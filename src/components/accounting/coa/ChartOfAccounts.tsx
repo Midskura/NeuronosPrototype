@@ -1,0 +1,476 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { Plus, Search, Filter, Download, ChevronDown, ChevronRight, Folder, FileText, MoreHorizontal, RefreshCw } from "lucide-react";
+import { toast } from "sonner@2.0.3";
+import { getAccounts, seedInitialAccounts, resetChartOfAccounts } from "../../../utils/accounting-api";
+import { Account } from "../../../types/accounting-core";
+import { AccountSidePanel } from "./AccountSidePanel";
+import { DataTable, ColumnDef } from "../../common/DataTable";
+
+import { AccountLedger } from "./AccountLedger";
+
+// Extended type for flattened tree
+type FlatAccount = Account & { level: number };
+
+export function ChartOfAccounts() {
+  // State
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState<"All" | "BalanceSheet" | "IncomeStatement">("All");
+  
+  // Ledger View State
+  const [viewMode, setViewMode] = useState<"list" | "ledger">("list");
+  const [activeLedgerAccount, setActiveLedgerAccount] = useState<Account | null>(null);
+
+  // Side Panel State
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+
+  // Expanded folders state (for hierarchy)
+  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({});
+
+  // Fetch Accounts
+  const loadAccounts = async () => {
+    try {
+      setLoading(true);
+      
+      // Seed data if empty (just once)
+      await seedInitialAccounts();
+      const data = await getAccounts();
+      setAccounts(data);
+      
+      // Auto-expand all folders by default for better visibility
+      const allFolderIds = data.filter(a => a.is_folder).map(a => a.id);
+      const initialExpanded: Record<string, boolean> = {};
+      allFolderIds.forEach(id => initialExpanded[id] = true);
+      setExpandedFolders(initialExpanded);
+      
+    } catch (error) {
+      console.error("Error loading accounts:", error);
+      toast.error("Failed to load Chart of Accounts");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadAccounts();
+  }, []);
+
+  // Filtering
+  const filteredAccounts = useMemo(() => {
+    return accounts.filter(acc => {
+      const matchesSearch = 
+        acc.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (acc.code && acc.code.includes(searchQuery));
+      
+      let matchesTab = true;
+      if (activeTab === "BalanceSheet") {
+        matchesTab = ["Asset", "Liability", "Equity"].includes(acc.type);
+      } else if (activeTab === "IncomeStatement") {
+        matchesTab = ["Income", "Expense"].includes(acc.type);
+      }
+      
+      return matchesSearch && matchesTab;
+    });
+  }, [accounts, searchQuery, activeTab]);
+
+  // Build Tree Structure helpers
+  const { roots, getChildren } = useMemo(() => {
+    const roots = filteredAccounts.filter(a => !a.parent_id); // Root nodes
+    const childrenMap = new Map<string, Account[]>();
+    
+    filteredAccounts.forEach(acc => {
+      if (acc.parent_id) {
+        if (!childrenMap.has(acc.parent_id)) {
+          childrenMap.set(acc.parent_id, []);
+        }
+        childrenMap.get(acc.parent_id)?.push(acc);
+      }
+    });
+
+    return { 
+      roots: roots.sort((a, b) => (a.code || "").localeCompare(b.code || "")),
+      getChildren: (id: string) => childrenMap.get(id) || []
+    };
+  }, [filteredAccounts]);
+
+  // Flatten Tree for DataTable
+  const flatAccounts = useMemo(() => {
+    const result: FlatAccount[] = [];
+    
+    const traverse = (nodes: Account[], level: number) => {
+      nodes.forEach(node => {
+        result.push({ ...node, level });
+        
+        // If expanded and has children, traverse them
+        if (expandedFolders[node.id]) {
+          const children = getChildren(node.id);
+          if (children.length > 0) {
+            traverse(children, level + 1);
+          }
+        }
+      });
+    };
+    
+    traverse(roots, 0);
+    return result;
+  }, [roots, expandedFolders, getChildren]);
+
+  // Handlers
+  const handleViewRegister = (account: Account, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveLedgerAccount(account);
+    setViewMode("ledger");
+  };
+
+  const handleBackToCOA = () => {
+    setViewMode("list");
+    setActiveLedgerAccount(null);
+  };
+
+  const toggleFolder = (id: string) => {
+    setExpandedFolders(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleAddAccount = () => {
+    setSelectedAccount(null);
+    setIsPanelOpen(true);
+  };
+
+  const handleResetCOA = async () => {
+    if (confirm("WARNING: This will delete ALL existing accounts and reset them to the standard Neuron Chart of Accounts. Are you sure?")) {
+      try {
+        setLoading(true);
+        await resetChartOfAccounts();
+        await loadAccounts();
+        toast.success("Chart of Accounts reset successfully");
+      } catch (error) {
+        console.error("Reset failed:", error);
+        toast.error("Failed to reset Chart of Accounts");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleEditAccount = (account: Account) => {
+    setSelectedAccount(account);
+    setIsPanelOpen(true);
+  };
+
+  // Helper: Currency Formatter
+  const formatCurrency = (amount: number, currency: "PHP" | "USD") => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount).replace('PHP', '₱').replace('USD', '$');
+  };
+
+  // Column Definitions
+  const columns: ColumnDef<FlatAccount>[] = [
+    {
+      header: "Account Name",
+      width: "35%",
+      cell: (item) => (
+        <div 
+          className="flex items-center gap-2"
+          style={{ paddingLeft: `${item.level * 24}px` }}
+        >
+          {item.is_folder ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFolder(item.id);
+              }}
+              className="p-1 hover:bg-gray-200 rounded text-gray-500 transition-colors"
+            >
+              {expandedFolders[item.id] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            </button>
+          ) : (
+            <div className="w-6" /> // Spacer
+          )}
+          
+          <span className="font-mono text-gray-400 text-xs w-12">{item.code}</span>
+
+          {item.is_folder ? (
+             <Folder size={16} className="text-[#0F766E] fill-[#0F766E]/10" />
+          ) : (
+             <FileText size={16} className="text-gray-400" />
+          )}
+          
+          <span className={item.is_folder ? "font-semibold text-[#12332B]" : "text-[#344054]"}>
+            {item.name}
+          </span>
+        </div>
+      )
+    },
+    {
+      header: "Type",
+      width: "12%",
+      cell: (item) => (
+        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium capitalize
+          ${item.type === 'Asset' ? 'bg-emerald-50 text-emerald-700' :
+            item.type === 'Liability' ? 'bg-amber-50 text-amber-700' :
+            item.type === 'Equity' ? 'bg-purple-50 text-purple-700' :
+            item.type === 'Income' ? 'bg-blue-50 text-blue-700' :
+            'bg-rose-50 text-rose-700' // Expense
+          }`}
+        >
+          {item.type}
+        </span>
+      )
+    },
+    {
+      header: "Detail Type",
+      width: "20%",
+      cell: (item) => (
+        <span className="text-gray-500 text-[12px]">{item.subtype || "-"}</span>
+      )
+    },
+    {
+      header: "Balance",
+      width: "18%",
+      align: "right",
+      cell: (item) => {
+        // Display native currency balance (or PHP default)
+        const currency = item.currency || "PHP";
+        return (
+          <span className="font-mono font-medium text-[#12332B] text-[12px]">
+            {formatCurrency(item.balance || 0, currency)}
+          </span>
+        );
+      }
+    },
+    {
+      header: "Action",
+      align: "right",
+      width: "150px",
+      cell: (item) => (
+        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span 
+            onClick={(e) => handleViewRegister(item, e)}
+            className="text-[11px] font-medium text-[#0F766E] hover:underline cursor-pointer"
+          >
+            View register
+          </span>
+        </div>
+      )
+    }
+  ];
+
+  if (viewMode === "ledger" && activeLedgerAccount) {
+    return (
+      <AccountLedger 
+        account={activeLedgerAccount} 
+        onBack={handleBackToCOA} 
+      />
+    );
+  }
+
+  // Calculate counts for tabs (Mock or Real)
+  // For now, simple counts
+  const tabCounts = {
+    "All": accounts.length,
+    "BalanceSheet": accounts.filter(a => ["Asset", "Liability", "Equity"].includes(a.type)).length,
+    "IncomeStatement": accounts.filter(a => ["Income", "Expense"].includes(a.type)).length
+  };
+
+  return (
+    <div className="h-full flex flex-col bg-white">
+      {/* Header Section */}
+      <div style={{ 
+        padding: "32px 48px 24px 48px",
+        borderBottom: "1px solid #E5E9F0"
+      }}>
+        {/* Title and Buttons */}
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "space-between", 
+          alignItems: "flex-start",
+          marginBottom: "24px"
+        }}>
+          <div>
+            <h1 style={{ 
+              fontSize: "32px",
+              fontWeight: 600,
+              color: "#12332B",
+              marginBottom: "4px",
+              letterSpacing: "-1.2px"
+            }}>
+              Chart of Accounts
+            </h1>
+            <p style={{ 
+              fontSize: "14px",
+              color: "#667085",
+              margin: 0
+            }}>
+              Manage your financial structure and ledger balances
+            </p>
+          </div>
+          
+          <div className="flex gap-3">
+             <button 
+                onClick={handleResetCOA}
+                className="h-10 px-4 bg-white border border-red-200 text-red-600 rounded-lg font-medium text-sm hover:bg-red-50 transition-colors flex items-center gap-2"
+                title="Reset to Standard COA"
+             >
+                <RefreshCw size={16} />
+                <span className="hidden sm:inline">Reset</span>
+             </button>
+             <button className="h-10 px-4 bg-white border border-[#E5E9F0] text-[#344054] rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors flex items-center gap-2">
+                <Download size={16} />
+                Export
+             </button>
+             <button
+               onClick={handleAddAccount}
+               style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "10px 20px",
+                  backgroundColor: "#0F766E", // var(--neuron-brand-green)
+                  border: "none",
+                  borderRadius: "8px",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "white",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
+               }}
+               onMouseEnter={(e) => {
+                 e.currentTarget.style.backgroundColor = "#0F544A";
+               }}
+               onMouseLeave={(e) => {
+                 e.currentTarget.style.backgroundColor = "#0F766E";
+               }}
+             >
+               <Plus size={18} />
+               New Account
+             </button>
+          </div>
+        </div>
+
+        {/* Search Bar - Full Width */}
+        <div style={{ position: "relative", marginBottom: "20px" }}>
+          <Search
+            size={18}
+            style={{
+              position: "absolute",
+              left: "12px",
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: "#667085",
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Filter by name or code..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "10px 12px 10px 40px",
+              border: "1px solid #E5E7EB",
+              borderRadius: "8px",
+              fontSize: "14px",
+              outline: "none",
+              color: "#12332B",
+              backgroundColor: "#FFFFFF",
+            }}
+          />
+        </div>
+
+        {/* Tabs */}
+        <div style={{ 
+          display: "flex", 
+          gap: "24px"
+        }}>
+          {(["All", "BalanceSheet", "IncomeStatement"] as const).map((tab) => {
+             const label = tab === "All" ? "All Accounts" : tab === "BalanceSheet" ? "Balance Sheet" : "Income Statement";
+             return (
+               <button
+                 key={tab}
+                 onClick={() => setActiveTab(tab)}
+                 style={{
+                   display: "flex",
+                   alignItems: "center",
+                   gap: "8px",
+                   padding: "12px 4px",
+                   background: "none",
+                   border: "none",
+                   borderBottom: activeTab === tab ? "2px solid #0F766E" : "2px solid transparent",
+                   fontSize: "14px",
+                   fontWeight: 600,
+                   color: activeTab === tab ? "#0F766E" : "#667085",
+                   cursor: "pointer",
+                   transition: "all 0.2s ease",
+                   marginBottom: "0"
+                 }}
+                 onMouseEnter={(e) => {
+                   if (activeTab !== tab) {
+                     e.currentTarget.style.color = "#12332B";
+                   }
+                 }}
+                 onMouseLeave={(e) => {
+                   if (activeTab !== tab) {
+                     e.currentTarget.style.color = "#667085";
+                   }
+                 }}
+               >
+                 {tab === "All" && <FileText size={16} />}
+                 {tab === "BalanceSheet" && <Folder size={16} />}
+                 {tab === "IncomeStatement" && <FileText size={16} />}
+                 {label}
+                 <span
+                   style={{
+                     display: "inline-flex",
+                     alignItems: "center",
+                     justifyContent: "center",
+                     padding: "2px 8px",
+                     borderRadius: "10px",
+                     backgroundColor: activeTab === tab ? "#E8F4F3" : "#F3F4F6",
+                     fontSize: "12px",
+                     fontWeight: 600,
+                     color: activeTab === tab ? "#0F766E" : "#667085"
+                   }}
+                 >
+                   {tabCounts[tab]}
+                 </span>
+               </button>
+             );
+          })}
+        </div>
+      </div>
+
+      {/* DataTable */}
+      <div className="flex-1 overflow-auto bg-white p-6">
+        <DataTable
+          data={flatAccounts}
+          columns={columns}
+          isLoading={loading}
+          emptyMessage="No accounts found matching your filters."
+          onRowClick={handleEditAccount}
+          rowClassName={() => "group cursor-pointer hover:bg-gray-50"}
+          enableSelection={false}
+          footerSummary={[
+             {
+                label: "Total Accounts",
+                value: <span className="text-[#374151]">{flatAccounts.length}</span>
+             }
+          ]}
+        />
+      </div>
+
+      {/* Side Panel */}
+      <AccountSidePanel
+        isOpen={isPanelOpen}
+        onClose={() => setIsPanelOpen(false)}
+        onSave={loadAccounts}
+        account={selectedAccount}
+      />
+    </div>
+  );
+}

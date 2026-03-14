@@ -1,0 +1,1256 @@
+import { useState } from "react";
+import { ArrowLeft, MoreVertical, Lock, Clock, ChevronRight, User } from "lucide-react";
+import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
+import { UnifiedBillingsTab } from "../../shared/billings/UnifiedBillingsTab";
+import { BookingRateCardButton } from "../../contracts/BookingRateCardButton";
+import { ExpensesTab } from "../shared/ExpensesTab";
+import { BookingCommentsTab } from "../../shared/BookingCommentsTab";
+import { useProjectFinancials } from "../../../hooks/useProjectFinancials";
+import { StatusSelector } from "../../StatusSelector";
+import { projectId, publicAnonKey } from "../../../utils/supabase/info";
+import { toast } from "../../ui/toast-utils";
+import { EditableMultiInputField } from "../../shared/EditableMultiInputField";
+import { EditableSectionCard, useSectionEdit } from "../../shared/EditableSectionCard";
+import { EditableField } from "../../shared/EditableField";
+import { ConsigneeInfoBadge } from "../../shared/ConsigneeInfoBadge";
+
+interface ForwardingBookingDetailsProps {
+  booking: ForwardingBooking;
+  onBack: () => void;
+  onBookingUpdated: () => void;
+  currentUser?: { name: string; email: string; department: string } | null;
+  initialTab?: string | null;
+  highlightId?: string | null;
+}
+
+type DetailTab = "booking-info" | "billings" | "expenses" | "comments";
+
+const STATUS_COLORS: Record<ExecutionStatus, string> = {
+  "Draft": "bg-gray-100 text-gray-700 border-gray-300",
+  "Confirmed": "bg-blue-50 text-blue-700 border-blue-300",
+  "In Progress": "bg-[#0F766E]/10 text-[#0F766E] border-[#0F766E]/30",
+  "Pending": "bg-amber-50 text-amber-700 border-amber-300",
+  "On Hold": "bg-orange-50 text-orange-700 border-orange-300",
+  "Completed": "bg-emerald-50 text-emerald-700 border-emerald-300",
+  "Cancelled": "bg-red-50 text-red-700 border-red-300",
+};
+
+// Activity Timeline Data Structure
+interface ActivityLogEntry {
+  id: string;
+  timestamp: Date;
+  user: string;
+  action: "field_updated" | "status_changed" | "created" | "note_added";
+  fieldName?: string;
+  oldValue?: string;
+  newValue?: string;
+  statusFrom?: ExecutionStatus;
+  statusTo?: ExecutionStatus;
+  note?: string;
+}
+
+// Initial mock activity data - starting point
+const initialActivityLog: ActivityLogEntry[] = [
+  {
+    id: "init-1",
+    timestamp: new Date("2024-12-22T16:45:00"),
+    user: "System",
+    action: "created"
+  },
+];
+
+// Field locking rules based on status
+// NOTE: All fields are now editable regardless of status since changes are tracked in activity log
+function isFieldLocked(fieldName: string, status: ExecutionStatus): { locked: boolean; reason: string } {
+  // All fields are editable - changes will be tracked in the activity log
+  return { locked: false, reason: "" };
+}
+
+export function ForwardingBookingDetails({
+  booking,
+  onBack,
+  onBookingUpdated,
+  currentUser,
+  initialTab,
+  highlightId
+}: ForwardingBookingDetailsProps) {
+  const [activeTab, setActiveTab] = useState<DetailTab>(
+    (initialTab as DetailTab) || "booking-info"
+  );
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(initialActivityLog);
+  
+  // Local state to track edited booking values
+  const [editedBooking, setEditedBooking] = useState<ForwardingBooking>(booking);
+
+  // Function to add new activity
+  const addActivity = (
+    fieldName: string,
+    oldValue: string,
+    newValue: string
+  ) => {
+    const newActivity: ActivityLogEntry = {
+      id: `activity-${Date.now()}-${Math.random()}`,
+      timestamp: new Date(),
+      user: currentUser?.name || "Current User",
+      action: "field_updated",
+      fieldName,
+      oldValue,
+      newValue
+    };
+
+    setActivityLog(prev => [newActivity, ...prev]);
+  };
+
+  const handleStatusUpdate = async (newStatus: ExecutionStatus) => {
+    const oldStatus = editedBooking.status;
+    if (oldStatus === newStatus) return;
+
+    // Optimistic Update
+    setEditedBooking(prev => ({
+      ...prev,
+      status: newStatus
+    }));
+
+    // Add activity log
+    const newActivity: ActivityLogEntry = {
+      id: `activity-${Date.now()}-${Math.random()}`,
+      timestamp: new Date(),
+      user: currentUser?.name || "Current User",
+      action: "status_changed",
+      statusFrom: oldStatus,
+      statusTo: newStatus
+    };
+    setActivityLog(prev => [newActivity, ...prev]);
+
+    // Persist to backend
+    try {
+      const response = await fetch(`https://${projectId}.supabase.co/functions/v1/make-server-c142e950/forwarding-bookings/${booking.bookingId}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${publicAnonKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+      
+      toast.success(`Status updated to ${newStatus}`);
+      onBookingUpdated();
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+      // Revert optimistic update
+      setEditedBooking(prev => ({ ...prev, status: oldStatus }));
+    }
+  };
+
+  const financials = useProjectFinancials(booking.projectNumber || "");
+  const bookingBillingItems = financials.billingItems.filter(item => item.booking_id === booking.bookingId);
+
+  return (
+    <div style={{ 
+      backgroundColor: "white",
+      display: "flex",
+      flexDirection: "column",
+      height: "100vh"
+    }}>
+      {/* Header Bar */}
+      <div style={{
+        padding: "20px 48px",
+        borderBottom: "1px solid var(--neuron-ui-border)",
+        backgroundColor: "white",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}>
+        <div>
+          <button
+            onClick={onBack}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              background: "none",
+              border: "none",
+              color: "var(--neuron-ink-secondary)",
+              cursor: "pointer",
+              fontSize: "13px",
+              marginBottom: "12px",
+              padding: "0"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--neuron-brand-green)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--neuron-ink-secondary)";
+            }}
+          >
+            <ArrowLeft size={16} />
+            Back to Forwarding Bookings
+          </button>
+          
+          <h1 style={{ 
+            fontSize: "20px",
+            fontWeight: 600,
+            color: "var(--neuron-ink-primary)",
+            marginBottom: "4px"
+          }}>
+            {booking.customerName}
+          </h1>
+          <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: 0 }}>
+            {booking.bookingId}
+          </p>
+        </div>
+
+        {/* Status Selector - Moved to Header */}
+        <StatusSelector 
+          status={editedBooking.status} 
+          onUpdateStatus={handleStatusUpdate}
+        />
+      </div>
+
+      {/* Merged Toolbar: Tabs + Actions */}
+      <div style={{
+        padding: "0 48px",
+        borderBottom: "1px solid var(--neuron-ui-border)",
+        backgroundColor: "white",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "56px"
+      }}>
+        {/* Tabs - Left Side */}
+        <div style={{ display: "flex", gap: "24px", height: "100%" }}>
+          <button
+            onClick={() => setActiveTab("booking-info")}
+            style={{
+              padding: "0 4px",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: activeTab === "booking-info" ? "#0F766E" : "var(--neuron-ink-muted)",
+              background: "none",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              borderBottom: activeTab === "booking-info" ? "2px solid #0F766E" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              height: "100%"
+            }}
+          >
+            Booking Information
+          </button>
+          <button
+            onClick={() => setActiveTab("billings")}
+            style={{
+              padding: "0 4px",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: activeTab === "billings" ? "#0F766E" : "var(--neuron-ink-muted)",
+              background: "none",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              borderBottom: activeTab === "billings" ? "2px solid #0F766E" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              height: "100%"
+            }}
+          >
+            Billings
+          </button>
+          <button
+            onClick={() => setActiveTab("expenses")}
+            style={{
+              padding: "0 4px",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: activeTab === "expenses" ? "#0F766E" : "var(--neuron-ink-muted)",
+              background: "none",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              borderBottom: activeTab === "expenses" ? "2px solid #0F766E" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              height: "100%"
+            }}
+          >
+            Expenses
+          </button>
+          <button
+            onClick={() => setActiveTab("comments")}
+            style={{
+              padding: "0 4px",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: activeTab === "comments" ? "#0F766E" : "var(--neuron-ink-muted)",
+              background: "none",
+              borderTop: "none",
+              borderLeft: "none",
+              borderRight: "none",
+              borderBottom: activeTab === "comments" ? "2px solid #0F766E" : "2px solid transparent",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              height: "100%"
+            }}
+          >
+            Comments
+          </button>
+        </div>
+
+        {/* Action Buttons - Right Side */}
+        <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          {/* Activity Timeline Button */}
+          <button
+            onClick={() => setShowTimeline(!showTimeline)}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              backgroundColor: showTimeline ? "#E8F2EE" : "white",
+              border: `1px solid ${showTimeline ? "#0F766E" : "var(--neuron-ui-border)"}`, // Thinner border to match other controls
+              borderRadius: "6px",
+              fontSize: "13px",
+              fontWeight: 500,
+              color: showTimeline ? "#0F766E" : "var(--neuron-ink-secondary)",
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              if (!showTimeline) {
+                e.currentTarget.style.backgroundColor = "#F9FAFB";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!showTimeline) {
+                e.currentTarget.style.backgroundColor = "white";
+              }
+            }}
+          >
+            <Clock size={16} />
+            Activity
+          </button>
+
+          {/* Movement Badge */}
+          <div style={{
+            padding: "8px 16px",
+            borderRadius: "6px",
+            fontSize: "13px",
+            fontWeight: 600,
+            backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA",
+            color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E",
+            border: `1px solid ${booking.movement === "EXPORT" ? "#FED7AA" : "#99F6E4"}`
+          }}>
+            {booking.movement || "IMPORT"}
+          </div>
+
+          {/* Kebab Menu */}
+          <button
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "36px", // Slightly smaller
+              height: "36px", // Slightly smaller
+              backgroundColor: "white",
+              border: "1px solid var(--neuron-ui-border)",
+              borderRadius: "6px",
+              cursor: "pointer",
+              transition: "all 0.2s ease"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#F9FAFB";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "white";
+            }}
+          >
+            <MoreVertical size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Content with Timeline Sidebar */}
+      <div style={{ 
+        flex: 1,
+        overflow: "hidden",
+        display: "flex"
+      }}>
+        {/* Main Content */}
+        <div style={{ 
+          flex: showTimeline ? "0 0 65%" : "1",
+          overflow: "auto",
+          transition: "flex 0.3s ease"
+        }}>
+          {activeTab === "booking-info" && (
+            <BookingInformationTab
+              booking={editedBooking}
+              onBookingUpdated={onBookingUpdated}
+              addActivity={addActivity}
+              setEditedBooking={setEditedBooking}
+            />
+          )}
+          {activeTab === "billings" && (
+            <div className="flex flex-col bg-white p-12 min-h-[600px]">
+              <UnifiedBillingsTab
+                items={bookingBillingItems}
+                projectId={booking.projectNumber || ""}
+                bookingId={booking.bookingId}
+                onRefresh={financials.refresh}
+                isLoading={financials.isLoading}
+                extraActions={<BookingRateCardButton booking={booking} serviceType="Forwarding" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />}
+              />
+            </div>
+          )}
+          {activeTab === "expenses" && (
+            <ExpensesTab
+              bookingId={booking.bookingId}
+              bookingType="forwarding"
+              currentUser={currentUser}
+              highlightId={activeTab === "expenses" ? highlightId : undefined}
+            />
+          )}
+          {activeTab === "comments" && (
+            <BookingCommentsTab
+              bookingId={booking.bookingId}
+              currentUserId={currentUser?.email || "unknown"}
+              currentUserName={currentUser?.name || "Unknown User"}
+              currentUserDepartment={currentUser?.department || "Operations"}
+            />
+          )}
+        </div>
+
+        {/* Timeline Sidebar */}
+        {showTimeline && (
+          <div style={{
+            flex: "0 0 35%",
+            borderLeft: "1px solid var(--neuron-ui-border)",
+            backgroundColor: "#FAFBFC",
+            overflow: "auto"
+          }}>
+            <ActivityTimeline activities={activityLog} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Activity Timeline Component
+function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
+  return (
+    <div style={{ padding: "24px" }}>
+      <h3 style={{
+        fontSize: "16px",
+        fontWeight: 600,
+        color: "var(--neuron-brand-green)",
+        marginBottom: "20px"
+      }}>
+        Activity Timeline
+      </h3>
+
+      <div style={{ position: "relative" }}>
+        {/* Timeline Line */}
+        <div style={{
+          position: "absolute",
+          left: "15px",
+          top: "0",
+          bottom: "0",
+          width: "2px",
+          backgroundColor: "#E5E7EB"
+        }} />
+
+        {/* Activity Items */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {activities.map((activity, index) => (
+            <div key={activity.id} style={{ position: "relative", paddingLeft: "40px" }}>
+              {/* Timeline Dot */}
+              <div style={{
+                position: "absolute",
+                left: "8px",
+                top: "4px",
+                width: "16px",
+                height: "16px",
+                borderRadius: "50%",
+                backgroundColor: activity.action === "status_changed" ? "#0F766E" :
+                               activity.action === "created" ? "#6B7280" :
+                               activity.action === "field_updated" ? "#3B82F6" : "#F59E0B",
+                border: "3px solid #FAFBFC"
+              }} />
+
+              {/* Activity Content */}
+              <div style={{
+                backgroundColor: "white",
+                border: "1px solid var(--neuron-ui-border)",
+                borderRadius: "8px",
+                padding: "12px 16px"
+              }}>
+                {/* Timestamp */}
+                <div style={{
+                  fontSize: "11px",
+                  color: "var(--neuron-ink-muted)",
+                  marginBottom: "6px"
+                }}>
+                  {activity.timestamp.toLocaleString()}
+                </div>
+
+                {/* Action Description */}
+                {activity.action === "field_updated" && (
+                  <div>
+                    <div style={{
+                      fontSize: "13px",
+                      color: "var(--neuron-ink-base)",
+                      marginBottom: "4px"
+                    }}>
+                      <span style={{ fontWeight: 600 }}>{activity.fieldName}</span> updated
+                    </div>
+                    {activity.oldValue && activity.newValue && (
+                      <div style={{
+                        fontSize: "12px",
+                        color: "var(--neuron-ink-secondary)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        marginTop: "6px"
+                      }}>
+                        <span style={{
+                          padding: "2px 8px",
+                          backgroundColor: "#FEE2E2",
+                          borderRadius: "4px",
+                          textDecoration: "line-through",
+                          color: "#EF4444"
+                        }}>
+                          {activity.oldValue || "(empty)"}
+                        </span>
+                        <ChevronRight size={12} />
+                        <span style={{
+                          padding: "2px 8px",
+                          backgroundColor: "#D1FAE5",
+                          borderRadius: "4px",
+                          color: "#10B981"
+                        }}>
+                          {activity.newValue}
+                        </span>
+                      </div>
+                    )}
+                    {!activity.oldValue && activity.newValue && (
+                      <div style={{
+                        fontSize: "12px",
+                        color: "var(--neuron-ink-secondary)",
+                        marginTop: "6px"
+                      }}>
+                        Set to: <span style={{
+                          padding: "2px 8px",
+                          backgroundColor: "#D1FAE5",
+                          borderRadius: "4px",
+                          color: "#10B981",
+                          fontWeight: 500
+                        }}>
+                          {activity.newValue}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activity.action === "status_changed" && (
+                  <div>
+                    <div style={{
+                      fontSize: "13px",
+                      color: "var(--neuron-ink-base)",
+                      marginBottom: "6px"
+                    }}>
+                      Status changed
+                    </div>
+                    <div style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px"
+                    }}>
+                      <span style={{
+                        padding: "4px 10px",
+                        backgroundColor: "#F3F4F6",
+                        borderRadius: "4px",
+                        color: "#6B7280",
+                        fontSize: "11px",
+                        fontWeight: 500
+                      }}>
+                        {activity.statusFrom}
+                      </span>
+                      <ChevronRight size={12} />
+                      <span style={{
+                        padding: "4px 10px",
+                        backgroundColor: "#E8F2EE",
+                        borderRadius: "4px",
+                        color: "#0F766E",
+                        fontSize: "11px",
+                        fontWeight: 500
+                      }}>
+                        {activity.statusTo}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {activity.action === "created" && (
+                  <div style={{
+                    fontSize: "13px",
+                    color: "var(--neuron-ink-base)"
+                  }}>
+                    Booking created
+                  </div>
+                )}
+
+                {/* User */}
+                <div style={{
+                  fontSize: "11px",
+                  color: "var(--neuron-ink-muted)",
+                  marginTop: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "4px"
+                }}>
+                  <User size={10} />
+                  {activity.user}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Reusable Field Components
+interface LockedFieldProps {
+  label: string;
+  value: string;
+  tooltip?: string;
+}
+
+function LockedField({ label, value, tooltip = "This field is locked because it's inherited from the Project" }: LockedFieldProps) {
+  return (
+    <div>
+      <label style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "13px",
+        fontWeight: 500,
+        color: "var(--neuron-ink-base)",
+        marginBottom: "8px"
+      }}>
+        {label}
+        <Lock size={12} color="#9CA3AF" title={tooltip} style={{ cursor: "help" }} />
+      </label>
+      <div style={{
+        padding: "10px 14px",
+        backgroundColor: "#F9FAFB",
+        border: "1px solid #E5E7EB",
+        borderRadius: "6px",
+        fontSize: "14px",
+        color: "#6B7280",
+        cursor: "not-allowed"
+      }}>
+        {value || "—"}
+      </div>
+    </div>
+  );
+}
+
+// EditableField is now imported from shared/EditableField.tsx
+
+// ── Field label mapping for activity log ──
+const FIELD_LABELS: Record<string, string> = {
+  accountHandler: "Account Handler",
+  typeOfEntry: "Type of Entry",
+  cargoType: "Cargo Type",
+  deliveryAddress: "Delivery Address",
+  consignee: "Consignee",
+  shipper: "Shipper",
+  mblMawb: "MBL/MAWB",
+  hblHawb: "HBL/HAWB",
+  bookingReferenceNumber: "Booking Reference No.",
+  registryNumber: "Registry Number",
+  carrier: "Carrier",
+  forwarder: "Forwarder",
+  countryOfOrigin: "Country of Origin",
+  aolPol: "AOL/POL",
+  aodPod: "AOD/POD",
+  eta: "ETA",
+  lct: "LCT",
+  transitTime: "Transit Time",
+  route: "Route",
+  grossWeight: "Gross Weight",
+  dimensions: "Dimensions",
+  commodityDescription: "Commodity Description",
+  preferentialTreatment: "Preferential Treatment",
+  warehouseLocation: "Warehouse Location",
+  containerNumbers: "Container Numbers",
+  detDemValidity: "Det/Dem Validity",
+  storageValidity: "Storage Validity",
+  croAvailability: "CRO Availability",
+  containerDeposit: "Container Deposit",
+  emptyReturn: "Empty Return",
+  tareWeight: "Tare Weight",
+  vgm: "VGM",
+  truckingName: "Trucking Name",
+  plateNumber: "Plate Number",
+  pickupLocation: "Pickup Location",
+  warehouseAddress: "Warehouse Address",
+};
+
+/**
+ * Diffs a draft against the original booking for the given fields,
+ * logs activity for each changed field, and merges updates into editedBooking.
+ */
+function diffAndApply(
+  original: ForwardingBooking,
+  draft: ForwardingBooking,
+  fields: string[],
+  addActivity: (fieldName: string, oldValue: string, newValue: string) => void,
+  setEditedBooking: (fn: (prev: ForwardingBooking) => ForwardingBooking) => void,
+  onBookingUpdated: () => void,
+) {
+  const updates: Record<string, any> = {};
+  fields.forEach((field) => {
+    const oldVal = String((original as any)[field] ?? "");
+    const newVal = String((draft as any)[field] ?? "");
+    if (oldVal !== newVal) {
+      addActivity(FIELD_LABELS[field] || field, oldVal, newVal);
+      updates[field] = (draft as any)[field];
+    }
+  });
+  if (Object.keys(updates).length > 0) {
+    setEditedBooking((prev: ForwardingBooking) => ({ ...prev, ...updates }));
+    onBookingUpdated();
+    toast.success("Changes saved");
+  }
+}
+
+// Booking Information Tab Component
+function BookingInformationTab({
+  booking,
+  onBookingUpdated,
+  addActivity,
+  setEditedBooking,
+}: {
+  booking: ForwardingBooking;
+  onBookingUpdated: () => void;
+  addActivity: (fieldName: string, oldValue: string, newValue: string) => void;
+  setEditedBooking: (fn: any) => void;
+}) {
+  // Per-section edit state via shared hook
+  const generalSection = useSectionEdit(booking);
+  const shipmentSection = useSectionEdit(booking);
+  const containerSection = useSectionEdit(booking);
+  const warehouseSection = useSectionEdit(booking);
+
+  // Field lists per section (for diff on save)
+  const GENERAL_FIELDS = ["accountHandler", "typeOfEntry", "cargoType", "deliveryAddress"];
+  const SHIPMENT_FIELDS = [
+    "consignee", "shipper", "mblMawb", "hblHawb", "bookingReferenceNumber",
+    "registryNumber", "carrier", "forwarder", "countryOfOrigin",
+    "aolPol", "aodPod", "eta", "lct", "transitTime", "route",
+    "grossWeight", "dimensions", "commodityDescription", "preferentialTreatment",
+  ];
+  const CONTAINER_FIELDS = [
+    "containerNumbers", "detDemValidity", "storageValidity", "croAvailability",
+    "containerDeposit", "emptyReturn", "tareWeight", "vgm",
+    "truckingName", "plateNumber", "pickupLocation", "warehouseAddress",
+  ];
+  const WAREHOUSE_FIELDS = ["warehouseLocation"];
+  
+  const gMode = generalSection.isEditing ? "edit" : "view";
+  const sMode = shipmentSection.isEditing ? "edit" : "view";
+  const cMode = containerSection.isEditing ? "edit" : "view";
+  const wMode = warehouseSection.isEditing ? "edit" : "view";
+
+  return (
+    <div style={{ 
+      padding: "32px 48px",
+      maxWidth: "1400px",
+      margin: "0 auto"
+    }}>
+      
+      {/* ── General Information ── */}
+      <EditableSectionCard
+        title="General Information"
+        subtitle={`Last updated by ${booking.accountHandler || "System"}, ${new Date(booking.updatedAt).toLocaleString()}`}
+        isEditing={generalSection.isEditing}
+        onEdit={generalSection.startEditing}
+        onCancel={generalSection.cancel}
+        onSave={() => {
+          const draft = generalSection.save();
+          diffAndApply(booking, draft, GENERAL_FIELDS, addActivity, setEditedBooking, onBookingUpdated);
+        }}
+      >
+        <div style={{ display: "grid", gap: "20px" }}>
+          {/* Row 1: Customer Name, Account Owner (always locked) */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <LockedField label="Customer Name" value={booking.customerName} />
+            <LockedField label="Account Owner" value={booking.accountOwner || ""} />
+          </div>
+
+          {/* Row 2: Account Handler, Mode, Type of Entry */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <EditableField
+              label="Account Handler"
+              value={generalSection.draft.accountHandler || ""}
+              mode={gMode}
+              placeholder="Assign handler..."
+              onChange={(v) => generalSection.updateField("accountHandler", v)}
+            />
+            <LockedField label="Mode" value={booking.mode} />
+            <EditableField
+              label="Type of Entry"
+              value={generalSection.draft.typeOfEntry || ""}
+              mode={gMode}
+              placeholder="Enter type..."
+              onChange={(v) => generalSection.updateField("typeOfEntry", v)}
+            />
+          </div>
+
+          {/* Row 3: Cargo Type, Quotation Reference, Project Number */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <EditableField
+              label="Cargo Type"
+              value={generalSection.draft.cargoType || ""}
+              mode={gMode}
+              placeholder="Enter cargo type..."
+              onChange={(v) => generalSection.updateField("cargoType", v)}
+            />
+            <LockedField label="Quotation Reference" value={booking.quotationReferenceNumber || ""} />
+            {booking.projectNumber && (
+              <LockedField label="Project Number" value={booking.projectNumber} />
+            )}
+          </div>
+
+          {/* Row 4: Delivery Address */}
+          <EditableField
+            label="Delivery Address"
+            value={generalSection.draft.deliveryAddress || ""}
+            mode={gMode}
+            type="textarea"
+            placeholder="Enter delivery address..."
+            onChange={(v) => generalSection.updateField("deliveryAddress", v)}
+          />
+        </div>
+
+        {/* Status-dependent fields (always visible, not editable via section) */}
+        {booking.status === "Pending" && booking.pendingReason && (
+          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "#FFF3E0", border: "1px solid #F59E0B33", borderRadius: "8px" }}>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#F59E0B", marginBottom: "8px" }}>
+              Pending Reason
+            </label>
+            <p style={{ fontSize: "14px", color: "#F59E0B", margin: 0 }}>{booking.pendingReason}</p>
+          </div>
+        )}
+        {booking.status === "Cancelled" && (
+          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "#FEE2E2", border: "1px solid #EF444433", borderRadius: "8px" }}>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#EF4444", marginBottom: "8px" }}>
+              Cancellation Reason
+            </label>
+            <p style={{ fontSize: "14px", color: "#EF4444", margin: "0 0 12px" }}>{booking.cancellationReason}</p>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#EF4444", marginBottom: "8px" }}>
+              Cancelled Date
+            </label>
+            <p style={{ fontSize: "14px", color: "#EF4444", margin: 0 }}>
+              {booking.cancelledDate ? new Date(booking.cancelledDate).toLocaleDateString() : "—"}
+            </p>
+          </div>
+        )}
+      </EditableSectionCard>
+
+      {/* ── Shipment Information ── */}
+      <EditableSectionCard
+        title="Shipment Information"
+        isEditing={shipmentSection.isEditing}
+        onEdit={shipmentSection.startEditing}
+        onCancel={shipmentSection.cancel}
+        onSave={() => {
+          const draft = shipmentSection.save();
+          diffAndApply(booking, draft, SHIPMENT_FIELDS, addActivity, setEditedBooking, onBookingUpdated);
+        }}
+      >
+        <div style={{ display: "grid", gap: "20px" }}>
+          {/* Row 1: Consignee, Shipper */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <div>
+              <EditableField
+                label="Consignee"
+                value={shipmentSection.draft.consignee || ""}
+                mode={sMode}
+                placeholder="Enter consignee..."
+                required
+                onChange={(v) => shipmentSection.updateField("consignee", v)}
+              />
+              {!shipmentSection.isEditing && <ConsigneeInfoBadge consigneeId={(booking as any).consignee_id} />}
+            </div>
+            <EditableField
+              label="Shipper"
+              value={shipmentSection.draft.shipper || ""}
+              mode={sMode}
+              placeholder="Enter shipper..."
+              required
+              onChange={(v) => shipmentSection.updateField("shipper", v)}
+            />
+          </div>
+
+          {/* Row 2: MBL/MAWB or Booking Ref, HBL/HAWB, Registry */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            {booking.movement === "EXPORT" ? (
+              <EditableMultiInputField
+                fieldName="bookingReferenceNumber"
+                label="Booking Reference No."
+                value={shipmentSection.draft.bookingReferenceNumber || ""}
+                status={booking.status}
+                placeholder="Enter booking ref..."
+                addButtonText="Add Reference No."
+                mode={sMode}
+                onChange={(v) => shipmentSection.updateField("bookingReferenceNumber", v)}
+              />
+            ) : (
+              <EditableMultiInputField
+                fieldName="mblMawb"
+                label="MBL/MAWB"
+                value={shipmentSection.draft.mblMawb || ""}
+                status={booking.status}
+                placeholder="Enter MBL/MAWB..."
+                addButtonText="Add MBL/MAWB"
+                mode={sMode}
+                onChange={(v) => shipmentSection.updateField("mblMawb", v)}
+              />
+            )}
+            <EditableMultiInputField
+              fieldName="hblHawb"
+              label={booking.movement === "EXPORT" ? "House Bill of Lading" : "HBL/HAWB"}
+              value={shipmentSection.draft.hblHawb || ""}
+              status={booking.status}
+              placeholder="Enter HBL/HAWB..."
+              addButtonText="Add HBL/HAWB"
+              mode={sMode}
+              onChange={(v) => shipmentSection.updateField("hblHawb", v)}
+            />
+            <EditableMultiInputField
+              fieldName="registryNumber"
+              label="Registry Number"
+              value={shipmentSection.draft.registryNumber || ""}
+              status={booking.status}
+              placeholder="Enter registry number..."
+              addButtonText="Add Registry"
+              mode={sMode}
+              onChange={(v) => shipmentSection.updateField("registryNumber", v)}
+            />
+          </div>
+
+          {/* Row 3: Carrier, Forwarder, Country of Origin */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <EditableField
+              label="Carrier"
+              value={shipmentSection.draft.carrier || ""}
+              mode={sMode}
+              placeholder="Enter carrier..."
+              onChange={(v) => shipmentSection.updateField("carrier", v)}
+            />
+            <EditableField
+              label="Forwarder"
+              value={shipmentSection.draft.forwarder || ""}
+              mode={sMode}
+              placeholder="Enter forwarder..."
+              onChange={(v) => shipmentSection.updateField("forwarder", v)}
+            />
+            <EditableField
+              label="Country of Origin"
+              value={shipmentSection.draft.countryOfOrigin || ""}
+              mode={sMode}
+              placeholder="Enter country..."
+              onChange={(v) => shipmentSection.updateField("countryOfOrigin", v)}
+            />
+          </div>
+
+          {/* Row 4: AOL/POL, AOD/POD, ETA */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+            <EditableField
+              label="AOL/POL"
+              value={shipmentSection.draft.aolPol || ""}
+              mode={sMode}
+              placeholder="Enter airport/port of loading..."
+              onChange={(v) => shipmentSection.updateField("aolPol", v)}
+            />
+            <EditableField
+              label="AOD/POD"
+              value={shipmentSection.draft.aodPod || ""}
+              mode={sMode}
+              placeholder="Enter airport/port of discharge..."
+              onChange={(v) => shipmentSection.updateField("aodPod", v)}
+            />
+            <EditableField
+              label="ETA"
+              value={shipmentSection.draft.eta ? new Date(shipmentSection.draft.eta).toISOString().split('T')[0] : ""}
+              type="date"
+              mode={sMode}
+              placeholder="Set ETA..."
+              onChange={(v) => shipmentSection.updateField("eta", v)}
+            />
+          </div>
+
+          {/* Export Specifics: LCT, Transit Time, Route */}
+          {booking.movement === "EXPORT" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+              <EditableField
+                label="LCT (Last Cargo Time)"
+                value={shipmentSection.draft.lct || ""}
+                type="date"
+                mode={sMode}
+                onChange={(v) => shipmentSection.updateField("lct", v)}
+              />
+              <EditableField
+                label="Transit Time"
+                value={shipmentSection.draft.transitTime || ""}
+                mode={sMode}
+                placeholder="e.g. 15 days"
+                onChange={(v) => shipmentSection.updateField("transitTime", v)}
+              />
+              <EditableField
+                label="Route"
+                value={shipmentSection.draft.route || ""}
+                mode={sMode}
+                placeholder="e.g. MNL-SIN-LAX"
+                onChange={(v) => shipmentSection.updateField("route", v)}
+              />
+            </div>
+          )}
+
+          {/* Row 5: Gross Weight, Dimensions */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            <EditableField
+              label="Gross Weight"
+              value={shipmentSection.draft.grossWeight || ""}
+              mode={sMode}
+              placeholder="Enter weight (e.g., 1000 kg)..."
+              onChange={(v) => shipmentSection.updateField("grossWeight", v)}
+            />
+            <EditableField
+              label="Dimensions"
+              value={shipmentSection.draft.dimensions || ""}
+              mode={sMode}
+              placeholder="Enter dimensions (e.g., 120x80x100 cm)..."
+              onChange={(v) => shipmentSection.updateField("dimensions", v)}
+            />
+          </div>
+
+          {/* Row 6: Commodity Description */}
+          <EditableField
+            label="Commodity Description"
+            value={shipmentSection.draft.commodityDescription || ""}
+            type="textarea"
+            mode={sMode}
+            placeholder="Enter detailed commodity description..."
+            onChange={(v) => shipmentSection.updateField("commodityDescription", v)}
+          />
+
+          {/* Preferential Treatment */}
+          <EditableField
+            label="Preferential Treatment"
+            value={shipmentSection.draft.preferentialTreatment || ""}
+            mode={sMode}
+            placeholder="Enter preferential treatment details..."
+            onChange={(v) => shipmentSection.updateField("preferentialTreatment", v)}
+          />
+        </div>
+      </EditableSectionCard>
+
+      {/* ── Container Details (FCL only) ── */}
+      {booking.mode === "FCL" && (
+        <EditableSectionCard
+          title="Container Details"
+          isEditing={containerSection.isEditing}
+          onEdit={containerSection.startEditing}
+          onCancel={containerSection.cancel}
+          onSave={() => {
+            const draft = containerSection.save();
+            // Special handling: containerNumbers is stored as string[] but displayed as CSV
+            const cnOld = booking.containerNumbers?.join(", ") || "";
+            const cnNew = draft.containerNumbers
+              ? (Array.isArray(draft.containerNumbers)
+                  ? draft.containerNumbers.join(", ")
+                  : String(draft.containerNumbers))
+              : "";
+            if (cnOld !== cnNew) {
+              addActivity("Container Numbers", cnOld, cnNew);
+            }
+            // containerDeposit: convert "Yes"/"No" string back to boolean
+            const depositVal = (draft as any)._containerDepositStr;
+            if (depositVal !== undefined) {
+              (draft as any).containerDeposit = depositVal === "Yes";
+            }
+            // Diff remaining fields normally
+            const otherFields = CONTAINER_FIELDS.filter(f => f !== "containerNumbers" && f !== "containerDeposit");
+            diffAndApply(booking, draft, otherFields, addActivity, setEditedBooking, onBookingUpdated);
+            // Apply container-specific updates
+            const updates: any = {};
+            if (cnOld !== cnNew) {
+              updates.containerNumbers = cnNew.split(",").map((c: string) => c.trim()).filter(Boolean);
+            }
+            if (depositVal !== undefined && (booking.containerDeposit ? "Yes" : "No") !== depositVal) {
+              addActivity("Container Deposit", booking.containerDeposit ? "Yes" : "No", depositVal);
+              updates.containerDeposit = depositVal === "Yes";
+            }
+            if (Object.keys(updates).length > 0) {
+              setEditedBooking((prev: any) => ({ ...prev, ...updates }));
+              onBookingUpdated();
+            }
+          }}
+        >
+          <div style={{ display: "grid", gap: "20px" }}>
+            <EditableMultiInputField
+              fieldName="containerNumbers"
+              label="Container Numbers"
+              value={containerSection.draft.containerNumbers && containerSection.draft.containerNumbers.length > 0
+                ? containerSection.draft.containerNumbers.join(", ")
+                : ""}
+              status={booking.status}
+              placeholder="Enter container number..."
+              addButtonText="Add Container"
+              mode={cMode}
+              onChange={(v) => containerSection.updateField("containerNumbers", v.split(",").map((c: string) => c.trim()).filter(Boolean) as any)}
+            />
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+              <EditableField
+                label="Det/Dem Validity"
+                value={containerSection.draft.detDemValidity || ""}
+                type="date"
+                mode={cMode}
+                placeholder="Select date..."
+                onChange={(v) => containerSection.updateField("detDemValidity", v)}
+              />
+              <EditableField
+                label="Storage Validity"
+                value={containerSection.draft.storageValidity || ""}
+                type="date"
+                mode={cMode}
+                placeholder="Select date..."
+                onChange={(v) => containerSection.updateField("storageValidity", v)}
+              />
+              <EditableField
+                label="CRO Availability"
+                value={containerSection.draft.croAvailability || ""}
+                type="date"
+                mode={cMode}
+                placeholder="Select date..."
+                onChange={(v) => containerSection.updateField("croAvailability", v)}
+              />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+              <EditableField
+                label="Container Deposit"
+                value={containerSection.draft.containerDeposit ? "Yes" : "No"}
+                type="select"
+                options={["Yes", "No"]}
+                mode={cMode}
+                onChange={(v) => {
+                  containerSection.updateField("_containerDepositStr" as any, v as any);
+                  containerSection.updateField("containerDeposit", (v === "Yes") as any);
+                }}
+              />
+              <EditableField
+                label="Empty Return"
+                value={containerSection.draft.emptyReturn || ""}
+                mode={cMode}
+                placeholder="Enter empty return location..."
+                onChange={(v) => containerSection.updateField("emptyReturn", v)}
+              />
+            </div>
+
+            {/* Export FCL Specifics */}
+            {booking.movement === "EXPORT" && (
+              <>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+                  <EditableField
+                    label="Tare Weight"
+                    value={containerSection.draft.tareWeight || ""}
+                    mode={cMode}
+                    placeholder="Enter tare weight..."
+                    onChange={(v) => containerSection.updateField("tareWeight", v)}
+                  />
+                  <EditableField
+                    label="VGM"
+                    value={containerSection.draft.vgm || ""}
+                    mode={cMode}
+                    placeholder="Enter VGM..."
+                    onChange={(v) => containerSection.updateField("vgm", v)}
+                  />
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "20px" }}>
+                  <EditableField
+                    label="Trucking Name"
+                    value={containerSection.draft.truckingName || ""}
+                    mode={cMode}
+                    placeholder="Enter trucking name..."
+                    onChange={(v) => containerSection.updateField("truckingName", v)}
+                  />
+                  <EditableField
+                    label="Plate Number"
+                    value={containerSection.draft.plateNumber || ""}
+                    mode={cMode}
+                    placeholder="Enter plate number..."
+                    onChange={(v) => containerSection.updateField("plateNumber", v)}
+                  />
+                  <EditableField
+                    label="Pickup Location"
+                    value={containerSection.draft.pickupLocation || ""}
+                    mode={cMode}
+                    placeholder="Enter pickup location..."
+                    onChange={(v) => containerSection.updateField("pickupLocation", v)}
+                  />
+                </div>
+
+                <EditableField
+                  label="Warehouse Address"
+                  value={containerSection.draft.warehouseAddress || ""}
+                  mode={cMode}
+                  placeholder="Enter warehouse address..."
+                  onChange={(v) => containerSection.updateField("warehouseAddress", v)}
+                />
+              </>
+            )}
+          </div>
+        </EditableSectionCard>
+      )}
+
+      {/* ── Warehouse Details (LCL/AIR only) ── */}
+      {(booking.mode === "LCL" || booking.mode === "AIR") && (
+        <EditableSectionCard
+          title="Warehouse Details"
+          isEditing={warehouseSection.isEditing}
+          onEdit={warehouseSection.startEditing}
+          onCancel={warehouseSection.cancel}
+          onSave={() => {
+            const draft = warehouseSection.save();
+            diffAndApply(booking, draft, WAREHOUSE_FIELDS, addActivity, setEditedBooking, onBookingUpdated);
+          }}
+        >
+          <EditableField
+            label="Warehouse Location"
+            value={warehouseSection.draft.warehouseLocation || ""}
+            mode={wMode}
+            placeholder="Enter warehouse location..."
+            onChange={(v) => warehouseSection.updateField("warehouseLocation", v)}
+          />
+        </EditableSectionCard>
+      )}
+    </div>
+  );
+}
