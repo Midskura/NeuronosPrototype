@@ -254,27 +254,32 @@ export async function linkBookingToContract(
   status: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { apiFetch } = await import("./api");
-    const response = await apiFetch(`/contracts/${contractId}/link-booking`, {
-      method: "POST",
-      body: JSON.stringify({
-          bookingId,
-          bookingNumber,
-          serviceType,
-          status,
-        }),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      return {
-        success: false,
-        error: result.error || `HTTP ${response.status}`,
-      };
+    const { supabase } = await import("./supabase/client");
+    // Fetch the contract quotation
+    const { data: contract, error: fetchErr } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('id', contractId)
+      .maybeSingle();
+    
+    if (fetchErr || !contract) {
+      return { success: false, error: fetchErr?.message || 'Contract not found' };
     }
-
-    return result;
+    
+    // Add booking to linked_bookings array
+    const linkedBookings = contract.linked_bookings || [];
+    linkedBookings.push({ bookingId, bookingNumber, serviceType, status });
+    
+    const { error: updateErr } = await supabase
+      .from('quotations')
+      .update({ linked_bookings: linkedBookings, updated_at: new Date().toISOString() })
+      .eq('id', contractId);
+    
+    if (updateErr) {
+      return { success: false, error: updateErr.message };
+    }
+    
+    return { success: true };
   } catch (error) {
     console.error("[contractAutofill] Error linking booking to contract:", error);
     return { success: false, error: String(error) };

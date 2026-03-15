@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { Clock, User, CheckCircle, XCircle, FileText, Send, Ban } from "lucide-react";
 
 interface HistoryEntry {
@@ -30,13 +30,16 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
   const fetchHistory = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/evouchers/${evoucherId}/history`);
-      const result = await response.json();
+      const { data, error } = await supabase
+        .from('evoucher_history')
+        .select('*')
+        .eq('evoucher_id', evoucherId)
+        .order('created_at', { ascending: false });
 
-      if (result.success) {
-        setHistory(result.data);
+      if (error) {
+        console.error("Error fetching history:", error.message);
       } else {
-        console.error("Error fetching history:", result.error);
+        setHistory(data || []);
       }
     } catch (error) {
       console.error("Error fetching history:", error);

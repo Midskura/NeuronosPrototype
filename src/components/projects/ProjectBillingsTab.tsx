@@ -1,5 +1,4 @@
-import type { EVoucher, EVoucherStatus } from "../../types/evoucher";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 interface ProjectBillingsTabProps {
@@ -24,19 +23,10 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
   const fetchBillings = async () => {
     try {
       setIsLoading(true);
-      // Fetch all billings (we filter by project client-side)
-      const response = await apiFetch(`/evouchers?transaction_type=billing`);
+      const { data, error } = await supabase.from('evouchers').select('*').eq('transaction_type', 'billing').eq('project_number', project.project_number);
       
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && Array.isArray(result.data)) {
-          // Filter for this project
-          const projectBillings = result.data.filter((ev: EVoucher) => 
-            ev.project_number === project.project_number || 
-            (ev.description && ev.description.includes(project.project_number))
-          );
-          setBillings(projectBillings);
-        }
+      if (!error && data) {
+        setBillings(data);
       }
     } catch (error) {
       console.error("Error fetching billings:", error);
@@ -53,26 +43,31 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
     toast.loading("Generating invoice from quotation charges...", { id: "import-billing" });
     
     try {
-      const response = await apiFetch(
-        `/projects/${project.id}/generate-invoice`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            // No bookingType/bookingId provided = Generate Full Project Invoice
-          }),
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      // Generate invoice client-side: create billing evouchers from quotation charges
+      const quotation = project.quotation;
+      if (!quotation?.selling_price_charges?.length) {
+        throw new Error("No quotation charges found to generate billing from");
+      }
+      
+      const billingItems = quotation.selling_price_charges.map((charge: any) => ({
+        id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        transaction_type: 'billing',
+        project_number: project.project_number,
+        customer_id: project.customer_id,
+        customer_name: project.customer_name,
+        description: charge.description || charge.charge_name,
+        amount: charge.amount || charge.total || 0,
+        status: 'Draft',
+        created_at: new Date().toISOString(),
+      }));
+      
+      const { error: insertError } = await supabase.from('evouchers').insert(billingItems);
+      
+      if (!insertError) {
         toast.success("Invoice generated successfully!", { id: "import-billing" });
         fetchBillings(); // Refresh the list
       } else {
-        toast.error(result.error || "Failed to generate invoice", { id: "import-billing" });
+        toast.error(insertError.message || "Failed to generate invoice", { id: "import-billing" });
       }
     } catch (error) {
       console.error("Error importing billing:", error);
@@ -138,20 +133,12 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
       
       // 2. Update each selected voucher
       const updatePromises = Array.from(selectedIds).map(id => 
-        apiFetch(`/evouchers/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            statement_reference: statementRef,
-            // We keep it as draft or move to pending? 
-            // Usually, creating a statement makes it "Ready for Approval"
-            status: "pending", 
-            billing_status: "billed",
-            remaining_balance: billings.find(b => b.id === id)?.amount || 0
-          })
-        })
+        supabase.from('evouchers').update({
+          statement_reference: statementRef,
+          status: "pending", 
+          billing_status: "billed",
+          remaining_balance: billings.find(b => b.id === id)?.amount || 0
+        }).eq('id', id)
       );
 
       await Promise.all(updatePromises);
@@ -192,23 +179,18 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
     const toastId = toast.loading("Finalizing statement...", { id: "finalize-stmt" });
 
     try {
-      const response = await apiFetch(`/statements/${statementRef}/finalize`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          user_id: currentUser?.id
-        })
-      });
+      const { error: finalizeError } = await supabase.from('evouchers').update({
+        status: 'posted',
+        billing_status: 'posted',
+        finalized_at: new Date().toISOString(),
+        finalized_by: currentUser?.id,
+      }).eq('statement_reference', statementRef);
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (!finalizeError) {
         toast.success("Statement Finalized & Posted to Ledger!", { id: "finalize-stmt" });
-        fetchBillings(); // Refresh UI
+        fetchBillings();
       } else {
-        throw new Error(result.error || "Failed to finalize");
+        throw new Error(finalizeError.message || "Failed to finalize");
       }
     } catch (error) {
       console.error("Error finalizing:", error);

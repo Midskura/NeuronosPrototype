@@ -1,7 +1,7 @@
+import type { Customer } from "../../types/bd";
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect, useRef } from "react";
 import { Search, Plus, Building2, ChevronDown } from "lucide-react";
-import type { Customer } from "../../types/bd";
-import { apiFetch } from "../../utils/api";
 
 interface CompanyAutocompleteProps {
   value: string; // company_name
@@ -30,15 +30,13 @@ export function CompanyAutocomplete({
   const fetchCustomers = async (search: string = "") => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('customers').select('*');
       if (search) {
-        params.append("search", search);
+        query = query.or(`name.ilike.%${search}%,company_name.ilike.%${search}%`);
       }
-
-      const response = await apiFetch(`/customers?${params.toString()}`);
-      const result = await response.json();
-      if (result.success) {
-        setCustomers(result.data);
+      const { data, error } = await query;
+      if (!error && data) {
+        setCustomers(data);
       }
     } catch (error) {
       console.error("Error fetching customers:", error);

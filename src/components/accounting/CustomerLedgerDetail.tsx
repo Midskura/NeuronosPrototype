@@ -8,7 +8,7 @@ import type { Customer, Industry, CustomerStatus } from "../../types/bd";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { UnifiedExpensesTab } from "./UnifiedExpensesTab";
 import type { Expense as OperationsExpense } from "../../types/operations";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { 
   ResponsiveContainer, 
   BarChart, 
@@ -56,38 +56,33 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
     try {
       setIsLoading(true);
       
-      // Fetch Revenue (Billings)
-      const billingsResponse = await apiFetch(`/billings?customerId=${customer.id}`);
+      // Fetch Revenue (Billings) from billing_line_items
+      const { data: billingsData, error: billingsError } = await supabase
+        .from('billing_line_items')
+        .select('*');
       
       // Fetch Collections
-      const collectionsResponse = await apiFetch(`/collections?customer_id=${customer.id}`);
+      const { data: collectionsData, error: collectionsError } = await supabase
+        .from('collections')
+        .select('*')
+        .eq('customer_id', customer.id);
 
       // Fetch Projects
-      const projectsResponse = await apiFetch(`/projects?customer_id=${customer.id}`);
+      const { data: projectsData, error: projectsError } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('customer_id', customer.id);
 
-      // Fetch Expenses
-      // Trying a standard filter pattern, fallback to empty if not supported
-      const expensesResponse = await apiFetch(`/accounting/expenses?customer_id=${customer.id}`);
+      // Fetch Expenses (evouchers with expense transaction_type + posted expenses)
+      const { data: expensesData, error: expensesError } = await supabase
+        .from('evouchers')
+        .select('*')
+        .eq('transaction_type', 'expense');
       
-      if (billingsResponse.ok) {
-        const data = await billingsResponse.json();
-        if (data.success) setBillings(data.data);
-      }
-      
-      if (collectionsResponse.ok) {
-        const data = await collectionsResponse.json();
-        if (data.success) setCollections(data.data);
-      }
-
-      if (projectsResponse.ok) {
-        const data = await projectsResponse.json();
-        if (data.success) setProjects(data.data);
-      }
-
-      if (expensesResponse.ok) {
-        const data = await expensesResponse.json();
-        if (data.success) setExpenses(data.data);
-      }
+      if (!billingsError && billingsData) setBillings(billingsData);
+      if (!collectionsError && collectionsData) setCollections(collectionsData);
+      if (!projectsError && projectsData) setProjects(projectsData);
+      if (!expensesError && expensesData) setExpenses(expensesData);
     } catch (error) {
       console.error("Error fetching financials:", error);
     } finally {

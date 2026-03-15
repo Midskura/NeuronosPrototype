@@ -1,7 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Activity, RefreshCw, Download, Filter, ExternalLink } from "lucide-react";
 import { useUser } from "../hooks/useUser";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import { useNavigate } from "react-router";
 import { CustomDropdown } from "./bd/CustomDropdown";
 
@@ -28,8 +26,6 @@ export function ActivityLogPage() {
   const [total, setTotal] = useState(0);
   const [hasNewActivities, setHasNewActivities] = useState(false);
   const [newActivityCount, setNewActivityCount] = useState(0);
-  
-  // baseUrl removed — using apiFetch() wrapper instead
   
   // Executive Department exception: Everyone in Executive gets director access
   const actualRole = effectiveDepartment === "Executive" ? "director" : effectiveRole;
@@ -73,12 +69,13 @@ export function ActivityLogPage() {
   
   const fetchUsersInDepartment = async (department: string) => {
     try {
-      const response = await apiFetch(`/users?department=${department}`);
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name')
+        .eq('department', department);
       
-      const result = await response.json();
-      
-      if (result.success && result.data) {
-        setUsersInDepartment(result.data.map((u: any) => ({ id: u.id, name: u.name })));
+      if (!error && data) {
+        setUsersInDepartment(data);
       }
     } catch (error) {
       console.error("Failed to fetch users:", error);
@@ -106,51 +103,41 @@ export function ActivityLogPage() {
   const loadActivities = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams({
-        role: actualRole,
-        department: effectiveDepartment,
-        limit: "50",
-        offset: "0"
-      });
+      let query = supabase
+        .from('crm_activities')
+        .select('*', { count: 'exact' })
+        .order('timestamp', { ascending: false })
+        .limit(50);
       
       if (entityTypeFilter !== "all") {
-        params.append("entity_type", entityTypeFilter);
+        query = query.eq('entity_type', entityTypeFilter);
       }
-      
       if (actionTypeFilter !== "all") {
-        params.append("action_type", actionTypeFilter);
+        query = query.eq('action_type', actionTypeFilter);
       }
-      
       if (departmentFilter !== "all") {
-        params.append("department", departmentFilter);
+        query = query.eq('department', departmentFilter);
       }
-      
       if (userFilter) {
-        params.append("user_id", userFilter);
+        query = query.eq('user_id', userFilter);
       }
-      
       if (dateFrom) {
-        params.append("date_from", dateFrom);
+        query = query.gte('timestamp', dateFrom);
       }
-      
       if (dateTo) {
-        params.append("date_to", dateTo);
+        query = query.lte('timestamp', dateTo);
       }
       
-      const response = await apiFetch(`/activity-log?${params}`);
+      const { data, error, count } = await query;
       
-      const result = await response.json();
-      
-      if (result.success) {
-        setActivities(result.data);
-        setTotal(result.total);
+      if (!error && data) {
+        setActivities(data);
+        setTotal(count || data.length);
         
-        // Track latest timestamp for new activity detection
-        if (result.data.length > 0) {
-          latestTimestampRef.current = result.data[0].timestamp;
+        if (data.length > 0) {
+          latestTimestampRef.current = data[0].timestamp;
         }
         
-        // Reset new activity indicator
         setHasNewActivities(false);
         setNewActivityCount(0);
       }
@@ -165,32 +152,22 @@ export function ActivityLogPage() {
     if (!latestTimestampRef.current) return;
     
     try {
-      const params = new URLSearchParams({
-        role: actualRole,
-        department: effectiveDepartment,
-        limit: "10",
-        offset: "0",
-        date_from: latestTimestampRef.current
-      });
+      let query = supabase
+        .from('crm_activities')
+        .select('*')
+        .gt('timestamp', latestTimestampRef.current)
+        .order('timestamp', { ascending: false })
+        .limit(10);
       
       if (entityTypeFilter !== "all") {
-        params.append("entity_type", entityTypeFilter);
+        query = query.eq('entity_type', entityTypeFilter);
       }
       
-      const response = await apiFetch(`/activity-log?${params}`);
+      const { data, error } = await query;
       
-      const result = await response.json();
-      
-      if (result.success && result.data.length > 0) {
-        // Check if there are actually new activities
-        const newerActivities = result.data.filter((act: ActivityLog) => 
-          new Date(act.timestamp) > new Date(latestTimestampRef.current!)
-        );
-        
-        if (newerActivities.length > 0) {
-          setHasNewActivities(true);
-          setNewActivityCount(newerActivities.length);
-        }
+      if (!error && data && data.length > 0) {
+        setHasNewActivities(true);
+        setNewActivityCount(data.length);
       }
     } catch (error) {
       console.error("Failed to check for new activities:", error);

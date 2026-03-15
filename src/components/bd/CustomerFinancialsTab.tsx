@@ -1,18 +1,7 @@
+import type { Customer } from "../../types/bd";
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect } from "react";
 import { TrendingUp, CreditCard, DollarSign, Activity, FileText } from "lucide-react";
-import type { Customer } from "../../types/bd";
-import { apiFetch } from "../../utils/api";
-import { 
-  ResponsiveContainer, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip,
-  Legend,
-  Cell
-} from "recharts";
 
 interface CustomerFinancialsTabProps {
   customer: Customer;
@@ -32,23 +21,23 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
       setIsLoading(true);
       
       // Fetch Revenue (Billings)
-      const billingsResponse = await apiFetch(`/billings?customerId=${customer.id}`);
+      const { data: billingRows } = await supabase
+        .from('billing_line_items')
+        .select('*')
+        .eq('customer_id', customer.id);
       
       // Fetch Collections
-      const collectionsResponse = await apiFetch(`/collections?customer_id=${customer.id}`);
+      const { data: collectionRows } = await supabase
+        .from('collections')
+        .select('*')
+        .eq('customer_id', customer.id);
       
-      if (billingsResponse.ok) {
-        const billingsData = await billingsResponse.json();
-        if (billingsData.success) {
-           setBillings(billingsData.data);
-        }
+      if (billingRows) {
+        setBillings(billingRows);
       }
       
-      if (collectionsResponse.ok) {
-        const collectionsData = await collectionsResponse.json();
-        if (collectionsData.success) {
-           setCollections(collectionsData.data);
-        }
+      if (collectionRows) {
+        setCollections(collectionRows);
       }
     } catch (error) {
       console.error("Error fetching financials:", error);

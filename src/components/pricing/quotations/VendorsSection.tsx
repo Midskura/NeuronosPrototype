@@ -4,7 +4,7 @@ import type { Vendor, VendorType, ServiceType, QuotationChargeCategory } from ".
 import type { VendorLineItem } from "../../../data/networkPartners"; // ⚠️ DEPRECATED - kept for backward compatibility
 import { NETWORK_PARTNERS, COUNTRIES } from "../../../data/networkPartners";
 import { FormSelect } from "./FormSelect";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { ChargeCategoriesManager } from "../shared/ChargeCategoriesManager";
 import { toast } from "sonner";
 
@@ -157,18 +157,11 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
     if (vendorBackendId) {
       try {
         console.log(`🌐 Fetching rates from backend for ${vendor.name}...`);
-        const response = await apiFetch(
-          `/vendors/${vendorBackendId}/charge-categories`
-        );
+        const { data: ccData, error: ccError } = await supabase.from('vendor_charge_categories').select('*').eq('vendor_id', vendorBackendId);
         
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success && result.data && result.data.length > 0) {
-            fetchedRates = result.data;
-            console.log(`✅ Fetched ${fetchedRates.length} categories from backend for ${vendor.name}`);
-          }
-        } else {
-          console.warn(`⚠️ Backend returned ${response.status} for ${vendor.name}`);
+        if (!ccError && ccData && ccData.length > 0) {
+          fetchedRates = ccData;
+          console.log(`✅ Fetched ${fetchedRates.length} categories from backend for ${vendor.name}`);
         }
       } catch (error) {
         console.warn(`⚠️ Failed to fetch rates for ${vendor.name}:`, error);
@@ -276,16 +269,10 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
       // Try to fetch live vendor data from backend
       if (vendor.vendor_id) {
         try {
-          const response = await apiFetch(
-            `/vendors/${vendor.vendor_id}/charge-categories`
-          );
-          
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              data = result.data;
-              console.log(`✅ Imported live charge categories from backend for vendor ${vendor.name}`);
-            }
+          const { data: ccData } = await supabase.from('vendor_charge_categories').select('*').eq('vendor_id', vendor.vendor_id);
+          if (ccData && ccData.length > 0) {
+            data = ccData;
+            console.log(`✅ Imported live charge categories from backend for vendor ${vendor.name}`);
           }
         } catch (error) {
           console.warn(`⚠️ Failed to fetch live vendor data, using fallback:`, error);
@@ -326,23 +313,14 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
     setSavingVendorId(vendorId);
     
     try {
-      // Step 1: Save to backend
-      const response = await apiFetch(
-        `/vendors/${vendor.vendor_id}/charge-categories`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            charge_categories: cachedRates
-          })
-        }
-      );
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Backend returned ${response.status}`);
+      // Step 1: Save to backend - delete existing and re-insert
+      await supabase.from('vendor_charge_categories').delete().eq('vendor_id', vendor.vendor_id);
+      if (cachedRates.length > 0) {
+        const { error: saveError } = await supabase.from('vendor_charge_categories').insert(
+          cachedRates.map((cc: any) => ({ ...cc, vendor_id: vendor.vendor_id }))
+        );
+        if (saveError) throw new Error(saveError.message);
       }
-      
-      const result = await response.json();
       console.log(`✅ Saved ${cachedRates.length} categories to backend for ${vendor.name}`);
       
       // Step 2: Update originalVendorRates to reflect saved state

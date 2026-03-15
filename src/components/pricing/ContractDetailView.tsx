@@ -16,7 +16,7 @@ import { useState, useEffect, useMemo } from "react";
 import { ArrowLeft, Edit3, RefreshCw, FileText, Calendar, Building2, Briefcase, Ship, Shield, Truck, Clock, Zap, Plus, ChevronDown, Layout, Layers, Users, Receipt, FileStack, DollarSign, TrendingUp, Paperclip, MessageSquare, Eye, MoreVertical } from "lucide-react";
 import type { QuotationNew, ContractRateMatrix } from "../../types/pricing";
 import { ContractRateCardV2 as ContractRateMatrixEditor } from "./quotations/ContractRateCardV2";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { CreateBookingFromContractPanel } from "../contracts/CreateBookingFromContractPanel";
 import type { InquiryService } from "../../types/pricing";
@@ -143,21 +143,14 @@ export function ContractDetailView({
         updated_at: new Date().toISOString(),
       };
 
-      const response = await apiFetch(
-        `/quotations/${quotation.id}`,
-        {
-          method: "PUT",
-          body: JSON.stringify(updatedQuotation),
-        }
-      );
-      const data = await response.json();
-      if (data.success) {
+      const { error } = await supabase.from('quotations').update(updatedQuotation).eq('id', quotation.id);
+      if (!error) {
         toast.success("Contract activated successfully! Operations can now link bookings.");
         if (onUpdate) {
           onUpdate(updatedQuotation);
         }
       } else {
-        toast.error(data.error || "Failed to activate contract");
+        toast.error(error.message || "Failed to activate contract");
       }
     } catch (err) {
       console.error("Error activating contract:", err);
@@ -189,20 +182,16 @@ export function ContractDetailView({
   const fetchLinkedBookings = async () => {
     setIsLoadingBookings(true);
     try {
-      // Primary: try fetching from bookings API with contract_id filter
-      const response = await apiFetch(
-        `/bookings?contract_id=${quotation.id}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const fetched = data.data || data.bookings || [];
-        if (fetched.length > 0) {
-          setLinkedBookings(fetched);
-          return;
-        }
+      // Fetch bookings linked to this contract across all booking tables
+      const tables = ['forwarding_bookings', 'brokerage_bookings', 'trucking_bookings', 'marine_insurance_bookings', 'others_bookings'];
+      const allBookings: any[] = [];
+      for (const table of tables) {
+        const { data } = await supabase.from(table).select('*').eq('contract_id', quotation.id);
+        if (data) allBookings.push(...data);
       }
-      // Fallback: use the contract's own linkedBookings array
-      if ((quotation as any).linkedBookings?.length > 0) {
+      if (allBookings.length > 0) {
+        setLinkedBookings(allBookings);
+      } else if ((quotation as any).linkedBookings?.length > 0) {
         setLinkedBookings((quotation as any).linkedBookings);
       }
     } catch (err) {
@@ -219,16 +208,9 @@ export function ContractDetailView({
   const fetchActivityLog = async () => {
     setIsLoadingActivity(true);
     try {
-      const response = await apiFetch(
-        `/contracts/${quotation.id}/activity`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const fetched = data.data || data.activity || [];
-        if (fetched.length > 0) {
-          setActivityEvents(fetched);
-          return;
-        }
+      const { data } = await supabase.from('contract_activity').select('*').eq('contract_id', quotation.id).order('created_at', { ascending: false });
+      if (data && data.length > 0) {
+        setActivityEvents(data);
       }
     } catch (err) {
       console.error("Error fetching contract activity log:", err);
@@ -245,28 +227,31 @@ export function ContractDetailView({
     }
     setIsRenewing(true);
     try {
-      const response = await apiFetch(
-        `/contracts/${quotation.id}/renew`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            new_validity_start: renewStart,
-            new_validity_end: renewEnd,
-          }),
-        }
-      );
-      const data = await response.json();
-      if (data.success) {
-        toast.success(`Contract renewed as ${data.new_contract.quote_number}`);
+      // Create a renewed copy of this contract
+      const newQuoteNumber = `${quotation.quote_number}-R${Date.now().toString().slice(-4)}`;
+      const renewedContract = {
+        ...quotation,
+        id: `quot-${Date.now()}`,
+        quote_number: newQuoteNumber,
+        contract_validity_start: renewStart,
+        contract_validity_end: renewEnd,
+        contract_status: 'Active',
+        status: 'Converted to Contract',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      delete (renewedContract as any).project_id;
+      const { data: newContract, error: renewError } = await supabase.from('quotations').insert(renewedContract).select().single();
+      if (!renewError && newContract) {
+        toast.success(`Contract renewed as ${newContract.quote_number}`);
         setShowRenewModal(false);
         setRenewStart("");
         setRenewEnd("");
-        // Update current view to show renewed status
         if (onUpdate) {
           onUpdate({ ...quotation, contract_status: "Renewed" });
         }
       } else {
-        toast.error(data.error || "Failed to renew contract");
+        toast.error(renewError?.message || "Failed to renew contract");
       }
     } catch (err) {
       console.error("Error renewing contract:", err);
@@ -282,24 +267,23 @@ export function ContractDetailView({
       setGeneratingBillingId(bookingId);
       toast.loading(`Generating billing for ${serviceType}...`, { id: "gen-billing" });
 
-      const response = await apiFetch(
-        `/contracts/${quotation.id}/generate-billing`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            booking_id: bookingId,
-            service_type: serviceType,
-          }),
-        }
-      );
+      // Generate billing: create an evoucher for this booking
+      const billingData = {
+        id: `ev-${Date.now()}`,
+        contract_id: quotation.id,
+        booking_id: bookingId,
+        service_type: serviceType,
+        transaction_type: 'billing',
+        status: 'Draft',
+        created_at: new Date().toISOString(),
+      };
+      const { error: billingError } = await supabase.from('evouchers').insert(billingData);
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (!billingError) {
         toast.success("Billing generated successfully!", { id: "gen-billing" });
         contractFinancials.refresh();
       } else {
-        toast.error(result.error || "Failed to generate billing", { id: "gen-billing" });
+        toast.error(billingError.message || "Failed to generate billing", { id: "gen-billing" });
       }
     } catch (error) {
       console.error("Error generating billing:", error);
@@ -739,18 +723,11 @@ export function ContractDetailView({
               status={contractStatus as any}
               onUpdateStatus={async (newStatus) => {
                 try {
-                  const response = await apiFetch(
-                    `/contracts/${quotation.id}/status`,
-                    {
-                      method: "PATCH",
-                      body: JSON.stringify({
-                        status: newStatus,
-                        user: currentUser?.name || "Unknown",
-                      }),
-                    }
-                  );
-                  const data = await response.json();
-                  if (data.success) {
+                  const { error: statusError } = await supabase.from('quotations').update({
+                    contract_status: newStatus,
+                    updated_at: new Date().toISOString(),
+                  }).eq('id', quotation.id);
+                  if (!statusError) {
                     toast.success(`Status changed to ${newStatus}`);
                     if (onUpdate) onUpdate({ ...quotation, contract_status: newStatus });
                   } else {

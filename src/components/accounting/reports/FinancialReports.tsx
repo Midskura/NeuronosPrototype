@@ -1,4 +1,4 @@
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { useState, useEffect, useMemo } from "react";
 import { TrendingUp, TrendingDown, DollarSign, PieChart, Activity, Download, Calendar } from "lucide-react";
 import { 
@@ -25,13 +25,12 @@ export function FinancialReports() {
   const fetchAccounts = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(`/accounts`);
+      const { data, error } = await supabase
+        .from('accounts')
+        .select('*');
       
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setAccounts(result.data || []);
-        }
+      if (!error && data) {
+        setAccounts(data);
       }
     } catch (error) {
       console.error("Error fetching accounts:", error);

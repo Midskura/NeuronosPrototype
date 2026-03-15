@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { QuotationNew } from "../../types/pricing";
 import { X } from "lucide-react";
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 
 interface CreateProjectModalProps {
@@ -38,25 +36,22 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
 
     setIsCreating(true);
     try {
-      const response = await apiFetch(`/projects`, {
-        method: 'POST',
-        body: JSON.stringify({
-          quotation_id: quotation.id,
-          ...formData,
-          ops_assigned_user_id: formData.ops_assigned_user_name ? "user-ops-rep-001" : null,
-          bd_owner_user_id: currentUser?.id,
-          bd_owner_user_name: currentUser?.name
-        })
-      });
+      const projectData = {
+        id: `proj-${Date.now()}`,
+        quotation_id: quotation.id,
+        ...formData,
+        ops_assigned_user_id: formData.ops_assigned_user_name ? "user-ops-rep-001" : null,
+        bd_owner_user_id: currentUser?.id,
+        bd_owner_user_name: currentUser?.name,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
 
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success("Project created successfully!");
-        onSuccess(result.data.id);
-      } else {
-        toast.error("Error creating project", result.error);
-      }
+      const { data, error } = await supabase.from('projects').insert(projectData).select().single();
+      if (error) throw error;
+      
+      toast.success("Project created successfully!");
+      onSuccess(data.id);
     } catch (error) {
       console.error('Error creating project:', error);
       toast.error("Failed to create project");

@@ -1,4 +1,4 @@
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { useState } from "react";
 import { CheckCircle, XCircle, Send, Ban, Loader2 } from "lucide-react";
 
@@ -29,7 +29,6 @@ export function EVoucherWorkflowPanel({
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Get current user from localStorage
       const userData = localStorage.getItem("neuron_user");
       const user = userData ? JSON.parse(userData) : null;
 
@@ -38,23 +37,29 @@ export function EVoucherWorkflowPanel({
         return;
       }
 
-      const response = await apiFetch(`/evouchers/${evoucherId}/submit`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.department
-        })
+      // Update evoucher status
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'pending', updated_at: new Date().toISOString() })
+        .eq('id', evoucherId);
+
+      if (updateError) throw updateError;
+
+      // Insert history record
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucherId,
+        action: 'Submitted for Approval',
+        previous_status: 'draft',
+        new_status: 'pending',
+        performed_by: user.id,
+        performed_by_name: user.name,
+        performed_by_role: user.department,
+        created_at: new Date().toISOString()
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("E-Voucher submitted for approval successfully!");
-        onStatusChange?.();
-      } else {
-        alert(`Error: ${result.error}`);
-      }
+      alert("E-Voucher submitted for approval successfully!");
+      onStatusChange?.();
     } catch (error) {
       console.error("Error submitting E-Voucher:", error);
       alert("Failed to submit E-Voucher");
@@ -78,23 +83,27 @@ export function EVoucherWorkflowPanel({
         return;
       }
 
-      const response = await apiFetch(`/evouchers/${evoucherId}/approve`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.department
-        })
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'Approved', updated_at: new Date().toISOString() })
+        .eq('id', evoucherId);
+
+      if (updateError) throw updateError;
+
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucherId,
+        action: 'Approved',
+        previous_status: 'pending',
+        new_status: 'Approved',
+        performed_by: user.id,
+        performed_by_name: user.name,
+        performed_by_role: user.department,
+        created_at: new Date().toISOString()
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("E-Voucher approved successfully! Use 'Post to Ledger' to create the accounting entry.");
-        onStatusChange?.();
-      } else {
-        alert(`Error: ${result.error}`);
-      }
+      alert("E-Voucher approved successfully! Use 'Post to Ledger' to create the accounting entry.");
+      onStatusChange?.();
     } catch (error) {
       console.error("Error approving E-Voucher:", error);
       alert("Failed to approve E-Voucher");
@@ -118,23 +127,27 @@ export function EVoucherWorkflowPanel({
         return;
       }
 
-      const response = await apiFetch(`/evouchers/${evoucherId}/post-to-ledger`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.department
-        })
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'posted', posted_to_ledger: true, updated_at: new Date().toISOString() })
+        .eq('id', evoucherId);
+
+      if (updateError) throw updateError;
+
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucherId,
+        action: 'Posted to Ledger',
+        previous_status: 'Approved',
+        new_status: 'posted',
+        performed_by: user.id,
+        performed_by_name: user.name,
+        performed_by_role: user.department,
+        created_at: new Date().toISOString()
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("E-Voucher posted to ledger successfully! Check the relevant module (Expenses/Collections/Billings) to see the entry.");
-        onStatusChange?.();
-      } else {
-        alert(`Error: ${result.error}`);
-      }
+      alert("E-Voucher posted to ledger successfully! Check the relevant module (Expenses/Collections/Billings) to see the entry.");
+      onStatusChange?.();
     } catch (error) {
       console.error("Error posting E-Voucher to ledger:", error);
       alert("Failed to post E-Voucher to ledger");
@@ -159,26 +172,30 @@ export function EVoucherWorkflowPanel({
         return;
       }
 
-      const response = await apiFetch(`/evouchers/${evoucherId}/reject`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.department,
-          rejection_reason: rejectionReason
-        })
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'rejected', updated_at: new Date().toISOString() })
+        .eq('id', evoucherId);
+
+      if (updateError) throw updateError;
+
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucherId,
+        action: 'Rejected',
+        previous_status: 'pending',
+        new_status: 'rejected',
+        performed_by: user.id,
+        performed_by_name: user.name,
+        performed_by_role: user.department,
+        notes: rejectionReason,
+        created_at: new Date().toISOString()
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("E-Voucher rejected successfully.");
-        setShowRejectModal(false);
-        setRejectionReason("");
-        onStatusChange?.();
-      } else {
-        alert(`Error: ${result.error}`);
-      }
+      alert("E-Voucher rejected successfully.");
+      setShowRejectModal(false);
+      setRejectionReason("");
+      onStatusChange?.();
     } catch (error) {
       console.error("Error rejecting E-Voucher:", error);
       alert("Failed to reject E-Voucher");
@@ -202,23 +219,27 @@ export function EVoucherWorkflowPanel({
         return;
       }
 
-      const response = await apiFetch(`/evouchers/${evoucherId}/cancel`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user.id,
-          user_name: user.name,
-          user_role: user.department
-        })
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'cancelled', updated_at: new Date().toISOString() })
+        .eq('id', evoucherId);
+
+      if (updateError) throw updateError;
+
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucherId,
+        action: 'Cancelled',
+        previous_status: currentStatus,
+        new_status: 'cancelled',
+        performed_by: user.id,
+        performed_by_name: user.name,
+        performed_by_role: user.department,
+        created_at: new Date().toISOString()
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        alert("E-Voucher cancelled successfully.");
-        onStatusChange?.();
-      } else {
-        alert(`Error: ${result.error}`);
-      }
+      alert("E-Voucher cancelled successfully.");
+      onStatusChange?.();
     } catch (error) {
       console.error("Error cancelling E-Voucher:", error);
       alert("Failed to cancel E-Voucher");

@@ -1,8 +1,7 @@
-import { X, Upload, Phone, Mail, Users, MessageSquare, Send, MessageCircle, Linkedin, StickyNote, FileText, Trash2 } from "lucide-react";
+import { CustomDropdown } from "./CustomDropdown";
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect, useRef } from "react";
 import type { Activity, ActivityType } from "../../types/bd";
-import { CustomDropdown } from "./CustomDropdown";
-import { apiFetch } from "../../utils/api";
 
 interface AddActivityPanelProps {
   isOpen: boolean;
@@ -52,19 +51,12 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch contacts
-        const contactsResponse = await apiFetch(`/contacts`);
-        if (contactsResponse.ok) {
-          const result = await contactsResponse.json();
-          if (result.success) setContacts(result.data);
-        }
-
-        // Fetch customers
-        const customersResponse = await apiFetch(`/customers`);
-        if (customersResponse.ok) {
-          const result = await customersResponse.json();
-          if (result.success) setCustomers(result.data);
-        }
+        const [{ data: contactRows }, { data: customerRows }] = await Promise.all([
+          supabase.from('contacts').select('*'),
+          supabase.from('customers').select('*'),
+        ]);
+        if (contactRows) setContacts(contactRows);
+        if (customerRows) setCustomers(customerRows);
         
         console.log('[AddActivityPanel] Fetched dropdown data');
       } catch (error) {

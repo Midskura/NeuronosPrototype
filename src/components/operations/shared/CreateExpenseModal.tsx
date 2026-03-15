@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import type { Expense } from "../../../types/operations";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { toast } from "../../ui/toast-utils";
 
 interface CreateExpenseModalProps {
@@ -63,19 +63,15 @@ export function CreateExpenseModal({
         notes: notes || undefined,
       };
 
-      const response = await apiFetch(`/expenses`, {
-        method: "POST",
-        body: JSON.stringify(expenseData)
+      const { error } = await supabase.from('expenses').insert({
+        ...expenseData,
+        id: `exp-${Date.now()}`,
+        created_at: new Date().toISOString(),
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success("Expense created successfully");
-        onExpenseCreated();
-      } else {
-        toast.error("Error creating expense: " + result.error);
-      }
+      if (error) throw error;
+      toast.success("Expense created successfully");
+      onExpenseCreated();
     } catch (error) {
       console.error('Error creating expense:', error);
       toast.error('Unable to create expense');

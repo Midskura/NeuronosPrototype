@@ -12,7 +12,7 @@ import { AddAccountForm } from "./AddAccountForm";
 import { formatCurrency } from "../../utils/accounting-math";
 import { SidePanel } from "../common/SidePanel";
 import { toast } from "../ui/toast-utils";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
 
 export function TransactionsModule() {
@@ -223,26 +223,28 @@ export function TransactionsModule() {
 
       try {
         if (txn.source_document_id) {
-          // 3. Post to Ledger via Backend
-          const response = await apiFetch(`/evouchers/${txn.source_document_id}/post-to-ledger`, {
-            method: 'POST',
-            body: JSON.stringify({
-              user_id: "user-system",
-              user_name: "System User",
-              user_role: "Accountant",
-              debit_account_id: txn.category_account_id,
-              credit_account_id: selectedBankId,
-              posting_date: txn.date
-            }),
-          });
+          // 3. Post to Ledger via Supabase — insert journal entry directly
+          const journalEntry = {
+            evoucher_id: txn.source_document_id,
+            debit_account_id: txn.category_account_id,
+            credit_account_id: selectedBankId,
+            amount: txn.amount,
+            posting_date: txn.date,
+            description: txn.description,
+            posted_by: "user-system",
+            posted_by_name: "System User",
+            status: 'posted',
+            created_at: new Date().toISOString(),
+          };
           
-          if (!response.ok) {
-            const errData = await response.json();
-            throw new Error(errData.error || "Failed to post");
-          }
+          const { error: jeError } = await supabase.from('journal_entries').insert(journalEntry);
+          if (jeError) throw new Error(jeError.message);
+
+          // Update the evoucher status to posted
+          await supabase.from('evouchers').update({ status: 'posted', updated_at: new Date().toISOString() }).eq('id', txn.source_document_id);
           
           toast.success("Transaction posted to ledger");
-          refreshTxns(); // Confirm with fresh server data
+          refreshTxns();
         } else {
           // Manual transaction logic would go here
           toast.info("Manual transaction posted (Mock)");

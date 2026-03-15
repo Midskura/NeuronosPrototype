@@ -1,7 +1,6 @@
+import type { Project } from "../../types/pricing";
 import { useState, useEffect } from "react";
 import { X, CheckCircle, FileText, Info } from "lucide-react";
-import type { Project } from "../../types/pricing";
-import { apiFetch } from "../../utils/api";
 import { 
   autofillForwardingFromProject,
   autofillBrokerageFromProject,
@@ -80,7 +79,7 @@ export function CreateBookingFromProjectModal({
       switch (serviceType) {
         case "Forwarding":
           bookingData = autofillForwardingFromProject(project);
-          endpoint = `/forwarding-bookings`;
+          endpoint = `forwarding_bookings`;
           bookingIdPrefix = "FWD";
           
           // Add required fields for forwarding (only if not already autofilled)
@@ -105,7 +104,7 @@ export function CreateBookingFromProjectModal({
 
         case "Brokerage":
           bookingData = autofillBrokerageFromProject(project);
-          endpoint = `/brokerage-bookings`;
+          endpoint = `brokerage_bookings`;
           bookingIdPrefix = "BRK";
           
           bookingData = {
@@ -130,7 +129,7 @@ export function CreateBookingFromProjectModal({
 
         case "Trucking":
           bookingData = autofillTruckingFromProject(project);
-          endpoint = `/trucking-bookings`;
+          endpoint = `trucking_bookings`;
           bookingIdPrefix = "TRK";
           
           bookingData = {
@@ -150,7 +149,7 @@ export function CreateBookingFromProjectModal({
 
         case "Marine Insurance":
           bookingData = autofillMarineInsuranceFromProject(project);
-          endpoint = `/marine-insurance-bookings`;
+          endpoint = `marine_insurance_bookings`;
           bookingIdPrefix = "INS";
           
           bookingData = {
@@ -171,7 +170,7 @@ export function CreateBookingFromProjectModal({
 
         case "Others":
           bookingData = autofillOthersFromProject(project);
-          endpoint = `/others-bookings`;
+          endpoint = `others_bookings`;
           bookingIdPrefix = "OTH";
           
           bookingData = {
@@ -192,22 +191,16 @@ export function CreateBookingFromProjectModal({
 
       // Create the booking
       console.log(`Creating ${serviceType} booking from project ${project.project_number}...`);
-      const response = await apiFetch(endpoint, {
-        method: "POST",
-        body: JSON.stringify(bookingData),
-      });
+      const { data: createdBooking, error: createError } = await supabase.from(endpoint).insert(bookingData).select().single();
 
-      if (!response.ok) {
-        throw new Error(`Failed to create booking: ${response.statusText}`);
+      if (createError) {
+        throw new Error(createError.message || "Failed to create booking");
       }
-
-      const result = await response.json();
       
-      if (!result.success) {
-        throw new Error(result.error || "Failed to create booking");
+      if (!createdBooking) {
+        throw new Error("Failed to create booking");
       }
 
-      const createdBooking = result.data;
       console.log(`✓ Created booking: ${createdBooking.bookingId}`);
 
       // Link booking to project

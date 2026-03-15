@@ -8,7 +8,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 
 interface CustomerOption {
   value: string;
@@ -21,11 +21,9 @@ export function useCustomerOptions(isOpen: boolean): CustomerOption[] {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await apiFetch(`/customers`);
-        if (response.ok) {
-          const result = await response.json();
-          const customers = result.data || result || [];
-          const options = customers.map((c: any) => ({
+        const { data, error } = await supabase.from('customers').select('*');
+        if (!error && data) {
+          const options = data.map((c: any) => ({
             value: c.company_name || c.name || c.id,
             label: c.company_name || c.name || c.id,
           }));

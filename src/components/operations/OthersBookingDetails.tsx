@@ -7,10 +7,10 @@ import { ExpensesTab } from "./shared/ExpensesTab";
 import { BookingCommentsTab } from "../shared/BookingCommentsTab";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 import { StatusSelector } from "../StatusSelector";
-import { apiFetch } from "../../utils/api";
 import { toast } from "../ui/toast-utils";
 import { EditableSectionCard, useSectionEdit } from "../shared/EditableSectionCard";
 import { EditableField } from "../shared/EditableField";
+import { supabase } from "../../utils/supabase/client";
 
 interface OthersBookingDetailsProps {
   booking: OthersBooking;
@@ -140,11 +140,8 @@ export function OthersBookingDetails({ booking, onBack, onUpdate, currentUser, i
     setEditedBooking(prev => ({ ...prev, status: newStatus }));
     setActivityLog(prev => [{ id: `activity-${Date.now()}`, timestamp: new Date(), user: currentUser?.name || "Current User", action: "status_changed", statusFrom: oldStatus, statusTo: newStatus }, ...prev]);
     try {
-      const response = await apiFetch(`/others-bookings/${booking.bookingId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ status: newStatus })
-      });
-      if (!response.ok) throw new Error('Failed to update status');
+      const { error } = await supabase.from('others_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
+      if (error) throw error;
       toast.success(`Status updated to ${newStatus}`);
       onUpdate();
     } catch (error) {

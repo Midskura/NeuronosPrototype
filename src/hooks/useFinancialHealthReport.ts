@@ -2,7 +2,7 @@
 // and groups them by project for the Financial Health / Sales Report page
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 
 export interface ProjectFinancialRow {
   projectNumber: string;
@@ -36,34 +36,25 @@ export function useFinancialHealthReport(monthFilter?: string) {
   const fetchAll = useCallback(async () => {
     try {
       setIsLoading(true);
-      const [projRes, billRes, expRes, invRes, colRes] = await Promise.all([
-        apiFetch(`/projects`),
-        apiFetch(`/accounting/billing-items`),
-        apiFetch(`/accounting/expenses`),
-        apiFetch(`/accounting/invoices`),
-        apiFetch(`/accounting/collections`),
+      const [
+        { data: projRows },
+        { data: billRows },
+        { data: expRows },
+        { data: invRows },
+        { data: colRows },
+      ] = await Promise.all([
+        supabase.from("projects").select("*"),
+        supabase.from("billing_line_items").select("*"),
+        supabase.from("expenses").select("*"),
+        supabase.from("invoices").select("*"),
+        supabase.from("collections").select("*"),
       ]);
 
-      if (projRes.ok) {
-        const d = await projRes.json();
-        setProjects(d.success ? d.data || [] : d || []);
-      }
-      if (billRes.ok) {
-        const d = await billRes.json();
-        setBillingItems(d.success ? d.data || [] : []);
-      }
-      if (expRes.ok) {
-        const d = await expRes.json();
-        setExpenses(d.success ? d.data || [] : d.data || []);
-      }
-      if (invRes.ok) {
-        const d = await invRes.json();
-        setInvoices(d.success ? d.data || [] : []);
-      }
-      if (colRes.ok) {
-        const d = await colRes.json();
-        setCollections(d.success ? d.data || [] : []);
-      }
+      setProjects(projRows || []);
+      setBillingItems(billRows || []);
+      setExpenses(expRows || []);
+      setInvoices(invRows || []);
+      setCollections(colRows || []);
     } catch (error) {
       console.error("Error fetching financial health data:", error);
     } finally {

@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from "react";
 import { Upload, File, Download, Trash2, FileText, Image as ImageIcon, Loader2 } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 interface EntityAttachmentsTabProps {
@@ -34,6 +34,7 @@ interface Attachment {
   uploaded_by: string;
   uploaded_at: string;
   isUploading?: boolean;
+  storage_path?: string;
 }
 
 export function EntityAttachmentsTab({ entityId, entityType, currentUser }: EntityAttachmentsTabProps) {
@@ -50,12 +51,15 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
   const fetchAttachments = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(
-        `/${entityType}/${entityId}/attachments`
-      );
+      const { data, error } = await supabase
+        .from('entity_attachments')
+        .select('*')
+        .eq('entity_type', entityType)
+        .eq('entity_id', entityId)
+        .order('uploaded_at', { ascending: false });
 
-      if (response.success) {
-        setAttachments(response.data || []);
+      if (!error) {
+        setAttachments(data || []);
       }
     } catch (error) {
       console.error(`Error fetching ${entityType} attachments:`, error);
@@ -96,21 +100,27 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
         const tempId = optimisticAttachments[i].id;
         
         try {
-          const formData = new FormData();
-          formData.append('file', file);
-          formData.append('uploaded_by', currentUser.name);
+          const filePath = `${entityType}/${entityId}/${Date.now()}-${file.name}`;
+          const { error: uploadError } = await supabase.storage
+            .from('attachments')
+            .upload(filePath, file);
 
-          const response = await apiFetch(
-            `/${entityType}/${entityId}/attachments`,
-            {
-              method: 'POST',
-              body: formData
-            }
-          );
+          if (uploadError) throw new Error(`Failed to upload ${file.name}`);
 
-          if (!response.ok) {
-            throw new Error(`Failed to upload ${file.name}`);
-          }
+          const { data: urlData } = supabase.storage.from('attachments').getPublicUrl(filePath);
+
+          // Save attachment record
+          await supabase.from('entity_attachments').insert({
+            entity_type: entityType,
+            entity_id: entityId,
+            file_name: file.name,
+            file_size: file.size,
+            file_type: file.type,
+            file_url: urlData.publicUrl,
+            storage_path: filePath,
+            uploaded_by: currentUser.name,
+            uploaded_at: new Date().toISOString(),
+          });
         } catch (error) {
           // Remove failed upload from optimistic list
           setAttachments(prev => prev.filter(a => a.id !== tempId));
@@ -135,14 +145,19 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
     if (!confirm("Are you sure you want to delete this file?")) return;
 
     try {
-      const response = await apiFetch(
-        `/${entityType}/${entityId}/attachments/${attachmentId}`,
-        {
-          method: 'DELETE',
-        }
-      );
+      // Get the attachment to find storage path
+      const attachment = attachments.find(a => a.id === attachmentId);
+      
+      const { error: deleteError } = await supabase
+        .from('entity_attachments')
+        .delete()
+        .eq('id', attachmentId);
 
-      if (response.ok) {
+      if (!deleteError) {
+        // Also delete from storage if we have the path
+        if ((attachment as any)?.storage_path) {
+          await supabase.storage.from('attachments').remove([(attachment as any).storage_path]);
+        }
         toast.success("File deleted successfully");
         fetchAttachments();
       } else {

@@ -1,5 +1,4 @@
-import { PartnerSheet } from "./partners/PartnerSheet";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { useNetworkPartners } from "../../hooks/useNetworkPartners";
 
 // --- UNIFIED COMPONENT SYSTEM ---
@@ -232,18 +231,10 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
   const loadChargeCategories = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(
-        `/vendors/${currentVendor.id}/charge-categories`
-      );
+      const { data, error } = await supabase.from('vendor_charge_categories').select('*').eq('vendor_id', currentVendor.id);
 
-      if (!response.ok) {
-        throw new Error(`Failed to load charge categories: ${response.statusText}`);
-      }
-
-      const result = await response.json();
-      
-      if (result.success && result.data) {
-        setChargeCategories(result.data);
+      if (!error && data) {
+        setChargeCategories(data);
       } else {
         setChargeCategories(currentVendor.charge_categories || []);
       }
@@ -258,19 +249,15 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
   const saveChargeCategories = async () => {
     try {
       setIsSaving(true);
-      const response = await apiFetch(
-        `/vendors/${currentVendor.id}/charge-categories`,
-        {
-          method: 'POST',
-          body: JSON.stringify({ charge_categories: chargeCategories })
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Failed to save charge categories: ${response.statusText}`);
+      // Delete existing and re-insert
+      await supabase.from('vendor_charge_categories').delete().eq('vendor_id', currentVendor.id);
+      if (chargeCategories.length > 0) {
+        const { error } = await supabase.from('vendor_charge_categories').insert(
+          chargeCategories.map((cc: any) => ({ ...cc, vendor_id: currentVendor.id }))
+        );
+        if (error) throw error;
       }
 
-      const result = await response.json();
       console.log(`✅ Saved ${chargeCategories.length} charge categories for vendor ${currentVendor.id}`);
       setHasUnsavedChanges(false);
     } catch (error) {

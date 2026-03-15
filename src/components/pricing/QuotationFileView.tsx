@@ -5,12 +5,12 @@ import { QuotationActionMenu } from "./QuotationActionMenu";
 import { StatusChangeButton } from "./StatusChangeButton";
 import { CreateProjectModal } from "../bd/CreateProjectModal";
 import { CreateBookingsFromProjectModal } from "./CreateBookingsFromProjectModal";
-import { apiFetch } from "../../utils/api";
 import { toast } from "../ui/toast-utils";
 import { CommentsTab } from "../shared/CommentsTab";
 import { SegmentedToggle } from "../ui/SegmentedToggle";
 import { QuotationPDFScreen } from "../projects/quotation/screen/QuotationPDFScreen";
 import { QuotationFormView } from "../projects/quotation/QuotationFormView";
+import { supabase } from "../../utils/supabase/client";
 
 interface QuotationFileViewProps {
   quotation: QuotationNew;
@@ -219,40 +219,39 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     setIsCreatingProject(true);
 
     try {
-      const response = await apiFetch(`/quotations/${quotation.id}/accept-and-create-project`, {
-        method: 'POST',
-        body: JSON.stringify({
-          bd_owner_user_id: currentUser.id,
-          bd_owner_user_name: currentUser.name,
-          ops_assigned_user_id: null,
-          ops_assigned_user_name: null,
-          special_instructions: ""
-        })
-      });
+      // Accept quotation: update status to 'Accepted' and create project
+      const { error: qError } = await supabase.from('quotations').update({
+        status: 'Accepted',
+        accepted_at: new Date().toISOString(),
+      }).eq('id', quotation.id);
+      if (qError) throw new Error(qError.message);
 
-      const result = await response.json();
+      // Create the project
+      const projectNumber = `PRJ-${Date.now().toString().slice(-6)}`;
+      const projectData = {
+        id: `proj-${Date.now()}`,
+        project_number: projectNumber,
+        quotation_id: quotation.id,
+        customer_id: quotation.customer_id,
+        customer_name: quotation.customer_name || quotation.company_name,
+        status: 'Active',
+        bd_owner_user_id: currentUser.id,
+        bd_owner_user_name: currentUser.name,
+        created_at: new Date().toISOString(),
+      };
+      const { data: project, error: pError } = await supabase.from('projects').insert(projectData).select().single();
+      if (pError) throw new Error(pError.message);
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to create project');
-      }
-
-      const { quotation: updatedQuotation, project } = result.data;
-
-      // Update local quotation state
+      const updatedQuotation = { ...quotation, status: 'Accepted', project_id: project.id, project_number: project.project_number };
       onUpdate(updatedQuotation);
 
-      // Show success message
       toast.success(`✓ Project ${project.project_number} created successfully!`);
 
-      // Store created project
       setCreatedProject(project);
 
-      // Different behavior for PD vs BD users
       if (userDepartment === "Pricing") {
-        // PD users: Open booking creation modal
         setShowCreateBookingsModal(true);
       } else {
-        // BD users: Navigate to project (existing behavior)
         if (onConvertToProject) {
           onConvertToProject(project.id);
         }
@@ -276,22 +275,16 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     setIsActivatingContract(true);
 
     try {
-      const response = await apiFetch(`/quotations/${quotation.id}/activate-contract`, {
-        method: 'POST',
-      });
+      const { error: activateError } = await supabase.from('quotations').update({
+        status: 'Active Contract',
+        activated_at: new Date().toISOString(),
+      }).eq('id', quotation.id);
 
-      const result = await response.json();
+      if (activateError) throw new Error(activateError.message);
 
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Failed to activate contract');
-      }
+      const updatedContract = { ...quotation, status: 'Active Contract' };
+      onUpdate(updatedContract);
 
-      const { quotation: updatedQuotation } = result.data;
-
-      // Update local quotation state
-      onUpdate(updatedQuotation);
-
-      // Show success message
       toast.success(`✓ Contract ${quotation.quote_number} activated! View in Contracts module.`);
 
       // Notify parent

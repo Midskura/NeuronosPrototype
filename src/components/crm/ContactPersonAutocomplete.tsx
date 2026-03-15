@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, User, ChevronDown } from "lucide-react";
 import type { Contact } from "../../types/contact";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 
 interface ContactPersonAutocompleteProps {
   value: string; // contact_name
@@ -34,20 +34,16 @@ export function ContactPersonAutocomplete({
   const fetchContacts = async (search: string = "", customer_id?: string) => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('contacts').select('*');
       if (search) {
-        params.append("search", search);
+        query = query.or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%`);
       }
-      // ✅ Filter by customer_id on backend
       if (customer_id) {
-        params.append("customer_id", customer_id);
+        query = query.eq('customer_id', customer_id);
       }
-
-      const response = await apiFetch(`/contacts?${params.toString()}`);
-      const result = await response.json();
-      if (result.success) {
-        // Backend already filtered by customer_id
-        setContacts(result.data);
+      const { data, error } = await query;
+      if (!error && data) {
+        setContacts(data);
       }
     } catch (error) {
       console.error("Error fetching contacts:", error);

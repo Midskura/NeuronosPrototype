@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import { toast } from "../components/ui/toast-utils";
 import type { EVoucher, EVoucherStatus, EVoucherTransactionType, EVoucherSourceModule } from "../types/evoucher";
 import { useCachedFetch, useInvalidateCache } from "./useNeuronCache";
@@ -19,33 +19,24 @@ export function useEVouchers(view: EVoucherView, userId?: string) {
     : `evouchers-${view}`;
 
   const fetcher = useCallback(async (): Promise<EVoucher[]> => {
-    let path = `/evouchers`;
+    let query = supabase.from('evouchers').select('*').order('created_at', { ascending: false });
     
     if (view === "pending") {
-      path = `/evouchers/pending`;
+      query = query.in('status', ['pending', 'Pending']);
     } else if (view === "my-evouchers" && userId) {
-      path = `/evouchers/my-evouchers?requestor_id=${userId}`;
+      query = query.eq('requestor_id', userId);
     } else if (view === "my-evouchers" && !userId) {
       return [];
     }
 
-    const response = await apiFetch(path);
+    const { data, error } = await query;
 
-    if (!response.ok) throw new Error(`Failed to fetch ${view} e-vouchers`);
-
-    const result = await response.json();
+    if (error) throw new Error(`Failed to fetch ${view} e-vouchers: ${error.message}`);
     
-    let data: EVoucher[] = [];
-    if (result.success && Array.isArray(result.data)) {
-      data = result.data;
-    } else if (Array.isArray(result.data)) {
-      data = result.data;
-    } else if (Array.isArray(result)) {
-      data = result;
-    }
+    let evouchers: EVoucher[] = data || [];
 
     // NEURON-DRY-2411: E-Vouchers Module is now strictly "Money Out".
-    return data.filter(item => 
+    return evouchers.filter(item => 
       item.transaction_type !== "collection" && 
       item.transaction_type !== "billing"
     );

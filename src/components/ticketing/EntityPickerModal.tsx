@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, Filter, ChevronDown, Calendar, User, ArrowUpDown, FileText, Package, Building, Users, DollarSign } from 'lucide-react';
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 
 interface Entity {
   id: string;
@@ -130,77 +130,63 @@ export function EntityPickerModal({
     setError(null);
     
     try {
-      const params = new URLSearchParams();
-      
-      // Pagination
-      params.append('limit', ITEMS_PER_PAGE.toString());
-      params.append('offset', offset.toString());
-      
-      // Search
+      // Map entityType to Supabase table name
+      const tableMap: Record<string, string> = {
+        quotation: 'quotations',
+        booking: 'bookings',
+        customer: 'customers',
+        contact: 'contacts',
+        expense: 'evouchers',
+      };
+      const tableName = tableMap[entityType] || `${entityType}s`;
+
+      let query = supabase.from(tableName).select('*', { count: 'exact' });
+
+      // Search — use ilike on name-like columns
       if (searchQuery.trim()) {
-        params.append('search', searchQuery.trim());
+        const s = `%${searchQuery.trim()}%`;
+        if (entityType === 'quotation') query = query.or(`quotation_name.ilike.${s},quote_number.ilike.${s}`);
+        else if (entityType === 'booking') query = query.or(`booking_name.ilike.${s},tracking_number.ilike.${s}`);
+        else if (entityType === 'customer') query = query.ilike('company_name', s);
+        else if (entityType === 'contact') query = query.ilike('name', s);
+        else if (entityType === 'expense') query = query.ilike('expense_name', s);
+        else query = query.ilike('name', s);
       }
       
-      // Smart defaults: If no search and no filters, show recent items (last 30 days)
+      // Smart default: show recent items (last 30 days) if no search/filters
       if (!searchQuery.trim() && !filters.dateFrom && !filters.dateTo && !filters.status && !filters.createdBy) {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        params.append('date_from', thirtyDaysAgo.toISOString().split('T')[0]);
+        query = query.gte('created_at', thirtyDaysAgo.toISOString());
       }
       
       // Context-aware filtering
       if (contextCustomerId && (entityType === 'quotation' || entityType === 'booking' || entityType === 'contact')) {
-        params.append('customer_id', contextCustomerId);
+        query = query.eq('customer_id', contextCustomerId);
       }
       
       // Advanced filters
-      if (filters.status) {
-        params.append('status', filters.status);
-      }
-      
-      if (filters.dateFrom) {
-        params.append('date_from', filters.dateFrom);
-      }
-      
-      if (filters.dateTo) {
-        params.append('date_to', filters.dateTo);
-      }
-      
-      if (filters.createdBy) {
-        params.append('created_by', filters.createdBy);
-      }
-      
-      if (currentUserId && filters.createdBy === 'me') {
-        params.append('created_by', currentUserId);
-      }
+      if (filters.status) query = query.eq('status', filters.status);
+      if (filters.dateFrom) query = query.gte('created_at', filters.dateFrom);
+      if (filters.dateTo) query = query.lte('created_at', filters.dateTo + 'T23:59:59');
+      if (filters.createdBy && filters.createdBy !== 'me') query = query.eq('created_by', filters.createdBy);
+      if (filters.createdBy === 'me' && currentUserId) query = query.eq('created_by', currentUserId);
       
       // Sorting
-      params.append('sort_by', filters.sortBy);
-      params.append('sort_order', filters.sortOrder);
+      query = query.order(filters.sortBy || 'created_at', { ascending: filters.sortOrder === 'asc' });
       
-      const endpoint = `/${entityType}s?${params.toString()}`;
-      const response = await apiFetch(endpoint);
+      // Pagination
+      query = query.range(offset, offset + ITEMS_PER_PAGE - 1);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${entityType}s`);
-      }
+      const { data, error: fetchError, count } = await query;
 
-      const result = await response.json();
-      
-      if (result.success && result.data) {
-        const formattedEntities = result.data.map((item: any) => formatEntity(item, entityType));
-        setEntities(formattedEntities);
-        
-        // Handle pagination metadata
-        if (result.pagination) {
-          setTotal(result.pagination.total);
-          setHasMore(result.pagination.hasMore);
-        }
-        
-        setSelectedIndex(0); // Reset selection
-      } else {
-        setError(result.error || 'Failed to load data');
-      }
+      if (fetchError) throw new Error(fetchError.message);
+
+      const formattedEntities = (data || []).map((item: any) => formatEntity(item, entityType));
+      setEntities(formattedEntities);
+      setTotal(count || 0);
+      setHasMore((offset + ITEMS_PER_PAGE) < (count || 0));
+      setSelectedIndex(0);
     } catch (err) {
       console.error(`Error fetching ${entityType}s:`, err);
       setError(String(err));

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { X, Send, ExternalLink, FileText, Building2, AlertCircle, MessageCircle, Clock, User, Activity } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useUser } from "../../hooks/useUser";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 import type { Ticket } from "../InboxPage";
 import { CustomDropdown } from "../bd/CustomDropdown";
@@ -66,10 +66,9 @@ export function TicketDetailModal({ ticket, isOpen, onClose, onUpdate }: TicketD
   const loadComments = async () => {
     setIsLoadingComments(true);
     try {
-      const response = await apiFetch(`/tickets/${ticket.id}`);
-      const result = await response.json();
-      if (result.success && result.data.comments) {
-        setComments(result.data.comments);
+      const { data, error } = await supabase.from('ticket_comments').select('*').eq('ticket_id', ticket.id).order('created_at', { ascending: true });
+      if (!error && data) {
+        setComments(data);
       }
     } catch (error) {
       console.error("Failed to load comments:", error);
@@ -81,12 +80,9 @@ export function TicketDetailModal({ ticket, isOpen, onClose, onUpdate }: TicketD
   const loadActivities = async () => {
     setIsLoadingActivities(true);
     try {
-      const response = await apiFetch(
-        `/tickets/${ticket.id}/activity?role=${effectiveRole}&department=${effectiveDepartment}`
-      );
-      const result = await response.json();
-      if (result.success) {
-        setActivities(result.data);
+      const { data, error } = await supabase.from('ticket_activity').select('*').eq('ticket_id', ticket.id).order('created_at', { ascending: false });
+      if (!error && data) {
+        setActivities(data);
       }
     } catch (error) {
       console.error("Failed to load activities:", error);
@@ -100,25 +96,25 @@ export function TicketDetailModal({ ticket, isOpen, onClose, onUpdate }: TicketD
     
     setIsAddingComment(true);
     try {
-      const response = await apiFetch(`/tickets/${ticket.id}/comments`, {
-        method: "POST",
-        body: JSON.stringify({
-          user_id: user?.id || "",
-          user_name: user?.name || "",
-          user_department: user?.department || "",
-          content: newComment
-        })
+      const { error: insertError } = await supabase.from('ticket_comments').insert({
+        ticket_id: ticket.id,
+        user_id: user?.id || "",
+        user_name: user?.name || "",
+        user_department: user?.department || "",
+        content: newComment,
+        created_at: new Date().toISOString(),
       });
       
-      const result = await response.json();
-      if (result.success) {
+      if (!insertError) {
         toast.success("Comment added");
         setNewComment("");
         loadComments();
         if (canViewActivity) {
-          loadActivities(); // Refresh activity log
+          loadActivities();
         }
         onUpdate();
+      } else {
+        toast.error("Failed to add comment");
       }
     } catch (error) {
       console.error("Failed to add comment:", error);
@@ -131,24 +127,29 @@ export function TicketDetailModal({ ticket, isOpen, onClose, onUpdate }: TicketD
   const handleUpdateStatus = async (newStatus: string) => {
     setIsUpdatingStatus(true);
     try {
-      const response = await apiFetch(`/tickets/${ticket.id}/status`, {
-        method: "PATCH",
-        body: JSON.stringify({ 
-          status: newStatus,
+      const { error: updateError } = await supabase.from('tickets').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', ticket.id);
+      
+      if (!updateError) {
+        // Log activity
+        await supabase.from('ticket_activity').insert({
+          ticket_id: ticket.id,
+          action: 'status_change',
+          old_value: selectedStatus,
+          new_value: newStatus,
           user_id: user?.id || "",
           user_name: user?.name || "",
-          user_department: user?.department || ""
-        })
-      });
-      
-      const result = await response.json();
-      if (result.success) {
+          user_department: user?.department || "",
+          created_at: new Date().toISOString(),
+        });
+        
         toast.success("Status updated");
         setSelectedStatus(newStatus);
         if (canViewActivity) {
-          loadActivities(); // Refresh activity log
+          loadActivities();
         }
         onUpdate();
+      } else {
+        toast.error("Failed to update status");
       }
     } catch (error) {
       console.error("Failed to update status:", error);

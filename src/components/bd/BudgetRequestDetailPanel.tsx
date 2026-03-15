@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { CheckCircle2, FileText } from "lucide-react";
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "sonner@2.0.3";
 import { AddRequestForPaymentPanel } from "../accounting/AddRequestForPaymentPanel";
 import { PostToLedgerPanel } from "../accounting/PostToLedgerPanel";
@@ -62,20 +61,26 @@ export function BudgetRequestDetailPanel({
     }
 
     try {
-      const response = await apiFetch(`/evouchers/${request.id}/approve`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: currentUser?.id,
-          user_name: currentUser?.name,
-          user_role: currentUser?.role,
-        })
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Approved', updated_at: new Date().toISOString() })
+        .eq('id', request.id);
+      
+      if (error) throw error;
+      
+      // Insert history
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: request.id,
+        action: 'Approved',
+        previous_status: request.status,
+        new_status: 'Approved',
+        performed_by: 'current-user',
+        performed_by_name: 'Current User',
+        created_at: new Date().toISOString()
       });
-
-      if (!response.ok) {
-        throw new Error('Failed to approve E-Voucher');
-      }
-
-      toast.success('E-Voucher approved successfully');
+      
+      toast.success("Budget request approved");
+      if (onStatusChange) onStatusChange();
       
       // Show billing prompt if applicable (panel stayed open for this path)
       if (hasBillingPrompt) {

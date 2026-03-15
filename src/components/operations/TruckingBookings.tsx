@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Plus, Search, Truck, Briefcase, UserCheck, FileEdit, Clock, CheckCircle, Trash2 } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { CreateTruckingBookingPanel } from "./CreateTruckingBookingPanel";
 import { TruckingBookingDetails } from "./TruckingBookingDetails";
 import { NeuronStatusPill } from "../NeuronStatusPill";
@@ -45,11 +45,9 @@ export function TruckingBookings({ currentUser, pendingBookingId, initialTab, hi
 
   // ── Cached bookings fetch ─────────────────────────────────
   const bookingsFetcher = async (): Promise<TruckingBooking[]> => {
-    const response = await apiFetch(`/trucking-bookings`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    if (result.success) return result.data;
-    throw new Error(result.error);
+    const { data, error } = await supabase.from('trucking_bookings').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
   };
 
   const { data: bookings, isLoading, refresh: fetchBookings } = useCachedFetch<TruckingBooking[]>(
@@ -80,18 +78,11 @@ export function TruckingBookings({ currentUser, pendingBookingId, initialTab, hi
     }
 
     try {
-      const response = await apiFetch(`/trucking-bookings/${bookingId}`, {
-        method: 'DELETE',
-      });
+      const { error } = await supabase.from('trucking_bookings').delete().eq('bookingId', bookingId);
+      if (error) throw error;
 
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Booking deleted successfully');
-        fetchBookings(); // Refresh list
-      } else {
-        toast.error('Failed to delete booking: ' + result.error);
-      }
+      toast.success('Booking deleted successfully');
+      fetchBookings(); // Refresh list
     } catch (error) {
       console.error('Error deleting booking:', error);
       toast.error('Unable to delete booking');

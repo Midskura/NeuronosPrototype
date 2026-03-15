@@ -4,7 +4,7 @@ import type { Contact, LifecycleStage, LeadStatus, Task, Activity, Customer } fr
 import type { QuotationNew } from "../../types/pricing";
 import { CustomDropdown } from "./CustomDropdown";
 import { ActivityTimelineTable } from "./ActivityTimelineTable";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 
 interface ContactDetailProps {
   contact: Contact;
@@ -184,10 +184,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
   const fetchCustomer = async (customerId: string) => {
     try {
-      const response = await apiFetch(`/customers?id=${customerId}`);
-      const result = await response.json();
-      if (result.success && result.data.length > 0) {
-        setCustomer(result.data[0]);
+      const { data } = await supabase.from('customers').select('*').eq('id', customerId).maybeSingle();
+      if (data) {
+        setCustomer(data);
       }
     } catch (error) {
       console.error("Error fetching customer:", error);
@@ -196,16 +195,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
   const fetchActivities = async () => {
     try {
-      const response = await apiFetch(`/activities?contact_id=${contact.id}`);
-      
-      if (!response.ok) {
-        console.error(`HTTP error fetching activities! status: ${response.status}`);
-        setActivities([]);
-        return;
-      }
-      
-      const result = await response.json();
-      if (result.success) {
+      const { data, error } = await supabase.from('crm_activities').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false });
+      if (!error && data) {
+        const result = { success: true, data };
         setActivities(result.data);
       } else {
         console.error("Failed to fetch activities:", result.error);
@@ -220,9 +212,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
   const fetchTasks = async () => {
     try {
-      const response = await apiFetch(`/tasks?contact_id=${contact.id}`);
-      const result = await response.json();
-      if (result.success) {
+      const { data, error } = await supabase.from('tasks').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false });
+      if (!error && data) {
+        const result = { success: true, data };
         setTasks(result.data);
       }
     } catch (error) {
@@ -241,9 +233,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
       }
       params.append("contact_id", contact.id);
       
-      const response = await apiFetch(`/quotations?${params.toString()}`);
-      const result = await response.json();
-      if (result.success) {
+      const { data, error } = await supabase.from('quotations').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false });
+      if (!error && data) {
+        const result = { success: true, data };
         setQuotations(result.data);
       }
     } catch (error) {
@@ -253,9 +245,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
   const fetchUsers = async () => {
     try {
-      const response = await apiFetch(`/users`);
-      const result = await response.json();
-      if (result.success) {
+      const { data, error } = await supabase.from('users').select('*');
+      if (!error && data) {
+        const result = { success: true, data };
         setUsers(result.data);
       }
     } catch (error) {
@@ -385,23 +377,23 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
         notes: editedContact.notes,
       };
 
-      const response = await apiFetch(`/contacts/${contact.id}`, {
-        method: "PUT",
-        body: JSON.stringify(updatePayload),
-      });
+      const { data: updatedData, error: updateError } = await supabase
+        .from('contacts')
+        .update(updatePayload)
+        .eq('id', contact.id)
+        .select()
+        .single();
 
-      const result = await response.json();
-      if (result.success) {
-        console.log("Contact updated successfully:", result.data);
-        // Update local state with the response data, keeping frontend aliases in sync
-        Object.assign(contact, result.data, {
-          job_title: result.data.title,
-          mobile_number: result.data.phone,
-          company_id: result.data.customer_id,
+      if (!updateError && updatedData) {
+        console.log("Contact updated successfully:", updatedData);
+        Object.assign(contact, updatedData, {
+          job_title: updatedData.title,
+          mobile_number: updatedData.phone,
+          company_id: updatedData.customer_id,
         });
         setEditedContact({ ...contact });
       } else {
-        console.error("Failed to update contact:", result.error);
+        console.error("Failed to update contact:", updateError?.message);
       }
     } catch (error) {
       console.error("Error saving contact:", error);
@@ -1236,14 +1228,13 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       user_id: contact.owner_id || 'user-1' // Fallback to current user or owner
                                     };
 
-                                    const response = await apiFetch(`/activities`, {
-                                      method: 'POST',
-                                      body: JSON.stringify(activityToSave),
+                                    const { error: actErr } = await supabase.from('crm_activities').insert({
+                                      ...activityToSave,
+                                      id: `act-${Date.now()}`,
+                                      created_at: new Date().toISOString(),
                                     });
 
-                                    const result = await response.json();
-
-                                    if (result.success) {
+                                    if (!actErr) {
                                       // In real app, this would save to backend
                                       // toast.success("Activity logged successfully");
                                       setIsLoggingActivity(false);
@@ -1854,14 +1845,13 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       status: newTask.status || "Pending"
                                     };
 
-                                    const response = await apiFetch(`/tasks`, {
-                                      method: 'POST',
-                                      body: JSON.stringify(taskToSave),
+                                    const { error: taskErr } = await supabase.from('tasks').insert({
+                                      ...taskToSave,
+                                      id: `task-${Date.now()}`,
+                                      created_at: new Date().toISOString(),
                                     });
 
-                                    const result = await response.json();
-
-                                    if (result.success) {
+                                    if (!taskErr) {
                                       setIsCreatingTask(false);
                                       setNewTask({
                                         type: "Call",

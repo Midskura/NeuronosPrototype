@@ -1,3 +1,4 @@
+import { supabase } from '../utils/supabase/client';
 import { useState, useEffect, useCallback } from "react";
 import { ContactsListWithFilters } from "./crm/ContactsListWithFilters";
 import { CustomersListWithFilters } from "./crm/CustomersListWithFilters";
@@ -18,7 +19,6 @@ import type { Customer } from "../types/bd";
 import type { Task } from "../types/bd";
 import type { Activity } from "../types/bd";
 import type { QuotationNew, Project, QuotationType } from "../types/pricing";
-import { apiFetch } from '../utils/api';
 import { toast } from "./ui/toast-utils";
 import { useCachedFetch, useInvalidateCache } from "../hooks/useNeuronCache";
 
@@ -36,7 +36,7 @@ interface BusinessDevelopmentProps {
   onCreateTicket?: (quotation: QuotationNew) => void;
 }
 
-// API_URL removed — using apiFetch() wrapper (Phase 3)
+// API_URL removed — using supabase.from() (Phase 3)
 
 export function BusinessDevelopment({ view: initialView = "contacts", onCreateInquiry, onViewInquiry, customerData, inquiryId, contactId, currentUser, onCreateTicket }: BusinessDevelopmentProps) {
   const [view, setView] = useState<BDView>(initialView);
@@ -64,11 +64,13 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
   const invalidateCache = useInvalidateCache();
 
   const quotationsFetcher = useCallback(async (): Promise<QuotationNew[]> => {
-    const response = await apiFetch(`/quotations?department=bd`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    if (result.success) return result.data;
-    throw new Error(result.error);
+    const { data, error } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('department', 'bd')
+      .order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
   }, []);
 
   const { data: cachedQuotations, isLoading: quotationsLoading, refresh: refreshQuotations } = useCachedFetch<QuotationNew[]>(
@@ -78,11 +80,12 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
   );
 
   const projectsFetcher = useCallback(async (): Promise<Project[]> => {
-    const response = await apiFetch(`/projects`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    if (result.success) return result.data;
-    throw new Error(result.error);
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
   }, []);
 
   const { data: cachedProjects, isLoading: projectsLoading, refresh: refreshProjects } = useCachedFetch<Project[]>(
@@ -134,13 +137,13 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
     const fetchContactById = async () => {
       if (contactId && view === "contacts") {
         try {
-          const response = await apiFetch(`/contacts/${contactId}`);
+          const { data: backendContact, error } = await supabase
+            .from('contacts')
+            .select('*')
+            .eq('id', contactId)
+            .maybeSingle();
           
-          const result = await response.json();
-          
-          if (result.success && result.data) {
-            // Convert backend Contact to BD Contact format
-            const backendContact = result.data;
+          if (!error && backendContact) {
             const bdContact: Contact = {
               id: backendContact.id,
               name: `${backendContact.first_name || ''} ${backendContact.last_name || ''}`.trim(),
@@ -166,7 +169,6 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
             setSelectedContact(bdContact);
             setSubView("detail");
           } else {
-            console.error('Error fetching contact:', result.error);
             toast.error("Contact not found");
           }
         } catch (error) {
@@ -192,10 +194,13 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
       // Fetch contact info if contact_id exists
       if (selectedActivity.contact_id) {
         try {
-          const response = await apiFetch(`/contacts/${selectedActivity.contact_id}`);
-          const result = await response.json();
-          if (result.success && result.data) {
-            const backendContact = result.data;
+          const { data: backendContact } = await supabase
+            .from('contacts')
+            .select('*')
+            .eq('id', selectedActivity.contact_id)
+            .maybeSingle();
+          
+          if (backendContact) {
             const bdContact: Contact = {
               id: backendContact.id,
               name: `${backendContact.first_name || ''} ${backendContact.last_name || ''}`.trim(),
@@ -228,10 +233,14 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
       // Fetch customer info if customer_id exists
       if (selectedActivity.customer_id) {
         try {
-          const response = await apiFetch(`/customers/${selectedActivity.customer_id}`);
-          const result = await response.json();
-          if (result.success && result.data) {
-            setActivityCustomerInfo(result.data);
+          const { data: customerData } = await supabase
+            .from('customers')
+            .select('*')
+            .eq('id', selectedActivity.customer_id)
+            .maybeSingle();
+          
+          if (customerData) {
+            setActivityCustomerInfo(customerData);
           }
         } catch (error) {
           console.error('Error fetching activity customer:', error);
@@ -259,10 +268,14 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
       // Fetch contact if contact_id exists
       if (selectedTask.contact_id) {
         try {
-          const response = await apiFetch(`/contacts/${selectedTask.contact_id}`);
-          const result = await response.json();
-          if (result.success && result.data) {
-            setTaskContacts([result.data]);
+          const { data: contactData } = await supabase
+            .from('contacts')
+            .select('*')
+            .eq('id', selectedTask.contact_id)
+            .maybeSingle();
+          
+          if (contactData) {
+            setTaskContacts([contactData]);
           }
         } catch (error) {
           console.error('Error fetching task contact:', error);
@@ -272,10 +285,14 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
       // Fetch customer if customer_id exists
       if (selectedTask.customer_id) {
         try {
-          const response = await apiFetch(`/customers/${selectedTask.customer_id}`);
-          const result = await response.json();
-          if (result.success && result.data) {
-            setTaskCustomers([result.data]);
+          const { data: customerData } = await supabase
+            .from('customers')
+            .select('*')
+            .eq('id', selectedTask.customer_id)
+            .maybeSingle();
+          
+          if (customerData) {
+            setTaskCustomers([customerData]);
           }
         } catch (error) {
           console.error('Error fetching task customer:', error);
@@ -356,43 +373,33 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
     console.log("Saving inquiry:", data);
     
     try {
-      // Determine if this is create or update
       const isUpdate = !!data.id && data.id.startsWith('QUO-');
       
       if (isUpdate) {
-        // Update existing quotation
-        const response = await apiFetch(`/quotations/${data.id}`, {
-          method: 'PUT',
-          body: JSON.stringify(data)
-        });
+        const { error } = await supabase
+          .from('quotations')
+          .update({ ...data, updated_at: new Date().toISOString() })
+          .eq('id', data.id);
         
-        const result = await response.json();
-        
-        if (result.success) {
-          console.log('Inquiry updated successfully');
-          await fetchQuotations(); // Refresh list
-          setSubView("list");
-        } else {
-          console.error('Error updating inquiry:', result.error);
-          alert('Error updating inquiry: ' + result.error);
-        }
+        if (error) throw error;
+        console.log('Inquiry updated successfully');
+        await fetchQuotations();
+        setSubView("list");
       } else {
-        // Create new quotation
-        const response = await apiFetch(`/quotations`, {
-          method: 'POST',
-          body: JSON.stringify(data)
-        });
+        const newId = `QUO-${Date.now()}`;
+        const newData = {
+          ...data,
+          id: newId,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
         
-        const result = await response.json();
+        const { error } = await supabase.from('quotations').insert(newData);
         
-        if (result.success) {
-          console.log('Inquiry created successfully:', result.data.id);
-          await fetchQuotations(); // Refresh list
-          setSubView("list");
-        } else {
-          console.error('Error creating inquiry:', result.error);
-          alert('Error creating inquiry: ' + result.error);
-        }
+        if (error) throw error;
+        console.log('Inquiry created successfully:', newId);
+        await fetchQuotations();
+        setSubView("list");
       }
     } catch (error) {
       console.error('Error saving inquiry:', error);
@@ -401,22 +408,19 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
   };
 
   const handleUpdateQuotation = async (updatedQuotation: QuotationNew) => {
-    // Update the selected quotation in state
     setSelectedQuotation(updatedQuotation);
     
     try {
-      const response = await apiFetch(`/quotations/${updatedQuotation.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updatedQuotation)
-      });
+      const { error } = await supabase
+        .from('quotations')
+        .update({ ...updatedQuotation, updated_at: new Date().toISOString() })
+        .eq('id', updatedQuotation.id);
       
-      const result = await response.json();
-      
-      if (result.success) {
+      if (!error) {
         console.log("Quotation updated successfully");
-        await fetchQuotations(); // Refresh list
+        await fetchQuotations();
       } else {
-        console.error('Error updating quotation:', result.error);
+        console.error('Error updating quotation:', error.message);
       }
     } catch (error) {
       console.error('Error updating quotation:', error);
@@ -427,21 +431,20 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
     if (!selectedQuotation) return;
     
     try {
-      const response = await apiFetch(`/quotations/${selectedQuotation.id}`, {
-        method: 'DELETE',
-      });
+      const { error } = await supabase
+        .from('quotations')
+        .delete()
+        .eq('id', selectedQuotation.id);
       
-      const result = await response.json();
-      
-      if (result.success) {
+      if (!error) {
         console.log("Quotation deleted successfully");
         toast.success("Quotation deleted successfully");
-        await fetchQuotations(); // Refresh list
-        setSubView("list"); // Go back to list
+        await fetchQuotations();
+        setSubView("list");
         setSelectedQuotation(null);
       } else {
-        console.error('Error deleting quotation:', result.error);
-        toast.error("Error deleting quotation", result.error);
+        console.error('Error deleting quotation:', error.message);
+        toast.error("Error deleting quotation");
       }
     } catch (error) {
       console.error('Error deleting quotation:', error);
@@ -492,24 +495,24 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                 contact={selectedContact} 
                 onBack={handleBackFromContact}
                 onCreateInquiry={async (customer, contact) => {
-                  // If customer is provided, use it. Otherwise fetch it from contact's customer_id
                   let customerToUse = customer;
                   
                   if (!customerToUse && contact.customer_id) {
                     try {
-                      const response = await apiFetch(`/customers/${contact.customer_id}`);
+                      const { data: custData } = await supabase
+                        .from('customers')
+                        .select('*')
+                        .eq('id', contact.customer_id)
+                        .maybeSingle();
                       
-                      const result = await response.json();
-                      
-                      if (result.success && result.data) {
-                        customerToUse = result.data;
+                      if (custData) {
+                        customerToUse = custData;
                       }
                     } catch (error) {
                       console.error('Error fetching customer:', error);
                     }
                   }
                   
-                  // Navigate to inquiries and open builder with contact data
                   setSelectedCustomer(customerToUse || null);
                   setSelectedContact(contact);
                   setView("inquiries");
@@ -546,22 +549,22 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                 customerData={selectedCustomer}
                 onSave={async (data: QuotationNew) => {
                   try {
-                    const response = await apiFetch(`/quotations`, {
-                      method: 'POST',
-                      body: JSON.stringify(data)
-                    });
+                    const newId = `QUO-${Date.now()}`;
+                    const newData = {
+                      ...data,
+                      id: newId,
+                      created_at: new Date().toISOString(),
+                      updated_at: new Date().toISOString(),
+                    };
                     
-                    const result = await response.json();
+                    const { error } = await supabase.from('quotations').insert(newData);
                     
-                    if (result.success) {
+                    if (!error) {
                       toast.success("Inquiry created successfully!");
-                      console.log('Inquiry created successfully:', result.data.id);
-                      // Increment key to force CustomerDetail to re-fetch data
                       setCustomerDetailKey(prev => prev + 1);
-                      // Go back to customer detail view
                       setSubView("detail");
                     } else {
-                      console.error('Error creating inquiry:', result.error);
+                      console.error('Error creating inquiry:', error.message);
                       toast.error("Failed to create inquiry");
                     }
                   } catch (error) {
@@ -658,23 +661,21 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                 onCreateTicket={onCreateTicket}
                 onConvertToProject={async (projectId) => {
                   try {
-                    // Fetch the created project by ID
-                    const response = await apiFetch(`/projects/${projectId}`);
+                    const { data: projectData, error: fetchErr } = await supabase
+                      .from('projects')
+                      .select('*')
+                      .eq('id', projectId)
+                      .maybeSingle();
 
-                    const result = await response.json();
-
-                    if (result.success && result.data) {
-                      console.log(`Project ${result.data.project_number} has ${result.data.services_metadata?.length || 0} service specifications`);
+                    if (!fetchErr && projectData) {
+                      console.log(`Project ${projectData.project_number} has ${projectData.services_metadata?.length || 0} service specifications`);
                       
-                      // Navigate directly to the project detail
-                      setSelectedProject(result.data);
+                      setSelectedProject(projectData);
                       setView("projects");
                       setSubView("detail");
                       
-                      // Also refresh the projects list in background
                       fetchProjects();
                     } else {
-                      // Fallback: navigate to projects list
                       await fetchProjects();
                       setView("projects");
                       setSubView("list");

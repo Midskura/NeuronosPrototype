@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Plus } from "lucide-react";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 
 // ==================== TYPES ====================
 
@@ -47,12 +47,11 @@ async function fetchCatalogItems(forceRefresh = false): Promise<CatalogItem[]> {
     return cachedItems;
   }
   try {
-    const res = await apiFetch(`/catalog/items`);
-    const json = await res.json();
-    if (json.success && Array.isArray(json.data)) {
-      cachedItems = json.data;
+    const { data, error } = await supabase.from('catalog_items').select('*');
+    if (!error && data) {
+      cachedItems = data;
       cacheTimestamp = Date.now();
-      return json.data;
+      return data;
     }
   } catch (err) {
     console.error("Error fetching catalog items:", err);
@@ -213,24 +212,21 @@ export function CatalogItemCombobox({
     setIsCreating(true);
 
     try {
-      const res = await apiFetch(`/catalog/items`, {
-        method: "POST",
-        body: JSON.stringify({
-          name,
-          type: itemType,
-          category: name,
-          service_types: serviceType ? [serviceType] : [],
-          default_currency: "PHP",
-          is_taxable: itemType === "charge" || itemType === "both",
-        }),
-      });
+      const { data, error } = await supabase.from('catalog_items').insert({
+        name,
+        type: itemType,
+        category: name,
+        service_types: serviceType ? [serviceType] : [],
+        default_currency: "PHP",
+        is_taxable: itemType === "charge" || itemType === "both",
+        created_at: new Date().toISOString(),
+      }).select().single();
 
-      const json = await res.json();
-      if (json.success && json.data) {
+      if (!error && data) {
         invalidateCache();
-        handleSelect(json.data);
+        handleSelect(data);
       } else {
-        console.error("Error creating catalog item:", json.error);
+        console.error("Error creating catalog item:", error?.message);
       }
     } catch (err) {
       console.error("Error creating catalog item:", err);

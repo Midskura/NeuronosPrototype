@@ -1,4 +1,4 @@
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 
 interface ActivitiesListProps {
@@ -20,27 +20,11 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
   const fetchActivities = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/activities`);
-      
-      if (!response.ok) {
-        console.error(`HTTP error! status: ${response.status}`);
-        setActivities([]);
-        setIsLoading(false);
-        return;
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setActivities(result.data);
-        console.log(`Fetched ${result.data.length} activities`);
-      } else {
-        console.error('Error fetching activities:', result.error);
-        setActivities([]);
-      }
+      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      setActivities(data || []);
     } catch (error) {
       console.error('Error fetching activities:', error);
-      // Silently fail - don't show error toast for activities
       setActivities([]);
     } finally {
       setIsLoading(false);
@@ -50,17 +34,8 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
   // Fetch customers from backend
   const fetchCustomers = async () => {
     try {
-      const response = await apiFetch(`/customers`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setCustomers(result.data);
-      }
+      const { data, error } = await supabase.from('customers').select('*');
+      if (!error && data) setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -69,17 +44,8 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
   // Fetch contacts from backend
   const fetchContacts = async () => {
     try {
-      const response = await apiFetch(`/contacts`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setContacts(result.data);
-      }
+      const { data, error } = await supabase.from('contacts').select('*');
+      if (!error && data) setContacts(data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
     }
@@ -94,23 +60,15 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
 
   const handleSaveActivity = async (activityData: Partial<Activity>) => {
     try {
-      const response = await apiFetch(`/activities`, {
-        method: 'POST',
-        body: JSON.stringify(activityData)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Activity created successfully');
-        fetchActivities(); // Refresh the list
-      } else {
-        toast.error('Error creating activity: ' + result.error);
-      }
+      const newActivity = {
+        ...activityData,
+        id: `act-${Date.now()}`,
+        created_at: new Date().toISOString(),
+      };
+      const { error } = await supabase.from('crm_activities').insert(newActivity);
+      if (error) throw error;
+      toast.success('Activity created successfully');
+      fetchActivities();
     } catch (error) {
       console.error('Error creating activity:', error);
       toast.error('Unable to create activity. Please try again.');

@@ -5,7 +5,7 @@ import { CustomDatePicker } from "../../common/CustomDatePicker";
 import { BillingsTable } from "./BillingsTable";
 import { CategoryPresetDropdown } from "../../pricing/quotations/CategoryPresetDropdown";
 import { toast } from "../../ui/toast-utils";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import type { QuotationNew } from "../../../types/pricing";
 
 // Interface matching the backend response for billing items
@@ -446,22 +446,23 @@ export function UnifiedBillingsTab({
 
           toast.info("Saving changes...");
           
-          const response = await apiFetch(`/accounting/billings/batch`, {
-              method: 'POST',
-              body: JSON.stringify({ 
-                  items: itemsToSave,
-                  project_id: projectId
-              })
-          });
+          const billingRows = itemsToSave.map((item: any) => ({
+              ...item,
+              project_id: projectId,
+              transaction_type: 'billing',
+              status: item.status || 'unbilled',
+              created_at: item.created_at || new Date().toISOString(),
+          }));
+
+          // Upsert: items with existing IDs get updated, new items get inserted
+          const { error: upsertError } = await supabase.from('evouchers').upsert(billingRows);
           
-          const result = await response.json();
-          
-          if (result.success) {
+          if (!upsertError) {
               toast.success("Changes saved successfully");
               setPendingChanges(false);
-              onRefresh(); // Reload to get the real IDs from the backend
+              onRefresh();
           } else {
-              toast.error(result.error || "Failed to save changes");
+              toast.error(upsertError.message || "Failed to save changes");
           }
           
       } catch (error) {

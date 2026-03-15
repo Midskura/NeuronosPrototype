@@ -1,4 +1,4 @@
-import { apiFetch } from "./api";
+import { supabase } from "./supabase/client";
 
 interface Contact {
   id: string;
@@ -26,11 +26,19 @@ export async function cleanupDuplicates() {
 
     // ==================== CLEANUP CONTACTS ====================
     console.log("\n📞 Fetching all contacts...");
-    const contactsResponse = await apiFetch('/contacts', {
-      method: "GET",
-    });
+    const { data: contacts, error: contactsErr } = await supabase
+      .from('contacts')
+      .select('*');
+    
+    if (contactsErr || !contacts) {
+      console.error("⚠️ Error fetching contacts:", contactsErr);
+      return {
+        success: false,
+        error: String(contactsErr)
+      };
+    }
 
-    const contactsResult = await contactsResponse.json();
+    const contactsResult = { success: true, data: contacts };
     
     if (contactsResult.success && contactsResult.data) {
       const contacts: Contact[] = contactsResult.data;
@@ -58,16 +66,16 @@ export async function cleanupDuplicates() {
           for (const contact of toDelete) {
             console.log(`   ❌ Deleting duplicate: ${contact.name} (ID: ${contact.id})`);
             
-            const deleteResponse = await apiFetch(`/contacts/${contact.id}`, {
-              method: "DELETE",
-            });
-
-            const deleteResult = await deleteResponse.json();
-            if (deleteResult.success) {
+            const { error: deleteErr } = await supabase
+              .from('contacts')
+              .delete()
+              .eq('id', contact.id);
+            
+            if (!deleteErr) {
               deletedContacts++;
               console.log(`   ✅ Deleted successfully`);
             } else {
-              console.error(`   ⚠️ Failed to delete: ${deleteResult.error}`);
+              console.error(`   ⚠️ Failed to delete: ${deleteErr}`);
             }
           }
         }
@@ -76,11 +84,19 @@ export async function cleanupDuplicates() {
 
     // ==================== CLEANUP CUSTOMERS ====================
     console.log("\n\n🏢 Fetching all customers...");
-    const customersResponse = await apiFetch('/customers', {
-      method: "GET",
-    });
+    const { data: customers, error: customersErr } = await supabase
+      .from('customers')
+      .select('*');
+    
+    if (customersErr || !customers) {
+      console.error("⚠️ Error fetching customers:", customersErr);
+      return {
+        success: false,
+        error: String(customersErr)
+      };
+    }
 
-    const customersResult = await customersResponse.json();
+    const customersResult = { success: true, data: customers };
     
     if (customersResult.success && customersResult.data) {
       const customers: Customer[] = customersResult.data;
@@ -108,16 +124,16 @@ export async function cleanupDuplicates() {
           for (const customer of toDelete) {
             console.log(`   ❌ Deleting duplicate: ${customer.company_name} (ID: ${customer.id})`);
             
-            const deleteResponse = await apiFetch(`/customers/${customer.id}`, {
-              method: "DELETE",
-            });
-
-            const deleteResult = await deleteResponse.json();
-            if (deleteResult.success) {
+            const { error: deleteErr } = await supabase
+              .from('customers')
+              .delete()
+              .eq('id', customer.id);
+            
+            if (!deleteErr) {
               deletedCustomers++;
               console.log(`   ✅ Deleted successfully`);
             } else {
-              console.error(`   ⚠️ Failed to delete: ${deleteResult.error}`);
+              console.error(`   ⚠️ Failed to delete: ${deleteErr}`);
             }
           }
         }

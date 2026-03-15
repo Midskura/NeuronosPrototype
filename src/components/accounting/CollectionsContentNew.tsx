@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Plus, FileText, Search, Filter, Calendar, DollarSign, CreditCard, Banknote, Building2 } from "lucide-react";
 import type { Collection } from "../../types/accounting";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { AddRequestForPaymentPanel } from "./AddRequestForPaymentPanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { CollectionDetailsSheet } from "./collections/CollectionDetailsSheet";
@@ -44,15 +44,16 @@ export function CollectionsContentNew() {
       setError(null);
       
       // PHASE 4 FIX: Fetch from Universal E-Vouchers table
-      const response = await apiFetch(`/evouchers`);
+      const { data: evoucherRows, error: fetchError } = await supabase
+        .from('evouchers')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+      if (fetchError) {
+        throw new Error(`Supabase error: ${fetchError.message}`);
       }
 
-      const result = await response.json();
-      const evouchers = result.data || [];
+      const evouchers = evoucherRows || [];
       
       // Map E-Vouchers to Collection interface
       const mappedCollections = evouchers

@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
 import type { Project } from "../../types/pricing";
@@ -39,11 +37,9 @@ export function ProjectsModule({ currentUser, onCreateTicket, initialProject, de
 
   // ── Cached projects fetch ────────────────────────────────
   const projectsFetcher = async (): Promise<Project[]> => {
-    const response = await apiFetch(`/projects`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    if (result.success) return result.data;
-    throw new Error(result.error);
+    const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+    if (error) throw new Error(error.message);
+    return data || [];
   };
 
   const { data: projects, isLoading, refresh: refreshProjects } = useCachedFetch<Project[]>(
@@ -90,15 +86,12 @@ export function ProjectsModule({ currentUser, onCreateTicket, initialProject, de
     // If viewing a specific project, fetch fresh detail (includes linkedBookings)
     if (selectedProject) {
       try {
-        const response = await apiFetch(`/projects/${selectedProject.id}`);
+        const { data, error } = await supabase.from('projects').select('*').eq('id', selectedProject.id).single();
         
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            setSelectedProject(result.data);
-          }
+        if (!error && data) {
+          setSelectedProject(data);
         } else {
-          console.error('Failed to fetch project:', response.status, await response.text());
+          console.error('Failed to fetch project:', error?.message);
         }
       } catch (error) {
         console.error('Error refreshing selected project:', error);

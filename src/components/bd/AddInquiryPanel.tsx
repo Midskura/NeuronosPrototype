@@ -6,7 +6,7 @@ import { ForwardingFormV2 } from "../pricing/quotations/ForwardingFormV2";
 import { TruckingFormV2 } from "../pricing/quotations/TruckingFormV2";
 import { MarineInsuranceFormV2 } from "../pricing/quotations/MarineInsuranceFormV2";
 import { OthersFormV2 } from "../pricing/quotations/OthersFormV2";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import type { Customer } from "../../types/bd";
 import type { 
   ServiceType, 
@@ -113,20 +113,20 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         setIsLoadingData(true);
         
         // Fetch customers
-        const customersResponse = await apiFetch(`/customers`);
+        const { data: customerRows } = await supabase.from('customers').select('*');
         
-        if (customersResponse.ok) {
-          const customersResult = await customersResponse.json();
+        if (customerRows) {
+          const customersResult = { success: true, data: customerRows };
           if (customersResult.success) {
             setCustomers(customersResult.data);
           }
         }
         
         // Fetch all contacts
-        const contactsResponse = await apiFetch(`/contacts`);
+        const { data: contactRows } = await supabase.from('contacts').select('*');
         
-        if (contactsResponse.ok) {
-          const contactsResult = await contactsResponse.json();
+        if (contactRows) {
+          const contactsResult = { success: true, data: contactRows };
           if (contactsResult.success) {
             setAllContacts(contactsResult.data);
           }

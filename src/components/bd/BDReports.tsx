@@ -1,11 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Search, FileText, Plus, BarChart, Calendar, User, ChevronDown } from 'lucide-react';
-import { ReportTemplates } from './reports/ReportTemplates';
-import { CustomReportBuilder } from './reports/CustomReportBuilder';
-import { ReportControlCenter } from './reports/ReportControlCenter';
-import { SavedReports } from './reports/SavedReports';
-import { ReportResults } from './reports/ReportResults';
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
 type ViewMode = 'list' | 'templates' | 'custom' | 'saved' | 'results' | 'control-center';
@@ -52,15 +45,9 @@ export function BDReports() {
   const fetchSavedReports = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/bd-reports`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch reports');
-      }
-
-      const data = await response.json();
-      if (data.success) {
-        setSavedReports(data.data || []);
-      }
+      const { data, error } = await supabase.from('bd_reports').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      setSavedReports(data || []);
     } catch (error) {
       console.error('Error fetching saved reports:', error);
       toast.error('Failed to load saved reports');

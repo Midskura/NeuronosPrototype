@@ -12,11 +12,16 @@ export async function fetchProjectByNumber(
   projectNumber: string,
 ): Promise<{ success: boolean; data?: Project; error?: string }> {
   try {
-    const { apiFetch } = await import("./api");
-    const response = await apiFetch(`/projects/by-number/${projectNumber}`);
-
-    const result = await response.json();
-    return result;
+    const { supabase } = await import("./supabase/client");
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('project_number', projectNumber)
+      .maybeSingle();
+    
+    if (error) return { success: false, error: error.message };
+    if (!data) return { success: false, error: 'Project not found' };
+    return { success: true, data };
   } catch (error) {
     return { success: false, error: String(error) };
   }
@@ -332,19 +337,29 @@ export async function linkBookingToProject(
   status: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { apiFetch } = await import("./api");
-    const response = await apiFetch(`/projects/${projectId}/link-booking`, {
-      method: "POST",
-      body: JSON.stringify({
-          bookingId,
-          bookingNumber,
-          serviceType,
-          status,
-        })
-    });
-
-    const result = await response.json();
-    return result;
+    const { supabase } = await import("./supabase/client");
+    // Fetch the project
+    const { data: project, error: fetchErr } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', projectId)
+      .maybeSingle();
+    
+    if (fetchErr || !project) {
+      return { success: false, error: fetchErr?.message || 'Project not found' };
+    }
+    
+    // Add booking to linkedBookings array
+    const linkedBookings = project.linkedBookings || project.linked_bookings || [];
+    linkedBookings.push({ bookingId, bookingNumber, serviceType, status });
+    
+    const { error: updateErr } = await supabase
+      .from('projects')
+      .update({ linkedBookings, updated_at: new Date().toISOString() })
+      .eq('id', projectId);
+    
+    if (updateErr) return { success: false, error: updateErr.message };
+    return { success: true };
   } catch (error) {
     return { success: false, error: String(error) };
   }
@@ -357,14 +372,27 @@ export async function unlinkBookingFromProject(
   bookingId: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { apiFetch } = await import("./api");
-    const response = await apiFetch(`/projects/${projectId}/unlink-booking`, {
-      method: "POST",
-      body: JSON.stringify({ bookingId })
-    });
-
-    const result = await response.json();
-    return result;
+    const { supabase } = await import("./supabase/client");
+    const { data: project, error: fetchErr } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', projectId)
+      .maybeSingle();
+    
+    if (fetchErr || !project) {
+      return { success: false, error: fetchErr?.message || 'Project not found' };
+    }
+    
+    const linkedBookings = (project.linkedBookings || project.linked_bookings || [])
+      .filter((b: any) => b.bookingId !== bookingId);
+    
+    const { error: updateErr } = await supabase
+      .from('projects')
+      .update({ linkedBookings, updated_at: new Date().toISOString() })
+      .eq('id', projectId);
+    
+    if (updateErr) return { success: false, error: updateErr.message };
+    return { success: true };
   } catch (error) {
     return { success: false, error: String(error) };
   }

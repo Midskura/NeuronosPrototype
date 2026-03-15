@@ -4,7 +4,7 @@ import { PhilippinePeso } from "../icons/PhilippinePeso";
 import { EVoucherStatusBadge } from "./evouchers/EVoucherStatusBadge";
 import { EVoucherWorkflowPanel } from "./evouchers/EVoucherWorkflowPanel";
 import { EVoucherHistoryTimeline } from "./evouchers/EVoucherHistoryTimeline";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 import type { EVoucher } from "../../types/evoucher";
 
@@ -69,18 +69,20 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     if (!confirm("Are you sure you want to approve this E-Voucher?")) return;
     setIsSubmitting(true);
     try {
-      const response = await apiFetch(`/evouchers/${evoucher.id}/approve`, {
-        method: 'POST',
-        body: JSON.stringify({ ...getUserPayload(), notes: '' }),
+      const payload = getUserPayload();
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Approved', updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      if (error) throw error;
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
+        action: 'Approved', previous_status: evoucher.status, new_status: 'Approved',
+        performed_by: payload.user_id, performed_by_name: payload.user_name,
+        performed_by_role: payload.user_role, created_at: new Date().toISOString()
       });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("E-Voucher approved successfully");
-        onStatusChange?.();
-        onClose();
-      } else {
-        toast.error(`Failed to approve: ${result.error}`);
-      }
+      toast.success("E-Voucher approved successfully");
+      onStatusChange?.();
+      onClose();
     } catch (error) {
       console.error("Error approving E-Voucher:", error);
       toast.error("Failed to approve E-Voucher");
@@ -94,18 +96,20 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     if (!reason) return;
     setIsSubmitting(true);
     try {
-      const response = await apiFetch(`/evouchers/${evoucher.id}/reject`, {
-        method: 'POST',
-        body: JSON.stringify({ ...getUserPayload(), rejection_reason: reason }),
+      const payload = getUserPayload();
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Disapproved', updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      if (error) throw error;
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
+        action: 'Disapproved', previous_status: evoucher.status, new_status: 'Disapproved',
+        performed_by: payload.user_id, performed_by_name: payload.user_name,
+        performed_by_role: payload.user_role, notes: reason, created_at: new Date().toISOString()
       });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("E-Voucher disapproved");
-        onStatusChange?.();
-        onClose();
-      } else {
-        toast.error(`Failed to disapprove: ${result.error}`);
-      }
+      toast.success("E-Voucher disapproved");
+      onStatusChange?.();
+      onClose();
     } catch (error) {
       console.error("Error disapproving E-Voucher:", error);
       toast.error("Failed to disapprove E-Voucher");
@@ -118,24 +122,23 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     if (!confirm("Mark this E-Voucher as disbursed?")) return;
     setIsSubmitting(true);
     try {
-      // TODO: Server endpoint POST /evouchers/:id/disburse does not exist yet.
-      // When added, it should transition status Approved → Disbursed and record
-      // disbursement_officer, disbursement_date, payment_method in the evoucher.
-      const response = await apiFetch(`/evouchers/${evoucher.id}/disburse`, {
-        method: 'POST',
-        body: JSON.stringify(getUserPayload()),
+      const payload = getUserPayload();
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Disbursed', updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      if (error) throw error;
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
+        action: 'Disbursed', previous_status: evoucher.status, new_status: 'Disbursed',
+        performed_by: payload.user_id, performed_by_name: payload.user_name,
+        performed_by_role: payload.user_role, created_at: new Date().toISOString()
       });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("E-Voucher marked as disbursed");
-        onStatusChange?.();
-        onClose();
-      } else {
-        toast.error(`Failed to disburse: ${result.error}`);
-      }
+      toast.success("E-Voucher marked as disbursed");
+      onStatusChange?.();
+      onClose();
     } catch (error) {
       console.error("Error disbursing E-Voucher:", error);
-      toast.error("Disburse endpoint not available yet — server update required");
+      toast.error("Failed to disburse E-Voucher");
     } finally {
       setIsSubmitting(false);
     }
@@ -145,18 +148,20 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     if (!confirm("Record the transaction for this E-Voucher? This will post to the accounting ledger.")) return;
     setIsSubmitting(true);
     try {
-      const response = await apiFetch(`/evouchers/${evoucher.id}/post-to-ledger`, {
-        method: 'POST',
-        body: JSON.stringify(getUserPayload()),
+      const payload = getUserPayload();
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Recorded', posted_to_ledger: true, updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      if (error) throw error;
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
+        action: 'Recorded / Posted to Ledger', previous_status: evoucher.status, new_status: 'Recorded',
+        performed_by: payload.user_id, performed_by_name: payload.user_name,
+        performed_by_role: payload.user_role, created_at: new Date().toISOString()
       });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("Transaction recorded and posted to ledger");
-        onStatusChange?.();
-        onClose();
-      } else {
-        toast.error(`Failed to record: ${result.error}`);
-      }
+      toast.success("Transaction recorded and posted to ledger");
+      onStatusChange?.();
+      onClose();
     } catch (error) {
       console.error("Error recording transaction:", error);
       toast.error("Failed to record transaction");
@@ -169,24 +174,23 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     if (!confirm("Mark this E-Voucher as audited? This completes the workflow.")) return;
     setIsSubmitting(true);
     try {
-      // TODO: Server endpoint POST /evouchers/:id/audit does not exist yet.
-      // When added, it should transition status Recorded → Audited and record
-      // audited_by, audited_at in the evoucher + add workflow history.
-      const response = await apiFetch(`/evouchers/${evoucher.id}/audit`, {
-        method: 'POST',
-        body: JSON.stringify(getUserPayload()),
+      const payload = getUserPayload();
+      const { error } = await supabase.from('evouchers')
+        .update({ status: 'Audited', updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      if (error) throw error;
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
+        action: 'Audited', previous_status: evoucher.status, new_status: 'Audited',
+        performed_by: payload.user_id, performed_by_name: payload.user_name,
+        performed_by_role: payload.user_role, created_at: new Date().toISOString()
       });
-      const result = await response.json();
-      if (result.success) {
-        toast.success("E-Voucher audit completed");
-        onStatusChange?.();
-        onClose();
-      } else {
-        toast.error(`Failed to complete audit: ${result.error}`);
-      }
+      toast.success("E-Voucher audit completed");
+      onStatusChange?.();
+      onClose();
     } catch (error) {
       console.error("Error auditing E-Voucher:", error);
-      toast.error("Audit endpoint not available yet — server update required");
+      toast.error("Failed to audit E-Voucher");
     } finally {
       setIsSubmitting(false);
     }

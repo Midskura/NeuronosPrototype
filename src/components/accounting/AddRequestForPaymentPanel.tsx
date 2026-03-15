@@ -7,7 +7,7 @@ import { GroupedDropdown } from "../bd/GroupedDropdown";
 import type { EVoucher, EVoucherTransactionType, LinkedBilling } from "../../types/evoucher";
 import { useEVoucherSubmit } from "../../hooks/useEVoucherSubmit";
 import { useUser } from "../../hooks/useUser";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { getAccounts } from "../../utils/accounting-api";
 import type { Account } from "../../types/accounting";
 
@@ -477,12 +477,13 @@ export function AddRequestForPaymentPanel({
   const fetchOpenStatements = async () => {
     try {
       setIsLoadingStatements(true);
-      const response = await apiFetch(`/evouchers?transaction_type=billing`);
+      const { data: evoucherRows, error: fetchError } = await supabase
+        .from('evouchers')
+        .select('*')
+        .eq('transaction_type', 'billing');
       
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && Array.isArray(result.data)) {
-          let billings = result.data;
+      if (!fetchError && evoucherRows) {
+          let billings = evoucherRows;
           
           // Filter by project if projectNumber is set
           if (projectNumber) {
@@ -514,7 +515,6 @@ export function AddRequestForPaymentPanel({
           const statements = Object.values(grouped).filter((s: any) => s.remainingBalance > 1); // Ignore small balances
           setAvailableStatements(statements);
         }
-      }
     } catch (error) {
       console.error("Error fetching statements:", error);
     } finally {

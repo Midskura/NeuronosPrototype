@@ -9,7 +9,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
 import type { QuotationNew } from "../../types/pricing";
@@ -48,33 +48,30 @@ export function ContractsModule({ currentUser, onCreateTicket, initialContract, 
 
   // ── Cached contracts fetch ────────────────────────────────
   const contractsFetcher = async (): Promise<QuotationNew[]> => {
-    // Fetch all quotations and filter for contracts client-side
-    // This reuses the existing /quotations endpoint — no new backend needed
-    const response = await apiFetch(`/quotations?department=pricing`);
+    const { data, error } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('quotation_type', 'contract')
+      .in('contract_status', ['Active', 'Expiring', 'Expired', 'Renewed']);
 
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (error) throw new Error(error.message);
 
-    const result = await response.json();
+    // Also include "Converted to Contract" status
+    const { data: converted, error: convError } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('quotation_type', 'contract')
+      .eq('status', 'Converted to Contract');
 
-    if (result.success) {
-      // Filter to activated contract quotations only
-      // Only contracts that have been approved and activated (status = "Converted to Contract"
-      // or contract_status = "Active"/"Expiring"/"Expired"/"Renewed") show here.
-      // Draft/in-progress contract quotations stay in the quotation lists until activated.
-      const contracts = (result.data || []).filter(
-        (q: QuotationNew) =>
-          q.quotation_type === "contract" &&
-          (q.status === "Converted to Contract" ||
-           q.contract_status === "Active" ||
-           q.contract_status === "Expiring" ||
-           q.contract_status === "Expired" ||
-           q.contract_status === "Renewed")
-      );
-      console.log(`ContractsModule: ${contracts.length} activated contracts found out of ${result.data.length} quotations`);
-      return contracts;
+    const allContracts = [...(data || [])];
+    if (!convError && converted) {
+      // Merge without duplicates
+      const existingIds = new Set(allContracts.map(c => c.id));
+      converted.forEach(c => { if (!existingIds.has(c.id)) allContracts.push(c); });
     }
 
-    throw new Error(result.error);
+    console.log(`ContractsModule: ${allContracts.length} activated contracts found`);
+    return allContracts;
   };
 
   const {
@@ -121,15 +118,11 @@ export function ContractsModule({ currentUser, onCreateTicket, initialContract, 
     // If viewing a specific contract, fetch fresh detail
     if (selectedContract) {
       try {
-        const response = await apiFetch(`/quotations/${selectedContract.id}`);
-
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            setSelectedContract(result.data);
-          }
+        const { data, error } = await supabase.from('quotations').select('*').eq('id', selectedContract.id).single();
+        if (!error && data) {
+          setSelectedContract(data);
         } else {
-          console.error('Failed to fetch contract:', response.status, await response.text());
+          console.error('Failed to fetch contract:', error?.message);
         }
       } catch (error) {
         console.error('Error refreshing selected contract:', error);

@@ -1,9 +1,4 @@
-import { useState, useEffect } from "react";
-import { Search, Plus, Calendar, Flag, CheckCircle2, Phone, Mail, Send, Users, MessageSquare, MessageCircle, Linkedin, ListTodo, ChevronDown } from "lucide-react";
-import type { Task, TaskType, TaskPriority, TaskStatus } from "../../types/bd";
-import { AddTaskPanel } from "./AddTaskPanel";
-import { CustomDropdown } from "./CustomDropdown";
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 
 interface TasksListProps {
@@ -27,21 +22,10 @@ export function TasksList({ onViewTask }: TasksListProps) {
   const fetchTasks = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/tasks`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setTasks(result.data);
-        console.log(`Fetched ${result.data.length} tasks`);
-      } else {
-        console.error('Error fetching tasks:', result.error);
-        toast.error('Error loading tasks: ' + result.error);
-      }
+      const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      setTasks(data || []);
+      console.log(`Fetched ${data?.length || 0} tasks`);
     } catch (error) {
       console.error('Error fetching tasks:', error);
       toast.error('Unable to load tasks. Please try again.');
@@ -54,17 +38,8 @@ export function TasksList({ onViewTask }: TasksListProps) {
   // Fetch customers from backend
   const fetchCustomers = async () => {
     try {
-      const response = await apiFetch(`/customers`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setCustomers(result.data);
-      }
+      const { data, error } = await supabase.from('customers').select('*');
+      if (!error && data) setCustomers(data);
     } catch (error) {
       console.error('Error fetching customers:', error);
     }
@@ -73,17 +48,8 @@ export function TasksList({ onViewTask }: TasksListProps) {
   // Fetch contacts from backend
   const fetchContacts = async () => {
     try {
-      const response = await apiFetch(`/contacts`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setContacts(result.data);
-      }
+      const { data, error } = await supabase.from('contacts').select('*');
+      if (!error && data) setContacts(data);
     } catch (error) {
       console.error('Error fetching contacts:', error);
     }
@@ -98,23 +64,11 @@ export function TasksList({ onViewTask }: TasksListProps) {
 
   const handleSaveTask = async (taskData: Partial<Task>) => {
     try {
-      const response = await apiFetch(`/tasks`, {
-        method: 'POST',
-        body: JSON.stringify(taskData)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Task created successfully');
-        fetchTasks(); // Refresh the list
-      } else {
-        toast.error('Error creating task: ' + result.error);
-      }
+      const newTask = { ...taskData, id: `task-${Date.now()}`, created_at: new Date().toISOString() };
+      const { error } = await supabase.from('tasks').insert(newTask);
+      if (error) throw error;
+      toast.success('Task created successfully');
+      fetchTasks(); // Refresh the list
     } catch (error) {
       console.error('Error creating task:', error);
       toast.error('Unable to create task. Please try again.');

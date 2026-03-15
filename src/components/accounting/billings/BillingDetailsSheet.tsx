@@ -1,7 +1,7 @@
 import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import type { Billing } from "../../types/accounting";
 import { SidePanel } from "../../common/SidePanel";
 
@@ -25,16 +25,26 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
         setError(null);
         
         console.log(`Fetching billing details for ID: ${billingId}`);
-        const response = await apiFetch(`/accounting/billings/${billingId}`);
+        // Try invoices table first (posted billings), fallback to evouchers
+        const { data: invoiceData, error: invoiceError } = await supabase
+          .from('invoices')
+          .select('*')
+          .eq('id', billingId)
+          .maybeSingle();
         
-        if (!response.ok) {
-           const text = await response.text();
-           console.error(`Billing fetch failed: ${response.status} ${response.statusText}`, text);
-           throw new Error(`Failed to load billing details: ${response.statusText}`);
+        if (invoiceData) {
+          setBilling(invoiceData);
+        } else {
+          // Fallback: try evouchers table
+          const { data: evData, error: evError } = await supabase
+            .from('evouchers')
+            .select('*')
+            .eq('id', billingId)
+            .maybeSingle();
+          
+          if (evError) throw new Error(evError.message);
+          setBilling(evData);
         }
-
-        const data = await response.json();
-        setBilling(data.data || data); 
       } catch (err) {
         console.error("Error fetching billing:", err);
         setError("Could not load billing details.");

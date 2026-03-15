@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { RefreshCw, Database, Package, FileText, AlertCircle } from "lucide-react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 
 export function DiagnosticsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -10,17 +10,10 @@ export function DiagnosticsPage() {
   const fetchProjects = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/projects`);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      
-      if (result.success) {
-        setProjects(result.data);
-        console.log('📊 All Projects Data:', result.data);
+      const { data, error } = await supabase.from('projects').select('*');
+      if (!error && data) {
+        setProjects(data);
+        console.log('All Projects Data:', data);
       }
     } catch (error) {
       console.error('Error fetching projects:', error);
@@ -35,7 +28,7 @@ export function DiagnosticsPage() {
 
   const inspectProject = (project: any) => {
     setSelectedProject(project);
-    console.log('🔍 Selected Project Details:', {
+    console.log('Selected Project Details:', {
       id: project.id,
       project_number: project.project_number,
       linkedBookings: project.linkedBookings,

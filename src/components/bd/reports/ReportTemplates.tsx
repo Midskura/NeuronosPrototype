@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Play } from 'lucide-react';
-import { apiFetch } from '../../../utils/api';
+import { supabase } from '../../../utils/supabase/client';
 
 interface Template {
   id: string;
@@ -25,11 +25,9 @@ export function ReportTemplates({ onBack, onRunReport }: ReportTemplatesProps) {
 
   const fetchTemplates = async () => {
     try {
-      const response = await apiFetch('/reports/templates');
-
-      const result = await response.json();
-      if (result.success) {
-        setTemplates(result.data);
+      const { data, error } = await supabase.from('report_templates').select('*');
+      if (!error && data) {
+        setTemplates(data);
       }
     } catch (error) {
       console.error('Error fetching templates:', error);

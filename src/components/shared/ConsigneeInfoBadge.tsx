@@ -12,7 +12,7 @@
 import { useState, useEffect } from "react";
 import { Building2 } from "lucide-react";
 import type { Consignee } from "../../types/bd";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 
 interface ConsigneeInfoBadgeProps {
   consigneeId?: string;
@@ -30,10 +30,8 @@ export function ConsigneeInfoBadge({ consigneeId }: ConsigneeInfoBadgeProps) {
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiFetch(`/consignees/${consigneeId}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!cancelled) setConsignee(data);
+        const { data, error } = await supabase.from('consignees').select('*').eq('id', consigneeId).single();
+        if (!error && data && !cancelled) setConsignee(data);
       } catch {
         // Silently fail — badge is informational only
       }

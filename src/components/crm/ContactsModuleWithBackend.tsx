@@ -4,7 +4,7 @@ import type { Contact } from "../../types/contact";
 import { ContactCreationModal } from "./ContactCreationModal";
 import { ContactDetailView } from "./ContactDetailView";
 import { QuotationBuilderV3 } from "../pricing/quotations/QuotationBuilderV3";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import type { QuotationNew } from "../../types/pricing";
 import { CustomDropdown } from "../bd/CustomDropdown";
@@ -30,20 +30,16 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   const fetchContacts = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('contacts').select('*');
       if (statusFilter !== "All Statuses") {
-        params.append("status", statusFilter);
+        query = query.eq('status', statusFilter);
       }
       if (searchQuery) {
-        params.append("search", searchQuery);
+        query = query.or(`first_name.ilike.%${searchQuery}%,last_name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
       }
-
-      const response = await apiFetch(`/contacts?${params.toString()}`);
-      const result = await response.json();
-      if (result.success) {
-        setContacts(result.data);
-      } else {
-        console.error("Failed to fetch contacts:", result.error);
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (!error && data) {
+        setContacts(data);
       }
     } catch (error) {
       console.error("Error fetching contacts:", error);
@@ -72,13 +68,11 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
     const fetchContactById = async () => {
       if (contactId) {
         try {
-          const response = await apiFetch(`/contacts/${contactId}`);
-          const result = await response.json();
-          if (result.success && result.data) {
-            setSelectedContact(result.data);
+          const { data, error } = await supabase.from('contacts').select('*').eq('id', contactId).maybeSingle();
+          if (!error && data) {
+            setSelectedContact(data);
             setView("detail");
           } else {
-            console.error('Error fetching contact:', result.error);
             toast.error("Contact not found");
           }
         } catch (error) {
@@ -94,21 +88,14 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   // Create new contact
   const handleCreateContact = async (contactData: Partial<Contact>) => {
     try {
-      const response = await apiFetch(`/contacts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(contactData),
+      const { error } = await supabase.from('contacts').insert({
+        ...contactData,
+        id: `contact-${Date.now()}`,
+        created_at: new Date().toISOString(),
       });
-
-      const result = await response.json();
-      if (result.success) {
-        await fetchContacts(); // Refresh list
-        setIsCreating(false);
-      } else {
-        throw new Error(result.error);
-      }
+      if (error) throw error;
+      await fetchContacts();
+      setIsCreating(false);
     } catch (error) {
       console.error("Error creating contact:", error);
       throw error;
@@ -118,23 +105,11 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   // Update contact
   const handleUpdateContact = async (id: string, updates: Partial<Contact>) => {
     try {
-      const response = await apiFetch(`/contacts/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updates),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        // Update local state
-        setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
-        if (selectedContact && selectedContact.id === id) {
-          setSelectedContact({ ...selectedContact, ...updates });
-        }
-      } else {
-        throw new Error(result.error);
+      const { error } = await supabase.from('contacts').update(updates).eq('id', id);
+      if (error) throw error;
+      setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+      if (selectedContact && selectedContact.id === id) {
+        setSelectedContact({ ...selectedContact, ...updates });
       }
     } catch (error) {
       console.error("Error updating contact:", error);
@@ -145,11 +120,9 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   // View contact detail
   const handleViewContact = async (contact: Contact) => {
     try {
-      // Fetch full contact details including quotations
-      const response = await apiFetch(`/contacts/${contact.id}`);
-      const result = await response.json();
-      if (result.success) {
-        setSelectedContact(result.data);
+      const { data, error } = await supabase.from('contacts').select('*').eq('id', contact.id).maybeSingle();
+      if (!error && data) {
+        setSelectedContact(data);
         setView("detail");
       }
     } catch (error) {
@@ -208,27 +181,20 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
         }}
         onSave={async (newQuotation) => {
           try {
-            const response = await apiFetch(`/quotations`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(newQuotation),
+            const { error } = await supabase.from('quotations').insert({
+              ...newQuotation,
+              id: `quot-${Date.now()}`,
+              created_at: new Date().toISOString(),
             });
 
-            const result = await response.json();
-            if (result.success) {
-              toast.success("Inquiry created successfully!");
-              // Refresh contact details to show new inquiry
-              const contactResponse = await apiFetch(`/contacts/${selectedContact.id}`);
-              const contactResult = await contactResponse.json();
-              if (contactResult.success) {
-                setSelectedContact(contactResult.data);
-              }
-              setView("detail");
-            } else {
-              throw new Error(result.error);
+            if (error) throw error;
+            toast.success("Inquiry created successfully!");
+            // Refresh contact details
+            const { data: refreshedContact } = await supabase.from('contacts').select('*').eq('id', selectedContact.id).maybeSingle();
+            if (refreshedContact) {
+              setSelectedContact(refreshedContact);
             }
+            setView("detail");
           } catch (error) {
             console.error("Error creating quotation:", error);
             toast.error("Failed to create inquiry");

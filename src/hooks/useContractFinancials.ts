@@ -22,7 +22,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import { toast } from "../components/ui/toast-utils";
 import {
   calculateFinancialTotals,
@@ -64,114 +64,107 @@ export function useContractFinancials(
     try {
       setIsLoading(true);
 
-      // Parallel fetch — same 4 endpoints as useProjectFinancials
-      const [invoicesRes, billingItemsRes, expensesRes, collectionsRes] =
-        await Promise.all([
-          // 1. Invoices — keyed by projectNumber (we use contractQuoteNumber)
-          apiFetch(
-            `/accounting/invoices?projectNumber=${contractQuoteNumber}`
-          ),
-          // 2. Billing Items — fetch all, filter client-side
-          apiFetch(`/accounting/billing-items`),
-          // 3. Expenses — fetch all e-vouchers, filter client-side
-          apiFetch(`/evouchers`),
-          // 4. Collections — keyed by project_number
-          apiFetch(
-            `/accounting/collections?project_number=${contractQuoteNumber}`
-          ),
-        ]);
+      // Parallel fetch — same 4 tables as useProjectFinancials
+      const [
+        { data: invoiceRows, error: invoiceErr },
+        { data: billingItemRows, error: billingErr },
+        { data: evoucherRows, error: evoucherErr },
+        { data: collectionRows, error: collectionErr },
+      ] = await Promise.all([
+        // 1. Invoices — keyed by projectNumber (we use contractQuoteNumber)
+        supabase
+          .from("invoices")
+          .select("*")
+          .eq("project_number", contractQuoteNumber),
+        // 2. Billing Items — fetch all, filter client-side
+        supabase.from("billing_line_items").select("*"),
+        // 3. Expenses — fetch all e-vouchers, filter client-side
+        supabase.from("evouchers").select("*"),
+        // 4. Collections — keyed by project_number
+        supabase
+          .from("collections")
+          .select("*")
+          .eq("project_number", contractQuoteNumber),
+      ]);
 
       // --- Process Invoices ---
-      if (invoicesRes.ok) {
-        const invoicesData = await invoicesRes.json();
-        if (invoicesData.success) {
-          setInvoices(
-            (invoicesData.data || []).filter((inv: any) => {
-              const status = (inv.status || "").toLowerCase();
-              const paymentStatus = (inv.payment_status || "").toLowerCase();
-              return (
-                ["draft", "posted", "approved", "paid", "open", "partial"].includes(status) ||
-                ["paid", "partial"].includes(paymentStatus)
-              );
-            })
-          );
-        }
+      if (!invoiceErr && invoiceRows) {
+        setInvoices(
+          invoiceRows.filter((inv: any) => {
+            const status = (inv.status || "").toLowerCase();
+            const paymentStatus = (inv.payment_status || "").toLowerCase();
+            return (
+              ["draft", "posted", "approved", "paid", "open", "partial"].includes(
+                status
+              ) ||
+              ["paid", "partial"].includes(paymentStatus)
+            );
+          })
+        );
       }
 
       // --- Process Billing Items (client-side filtering by booking IDs) ---
       const parsedBookingIds = JSON.parse(bookingIdsKey) as string[];
       const validIds = new Set([contractQuoteNumber, ...parsedBookingIds]);
 
-      if (billingItemsRes.ok) {
-        const billingItemsData = await billingItemsRes.json();
-        if (billingItemsData.success) {
-          const relevantItems = (billingItemsData.data || []).filter(
-            (item: any) => {
-              if (item.project_number === contractQuoteNumber) return true;
-              if (item.booking_id && validIds.has(item.booking_id)) return true;
-              return false;
-            }
-          );
-          // NOTE: No virtual-item merge for contracts (contracts don't have
-          // per-shipment selling_price categories). If needed in the future,
-          // add the merge logic here.
-          setBillingItems(relevantItems);
-        }
+      if (!billingErr && billingItemRows) {
+        const relevantItems = billingItemRows.filter(
+          (item: any) => {
+            if (item.project_number === contractQuoteNumber) return true;
+            if (item.booking_id && validIds.has(item.booking_id)) return true;
+            return false;
+          }
+        );
+        setBillingItems(relevantItems);
       }
 
       // --- Process Expenses ---
       let relevantExpenses: any[] = [];
-      if (expensesRes.ok) {
-        const expensesResult = await expensesRes.json();
-        if (expensesResult.success && expensesResult.data) {
-          relevantExpenses = (expensesResult.data || [])
-            .filter((ev: any) => {
-              const isRelevant =
-                validIds.has(ev.project_number) ||
-                validIds.has(ev.booking_id);
-              if (!isRelevant) return false;
-              const type = (ev.transaction_type || "").toLowerCase();
-              return type === "expense" || type === "budget_request";
-            })
-            .map((ev: any) => ({
-              id: ev.id,
-              evoucher_id: ev.id,
-              created_at: ev.created_at || ev.request_date,
-              description: ev.purpose || ev.description,
-              amount: ev.total_amount || ev.amount || 0,
-              total_amount: ev.total_amount || ev.amount || 0,
-              currency: ev.currency || "PHP",
-              status: ev.status,
-              expense_category: ev.expense_category,
-              is_billable: ev.is_billable,
-              project_number: ev.project_number,
-              booking_id: ev.booking_id,
-              vendor_name: ev.vendor_name,
-              payment_status:
-                (ev.status || "").toLowerCase() === "paid" ? "paid" : "unpaid",
-            }));
+      if (!evoucherErr && evoucherRows) {
+        relevantExpenses = evoucherRows
+          .filter((ev: any) => {
+            const isRelevant =
+              validIds.has(ev.project_number) ||
+              validIds.has(ev.booking_id);
+            if (!isRelevant) return false;
+            const type = (ev.transaction_type || "").toLowerCase();
+            return type === "expense" || type === "budget_request";
+          })
+          .map((ev: any) => ({
+            id: ev.id,
+            evoucher_id: ev.id,
+            created_at: ev.created_at || ev.request_date,
+            description: ev.purpose || ev.description,
+            amount: ev.total_amount || ev.amount || 0,
+            total_amount: ev.total_amount || ev.amount || 0,
+            currency: ev.currency || "PHP",
+            status: ev.status,
+            expense_category: ev.expense_category,
+            is_billable: ev.is_billable,
+            project_number: ev.project_number,
+            booking_id: ev.booking_id,
+            vendor_name: ev.vendor_name,
+            payment_status:
+              (ev.status || "").toLowerCase() === "paid" ? "paid" : "unpaid",
+          }));
 
-          setExpenses(
-            relevantExpenses.filter((e: any) =>
-              ["approved", "posted", "paid", "partial"].includes(
-                (e.status || "").toLowerCase()
-              )
+        setExpenses(
+          relevantExpenses.filter((e: any) =>
+            ["approved", "posted", "paid", "partial"].includes(
+              (e.status || "").toLowerCase()
             )
-          );
-        }
+          )
+        );
       }
 
       // Merge billable expenses into billing items
-      if (billingItemsRes.ok) {
+      if (!billingErr && billingItemRows) {
         setBillingItems((prev) => mergeBillableExpenses(prev, relevantExpenses));
       }
 
       // --- Process Collections ---
-      if (collectionsRes.ok) {
-        const collectionsData = await collectionsRes.json();
-        if (collectionsData.success) {
-          setCollections(collectionsData.data || []);
-        }
+      if (!collectionErr && collectionRows) {
+        setCollections(collectionRows);
       }
     } catch (error) {
       console.error("Error fetching contract financials:", error);

@@ -1,9 +1,6 @@
-import { useState, useEffect } from "react";
-import { X, User, Building2, Target, UserPlus } from "lucide-react";
 import type { LifecycleStage, LeadStatus } from "../../types/bd";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { CustomSelect } from "./CustomSelect";
-import { CustomDropdown } from "./CustomDropdown";
 import { useUsers } from "../../hooks/useUsers";
 
 interface AddContactPanelProps {
@@ -60,13 +57,10 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
     const fetchData = async () => {
       try {
         // Fetch customers
-        const customersResponse = await apiFetch(`/customers`);
+        const { data: customerRows } = await supabase.from('customers').select('*');
         
-        if (customersResponse.ok) {
-          const customersResult = await customersResponse.json();
-          if (customersResult.success) {
-            setCustomers(customersResult.data);
-          }
+        if (customerRows) {
+          setCustomers(customerRows);
         }
       } catch (error) {
         console.error('Error fetching data for AddContactPanel:', error);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { apiFetch } from '../utils/api';
+import { supabase } from '../utils/supabase/client';
 import { toast } from '../components/ui/toast-utils';
 
 type EVoucherContext = "bd" | "accounting" | "operations" | "collection" | "billing";
@@ -99,25 +99,29 @@ export function useEVoucherSubmit(context: EVoucherContext = "bd") {
 
       console.log('Creating E-Voucher draft:', payload);
 
-      const response = await apiFetch(`/evouchers`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
+      const voucherNumber = `EV-${Date.now()}`;
+      const evoucherId = `evoucher-${Date.now()}`;
+      const newEVoucher = {
+        ...payload,
+        id: evoucherId,
+        voucher_number: voucherNumber,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create E-Voucher');
+      const { data: created, error: insertErr } = await supabase
+        .from('evouchers')
+        .insert(newEVoucher)
+        .select()
+        .single();
+
+      if (insertErr) {
+        throw new Error(insertErr.message);
       }
 
-      const result = await response.json();
-
-      if (result.success) {
-        console.log('✅ E-Voucher draft created:', result.data);
-        toast.success(`Draft saved successfully! Ref: ${result.data.voucher_number}`);
-        return result.data;
-      } else {
-        throw new Error(result.error || 'Failed to create E-Voucher');
-      }
+      console.log('E-Voucher draft created:', created);
+      toast.success(`Draft saved successfully! Ref: ${created.voucher_number}`);
+      return created;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       console.error('Error creating E-Voucher draft:', err);
@@ -186,79 +190,67 @@ export function useEVoucherSubmit(context: EVoucherContext = "bd") {
 
       console.log('📤 Creating E-Voucher for submission:', JSON.stringify(payload, null, 2));
 
-      const createResponse = await apiFetch(`/evouchers`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
+      const voucherNumber = `EV-${Date.now()}`;
+      const evoucherId = `evoucher-${Date.now()}`;
+      const newEVoucher = {
+        ...payload,
+        id: evoucherId,
+        voucher_number: voucherNumber,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
 
-      if (!createResponse.ok) {
-        const errorText = await createResponse.text();
-        console.error('Create E-Voucher response error:', errorText);
-        
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          throw new Error(`Server error (${createResponse.status}): ${errorText || 'Unknown error'}`);
-        }
-        
-        throw new Error(errorData.error || 'Failed to create E-Voucher');
+      const { data: created, error: insertErr } = await supabase
+        .from('evouchers')
+        .insert(newEVoucher)
+        .select()
+        .single();
+
+      if (insertErr) {
+        throw new Error(insertErr.message);
       }
 
-      const createResult = await createResponse.json();
+      const createdId = created.id;
+      const createdVoucherNumber = created.voucher_number;
 
-      if (!createResult.success) {
-        throw new Error(createResult.error || 'Failed to create E-Voucher');
-      }
+      console.log('E-Voucher created:', createdVoucherNumber);
 
-      const evoucherId = createResult.data.id;
-      const voucherNumber = createResult.data.voucher_number;
-
-      console.log('✅ E-Voucher created:', voucherNumber);
-
-      // Step 2: Submit for approval
+      // Step 2: Submit for approval (update status)
       console.log('Submitting E-Voucher for approval...');
 
-      const submitResponse = await apiFetch(`/evouchers/${evoucherId}/submit`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: data.requestor,
-          user_name: data.requestor,
-          user_role: 'User',
-        }),
+      const { error: submitErr } = await supabase
+        .from('evouchers')
+        .update({ status: 'pending', updated_at: new Date().toISOString() })
+        .eq('id', createdId);
+
+      if (submitErr) {
+        throw new Error(submitErr.message);
+      }
+
+      // Insert history record
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: createdId,
+        action: 'Submitted for Approval',
+        previous_status: 'draft',
+        new_status: 'pending',
+        performed_by: data.requestor,
+        performed_by_name: data.requestor,
+        performed_by_role: 'User',
+        created_at: new Date().toISOString()
       });
 
-      if (!submitResponse.ok) {
-        const errorText = await submitResponse.text();
-        console.error('Submit E-Voucher response error:', errorText);
-        
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          throw new Error(`Server error (${submitResponse.status}): ${errorText || 'Unknown error'}`);
-        }
-        
-        throw new Error(errorData.error || 'Failed to submit E-Voucher');
-      }
-
-      const submitResult = await submitResponse.json();
-
-      if (submitResult.success) {
-        console.log('✅ E-Voucher submitted for approval:', submitResult.data);
-        
-        // Context-aware success message
-        const successMessage = 
-          context === "bd" ? `Budget Request ${voucherNumber} submitted successfully!` :
-          context === "collection" ? `Collection ${voucherNumber} recorded successfully!` :
-          context === "billing" ? `Invoice ${voucherNumber} created successfully!` :
-          `Expense ${voucherNumber} submitted successfully!`;
-        
-        toast.success(successMessage);
-        return submitResult.data;
-      } else {
-        throw new Error(submitResult.error || 'Failed to submit E-Voucher');
-      }
+      console.log('E-Voucher submitted for approval');
+      
+      // Context-aware success message
+      const successMessage = 
+        context === "bd" ? `Budget Request ${createdVoucherNumber} submitted successfully!` :
+        context === "collection" ? `Collection ${createdVoucherNumber} recorded successfully!` :
+        context === "billing" ? `Invoice ${createdVoucherNumber} created successfully!` :
+        `Expense ${createdVoucherNumber} submitted successfully!`;
+      
+      toast.success(successMessage);
+      return { ...created, status: 'pending' };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       console.error('Error submitting E-Voucher:', err);
@@ -312,31 +304,55 @@ export function useEVoucherSubmit(context: EVoucherContext = "bd") {
 
       console.log('⚡ Auto-approving E-Voucher:', payload);
 
-      const response = await apiFetch(`/evouchers/auto-approve`, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-      });
+      const voucherNumber = `EV-${Date.now()}`;
+      const evoucherId = `evoucher-${Date.now()}`;
+      const newEVoucher = {
+        ...payload,
+        id: evoucherId,
+        voucher_number: voucherNumber,
+        status: 'Approved',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch {
-          throw new Error(`Server error (${response.status}): ${errorText || 'Unknown error'}`);
+      const { data: created, error: insertErr } = await supabase
+        .from('evouchers')
+        .insert(newEVoucher)
+        .select()
+        .single();
+
+      if (insertErr) {
+        throw new Error(insertErr.message);
+      }
+
+      // Insert history records for create + auto-approve
+      await supabase.from('evoucher_history').insert([
+        {
+          id: `EH-${Date.now()}-1`,
+          evoucher_id: created.id,
+          action: 'Created',
+          new_status: 'draft',
+          performed_by: data.requestor,
+          performed_by_name: data.requestor,
+          performed_by_role: context,
+          created_at: new Date().toISOString()
+        },
+        {
+          id: `EH-${Date.now()}-2`,
+          evoucher_id: created.id,
+          action: 'Auto-Approved',
+          previous_status: 'draft',
+          new_status: 'Approved',
+          performed_by: data.requestor,
+          performed_by_name: data.requestor,
+          performed_by_role: context,
+          created_at: new Date().toISOString()
         }
-        throw new Error(errorData.error || 'Failed to auto-approve E-Voucher');
-      }
+      ]);
 
-      const result = await response.json();
-
-      if (result.success) {
-        console.log('✅ E-Voucher auto-approved:', result.data);
-        toast.success(`Voucher ${result.data.voucher_number} posted successfully!`);
-        return result.data;
-      } else {
-        throw new Error(result.error || 'Failed to auto-approve E-Voucher');
-      }
+      console.log('E-Voucher auto-approved:', created);
+      toast.success(`Voucher ${created.voucher_number} posted successfully!`);
+      return created;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       console.error('Error auto-approving E-Voucher:', err);
@@ -358,24 +374,18 @@ export function useEVoucherSubmit(context: EVoucherContext = "bd") {
     try {
       console.log('🗑️ Deleting E-Voucher:', id);
 
-      const response = await apiFetch(`/evouchers/${id}`, {
-        method: 'DELETE',
-      });
+      const { error: deleteErr } = await supabase
+        .from('evouchers')
+        .delete()
+        .eq('id', id);
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server error (${response.status}): ${errorText || 'Unknown error'}`);
+      if (deleteErr) {
+        throw new Error(deleteErr.message);
       }
 
-      const result = await response.json();
-
-      if (result.success) {
-        console.log('✅ E-Voucher deleted:', id);
-        toast.success(`Expense deleted successfully`);
-        return true;
-      } else {
-        throw new Error(result.error || 'Failed to delete expense');
-      }
+      console.log('E-Voucher deleted:', id);
+      toast.success(`Expense deleted successfully`);
+      return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
       console.error('Error deleting expense:', err);

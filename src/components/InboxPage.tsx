@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { Mail, Plus, Filter } from "lucide-react";
+import { useUser } from "../hooks/useUser";
+import { supabase } from "../utils/supabase/client";
 import { TicketsList } from "./ticketing/TicketsList";
 import { TicketManagementTable } from "./ticketing/TicketManagementTable";
 import { TicketDetailModal } from "./ticketing/TicketDetailModal";
 import { NewTicketPanel } from "./ticketing/NewTicketPanel";
-import { useUser } from "../hooks/useUser";
-import { apiFetch } from "../utils/api";
+import { useState, useEffect } from "react";
+import { Mail, Plus, Filter } from "lucide-react";
 
 export type TicketStatus = "Open" | "Assigned" | "In Progress" | "Waiting on Requester" | "Resolved" | "Closed";
 export type TicketPriority = "Normal" | "High" | "Urgent";
@@ -57,13 +57,20 @@ export function InboxPage() {
     
     setIsLoading(true);
     try {
-      const response = await apiFetch(
-        `/tickets?user_id=${user.id}&role=${effectiveRole}&department=${effectiveDepartment}`
-      );
+      let query = supabase
+        .from('tickets')
+        .select('*')
+        .order('created_at', { ascending: false });
       
-      if (response.ok) {
-        const data = await response.json();
-        setTickets(data.data || []);
+      // Filter by department or user
+      if (effectiveRole !== 'director' && effectiveRole !== 'executive') {
+        query = query.or(`assigned_to.eq.${user.id},created_by.eq.${user.id},to_department.eq.${effectiveDepartment}`);
+      }
+      
+      const { data, error } = await query;
+      
+      if (!error && data) {
+        setTickets(data);
       }
     } catch (error) {
       console.error("Failed to load tickets:", error);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Project } from "../../types/pricing";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import type { Expense as OperationsExpense } from "../../types/operations";
 import { UnifiedExpensesTab } from "../accounting/UnifiedExpensesTab";
 
@@ -29,11 +29,8 @@ export function ProjectExpensesTab({ project, currentUser, title, subtitle }: Pr
   const fetchAllExpenses = async () => {
     try {
       setIsLoading(true);
-      const response = await apiFetch(`/evouchers`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          const allEVouchers = result.data || [];
+      const { data: allEVouchers, error } = await supabase.from('evouchers').select('*');
+      if (!error && allEVouchers) {
           
           const validIds = new Set([
             project.id,
@@ -113,7 +110,6 @@ export function ProjectExpensesTab({ project, currentUser, title, subtitle }: Pr
             return createdB - createdA; // Newer creation first
           });
           setExpenses(uniqueExpenses);
-        }
       }
     } catch (error) {
       console.error("Error fetching expenses:", error);

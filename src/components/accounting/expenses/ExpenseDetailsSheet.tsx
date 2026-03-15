@@ -2,7 +2,7 @@ import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock,
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import type { Expense } from "../../types/accounting";
 
 interface ExpenseDetailsSheetProps {
@@ -28,16 +28,20 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
         console.log(`[ExpenseDetailsSheet] Fetching details for ID: ${expenseId}`);
         
         // Use /evouchers endpoint to support Draft/Pending items as well as Posted ones
-        const response = await apiFetch(`/evouchers/${expenseId}`);
+        const { data: evData, error: evError } = await supabase
+          .from('evouchers')
+          .select('*')
+          .eq('id', expenseId)
+          .maybeSingle();
         
-        if (!response.ok) {
-           const text = await response.text();
-           console.error(`[ExpenseDetailsSheet] API Error: ${response.status} ${response.statusText}`, text);
-           throw new Error(`Failed to load details: ${response.statusText}`);
+        if (evError) {
+          throw new Error(evError.message);
         }
 
-        const result = await response.json();
-        const data = result.data || result;
+        const data = evData;
+        if (!data) {
+          throw new Error('Expense not found');
+        }
         
         // Map E-Voucher data to Expense interface for display
         const mappedExpense: any = {

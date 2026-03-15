@@ -1,11 +1,4 @@
-import { useState, useEffect } from "react";
-import { Plus, Users, TrendingUp, Inbox } from "lucide-react";
-import { TicketManagementTable } from "./ticketing/TicketManagementTable";
-import { TicketDetailModal } from "./ticketing/TicketDetailModal";
-import { NewTicketPanel } from "./ticketing/NewTicketPanel";
-import { CustomDropdown } from "./bd/CustomDropdown";
 import { useUser } from "../hooks/useUser";
-import { apiFetch } from "../utils/api";
 import type { Ticket, TicketStatus } from "./InboxPage";
 
 type TabType = "all" | "my-tickets";
@@ -35,13 +28,17 @@ export function TicketQueuePage() {
     
     setIsLoading(true);
     try {
-      const response = await apiFetch(
-        `/tickets?user_id=${user.id}&role=${actualRole}&department=${effectiveDepartment}`
-      );
+      let query = supabase.from('tickets').select('*');
       
-      if (response.ok) {
-        const data = await response.json();
-        setTickets(data.data || []);
+      // Filter by department for non-directors
+      if (actualRole !== 'Director') {
+        query = query.eq('department', effectiveDepartment);
+      }
+      
+      const { data, error } = await query.order('created_at', { ascending: false });
+      
+      if (!error && data) {
+        setTickets(data);
       }
     } catch (error) {
       console.error("Failed to load tickets:", error);

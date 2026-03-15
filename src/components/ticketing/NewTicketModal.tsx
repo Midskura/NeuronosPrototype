@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { X, Plus } from "lucide-react";
 import { useUser } from "../../hooks/useUser";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { EntityPickerModal } from "./EntityPickerModal";
 import { toast } from "sonner@2.0.3";
 
@@ -54,10 +54,9 @@ export function NewTicketModal({ isOpen, onClose, onSuccess, prefilledEntity }: 
   const loadTicketTypes = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/ticket-types`);
-      const result = await response.json();
-      if (result.success) {
-        setTicketTypes(result.data);
+      const { data, error } = await supabase.from('ticket_types').select('*');
+      if (!error && data) {
+        setTicketTypes(data);
       }
     } catch (error) {
       console.error("Failed to load ticket types:", error);
@@ -85,33 +84,36 @@ export function NewTicketModal({ isOpen, onClose, onSuccess, prefilledEntity }: 
     
     setIsCreating(true);
     try {
-      const response = await apiFetch(`/tickets`, {
-        method: "POST",
-        body: JSON.stringify({
-          ticket_type: ticketType,
-          subject,
-          description,
-          priority,
-          from_department: user?.department || "",
-          to_department: toDepartment,
-          created_by: user?.id || "",
-          created_by_name: user?.name || "",
-          related_entities: linkedEntity ? [{
-            type: linkedEntity.type,
-            id: linkedEntity.id,
-            name: linkedEntity.name
-          }] : []
-        })
-      });
+      const ticketRow = {
+        ticket_type: ticketType,
+        subject,
+        description,
+        priority,
+        from_department: user?.department || "",
+        to_department: toDepartment,
+        created_by: user?.id || "",
+        created_by_name: user?.name || "",
+        related_entities: linkedEntity ? [{
+          type: linkedEntity.type,
+          id: linkedEntity.id,
+          name: linkedEntity.name
+        }] : [],
+        status: 'open',
+        created_at: new Date().toISOString(),
+      };
       
-      const result = await response.json();
+      const { data: result, error: insertError } = await supabase
+        .from('tickets')
+        .insert(ticketRow)
+        .select()
+        .single();
       
-      if (result.success) {
+      if (!insertError && result) {
         toast.success("Ticket created successfully");
         onSuccess();
         resetForm();
       } else {
-        toast.error(result.error || "Failed to create ticket");
+        toast.error(insertError?.message || "Failed to create ticket");
       }
     } catch (error) {
       console.error("Failed to create ticket:", error);

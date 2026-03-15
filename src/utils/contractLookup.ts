@@ -14,7 +14,7 @@
  */
 
 import type { ContractSummary, QuotationNew } from "../types/pricing";
-import { apiFetch } from "./api";
+import { supabase } from "./supabase/client";
 
 // ============================================
 // ACTIVE CONTRACT DETECTION
@@ -35,17 +35,27 @@ export async function fetchActiveContractsForCustomer(
   }
 
   try {
-    const response = await apiFetch(
-      `/contracts/active?customer_name=${encodeURIComponent(customerName.trim())}`
-    );
+    const { data, error } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('quotation_type', 'contract')
+      .eq('status', 'Active')
+      .ilike('customer_name', `%${customerName.trim()}%`);
 
-    if (!response.ok) {
-      console.error(`[contractLookup] Failed to fetch contracts: HTTP ${response.status}`);
+    if (error) {
+      console.error(`[contractLookup] Failed to fetch contracts:`, error.message);
       return [];
     }
 
-    const data = await response.json();
-    return (data.contracts || []) as ContractSummary[];
+    return (data || []).map((q: any) => ({
+      id: q.id,
+      quoteNumber: q.quote_number,
+      customerName: q.customer_name,
+      status: q.status,
+      services: q.services || [],
+      validFrom: q.valid_from,
+      validTo: q.valid_to,
+    })) as ContractSummary[];
   } catch (err) {
     console.error("[contractLookup] Error fetching active contracts:", err);
     return [];
@@ -99,19 +109,20 @@ export async function fetchFullContract(
   if (!contractId) return null;
 
   try {
-    const response = await apiFetch(
-      `/quotations/${contractId}`
-    );
+    const { data, error } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('id', contractId)
+      .maybeSingle();
 
-    if (!response.ok) {
-      console.error(`[contractLookup] Failed to fetch contract ${contractId}: HTTP ${response.status}`);
+    if (error) {
+      console.error(`[contractLookup] Failed to fetch contract ${contractId}:`, error.message);
       return null;
     }
 
-    const data = await response.json();
-
-    // Validate it's actually a contract
-    const quotation = data.data || data;
+    const quotation = data;
+    if (!quotation) return null;
+    
     if (quotation.quotation_type !== "contract") {
       console.warn(`[contractLookup] Quotation ${contractId} is not a contract (type: ${quotation.quotation_type})`);
       return null;

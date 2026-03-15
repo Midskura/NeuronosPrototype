@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FileCheck, Package, FileText, Users } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { SearchableDropdown } from "../shared/SearchableDropdown";
@@ -207,41 +207,30 @@ export function CreateBrokerageBookingPanel({
         submissionData.assigned_handler_name = teamAssignment.handler?.name;
       }
 
-      const response = await apiFetch(`/brokerage-bookings`, {
-        method: "POST",
-        body: JSON.stringify(submissionData),
-      });
+      const { data, error } = await supabase.from('brokerage_bookings').insert(submissionData).select().single();
 
-      if (!response.ok) {
-        throw new Error("Failed to create brokerage booking");
+      if (error) {
+        throw new Error(error.message);
       }
 
-      const result = await response.json();
-      if (result.success) {
-        toast.success("Brokerage booking created successfully");
-        
-        // Save team preference if requested and from Pricing
-        if (source === "pricing" && teamAssignment?.saveAsDefault && customerId) {
-          try {
-            await apiFetch(`/client-handler-preferences`, {
-              method: "POST",
-              body: JSON.stringify({
-                  client_id: customerId,
-                  service_type: serviceType,
-                  preferred_supervisor_id: teamAssignment.supervisor?.id,
-                  preferred_handler_id: teamAssignment.handler?.id,
-                }),
-            });
-          } catch (error) {
-            console.error("Error saving team preference:", error);
-          }
+      toast.success("Brokerage booking created successfully");
+      
+      // Save team preference if requested and from Pricing
+      if (source === "pricing" && teamAssignment?.saveAsDefault && customerId) {
+        try {
+          await supabase.from('client_handler_preferences').upsert({
+            client_id: customerId,
+            service_type: serviceType,
+            preferred_supervisor_id: teamAssignment.supervisor?.id,
+            preferred_handler_id: teamAssignment.handler?.id,
+          });
+        } catch (error) {
+          console.error("Error saving team preference:", error);
         }
-        
-        onSuccess(result.data); // Pass the booking data
-        onClose();
-      } else {
-        toast.error("Failed to create booking: " + result.error);
       }
+      
+      onSuccess(data);
+      onClose();
     } catch (error) {
       console.error("Error creating brokerage booking:", error);
       toast.error("Failed to create booking. Please try again.");

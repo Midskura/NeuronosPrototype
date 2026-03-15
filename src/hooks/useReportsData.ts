@@ -7,7 +7,7 @@
 // pre-computed project rows.
 
 import { useState, useEffect, useCallback } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 
 export interface ReportsData {
   projects: any[];
@@ -34,40 +34,25 @@ export function useReportsData(): ReportsData {
       setIsLoading(true);
       setError(null);
 
-      const [projRes, billRes, expRes, invRes, colRes] = await Promise.all([
-        apiFetch(`/projects`),
-        apiFetch(`/accounting/billing-items`),
-        apiFetch(`/accounting/expenses`),
-        apiFetch(`/accounting/invoices`),
-        apiFetch(`/accounting/collections`),
+      const [
+        { data: p, error: e1 },
+        { data: b, error: e2 },
+        { data: e, error: e3 },
+        { data: i, error: e4 },
+        { data: c, error: e5 },
+      ] = await Promise.all([
+        supabase.from("projects").select("*"),
+        supabase.from("billing_line_items").select("*"),
+        supabase.from("expenses").select("*"),
+        supabase.from("invoices").select("*"),
+        supabase.from("collections").select("*"),
       ]);
 
-      // Parse each response, extracting the data array
-      const parse = async (res: Response, label: string): Promise<any[]> => {
-        if (!res.ok) {
-          console.error(`Reports: Failed to fetch ${label} — ${res.status}`);
-          return [];
-        }
-        const json = await res.json();
-        if (json.success && Array.isArray(json.data)) return json.data;
-        if (Array.isArray(json)) return json;
-        if (Array.isArray(json.data)) return json.data;
-        return [];
-      };
-
-      const [p, b, e, i, c] = await Promise.all([
-        parse(projRes, "projects"),
-        parse(billRes, "billing-items"),
-        parse(expRes, "expenses"),
-        parse(invRes, "invoices"),
-        parse(colRes, "collections"),
-      ]);
-
-      setProjects(p);
-      setBillingItems(b);
-      setExpenses(e);
-      setInvoices(i);
-      setCollections(c);
+      setProjects(p || []);
+      setBillingItems(b || []);
+      setExpenses(e || []);
+      setInvoices(i || []);
+      setCollections(c || []);
     } catch (err: any) {
       console.error("Reports: Error fetching data:", err);
       setError(err?.message || "Failed to load report data");

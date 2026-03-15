@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
-import { X, Save, ArrowRightLeft, Calendar } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { motion, AnimatePresence } from "motion/react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { saveTransaction } from "../../utils/accounting-api";
 import type { Account } from "../../types/accounting-core";
 import type { EVoucher } from "../../types/evoucher";
@@ -36,13 +34,9 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
   const fetchAccounts = async () => {
     try {
       setLoadingAccounts(true);
-      const response = await apiFetch(`/accounts`);
-      const result = await response.json();
-      if (result.success) {
-        setAccounts(result.data || []);
-      } else {
-        throw new Error(result.error || "Failed to fetch accounts");
-      }
+      const { data, error } = await supabase.from('accounts').select('*');
+      if (error) throw new Error(error.message);
+      setAccounts(data || []);
     } catch (error) {
       console.error("Error loading accounts:", error);
       toast.error("Failed to load accounts");
@@ -59,21 +53,25 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
 
     try {
       setLoading(true);
-      const response = await apiFetch(`/evouchers/${evoucher.id}/post-to-ledger`, {
-          method: "POST",
-          body: JSON.stringify({
-            user_id: currentUser?.id,
-            user_name: currentUser?.name,
-            debit_account_id: debitAccountId,
-            credit_account_id: creditAccountId,
-            posting_date: postingDate
-          })
-        });
+      // Update evoucher status to posted
+      const { error: updateErr } = await supabase.from('evouchers')
+        .update({ status: 'posted', posted_to_ledger: true, updated_at: new Date().toISOString() })
+        .eq('id', evoucher.id);
+      
+      if (updateErr) throw new Error(updateErr.message);
 
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.error);
-      }
+      // Insert history record
+      await supabase.from('evoucher_history').insert({
+        id: `EH-${Date.now()}`,
+        evoucher_id: evoucher.id,
+        action: 'Posted to Ledger',
+        previous_status: evoucher.status,
+        new_status: 'posted',
+        performed_by: currentUser?.id,
+        performed_by_name: currentUser?.name,
+        performed_by_role: currentUser?.department,
+        created_at: new Date().toISOString()
+      });
 
       // --- AUTO-POST TRANSACTION TO LEDGER ---
       // Check if Credit Account is an Asset (Bank/Cash) => Money Out

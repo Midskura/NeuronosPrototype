@@ -1,5 +1,6 @@
 import { NeuronKPICard } from "../ui/NeuronKPICard";
 import { toast } from "../ui/toast-utils";
+import { supabase } from "../../utils/supabase/client";
 
 export function AccountingCustomers() {
   const [view, setView] = useState<"list" | "detail">("list");
@@ -20,13 +21,16 @@ export function AccountingCustomers() {
   // Fetch users from backend
   const fetchUsers = async () => {
     try {
-      const response = await apiFetch(`/users?department=Business%20Development`);
-      if (response.success) {
-        setUsers(response.data);
-      } else {
-        console.warn("Failed to fetch users:", response.error);
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('department', 'Business Development');
+      if (error) {
+        console.warn("Failed to fetch users:", error.message);
         setUsers([]);
+        return;
       }
+      setUsers(data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
       setUsers([]);
@@ -36,18 +40,16 @@ export function AccountingCustomers() {
   // Fetch activities from backend
   const fetchActivities = async () => {
     try {
-      const response = await apiFetch(`/activities`);
-      
-      if (!response.ok) {
+      const { data, error } = await supabase
+        .from('crm_activities')
+        .select('*')
+        .order('date', { ascending: false });
+      if (error) {
+        console.warn("Failed to fetch activities:", error.message);
         setActivities([]);
         return;
       }
-      
-      if (response.success) {
-        setActivities(response.data);
-      } else {
-        setActivities([]);
-      }
+      setActivities(data || []);
     } catch (error) {
       console.error("Error fetching activities:", error);
       setActivities([]);
@@ -58,26 +60,25 @@ export function AccountingCustomers() {
   const fetchCustomers = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('customers').select('*');
       if (searchQuery) {
-        params.append("search", searchQuery);
+        query = query.ilike('name', `%${searchQuery}%`);
       }
       if (industryFilter && industryFilter !== "All") {
-        params.append("industry", industryFilter);
+        query = query.eq('industry', industryFilter);
       }
       if (statusFilter && statusFilter !== "All") {
-        params.append("status", statusFilter);
+        query = query.eq('status', statusFilter);
       }
-      // Use 'Accounting' role or just fetch all
-      params.append("role", "Accounting");
+      query = query.order('created_at', { ascending: false });
       
-      const url = `/customers?${params.toString()}`;
-      
-      const response = await apiFetch(url);
-      
-      if (response.success) {
-        setCustomers(response.data);
+      const { data, error } = await query;
+      if (error) {
+        console.error("Error fetching customers:", error.message);
+        setCustomers([]);
+        return;
       }
+      setCustomers(data || []);
     } catch (error) {
       console.error("Error fetching customers:", error);
     } finally {
@@ -88,10 +89,14 @@ export function AccountingCustomers() {
   // Fetch all contacts for counting
   const fetchContacts = async () => {
     try {
-      const response = await apiFetch(`/contacts`);
-      if (response.success) {
-        setAllContacts(response.data);
+      const { data, error } = await supabase
+        .from('contacts')
+        .select('*');
+      if (error) {
+        console.error('Error fetching contacts:', error.message);
+        return;
       }
+      setAllContacts(data || []);
     } catch (error) {
       console.error('Error fetching contacts:', error);
     }
@@ -132,18 +137,19 @@ export function AccountingCustomers() {
     }
 
     try {
-      const response = await apiFetch(`/customers/${customerId}`, {
-        method: "DELETE",
-      });
+      const { error } = await supabase
+        .from('customers')
+        .delete()
+        .eq('id', customerId);
 
-      if (response.success) {
-        await fetchCustomers(); // Refresh list
-        await fetchContacts(); // Refresh contacts
-        setOpenDropdownId(null); // Close dropdown
-        toast.success("Customer deleted successfully");
-      } else {
-        toast.error(`Failed to delete customer: ${response.error}`);
+      if (error) {
+        toast.error(`Failed to delete customer: ${error.message}`);
+        return;
       }
+      await fetchCustomers(); // Refresh list
+      await fetchContacts(); // Refresh contacts
+      setOpenDropdownId(null); // Close dropdown
+      toast.success("Customer deleted successfully");
     } catch (error) {
       console.error("Error deleting customer:", error);
       toast.error("Failed to delete customer. Please try again.");
@@ -157,19 +163,18 @@ export function AccountingCustomers() {
       created_at: new Date().toISOString(),
     };
     try {
-      const response = await apiFetch(`/customers`, {
-        method: "POST",
-        body: JSON.stringify(transformedData),
-      });
+      const { error } = await supabase
+        .from('customers')
+        .insert(transformedData);
 
-      if (response.success) {
-        await fetchCustomers(); // Refresh list
-        await fetchContacts(); // Refresh contacts for accurate counts
-        setIsAddCustomerOpen(false);
-        toast.success("Customer added successfully");
-      } else {
-        throw new Error(response.error);
+      if (error) {
+        toast.error(`Failed to create customer: ${error.message}`);
+        return;
       }
+      await fetchCustomers(); // Refresh list
+      await fetchContacts(); // Refresh contacts for accurate counts
+      setIsAddCustomerOpen(false);
+      toast.success("Customer added successfully");
     } catch (error) {
       console.error("Error creating customer:", error);
       toast.error("Failed to create customer");

@@ -1,14 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
-import {
-  Plus,
-  Search,
-  ChevronDown,
-  ChevronRight,
-  PhilippinePeso,
-  AlertCircle
-} from "lucide-react";
 import type { Expense } from "../../types/accounting";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { useNavigate } from "react-router";
 import { AddRequestForPaymentPanel } from "./AddRequestForPaymentPanel";
 
@@ -52,16 +43,12 @@ export function ExpensesPage() {
       setLoading(true);
       setError(null);
       
-      // Fetch from NEW accounting endpoint (read-only expenses from E-Vouchers)
-      const response = await apiFetch(`/accounting/expenses`);
+      const { data, error: fetchErr } = await supabase.from('expenses').select('*');
       
-      if (!response.ok) {
-        throw new Error(`Failed to fetch expenses: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log('✅ Fetched posted expenses from E-Vouchers:', data);
-      setExpenses(data.data || []);
+      if (fetchErr) throw new Error(fetchErr.message);
+      
+      console.log('Fetched expenses:', (data || []).length);
+      setExpenses(data || []);
     } catch (err) {
       console.error('Error fetching expenses:', err);
       setError(err instanceof Error ? err.message : 'Failed to load expenses');
@@ -72,8 +59,8 @@ export function ExpensesPage() {
 
   const handleCreateExpense = async (expenseData: any) => {
     try {
-      // Map frontend field names to backend field names
       const mappedData = {
+        id: `exp-${Date.now()}`,
         description: expenseData.requestName,
         purpose: expenseData.requestName,
         voucher_number: expenseData.evrnNumber,
@@ -90,24 +77,12 @@ export function ExpensesPage() {
         request_date: expenseData.date,
         requestor_name: expenseData.requestor,
         status: expenseData.status || "Submitted",
+        created_at: new Date().toISOString(),
       };
 
-      console.log('Creating expense with data:', mappedData); // Debug log
+      const { error: insertErr } = await supabase.from('expenses').insert(mappedData);
+      if (insertErr) throw new Error(insertErr.message);
       
-      const response = await apiFetch(`/expenses`, {
-        method: 'POST',
-        body: JSON.stringify(mappedData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create expense');
-      }
-
-      const result = await response.json();
-      console.log('Expense created successfully:', result);
-      
-      // Refresh the list
       await fetchExpenses();
       setShowAddPanel(false);
     } catch (err) {
@@ -118,8 +93,8 @@ export function ExpensesPage() {
 
   const handleSaveDraft = async (draftData: any) => {
     try {
-      // Map frontend field names to backend field names
       const mappedData = {
+        id: `exp-${Date.now()}`,
         description: draftData.requestName,
         purpose: draftData.requestName,
         voucher_number: draftData.evrnNumber,
@@ -136,24 +111,12 @@ export function ExpensesPage() {
         request_date: draftData.date,
         requestor_name: draftData.requestor,
         status: 'Draft',
+        created_at: new Date().toISOString(),
       };
 
-      console.log('Saving draft with data:', mappedData); // Debug log
+      const { error: insertErr } = await supabase.from('expenses').insert(mappedData);
+      if (insertErr) throw new Error(insertErr.message);
       
-      const response = await apiFetch(`/expenses`, {
-        method: 'POST',
-        body: JSON.stringify(mappedData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save draft');
-      }
-
-      const result = await response.json();
-      console.log('Draft saved successfully:', result);
-      
-      // Refresh the list
       await fetchExpenses();
       setShowAddPanel(false);
     } catch (err) {

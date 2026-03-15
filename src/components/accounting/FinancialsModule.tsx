@@ -33,7 +33,7 @@ import {
   FolderOpen,
   Layers,
 } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { calculateFinancialTotals } from "../../utils/financialCalculations";
 import type { FinancialData } from "../../hooks/useProjectFinancials";
 import type { BillingItem } from "../shared/billings/UnifiedBillingsTab";
@@ -149,46 +149,41 @@ export function FinancialsModule() {
     try {
       setIsLoading(true);
 
-      const [billingRes, invoicesRes, collectionsRes, expensesRes] = await Promise.all([
-        apiFetch(`/accounting/billing-items`),
-        apiFetch(`/accounting/invoices`),
-        apiFetch(`/accounting/collections`),
-        apiFetch(`/accounting/expenses`),
+      const [
+        { data: billingRows, error: e1 },
+        { data: invoiceRows, error: e2 },
+        { data: collectionRows, error: e3 },
+        { data: expenseRows, error: e4 },
+      ] = await Promise.all([
+        supabase.from('billing_line_items').select('*'),
+        supabase.from('invoices').select('*'),
+        supabase.from('collections').select('*'),
+        supabase.from('expenses').select('*'),
       ]);
 
       // Billing items
-      if (billingRes.ok) {
-        const data = await billingRes.json();
-        if (data.success) setBillingItems(data.data || []);
-      }
+      if (!e1 && billingRows) setBillingItems(billingRows);
 
       // Invoices (filter to valid statuses)
-      if (invoicesRes.ok) {
-        const data = await invoicesRes.json();
-        if (data.success) {
-          setInvoices(
-            (data.data || []).filter((b: any) => {
-              const status = (b.status || "").toLowerCase();
-              const paymentStatus = (b.payment_status || "").toLowerCase();
-              return (
-                ["draft", "posted", "approved", "paid", "open", "partial"].includes(status) ||
-                ["paid", "partial"].includes(paymentStatus)
-              );
-            })
-          );
-        }
+      if (!e2 && invoiceRows) {
+        setInvoices(
+          invoiceRows.filter((b: any) => {
+            const status = (b.status || "").toLowerCase();
+            const paymentStatus = (b.payment_status || "").toLowerCase();
+            return (
+              ["draft", "posted", "approved", "paid", "open", "partial"].includes(status) ||
+              ["paid", "partial"].includes(paymentStatus)
+            );
+          })
+        );
       }
 
       // Collections
-      if (collectionsRes.ok) {
-        const data = await collectionsRes.json();
-        if (data.success) setCollections(data.data || []);
-      }
+      if (!e3 && collectionRows) setCollections(collectionRows);
 
       // Expenses (map to OperationsExpense shape)
-      if (expensesRes.ok) {
-        const data = await expensesRes.json();
-        const mapped: OperationsExpense[] = (data.data || data || []).map((ev: any) => ({
+      if (!e4 && expenseRows) {
+        const mapped: OperationsExpense[] = expenseRows.map((ev: any) => ({
           id: ev.id,
           expenseName: ev.voucher_number || ev.expense_name || ev.id,
           description: ev.purpose || ev.description || "",
@@ -201,51 +196,24 @@ export function FinancialsModule() {
           vendorName: ev.vendor_name || ev.payee_name || "\u2014",
           bookingId: ev.booking_id || "",
           isBillable: ev.is_billable || false,
-          // Carry through for grouping
           customerName: ev.customer_name || "",
           projectNumber: ev.project_number || "",
           quotationNumber: ev.quotation_number || "",
           hasProject: ev.has_project || false,
-          // Service type enriched from parent booking (server-side)
           service_type: ev.service_type || "",
         }));
         setExpenses(mapped);
       }
     } catch (error) {
       console.error("Error fetching financials data:", error);
-      // Retry up to 3 times on network errors (server may be restarting)
-      if (retryCount < 3 && error instanceof TypeError && String(error).includes("Failed to fetch")) {
-        console.log(`Retrying financials fetch (attempt ${retryCount + 2}/4)...`);
-        setTimeout(() => fetchAll(retryCount + 1), 1500 * (retryCount + 1));
-        return; // Don't setIsLoading(false) yet
-      }
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Run orphan cleanup once per session, then fetch data
+  // Fetch data on mount (orphan cleanup removed — was server-side only)
   useEffect(() => {
-    const CLEANUP_KEY = "neuron_billing_orphan_cleanup_done";
-    const alreadyCleaned = sessionStorage.getItem(CLEANUP_KEY);
-    
-    if (alreadyCleaned) {
-      fetchAll();
-      return;
-    }
-    
-    apiFetch(`/maintenance/cleanup-orphaned-billings`, {
-      method: "POST",
-    })
-      .then(r => r.json())
-      .then(result => {
-        sessionStorage.setItem(CLEANUP_KEY, "1");
-        if (result.orphanedCount > 0) {
-          console.log(`🧹 Auto-cleanup: removed ${result.orphanedCount} orphaned billing items`);
-        }
-      })
-      .catch(err => console.warn("Orphan cleanup skipped:", err))
-      .finally(() => fetchAll());
+    fetchAll();
   }, [fetchAll]);
 
   // ── Derived data ──

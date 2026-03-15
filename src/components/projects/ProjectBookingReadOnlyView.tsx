@@ -1,5 +1,5 @@
 import { ExpensesTab } from "../operations/shared/ExpensesTab";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 import { StatusSelector } from "../StatusSelector";
 import { ExecutionStatus } from "../../types/operations";
@@ -67,12 +67,12 @@ export function ProjectBookingReadOnlyView({
       
       // Map bookingType to the correct endpoint format
       const endpointMap: Record<string, string> = {
-        "forwarding": "forwarding-bookings",
-        "brokerage": "brokerage-bookings",
-        "trucking": "trucking-bookings",
-        "marine-insurance": "marine-insurance-bookings",
-        "marine insurance": "marine-insurance-bookings",
-        "others": "others-bookings"
+        "forwarding": "forwarding_bookings",
+        "brokerage": "brokerage_bookings",
+        "trucking": "trucking_bookings",
+        "marine-insurance": "marine_insurance_bookings",
+        "marine insurance": "marine_insurance_bookings",
+        "others": "others_bookings"
       };
       
       const endpoint = endpointMap[normalizedType];
@@ -83,39 +83,24 @@ export function ProjectBookingReadOnlyView({
 
       console.log("[ProjectBookingReadOnlyView] Using endpoint:", endpoint);
 
-      const response = await apiFetch(
-        `/${endpoint}/${bookingId}`
-      );
+      const { data: bookingData, error } = await supabase.from(endpoint).select('*').eq('id', bookingId).maybeSingle();
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("[ProjectBookingReadOnlyView] Booking data fetched:", responseData);
-        
-        if (responseData.success && responseData.data) {
-          setBooking(responseData.data);
-        } else {
-          setBooking(responseData);
-        }
+      if (!error && bookingData) {
+        setBooking(bookingData);
       } else {
-        // Fallback: try the generic /bookings/:id endpoint
-        // (bookings may be stored under the generic `booking:` KV prefix)
-        console.log("[ProjectBookingReadOnlyView] Type-specific endpoint failed, trying generic /bookings/:id");
-        const fallbackResponse = await apiFetch(
-          `/bookings/${bookingId}`
-        );
-
-        if (!fallbackResponse.ok) {
-          throw new Error("Failed to fetch booking from both type-specific and generic endpoints");
+        // Fallback: try all booking tables
+        console.log("[ProjectBookingReadOnlyView] Type-specific table failed, trying all tables");
+        const tables = ['forwarding_bookings', 'brokerage_bookings', 'trucking_bookings', 'marine_insurance_bookings', 'others_bookings'];
+        let found = false;
+        for (const table of tables) {
+          const { data: fb } = await supabase.from(table).select('*').eq('id', bookingId).maybeSingle();
+          if (fb) {
+            setBooking(fb);
+            found = true;
+            break;
+          }
         }
-
-        const fallbackData = await fallbackResponse.json();
-        console.log("[ProjectBookingReadOnlyView] Booking data fetched via fallback:", fallbackData);
-        
-        if (fallbackData.success && fallbackData.data) {
-          setBooking(fallbackData.data);
-        } else {
-          setBooking(fallbackData);
-        }
+        if (!found) throw new Error("Booking not found in any table");
       }
     } catch (error) {
       console.error("[ProjectBookingReadOnlyView] Error fetching booking:", error);

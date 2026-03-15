@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Loader2, AlertCircle, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 // ==================== TYPES ====================
@@ -92,13 +92,62 @@ export function AuditingSummary() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ period, view });
-      if (serviceType !== "All") params.set("service_type", serviceType);
+      // Fetch billing line items and catalog items, aggregate client-side
+      const [{ data: lineItems }, { data: catalogItems }] = await Promise.all([
+        supabase.from('billing_line_items').select('*'),
+        supabase.from('catalog_items').select('*').eq('is_active', true),
+      ]);
 
-      const res = await apiFetch(`/catalog/audit/summary?${params}`);
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || "Unknown error");
-      setData(json.data);
+      if (!lineItems || !catalogItems) {
+        setData({ items: [], meta: { total_line_items: 0, linked_count: 0, unlinked_count: 0, linked_percentage: 0, period, service_type: serviceType, view } });
+        return;
+      }
+
+      // Aggregate by catalog item
+      const itemMap = new Map<string, any>();
+      for (const ci of catalogItems) {
+        itemMap.set(ci.id, {
+          catalog_item_id: ci.id,
+          name: ci.name,
+          type: ci.type,
+          booking_count: 0,
+          total_amount: 0,
+          avg_amount: 0,
+          min_amount: Infinity,
+          max_amount: -Infinity,
+        });
+      }
+
+      for (const li of lineItems) {
+        if (li.catalog_item_id && itemMap.has(li.catalog_item_id)) {
+          const entry = itemMap.get(li.catalog_item_id);
+          entry.booking_count++;
+          entry.total_amount += (li.amount || 0);
+          entry.min_amount = Math.min(entry.min_amount, li.amount || 0);
+          entry.max_amount = Math.max(entry.max_amount, li.amount || 0);
+        }
+      }
+
+      const items = Array.from(itemMap.values()).map(item => ({
+        ...item,
+        avg_amount: item.booking_count > 0 ? item.total_amount / item.booking_count : 0,
+        min_amount: item.min_amount === Infinity ? 0 : item.min_amount,
+        max_amount: item.max_amount === -Infinity ? 0 : item.max_amount,
+      }));
+
+      const linkedCount = lineItems.filter((li: any) => li.catalog_item_id).length;
+      setData({
+        items,
+        meta: {
+          total_line_items: lineItems.length,
+          linked_count: linkedCount,
+          unlinked_count: lineItems.length - linkedCount,
+          linked_percentage: lineItems.length > 0 ? Math.round((linkedCount / lineItems.length) * 100) : 0,
+          period,
+          service_type: serviceType,
+          view,
+        },
+      });
     } catch (err) {
       console.error("Summary fetch error:", err);
       setError(String(err));

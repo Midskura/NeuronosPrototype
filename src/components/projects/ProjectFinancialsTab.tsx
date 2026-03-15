@@ -1,7 +1,7 @@
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect } from "react";
 import { TrendingUp, TrendingDown, DollarSign, Activity, PieChart, BarChart } from "lucide-react";
 import type { Project } from "../../types/pricing";
-import { apiFetch } from "../../utils/api";
 import { 
   ResponsiveContainer, 
   BarChart as RechartsBarChart, 
@@ -33,28 +33,21 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
       setIsLoading(true);
       
       // Fetch Revenue (Billings)
-      const billingsResponse = await apiFetch(`/evouchers?transaction_type=billing&project_number=${project.project_number}`);
+      const { data: billingsData } = await supabase.from('evouchers').select('*').eq('transaction_type', 'billing').eq('project_number', project.project_number);
       
       // Fetch Expenses
-      const expensesResponse = await apiFetch(`/evouchers?transaction_type=expense&project_number=${project.project_number}`);
+      const { data: expensesData } = await supabase.from('evouchers').select('*').eq('transaction_type', 'expense').eq('project_number', project.project_number);
       
-      if (billingsResponse.ok && expensesResponse.ok) {
-        const billingsData = await billingsResponse.json();
-        const expensesData = await expensesResponse.json();
-        
-        if (billingsData.success) {
-           // Filter for finalized/posted billings only
-           setBillings(billingsData.data.filter((b: any) => 
-             b.status === "posted" || b.status === "Posted" || b.status === "Approved"
-           ));
-        }
-        
-        if (expensesData.success) {
-           // Filter for approved/posted expenses only
-           setExpenses(expensesData.data.filter((e: any) => 
-             e.status === "Approved" || e.status === "posted" || e.status === "Posted"
-           ));
-        }
+      if (billingsData) {
+        setBillings(billingsData.filter((b: any) => 
+          b.status === "posted" || b.status === "Posted" || b.status === "Approved"
+        ));
+      }
+      
+      if (expensesData) {
+        setExpenses(expensesData.filter((e: any) => 
+          e.status === "Approved" || e.status === "posted" || e.status === "Posted"
+        ));
       }
     } catch (error) {
       console.error("Error fetching financials:", error);

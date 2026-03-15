@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import type { Project, QuotationNew, SellingPriceLineItem } from "../types/pricing";
 import { calculateFinancialTotals, mergeBillableExpenses, FinancialTotals, convertQuotationToVirtualItems, mergeVirtualItemsWithRealItems } from "../utils/financialCalculations";
 import { useCachedFetch } from "./useNeuronCache";
@@ -30,26 +30,25 @@ export function useProjectsFinancialsMap(projects: Project[]) {
   }, [projects]);
 
   // ── Cached data sources (shared across modules) ───────────
-  const apiFetcher = useCallback((endpoint: string) => async () => {
-    const response = await apiFetch(endpoint);
-    if (!response.ok) throw new Error(`Failed to fetch ${endpoint}: ${response.status}`);
-    const json = await response.json();
-    return json.success ? (json.data || []) : [];
+  const supabaseFetcher = useCallback((table: string) => async () => {
+    const { data, error } = await supabase.from(table).select('*');
+    if (error) throw new Error(`Failed to fetch ${table}: ${error.message}`);
+    return data || [];
   }, []);
 
   const skip = projects.length === 0;
 
   const { data: invoicesData, isLoading: l1 } = useCachedFetch<any[]>(
-    "accounting-invoices", apiFetcher("/accounting/invoices"), [], { skip }
+    "accounting-invoices", supabaseFetcher("invoices"), [], { skip }
   );
   const { data: expensesData, isLoading: l2 } = useCachedFetch<any[]>(
-    "accounting-expenses", apiFetcher("/accounting/expenses"), [], { skip }
+    "accounting-expenses", supabaseFetcher("expenses"), [], { skip }
   );
   const { data: billingItemsData, isLoading: l3 } = useCachedFetch<any[]>(
-    "accounting-billing-items", apiFetcher("/accounting/billing-items"), [], { skip }
+    "accounting-billing-items", supabaseFetcher("billing_line_items"), [], { skip }
   );
   const { data: quotationsData, isLoading: l4 } = useCachedFetch<any[]>(
-    "quotations", apiFetcher("/quotations"), [], { skip }
+    "quotations", supabaseFetcher("quotations"), [], { skip }
   );
 
   const isLoading = l1 || l2 || l3 || l4;

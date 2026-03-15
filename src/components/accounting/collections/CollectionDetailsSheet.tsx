@@ -2,7 +2,7 @@ import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock,
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import type { Collection } from "../../types/accounting";
 
 interface CollectionDetailsSheetProps {
@@ -25,16 +25,25 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
         setError(null);
         
         console.log(`Fetching collection details for ID: ${collectionId}`);
-        const response = await apiFetch(`/accounting/collections/${collectionId}`);
+        const { data: collData, error: collError } = await supabase
+          .from('collections')
+          .select('*')
+          .eq('id', collectionId)
+          .maybeSingle();
         
-        if (!response.ok) {
-           const text = await response.text();
-           console.error(`Collection fetch failed: ${response.status} ${response.statusText}`, text);
-           throw new Error(`Failed to load collection details: ${response.statusText}`);
+        if (collData) {
+          setCollection(collData);
+        } else {
+          // Fallback: try evouchers table
+          const { data: evData, error: evError } = await supabase
+            .from('evouchers')
+            .select('*')
+            .eq('id', collectionId)
+            .maybeSingle();
+          
+          if (evError) throw new Error(evError.message);
+          setCollection(evData);
         }
-
-        const data = await response.json();
-        setCollection(data.data || data); 
       } catch (err) {
         console.error("Error fetching collection:", err);
         setError("Could not load collection details.");

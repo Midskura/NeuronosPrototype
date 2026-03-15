@@ -1,6 +1,7 @@
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect } from "react";
 import { BarChart3, Download, Calendar, Filter } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+
 
 interface ReportFilters {
   startDate: string;
@@ -42,15 +43,22 @@ export function OperationsReports() {
         { type: "Others", endpoint: "others-bookings" }
       ];
 
+      const tableMap: Record<string, string> = {
+        "Forwarding": "forwarding_bookings",
+        "Trucking": "trucking_bookings",
+        "Brokerage": "brokerage_bookings",
+        "Marine Insurance": "marine_insurance_bookings",
+        "Others": "others_bookings",
+      };
+
       const allBookings: any[] = [];
       
       for (const service of services) {
-        const response = await apiFetch(`/${service.endpoint}`);
-        if (response.ok) {
-          const result = await response.json();
-          if (result.success) {
-            allBookings.push(...result.data.map((b: any) => ({ ...b, serviceType: service.type })));
-          }
+        const tableName = tableMap[service.type];
+        if (!tableName) continue;
+        const { data } = await supabase.from(tableName).select('*').order('created_at', { ascending: false });
+        if (data) {
+          allBookings.push(...data.map((b: any) => ({ ...b, serviceType: service.type })));
         }
       }
 

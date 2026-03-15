@@ -1,5 +1,5 @@
 import type { Project, ProjectStatus } from "../../types/pricing";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 
@@ -69,19 +69,9 @@ export function ProjectDetail({
     try {
       // Use the server API instead of direct table access
       // FIX: Prioritize project.quotation_id (FK) over project.quotation.id (embedded) to ensure we update the linked record
-      const response = await apiFetch(`/quotations/${project.quotation_id || project.quotation?.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updates)
-      });
-
-      if (!response.ok) {
-        throw new Error(`Server responded with ${response.status}`);
-      }
-      
-      const result = await response.json();
-      if (!result.success) {
-        throw new Error(result.error || "Failed to update quotation");
-      }
+      const quotationId = project.quotation_id || project.quotation?.id;
+      const { error } = await supabase.from('quotations').update(updates).eq('id', quotationId);
+      if (error) throw new Error(error.message);
       
       toast.success("Quotation updated successfully");
       // await the update to ensure the parent component has refreshed the data before we return
@@ -148,14 +138,8 @@ export function ProjectDetail({
     setOptimisticStatus(newStatus);
     
     try {
-      const response = await apiFetch(`/projects/${project.id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: newStatus })
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update project status");
-      }
+      const { error } = await supabase.from('projects').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', project.id);
+      if (error) throw new Error(error.message);
       
       toast.success(`Project status updated to ${newStatus}`);
       onUpdate(); // Refresh parent to show new status (server confirmation)

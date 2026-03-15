@@ -12,7 +12,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronDown, Building2, Plus, X } from "lucide-react";
 import type { Consignee } from "../../types/bd";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 
 interface ConsigneePickerProps {
   /** Current free-text value of the consignee field */
@@ -65,10 +65,9 @@ export function ConsigneePicker({
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiFetch(`/customers`);
-        const json = await res.json();
+        const { data, error } = await supabase.from('customers').select('id, name, company_name').ilike('company_name', customerName.trim());
         if (cancelled) return;
-        const customers = json.data || [];
+        const customers = data || [];
         const match = customers.find(
           (c: any) =>
             (c.name || c.company_name || "").toLowerCase() === customerName.trim().toLowerCase()
@@ -91,12 +90,9 @@ export function ConsigneePicker({
     let cancelled = false;
     (async () => {
       try {
-        const res = await apiFetch(
-          `/consignees?customer_id=${encodeURIComponent(resolvedCustomerId)}`
-        );
-        const json = await res.json();
-        if (!cancelled && json.success) {
-          setConsignees(json.data || []);
+        const { data, error } = await supabase.from('consignees').select('*').eq('customer_id', resolvedCustomerId);
+        if (!cancelled && !error) {
+          setConsignees(data || []);
         }
       } catch {
         // silent

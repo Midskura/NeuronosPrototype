@@ -1,8 +1,7 @@
-import { X, Upload, CheckSquare, Phone, Mail, Users, Send, MessageCircle, Linkedin, MessageSquare, Flag, UserCircle } from "lucide-react";
+import { CustomDropdown } from "./CustomDropdown";
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect } from "react";
 import type { Task, TaskType, TaskPriority } from "../../types/bd";
-import { CustomDropdown } from "./CustomDropdown";
-import { apiFetch } from "../../utils/api";
 
 interface AddTaskPanelProps {
   isOpen: boolean;
@@ -50,34 +49,22 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
   const [attachments, setAttachments] = useState<File[]>([]);
   const [contacts, setContacts] = useState<BackendContact[]>([]);
   const [customers, setCustomers] = useState<BackendCustomer[]>([]);
-  const [users, setUsers] = useState<BackendUser[]>([]);
+  const [bdUsers, setBdUsers] = useState<BackendUser[]>([]);
 
   // Fetch dropdown data when panel opens
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch contacts
-        const contactsResponse = await apiFetch(`/contacts`);
-        if (contactsResponse.ok) {
-          const result = await contactsResponse.json();
-          if (result.success) setContacts(result.data);
-        }
-
-        // Fetch customers
-        const customersResponse = await apiFetch(`/customers`);
-        if (customersResponse.ok) {
-          const result = await customersResponse.json();
-          if (result.success) setCustomers(result.data);
-        }
-
-        // Fetch BD users
-        const usersResponse = await apiFetch(`/users`);
-        if (usersResponse.ok) {
-          const result = await usersResponse.json();
-          if (result.success) {
-            const bdUsers = result.data.filter((u: BackendUser) => u.department === "Business Development");
-            setUsers(bdUsers);
-          }
+        const [{ data: contactRows }, { data: customerRows }, { data: userRows }] = await Promise.all([
+          supabase.from('contacts').select('*'),
+          supabase.from('customers').select('*'),
+          supabase.from('users').select('*'),
+        ]);
+        if (contactRows) setContacts(contactRows);
+        if (customerRows) setCustomers(customerRows);
+        if (userRows) {
+          const bdUsers = userRows.filter((u: any) => u.department === 'Business Development');
+          setBdUsers(bdUsers);
         }
         
         console.log('[AddTaskPanel] Fetched dropdown data');
@@ -317,7 +304,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 onChange={(value) => setTaskData({ ...taskData, assigned_to: value || undefined })}
                 options={[
                   { value: "", label: "Assign to someone..." },
-                  ...users.map(user => ({
+                  ...bdUsers.map(user => ({
                     value: user.id,
                     label: `${user.name} - ${user.role}`,
                     icon: <UserCircle size={16} />

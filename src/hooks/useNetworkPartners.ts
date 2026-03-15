@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { NetworkPartner, NETWORK_PARTNERS } from "../data/networkPartners";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 
 export function useNetworkPartners() {
   const [partners, setPartners] = useState<NetworkPartner[]>([]);
@@ -15,39 +15,17 @@ export function useNetworkPartners() {
     try {
       console.log(`Starting seed with ${seedData.length} partners...`);
       
-      // Chunk the data to avoid payload size limits
-      // Reduced chunk size to 5 to be very safe with Edge Function limits
-      const CHUNK_SIZE = 5;
-      const chunks = [];
+      const { error: insertErr } = await supabase
+        .from('service_providers')
+        .upsert(seedData, { onConflict: 'id' });
       
-      for (let i = 0; i < seedData.length; i += CHUNK_SIZE) {
-        chunks.push(seedData.slice(i, i + CHUNK_SIZE));
+      if (insertErr) {
+        console.error("Seeding failed:", insertErr.message);
+        return false;
       }
       
-      let successCount = 0;
-      
-      for (let i = 0; i < chunks.length; i++) {
-        const chunk = chunks[i];
-        try {
-          console.log(`Seeding chunk ${i + 1}/${chunks.length}...`);
-          const response = await apiFetch(`/partners/seed`, {
-            method: 'POST',
-            body: JSON.stringify(chunk)
-          });
-          
-          if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Seeding chunk ${i + 1} failed: ${response.status} ${response.statusText}`, errorText);
-          } else {
-            successCount += chunk.length;
-          }
-        } catch (chunkError) {
-          console.error(`Network error during seeding chunk ${i + 1}:`, chunkError);
-        }
-      }
-      
-      console.log(`Seeding complete. Successfully seeded ${successCount}/${seedData.length} partners.`);
-      return successCount > 0;
+      console.log(`Seeding complete. Successfully seeded ${seedData.length} partners.`);
+      return true;
     } catch (err) {
       console.error("Seeding process error:", err);
       return false;
@@ -59,39 +37,34 @@ export function useNetworkPartners() {
       setIsLoading(true);
       setError(null);
       
-      // Add a timestamp to prevent caching issues
-      const response = await apiFetch(`/partners?t=${Date.now()}`);
+      const { data, error: fetchErr } = await supabase
+        .from('service_providers')
+        .select('*');
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch partners: ${response.status} ${response.statusText}`);
+      if (fetchErr) {
+        throw new Error(fetchErr.message);
       }
 
-      const result = await response.json();
+      let rows = data || [];
       
-      if (result.success) {
-        let data = result.data || [];
+      // Auto-seeding logic
+      if (rows.length === 0 && NETWORK_PARTNERS && NETWORK_PARTNERS.length > 0) {
+        console.log("Empty backend detected. Initiating seeding...");
         
-        // Auto-seeding logic
-        if (data.length === 0 && NETWORK_PARTNERS && NETWORK_PARTNERS.length > 0) {
-          console.log("Empty backend detected. Initiating seeding...");
-          
-          // Show local data immediately for better UX
-          setPartners(NETWORK_PARTNERS);
-          
-          // Seed in background
-          seedPartners(NETWORK_PARTNERS).then((seeded) => {
-            if (seeded) {
-              console.log("Seeding finished successfully. Data synced.");
-            } else {
-              console.warn("Seeding finished with errors or was skipped.");
-            }
-          });
-          
-        } else {
-          setPartners(data);
-        }
+        // Show local data immediately for better UX
+        setPartners(NETWORK_PARTNERS);
+        
+        // Seed in background
+        seedPartners(NETWORK_PARTNERS).then((seeded) => {
+          if (seeded) {
+            console.log("Seeding finished successfully. Data synced.");
+          } else {
+            console.warn("Seeding finished with errors or was skipped.");
+          }
+        });
+        
       } else {
-        throw new Error(result.error || "Unknown error");
+        setPartners(rows);
       }
     } catch (err) {
       console.error("Error in useNetworkPartners:", err);
@@ -109,11 +82,7 @@ export function useNetworkPartners() {
   const savePartner = async (partnerData: Partial<NetworkPartner>) => {
     try {
       const isNew = !partnerData.id || partnerData.id.startsWith("new-");
-      const method = isNew ? 'POST' : 'PUT';
-      const path = isNew 
-        ? `/partners` 
-        : `/partners/${partnerData.id}`;
-
+      
       // Optimistic update
       const tempId = partnerData.id || `temp-${Date.now()}`;
       const optimisticPartner = { ...partnerData, id: tempId } as NetworkPartner;
@@ -123,29 +92,30 @@ export function useNetworkPartners() {
         return prev.map(p => p.id === partnerData.id ? { ...p, ...partnerData } : p);
       });
 
-      const response = await apiFetch(path, {
-        method,
-        body: JSON.stringify(partnerData)
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to save partner: ${response.statusText} - ${errorText}`);
-      }
-
-      const result = await response.json();
-      
-      if (result.success) {
-        // Replace optimistic data with real server data
-        setPartners(prev => {
-          if (isNew) {
-            return prev.map(p => p.id === tempId ? result.data : p);
-          }
-          return prev.map(p => p.id === result.data.id ? result.data : p);
-        });
-        return result.data;
+      if (isNew) {
+        const newPartner = { ...partnerData, id: `sp-${Date.now()}` };
+        const { data: created, error: insertErr } = await supabase
+          .from('service_providers')
+          .insert(newPartner)
+          .select()
+          .single();
+        
+        if (insertErr) throw new Error(insertErr.message);
+        
+        setPartners(prev => prev.map(p => p.id === tempId ? created : p));
+        return created;
       } else {
-        throw new Error(result.error);
+        const { data: updated, error: updateErr } = await supabase
+          .from('service_providers')
+          .update(partnerData)
+          .eq('id', partnerData.id!)
+          .select()
+          .single();
+        
+        if (updateErr) throw new Error(updateErr.message);
+        
+        setPartners(prev => prev.map(p => p.id === updated.id ? updated : p));
+        return updated;
       }
     } catch (err) {
       console.error("Error saving partner:", err);
@@ -158,12 +128,13 @@ export function useNetworkPartners() {
       // Optimistic update
       setPartners(prev => prev.filter(p => p.id !== id));
 
-      const response = await apiFetch(`/partners/${id}`, {
-        method: 'DELETE',
-      });
+      const { error: deleteErr } = await supabase
+        .from('service_providers')
+        .delete()
+        .eq('id', id);
 
-      if (!response.ok) {
-        throw new Error("Failed to delete");
+      if (deleteErr) {
+        throw new Error(deleteErr.message);
       }
     } catch (err) {
       console.error("Error deleting partner:", err);

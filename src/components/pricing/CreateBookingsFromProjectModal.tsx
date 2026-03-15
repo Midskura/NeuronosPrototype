@@ -1,4 +1,5 @@
 import { toast } from "sonner@2.0.3";
+import { supabase } from "../../utils/supabase/client";
 
 interface CreateBookingsFromProjectModalProps {
   isOpen: boolean;
@@ -52,15 +53,15 @@ export function CreateBookingsFromProjectModal({
     }));
   };
 
-  const getBookingEndpoint = (serviceType: ServiceType): string => {
-    const endpoints: Record<ServiceType, string> = {
-      "Forwarding": "forwarding-bookings",
-      "Brokerage": "brokerage-bookings",
-      "Trucking": "trucking-bookings",
-      "Marine Insurance": "marine-insurance-bookings",
-      "Others": "others-bookings",
+  const getBookingTable = (serviceType: ServiceType): string => {
+    const tables: Record<ServiceType, string> = {
+      "Forwarding": "forwarding_bookings",
+      "Brokerage": "brokerage_bookings",
+      "Trucking": "trucking_bookings",
+      "Marine Insurance": "marine_insurance_bookings",
+      "Others": "others_bookings",
     };
-    return endpoints[serviceType];
+    return tables[serviceType];
   };
 
   const buildBookingPayload = (serviceState: ServiceBookingState) => {
@@ -205,35 +206,27 @@ export function CreateBookingsFromProjectModal({
         throw new Error("Invalid booking payload");
       }
 
-      const endpoint = getBookingEndpoint(serviceState.serviceType);
+      const endpoint = getBookingTable(serviceState.serviceType);
       
       // Create booking
-      const response = await apiFetch(`/${endpoint}`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      const { data: bookingResult, error: bookingError } = await supabase.from(endpoint).insert(payload).select().single();
 
-      const result = await response.json();
-      
-      if (!result.success) {
-        throw new Error(result.error || "Failed to create booking");
+      if (bookingError) {
+        throw new Error(bookingError.message || "Failed to create booking");
       }
 
       // Save handler preference if checkbox was checked
       if (serviceState.assignment.saveAsDefault) {
         try {
-          await apiFetch(`/client-handler-preferences`, {
-            method: "POST",
-            body: JSON.stringify({
-              customer_id: project.customer_id,
-              service_type: serviceState.serviceType,
-              preferred_manager_id: serviceState.assignment.manager.id,
-              preferred_manager_name: serviceState.assignment.manager.name,
-              preferred_supervisor_id: serviceState.assignment.supervisor?.id,
-              preferred_supervisor_name: serviceState.assignment.supervisor?.name,
-              preferred_handler_id: serviceState.assignment.handler?.id,
-              preferred_handler_name: serviceState.assignment.handler?.name,
-            }),
+          await supabase.from('client_handler_preferences').upsert({
+            customer_id: project.customer_id,
+            service_type: serviceState.serviceType,
+            preferred_manager_id: serviceState.assignment.manager.id,
+            preferred_manager_name: serviceState.assignment.manager.name,
+            preferred_supervisor_id: serviceState.assignment.supervisor?.id,
+            preferred_supervisor_name: serviceState.assignment.supervisor?.name,
+            preferred_handler_id: serviceState.assignment.handler?.id,
+            preferred_handler_name: serviceState.assignment.handler?.name,
           });
         } catch (error) {
           console.error("Error saving preference:", error);
@@ -247,7 +240,7 @@ export function CreateBookingsFromProjectModal({
           ...prev[key], 
           isCreating: false, 
           isCreated: true,
-          bookingId: result.data.bookingId,
+          bookingId: bookingResult.id,
         },
       }));
 

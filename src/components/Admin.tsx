@@ -2,7 +2,7 @@ import { useState } from "react";
 import { cleanupDuplicates } from "../utils/cleanupDuplicates";
 import { toast } from "sonner@2.0.3";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
@@ -101,17 +101,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleMigrateQuotationStatuses = async () => {
     setIsMigratingStatuses(true);
     try {
-      const response = await apiFetch(`/quotations/migrate-statuses`, {
-        method: 'POST',
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`Migration complete! ${result.migrated} quotations updated, ${result.skipped} already current.`);
-      } else {
-        toast.error(`Migration failed: ${result.error}`);
-      }
+      toast.info("Quotation status migration should be run via Supabase SQL Editor.");
     } catch (error) {
       console.error("Error migrating quotation statuses:", error);
       toast.error("Failed to migrate quotation statuses. Check console for details.");
@@ -123,21 +113,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleMigrateServicesMetadata = async () => {
     setIsMigratingServices(true);
     try {
-      const response = await apiFetch(`/migrate-services-metadata`, {
-        method: 'POST',
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        const { projects, quotations } = result.data;
-        toast.success(
-          `✅ Migration complete! Projects: ${projects.updated} updated, ${projects.skipped} skipped. Quotations: ${quotations.updated} updated, ${quotations.skipped} skipped.`,
-          { duration: 5000 }
-        );
-      } else {
-        toast.error(`Migration failed: ${result.error}`);
-      }
+      toast.info("Services metadata migration should be run via Supabase SQL Editor.");
     } catch (error) {
       console.error("Error migrating services metadata:", error);
       toast.error("Failed to migrate services metadata. Check console for details.");
@@ -149,24 +125,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleSeedComprehensiveData = async () => {
     setIsSeeding(true);
     try {
-      // First, seed customers and contacts with correct IDs
-      console.log('[SEED] Seeding customers...');
-      await apiFetch(`/customers/seed`, { method: 'POST' });
-      
-      console.log('[SEED] Seeding contacts...');
-      await apiFetch(`/contacts/seed`, { method: 'POST' });
-      
-      // Then seed comprehensive data (quotations, projects, etc.)
-      console.log('[SEED] Seeding comprehensive data...');
-      const response = await apiFetch(`/seed/comprehensive`, { method: 'POST' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`🎉 Seed complete! ${result.summary.customers} customers, ${result.summary.quotations} quotations created!`);
-      } else {
-        toast.error(`Seed failed: ${result.error}`);
-      }
+      toast.info("Comprehensive seeding should be run via Supabase SQL Editor or dashboard.");
     } catch (error) {
       console.error("Error seeding comprehensive data:", error);
       toast.error("Failed to seed data. Check console for details.");
@@ -178,29 +137,13 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleClearSeedData = async () => {
     setIsClearingSeed(true);
     try {
-      // Clear contacts first
-      console.log('[CLEAR] Clearing contacts...');
-      const contactsResponse = await apiFetch(`/contacts/clear`, { method: 'DELETE' });
-      const contactsResult = await contactsResponse.json();
-      console.log('[CLEAR] Contacts cleared:', contactsResult);
-      
-      // Clear customers
-      console.log('[CLEAR] Clearing customers...');
-      const customersResponse = await apiFetch(`/customers/clear`, { method: 'DELETE' });
-      const customersResult = await customersResponse.json();
-      console.log('[CLEAR] Customers cleared:', customersResult);
-      
-      // Clear quotations and projects
-      console.log('[CLEAR] Clearing quotations and projects...');
-      const response = await apiFetch(`/seed/clear`, { method: 'DELETE' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`✅ Cleared all data: ${contactsResult.count || 0} contacts, ${customersResult.count || 0} customers, quotations & projects!`);
-      } else {
-        toast.error(`Clear failed: ${result.error}`);
-      }
+      await Promise.all([
+        supabase.from('contacts').delete().neq('id', ''),
+        supabase.from('customers').delete().neq('id', ''),
+        supabase.from('quotations').delete().neq('id', ''),
+        supabase.from('projects').delete().neq('id', ''),
+      ]);
+      toast.success("All data cleared successfully!");
     } catch (error) {
       console.error("Error clearing seed data:", error);
       toast.error("Failed to clear seed data. Check console for details.");
@@ -212,15 +155,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleMigrateContactNames = async () => {
     setIsMigratingContactNames(true);
     try {
-      const response = await apiFetch(`/contacts/migrate-names`, { method: 'POST' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`Migration complete! ${result.migrated} contacts migrated, ${result.skipped} already up-to-date.`);
-      } else {
-        toast.error(`Migration failed: ${result.error}`);
-      }
+      toast.info("Contact name migration should be run via Supabase SQL Editor.");
     } catch (error) {
       console.error("Error migrating contact names:", error);
       toast.error("Failed to migrate contact names. Check console for details.");
@@ -232,15 +167,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleSeedUsers = async () => {
     setIsSeedingUsers(true);
     try {
-      const response = await apiFetch(`/users/seed`, { method: 'POST' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`🎉 Seed complete! ${result.summary.users} users created!`);
-      } else {
-        toast.error(`Seed failed: ${result.error}`);
-      }
+      toast.info("User seeding should be run via Supabase Auth dashboard.");
     } catch (error) {
       console.error("Error seeding users:", error);
       toast.error("Failed to seed users. Check console for details.");
@@ -252,15 +179,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleSeedBalanceSheet = async () => {
     setIsSeedingBalanceSheet(true);
     try {
-      const response = await apiFetch(`/seed/coa-balance-sheet`, { method: 'POST' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`🎉 Balance Sheet COA Seeded Successfully!`);
-      } else {
-        toast.error(`Seed failed: ${result.error}`);
-      }
+      toast.info("Balance Sheet COA seeding should be run via Supabase SQL Editor.");
     } catch (error) {
       console.error("Error seeding Balance Sheet:", error);
       toast.error("Failed to seed Balance Sheet. Check console for details.");
@@ -272,15 +191,7 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
   const handleSeedIncomeStatement = async () => {
     setIsSeedingIncomeStatement(true);
     try {
-      const response = await apiFetch(`/seed/coa-income-statement`, { method: 'POST' });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success(`🎉 Income Statement COA Seeded Successfully!`);
-      } else {
-        toast.error(`Seed failed: ${result.error}`);
-      }
+      toast.info("Income Statement COA seeding should be run via Supabase SQL Editor.");
     } catch (error) {
       console.error("Error seeding Income Statement:", error);
       toast.error("Failed to seed Income Statement. Check console for details.");

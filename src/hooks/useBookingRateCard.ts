@@ -9,7 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import type { ContractRateMatrix } from "../types/pricing";
 
 export interface BookingRateCardData {
@@ -51,26 +51,24 @@ export function useBookingRateCard(contractId?: string): BookingRateCardData {
       setIsLoading(true);
 
       // Fetch all quotations and find the parent contract by ID
-      const response = await apiFetch(`/quotations/${contractId}`);
+      const { data, error } = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('id', contractId)
+        .maybeSingle();
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      const data = await response.json();
-
-      if (data.success && Array.isArray(data.data)) {
-        const contract = data.data.find((q: any) => q.id === contractId);
-
-        if (contract) {
-          setRateMatrices(contract.rate_matrices || []);
-          setContractNumber(contract.quote_number || "");
-          setCustomerName(contract.customer_name || "");
-          setCurrency(contract.currency || "PHP");
-        } else {
-          console.warn(`useBookingRateCard: Contract ${contractId} not found`);
-          setRateMatrices([]);
-        }
+      if (data) {
+        setRateMatrices(data.rate_matrices || []);
+        setContractNumber(data.quote_number || "");
+        setCustomerName(data.customer_name || "");
+        setCurrency(data.currency || "PHP");
+      } else {
+        console.warn(`useBookingRateCard: Contract ${contractId} not found`);
+        setRateMatrices([]);
       }
     } catch (error) {
       console.error("Error fetching contract for rate card:", error);

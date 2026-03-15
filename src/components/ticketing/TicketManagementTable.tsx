@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Search, Filter, ChevronDown, ChevronUp, User, Clock, AlertCircle, CheckCircle2, MoreVertical, X, RefreshCw, Flag, Trash2 } from "lucide-react";
 import type { Ticket, TicketStatus, TicketPriority } from "../InboxPage";
 import { useUser } from "../../hooks/useUser";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 import { CustomDropdown } from "../bd/CustomDropdown";
 
@@ -149,23 +149,16 @@ export function TicketManagementTable({
   const handleAssignTicket = async (ticketId: string, assignToUserId: string | null) => {
     setAssigningTicketId(ticketId);
     try {
-      const response = await apiFetch(
-        `/tickets/${ticketId}/assign`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            assigned_to: assignToUserId,
-            assigned_by: user?.id
-          })
-        }
-      );
+      const { error: updateError } = await supabase
+        .from('tickets')
+        .update({ assigned_to: assignToUserId, assigned_by: user?.id, updated_at: new Date().toISOString() })
+        .eq('id', ticketId);
 
-      if (response.ok) {
+      if (!updateError) {
         toast.success("Ticket assigned successfully");
         onTicketsUpdated();
       } else {
-        const error = await response.json();
-        toast.error(error.error || "Failed to assign ticket");
+        toast.error(updateError.message || "Failed to assign ticket");
       }
     } catch (error) {
       console.error("Error assigning ticket:", error);
@@ -186,35 +179,17 @@ export function TicketManagementTable({
     
     try {
       const ticketIds = Array.from(selectedTickets);
-      let successCount = 0;
-      let failCount = 0;
+      const { error: deleteError, count } = await supabase
+        .from('tickets')
+        .delete()
+        .in('id', ticketIds);
 
-      for (const ticketId of ticketIds) {
-        try {
-          const response = await apiFetch(
-            `/tickets/${ticketId}`,
-            {
-              method: "DELETE",
-            }
-          );
-
-          if (response.ok) {
-            successCount++;
-          } else {
-            failCount++;
-          }
-        } catch (error) {
-          failCount++;
-        }
-      }
-
-      if (successCount > 0) {
-        toast.success(`${successCount} ticket(s) deleted successfully`);
+      if (!deleteError) {
+        toast.success(`${ticketIds.length} ticket(s) deleted successfully`);
         setSelectedTickets(new Set());
         onTicketsUpdated();
-      }
-      if (failCount > 0) {
-        toast.error(`Failed to delete ${failCount} ticket(s)`);
+      } else {
+        toast.error("Failed to delete tickets");
       }
     } catch (error) {
       console.error("Bulk delete error:", error);
@@ -227,40 +202,17 @@ export function TicketManagementTable({
     
     try {
       const ticketIds = Array.from(selectedTickets);
-      let successCount = 0;
-      let failCount = 0;
+      const { error: updateError } = await supabase
+        .from('tickets')
+        .update({ status: newStatus, updated_at: new Date().toISOString() })
+        .in('id', ticketIds);
 
-      for (const ticketId of ticketIds) {
-        try {
-          const response = await apiFetch(
-            `/tickets/${ticketId}/status`,
-            {
-              method: "PATCH",
-              body: JSON.stringify({
-                status: newStatus,
-                user_id: user?.id,
-                user_name: user?.name || "Unknown"
-              })
-            }
-          );
-
-          if (response.ok) {
-            successCount++;
-          } else {
-            failCount++;
-          }
-        } catch (error) {
-          failCount++;
-        }
-      }
-
-      if (successCount > 0) {
-        toast.success(`${successCount} ticket(s) updated to ${newStatus}`);
+      if (!updateError) {
+        toast.success(`${ticketIds.length} ticket(s) updated to ${newStatus}`);
         setSelectedTickets(new Set());
         onTicketsUpdated();
-      }
-      if (failCount > 0) {
-        toast.error(`Failed to update ${failCount} ticket(s)`);
+      } else {
+        toast.error("Failed to update tickets");
       }
     } catch (error) {
       console.error("Bulk status change error:", error);
@@ -273,38 +225,17 @@ export function TicketManagementTable({
     
     try {
       const ticketIds = Array.from(selectedTickets);
-      let successCount = 0;
-      let failCount = 0;
+      const { error: updateError } = await supabase
+        .from('tickets')
+        .update({ priority: newPriority, updated_at: new Date().toISOString() })
+        .in('id', ticketIds);
 
-      for (const ticketId of ticketIds) {
-        try {
-          const response = await apiFetch(
-            `/tickets/${ticketId}/priority`,
-            {
-              method: "PATCH",
-              body: JSON.stringify({
-                priority: newPriority
-              })
-            }
-          );
-
-          if (response.ok) {
-            successCount++;
-          } else {
-            failCount++;
-          }
-        } catch (error) {
-          failCount++;
-        }
-      }
-
-      if (successCount > 0) {
-        toast.success(`${successCount} ticket(s) priority updated to ${newPriority}`);
+      if (!updateError) {
+        toast.success(`${ticketIds.length} ticket(s) priority updated to ${newPriority}`);
         setSelectedTickets(new Set());
         onTicketsUpdated();
-      }
-      if (failCount > 0) {
-        toast.error(`Failed to update ${failCount} ticket(s)`);
+      } else {
+        toast.error("Failed to update ticket priorities");
       }
     } catch (error) {
       console.error("Bulk priority change error:", error);

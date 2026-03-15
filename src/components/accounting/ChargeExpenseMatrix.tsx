@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Loader2, AlertCircle, Grid3X3, ChevronLeft, ChevronRight, Download } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 // ==================== TYPES ====================
@@ -145,13 +145,43 @@ export function ChargeExpenseMatrix() {
     setLoading(true);
     setError(null);
     try {
-      const params = new URLSearchParams({ period, view });
-      if (serviceType !== "All") params.set("service_type", serviceType);
+      // Fetch billing line items and catalog items, build matrix client-side
+      const [{ data: lineItems }, { data: catalogItems }] = await Promise.all([
+        supabase.from('billing_line_items').select('*'),
+        supabase.from('catalog_items').select('*').eq('is_active', true),
+      ]);
 
-      const res = await apiFetch(`/catalog/audit/matrix?${params}`);
-      const json = await res.json();
-      if (!json.success) throw new Error(json.error || "Unknown error");
-      setData(json.data);
+      if (!lineItems || !catalogItems) {
+        setData({ columns: [], rows: [] });
+        return;
+      }
+
+      // Build pivot: columns = catalog items, rows = bookings
+      const columns = catalogItems.map((ci: any) => ({
+        catalog_item_id: ci.id,
+        name: ci.name,
+      }));
+
+      // Group line items by booking
+      const byBooking = new Map<string, any[]>();
+      for (const li of lineItems) {
+        const key = li.booking_id || li.project_number || 'unassigned';
+        if (!byBooking.has(key)) byBooking.set(key, []);
+        byBooking.get(key)!.push(li);
+      }
+
+      const rows = Array.from(byBooking.entries()).map(([bookingId, items]) => ({
+        booking_id: bookingId,
+        project_number: items[0]?.project_number || bookingId,
+        cells: Object.fromEntries(
+          columns.map((col: any) => {
+            const match = items.find((li: any) => li.catalog_item_id === col.catalog_item_id);
+            return [col.catalog_item_id, match ? match.amount || 0 : null];
+          })
+        ),
+      }));
+
+      setData({ columns, rows });
     } catch (err) {
       console.error("Matrix fetch error:", err);
       setError(String(err));

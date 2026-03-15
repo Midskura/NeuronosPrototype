@@ -1,8 +1,7 @@
-import { Truck, Package, MapPin } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Plus, X } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
+import { Plus, X, Truck, MapPin, Package } from "lucide-react";
+import { useState, useEffect } from "react";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { SearchableDropdown } from "../shared/SearchableDropdown";
 import { MovementToggle } from "./shared/MovementToggle";
@@ -109,31 +108,20 @@ export function CreateTruckingBookingPanel({
     setLoading(true);
 
     try {
-      const response = await apiFetch(`/trucking-bookings`, {
-        method: "POST",
-        body: JSON.stringify({
-            ...formData,
-            // ✨ Multi-line trucking: persist line items + sync legacy fields from first item
-            // Filter out completely empty line items before saving
-            trucking_line_items: truckingLineItems.filter(li => li.destination || li.truckType || li.quantity > 0),
-            truckType: truckingLineItems[0]?.truckType || formData.truckType,
-            deliveryAddress: truckingLineItems[0]?.destination || formData.deliveryAddress,
-            ...(detectedContractId && { contract_id: detectedContractId }),
-          }),
-      });
+      const insertPayload = {
+        ...formData,
+        trucking_line_items: truckingLineItems.filter(li => li.destination || li.truckType || li.quantity > 0),
+        truckType: truckingLineItems[0]?.truckType || formData.truckType,
+        deliveryAddress: truckingLineItems[0]?.destination || formData.deliveryAddress,
+        ...(detectedContractId && { contract_id: detectedContractId }),
+      };
+      const { data, error } = await supabase.from('trucking_bookings').insert(insertPayload).select().single();
 
-      if (!response.ok) {
-        throw new Error("Failed to create trucking booking");
-      }
+      if (error) throw new Error(error.message);
 
-      const result = await response.json();
-      if (result.success) {
-        toast.success("Trucking booking created successfully");
-        onSuccess(result.data); // Pass the booking data
-        onClose();
-      } else {
-        toast.error("Failed to create booking: " + result.error);
-      }
+      toast.success("Trucking booking created successfully");
+      onSuccess(data);
+      onClose();
     } catch (error) {
       console.error("Error creating trucking booking:", error);
       toast.error("Failed to create booking. Please try again.");

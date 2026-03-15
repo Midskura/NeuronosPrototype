@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { UnifiedInvoicesTab } from "../shared/invoices/UnifiedInvoicesTab";
 import type { FinancialData } from "../../hooks/useProjectFinancials";
 import { calculateFinancialTotals } from "../../utils/financialCalculations";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 
 export function AggregateInvoicesPage() {
   const [invoices, setInvoices] = useState<any[]>([]);
@@ -16,37 +16,36 @@ export function AggregateInvoicesPage() {
   const fetchAll = useCallback(async () => {
     try {
       setIsLoading(true);
-      const [invoicesRes, billingRes, collectionsRes] = await Promise.all([
-        apiFetch(`/accounting/invoices`),
-        apiFetch(`/accounting/billing-items`),
-        apiFetch(`/accounting/collections`),
+      const [
+        { data: invoiceRows, error: invoiceErr },
+        { data: billingRows, error: billingErr },
+        { data: collectionRows, error: collectionErr },
+      ] = await Promise.all([
+        supabase.from('invoices').select('*'),
+        supabase.from('billing_line_items').select('*'),
+        supabase.from('collections').select('*'),
       ]);
 
-      if (invoicesRes.ok) {
-        const data = await invoicesRes.json();
-        if (data.success) {
-          // Filter to valid statuses
-          setInvoices(
-            (data.data || []).filter((b: any) => {
-              const status = (b.status || "").toLowerCase();
-              const paymentStatus = (b.payment_status || "").toLowerCase();
-              return (
-                ["draft", "posted", "approved", "paid", "open", "partial"].includes(status) ||
-                ["paid", "partial"].includes(paymentStatus)
-              );
-            })
-          );
-        }
+      if (!invoiceErr && invoiceRows) {
+        // Filter to valid statuses
+        setInvoices(
+          invoiceRows.filter((b: any) => {
+            const status = (b.status || "").toLowerCase();
+            const paymentStatus = (b.payment_status || "").toLowerCase();
+            return (
+              ["draft", "posted", "approved", "paid", "open", "partial"].includes(status) ||
+              ["paid", "partial"].includes(paymentStatus)
+            );
+          })
+        );
       }
 
-      if (billingRes.ok) {
-        const data = await billingRes.json();
-        if (data.success) setBillingItems(data.data || []);
+      if (!billingErr && billingRows) {
+        setBillingItems(billingRows);
       }
 
-      if (collectionsRes.ok) {
-        const data = await collectionsRes.json();
-        if (data.success) setCollections(data.data || []);
+      if (!collectionErr && collectionRows) {
+        setCollections(collectionRows);
       }
     } catch (error) {
       console.error("Error fetching aggregate invoices data:", error);

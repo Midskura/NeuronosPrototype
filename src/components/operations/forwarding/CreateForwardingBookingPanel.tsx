@@ -2,7 +2,7 @@ import { Package, Ship, Box, Warehouse, Link as LinkIcon, Users } from "lucide-r
 import { useState, useEffect } from "react";
 import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
 import type { Project } from "../../../types/pricing";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { toast } from "../../ui/toast-utils";
 import { ProjectAutofillSection } from "../shared/ProjectAutofillSection";
 import { ServicesMultiSelect } from "../shared/ServicesMultiSelect";
@@ -289,56 +289,40 @@ export function CreateForwardingBookingPanel({
         bookingData.assigned_handler_name = teamAssignment.handler?.name;
       }
 
-      const response = await apiFetch(`/forwarding-bookings`, {
-        method: "POST",
-        body: JSON.stringify(bookingData)
-      });
+      const { data: createdBooking, error } = await supabase.from('forwarding_bookings').insert(bookingData).select().single();
 
-      const result = await response.json();
+      if (error) throw new Error(error.message);
 
-      if (result.success) {
-        const createdBooking = result.data;
-        
-        // If linked to a project, create bidirectional link
-        if (fetchedProject && projectNumber) {
-          try {
-            await linkBookingToProject(
-              fetchedProject.id,
-              createdBooking.bookingId,
-              createdBooking.bookingId, // Use bookingId as the booking number
-              "Forwarding",
-              createdBooking.status,
-            );
-            console.log(`Linked booking ${createdBooking.bookingId} to project ${projectNumber}`);
-          } catch (linkError) {
-            console.error("Error linking booking to project:", linkError);
-            // Don't fail the whole operation, just log it
-          }
+      if (fetchedProject && projectNumber) {
+        try {
+          await linkBookingToProject(
+            fetchedProject.id,
+            createdBooking.bookingId,
+            createdBooking.bookingId,
+            "Forwarding",
+            createdBooking.status,
+          );
+        } catch (linkError) {
+          console.error("Error linking booking to project:", linkError);
         }
-        
-        // Save team preference if requested and from Pricing
-        if (source === "pricing" && teamAssignment?.saveAsDefault && customerId) {
-          try {
-            await apiFetch(`/client-handler-preferences`, {
-              method: "POST",
-              body: JSON.stringify({
-                client_id: customerId,
-                service_type: serviceType,
-                preferred_supervisor_id: teamAssignment.supervisor?.id,
-                preferred_handler_id: teamAssignment.handler?.id,
-              }),
-            });
-          } catch (error) {
-            console.error("Error saving team preference:", error);
-          }
-        }
-        
-        toast.success(`Forwarding booking ${createdBooking.bookingId} created successfully`);
-        onBookingCreated(createdBooking); // Pass the booking data
-        onClose();
-      } else {
-        toast.error("Error creating booking: " + result.error);
       }
+      
+      if (source === "pricing" && teamAssignment?.saveAsDefault && customerId) {
+        try {
+          await supabase.from('client_handler_preferences').upsert({
+            client_id: customerId,
+            service_type: serviceType,
+            preferred_supervisor_id: teamAssignment.supervisor?.id,
+            preferred_handler_id: teamAssignment.handler?.id,
+          });
+        } catch (prefError) {
+          console.error("Error saving team preference:", prefError);
+        }
+      }
+      
+      toast.success(`Forwarding booking ${createdBooking.bookingId} created successfully`);
+      onBookingCreated(createdBooking);
+      onClose();
     } catch (error) {
       console.error('Error creating booking:', error);
       toast.error('Unable to create booking');

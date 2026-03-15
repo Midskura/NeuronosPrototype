@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Play, Trash2, Clock } from 'lucide-react';
-import { apiFetch } from '../../../utils/api';
+import { supabase } from '../../../utils/supabase/client';
 import { useUser } from '../../../hooks/useUser';
 
 interface SavedReport {
@@ -33,11 +33,9 @@ export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
     if (!user) return;
 
     try {
-      const response = await apiFetch(`/reports/saved?user_id=${user.id}`);
-
-      const result = await response.json();
-      if (result.success) {
-        setReports(result.data);
+      const { data, error } = await supabase.from('saved_reports').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+      if (!error && data) {
+        setReports(data);
       }
     } catch (error) {
       console.error('Error fetching saved reports:', error);
@@ -51,14 +49,9 @@ export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
     if (!confirm('Are you sure you want to delete this saved report?')) return;
 
     try {
-      const response = await apiFetch(`/reports/saved/${reportId}?user_id=${user.id}`, {
-        method: 'DELETE',
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setReports(reports.filter((r) => r.id !== reportId));
-      }
+      const { error } = await supabase.from('saved_reports').delete().eq('id', reportId).eq('user_id', user.id);
+      if (error) throw error;
+      setReports(reports.filter((r) => r.id !== reportId));
     } catch (error) {
       console.error('Error deleting report:', error);
     }

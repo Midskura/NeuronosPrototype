@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { apiFetch } from '../utils/api';
+import { supabase } from '../utils/supabase/client';
 import { useUser } from '../hooks/useUser';
 import { AlertCircle, CheckCircle2, Send, User, Calendar, Clock, MessageSquare, CircleDot, Flag } from 'lucide-react';
 import { EntityPickerModal } from './ticketing/EntityPickerModal';
@@ -56,17 +56,12 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
   // Users State
   const [users, setUsers] = useState<any[]>([]);
   
-  // baseUrl removed — using apiFetch() wrapper
-  
   // Fetch ticket types
   const fetchTicketTypes = async () => {
     setLoadingTypes(true);
     try {
-      const response = await apiFetch(`/ticket-types`);
-      const result = await response.json();
-      if (result.success) {
-        setTicketTypes(result.data);
-      }
+      const { data, error } = await supabase.from('ticket_types').select('*');
+      if (!error && data) setTicketTypes(data);
     } catch (error) {
       console.error('Error fetching ticket types:', error);
     }
@@ -76,11 +71,8 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const response = await apiFetch(`/users`);
-      const result = await response.json();
-      if (result.success) {
-        setUsers(result.data);
-      }
+      const { data, error } = await supabase.from('users').select('*');
+      if (!error && data) setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -90,20 +82,11 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
   const fetchTickets = async () => {
     setLoadingTickets(true);
     try {
-      const params = new URLSearchParams({
-        user_id: user?.id || '',
-        role: user?.role || '',
-        department: user?.department || ''
-      });
-      
-      if (filterStatus) params.append('status', filterStatus);
-      if (filterPriority) params.append('priority', filterPriority);
-      
-      const response = await apiFetch(`/tickets?${params}`);
-      const result = await response.json();
-      if (result.success) {
-        setTickets(result.data);
-      }
+      let query = supabase.from('tickets').select('*');
+      if (filterStatus) query = query.eq('status', filterStatus);
+      if (filterPriority) query = query.eq('priority', filterPriority);
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (!error && data) setTickets(data);
     } catch (error) {
       console.error('Error fetching tickets:', error);
     }
@@ -114,11 +97,8 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
   const fetchTicketDetail = async (ticketId: string) => {
     setLoadingDetail(true);
     try {
-      const response = await apiFetch(`/tickets/${ticketId}`);
-      const result = await response.json();
-      if (result.success) {
-        setSelectedTicket(result.data);
-      }
+      const { data, error } = await supabase.from('tickets').select('*').eq('id', ticketId).single();
+      if (!error && data) setSelectedTicket(data);
     } catch (error) {
       console.error('Error fetching ticket detail:', error);
     }
@@ -134,35 +114,29 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
     
     setCreating(true);
     try {
-      const response = await apiFetch(`/tickets`, {
-        method: 'POST',
-        body: JSON.stringify({
-          ticket_type: ticketType,
-          subject,
-          description,
-          from_department: fromDept,
-          to_department: toDept,
-          priority,
-          created_by: user?.id,
-          created_by_name: user?.name,
-          linked_entity_type: linkedEntityType,
-          linked_entity_id: linkedEntityId,
-          linked_entity_name: linkedEntityName,
-          linked_entity_status: linkedEntityStatus
-        })
-      });
+      const { data, error } = await supabase.from('tickets').insert({
+        ticket_type: ticketType,
+        subject,
+        description,
+        from_department: fromDept,
+        to_department: toDept,
+        priority,
+        created_by: user?.id,
+        created_by_name: user?.name,
+        linked_entity_type: linkedEntityType,
+        linked_entity_id: linkedEntityId,
+        linked_entity_name: linkedEntityName,
+        linked_entity_status: linkedEntityStatus
+      }).select().single();
       
-      const result = await response.json();
-      if (result.success) {
-        alert(`✅ Ticket created: ${result.data.id}`);
-        // Reset form
+      if (!error && data) {
+        alert(`✅ Ticket created: ${data.id}`);
         setSubject('');
         setDescription('');
-        // Switch to list tab
         setActiveTab('list');
         fetchTickets();
       } else {
-        alert(`❌ Error: ${result.error}`);
+        alert(`❌ Error: ${error?.message}`);
       }
     } catch (error) {
       console.error('Error creating ticket:', error);
@@ -177,20 +151,16 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
     
     setAddingComment(true);
     try {
-      const response = await apiFetch(`/tickets/${selectedTicket.id}/comments`, {
-        method: 'POST',
-        body: JSON.stringify({
-          user_id: user?.id,
-          user_name: user?.name,
-          user_department: user?.department,
-          content: commentText
-        })
+      const { error } = await supabase.from('ticket_comments').insert({
+        ticket_id: selectedTicket.id,
+        user_id: user?.id,
+        user_name: user?.name,
+        user_department: user?.department,
+        content: commentText
       });
       
-      const result = await response.json();
-      if (result.success) {
+      if (!error) {
         setCommentText('');
-        // Refresh ticket detail
         fetchTicketDetail(selectedTicket.id);
       }
     } catch (error) {
@@ -204,13 +174,9 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
     if (!selectedTicket) return;
     
     try {
-      const response = await apiFetch(`/tickets/${selectedTicket.id}/status`, {
-        method: 'PATCH',
-        body: JSON.stringify({ status: newStatus })
-      });
+      const { error } = await supabase.from('tickets').update({ status: newStatus, updated_at: new Date().toISOString() }).eq('id', selectedTicket.id);
       
-      const result = await response.json();
-      if (result.success) {
+      if (!error) {
         alert(`✅ Status updated to: ${newStatus}`);
         fetchTicketDetail(selectedTicket.id);
         fetchTickets();
@@ -225,13 +191,9 @@ export function TicketTestingDashboard({ prefilledEntity }: TicketTestingDashboa
     if (!selectedTicket) return;
     
     try {
-      const response = await apiFetch(`/tickets/${selectedTicket.id}/assign`, {
-        method: 'PATCH',
-        body: JSON.stringify({ assigned_to: userId, assigned_to_name: userName })
-      });
+      const { error } = await supabase.from('tickets').update({ assigned_to: userId, assigned_to_name: userName, updated_at: new Date().toISOString() }).eq('id', selectedTicket.id);
       
-      const result = await response.json();
-      if (result.success) {
+      if (!error) {
         alert(`✅ Assigned to: ${userName}`);
         fetchTicketDetail(selectedTicket.id);
         fetchTickets();

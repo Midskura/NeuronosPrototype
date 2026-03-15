@@ -11,7 +11,7 @@ import { AddContactPanel } from "./AddContactPanel";
 import { CustomerProjectsTab } from "./CustomerProjectsTab";
 import { CustomerInquiriesTab } from "./CustomerInquiriesTab";
 import { ConsigneeInlineSection } from "./ConsigneeInlineSection";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 interface CustomerDetailProps {
@@ -171,32 +171,12 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
     try {
       console.log(`Fetching customer details for: ${customer.id} (${customer.name || customer.company_name})`);
       
-      const response = await apiFetch(`/customers/${customer.id}`);
-      
-      const result = await response.json();
-      console.log('Customer details response:', result);
-      
-      if (result.success && result.data) {
-        if (result.data.quotations) {
-          setQuotations(result.data.quotations);
-          console.log(`✅ Fetched ${result.data.quotations.length} quotations for customer ${customer.name || customer.company_name}:`, result.data.quotations);
-        } else {
-          console.log(`No quotations field in response for customer ${customer.name || customer.company_name}`);
-          setQuotations([]);
-        }
-        
-        if (result.data.contacts) {
-          setContacts(result.data.contacts);
-          console.log(`✅ Fetched ${result.data.contacts.length} contacts for customer ${customer.name || customer.company_name}:`, result.data.contacts);
-        } else {
-          console.log(`No contacts field in response for customer ${customer.name || customer.company_name}`);
-          setContacts([]);
-        }
-      } else {
-        console.error('Error fetching customer details:', result.error);
-        setQuotations([]);
-        setContacts([]);
-      }
+      const [{ data: quotationRows }, { data: contactRows }] = await Promise.all([
+        supabase.from('quotations').select('*').eq('customer_id', customer.id).order('created_at', { ascending: false }),
+        supabase.from('contacts').select('*').eq('customer_id', customer.id),
+      ]);
+      setQuotations(quotationRows || []);
+      setContacts(contactRows || []);
     } catch (error) {
       console.error('Error fetching customer details:', error);
       setQuotations([]);
@@ -211,22 +191,9 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   const fetchActivities = async () => {
     setIsLoadingActivities(true);
     try {
-      const response = await apiFetch(`/activities?customer_id=${customer.id}`);
-      
-      if (!response.ok) {
-        console.error(`HTTP error fetching activities! status: ${response.status}`);
-        setActivities([]);
-        setIsLoadingActivities(false);
-        return;
-      }
-      
-      const result = await response.json();
-      if (result.success) {
-        setActivities(result.data);
-      } else {
-        console.error("Failed to fetch activities:", result.error);
-        setActivities([]);
-      }
+      const { data, error } = await supabase.from('crm_activities').select('*').eq('customer_id', customer.id).order('created_at', { ascending: false });
+      if (!error) setActivities(data || []);
+      else setActivities([]);
     } catch (error) {
       console.error("Error fetching activities:", error);
       // Silently fail - set empty array
@@ -240,13 +207,9 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   const fetchTasks = async () => {
     setIsLoadingTasks(true);
     try {
-      const response = await apiFetch(`/tasks?customer_id=${customer.id}`);
-      const result = await response.json();
-      if (result.success) {
-        setTasks(result.data);
-      } else {
-        setTasks([]);
-      }
+      const { data, error } = await supabase.from('tasks').select('*').eq('customer_id', customer.id).order('created_at', { ascending: false });
+      if (!error) setTasks(data || []);
+      else setTasks([]);
     } catch (error) {
       console.error("Error fetching tasks:", error);
       setTasks([]);
@@ -270,26 +233,16 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
         status: 'Pending'
       };
 
-      const response = await apiFetch(`/tasks`, {
-        method: 'POST',
-        body: JSON.stringify(taskToCreate),
+      const { error } = await supabase.from('tasks').insert({
+        ...taskToCreate,
+        id: `task-${Date.now()}`,
+        created_at: new Date().toISOString(),
       });
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Task created successfully');
-        setIsCreatingTask(false);
-        setNewTask({
-          type: "Call",
-          priority: "Medium",
-          status: "Pending",
-          customer_id: customer.id
-        });
-        fetchTasks(); // Refresh the tasks list
-      } else {
-        toast.error('Error creating task: ' + result.error);
-      }
+      if (error) throw error;
+      toast.success('Task created successfully');
+      setIsCreatingTask(false);
+      setNewTask({ type: "Call", priority: "Medium", status: "Pending", customer_id: customer.id });
+      fetchTasks();
     } catch (error) {
       console.error('Error creating task:', error);
       toast.error('Unable to create task. Please try again.');
@@ -300,12 +253,9 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   const fetchProjects = async () => {
     setIsLoadingProjects(true);
     try {
-      const response = await apiFetch(`/projects`);
-      const result = await response.json();
-      if (result.success) {
-        // Client-side filtering because API might not support query params fully yet
-        // or to be safe since we want to match by customer name or ID
-        const customerProjects = result.data.filter((p: Project) => 
+      const { data, error } = await supabase.from('projects').select('*');
+      if (!error && data) {
+        const customerProjects = data.filter((p: Project) => 
           p.customer_id === customer.id || 
           p.customer_name === (customer.name || customer.company_name)
         );
@@ -324,11 +274,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   // Fetch users for lookups
   const fetchUsers = async () => {
     try {
-      const response = await apiFetch(`/users`);
-      const result = await response.json();
-      if (result.success) {
-        setUsers(result.data);
-      }
+      const { data, error } = await supabase.from('users').select('*');
+      if (!error && data) setUsers(data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -338,11 +285,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   const fetchCustomerContracts = async () => {
     setIsLoadingContracts(true);
     try {
-      const response = await apiFetch(`/contracts/by-customer/${encodeURIComponent(customer.company_name || customer.name || "")}`);
-      if (response.ok) {
-        const data = await response.json();
-        setCustomerContracts(data.contracts || []);
-      }
+      const { data, error } = await supabase.from('contracts').select('*').eq('customer_name', customer.company_name || customer.name || '');
+      if (!error) setCustomerContracts(data || []);
     } catch (error) {
       console.error("Error fetching customer contracts:", error);
       setCustomerContracts([]);
@@ -457,30 +401,22 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
   const handleSave = async () => {
     setIsSavingCustomer(true);
     try {
-      const response = await apiFetch(`/customers/${customer.id}`, {
-        method: "PUT",
-        body: JSON.stringify({
-          name: editedCustomer.name || editedCustomer.company_name,
-          company_name: editedCustomer.name || editedCustomer.company_name,
-          client_type: editedCustomer.client_type,
-          industry: editedCustomer.industry,
-          registered_address: editedCustomer.registered_address,
-          status: editedCustomer.status,
-          lead_source: editedCustomer.lead_source,
-          notes: editedCustomer.notes,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setLocalCustomer({ ...localCustomer, ...editedCustomer });
-        toast.success("Customer saved successfully");
-        setIsEditing(false);
-      } else {
-        console.error("Failed to save customer:", result.error);
-        toast.error(`Failed to save: ${result.error}`);
-      }
+      const updatePayload = {
+        name: editedCustomer.name || editedCustomer.company_name,
+        company_name: editedCustomer.name || editedCustomer.company_name,
+        client_type: editedCustomer.client_type,
+        industry: editedCustomer.industry,
+        registered_address: editedCustomer.registered_address,
+        status: editedCustomer.status,
+        lead_source: editedCustomer.lead_source,
+        notes: editedCustomer.notes,
+        updated_at: new Date().toISOString(),
+      };
+      const { error } = await supabase.from('customers').update(updatePayload).eq('id', customer.id);
+      if (error) throw error;
+      setLocalCustomer({ ...localCustomer, ...editedCustomer });
+      toast.success("Customer saved successfully");
+      setIsEditing(false);
     } catch (err: any) {
       console.error("Error saving customer:", err);
       toast.error(`Failed to save customer: ${err.message}`);
@@ -2167,19 +2103,16 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
               customer_id: customer.id, // Set the current customer as the company
             };
             
-            const response = await apiFetch(`/contacts`, {
-              method: 'POST',
-              body: JSON.stringify(newContactData),
+            const { error } = await supabase.from('contacts').insert({
+              ...newContactData,
+              id: `contact-${Date.now()}`,
+              created_at: new Date().toISOString(),
             });
-            
-            const result = await response.json();
-            
-            if (result.success) {
-              console.log('✅ Contact created successfully:', result.data);
-              // Refresh contacts list
+            if (!error) {
+              console.log('Contact created successfully');
               fetchCustomerDetails();
             } else {
-              console.error('❌ Failed to create contact:', result.error);
+              console.error('Failed to create contact:', error.message);
             }
           } catch (error) {
             console.error('❌ Error creating contact:', error);

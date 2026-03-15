@@ -6,7 +6,7 @@ import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { toast } from "../../ui/toast-utils";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 
 interface AddChargeModalProps {
   isOpen: boolean;
@@ -64,19 +64,19 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
         quotation_category: formData.category
       };
 
-      const response = await apiFetch(`/accounting/billing-items`, {
-        method: "POST",
-        body: JSON.stringify(payload)
+      const { error: insertError } = await supabase.from('evouchers').insert({
+        ...payload,
+        transaction_type: 'billing',
+        status: 'unbilled',
+        created_at: new Date().toISOString(),
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (!insertError) {
         toast.success("Charge added successfully");
         onSuccess();
         onClose();
       } else {
-        toast.error(result.error || "Failed to add charge");
+        toast.error(insertError.message || "Failed to add charge");
       }
     } catch (error) {
       console.error("Error adding charge:", error);

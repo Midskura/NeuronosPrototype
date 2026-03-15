@@ -1,7 +1,7 @@
 import { ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { SharedPricingRow, PricingRowData } from "../pricing/SharedPricingRow";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { toast } from "../../ui/toast-utils";
 import { PricingTableHeader } from "../pricing/PricingTableHeader";
 import { UniversalPricingRow, PricingItemData } from "../pricing/UniversalPricingRow";
@@ -110,19 +110,19 @@ export function BillingCategorySection({
         remarks: data.remarks
       };
 
-      const response = await apiFetch(`/accounting/billing-items`, {
-        method: "POST",
-        body: JSON.stringify(payload)
+      const { error: insertError } = await supabase.from('evouchers').insert({
+        ...payload,
+        transaction_type: 'billing',
+        status: 'unbilled',
+        created_at: new Date().toISOString(),
       });
 
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (!insertError) {
         toast.success("Item added successfully");
         setIsAddingItem(false);
         if (onRefresh) onRefresh();
       } else {
-        toast.error(result.error || "Failed to add item");
+        toast.error(insertError.message || "Failed to add item");
       }
     } catch (error) {
       console.error("Error adding item:", error);

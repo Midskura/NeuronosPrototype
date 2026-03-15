@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, Download, Save, TrendingUp, TrendingDown } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { apiFetch } from '../../../utils/api';
+import { supabase } from '../../../utils/supabase/client';
 import { useUser } from '../../../hooks/useUser';
+import { toast } from 'sonner';
 
 const COLORS = ['#0F766E', '#14B8A6', '#5EEAD4', '#99F6E4', '#CCFBF1'];
 
@@ -27,15 +28,10 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
   const generateReport = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/reports/generate`, {
-        method: 'POST',
-        body: JSON.stringify(config),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        setReportData(result.data);
-      }
+      const tableName = config.dataSource === 'activities' ? 'crm_activities' : (config.dataSource || 'quotations');
+      const { data, error } = await supabase.from(tableName).select('*');
+      if (error) throw error;
+      setReportData({ tableData: data || [], summary: {} });
     } catch (error) {
       console.error('Error generating report:', error);
     } finally {
@@ -43,32 +39,10 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
     }
   };
 
-  const handleExport = async (format: 'csv' | 'excel' | 'pdf') => {
+  const handleExport = async (format: 'csv' | 'excel') => {
     if (!reportData || !reportData.tableData) return;
-
     try {
-      const response = await apiFetch(`/reports/export`, {
-        method: 'POST',
-        body: JSON.stringify({
-          format,
-          data: reportData.tableData,
-          filename: `${config.templateName || 'custom_report'}_${new Date().toISOString().split('T')[0]}`,
-        }),
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        // Create download link
-        const blob = new Blob([result.data.content], { type: result.data.mimeType });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = result.data.filename;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      }
+      toast.info(`Export to ${format.toUpperCase()} — client-side export coming soon.`);
     } catch (error) {
       console.error('Error exporting report:', error);
     }
@@ -78,23 +52,18 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
     if (!user || !saveName) return;
 
     try {
-      const response = await apiFetch(`/reports/save`, {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: user.id,
-          name: saveName,
-          description: saveDescription,
-          config,
-        }),
+      const { error } = await supabase.from('saved_reports').insert({
+        id: `sr-${Date.now()}`,
+        user_id: user.id,
+        name: saveName,
+        config: config,
+        created_at: new Date().toISOString(),
       });
-
-      const result = await response.json();
-      if (result.success) {
-        setShowSaveDialog(false);
-        setSaveName('');
-        setSaveDescription('');
-        alert('Report saved successfully!');
-      }
+      if (error) throw error;
+      toast.success('Report saved successfully');
+      setShowSaveDialog(false);
+      setSaveName('');
+      setSaveDescription('');
     } catch (error) {
       console.error('Error saving report:', error);
     }
@@ -247,26 +216,6 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 }}
               >
                 Export as Excel
-              </button>
-              <button
-                onClick={() => handleExport('pdf')}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  textAlign: 'left',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#12332B',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#F9FAFB';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                Export as PDF
               </button>
             </div>
           </div>

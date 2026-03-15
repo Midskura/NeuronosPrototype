@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, FileText, Plus, BarChart, Download, ChevronDown, ChevronUp, X, Filter } from 'lucide-react';
-import { apiFetch } from '../../../utils/api';
+import { supabase } from '../../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
 type DataSource = 'quotations' | 'customers' | 'contacts' | 'activities' | 'budget_requests';
@@ -104,6 +104,7 @@ export function ReportsModule() {
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showColumnPicker, setShowColumnPicker] = useState(false);
+  const [dateRange, setDateRange] = useState<{ start: string | null; end: string | null }>({ start: null, end: null });
 
   // Initialize columns when data source changes
   useEffect(() => {
@@ -121,40 +122,19 @@ export function ReportsModule() {
   // Fetch results whenever filters or data source change
   useEffect(() => {
     fetchResults();
-  }, [dataSource, filters]);
+  }, [dataSource, filters, dateRange]);
 
   const fetchResults = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/reports/generate`, {
-        method: 'POST',
-        body: JSON.stringify({
-          dataSource,
-          filters: filters.map(f => ({
-            field: f.field,
-            operator: f.operator,
-            value: f.value,
-          })),
-          columns: columns.filter(c => c.visible).map(c => c.key),
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        // Backend returns data in format: { success: true, data: { tableData: [...], totalRows: N } }
-        const tableData = data.data?.tableData || data.data;
-        if (Array.isArray(tableData)) {
-          setResults(tableData);
-        } else if (Array.isArray(data.data)) {
-          setResults(data.data);
-        } else {
-          console.error('Invalid response format:', data);
-          setResults([]);
-        }
-      } else {
-        console.error('Invalid response format:', data);
-        setResults([]);
-      }
+      const tableName = dataSource === 'activities' ? 'crm_activities' : dataSource;
+      let query = supabase.from(tableName).select('*');
+      // Apply date filters if set
+      if (dateRange.start) query = query.gte('created_at', dateRange.start);
+      if (dateRange.end) query = query.lte('created_at', dateRange.end);
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (error) throw error;
+      setResults(data || []);
     } catch (error) {
       console.error('Error fetching results:', error);
       setResults([]);
@@ -194,26 +174,7 @@ export function ReportsModule() {
 
   const exportData = async (format: 'csv' | 'excel' | 'pdf') => {
     try {
-      const response = await apiFetch(`/reports/export`, {
-        method: 'POST',
-        body: JSON.stringify({
-          format,
-          dataSource,
-          filters,
-          columns: columns.filter(c => c.visible).map(c => c.key),
-          data: results,
-        }),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `report-${dataSource}-${Date.now()}.${format}`;
-        a.click();
-        toast.success(`Report exported as ${format.toUpperCase()}`);
-      }
+      toast.info(`Export to ${format.toUpperCase()} — client-side export coming soon.`);
     } catch (error) {
       console.error('Export error:', error);
       toast.error('Failed to export report');
@@ -225,23 +186,22 @@ export function ReportsModule() {
       const reportName = prompt('Enter a name for this report configuration:');
       if (!reportName) return;
 
-      const response = await apiFetch(`/reports/save`, {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: 'user-executive-001',
-          name: reportName,
-          config: {
-            dataSource,
-            filters,
-            columns: columns.filter(c => c.visible).map(c => c.key),
-          },
-        }),
-      });
+      const selectedColumns = columns.filter(c => c.visible).map(c => c.key);
+      const activeFilters = filters.map(f => ({
+        field: f.field,
+        operator: f.operator,
+        value: f.value,
+      }));
 
-      const data = await response.json();
-      if (data.success) {
-        toast.success('Report configuration saved');
-      }
+      const { error } = await supabase.from('saved_reports').insert({
+        id: `sr-${Date.now()}`,
+        user_id: 'user-executive-001',
+        name: reportName,
+        config: { dataSource, columns: selectedColumns, filters: activeFilters, dateRange },
+        created_at: new Date().toISOString(),
+      });
+      if (error) throw error;
+      toast.success('Report configuration saved!');
     } catch (error) {
       console.error('Save error:', error);
       toast.error('Failed to save report');

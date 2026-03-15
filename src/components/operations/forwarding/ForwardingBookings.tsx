@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, Search, Package, Briefcase, UserCheck, FileEdit, Clock, CheckCircle, Trash2 } from "lucide-react";
 import { CreateForwardingBookingPanel } from "./CreateForwardingBookingPanel";
 import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { toast } from "../../ui/toast-utils";
 import { NeuronStatusPill } from "../../NeuronStatusPill";
 import { SkeletonTable } from "../../shared/NeuronSkeleton";
@@ -29,11 +29,9 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
 
   // ── Cached bookings fetch ─────────────────────────────────
   const bookingsFetcher = async (): Promise<ForwardingBooking[]> => {
-    const response = await apiFetch(`/forwarding-bookings`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    if (result.success) return result.data;
-    throw new Error(result.error);
+    const { data, error } = await supabase.from('forwarding_bookings').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
   };
 
   const { data: bookings, isLoading, refresh: fetchBookings } = useCachedFetch<ForwardingBooking[]>(
@@ -64,18 +62,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
     }
 
     try {
-      const response = await apiFetch(`/forwarding-bookings/${bookingId}`, {
-        method: 'DELETE',
-      });
+      const { error } = await supabase.from('forwarding_bookings').delete().eq('bookingId', bookingId);
+      if (error) throw error;
 
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Booking deleted successfully');
-        fetchBookings(); // Refresh list
-      } else {
-        toast.error('Failed to delete booking', result.error);
-      }
+      toast.success('Booking deleted successfully');
+      fetchBookings(); // Refresh list
     } catch (error) {
       console.error('Error deleting booking:', error);
       toast.error('Unable to delete booking');

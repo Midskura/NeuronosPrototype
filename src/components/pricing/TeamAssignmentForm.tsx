@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import type { ServiceType } from "../../types/operations";
 import type { User } from "../../hooks/useUser";
 import { CustomDropdown } from "../bd/CustomDropdown";
@@ -44,13 +44,9 @@ export function TeamAssignmentForm({
     const fetchManager = async () => {
       setIsLoadingManager(true);
       try {
-        const response = await apiFetch(
-          `/users?department=Operations&service_type=${serviceType}&operations_role=Manager`
-        );
-        const result = await response.json();
-        if (result.success && result.data.length > 0) {
-          const mgr = result.data[0];
-          setManager({ id: mgr.id, name: mgr.name });
+        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Manager');
+        if (data && data.length > 0) {
+          setManager({ id: data[0].id, name: data[0].name });
         }
       } catch (error) {
         console.error("Error fetching manager:", error);
@@ -67,13 +63,8 @@ export function TeamAssignmentForm({
     const fetchSupervisors = async () => {
       setIsLoadingSupervisors(true);
       try {
-        const response = await apiFetch(
-          `/users?department=Operations&service_type=${serviceType}&operations_role=Supervisor`
-        );
-        const result = await response.json();
-        if (result.success) {
-          setSupervisors(result.data);
-        }
+        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Supervisor');
+        if (data) setSupervisors(data);
       } catch (error) {
         console.error("Error fetching supervisors:", error);
       } finally {
@@ -89,13 +80,8 @@ export function TeamAssignmentForm({
     const fetchHandlers = async () => {
       setIsLoadingHandlers(true);
       try {
-        const response = await apiFetch(
-          `/users?department=Operations&service_type=${serviceType}&operations_role=Handler`
-        );
-        const result = await response.json();
-        if (result.success) {
-          setHandlers(result.data);
-        }
+        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Handler');
+        if (data) setHandlers(data);
       } catch (error) {
         console.error("Error fetching handlers:", error);
       } finally {
@@ -111,31 +97,8 @@ export function TeamAssignmentForm({
     const loadPreference = async () => {
       setIsLoadingPreference(true);
       try {
-        const response = await apiFetch(
-          `/client-handler-preferences/${customerId}/${serviceType}`
-        );
-        
-        // Check if response is ok and is JSON before parsing
-        if (!response.ok) {
-          // 404 or other error - no preference exists, which is fine
-          if (response.status === 404) {
-            console.log(`No saved preference found for client ${customerId} and service ${serviceType}`);
-          } else {
-            console.warn(`Unexpected response status ${response.status} when loading preference`);
-          }
-          return;
-        }
-        
-        // Check content type to ensure it's JSON
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          console.warn("Response is not JSON:", contentType);
-          return;
-        }
-        
-        const result = await response.json();
-        if (result.success && result.data) {
-          const pref = result.data;
+        const { data: pref } = await supabase.from('client_handler_preferences').select('*').eq('client_id', customerId).eq('service_type', serviceType).maybeSingle();
+        if (pref) {
           setSelectedSupervisor(pref.preferred_supervisor_id);
           setSelectedHandler(pref.preferred_handler_id);
           setHasSavedPreference(true);

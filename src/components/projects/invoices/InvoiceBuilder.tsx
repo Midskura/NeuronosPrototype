@@ -4,7 +4,7 @@ import { toast } from "../../ui/toast-utils";
 import type { Project } from "../../../types/pricing";
 import { Invoice, BillingLineItem, Billing, Account } from "../../../types/accounting";
 import { getAccounts } from "../../../utils/accounting-api";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { InvoiceDocument, InvoicePrintOptions } from "./InvoiceDocument";
 import { SignatoryControl } from "../quotation/screen/controls/SignatoryControl";
 import { DisplayOptionsControl } from "../quotation/screen/controls/DisplayOptionsControl";
@@ -193,14 +193,11 @@ export function InvoiceBuilder({
         const fetchCustomer = async () => {
             setIsFetchingAddress(true);
             try {
-                const response = await apiFetch(`/customers/${project.customer_id}`);
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        const addr = result.data.address || result.data.registered_address || result.data.billing_address || "";
-                        if (addr) setCustomerAddress(addr);
-                        if (result.data.tin) setCustomerTin(result.data.tin);
-                    }
+                const { data: customerData } = await supabase.from('customers').select('*').eq('id', project.customer_id).single();
+                if (customerData) {
+                    const addr = customerData.address || customerData.registered_address || customerData.billing_address || "";
+                    if (addr) setCustomerAddress(addr);
+                    if (customerData.tin) setCustomerTin(customerData.tin);
                 }
             } catch (err) {
                 console.error("Failed to fetch customer details:", err);
@@ -446,48 +443,30 @@ export function InvoiceBuilder({
              const { id, is_virtual, ...rest } = item as any;
              return {
                  ...rest,
-                 project_id: project.id, // Ensure strict project linking
+                 project_id: project.id,
                  status: 'unbilled'
              };
           });
 
-          const saveResponse = await apiFetch(`/accounting/billings/batch`, {
-              method: 'POST',
-              body: JSON.stringify({ 
-                  items: itemsToSave,
-                  project_id: project.id 
-              })
-          });
-
-          const saveResult = await saveResponse.json();
-          if (!saveResult.success) {
-              throw new Error(saveResult.error || "Failed to finalize virtual billing items");
-          }
-          
-          // Fix: The server returns { success: true, data: { items: [], processed: N } }
-          // So we need to access saveResult.data.items, not saveResult.data directly
-          // We must be extremely defensive here
-          let savedItems: any[] = [];
-          if (saveResult.data && Array.isArray(saveResult.data.items)) {
-              savedItems = saveResult.data.items;
-          } else if (Array.isArray(saveResult.data)) {
-              savedItems = saveResult.data;
-          }
-          
-          if (!Array.isArray(savedItems)) {
-              console.error("Unexpected response format from batch billing:", saveResult);
-              savedItems = [];
-          }
+          const batchInsertItems = itemsToSave.map((item: any) => ({
+              ...item,
+              project_id: project.id,
+              project_number: project.project_number,
+              transaction_type: 'billing',
+              status: 'unbilled',
+              created_at: new Date().toISOString(),
+          }));
+          const { data: batchResult, error: batchSaveError } = await supabase.from('evouchers').insert(batchInsertItems).select();
+          if (batchSaveError) throw new Error(batchSaveError.message);
+          const savedItems: any[] = batchResult || [];
           
           // Map Virtual IDs -> Real IDs
           const idMap = new Map<string, string>();
           virtualItemsToSave.forEach(vItem => {
-              // Match by source_quotation_item_id or description/amount as fallback
               const match = savedItems.find((sItem: any) => 
                   (vItem.source_quotation_item_id && sItem.source_quotation_item_id === vItem.source_quotation_item_id) ||
                   (sItem.description === vItem.description && sItem.amount === vItem.amount)
               );
-              
               if (match) {
                   idMap.set(vItem.id, match.id);
               }
@@ -503,21 +482,32 @@ export function InvoiceBuilder({
       }
 
       console.log(`[InvoiceBuilder] Submitting invoice — revenue_account_id: "${revenueAccountId}", total: ${draftInvoice.total_amount}`);
-      const payload = {
+
+      // Generate invoice number (prefix + timestamp-based suffix)
+      const invoiceNumber = `INV-${Date.now().toString(36).toUpperCase()}`;
+
+      // Compute effective due date for persistence
+      let effectiveDueDate = dueDate || undefined;
+      if (!effectiveDueDate) {
+          const d = new Date(invoiceDate);
+          d.setDate(d.getDate() + 30);
+          effectiveDueDate = d.toISOString().split('T')[0];
+      }
+
+      const invoiceRow = {
+        invoice_number: invoiceNumber,
         project_number: project.project_number,
         customer_id: project.customer_id,
         customer_name: billedToType === "consignee" && selectedConsignee ? selectedConsignee.name : project.customer_name,
         customer_address: customerAddress,
         billed_to_type: billedToType,
-        billed_to_consignee_id: billedToConsigneeId,
+        billed_to_consignee_id: billedToConsigneeId || null,
         billing_item_ids: finalBillingItemIds,
         invoice_date: invoiceDate,
-        due_date: dueDate || undefined,
+        due_date: effectiveDueDate,
         notes: notes,
         user_id: "current-user-id",
-        user_name: signatories.prepared_by.name,
-        
-        // Snapshot Data (The Truth)
+        created_by_name: signatories.prepared_by.name,
         currency: targetCurrency,
         exchange_rate: exchangeRate,
         original_currency: project.currency,
@@ -525,11 +515,9 @@ export function InvoiceBuilder({
         subtotal: draftInvoice.subtotal,
         total_amount: draftInvoice.total_amount,
         tax_amount: draftInvoice.tax_amount,
-        
-        // GL Posting: Revenue account for JE (DR AR / CR Revenue)
-        // IMPORTANT: Always send the field (even as empty string) so the server sees it
-        revenue_account_id: revenueAccountId,
-        
+        revenue_account_id: revenueAccountId || null,
+        status: 'posted',
+        payment_status: 'unpaid',
         metadata: {
             signatories,
             displayOptions,
@@ -541,32 +529,27 @@ export function InvoiceBuilder({
                 credit_terms: creditTerms
             },
             item_overrides: itemOverrides
-        }
+        },
+        created_at: new Date().toISOString(),
       };
 
-      const response = await apiFetch(`/accounting/invoices`, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
+      const { data: invoiceData, error: invoiceError } = await supabase
+        .from('invoices')
+        .insert(invoiceRow)
+        .select()
+        .single();
 
-      const result = await response.json();
+      if (invoiceError) throw new Error(invoiceError.message);
 
-      if (result.success) {
-        // JE + Transaction are now created server-side inside createInvoice (Phase 1)
-        const hasJE = result.data?.journal_entry_id;
-        if (hasJE) {
-            toast.success(`Invoice ${result.data.invoice_number} posted to ledger`);
-        } else if (!revenueAccountId) {
-            toast.success(`Invoice ${result.data.invoice_number} created (no revenue account selected — GL entry skipped)`);
-        } else {
-            // Revenue account was selected but JE still wasn't created — likely AR account missing
-            console.warn(`[InvoiceBuilder] JE not created despite revenue_account_id="${revenueAccountId}". Check server logs.`);
-            toast.success(`Invoice ${result.data.invoice_number} created (GL entry could not be posted — check AR account setup)`);
-        }
-        if (onSuccess) onSuccess();
-      } else {
-        toast.error(result.error || "Failed to create invoice");
-      }
+      // Mark selected billing items as billed
+      const { error: updateError } = await supabase
+        .from('evouchers')
+        .update({ status: 'billed', invoice_id: invoiceData.id })
+        .in('id', finalBillingItemIds);
+      if (updateError) console.warn('[InvoiceBuilder] Failed to mark items as billed:', updateError.message);
+
+      toast.success(`Invoice ${invoiceData.invoice_number} created`);
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Error creating invoice:", error);
       toast.error("Failed to create invoice");
@@ -877,7 +860,7 @@ export function InvoiceBuilder({
                                        <span className="text-sm text-gray-400">No unbilled charges found.</span>
                                    </div>
                                ) : hasBookings ? (
-                                   /* ── BOOKING-GROUPED VIEW ── */
+                                   /* -- BOOKING-GROUPED VIEW -- */
                                    bookingGroupIds.map((bid, bidIdx) => {
                                      const items = bookingGroupedData[bid] || [];
                                      const meta = bookingMeta.get(bid);
@@ -929,7 +912,7 @@ export function InvoiceBuilder({
                                      );
                                    })
                                ) : (
-                                   /* ── FLAT CATEGORY-GROUPED VIEW (fallback when no linkedBookings) ── */
+                                   /* -- FLAT CATEGORY-GROUPED VIEW (fallback when no linkedBookings) -- */
                                    Object.entries(unbilledItems.reduce((acc: Record<string, any[]>, item: any) => {
                                        let key = item.service_type || "Freight Charges";
                                        const desc = (item.description || "").toLowerCase();
@@ -1010,7 +993,7 @@ export function InvoiceBuilder({
 
                           <div>
                               <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Notes / Memo</label>
-                              <textarea 
+                              <textarea
                                   value={notes}
                                   onChange={(e) => setNotes(e.target.value)}
                                   rows={3}

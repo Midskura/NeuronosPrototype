@@ -1,8 +1,5 @@
-import { Search, Plus, Globe, Building2, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { Vendor, VendorType } from "../../types/pricing";
-import { apiFetch } from "../../utils/api";
-import { toast } from "../ui/toast-utils";
 
 export function VendorsList() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,20 +11,12 @@ export function VendorsList() {
   const fetchVendors = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/vendors`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setVendors(result.data);
-        console.log(`Fetched ${result.data.length} vendors`);
+      const { data, error } = await supabase.from('network_partners').select('*').order('company_name');
+      if (!error && data) {
+        setVendors(data);
       } else {
-        console.error('Error fetching vendors:', result.error);
-        toast.error('Error loading vendors: ' + result.error);
+        toast.error('Error loading vendors');
+        setVendors([]);
       }
     } catch (error) {
       console.error('Error fetching vendors:', error);

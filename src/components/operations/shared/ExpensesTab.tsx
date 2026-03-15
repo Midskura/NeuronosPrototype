@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from "../../../utils/api";
+import { supabase } from "../../../utils/supabase/client";
 import { UnifiedExpensesTab } from "../../accounting/UnifiedExpensesTab";
 import type { Expense as OperationsExpense } from "../../../types/operations";
 
@@ -33,13 +33,9 @@ export function ExpensesTab({
     try {
       setIsLoading(true);
       
-      const response = await apiFetch(`/evouchers`);
+      const { data: allEVouchers, error } = await supabase.from('evouchers').select('*');
       
-      if (response.ok) {
-        const result = await response.json();
-        
-        if (result.success && result.data) {
-          const allEVouchers = result.data || [];
+      if (!error && allEVouchers) {
           
           // Filter for this specific booking
           const relevantEVouchers = allEVouchers.filter((ev: any) => {
@@ -96,7 +92,6 @@ export function ExpensesTab({
           });
 
           setExpenses(mappedExpenses);
-        }
       }
     } catch (error) {
       console.error("Error fetching expenses:", error);

@@ -14,7 +14,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 import { toast } from "../components/ui/toast-utils";
 import type { BillingItem } from "../components/shared/billings/UnifiedBillingsTab";
 
@@ -67,19 +67,19 @@ export function useContractBillings(linkedBookingIds: string[]): ContractBilling
     try {
       setIsLoading(true);
 
-      const response = await apiFetch(`/accounting/billing-items`);
+      const { data, error } = await supabase
+        .from('billing_line_items')
+        .select('*');
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+      if (error) {
+        throw new Error(error.message);
       }
 
-      const data = await response.json();
-
-      if (data.success && Array.isArray(data.data)) {
+      if (data && Array.isArray(data)) {
         const validIds = new Set(ids);
 
         // Client-side filter: items where booking_id OR project_number matches any linked booking
-        const matchedItems = data.data.filter((item: any) => {
+        const matchedItems = data.filter((item: any) => {
           if (item.booking_id && validIds.has(item.booking_id)) return true;
           if (item.project_number && validIds.has(item.project_number)) return true;
           if (item.source_booking_id && validIds.has(item.source_booking_id)) return true;

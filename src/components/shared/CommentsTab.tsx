@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, Paperclip, X, Download, FileText } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 
 interface FileAttachment {
@@ -59,22 +59,14 @@ export function CommentsTab({
   const fetchComments = async () => {
     setIsLoading(true);
     try {
-      const response = await apiFetch(`/comments?inquiry_id=${inquiryId}`);
+      const { data, error } = await supabase
+        .from('comments')
+        .select('*')
+        .eq('inquiry_id', inquiryId)
+        .order('created_at', { ascending: true });
 
-      // If endpoint doesn't exist yet (404), just show empty state
-      if (response.status === 404) {
-        setComments([]);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
-        setComments(result.data || []);
+      if (!error) {
+        setComments(data || []);
       } else {
         setComments([]);
       }
@@ -102,54 +94,46 @@ export function CommentsTab({
         setIsUploadingFiles(true);
         
         for (const file of attachedFiles) {
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("inquiry_id", inquiryId);
+          const filePath = `comments/${inquiryId}/${Date.now()}-${file.name}`;
+          const { error: uploadError } = await supabase.storage
+            .from('attachments')
+            .upload(filePath, file);
 
-          const uploadResponse = await apiFetch(`/comments/upload`, {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!uploadResponse.ok) {
+          if (uploadError) {
             throw new Error(`Failed to upload ${file.name}`);
           }
 
-          const uploadResult = await uploadResponse.json();
-          if (uploadResult.success) {
-            uploadedAttachments.push(uploadResult.data);
-          }
+          const { data: urlData } = supabase.storage.from('attachments').getPublicUrl(filePath);
+          uploadedAttachments.push({
+            id: filePath,
+            name: file.name,
+            url: urlData.publicUrl,
+            type: file.type,
+            size: file.size,
+          });
         }
         
         setIsUploadingFiles(false);
       }
 
       // Create comment with attachments
-      const response = await apiFetch(`/comments`, {
-        method: "POST",
-        body: JSON.stringify({
-          inquiry_id: inquiryId,
-          user_id: currentUserId,
-          user_name: currentUserName,
-          department: currentUserDepartment,
-          message: newComment.trim() || "",
-          attachments: uploadedAttachments,
-        }),
+      const { error: insertError } = await supabase.from('comments').insert({
+        inquiry_id: inquiryId,
+        user_id: currentUserId,
+        user_name: currentUserName,
+        department: currentUserDepartment,
+        message: newComment.trim() || "",
+        attachments: uploadedAttachments,
+        created_at: new Date().toISOString(),
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.success) {
+      if (!insertError) {
         setNewComment("");
         setAttachedFiles([]);
-        // Refresh comments to show the new one
         await fetchComments();
         toast.success("Comment added");
       } else {
-        toast.error(result.error || "Failed to add comment");
+        toast.error(insertError.message || "Failed to add comment");
       }
     } catch (error) {
       console.error("Error submitting comment:", error);

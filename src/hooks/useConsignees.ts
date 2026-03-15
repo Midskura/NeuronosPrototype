@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Consignee } from "../types/bd";
-import { apiFetch } from "../utils/api";
+import { supabase } from "../utils/supabase/client";
 
 export function useConsignees(customerId?: string) {
   const [consignees, setConsignees] = useState<Consignee[]>([]);
@@ -17,25 +17,19 @@ export function useConsignees(customerId?: string) {
     setError(null);
 
     try {
-      const res = await apiFetch(`/consignees?customer_id=${encodeURIComponent(customerId)}`);
+      const { data, error: fetchErr } = await supabase
+        .from('consignees')
+        .select('*')
+        .eq('customer_id', customerId);
 
-      // Gracefully handle non-200 (e.g. 404/403 from un-deployed edge function)
-      if (!res.ok) {
-        console.warn(`Consignees fetch returned ${res.status} — edge function may not be deployed yet`);
+      if (fetchErr) {
+        setError(fetchErr.message);
         setConsignees([]);
-        setIsLoading(false);
-        return;
-      }
-
-      const json = await safeJson(res);
-
-      if (json.success) {
-        setConsignees(json.data || []);
       } else {
-        setError(json.error || "Failed to fetch consignees");
+        setConsignees(data || []);
       }
     } catch (err) {
-      console.warn("Consignees fetch failed (edge function may be unavailable):", err);
+      console.warn("Consignees fetch failed:", err);
       setConsignees([]);
     } finally {
       setIsLoading(false);
@@ -50,66 +44,52 @@ export function useConsignees(customerId?: string) {
     async (data: Partial<Consignee>) => {
       if (!customerId) throw new Error("No customer_id");
 
-      const res = await apiFetch(`/consignees`, {
-        method: "POST",
-        body: JSON.stringify({ ...data, customer_id: customerId }),
-      });
+      const newConsignee = {
+        ...data,
+        customer_id: customerId,
+        id: `consignee-${Date.now()}`,
+        created_at: new Date().toISOString(),
+      };
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error(`Create consignee failed (${res.status}):`, text.slice(0, 200));
-        throw new Error(`Server returned ${res.status} — edge function may not be deployed`);
-      }
+      const { data: created, error } = await supabase
+        .from('consignees')
+        .insert(newConsignee)
+        .select()
+        .single();
 
-      const json = await safeJson(res);
+      if (error) throw new Error(error.message);
 
-      if (!json.success) throw new Error(json.error);
-
-      // Refresh list
       await fetchConsignees();
-      return json.data as Consignee;
+      return created as Consignee;
     },
     [customerId, fetchConsignees]
   );
 
   const updateConsignee = useCallback(
     async (id: string, data: Partial<Consignee>) => {
-      const res = await apiFetch(`/consignees/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(data),
-      });
+      const { data: updated, error } = await supabase
+        .from('consignees')
+        .update(data)
+        .eq('id', id)
+        .select()
+        .single();
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error(`Update consignee failed (${res.status}):`, text.slice(0, 200));
-        throw new Error(`Server returned ${res.status} — edge function may not be deployed`);
-      }
-
-      const json = await safeJson(res);
-
-      if (!json.success) throw new Error(json.error);
+      if (error) throw new Error(error.message);
 
       await fetchConsignees();
-      return json.data as Consignee;
+      return updated as Consignee;
     },
     [fetchConsignees]
   );
 
   const deleteConsignee = useCallback(
     async (id: string) => {
-      const res = await apiFetch(`/consignees/${id}`, {
-        method: "DELETE",
-      });
+      const { error } = await supabase
+        .from('consignees')
+        .delete()
+        .eq('id', id);
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error(`Delete consignee failed (${res.status}):`, text.slice(0, 200));
-        throw new Error(`Server returned ${res.status} — edge function may not be deployed`);
-      }
-
-      const json = await safeJson(res);
-
-      if (!json.success) throw new Error(json.error);
+      if (error) throw new Error(error.message);
 
       await fetchConsignees();
     },

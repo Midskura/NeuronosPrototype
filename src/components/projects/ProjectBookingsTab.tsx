@@ -1,5 +1,5 @@
 import { CreateBookingFromProjectPanel } from "./CreateBookingFromProjectPanel";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { BookingsTable } from "../shared/BookingsTable";
 import { getServiceIcon } from "../../utils/quotation-helpers";
@@ -59,19 +59,19 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
           
           switch (serviceType) {
             case "Forwarding":
-              endpoint = "forwarding-bookings";
+              endpoint = "forwarding_bookings";
               break;
             case "Brokerage":
-              endpoint = "brokerage-bookings";
+              endpoint = "brokerage_bookings";
               break;
             case "Trucking":
-              endpoint = "trucking-bookings";
+              endpoint = "trucking_bookings";
               break;
             case "Marine Insurance":
-              endpoint = "marine-insurance-bookings";
+              endpoint = "marine_insurance_bookings";
               break;
             case "Others":
-              endpoint = "others-bookings";
+              endpoint = "others_bookings";
               break;
             default:
               console.warn(`Unknown service type: ${serviceType}`);
@@ -79,25 +79,15 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
           }
           
           // Fetch the booking to verify it exists
-          const response = await apiFetch(
-            `/${endpoint}/${booking.bookingId}`
-          );
+          const { data: bookingData } = await supabase.from(endpoint).select('*').eq('id', booking.bookingId).maybeSingle();
           
-          if (response.ok) {
-            const result = await response.json();
-            if (result.success && result.data) {
-              // Ensure we use the status from the fresh API response
-              // This is critical to ensure the "Hydration on Read" principle is followed
-              // The status in project.linkedBookings might be stale
-              verified.push({
-                ...booking,
-                status: result.data.status || booking.status
-              });
-            } else {
-              console.warn(`Booking ${booking.bookingId} exists in project but not in database`);
-            }
+          if (bookingData) {
+            verified.push({
+              ...booking,
+              status: bookingData.status || booking.status
+            });
           } else {
-            console.warn(`Booking ${booking.bookingId} not found (${response.status})`);
+            console.warn(`Booking ${booking.bookingId} not found in ${endpoint}`);
           }
         } catch (error) {
           console.error(`Error verifying booking ${booking.bookingId}:`, error);
@@ -118,16 +108,14 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
         // Automatically clean up orphaned bookings
         try {
           console.log(`🧹 Automatically cleaning up orphaned bookings from project ${project.project_number}...`);
-          const cleanupResponse = await apiFetch(
-            `/projects/${project.id}/cleanup-orphaned-bookings`,
-            {
-              method: 'POST',
-            }
-          );
+          // Update project's linkedBookings to only include verified ones
+          const { error: cleanupError } = await supabase.from('projects').update({
+            linked_bookings: verified,
+            updated_at: new Date().toISOString(),
+          }).eq('id', project.id);
           
-          if (cleanupResponse.ok) {
-            const result = await cleanupResponse.json();
-            console.log(`✅ Cleanup completed:`, result.message, result.details);
+          if (!cleanupError) {
+            console.log(`✅ Cleanup completed: removed ${orphanedCount} orphaned reference(s)`);
             
             // Mark as cleaned up to prevent repeated cleanup calls
             setHasCleanedUp(true);

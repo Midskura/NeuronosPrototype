@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { Plus, Search, Calendar } from "lucide-react";
 import type { Expense } from "../../types/accounting";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { AddRequestForPaymentPanel } from "./AddRequestForPaymentPanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { ExpensesListTable } from "./ExpensesListTable";
@@ -37,30 +37,56 @@ export function ExpensesPageNew() {
       setLoading(true);
       setError(null);
       
-      // Build query params
-      const params = new URLSearchParams();
-      if (dateRange.from) params.append("date_from", dateRange.from);
-      if (dateRange.to) params.append("date_to", dateRange.to);
+      // Fetch from evouchers table (expense type) + posted expenses
+      let query = supabase.from('evouchers').select('*').eq('transaction_type', 'expense');
+      if (dateRange.from) {
+        query = query.gte('request_date', dateRange.from);
+      }
+      if (dateRange.to) {
+        query = query.lte('request_date', dateRange.to);
+      }
+      query = query.order('created_at', { ascending: false });
       
-      const response = await apiFetch(`/accounting/expenses?${params}`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+      const { data: evoucherRows, error: fetchError } = await query;
+      
+      if (fetchError) {
+        throw new Error(`Supabase error: ${fetchError.message}`);
       }
 
-      const data = await response.json();
-      console.log('✅ Fetched expenses:', data);
-      setExpenses(data.data || []);
+      // Also fetch posted expenses from the expenses table
+      const { data: postedRows } = await supabase
+        .from('expenses')
+        .select('*');
+
+      // Merge: posted expenses + unposted evouchers
+      const postedIds = new Set((postedRows || []).map((e: any) => e.evoucher_id));
+      const unpostedEvouchers = (evoucherRows || []).filter((ev: any) => !postedIds.has(ev.id));
+      
+      const mappedExpenses = [
+        ...(postedRows || []),
+        ...unpostedEvouchers.map((ev: any) => ({
+          id: ev.id,
+          evoucher_id: ev.id,
+          evoucher_number: ev.voucher_number,
+          date: ev.request_date || ev.created_at,
+          vendor: ev.vendor_name,
+          category: ev.expense_category,
+          amount: ev.amount,
+          currency: ev.currency || 'PHP',
+          description: ev.purpose || ev.description,
+          status: ev.status,
+          project_number: ev.project_number,
+          payment_method: ev.payment_method,
+          created_at: ev.created_at,
+        }))
+      ];
+
+      console.log('Fetched expenses:', mappedExpenses.length);
+      setExpenses(mappedExpenses);
     } catch (err) {
-      console.error('❌ Error fetching expenses:', err);
+      console.error('Error fetching expenses:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to load expenses';
       setError(errorMessage);
-      
-      // If it's a network error, show a more helpful message
-      if (errorMessage.includes('Failed to fetch')) {
-        setError('Unable to connect to server. Please check your connection and try again.');
-      }
     } finally {
       setLoading(false);
     }

@@ -1,11 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react";
-import { Search, Calendar, ArrowUpDown, SlidersHorizontal, Plus, X, ChevronDown, ChevronRight, Circle, PhilippinePeso, FileText, DollarSign, Briefcase, Users, Package } from "lucide-react";
-import { AddRequestForPaymentPanel } from "../accounting/AddRequestForPaymentPanel";
-import { BudgetRequestDetailPanel } from "./BudgetRequestDetailPanel";
-import { MultiSelectDropdown } from "./MultiSelectDropdown";
-import { CustomDropdown } from "./CustomDropdown";
-import type { EVoucher } from "../../types/evoucher";
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 
 type QuickFilterTab = "all" | "my-requests";
@@ -251,22 +244,18 @@ export function BudgetRequestList() {
       // Fetch E-Vouchers with transaction_type = "budget_request"
       console.log('🔍 [Budget Requests] Fetching from:', `/evouchers?source_module=bd&transaction_type=budget_request`);
       
-      const response = await apiFetch(`/evouchers?source_module=bd&transaction_type=budget_request`);
+      const { data, error } = await supabase
+        .from('evouchers')
+        .select('*')
+        .eq('source_module', 'bd')
+        .eq('transaction_type', 'budget_request')
+        .order('created_at', { ascending: false });
       
-      if (!response.ok) {
-        console.error('❌ [Budget Requests] Failed to fetch. Status:', response.status);
-        const errorText = await response.text();
-        console.error('❌ [Budget Requests] Error response:', errorText);
-        setBudgetRequests([]); // Set empty array on error
-        return;
-      }
-
-      const data = await response.json();
-      console.log('📦 [Budget Requests] Received response:', data);
+      if (error) throw error;
       
-      if (data.success) {
+      if (data) {
         // Normalize status values and ensure amount field exists
-        const normalizedData = (data.data || []).map((ev: any) => ({
+        const normalizedData = (data || []).map((ev: any) => ({
           ...ev,
           status: normalizeStatus(ev.status),
           // Ensure amount field exists (fallback to total_amount if amount is missing)

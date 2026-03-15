@@ -22,7 +22,7 @@ import { generateRateCardBillingItems } from "../../utils/rateCardToBilling";
 import type { ContractRateMatrix, AppliedRate, TruckingLineItem } from "../../types/pricing";
 import type { BillingItem } from "../shared/billings/UnifiedBillingsTab";
 import { toast } from "../ui/toast-utils";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { RateBreakdownTable, formatCurrency } from "../pricing/shared/RateBreakdownTable";
 import { QuantityDisplaySection } from "../pricing/shared/QuantityDisplaySection";
 import { normalizeTruckingLineItems, extractMultiLineSelectionsAndQuantities } from "../../utils/contractQuantityExtractor";
@@ -146,22 +146,17 @@ export function RateCalculationSheet({
         return;
       }
 
-      const response = await apiFetch(`/accounting/billings/batch`, {
-        method: "POST",
-        body: JSON.stringify({
-          items: result.items.map((item) => ({
-            ...item,
-            id: `BIL-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
-            project_number: booking.projectNumber || "",
-          })),
-          projectId: booking.projectNumber || "",
-        }),
-      });
+      const billingRows = result.items.map((item) => ({
+        ...item,
+        id: `BIL-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
+        project_number: booking.projectNumber || "",
+        transaction_type: 'billing',
+        status: 'unbilled',
+        created_at: new Date().toISOString(),
+      }));
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP ${response.status}`);
-      }
+      const { error: insertError } = await supabase.from('evouchers').insert(billingRows);
+      if (insertError) throw new Error(insertError.message);
 
       toast.success(
         `Applied ${result.count} billing item${result.count !== 1 ? "s" : ""} totaling ${formatCurrency(result.total, currency)}.`

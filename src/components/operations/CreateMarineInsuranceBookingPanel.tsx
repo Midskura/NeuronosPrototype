@@ -1,6 +1,6 @@
 import { Shield, Package, FileText } from "lucide-react";
 import { useState } from "react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { SearchableDropdown } from "../shared/SearchableDropdown";
@@ -69,26 +69,17 @@ export function CreateMarineInsuranceBookingPanel({
     setLoading(true);
 
     try {
-      const response = await apiFetch(`/marine-insurance-bookings`, {
-        method: "POST",
-        body: JSON.stringify({
-            ...formData,
-            ...(detectedContractId && { contract_id: detectedContractId }),
-          }),
-      });
+      const insertPayload = {
+        ...formData,
+        ...(detectedContractId && { contract_id: detectedContractId }),
+      };
+      const { data, error } = await supabase.from('marine_insurance_bookings').insert(insertPayload).select().single();
 
-      if (!response.ok) {
-        throw new Error("Failed to create marine insurance booking");
-      }
+      if (error) throw new Error(error.message);
 
-      const result = await response.json();
-      if (result.success) {
-        toast.success("Marine insurance booking created successfully");
-        onSuccess(result.data); // Pass the booking data
-        onClose();
-      } else {
-        toast.error("Failed to create booking: " + result.error);
-      }
+      toast.success("Marine insurance booking created successfully");
+      onSuccess(data);
+      onClose();
     } catch (error) {
       console.error("Error creating marine insurance booking:", error);
       toast.error("Failed to create booking. Please try again.");

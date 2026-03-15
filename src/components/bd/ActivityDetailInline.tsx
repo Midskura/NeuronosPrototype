@@ -1,4 +1,4 @@
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { ArrowLeft, User, Building2, Calendar, MessageSquare, Upload, Paperclip, Send, Trash2, FileText, Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import type { Activity, Contact, Customer } from "../../types/bd";
@@ -82,25 +82,13 @@ export function ActivityDetailInline({
     }
 
     try {
-      const response = await apiFetch(`/activities/${activity.id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Activity deleted successfully');
-        if (onDelete) {
-          onDelete(); // Callback will navigate back and refresh
-        } else {
-          onBack(); // Just go back if no callback provided
-        }
+      const { error } = await supabase.from('crm_activities').delete().eq('id', activity.id);
+      if (error) throw error;
+      toast.success('Activity deleted successfully');
+      if (onDelete) {
+        onDelete();
       } else {
-        toast.error('Error deleting activity: ' + result.error);
+        onBack();
       }
     } catch (error) {
       console.error('Error deleting activity:', error);

@@ -1,10 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Search, Plus, Building2, Users as UsersIcon, TrendingUp, Briefcase, Target, MoreHorizontal, Trash2 } from "lucide-react";
-import type { Customer, Industry, CustomerStatus } from "../../types/bd";
-import { CustomDropdown } from "../bd/CustomDropdown";
-import { AddCustomerPanel } from "../bd/AddCustomerPanel";
 import { NeuronKPICard } from "../ui/NeuronKPICard";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { useUsers } from "../../hooks/useUsers";
 
 interface CustomersListWithFiltersProps {
@@ -39,25 +34,14 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   // Fetch activities from backend
   const fetchActivities = async () => {
     try {
-      const response = await apiFetch('/activities');
-      
-      if (!response.ok) {
-        console.error(`HTTP error fetching activities! status: ${response.status}`);
-        setActivities([]);
-        return;
-      }
-      
-      const result = await response.json();
-      if (result.success) {
-        setActivities(result.data);
-        console.log('[CustomersListWithFilters] Fetched activities:', result.data.length);
+      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        setActivities(data);
       } else {
-        console.error("Failed to fetch activities:", result.error);
         setActivities([]);
       }
     } catch (error) {
       console.error("Error fetching activities:", error);
-      // Silently fail - set empty array
       setActivities([]);
     }
   };
@@ -66,40 +50,19 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   const fetchCustomers = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('customers').select('*');
       if (searchQuery) {
-        params.append("search", searchQuery);
+        query = query.or(`name.ilike.%${searchQuery}%,company_name.ilike.%${searchQuery}%`);
       }
       if (industryFilter && industryFilter !== "All") {
-        params.append("industry", industryFilter);
+        query = query.eq('industry', industryFilter);
       }
       if (statusFilter && statusFilter !== "All") {
-        params.append("status", statusFilter);
+        query = query.eq('status', statusFilter);
       }
-      // Pass department to backend for data filtering
-      params.append("department", userDepartment);
-      
-      const url = `/customers?${params.toString()}`;
-      console.log(`[CustomersListWithFilters] Fetching from: ${url}`);
-      
-      const response = await apiFetch(url);
-
-      console.log(`[CustomersListWithFilters] Response status: ${response.status}`);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`[CustomersListWithFilters] HTTP error ${response.status}:`, errorText);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log(`[CustomersListWithFilters] Result:`, result);
-      
-      if (result.success) {
-        setCustomers(result.data);
-        console.log(`[CustomersListWithFilters] Set ${result.data.length} customers`);
-      } else {
-        console.error("[CustomersListWithFilters] Failed to fetch customers:", result.error);
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (!error && data) {
+        setCustomers(data);
       }
     } catch (error) {
       console.error("[CustomersListWithFilters] Error fetching customers:", error);
@@ -111,17 +74,9 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   // Fetch all contacts for counting
   const fetchContacts = async () => {
     try {
-      const response = await apiFetch('/contacts');
-
-      const result = await response.json();
-      if (result.success) {
-        setAllContacts(result.data);
-        console.log(`[CustomersListWithFilters] Fetched ${result.data.length} contacts for counting`);
-        if (result.data.length > 0) {
-          console.log('[CustomersListWithFilters] Sample contact:', result.data[0]);
-        }
-      } else {
-        console.error('[CustomersListWithFilters] Failed to fetch contacts:', result.error);
+      const { data, error } = await supabase.from('contacts').select('*');
+      if (!error && data) {
+        setAllContacts(data);
       }
     } catch (error) {
       console.error('[CustomersListWithFilters] Error fetching contacts:', error);
@@ -162,17 +117,13 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
     }
 
     try {
-      const response = await apiFetch(`/customers/${customerId}`, {
-        method: "DELETE",
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        await fetchCustomers(); // Refresh list
-        await fetchContacts(); // Refresh contacts
-        setOpenDropdownId(null); // Close dropdown
+      const { error } = await supabase.from('customers').delete().eq('id', customerId);
+      if (!error) {
+        await fetchCustomers();
+        await fetchContacts();
+        setOpenDropdownId(null);
       } else {
-        alert(`Failed to delete customer: ${result.error}`);
+        alert(`Failed to delete customer: ${error.message}`);
       }
     } catch (error) {
       console.error("Error deleting customer:", error);
@@ -183,22 +134,15 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   // Handle save customer
   const handleSaveCustomer = async (customerData: Partial<Customer>) => {
     try {
-      const response = await apiFetch('/customers', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(customerData),
+      const { error } = await supabase.from('customers').insert({
+        ...customerData,
+        id: `CUST-${Date.now()}`,
+        created_at: new Date().toISOString(),
       });
-
-      const result = await response.json();
-      if (result.success) {
-        await fetchCustomers(); // Refresh list
-        await fetchContacts(); // Refresh contacts for accurate counts
-        setIsAddCustomerOpen(false);
-      } else {
-        throw new Error(result.error);
-      }
+      if (error) throw error;
+      await fetchCustomers();
+      await fetchContacts();
+      setIsAddCustomerOpen(false);
     } catch (error) {
       console.error("Error creating customer:", error);
       throw error;

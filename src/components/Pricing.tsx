@@ -1,4 +1,4 @@
-import { apiFetch } from '../utils/api';
+import { supabase } from '../utils/supabase/client';
 import { useState, useEffect } from "react";
 import { QuotationDetail } from "./pricing/QuotationDetail";
 import { QuotationsListWithFilters } from "./pricing/QuotationsListWithFilters";
@@ -16,7 +16,7 @@ import type { Contact, Customer } from "../types/bd";
 import type { NetworkPartner } from "../data/networkPartners";
 // Removed static import: import { NETWORK_PARTNERS } from "../data/networkPartners";
 import { ContactsModuleWithBackend } from "./crm/ContactsModuleWithBackend";
-// projectId/publicAnonKey removed — using apiFetch() (Phase 3)
+// projectId/publicAnonKey removed — using supabase.from() (Phase 3)
 import { useNetworkPartners } from "../hooks/useNetworkPartners";
 
 export type PricingView = "contacts" | "customers" | "quotations" | "vendors" | "reports";
@@ -30,7 +30,7 @@ interface PricingProps {
   onCreateTicket?: (quotation: QuotationNew) => void;
 }
 
-// API_URL removed — using apiFetch() wrapper (Phase 3)
+// API_URL removed — using supabase.from() wrapper (Phase 3)
 
 export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUser, onCreateTicket }: PricingProps) {
   const [subView, setSubView] = useState<SubView>("list");
@@ -52,26 +52,17 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   const fetchQuotations = async () => {
     setIsLoading(true);
     try {
-      console.log('Fetching quotations from: /quotations?department=pricing');
+      const { data, error } = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('department', 'pricing')
+        .order('created_at', { ascending: false });
       
-      const response = await apiFetch(`/quotations?department=pricing`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        setQuotations(result.data);
-        console.log(`Fetched ${result.data.length} quotations for Pricing`);
-      } else {
-        console.error('Error fetching quotations:', result.error);
-        alert('Error loading quotations: ' + result.error);
-      }
+      if (error) throw error;
+      setQuotations(data || []);
+      console.log(`Fetched ${(data || []).length} quotations for Pricing`);
     } catch (error) {
-      console.log('Server not available. Using local data only.');
-      // Don't show error alert - just silently fall back to local/mock data
+      console.log('Error fetching quotations:', error);
       setQuotations([]);
     } finally {
       setIsLoading(false);
@@ -154,43 +145,32 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
     console.log("Saving quotation:", data);
     
     try {
-      // Determine if this is create or update
       const isUpdate = !!data.id && data.id.startsWith('QUO-');
       
       if (isUpdate) {
-        // Update existing quotation
-        const response = await apiFetch(`/quotations/${data.id}`, {
-          method: 'PUT',
-          body: JSON.stringify(data)
-        });
+        const { error } = await supabase
+          .from('quotations')
+          .update({ ...data, updated_at: new Date().toISOString() })
+          .eq('id', data.id);
         
-        const result = await response.json();
-        
-        if (result.success) {
-          console.log('Quotation updated successfully');
-          await fetchQuotations(); // Refresh list
-          setSubView("list");
-        } else {
-          console.error('Error updating quotation:', result.error);
-          alert('Error updating quotation: ' + result.error);
-        }
+        if (error) throw error;
+        console.log('Quotation updated successfully');
+        await fetchQuotations();
+        setSubView("list");
       } else {
-        // Create new quotation
-        const response = await apiFetch(`/quotations`, {
-          method: 'POST',
-          body: JSON.stringify(data)
-        });
+        const newId = `QUO-${Date.now()}`;
+        const newData = {
+          ...data,
+          id: newId,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        };
         
-        const result = await response.json();
-        
-        if (result.success) {
-          console.log('Quotation created successfully:', result.data.id);
-          await fetchQuotations(); // Refresh list
-          setSubView("list");
-        } else {
-          console.error('Error creating quotation:', result.error);
-          alert('Error creating quotation: ' + result.error);
-        }
+        const { error } = await supabase.from('quotations').insert(newData);
+        if (error) throw error;
+        console.log('Quotation created successfully:', newId);
+        await fetchQuotations();
+        setSubView("list");
       }
     } catch (error) {
       console.error('Error saving quotation:', error);
@@ -199,22 +179,19 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   };
 
   const handleUpdateQuotation = async (updatedQuotation: QuotationNew) => {
-    // Update the selected quotation in state
     setSelectedQuotation(updatedQuotation);
     
     try {
-      const response = await apiFetch(`/quotations/${updatedQuotation.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updatedQuotation)
-      });
+      const { error } = await supabase
+        .from('quotations')
+        .update({ ...updatedQuotation, updated_at: new Date().toISOString() })
+        .eq('id', updatedQuotation.id);
       
-      const result = await response.json();
-      
-      if (result.success) {
+      if (!error) {
         console.log("Quotation updated successfully");
-        await fetchQuotations(); // Refresh list
+        await fetchQuotations();
       } else {
-        console.error('Error updating quotation:', result.error);
+        console.error('Error updating quotation:', error.message);
       }
     } catch (error) {
       console.error('Error updating quotation:', error);
@@ -225,19 +202,18 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
     if (!selectedQuotation) return;
     
     try {
-      const response = await apiFetch(`/quotations/${selectedQuotation.id}`, {
-        method: 'DELETE',
-      });
+      const { error } = await supabase
+        .from('quotations')
+        .delete()
+        .eq('id', selectedQuotation.id);
       
-      const result = await response.json();
-      
-      if (result.success) {
+      if (!error) {
         console.log("Quotation deleted successfully");
-        await fetchQuotations(); // Refresh list
-        setSubView("list"); // Go back to list
+        await fetchQuotations();
+        setSubView("list");
         setSelectedQuotation(null);
       } else {
-        console.error('Error deleting quotation:', result.error);
+        console.error('Error deleting quotation:', error.message);
       }
     } catch (error) {
       console.error('Error deleting quotation:', error);
@@ -338,26 +314,25 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
                 }}
                 onSave={async (data) => {
                   try {
-                    // Determine if this is create or update
                     const isUpdate = !!data.id && data.id.startsWith('QUO-');
-                    const method = isUpdate ? 'PUT' : 'POST';
-                    const url = isUpdate ? `/quotations/${data.id}` : `/quotations`;
-
-                    const response = await apiFetch(url, {
-                      method: method,
-                      body: JSON.stringify(data)
-                    });
                     
-                    const result = await response.json();
-                    
-                    if (result.success) {
-                      console.log('Inquiry saved successfully');
-                      setSubView("detail");
-                      setSelectedQuotation(null);
+                    if (isUpdate) {
+                      const { error } = await supabase
+                        .from('quotations')
+                        .update({ ...data, updated_at: new Date().toISOString() })
+                        .eq('id', data.id);
+                      if (error) throw error;
                     } else {
-                      console.error('Error saving inquiry:', result.error);
-                      alert('Error saving inquiry: ' + result.error);
+                      const newId = `QUO-${Date.now()}`;
+                      const { error } = await supabase
+                        .from('quotations')
+                        .insert({ ...data, id: newId, created_at: new Date().toISOString(), updated_at: new Date().toISOString() });
+                      if (error) throw error;
                     }
+                    
+                    console.log('Inquiry saved successfully');
+                    setSubView("detail");
+                    setSelectedQuotation(null);
                   } catch (error) {
                     console.error('Error saving inquiry:', error);
                     alert('Error saving inquiry: ' + error);

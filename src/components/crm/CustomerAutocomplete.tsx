@@ -1,7 +1,7 @@
+import type { Contact } from "../../types/contact";
+import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect, useRef } from "react";
 import { Search, Plus, Building2, ChevronDown } from "lucide-react";
-import type { Contact } from "../../types/contact";
-import { apiFetch } from "../../utils/api";
 
 interface CustomerAutocompleteProps {
   value: string; // customer_name
@@ -32,16 +32,15 @@ export function CustomerAutocomplete({
   const fetchContacts = async (search: string = "") => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from("contacts").select("*");
       if (search) {
-        params.append("search", search);
+        query = query.or(
+          `first_name.ilike.%${search}%,last_name.ilike.%${search}%`
+        );
       }
-
-      const response = await apiFetch(`/contacts?${params.toString()}`);
-
-      const result = await response.json();
-      if (result.success) {
-        setContacts(result.data);
+      const { data, error } = await query;
+      if (!error && data) {
+        setContacts(data);
       }
     } catch (error) {
       console.error("Error fetching contacts:", error);

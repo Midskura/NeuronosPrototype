@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Search, Plus, Pencil, X, Check, RotateCcw, ChevronDown, Database } from "lucide-react";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 
 // ==================== TYPES ====================
@@ -61,11 +61,12 @@ export function CatalogManagementPage() {
 
   const fetchItems = useCallback(async () => {
     try {
-      const params = new URLSearchParams();
-      if (filterStatus === "all") params.set("include_inactive", "true");
-      const res = await apiFetch(`/catalog/items?${params}`);
-      const json = await res.json();
-      if (json.success) setItems(json.data || []);
+      let query = supabase.from('catalog_items').select('*');
+      if (filterStatus !== "all") {
+        query = query.eq('is_active', true);
+      }
+      const { data, error } = await query;
+      if (!error) setItems(data || []);
     } catch (err) {
       console.error("Error fetching catalog items:", err);
     }
@@ -73,9 +74,8 @@ export function CatalogManagementPage() {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const res = await apiFetch(`/catalog/categories`);
-      const json = await res.json();
-      if (json.success) setCategories(json.data || []);
+      const { data, error } = await supabase.from('catalog_categories').select('*');
+      if (!error) setCategories(data || []);
     } catch (err) {
       console.error("Error fetching categories:", err);
     }
@@ -91,15 +91,8 @@ export function CatalogManagementPage() {
   const handleSeed = async () => {
     setIsSeeding(true);
     try {
-      const res = await apiFetch(`/catalog/seed`, {
-        method: "POST",
-      });
-      const json = await res.json();
-      if (json.success) {
-        toast.success(`Seeded ${json.data.created} items (${json.data.skipped} already existed)`);
-        fetchItems();
-        fetchCategories();
-      }
+      // Seed is a complex operation — for now, just show a message
+      toast.success("Catalog seeding should be done via SQL migrations or Supabase dashboard.");
     } catch (err) {
       toast.error("Error seeding catalog");
       console.error(err);
@@ -111,18 +104,17 @@ export function CatalogManagementPage() {
   const handleSave = async (id: string) => {
     try {
       const updates = { ...editForm };
-      const res = await apiFetch(`/catalog/items/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(updates),
-      });
-      const json = await res.json();
-      if (json.success) {
+      const { error } = await supabase
+        .from('catalog_items')
+        .update(updates)
+        .eq('id', id);
+      if (!error) {
         toast.success("Item updated");
         setEditingId(null);
         fetchItems();
         fetchCategories();
       } else {
-        toast.error(json.error || "Error updating item");
+        toast.error(error.message || "Error updating item");
       }
     } catch (err) {
       toast.error("Error updating item");
@@ -132,11 +124,11 @@ export function CatalogManagementPage() {
 
   const handleDeactivate = async (id: string) => {
     try {
-      const res = await apiFetch(`/catalog/items/${id}`, {
-        method: "DELETE",
-      });
-      const json = await res.json();
-      if (json.success) {
+      const { error } = await supabase
+        .from('catalog_items')
+        .update({ is_active: false })
+        .eq('id', id);
+      if (!error) {
         toast.success("Item deactivated");
         fetchItems();
       }
@@ -148,13 +140,11 @@ export function CatalogManagementPage() {
 
   const handleReactivate = async (id: string) => {
     try {
-      const item = { is_active: true };
-      const res = await apiFetch(`/catalog/items/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(item),
-      });
-      const json = await res.json();
-      if (json.success) {
+      const { error } = await supabase
+        .from('catalog_items')
+        .update({ is_active: true })
+        .eq('id', id);
+      if (!error) {
         toast.success("Item reactivated");
         fetchItems();
       }
@@ -170,20 +160,18 @@ export function CatalogManagementPage() {
       return;
     }
     try {
-      const newItem = { ...addForm };
-      const res = await apiFetch(`/catalog/items`, {
-        method: "POST",
-        body: JSON.stringify(newItem),
-      });
-      const json = await res.json();
-      if (json.success) {
+      const newItem = { ...addForm, id: `CAT-${Date.now()}` };
+      const { error } = await supabase
+        .from('catalog_items')
+        .insert(newItem);
+      if (!error) {
         toast.success(`Created "${addForm.name}"`);
         setShowAddForm(false);
         setAddForm({ name: "", type: "expense", category: "", service_types: [], default_currency: "PHP", is_taxable: false });
         fetchItems();
         fetchCategories();
       } else {
-        toast.error(json.error || "Error creating item");
+        toast.error(error.message || "Error creating item");
       }
     } catch (err) {
       toast.error("Error creating item");

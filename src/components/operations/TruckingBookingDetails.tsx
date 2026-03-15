@@ -7,7 +7,6 @@ import { ExpensesTab } from "./shared/ExpensesTab";
 import { BookingCommentsTab } from "../shared/BookingCommentsTab";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 import { StatusSelector } from "../StatusSelector";
-import { apiFetch } from "../../utils/api";
 import { toast } from "../ui/toast-utils";
 import { EditableMultiInputField } from "../shared/EditableMultiInputField";
 import { EditableSectionCard, useSectionEdit } from "../shared/EditableSectionCard";
@@ -15,6 +14,7 @@ import { EditableField } from "../shared/EditableField";
 import { ConsigneeInfoBadge } from "../shared/ConsigneeInfoBadge";
 import { normalizeTruckingLineItems } from "../../utils/contractQuantityExtractor";
 import { Truck as TruckIcon } from "lucide-react";
+import { supabase } from "../../utils/supabase/client";
 
 interface TruckingBookingDetailsProps {
   booking: TruckingBooking;
@@ -158,11 +158,8 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
     setEditedBooking(prev => ({ ...prev, status: newStatus }));
     setActivityLog(prev => [{ id: `activity-${Date.now()}`, timestamp: new Date(), user: currentUser?.name || "Current User", action: "status_changed", statusFrom: oldStatus, statusTo: newStatus }, ...prev]);
     try {
-      const response = await apiFetch(`/trucking-bookings/${booking.bookingId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ status: newStatus })
-      });
-      if (!response.ok) throw new Error('Failed to update status');
+      const { error } = await supabase.from('trucking_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
+      if (error) throw error;
       toast.success(`Status updated to ${newStatus}`);
       onUpdate();
     } catch (error) {

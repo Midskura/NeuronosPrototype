@@ -4,7 +4,6 @@ import type { BrokerageBooking, ExecutionStatus } from "../../types/operations";
 import { UnifiedBillingsTab } from "../shared/billings/UnifiedBillingsTab";
 import { BookingRateCardButton } from "../contracts/BookingRateCardButton";
 import { ExpensesTab } from "./shared/ExpensesTab";
-import { apiFetch } from "../../utils/api";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 import { StatusSelector } from "../StatusSelector";
 import { toast } from "../ui/toast-utils";
@@ -12,6 +11,7 @@ import { EditableMultiInputField } from "../shared/EditableMultiInputField";
 import { EditableSectionCard, useSectionEdit } from "../shared/EditableSectionCard";
 import { EditableField } from "../shared/EditableField";
 import { ConsigneeInfoBadge } from "../shared/ConsigneeInfoBadge";
+import { supabase } from "../../utils/supabase/client";
 
 interface BrokerageBookingDetailsProps {
   booking: BrokerageBooking;
@@ -188,11 +188,8 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
     setEditedBooking(prev => ({ ...prev, status: newStatus }));
     setActivityLog(prev => [{ id: `activity-${Date.now()}`, timestamp: new Date(), user: currentUser?.name || "Current User", action: "status_changed", statusFrom: oldStatus, statusTo: newStatus }, ...prev]);
     try {
-      const response = await apiFetch(`/brokerage-bookings/${booking.bookingId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!response.ok) throw new Error('Failed to update status');
+      const { error } = await supabase.from('brokerage_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
+      if (error) throw error;
       toast.success(`Status updated to ${newStatus}`);
       onUpdate();
     } catch (error) {

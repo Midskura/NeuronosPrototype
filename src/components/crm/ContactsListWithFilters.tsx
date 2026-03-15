@@ -1,11 +1,5 @@
-import { useState, useEffect } from "react";
-import { Search, Plus, Phone, Mail, Building2, UserCircle, MoreHorizontal, Users, TrendingUp, UserCheck, Activity } from "lucide-react";
-import type { Contact, LifecycleStage, LeadStatus } from "../../types/bd";
-import type { Contact as BackendContact } from "../../types/contact";
-import { CustomDropdown } from "../bd/CustomDropdown";
-import { AddContactPanel } from "../bd/AddContactPanel";
 import { NeuronKPICard } from "../ui/NeuronKPICard";
-import { apiFetch } from "../../utils/api";
+import { supabase } from "../../utils/supabase/client";
 import { useUsers } from "../../hooks/useUsers";
 
 interface ContactsListWithFiltersProps {
@@ -38,25 +32,14 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   // Fetch activities from backend
   const fetchActivities = async () => {
     try {
-      const response = await apiFetch('/activities');
-      
-      if (!response.ok) {
-        console.error(`HTTP error fetching activities! status: ${response.status}`);
-        setActivities([]);
-        return;
-      }
-      
-      const result = await response.json();
-      if (result.success) {
-        setActivities(result.data);
-        console.log('[ContactsListWithFilters] Fetched activities:', result.data.length);
+      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        setActivities(data);
       } else {
-        console.error("Failed to fetch activities:", result.error);
         setActivities([]);
       }
     } catch (error) {
       console.error("Error fetching activities:", error);
-      // Silently fail - set empty array
       setActivities([]);
     }
   };
@@ -64,13 +47,10 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   // Fetch customers from backend
   const fetchCustomers = async () => {
     try {
-      const response = await apiFetch('/customers');
-      const result = await response.json();
-      if (result.success) {
-        setCustomers(result.data);
-        console.log('[ContactsListWithFilters] Fetched customers:', result.data.length);
+      const { data, error } = await supabase.from('customers').select('*');
+      if (!error && data) {
+        setCustomers(data);
       } else {
-        console.error("Failed to fetch customers:", result.error);
         setCustomers([]);
       }
     } catch (error) {
@@ -83,36 +63,19 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   const fetchContacts = async () => {
     setIsLoading(true);
     try {
-      const params = new URLSearchParams();
+      let query = supabase.from('contacts').select('*');
       if (searchQuery) {
-        params.append("search", searchQuery);
+        query = query.or(`first_name.ilike.%${searchQuery}%,last_name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
       }
-      // Pass role to backend for data filtering
-      params.append("role", userDepartment);
-      // Add cache-busting parameter to prevent browser caching
-      params.append("_t", Date.now().toString());
-      
-      const url = `/contacts?${params.toString()}`;
-      console.log('[ContactsListWithFilters] Fetching contacts from:', url);
-      
-      const response = await apiFetch(url, {
-        cache: 'no-store', // Disable browser caching
-      });
-
-      const result = await response.json();
-      console.log('[ContactsListWithFilters] Fetch result:', result);
-      console.log('[ContactsListWithFilters] Number of contacts fetched:', result.data?.length || 0);
-      
-      if (result.success) {
-        setContacts(result.data);
-        console.log('[ContactsListWithFilters] Set contacts state to:', result.data);
+      const { data, error } = await query.order('created_at', { ascending: false });
+      if (!error && data) {
+        setContacts(data);
       } else {
-        console.error("Failed to fetch contacts:", result.error);
-        setContacts([]); // Clear contacts on error
+        setContacts([]);
       }
     } catch (error) {
       console.error("Error fetching contacts:", error);
-      setContacts([]); // Clear contacts on error
+      setContacts([]);
     } finally {
       setIsLoading(false);
     }
@@ -157,18 +120,15 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
         notes: contactData.notes || null,
       };
       
-      const response = await apiFetch(`/contacts`, {
-        method: "POST",
-        body: JSON.stringify(transformedData),
-      });
+      const { data, error } = await supabase.from('contacts').insert({
+        ...transformedData,
+        id: `contact-${Date.now()}`,
+        created_at: new Date().toISOString(),
+      }).select().single();
 
-      const result = await response.json();
-      if (result.success) {
-        await fetchContacts(); // Refresh list
-        setIsAddContactOpen(false);
-      } else {
-        throw new Error(result.error);
-      }
+      if (error) throw error;
+      await fetchContacts();
+      setIsAddContactOpen(false);
     } catch (error) {
       console.error("Error creating contact:", error);
       throw error;

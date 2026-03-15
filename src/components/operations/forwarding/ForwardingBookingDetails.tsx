@@ -1,3 +1,5 @@
+import { supabase } from "../../../utils/supabase/client";
+import { toast } from "../../ui/toast-utils";
 import { useState } from "react";
 import { ArrowLeft, MoreVertical, Lock, Clock, ChevronRight, User } from "lucide-react";
 import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
@@ -7,8 +9,7 @@ import { ExpensesTab } from "../shared/ExpensesTab";
 import { BookingCommentsTab } from "../../shared/BookingCommentsTab";
 import { useProjectFinancials } from "../../../hooks/useProjectFinancials";
 import { StatusSelector } from "../../StatusSelector";
-import { apiFetch } from "../../../utils/api";
-import { toast } from "../../ui/toast-utils";
+
 import { EditableMultiInputField } from "../../shared/EditableMultiInputField";
 import { EditableSectionCard, useSectionEdit } from "../../shared/EditableSectionCard";
 import { EditableField } from "../../shared/EditableField";
@@ -125,14 +126,8 @@ export function ForwardingBookingDetails({
 
     // Persist to backend
     try {
-      const response = await apiFetch(`/forwarding-bookings/${booking.bookingId}`, {
-        method: 'PUT',
-        body: JSON.stringify({ status: newStatus })
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update status');
-      }
+      const { error } = await supabase.from('forwarding_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
+      if (error) throw error;
       
       toast.success(`Status updated to ${newStatus}`);
       onBookingUpdated();

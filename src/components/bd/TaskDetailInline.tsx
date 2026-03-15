@@ -1,8 +1,5 @@
-import { ArrowLeft, Calendar, Flag, User, Building2, Mail, Phone, Edit, Upload, Paperclip, Clock, MessageSquare, Send, Trash2, CheckCircle, Users, MessageCircle, Linkedin, CheckSquare, StickyNote, CircleCheckBig } from "lucide-react";
-import { useState } from "react";
-import type { Task, TaskType, TaskPriority, TaskStatus } from "../../types/bd";
 import { CustomDropdown } from "./CustomDropdown";
-import { apiFetch } from '../../utils/api';
+import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 
 interface TaskDetailInlineProps {
@@ -95,23 +92,11 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
 
   const handleSave = async () => {
     try {
-      const response = await apiFetch(`/tasks/${task.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(editedTask)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Task updated successfully');
-        if (onUpdate) onUpdate(); // Refresh parent list
-      } else {
-        toast.error('Error updating task: ' + result.error);
-      }
+      const { error } = await supabase.from('tasks').update(editedTask).eq('id', task.id);
+      if (error) throw error;
+      toast.success('Task updated successfully');
+      setIsEditing(false);
+      if (onUpdate) onUpdate();
     } catch (error) {
       console.error('Error updating task:', error);
       toast.error('Unable to update task. Please try again.');
@@ -137,25 +122,13 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
     }
 
     try {
-      const response = await apiFetch(`/tasks/${task.id}`, {
-        method: 'DELETE',
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
-      if (result.success) {
-        toast.success('Task deleted successfully');
-        if (onDelete) {
-          onDelete(); // Callback will navigate back and refresh
-        } else {
-          onBack(); // Just go back if no callback provided
-        }
+      const { error } = await supabase.from('tasks').delete().eq('id', task.id);
+      if (error) throw error;
+      toast.success('Task deleted successfully');
+      if (onDelete) {
+        onDelete(); // Callback will navigate back and refresh
       } else {
-        toast.error('Error deleting task: ' + result.error);
+        onBack(); // Just go back if no callback provided
       }
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -168,20 +141,8 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
       // Update task status to Completed
       const updatedTask = { ...editedTask, status: 'Completed' as TaskStatus };
       
-      const updateResponse = await apiFetch(`/tasks/${task.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updatedTask)
-      });
-
-      if (!updateResponse.ok) {
-        throw new Error(`HTTP error! status: ${updateResponse.status}`);
-      }
-
-      const updateResult = await updateResponse.json();
-
-      if (!updateResult.success) {
-        throw new Error(updateResult.error);
-      }
+      const { error: updateErr } = await supabase.from('tasks').update(updatedTask).eq('id', task.id);
+      if (updateErr) throw updateErr;
 
       // Create activity record for completed task
       const activityData = {
@@ -194,14 +155,12 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
         user_id: task.owner_id,
       };
 
-      const activityResponse = await apiFetch(`/activities`, {
-        method: 'POST',
-        body: JSON.stringify(activityData)
+      const { error: activityErr } = await supabase.from('crm_activities').insert({
+        ...activityData,
+        id: `act-${Date.now()}`,
+        created_at: new Date().toISOString(),
       });
-
-      if (!activityResponse.ok) {
-        console.warn('Failed to create activity record, but task was marked complete');
-      }
+      if (activityErr) throw activityErr;
 
       // Update local state
       setEditedTask(updatedTask);

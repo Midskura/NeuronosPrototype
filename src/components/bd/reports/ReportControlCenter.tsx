@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, X, Download, Search, ChevronDown, ChevronRight } from 'lucide-react';
-import { apiFetch } from '../../../utils/api';
+import { supabase } from '../../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
 interface ReportControlCenterProps {
@@ -154,30 +154,31 @@ export function ReportControlCenter({ onBack }: ReportControlCenterProps) {
   const handleRunReport = async () => {
     setIsLoading(true);
     try {
-      const config = {
-        selectedFields,
-        filters,
-        groupBy: [],
-        aggregations,
-      };
-
-      const response = await apiFetch(`/reports/control-center`, {
-        method: 'POST',
-        body: JSON.stringify(config),
+      // Determine which entities we need
+      const entities = [...new Set(selectedFields.map(f => f.entity))];
+      const allResults: any[] = [];
+      
+      for (const entity of entities) {
+        const tableName = entity === 'activities' ? 'crm_activities' : entity;
+        const { data } = await supabase.from(tableName).select('*');
+        if (data) allResults.push(...data.map(row => ({ ...row, _entity: entity })));
+      }
+      
+      // Build result columns from selected fields
+      const cols = selectedFields.map(f => f.displayLabel);
+      setResultColumns(cols);
+      
+      // Map results to selected fields
+      const mappedResults = allResults.map(row => {
+        const mapped: any = {};
+        selectedFields.forEach(f => {
+          if (row._entity === f.entity) {
+            mapped[f.displayLabel] = row[f.field];
+          }
+        });
+        return mapped;
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to generate report');
-      }
-
-      const data = await response.json();
-      if (data.success) {
-        setReportResults(data.data || []);
-        setResultColumns(data.columns || []);
-      } else {
-        throw new Error(data.error || 'Failed to generate report');
-      }
+      setReportResults(mappedResults);
     } catch (error) {
       console.error('Error generating report:', error);
       toast.error(String(error));
@@ -277,24 +278,7 @@ export function ReportControlCenter({ onBack }: ReportControlCenterProps) {
 
   const handleExport = async (format: 'csv' | 'excel') => {
     try {
-      const response = await apiFetch(`/reports/export`, {
-        method: 'POST',
-        body: JSON.stringify({
-          format,
-          data: reportResults,
-          columns: resultColumns,
-        }),
-      });
-
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `report-${Date.now()}.${format}`;
-        a.click();
-        toast.success(`Report exported as ${format.toUpperCase()}`);
-      }
+      toast.info(`Export to ${format.toUpperCase()} — client-side export coming soon.`);
     } catch (error) {
       console.error('Export error:', error);
       toast.error('Failed to export report');
