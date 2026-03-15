@@ -9,7 +9,7 @@ import { TransactionsControlBar } from "./TransactionsControlBar";
 import { SkeletonTransactionsPage } from "./SkeletonTransactionsPage";
 import { ManageAccountsModal } from "./ManageAccountsModal";
 import { AddAccountForm } from "./AddAccountForm";
-import { formatCurrency } from "../../utils/format";
+import { formatCurrency } from "../../utils/accounting-math";
 import { SidePanel } from "../common/SidePanel";
 import { toast } from "../ui/toast-utils";
 import { apiFetch } from "../../utils/api";

@@ -78,6 +78,46 @@ app.use(
   }),
 );
 
+// JWT verification middleware — verifies every request has a valid Supabase session
+app.use("/make-server-c142e950/*", async (c, next) => {
+  // Skip health check
+  if (c.req.path === "/make-server-c142e950/health") return next();
+
+  const authHeader = c.req.header("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return c.json({ success: false, error: "Missing authorization token" }, 401);
+  }
+
+  const token = authHeader.slice(7);
+
+  // Verify JWT using the existing supabase service client
+  if (!supabase) {
+    return c.json({ success: false, error: "Server not configured" }, 500);
+  }
+
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if (error || !user) {
+    return c.json({ success: false, error: "Invalid or expired token" }, 401);
+  }
+
+  // Fetch the profile row to get TEXT id, canonical role, and department
+  const { data: profile } = await db.from("users")
+    .select("id, role, department")
+    .eq("auth_id", user.id)
+    .maybeSingle();
+
+  if (!profile) {
+    return c.json({ success: false, error: "User profile not found" }, 403);
+  }
+
+  // Attach verified identity to context — handlers read from here, NOT query params
+  c.set("callerId", profile.id);
+  c.set("callerRole", profile.role);
+  c.set("callerDepartment", profile.department);
+
+  return next();
+});
+
 // Health check endpoint
 app.get("/make-server-c142e950/health", (c) => {
   return c.json({ status: "ok" });
@@ -85,43 +125,13 @@ app.get("/make-server-c142e950/health", (c) => {
 
 // ==================== AUTH & USERS API ====================
 
-// Login endpoint [RELATIONAL]
-app.post("/make-server-c142e950/auth/login", async (c) => {
-  try {
-    const { email, password } = await c.req.json();
-    
-    const { data: user, error } = await db.from("users").select("*").eq("email", email).maybeSingle();
-    if (error) throw error;
-    
-    if (!user) {
-      console.log(`Login failed: User not found for email ${email}`);
-      return c.json({ success: false, error: "Invalid email or password" }, 401);
-    }
-    
-    if (user.password !== password) {
-      console.log(`Login failed: Invalid password for email ${email}`);
-      return c.json({ success: false, error: "Invalid email or password" }, 401);
-    }
-    
-    if (!user.is_active) {
-      console.log(`Login failed: User account is inactive for email ${email}`);
-      return c.json({ success: false, error: "Account is inactive" }, 401);
-    }
-    
-    const { password: _, ...userWithoutPassword } = user;
-    console.log(`Login successful: ${user.email} (${user.department} ${user.role})`);
-    
-    return c.json({ success: true, data: userWithoutPassword });
-  } catch (error) {
-    console.error("Error during login:", error);
-    return c.json({ success: false, error: String(error) }, 500);
-  }
-});
+// Login endpoint REMOVED — frontend uses supabase.auth.signInWithPassword() directly.
+// The password column will be dropped in Phase 5 step 5.
 
 // Get current user (session check) [RELATIONAL]
 app.get("/make-server-c142e950/auth/me", async (c) => {
   try {
-    const userId = c.req.query("user_id");
+    const userId = c.get("callerId");
     if (!userId) {
       return c.json({ success: false, error: "User ID required" }, 400);
     }
@@ -133,8 +143,7 @@ app.get("/make-server-c142e950/auth/me", async (c) => {
       return c.json({ success: false, error: "User not found" }, 404);
     }
     
-    const { password: _, ...userWithoutPassword } = user;
-    return c.json({ success: true, data: userWithoutPassword });
+    return c.json({ success: true, data: user });
   } catch (error) {
     console.error("Error fetching current user:", error);
     return c.json({ success: false, error: String(error) }, 500);
@@ -159,14 +168,9 @@ app.get("/make-server-c142e950/users", async (c) => {
     const { data: users, error } = await query;
     if (error) throw error;
     
-    const usersWithoutPasswords = (users || []).map((u: any) => {
-      const { password: _, ...rest } = u;
-      return rest;
-    });
+    console.log(`Fetched ${(users || []).length} users (department: ${department || 'all'}, role: ${role || 'all'}, service_type: ${service_type || 'all'}, operations_role: ${operations_role || 'all'})`);
     
-    console.log(`Fetched ${usersWithoutPasswords.length} users (department: ${department || 'all'}, role: ${role || 'all'}, service_type: ${service_type || 'all'}, operations_role: ${operations_role || 'all'})`);
-    
-    return c.json({ success: true, data: usersWithoutPasswords });
+    return c.json({ success: true, data: users || [] });
   } catch (error) {
     console.error("Error fetching users:", error);
     return c.json({ success: false, error: String(error) }, 500);
@@ -785,6 +789,9 @@ app.post("/make-server-c142e950/client-handler-preferences/seed", async (c) => {
 
 // Clear all users (development only) [RELATIONAL]
 app.delete("/make-server-c142e950/auth/clear-users", async (c) => {
+  if (c.get("callerRole") !== "director") {
+    return c.json({ success: false, error: "Insufficient permissions — director role required" }, 403);
+  }
   try {
     const { data: allUsers } = await db.from("users").select("id, email");
     const { error } = await db.from("users").delete().neq("id", "");
@@ -1060,9 +1067,9 @@ app.post("/make-server-c142e950/tickets", async (c) => {
 // Get all tickets with role-based filtering [RELATIONAL]
 app.get("/make-server-c142e950/tickets", async (c) => {
   try {
-    const user_id = c.req.query("user_id");
-    const role = c.req.query("role");
-    const department = c.req.query("department");
+    const user_id = c.get("callerId");
+    const role = c.get("callerRole");
+    const department = c.get("callerDepartment");
     const status = c.req.query("status");
     const priority = c.req.query("priority");
     const search = c.req.query("search");
@@ -1381,8 +1388,8 @@ app.get("/make-server-c142e950/tickets/:id/comments", async (c) => {
 app.get("/make-server-c142e950/tickets/:id/activity", async (c) => {
   try {
     const ticket_id = c.req.param("id");
-    const user_role = c.req.query("role");
-    const user_department = c.req.query("department");
+    const user_role = c.get("callerRole");
+    const user_department = c.get("callerDepartment");
     
     if (user_role === "rep") {
       return c.json({ success: false, error: "Access denied: Activity log is not available for Employee/Rep roles" }, 403);
@@ -1425,11 +1432,11 @@ app.get("/make-server-c142e950/tickets/:id/activity", async (c) => {
 // Get system-wide activity log [RELATIONAL]
 app.get("/make-server-c142e950/activity-log", async (c) => {
   try {
-    const user_role = c.req.query("role");
-    const user_department = c.req.query("department");
+    const user_role = c.get("callerRole");
+    const user_department = c.get("callerDepartment");
     const entity_type = c.req.query("entity_type");
     const action_type = c.req.query("action_type");
-    const user_id = c.req.query("user_id");
+    const user_id = c.get("callerId");
     const date_from = c.req.query("date_from");
     const date_to = c.req.query("date_to");
     const limitVal = c.req.query("limit") ? parseInt(c.req.query("limit")!) : 50;
@@ -5061,6 +5068,9 @@ app.post("/make-server-c142e950/seed/comprehensive", async (c) => {
 
 // Clear all seed data (for testing)
 app.delete("/make-server-c142e950/seed/clear", async (c) => {
+  if (c.get("callerRole") !== "director") {
+    return c.json({ success: false, error: "Insufficient permissions — director role required" }, 403);
+  }
   try {
     console.log("Clearing all seed data... [RELATIONAL]");
     // Delete in correct FK order
@@ -5470,6 +5480,9 @@ app.post("/make-server-c142e950/customers/seed", async (c) => {
 
 // Clear all customers [RELATIONAL]
 app.delete("/make-server-c142e950/customers/clear", async (c) => {
+  if (c.get("callerRole") !== "director") {
+    return c.json({ success: false, error: "Insufficient permissions — director role required" }, 403);
+  }
   try {
     const { data: existing } = await db.from("customers").select("id");
     const count = existing?.length || 0;
@@ -5740,6 +5753,9 @@ app.put("/make-server-c142e950/contacts/:id", async (c) => {
 // ⚠️ IMPORTANT: Specific routes must come BEFORE parameterized routes
 // Clear all contacts [RELATIONAL]
 app.delete("/make-server-c142e950/contacts/clear", async (c) => {
+  if (c.get("callerRole") !== "director") {
+    return c.json({ success: false, error: "Insufficient permissions — director role required" }, 403);
+  }
   try {
     const { data: existing } = await db.from("contacts").select("id");
     const count = existing?.length || 0;
@@ -6552,6 +6568,9 @@ app.post("/make-server-c142e950/vendors/seed", async (c) => {
 
 // Clear all vendors
 app.delete("/make-server-c142e950/vendors/clear", async (c) => {
+  if (c.get("callerRole") !== "director") {
+    return c.json({ success: false, error: "Insufficient permissions — director role required" }, 403);
+  }
   try {
     const { data: existingVendors } = await db.from("network_partners").select("id").eq("partner_type", "vendor");
     const count = existingVendors?.length || 0;
