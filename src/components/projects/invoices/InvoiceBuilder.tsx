@@ -1,0 +1,1291 @@
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import { Loader2, ZoomIn, ZoomOut, Maximize, ChevronDown, User, Layout, Check, FileText, Calendar, Box, Truck, CreditCard, ArrowLeft, Download, Printer, RefreshCw, Coins } from "lucide-react";
+import { toast } from "../../ui/toast-utils";
+import type { Project } from "../../../types/pricing";
+import { Invoice, BillingLineItem, Billing, Account } from "../../../types/accounting";
+import { getAccounts } from "../../../utils/accounting-api";
+import { projectId, publicAnonKey } from "../../../utils/supabase/info";
+import { InvoiceDocument, InvoicePrintOptions } from "./InvoiceDocument";
+import { SignatoryControl } from "../quotation/screen/controls/SignatoryControl";
+import { DisplayOptionsControl } from "../quotation/screen/controls/DisplayOptionsControl";
+import { CustomDropdown } from "../../bd/CustomDropdown";
+import { useBookingGrouping } from "../../../hooks/useBookingGrouping";
+import { getServiceIcon } from "../../../utils/quotation-helpers";
+import { useConsignees } from "../../../hooks/useConsignees";
+import type { Consignee } from "../../../types/bd";
+
+const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-c142e950`;
+
+// A4 Dimensions in pixels at 96 DPI
+const A4_WIDTH_PX = 794; // 210mm
+const A4_HEIGHT_PX = 1123; // 297mm
+
+interface InvoiceBuilderProps {
+  mode: "create" | "view";
+  project: Project;
+  
+  // Create Mode
+  billingItems?: Billing[];
+  linkedBookings?: any[];
+  onSuccess?: () => void;
+  onRefreshData?: () => Promise<void>;
+  
+  // View Mode
+  invoice?: Invoice;
+  onBack?: () => void;
+}
+
+interface ItemOverride {
+    remarks: string;
+    tax_type: "VAT" | "NON-VAT";
+}
+
+export function InvoiceBuilder({ 
+  mode, 
+  project, 
+  billingItems = [], 
+  linkedBookings = [],
+  onSuccess,
+  invoice: initialInvoice,
+  onBack,
+  onRefreshData
+}: InvoiceBuilderProps) {
+  // -- Common State --
+  const [scale, setScale] = useState(0.85);
+  const [autoScale, setAutoScale] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const componentRef = useRef<HTMLDivElement>(null); // For printing
+
+  // -- View Mode State --
+  const [viewInvoice, setViewInvoice] = useState<Invoice | null>(initialInvoice || null);
+
+  // Print handler using native browser print
+  const handlePrint = useCallback(() => {
+    const content = componentRef.current;
+    if (!content) return;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) return;
+    const title = viewInvoice ? `Invoice-${viewInvoice.invoice_number}` : "Invoice";
+    printWindow.document.write(`<!DOCTYPE html><html><head><title>${title}</title><style>@media print { body { margin: 0; } }</style></head><body>${content.innerHTML}</body></html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }, [viewInvoice]);
+
+  // -- Create Mode State --
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split('T')[0]);
+  const [dueDate, setDueDate] = useState("");
+  const [notes, setNotes] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Currency & Exchange Rate (Snapshot Strategy)
+  const [targetCurrency, setTargetCurrency] = useState(project.currency || "PHP");
+  const [exchangeRate, setExchangeRate] = useState(1);
+  
+  // Item Overrides (Remarks, Tax Type)
+  const [itemOverrides, setItemOverrides] = useState<Record<string, ItemOverride>>({});
+
+  // New Fields (Zone A Requirements)
+  const [customerTin, setCustomerTin] = useState("");
+  const [blNumber, setBlNumber] = useState("");
+  const [consignee, setConsignee] = useState(project.customer_name || ""); // Default to customer
+  const [commodityDescription, setCommodityDescription] = useState(project.commodity || "");
+  const [creditTerms, setCreditTerms] = useState("NET 15");
+  const [customerAddress, setCustomerAddress] = useState(project.customer_address || "");
+  const [isFetchingAddress, setIsFetchingAddress] = useState(false);
+
+  // Bill To Override (Consignee billing — Phase 4)
+  const [billedToType, setBilledToType] = useState<"customer" | "consignee">("customer");
+  const [billedToConsigneeId, setBilledToConsigneeId] = useState<string | undefined>(undefined);
+  const { consignees: customerConsignees } = useConsignees(project.customer_id);
+  const selectedConsignee = customerConsignees.find(c => c.id === billedToConsigneeId);
+
+  const handleBillToChange = (type: "customer" | "consignee") => {
+    setBilledToType(type);
+    if (type === "customer") {
+      setBilledToConsigneeId(undefined);
+      setCustomerAddress(project.customer_address || "");
+      setCustomerTin("");
+    }
+  };
+
+  const handleBillToConsigneeSelect = (csgId: string) => {
+    setBilledToConsigneeId(csgId);
+    const csg = customerConsignees.find(c => c.id === csgId);
+    if (csg) {
+      setCustomerAddress(csg.address || "");
+      setCustomerTin(csg.tin || "");
+    }
+  };
+
+  // Accounting State (For GL Posting — Revenue Account for DR AR / CR Revenue)
+  const [revenueAccountId, setRevenueAccountId] = useState("");
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [loadingAccounts, setLoadingAccounts] = useState(false);
+
+  // -- Shared Options State --
+  const [signatories, setSignatories] = useState({
+      prepared_by: { name: "System User", title: "Authorized User" },
+      approved_by: { name: "MANAGEMENT", title: "Authorized Signatory" }
+  });
+  
+  const [displayOptions, setDisplayOptions] = useState({
+      show_bank_details: true,
+      show_notes: true,
+      show_tax_summary: true
+  });
+
+  // -- Initialization / Effects --
+
+  // 1. If View Mode, load data into state
+  useEffect(() => {
+    if (mode === 'view' && viewInvoice) {
+        // Load notes
+        setNotes(viewInvoice.notes || "");
+        
+        // Load metadata (signatories, display options) if available
+        const metadata = (viewInvoice as any).metadata || {};
+        if (metadata.signatories) setSignatories(metadata.signatories);
+        else {
+             // Fallback default for View
+             setSignatories({
+                prepared_by: { name: viewInvoice.created_by_name || "System User", title: "Authorized User" },
+                approved_by: { name: "MANAGEMENT", title: "Authorized Signatory" }
+             });
+        }
+        if (metadata.displayOptions) setDisplayOptions(metadata.displayOptions);
+    }
+  }, [mode, viewInvoice]);
+
+  useEffect(() => {
+    if (mode === 'create') {
+        const loadAccounts = async () => {
+            setLoadingAccounts(true);
+            try {
+                const accs = await getAccounts();
+                // Filter to Income-type accounts for revenue recognition (DR AR / CR Revenue)
+                // Match any casing: "Income", "income", "INCOME", "Revenue"
+                const incomeAccounts = accs.filter(a => {
+                  const t = (a.type || '').toLowerCase();
+                  return (t === 'income' || t === 'revenue') && !a.is_folder;
+                });
+                console.log(`[InvoiceBuilder] Loaded ${accs.length} accounts, ${incomeAccounts.length} income accounts`, incomeAccounts.map(a => ({ id: a.id, name: a.name, type: a.type })));
+                setAccounts(incomeAccounts);
+                
+                // Auto-select first revenue account only if nothing is currently selected
+                if (!revenueAccountId && incomeAccounts.length > 0) {
+                  setRevenueAccountId(incomeAccounts[0].id);
+                }
+            } catch (e) {
+                console.error("Failed to load revenue accounts for GL posting", e);
+            } finally {
+                setLoadingAccounts(false);
+            }
+        };
+        loadAccounts();
+    }
+  }, [mode]); // Revenue accounts don't depend on currency — load once on mount
+
+  // 2. Fetch Customer Address on Mount (Only for Create Mode)
+  useEffect(() => {
+    if (mode === 'create' && project.customer_id && !customerAddress) {
+        const fetchCustomer = async () => {
+            setIsFetchingAddress(true);
+            try {
+                const response = await fetch(`${API_URL}/customers/${project.customer_id}`, {
+                    headers: { 'Authorization': `Bearer ${publicAnonKey}` }
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        const addr = result.data.address || result.data.registered_address || result.data.billing_address || "";
+                        if (addr) setCustomerAddress(addr);
+                        if (result.data.tin) setCustomerTin(result.data.tin);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch customer details:", err);
+            } finally {
+                setIsFetchingAddress(false);
+            }
+        };
+        fetchCustomer();
+    }
+  }, [mode, project.customer_id, customerAddress]);
+  
+  // 3. Auto-scale Logic
+  useEffect(() => {
+    if (!autoScale || !containerRef.current) return;
+
+    const calculateScale = () => {
+      if (!containerRef.current) return;
+      const { clientWidth, clientHeight } = containerRef.current;
+      
+      const xMargin = 64; 
+      const yMargin = 120; 
+      
+      const availableWidth = clientWidth - xMargin;
+      const availableHeight = clientHeight - yMargin;
+      
+      const scaleX = availableWidth / A4_WIDTH_PX;
+      const scaleY = availableHeight / A4_HEIGHT_PX;
+      
+      const fitScale = Math.min(scaleX, scaleY);
+      const finalScale = Math.max(0.4, Math.min(fitScale, 1.1));
+      
+      setScale(finalScale);
+    };
+
+    const observer = new ResizeObserver(calculateScale);
+    observer.observe(containerRef.current);
+    calculateScale();
+
+    return () => observer.disconnect();
+  }, [autoScale]);
+
+  // -- Data Derivation --
+
+  // Filter unbilled (Create Mode)
+  const unbilledItems = useMemo(() => {
+    if (mode === 'view') return [];
+    return billingItems.filter(item => item.status === 'unbilled');
+  }, [billingItems, mode]);
+
+  // Booking grouping for unbilled items (Create Mode)
+  const getBookingId = useCallback((item: any) => item.booking_id || "unassigned", []);
+  const {
+    bookingGroupedData,
+    bookingIds: bookingGroupIds,
+    bookingMeta,
+    inferServiceType: inferSvcType,
+    expandedBookings,
+    toggleBooking,
+    toggleAllBookings: handleToggleAllBookings,
+    allExpanded: allBookingsExpanded,
+    hasBookings,
+  } = useBookingGrouping({
+    items: unbilledItems,
+    linkedBookings,
+    getBookingId,
+    enabled: mode === 'create' && linkedBookings.length > 0,
+  });
+
+  // Selected Items (Create Mode)
+  const selectedItems = useMemo(() => {
+    if (mode === 'view') return [];
+    return unbilledItems.filter(item => selectedIds.has(item.id));
+  }, [unbilledItems, selectedIds, mode]);
+
+  // Currency (Shared)
+  const currency = useMemo(() => {
+    if (mode === 'view') return viewInvoice?.currency || "PHP";
+    return targetCurrency;
+  }, [mode, viewInvoice, targetCurrency]);
+
+  // -- The Invoice Object --
+  const draftInvoice: Invoice = useMemo(() => {
+    // VIEW MODE: Return the static invoice
+    if (mode === 'view' && viewInvoice) {
+        return viewInvoice;
+    }
+
+    // CREATE MODE: Calculate logic
+    let effectiveDueDate = dueDate;
+    if (!effectiveDueDate) {
+         const d = new Date(invoiceDate);
+         d.setDate(d.getDate() + 30);
+         effectiveDueDate = d.toISOString().split('T')[0];
+    }
+    
+    let subtotal = 0;
+    let taxAmount = 0;
+
+    const finalLineItems: BillingLineItem[] = selectedItems.map(item => {
+        const override = itemOverrides[item.id] || { remarks: "", tax_type: "NON-VAT" };
+        
+        // Multi-Currency Calculation
+        const originalAmount = Number(item.amount) || 0;
+        let finalAmount = originalAmount;
+        let itemRateUsed = 1;
+        
+        // If item currency differs from target currency, apply rate
+        if (item.currency && item.currency !== targetCurrency) {
+            finalAmount = originalAmount * exchangeRate;
+            itemRateUsed = exchangeRate;
+        }
+        
+        const isVat = override.tax_type === "VAT";
+        const lineTax = isVat ? finalAmount * 0.12 : 0;
+        
+        subtotal += finalAmount;
+        taxAmount += lineTax;
+
+        return {
+            id: item.id,
+            description: item.description,
+            remarks: override.remarks,
+            quantity: 1,
+            unit_price: finalAmount,
+            amount: finalAmount,
+            tax_type: override.tax_type,
+            
+            // Snapshot Strategy Fields
+            original_amount: originalAmount,
+            original_currency: item.currency,
+            exchange_rate: itemRateUsed
+        };
+    });
+
+    const grandTotal = subtotal + taxAmount;
+
+    return {
+      id: "draft-preview",
+      invoice_number: "INV-DRAFT",
+      invoice_date: invoiceDate,
+      due_date: effectiveDueDate,
+      customer_id: project.customer_id,
+      customer_name: billedToType === "consignee" && selectedConsignee ? selectedConsignee.name : (project.customer_name || "Unknown Customer"),
+      customer_address: customerAddress || project.customer_address,
+      billed_to_type: billedToType,
+      billed_to_consignee_id: billedToConsigneeId,
+      project_number: project.project_number,
+      line_items: finalLineItems,
+      subtotal: subtotal,
+      tax_amount: taxAmount,
+      total_amount: grandTotal,
+      currency: currency,
+      notes: notes,
+      payment_status: "unpaid",
+      created_by_name: signatories.prepared_by.name,
+      status: "draft",
+      
+      // New Fields
+      exchange_rate: exchangeRate,
+      original_currency: project.currency, // Store source currency context
+      
+      customer_tin: customerTin,
+      bl_number: blNumber,
+      consignee: consignee,
+      commodity_description: commodityDescription,
+      credit_terms: creditTerms
+    } as Invoice;
+  }, [mode, viewInvoice, selectedItems, invoiceDate, dueDate, notes, project, currency, signatories, customerTin, blNumber, consignee, commodityDescription, creditTerms, itemOverrides, customerAddress, targetCurrency, exchangeRate, billedToType, selectedConsignee]);
+
+  // Print Options Object
+  const printOptions: InvoicePrintOptions = useMemo(() => ({
+      signatories: signatories,
+      display: displayOptions,
+      custom_notes: notes
+  }), [signatories, displayOptions, notes]);
+
+  // -- Actions --
+
+  // Create Mode Actions
+  const toggleSelection = (id: string) => {
+    const newSet = new Set(selectedIds);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+      if (!itemOverrides[id]) {
+          setItemOverrides(prev => ({
+              ...prev,
+              [id]: { remarks: "", tax_type: "NON-VAT" }
+          }));
+      }
+    }
+    setSelectedIds(newSet);
+  };
+
+  const toggleAll = () => {
+    if (selectedIds.size === unbilledItems.length) {
+      setSelectedIds(new Set());
+    } else {
+      const newSet = new Set(unbilledItems.map(i => i.id));
+      setSelectedIds(newSet);
+      const newOverrides = { ...itemOverrides };
+      unbilledItems.forEach(item => {
+          if (!newOverrides[item.id]) {
+              newOverrides[item.id] = { remarks: "", tax_type: "NON-VAT" };
+          }
+      });
+      setItemOverrides(newOverrides);
+    }
+  };
+
+  const updateItemOverride = (id: string, field: keyof ItemOverride, value: any) => {
+      setItemOverrides(prev => ({
+          ...prev,
+          [id]: {
+              ...prev[id] || { remarks: "", tax_type: "NON-VAT" },
+              [field]: value
+          }
+      }));
+  };
+
+  const handleSubmit = async () => {
+    if (selectedIds.size === 0) {
+      toast.error("Please select at least one billing item.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      
+      // -- HANDLE VIRTUAL ITEMS --
+      let finalBillingItemIds = Array.from(selectedIds);
+      const virtualIds = finalBillingItemIds.filter(id => id.startsWith('virtual-'));
+      
+      if (virtualIds.length > 0) {
+          toast.info("Finalizing billing items...");
+          
+          const virtualItemsToSave = billingItems.filter(item => virtualIds.includes(item.id));
+          
+          // Prepare payload: remove virtual ID
+          const itemsToSave = virtualItemsToSave.map(item => {
+             // eslint-disable-next-line @typescript-eslint/no-unused-vars
+             const { id, is_virtual, ...rest } = item as any;
+             return {
+                 ...rest,
+                 project_id: project.id, // Ensure strict project linking
+                 status: 'unbilled'
+             };
+          });
+
+          const saveResponse = await fetch(`${API_URL}/accounting/billings/batch`, {
+              method: 'POST',
+              headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${publicAnonKey}`
+              },
+              body: JSON.stringify({ 
+                  items: itemsToSave,
+                  project_id: project.id 
+              })
+          });
+
+          const saveResult = await saveResponse.json();
+          if (!saveResult.success) {
+              throw new Error(saveResult.error || "Failed to finalize virtual billing items");
+          }
+          
+          // Fix: The server returns { success: true, data: { items: [], processed: N } }
+          // So we need to access saveResult.data.items, not saveResult.data directly
+          // We must be extremely defensive here
+          let savedItems: any[] = [];
+          if (saveResult.data && Array.isArray(saveResult.data.items)) {
+              savedItems = saveResult.data.items;
+          } else if (Array.isArray(saveResult.data)) {
+              savedItems = saveResult.data;
+          }
+          
+          if (!Array.isArray(savedItems)) {
+              console.error("Unexpected response format from batch billing:", saveResult);
+              savedItems = [];
+          }
+          
+          // Map Virtual IDs -> Real IDs
+          const idMap = new Map<string, string>();
+          virtualItemsToSave.forEach(vItem => {
+              // Match by source_quotation_item_id or description/amount as fallback
+              const match = savedItems.find((sItem: any) => 
+                  (vItem.source_quotation_item_id && sItem.source_quotation_item_id === vItem.source_quotation_item_id) ||
+                  (sItem.description === vItem.description && sItem.amount === vItem.amount)
+              );
+              
+              if (match) {
+                  idMap.set(vItem.id, match.id);
+              }
+          });
+          
+          // Replace virtual IDs with real IDs
+          finalBillingItemIds = finalBillingItemIds.map(id => idMap.get(id) || id);
+          
+          // Refresh parent data if possible
+          if (onRefreshData) {
+              onRefreshData(); // Non-blocking
+          }
+      }
+
+      console.log(`[InvoiceBuilder] Submitting invoice — revenue_account_id: "${revenueAccountId}", total: ${draftInvoice.total_amount}`);
+      const payload = {
+        project_number: project.project_number,
+        customer_id: project.customer_id,
+        customer_name: billedToType === "consignee" && selectedConsignee ? selectedConsignee.name : project.customer_name,
+        customer_address: customerAddress,
+        billed_to_type: billedToType,
+        billed_to_consignee_id: billedToConsigneeId,
+        billing_item_ids: finalBillingItemIds,
+        invoice_date: invoiceDate,
+        due_date: dueDate || undefined,
+        notes: notes,
+        user_id: "current-user-id",
+        user_name: signatories.prepared_by.name,
+        
+        // Snapshot Data (The Truth)
+        currency: targetCurrency,
+        exchange_rate: exchangeRate,
+        original_currency: project.currency,
+        line_items: draftInvoice.line_items,
+        subtotal: draftInvoice.subtotal,
+        total_amount: draftInvoice.total_amount,
+        tax_amount: draftInvoice.tax_amount,
+        
+        // GL Posting: Revenue account for JE (DR AR / CR Revenue)
+        // IMPORTANT: Always send the field (even as empty string) so the server sees it
+        revenue_account_id: revenueAccountId,
+        
+        metadata: {
+            signatories,
+            displayOptions,
+            zone_a: {
+                customer_tin: customerTin,
+                bl_number: blNumber,
+                consignee: consignee,
+                commodity_description: commodityDescription,
+                credit_terms: creditTerms
+            },
+            item_overrides: itemOverrides
+        }
+      };
+
+      const response = await fetch(`${API_URL}/accounting/invoices`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${publicAnonKey}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // JE + Transaction are now created server-side inside createInvoice (Phase 1)
+        const hasJE = result.data?.journal_entry_id;
+        if (hasJE) {
+            toast.success(`Invoice ${result.data.invoice_number} posted to ledger`);
+        } else if (!revenueAccountId) {
+            toast.success(`Invoice ${result.data.invoice_number} created (no revenue account selected — GL entry skipped)`);
+        } else {
+            // Revenue account was selected but JE still wasn't created — likely AR account missing
+            console.warn(`[InvoiceBuilder] JE not created despite revenue_account_id="${revenueAccountId}". Check server logs.`);
+            toast.success(`Invoice ${result.data.invoice_number} created (GL entry could not be posted — check AR account setup)`);
+        }
+        if (onSuccess) onSuccess();
+      } else {
+        toast.error(result.error || "Failed to create invoice");
+      }
+    } catch (error) {
+      console.error("Error creating invoice:", error);
+      toast.error("Failed to create invoice");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Shared Actions
+  const zoomIn = () => { setAutoScale(false); setScale(prev => Math.min(prev + 0.1, 1.5)); };
+  const zoomOut = () => { setAutoScale(false); setScale(prev => Math.max(prev - 0.1, 0.4)); };
+  const toggleFit = () => { setAutoScale(true); };
+  
+  const updateSignatory = (type: "prepared_by" | "approved_by", field: "name" | "title", value: string) => {
+      setSignatories(prev => ({
+          ...prev,
+          [type]: { ...prev[type], [field]: value }
+      }));
+  };
+
+  const toggleDisplay = (key: keyof typeof displayOptions) => {
+      setDisplayOptions(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Helper
+  const formatCurrency = (amount: number, curr: string = "PHP") => {
+    return new Intl.NumberFormat("en-PH", { style: "currency", currency: curr }).format(amount);
+  };
+  
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "-";
+    return new Date(dateString).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  // Shared row renderer for billing items (used in both booking-grouped and category-grouped views)
+  const renderBillingItemRow = (item: any) => {
+    const isSelected = selectedIds.has(item.id);
+    const override = itemOverrides[item.id] || { remarks: "", tax_type: "NON-VAT" };
+    return (
+      <div key={item.id} className={`group border-b border-[#F3F4F6] last:border-0 transition-all ${isSelected ? 'bg-[#F0FDF9]' : 'hover:bg-[#F9FAFB]'}`}>
+        <div className="flex items-start px-4 py-3 cursor-pointer" onClick={() => toggleSelection(item.id)}>
+            <div className="w-8 shrink-0 pt-1 flex items-center justify-center">
+                <div className="relative flex items-center justify-center">
+                    <input 
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleSelection(item.id)}
+                        className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    <Check className="w-3 h-3 text-white absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={3} />
+                </div>
+            </div>
+            <div className="flex-1 px-3 min-w-0">
+                <div className={`text-sm font-medium mb-1 ${isSelected ? 'text-[#12332B]' : 'text-[#374151]'}`}>
+                    {item.description}
+                </div>
+                <div className="flex items-center gap-2 text-[11px] text-[#6B7280]">
+                    <span>{formatDate(item.created_at)}</span>
+                </div>
+            </div>
+            <div className="shrink-0 text-right pl-2 pt-1">
+                <div className={`text-sm font-bold whitespace-nowrap ${isSelected ? 'text-[#12332B]' : 'text-[#374151]'}`}>
+                    {formatCurrency(item.amount, item.currency)}
+                </div>
+            </div>
+        </div>
+        {isSelected && (
+            <div className="px-4 pb-4 pt-0 pl-14 cursor-default">
+                <div className="p-3 bg-white border border-gray-200 rounded-lg grid grid-cols-3 gap-3">
+                    <div className="col-span-2">
+                        <label className="block text-[10px] font-bold text-[#6B7280] mb-2 uppercase tracking-wide">Remarks</label>
+                        <input 
+                            type="text" 
+                            value={override.remarks}
+                            onChange={(e) => updateItemOverride(item.id, 'remarks', e.target.value)}
+                            className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                            placeholder="e.g. SERVICE CHARGE"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                    </div>
+                    <div className="col-span-1" onClick={(e) => e.stopPropagation()}>
+                        <label className="block text-[10px] font-bold text-[#6B7280] mb-2 uppercase tracking-wide">Tax</label>
+                        <div className="flex items-center h-[34px]">
+                            <label className="flex items-center gap-2 cursor-pointer group/tax select-none">
+                                <div className="relative flex items-center justify-center">
+                                    <input 
+                                        type="checkbox"
+                                        checked={override.tax_type === "VAT"}
+                                        onChange={(e) => updateItemOverride(item.id, 'tax_type', e.target.checked ? "VAT" : "NON-VAT")}
+                                        className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                                    />
+                                    <Check className="w-3 h-3 text-white absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={3} />
+                                </div>
+                                <span className="text-xs font-medium text-[#374151] group-hover/tax:text-[#12332B] transition-colors">VAT (12%)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex w-full h-full overflow-hidden bg-white">
+      {/* LEFT PANEL: Live Preview Stage */}
+      <div className="flex-1 bg-gray-50 flex flex-col relative overflow-hidden border-r border-[#E5E9F0]">
+          
+          {/* Header (View Mode Only) */}
+          {mode === 'view' && (
+              <div className="h-14 bg-white border-b border-[#E5E9F0] flex items-center justify-between px-4 shrink-0 z-20">
+                    <div className="flex items-center gap-3">
+                        {onBack && (
+                            <button 
+                                onClick={onBack}
+                                className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
+                            >
+                                <ArrowLeft size={18} />
+                            </button>
+                        )}
+                        <div>
+                            <h2 className="text-sm font-bold text-[#111827]">{viewInvoice?.invoice_number || "Loading..."}</h2>
+                            <span className="text-xs text-gray-500">{project.project_number}</span>
+                        </div>
+                    </div>
+              </div>
+          )}
+
+          {/* Canvas */}
+          <div 
+            ref={containerRef}
+            className="flex-1 relative overflow-hidden flex items-center justify-center p-8"
+          >
+              <div className="absolute inset-0 overflow-auto flex items-center justify-center p-8 pb-32">
+                   <div 
+                      style={{ 
+                          width: A4_WIDTH_PX * scale,
+                          height: A4_HEIGHT_PX * scale,
+                          transition: 'width 0.2s, height 0.2s',
+                          position: 'relative'
+                      }}
+                   >
+                       {/* The Paper */}
+                       <div 
+                           className="bg-white origin-top-left"
+                           style={{
+                              width: '210mm',
+                              minHeight: '297mm',
+                              transform: `scale(${scale})`,
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.02)'
+                           }}
+                       >
+                          <InvoiceDocument 
+                              ref={componentRef}
+                              project={project}
+                              invoice={draftInvoice}
+                              mode="preview"
+                              options={printOptions}
+                          />
+                       </div>
+                   </div>
+              </div>
+
+              {/* Floating Zoom Controls */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-full px-4 py-2 flex items-center gap-4 z-30 transition-all hover:bg-white hover:shadow-xl">
+                   <button onClick={zoomOut} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom Out">
+                      <ZoomOut size={18} />
+                   </button>
+                   <span className="text-sm font-medium text-gray-700 w-12 text-center select-none tabular-nums">{Math.round(scale * 100)}%</span>
+                   <button onClick={zoomIn} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom In">
+                      <ZoomIn size={18} />
+                   </button>
+                   <div className="w-px h-4 bg-gray-300" />
+                   <button 
+                      onClick={toggleFit} 
+                      className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[#0F766E] bg-[#F0FDFA]' : 'text-gray-600 hover:bg-gray-100'}`}
+                      title="Fit to Screen"
+                   >
+                      <Maximize size={16} />
+                      <span>Fit</span>
+                   </button>
+              </div>
+          </div>
+      </div>
+
+      {/* RIGHT PANEL: Controls Sidebar */}
+      <div className="w-[500px] flex flex-col bg-white z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+              
+              {/* SECTION: Currency & Exchange Rate (CREATE MODE ONLY) */}
+              {mode === 'create' && (
+                  <CollapsibleSection title="Currency Settings" icon={<Coins size={18} />} defaultOpen={true}>
+                      <div className="p-4 flex flex-col gap-4 border border-[#E5E9F0] rounded-lg bg-white mt-1 mb-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                              <div>
+                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                      Invoice Currency
+                                  </label>
+                                  <div className="relative">
+                                      <select
+                                          value={targetCurrency}
+                                          onChange={(e) => setTargetCurrency(e.target.value)}
+                                          className="w-full h-9 pl-3 pr-8 text-sm border border-gray-300 rounded-md focus:ring-[#0F766E] focus:border-[#0F766E] appearance-none bg-white"
+                                      >
+                                          <option value="PHP">PHP (Philippine Peso)</option>
+                                          <option value="USD">USD (US Dollar)</option>
+                                      </select>
+                                      <ChevronDown className="absolute right-2.5 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
+                                  </div>
+                              </div>
+                              
+                              <div>
+                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                      Exchange Rate
+                                  </label>
+                                  <div className="relative">
+                                      <input
+                                          type="number"
+                                          step="0.01"
+                                          value={exchangeRate}
+                                          onChange={(e) => setExchangeRate(parseFloat(e.target.value) || 0)}
+                                          className="w-full h-9 pl-3 pr-3 text-sm border border-gray-300 rounded-md focus:ring-[#0F766E] focus:border-[#0F766E]"
+                                      />
+                                  </div>
+                              </div>
+
+                              <div>
+                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                      Revenue Account
+                                  </label>
+                                  <CustomDropdown
+                                      value={revenueAccountId}
+                                      onChange={(val) => {
+                                          console.log(`[InvoiceBuilder] Revenue account selected: "${val}"`);
+                                          setRevenueAccountId(val);
+                                      }}
+                                      options={accounts.map(acc => ({
+                                          value: acc.id,
+                                          label: acc.code ? `${acc.code} - ${acc.name}` : acc.name
+                                      }))}
+                                      placeholder="Select Revenue Account..."
+                                      fullWidth
+                                      size="sm"
+                                  />
+                              </div>
+                          </div>
+                          
+                          {/* Conversion Hint */}
+                          {selectedItems.some(i => i.currency !== targetCurrency) && (
+                              <div className="bg-amber-50 border border-amber-200 rounded-md p-3 text-xs text-amber-800 flex items-start gap-2">
+                                  <RefreshCw className="w-4 h-4 shrink-0 mt-0.5" />
+                                  <div>
+                                      <span className="font-semibold">Conversion Active:</span> Items not in {targetCurrency} will be converted using rate {exchangeRate}.
+                                  </div>
+                              </div>
+                          )}
+                      </div>
+                  </CollapsibleSection>
+              )}
+
+              {/* SECTION: Billing Items (CREATE MODE ONLY) */}
+              {mode === 'create' && (
+                  <CollapsibleSection title={`Billing Items (${unbilledItems.length})`} icon={<FileText size={18} />} defaultOpen={true}>
+                      <div className="flex flex-col border border-[#E5E9F0] rounded-lg overflow-hidden bg-white mt-1">
+                          {/* Table Header */}
+                          <div className="flex items-center bg-[#F9FAFB] border-b border-[#E5E9F0] px-4 py-2">
+                              <div className="w-8 shrink-0 flex items-center justify-center">
+                                  <div className="relative flex items-center justify-center">
+                                      <input 
+                                          type="checkbox" 
+                                          className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                                          checked={unbilledItems.length > 0 && selectedIds.size === unbilledItems.length}
+                                          onChange={toggleAll}
+                                      />
+                                      <Check className="w-3 h-3 text-white absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={3} />
+                                  </div>
+                              </div>
+                              <div className="flex-1 px-3">
+                                  {hasBookings ? (
+                                      <button
+                                        onClick={handleToggleAllBookings}
+                                        className="flex items-center gap-2"
+                                        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#9CA3AF", fontSize: "11px", fontWeight: 600, letterSpacing: "0.02em" }}
+                                      >
+                                        <div style={{ transition: "transform 0.15s ease", transform: allBookingsExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
+                                          <ChevronDown size={12} />
+                                        </div>
+                                        <span style={{ color: "#667085" }}>Particulars</span>
+                                      </button>
+                                  ) : (
+                                      <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em]">Particulars</span>
+                                  )}
+                              </div>
+                              <div className="text-right">
+                                  <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em]">Amount</span>
+                              </div>
+                          </div>
+
+                          {/* Table Body */}
+                          <div className="max-h-[500px] overflow-y-auto bg-white custom-scrollbar">
+                               {unbilledItems.length === 0 ? (
+                                   <div className="p-8 text-center">
+                                       <span className="text-sm text-gray-400">No unbilled charges found.</span>
+                                   </div>
+                               ) : hasBookings ? (
+                                   /* ── BOOKING-GROUPED VIEW ── */
+                                   bookingGroupIds.map((bid, bidIdx) => {
+                                     const items = bookingGroupedData[bid] || [];
+                                     const meta = bookingMeta.get(bid);
+                                     const serviceType = bid === "unassigned" ? "Unassigned" : inferSvcType(bid, meta);
+                                     const subtotal = items.reduce((sum: number, item: any) => sum + (Number(item.amount) || 0), 0);
+                                     const isExpanded = expandedBookings.has(bid);
+                                     const itemCount = items.length;
+
+                                     return (
+                                       <div key={bid}>
+                                         {/* Booking Header Row — collapsible divider */}
+                                         <button
+                                           onClick={() => toggleBooking(bid)}
+                                           className="w-full flex items-center justify-between transition-colors"
+                                           style={{
+                                             padding: "8px 16px",
+                                             background: isExpanded ? "#F8FFFE" : "#FAFCFB",
+                                             border: "none",
+                                             borderTop: bidIdx > 0 ? "1px solid #E5E9E8" : "none",
+                                             borderBottom: isExpanded ? "1px solid #E5E9E8" : "none",
+                                             cursor: "pointer",
+                                           }}
+                                         >
+                                           <div className="flex items-center gap-2.5">
+                                             <div style={{ color: "#9CA3AF", transition: "transform 0.15s ease", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
+                                               <ChevronDown size={13} />
+                                             </div>
+                                             {bid !== "unassigned" && getServiceIcon(serviceType, { size: 13, color: "#0F766E" })}
+                                             <span style={{ fontSize: "11px", fontWeight: 600, color: bid === "unassigned" ? "#6B7280" : "#0F766E", fontFamily: "monospace" }}>
+                                               {bid === "unassigned" ? "Unassigned Items" : bid}
+                                             </span>
+                                             {bid !== "unassigned" && (
+                                               <span style={{ fontSize: "9px", fontWeight: 600, color: "#6B7280", padding: "1px 5px", backgroundColor: "#F3F4F6", borderRadius: "3px", border: "1px solid #E5E7EB" }}>
+                                                 {serviceType}
+                                               </span>
+                                             )}
+                                             <span style={{ fontSize: "9px", fontWeight: 600, color: "#6B7280", padding: "1px 5px", backgroundColor: "#F3F4F6", borderRadius: "3px", border: "1px solid #E5E7EB" }}>
+                                               {itemCount} item{itemCount !== 1 ? "s" : ""}
+                                             </span>
+                                           </div>
+                                           <span style={{ fontSize: "12px", fontWeight: 600, color: itemCount === 0 ? "#9CA3AF" : "#12332B", fontFamily: "monospace" }}>
+                                             {formatCurrency(subtotal)}
+                                           </span>
+                                         </button>
+
+                                         {/* Expanded: item rows nested under this booking */}
+                                         {isExpanded && items.map(item => renderBillingItemRow(item))}
+                                       </div>
+                                     );
+                                   })
+                               ) : (
+                                   /* ── FLAT CATEGORY-GROUPED VIEW (fallback when no linkedBookings) ── */
+                                   Object.entries(unbilledItems.reduce((acc: Record<string, any[]>, item: any) => {
+                                       let key = item.service_type || "Freight Charges";
+                                       const desc = (item.description || "").toLowerCase();
+                                       if (key === "Reimbursable Expense") {
+                                           key = "Billable Expense";
+                                       } else if (key === "General" || key === "Freight Charges") {
+                                           if (desc.includes("trucking") || desc.includes("customs") || desc.includes("fee") || desc.includes("handling") || desc.includes("thc")) {
+                                               key = "Origin Charges";
+                                           } else if (desc.includes("freight") || desc.includes("ocean")) {
+                                               key = "Freight Charges";
+                                           } else {
+                                               key = "Freight Charges";
+                                           }
+                                       }
+                                       if (!acc[key]) acc[key] = [];
+                                       acc[key].push(item);
+                                       return acc;
+                                   }, {} as Record<string, any[]>))
+                                   .sort(([a], [b]) => {
+                                       const order: Record<string, number> = { "Freight Charges": 1, "Origin Charges": 2, "Destination Charges": 3, "Billable Expense": 4 };
+                                       return (order[a] || 99) - (order[b] || 99);
+                                   })
+                                   .map(([category, items]) => (
+                                       <div key={category}>
+                                           <div className="px-4 py-2 bg-gray-50 border-b border-[#F3F4F6] text-[10px] font-bold text-[#6B7280] uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10">
+                                               <div className="w-1 h-1 rounded-full bg-gray-400"></div>
+                                               {category}
+                                               <span className="text-[9px] ml-auto bg-white border border-gray-200 px-1.5 rounded-full text-gray-500">{items.length}</span>
+                                           </div>
+                                           {items.map((item: any) => renderBillingItemRow(item))}
+                                       </div>
+                                   ))
+                               )}
+                          </div>
+                      </div>
+                  </CollapsibleSection>
+              )}
+
+              {/* SECTION: Invoice Details (CREATE MODE ONLY) */}
+              {mode === 'create' && (
+                  <CollapsibleSection title="Invoice Details" icon={<Calendar size={18} />} defaultOpen={true}>
+                      <div className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                  <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Invoice Date</label>
+                                  <input 
+                                      type="date"
+                                      value={invoiceDate}
+                                      onChange={(e) => setInvoiceDate(e.target.value)}
+                                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                  />
+                              </div>
+                              <div>
+                                  <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Due Date</label>
+                                  <input 
+                                      type="date"
+                                      value={dueDate}
+                                      onChange={(e) => setDueDate(e.target.value)}
+                                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                  />
+                              </div>
+                          </div>
+                          
+                          {/* Credit Terms Input */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Credit Terms</label>
+                              <div className="relative">
+                                <CreditCard className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                                <input 
+                                    type="text"
+                                    value={creditTerms}
+                                    onChange={(e) => setCreditTerms(e.target.value)}
+                                    placeholder="e.g. NET 15, NET 30, COD"
+                                    className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                />
+                              </div>
+                          </div>
+
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Notes / Memo</label>
+                              <textarea 
+                                  value={notes}
+                                  onChange={(e) => setNotes(e.target.value)}
+                                  rows={3}
+                                  placeholder="Add payment instructions or notes..."
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none resize-none transition-all"
+                              />
+                          </div>
+                      </div>
+                  </CollapsibleSection>
+              )}
+
+              {/* SECTION: Shipment & Legal (CREATE MODE ONLY) */}
+              {mode === 'create' && (
+                  <CollapsibleSection title="Shipment & Legal" icon={<Truck size={18} />} defaultOpen={true}>
+                      <div className="space-y-4">
+                          {/* Bill To Toggle */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Bill To</label>
+                              <div className="flex items-center gap-2 mb-3">
+                                  <button
+                                      type="button"
+                                      onClick={() => handleBillToChange("customer")}
+                                      className="px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all"
+                                      style={{
+                                          backgroundColor: billedToType === "customer" ? "#0F766E" : "#F9FAFB",
+                                          color: billedToType === "customer" ? "#FFFFFF" : "#667085",
+                                          border: billedToType === "customer" ? "1px solid #0F766E" : "1px solid #E5E9F0",
+                                      }}
+                                  >
+                                      Customer
+                                  </button>
+                                  <button
+                                      type="button"
+                                      onClick={() => handleBillToChange("consignee")}
+                                      disabled={customerConsignees.length === 0}
+                                      className="px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                      style={{
+                                          backgroundColor: billedToType === "consignee" ? "#0F766E" : "#F9FAFB",
+                                          color: billedToType === "consignee" ? "#FFFFFF" : "#667085",
+                                          border: billedToType === "consignee" ? "1px solid #0F766E" : "1px solid #E5E9F0",
+                                      }}
+                                  >
+                                      Consignee
+                                  </button>
+                                  {customerConsignees.length === 0 && (
+                                      <span className="text-[11px] italic" style={{ color: "#98A2B3" }}>
+                                          No consignees saved for this customer
+                                      </span>
+                                  )}
+                              </div>
+
+                              {/* Consignee Selector (when "Consignee" is selected) */}
+                              {billedToType === "consignee" && customerConsignees.length > 0 && (
+                                  <div className="mb-3">
+                                      <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Select Consignee</label>
+                                      <select
+                                          value={billedToConsigneeId || ""}
+                                          onChange={(e) => handleBillToConsigneeSelect(e.target.value)}
+                                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                          style={{ color: billedToConsigneeId ? "#12332B" : "#9CA3AF" }}
+                                      >
+                                          <option value="" disabled>Choose a consignee...</option>
+                                          {customerConsignees.map(csg => (
+                                              <option key={csg.id} value={csg.id}>
+                                                  {csg.name}{csg.tin ? ` (TIN: ${csg.tin})` : ""}
+                                              </option>
+                                          ))}
+                                      </select>
+                                      {selectedConsignee && (
+                                          <div className="mt-2 px-3 py-2 rounded-md text-[12px]" style={{ backgroundColor: "#E8F5F3", color: "#12332B" }}>
+                                              <span className="font-medium">Billing as:</span> {selectedConsignee.name}
+                                              {selectedConsignee.address && <span className="text-[11px] ml-2" style={{ color: "#667085" }}>• {selectedConsignee.address}</span>}
+                                          </div>
+                                      )}
+                                  </div>
+                              )}
+                          </div>
+
+                          {/* Customer Address */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Bill To Address</label>
+                              <textarea 
+                                  value={customerAddress}
+                                  onChange={(e) => setCustomerAddress(e.target.value)}
+                                  rows={3}
+                                  placeholder={isFetchingAddress ? "Fetching address..." : "Enter customer address"}
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none resize-none transition-all placeholder:text-gray-400"
+                              />
+                          </div>
+
+                          {/* Customer TIN */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Customer TIN</label>
+                              <input 
+                                  type="text"
+                                  value={customerTin}
+                                  onChange={(e) => setCustomerTin(e.target.value)}
+                                  placeholder="000-000-000-000"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                              />
+                          </div>
+                          
+                          {/* BL Number */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">BL No.</label>
+                              <input 
+                                  type="text"
+                                  value={blNumber}
+                                  onChange={(e) => setBlNumber(e.target.value)}
+                                  placeholder="e.g. KULA2503335"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                              />
+                          </div>
+
+                          {/* Consignee */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Consignee</label>
+                              <input 
+                                  type="text"
+                                  value={consignee}
+                                  onChange={(e) => setConsignee(e.target.value)}
+                                  placeholder="Consignee Name"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                              />
+                          </div>
+
+                          {/* Commodity Description */}
+                          <div>
+                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Commodity Desc.</label>
+                              <div className="relative">
+                                 <Box className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                                 <input 
+                                    type="text"
+                                    value={commodityDescription}
+                                    onChange={(e) => setCommodityDescription(e.target.value)}
+                                    placeholder="e.g. AIR / STC: LEAD FRAME"
+                                    className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                />
+                              </div>
+                          </div>
+                      </div>
+                  </CollapsibleSection>
+              )}
+
+              {/* SECTION: Signatories (BOTH MODES) */}
+              <CollapsibleSection title="Signatories" icon={<User size={18} />} defaultOpen={false}>
+                  <SignatoryControl 
+                      preparedBy={signatories.prepared_by}
+                      approvedBy={signatories.approved_by}
+                      onUpdate={updateSignatory}
+                  />
+                  {mode === 'view' && (
+                      <p className="text-[10px] text-gray-400 mt-3 italic">
+                          Note: Changes here only affect the printed document and are not saved to the record.
+                      </p>
+                  )}
+              </CollapsibleSection>
+
+              {/* SECTION: Display Options (BOTH MODES) */}
+              <CollapsibleSection title="Display Options" icon={<Layout size={18} />} defaultOpen={false}>
+                  <DisplayOptionsControl 
+                      options={displayOptions}
+                      onToggle={toggleDisplay}
+                  />
+              </CollapsibleSection>
+
+              {/* SECTION: Custom Notes (VIEW MODE ONLY) */}
+              {mode === 'view' && (
+                  <CollapsibleSection title="Custom Notes" icon={<FileText size={18} />} defaultOpen={true}>
+                      <div className="space-y-2.5">
+                          <label className="text-xs font-semibold text-[#12332B] uppercase tracking-wider">Print Notes</label>
+                          <textarea
+                              value={notes}
+                              onChange={(e) => setNotes(e.target.value)}
+                              className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-gray-400 min-h-[100px] resize-none"
+                              placeholder="Add custom notes for this printout..."
+                          />
+                      </div>
+                  </CollapsibleSection>
+              )}
+
+          </div>
+
+          {/* Sidebar Footer - Actions */}
+          <div className="p-6 border-t border-[#E5E9F0] bg-white shrink-0 flex flex-col gap-3 shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.02)] z-30">
+              {mode === 'create' ? (
+                  <>
+                      {/* Create Mode: Total Summary & Create Button */}
+                      <div className="flex flex-col gap-1 mb-2">
+                          <div className="flex items-center justify-between">
+                              <span className="text-xs text-gray-500">Subtotal</span>
+                              <span className="text-sm font-medium text-gray-700">{formatCurrency(draftInvoice.subtotal, currency)}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                              <span className="text-xs text-gray-500">Tax</span>
+                              <span className="text-sm font-medium text-gray-700">{formatCurrency(draftInvoice.tax_amount || 0, currency)}</span>
+                          </div>
+                          <div className="flex items-center justify-between pt-2 border-t mt-1">
+                              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total</span>
+                              <span className="text-xl font-bold text-[#12332B]">{formatCurrency(draftInvoice.total_amount, currency)}</span>
+                          </div>
+                      </div>
+                      
+                      <button
+                          onClick={handleSubmit}
+                          disabled={isSubmitting || selectedIds.size === 0}
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                          {isSubmitting ? (
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : (
+                              <Check size={18} />
+                          )}
+                          {isSubmitting ? "Creating Invoice..." : "Create & Finalize"}
+                      </button>
+                  </>
+              ) : (
+                  <>
+                      {/* View Mode: Download Button */}
+                      <button 
+                          onClick={() => handlePrint()}
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm group"
+                      >
+                          <Download size={18} className="group-hover:-translate-y-0.5 transition-transform duration-300" />
+                          <span>Download PDF</span>
+                      </button>
+                  </>
+              )}
+          </div>
+      </div>
+    </div>
+  );
+}
+
+// Local Helper Component for Sections
+function CollapsibleSection({ title, icon, children, defaultOpen = true }: { title: string, icon: React.ReactNode, children: React.ReactNode, defaultOpen?: boolean }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <div className="border-b border-[#E5E9F0] last:border-0">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors group outline-none"
+      >
+        <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#E0F2F1] flex items-center justify-center shrink-0 group-hover:bg-[#B2DFDB] transition-colors text-[#0F766E]">
+                {icon}
+            </div>
+            <h4 className="font-bold text-[#12332B] text-sm select-none uppercase tracking-wide">{title}</h4>
+        </div>
+        <div className={`text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+            <ChevronDown size={20} />
+        </div>
+      </button>
+      
+      <div 
+        className={`grid transition-all duration-300 ease-in-out ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+      >
+        <div className="overflow-hidden">
+            <div className="px-6 pb-6">
+                {children}
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+}

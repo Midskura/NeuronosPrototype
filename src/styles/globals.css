@@ -1,0 +1,960 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ===== NEURON DESIGN TOKENS ===== */
+  /* Backgrounds */
+  --neuron-bg-page: #F7FAF8;
+  --neuron-bg-elevated: #FFFFFF;
+  
+  /* Ink (Text Colors) */
+  --neuron-ink-primary: #12332B;
+  --neuron-ink-secondary: #2E5147;
+  --neuron-ink-muted: #6B7A76;
+  
+  /* Brand Colors */
+  --neuron-brand-green: #237F66;
+  --neuron-brand-green-600: #1E6D59;
+  --neuron-brand-green-100: #E8F2EE;
+  
+  /* Accent */
+  --neuron-accent-terracotta: #B06A4F;
+  
+  /* UI Colors */
+  --neuron-ui-border: #E5ECE9;
+  --neuron-ui-divider: #EEF3F1;
+  
+  /* States */
+  --neuron-state-hover: #F1F6F4;
+  --neuron-state-selected: #E4EFEA;
+  
+  /* Semantic */
+  --neuron-semantic-success: #2B8A6E;
+  --neuron-semantic-warn: #C88A2B;
+  --neuron-semantic-danger: #C94F3D;
+  
+  /* Elevations (Shadows) */
+  --elevation-1: 0 1px 2px 0 rgba(16, 24, 20, 0.04);
+  --elevation-2: 0 2px 8px 0 rgba(16, 24, 20, 0.06);
+  
+  /* Radius */
+  --neuron-radius-s: 6px;
+  --neuron-radius-m: 10px;
+  --neuron-radius-l: 14px;
+  
+  /* ===== LEGACY TOKENS (for backwards compatibility) ===== */
+  --font-size: 15px;
+  --background: #FFFFFF;
+  --foreground: #1F2937;
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+  --popover: #FFFFFF;
+  --popover-foreground: #1F2937;
+  --primary: #0A1D4D;
+  --primary-foreground: #ffffff;
+  --secondary: #0A1D4D;
+  --secondary-foreground: #ffffff;
+  --muted: #F9FAFB;
+  --muted-foreground: #6B7280;
+  --accent: #0F766E;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #E5E7EB;
+  --input: transparent;
+  --input-background: #FFFFFF;
+  --switch-background: #E5E7EB;
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #0F766E;
+  --chart-1: #F25C05;
+  --chart-2: #0A1D4D;
+  --chart-3: #6B7280;
+  --chart-4: #3b82f6;
+  --chart-5: #8b5cf6;
+  --radius: 0.5rem;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --sidebar: #0A1D4D;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #F25C05;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(242, 92, 5, 0.1);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #F25C05;
+  
+  /* Semantic text colors for accounting */
+  --text-revenue: #16a34a;
+  --text-expense: #dc2626;
+  --text-transfer: #374151;
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --font-weight-semibold: 600;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  /* Custom focus outline - faint green for Neuron brand */
+  *:focus,
+  *:focus-visible {
+    outline: 2px solid rgba(15, 118, 110, 0.3);
+    outline-offset: 2px;
+  }
+  
+  /* Remove outline for mouse users, keep for keyboard users (accessibility) */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Form inputs always show subtle green focus outline (overrides Tailwind focus:ring/outline) */
+  input:focus,
+  input:focus-visible,
+  textarea:focus,
+  textarea:focus-visible,
+  select:focus,
+  select:focus-visible {
+    outline: 2px solid rgba(15, 118, 110, 0.3) !important;
+    outline-offset: -1px;
+    box-shadow: none !important;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/**
+ * Inter Typography System with SF Pro Display-like Tracking
+ * 
+ * Tracking Strategy (Controlled Negative):
+ * - Body (12-16px): 0%
+ * - Small UI (10-12px): +0.2% (0.002em) - improved readability
+ * - H3 (18-20px): -0.5% (-0.005em)
+ * - H2 (22-28px): -1.0% (-0.01em)
+ * - H1/Page titles (30-40px): -1.5% (-0.015em)
+ * - Display (≥44px): -2.0% (-0.02em)
+ * 
+ * Font weights:
+ * Regular = 400, Medium = 500, Semibold = 600, Bold = 700
+ * 
+ * Line heights: Preserved from original SF Pro Display system
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    /* H1 - 24px falls in 22-28px range → -1.0% */
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 36px;
+      letter-spacing: -0.01em;
+      font-variant-numeric: normal;
+    }
+
+    /* H2 - 20px falls in 18-20px range → -0.5% */
+    h2 {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 30px;
+      letter-spacing: -0.005em;
+      font-variant-numeric: normal;
+    }
+
+    /* H3 - 18px falls in 18-20px range → -0.5% */
+    h3 {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 27px;
+      letter-spacing: -0.005em;
+    }
+
+    /* H4 - 16px is body range → 0% */
+    h4 {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      letter-spacing: 0;
+    }
+
+    /* Body - 15px → 0% */
+    p {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 22.5px;
+      letter-spacing: 0;
+    }
+
+    /* Label - 14px → 0% */
+    label {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 21px;
+      letter-spacing: 0;
+    }
+
+    /* Button - 15px, weight 500 → 0% */
+    button {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 22.5px;
+      letter-spacing: 0;
+    }
+
+    /* Inputs - 15px → 0% */
+    input, textarea, select {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 22.5px;
+      letter-spacing: 0;
+    }
+
+    /* Table text - 14px → 0% with tabular numerals */
+    table {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      letter-spacing: 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Small text - 12px → +0.2% for readability */
+    small {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+      letter-spacing: 0.002em;
+      text-transform: uppercase;
+    }
+  }
+}
+
+/* ✨ PHASE 7: Animation keyframes for vendor inline rates */
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+}
+
+html {
+  font-size: 15px;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1;
+}
+
+body {
+  font-family: var(--font-sans);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Custom scrollbar styling for smooth, subtle scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth scrolling with inertia */
+.content-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Main content wrapper with proper padding */
+.main-content-wrapper {
+  min-height: calc(100vh - 160px);
+  padding-bottom: 32px;
+}
+
+/* Grid system for layout consistency */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+/* Responsive chart containers */
+.chart-container {
+  width: 100%;
+  min-height: 300px;
+  max-height: 500px;
+}
+
+/* Badge/Pill styling with uppercase text - Small UI +0.2% tracking */
+.badge, [class*="badge"] {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.002em;
+  text-transform: uppercase;
+}
+
+/* Tabular numerals for numeric UI elements - Inter /tnum */
+.tabular-nums,
+.num,
+[class*="text-[32px]"],
+[class*="text-[28px]"],
+[class*="text-[24px]"],
+[class*="text-xl"],
+[class*="text-2xl"],
+[class*="text-3xl"],
+[class*="text-4xl"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Ensure all table cells use tabular numerals for proper alignment */
+table td,
+table th,
+[role="cell"],
+[role="gridcell"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* KPI metric cards and dashboard tiles - Large sizes get negative tracking */
+/* 32px falls in 30-40px range → -1.5% tracking */
+[class*="text-[32px]"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'kern' 1;
+  letter-spacing: -0.015em;
+}
+
+/* 28px falls in 22-28px range → -1.0% tracking */
+[class*="text-[28px]"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'kern' 1;
+  letter-spacing: -0.01em;
+}
+
+/* 24px falls in 22-28px range → -1.0% tracking */
+[class*="text-[24px]"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'kern' 1;
+  letter-spacing: -0.01em;
+}
+
+/* Small UI text (10-12px) - +0.2% tracking for readability */
+.text-\[10px\],
+.text-\[11px\],
+.text-\[12px\],
+[class*="text-xs"] {
+  letter-spacing: 0.002em;
+}
+
+/* Body text (13-16px) - 0% tracking */
+.text-\[13px\],
+.text-\[14px\],
+.text-\[15px\],
+.text-\[16px\] {
+  letter-spacing: 0;
+}
+
+/* Heading sizes - Negative tracking for SF Pro Display feel */
+.text-\[18px\],
+.text-\[19px\],
+.text-\[20px\] {
+  letter-spacing: -0.005em; /* -0.5% for 18-20px range */
+}
+
+.text-\[22px\],
+.text-\[26px\] {
+  letter-spacing: -0.01em; /* -1.0% for 22-28px range */
+}
+
+/* Additional tracking utility classes for Inter SF-like feel */
+.tracking-heading-tight {
+  letter-spacing: -0.015em; /* -1.5% for H1/Page titles 30-40px */
+}
+
+.tracking-heading {
+  letter-spacing: -0.01em; /* -1.0% for H2 22-28px */
+}
+
+.tracking-subheading {
+  letter-spacing: -0.005em; /* -0.5% for H3 18-20px */
+}
+
+.tracking-small-ui {
+  letter-spacing: 0.002em; /* +0.2% for small UI 10-12px */
+}
+
+.tracking-body {
+  letter-spacing: 0; /* 0% for body 12-16px */
+}
+
+/* Desktop-first Accounting Module Grid System */
+/* 12-column grid: 80px columns, 24px gutters = 1200px max-width */
+.accounting-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.accounting-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* JJB Toast Styling */
+[data-sonner-toast] {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-sonner-toast] [data-title] {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #0A1D4D !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+}
+
+[data-sonner-toast] [data-description] {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #6B7280 !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  margin-top: 2px !important;
+}
+
+[data-sonner-toast] [data-button],
+[data-sonner-toast] [data-cancel-button] {
+  background: #F25C05 !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease !important;
+}
+
+[data-sonner-toast] [data-button]:hover,
+[data-sonner-toast] [data-cancel-button]:hover {
+  background: #D84D00 !important;
+}
+
+[data-sonner-toast] [data-close-button] {
+  color: #6B7280 !important;
+  opacity: 0.5 !important;
+  transition: opacity 0.2s ease !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+/* Toast icon styling */
+[data-sonner-toast] [data-icon] {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  margin-top: 2px !important;
+}
+
+/* Success toast icon color */
+[data-sonner-toast][data-type="success"] [data-icon],
+[data-sonner-toast][data-type="success"] [data-icon] > svg {
+  color: #10B981 !important;
+  stroke: #10B981 !important;
+}
+
+/* Error toast icon color */
+[data-sonner-toast][data-type="error"] [data-icon],
+[data-sonner-toast][data-type="error"] [data-icon] > svg {
+  color: #EF4444 !important;
+  stroke: #EF4444 !important;
+}
+
+/* Info toast icon color */
+[data-sonner-toast][data-type="info"] [data-icon],
+[data-sonner-toast][data-type="info"] [data-icon] > svg {
+  color: #0A1D4D !important;
+  stroke: #0A1D4D !important;
+}
+
+/* Warning toast icon color */
+[data-sonner-toast][data-type="warning"] [data-icon],
+[data-sonner-toast][data-type="warning"] [data-icon] > svg {
+  color: #F59E0B !important;
+  stroke: #F59E0B !important;
+}
+
+/* Sonner container positioning */
+[data-sonner-toaster] {
+  font-family: var(--font-sans) !important;
+}
+
+/* Sonner toast animations - smooth and non-intrusive */
+[data-sonner-toast] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+[data-sonner-toast][data-mounted="true"] {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+[data-sonner-toast][data-removed="true"] {
+  animation: slideOut 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInPanel {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/**
+ * ================================================================
+ * TYPOGRAPHY SYSTEM - INTER with SF Pro Display-like Tracking
+ * Dev Handoff Documentation
+ * ================================================================
+ * 
+ * Font Family:
+ * Inter (Google Fonts Variable)
+ * 
+ * CSS Variable:
+ * :root {
+ *   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+ *                Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+ * }
+ * body { font-family: var(--font-sans); }
+ * 
+ * Font Weights (Mapping):
+ * - Regular → 400
+ * - Medium → 500
+ * - Semibold → 600
+ * - Bold → 700
+ * 
+ * Letter Spacing (Controlled Negative - SF Pro Display-like):
+ * - Small UI (10-12px): +0.2% (0.002em) - improved readability
+ * - Body (12-16px): 0%
+ * - H3 (18-20px): -0.5% (-0.005em)
+ * - H2 (22-28px): -1.0% (-0.01em)
+ * - H1/Page titles (30-40px): -1.5% (-0.015em)
+ * - Display (≥44px): -2.0% (-0.02em)
+ * 
+ * Optical Adjustments (SF-like feel):
+ * - Tightened headings visually with negative tracking
+ * - No negative tracking on text below 16px (prevents over-tightening)
+ * - Buttons: weight 500, tracking 0%
+ * - Small UI gets +0.2% for readability
+ * 
+ * OpenType Features:
+ * - Tabular numerals: font-feature-settings: 'tnum' 1
+ * - Kerning: font-feature-settings: 'kern' 1
+ * - Applied to: KPI values, table cells, numeric displays
+ * 
+ * Text Styles Reference:
+ * - h1: 24px / 600 / -0.01em (22-28px range)
+ * - h2: 20px / 500 / -0.005em (18-20px range)
+ * - h3: 18px / 500 / -0.005em (18-20px range)
+ * - h4: 16px / 500 / 0 (body range)
+ * - p: 15px / 400 / 0 (body range)
+ * - label: 14px / 500 / 0 (body range)
+ * - button: 15px / 500 / 0 (body range)
+ * - table: 14px / 400 / 0 + tabular-nums
+ * - small: 12px / 600 / +0.002em + uppercase
+ * - .text-[32px]: 32px / -0.015em + tabular-nums (30-40px range)
+ * - .text-[28px]: 28px / -0.01em + tabular-nums (22-28px range)
+ * - .text-[24px]: 24px / -0.01em + tabular-nums (22-28px range)
+ * 
+ * Tabular Numerals Applied To (/tnum):
+ * - All table elements (td, th, [role="cell"])
+ * - KPI metrics (.text-[32px], .text-[28px], .text-[24px])
+ * - Large numeric displays
+ * - Chart axis labels (via recharts styling)
+ * - .num, .tabular-nums classes
+ * 
+ * Web Font Loading:
+ * Uses Google Fonts API with font-display: swap
+ * Weights loaded: 400, 500, 600, 700
+ * Variable font axis: wght
+ * 
+ * Rendering Optimizations:
+ * - -webkit-font-smoothing: antialiased
+ * - -moz-osx-font-smoothing: grayscale
+ * - text-rendering: optimizeLegibility (implicit)
+ * 
+ * Component Updates:
+ * ✓ All text layers use Inter styles (no local font overrides)
+ * ✓ Headings: negative tracking applied (-0.5% to -1.5%)
+ * ✓ Body text: 0% tracking maintained
+ * ✓ Small UI: +0.2% tracking for readability
+ * ✓ KPI tiles: tabular numerals + negative tracking
+ * ✓ Tables: tabular numerals enabled
+ * ✓ Charts: tabular numerals on axis labels
+ * ✓ Toast notifications: Inter
+ * ✓ Print styles: Inter
+ * ✓ Line heights: preserved from SF Pro Display
+ * ✓ Layout spacing: unchanged
+ * ✓ Color tokens: unchanged (#0A1D4D navy, #F25C05 orange)
+ * ✓ Grid system: unchanged (12-column, 1280px max-width)
+ * 
+ * QA Checklist:
+ * □ No missing font warnings in browser console
+ * □ All text uses Inter (no SF Pro/Instrument Sans fallbacks)
+ * □ Headings show tightened tracking (negative letter-spacing)
+ * □ Body text remains at 0% tracking
+ * □ Small UI (10-12px) has +0.2% tracking
+ * □ All numeric displays show aligned digits (tabular)
+ * □ Buttons/inputs have no truncation at 14-16px
+ * □ Line heights match previous design
+ * □ Toast notifications render correctly
+ * □ Print styles maintain font family
+ * □ Charts display with tabular numerals
+ * □ Apply/Download bar renders correctly
+ * □ Reports filter bar displays properly
+ * 
+ * CSS Implementation Example:
+ * h1 { letter-spacing: -0.01em; }
+ * h2 { letter-spacing: -0.005em; }
+ * h3 { letter-spacing: -0.005em; }
+ * .small { letter-spacing: 0.002em; }
+ * .num { font-variant-numeric: tabular-nums; }
+ * 
+ * ================================================================
+ */
+
+/* ================================================================
+ * ENTRIES TABLE RESPONSIVE LAYOUT
+ * ================================================================
+ * 8-column grid with responsive breakpoints
+ * Viewport ≥1280px: Full widths
+ * Viewport 1024-1279px: Reduced AMOUNT & STATUS
+ * Viewport <1024px: Compact mode with adjusted columns
+ */
+
+/* Default: Desktop ≥1280px */
+.entries-table-header,
+.entries-table-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 280px) 160px 112px 1fr 1fr 160px 180px 56px;
+  gap: 0;
+  align-items: center;
+}
+
+/* Medium: 1024px - 1279px */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .entries-table-header,
+  .entries-table-row {
+    grid-template-columns: minmax(200px, 280px) 160px 112px 1fr 1fr 140px 160px 56px;
+  }
+}
+
+/* Compact: <1024px */
+@media (max-width: 1023px) {
+  .entries-table-header,
+  .entries-table-row {
+    grid-template-columns: minmax(180px, 240px) 148px 112px 1fr 1fr 140px 160px 48px;
+  }
+}
+
+/* Hide scrollbar while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Dialog overlay with 60% opacity */
+[data-slot="dialog-overlay"] {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ================================================================
+ * REPORTING MODULE - DATE CONTROLS RESPONSIVE
+ * ================================================================
+ * Desktop (≥1024px): All controls in a single row
+ * Tablet (768px-1023px): Two rows - controls wrap, Apply + Export stay together
+ * Mobile (≤767px): Stacked vertically with action buttons in a row
+ */
+
+/* DateControlsCard responsive behavior */
+@media (max-width: 1023px) {
+  .date-controls-card {
+    flex-wrap: wrap !important;
+  }
+  
+  .date-controls-card > * {
+    flex-shrink: 0;
+  }
+  
+  /* Keep Apply and Export together on tablet */
+  .date-controls-actions {
+    display: flex !important;
+    gap: 12px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .date-controls-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  
+  /* Full width inputs and selects on mobile */
+  .date-controls-card > div[class*="flex items-center"]:not(.date-controls-actions) {
+    width: 100% !important;
+  }
+  
+  /* Action buttons stay in a row on mobile */
+  .date-controls-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+  
+  .date-controls-actions > button {
+    flex: 1 !important;
+  }
+}
+
+/* Hide number input spinners */
+input[type="number"].no-spinners::-webkit-outer-spin-button,
+input[type="number"].no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"].no-spinners {
+  -moz-appearance: textfield;
+}
+
+/* ================================================================
+ * HIDE ALL NUMBER INPUT SPINNERS (Global)
+ * ================================================================
+ * Removes spinner controls from ALL number inputs across the app
+ */
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ================================================================
+ * CHECKBOX STYLING - WHITE BACKGROUND WHEN UNCHECKED
+ * ================================================================
+ */
+
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--neuron-brand-green);
+}
+
+/* ================================================================
+ * NEURON BUTTON SYSTEM - MAIN CTA BUTTONS
+ * ================================================================
+ * Primary action buttons with inverted hover state
+ */
+
+.neuron-btn-primary {
+  padding: 8px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  background-color: var(--neuron-brand-green);
+  border: 1px solid var(--neuron-brand-green);
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.neuron-btn-primary:hover {
+  background-color: white;
+  color: var(--neuron-brand-green);
+  border: 1px solid var(--neuron-brand-green);
+}
+
+.neuron-btn-primary:active {
+  transform: translateY(1px);
+}
+
+.neuron-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.neuron-btn-primary:disabled:hover {
+  background-color: var(--neuron-brand-green);
+  color: white;
+}

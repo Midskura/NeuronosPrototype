@@ -1,0 +1,137 @@
+import { useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X } from "lucide-react";
+
+export type SidePanelSize = "sm" | "md" | "lg" | "xl" | "full";
+
+interface SidePanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title?: React.ReactNode;
+  children: React.ReactNode;
+  footer?: React.ReactNode;
+  size?: SidePanelSize;
+  width?: string; // Custom width override
+  showCloseButton?: boolean;
+}
+
+export function SidePanel({
+  isOpen,
+  onClose,
+  title,
+  children,
+  footer,
+  size = "md",
+  width,
+  showCloseButton = true
+}: SidePanelProps) {
+  
+  // Handle ESC key to close
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
+  // Lock body scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  // Determine width based on size prop
+  const getWidth = () => {
+    if (width) return width;
+    
+    switch (size) {
+      case "sm": return "400px";
+      case "md": return "600px";
+      case "lg": return "920px"; // Matches current BillingDetailsSheet
+      case "xl": return "1200px";
+      case "full": return "100%";
+      default: return "600px";
+    }
+  };
+
+  const panelWidth = getWidth();
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-[60]"
+            onClick={onClose}
+            style={{ 
+              backgroundColor: "rgba(18, 51, 43, 0.15)"
+            }}
+          />
+
+          {/* Panel */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ 
+              type: "spring",
+              damping: 30,
+              stiffness: 300,
+              duration: 0.3
+            }}
+            className="fixed right-0 top-0 h-full bg-white shadow-2xl z-[70] flex flex-col border-l border-[#E5E9F0]"
+            style={{ width: panelWidth, maxWidth: "100vw" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Standard Header (Optional) */}
+            {title && (
+              <div className="px-12 py-6 border-b border-[#E5E9F0] bg-white flex items-center justify-between shrink-0">
+                <div className="flex-1">
+                   {typeof title === 'string' ? (
+                       <h2 className="text-[20px] font-semibold text-[#12332B]">{title}</h2>
+                   ) : title}
+                </div>
+                
+                {showCloseButton && (
+                  <button
+                    onClick={onClose}
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-[#667085] hover:bg-[#F3F4F6] transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Content Area */}
+            <div className="flex-1 overflow-hidden relative">
+               {children}
+            </div>
+
+            {/* Footer (Optional) */}
+            {footer && (
+              <div className="shrink-0">
+                {footer}
+              </div>
+            )}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}

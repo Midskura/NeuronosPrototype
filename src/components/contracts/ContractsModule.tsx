@@ -1,0 +1,216 @@
+/**
+ * ContractsModule
+ *
+ * List/detail router for Contracts. 1:1 structural copy of ProjectsModule.tsx —
+ * same props, same department logic, same update pattern — adapted for contract domain.
+ *
+ * @see /docs/blueprints/CONTRACTS_MODULE_BLUEPRINT.md
+ */
+
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router";
+import { projectId, publicAnonKey } from "../../utils/supabase/info";
+import { toast } from "../ui/toast-utils";
+import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
+import type { QuotationNew } from "../../types/pricing";
+import { ContractsList } from "./ContractsList";
+import { ContractDetailView } from "../pricing/ContractDetailView";
+
+const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-c142e950`;
+
+export type ContractsView = "list" | "detail";
+
+interface ContractsModuleProps {
+  currentUser?: { 
+    id?: string;
+    name: string; 
+    email: string; 
+    department: string;
+  } | null;
+  onCreateTicket?: (entity: { type: string; id: string; name: string }) => void;
+  initialContract?: QuotationNew | null;
+  departmentOverride?: "BD" | "Operations" | "Accounting";
+}
+
+export function ContractsModule({ currentUser, onCreateTicket, initialContract, departmentOverride }: ContractsModuleProps) {
+  const [view, setView] = useState<ContractsView>(initialContract ? "detail" : "list");
+  const [selectedContract, setSelectedContract] = useState<QuotationNew | null>(initialContract || null);
+  const invalidateCache = useInvalidateCache();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [initialTab, setInitialTab] = useState<string | null>(null);
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+
+  // Update view if initialContract changes
+  useEffect(() => {
+    if (initialContract) {
+      setSelectedContract(initialContract);
+      setView("detail");
+    }
+  }, [initialContract]);
+
+  // ── Cached contracts fetch ────────────────────────────────
+  const contractsFetcher = async (): Promise<QuotationNew[]> => {
+    if (!projectId || !publicAnonKey) {
+      console.error("Missing Supabase credentials:", { projectId, hasKey: !!publicAnonKey });
+      return [];
+    }
+
+    // Fetch all quotations and filter for contracts client-side
+    // This reuses the existing /quotations endpoint — no new backend needed
+    const response = await fetch(`${API_URL}/quotations?department=pricing`, {
+      headers: { Authorization: `Bearer ${publicAnonKey}` },
+    });
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const result = await response.json();
+
+    if (result.success) {
+      // Filter to activated contract quotations only
+      // Only contracts that have been approved and activated (status = "Converted to Contract"
+      // or contract_status = "Active"/"Expiring"/"Expired"/"Renewed") show here.
+      // Draft/in-progress contract quotations stay in the quotation lists until activated.
+      const contracts = (result.data || []).filter(
+        (q: QuotationNew) =>
+          q.quotation_type === "contract" &&
+          (q.status === "Converted to Contract" ||
+           q.contract_status === "Active" ||
+           q.contract_status === "Expiring" ||
+           q.contract_status === "Expired" ||
+           q.contract_status === "Renewed")
+      );
+      console.log(`ContractsModule: ${contracts.length} activated contracts found out of ${result.data.length} quotations`);
+      return contracts;
+    }
+
+    throw new Error(result.error);
+  };
+
+  const {
+    data: contracts,
+    isLoading,
+    refresh: refreshContracts,
+  } = useCachedFetch<QuotationNew[]>("contracts", contractsFetcher, []);
+
+  // Deep-link: auto-select contract from ?contract= query param
+  useEffect(() => {
+    const contractId = searchParams.get("contract");
+    const targetTab = searchParams.get("tab");
+    const targetHighlight = searchParams.get("highlight");
+    if (!contractId || contracts.length === 0 || isLoading) return;
+
+    const match = contracts.find(
+      (c) => c.quote_number === contractId || c.id === contractId
+    );
+    if (match) {
+      setSelectedContract(match);
+      setInitialTab(targetTab || null);
+      setHighlightId(targetHighlight || null);
+      setView("detail");
+      // Clean the query param so back-navigation doesn't re-trigger
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, contracts, isLoading, setSearchParams]);
+
+  const handleSelectContract = (contract: QuotationNew) => {
+    setSelectedContract(contract);
+    setView("detail");
+  };
+
+  const handleBackToList = () => {
+    setView("list");
+    setSelectedContract(null);
+    setInitialTab(null);
+    setHighlightId(null);
+  };
+
+  const handleContractUpdated = async (updatedContract?: QuotationNew) => {
+    console.log('handleContractUpdated called — refreshing contract data...');
+    
+    // If viewing a specific contract, fetch fresh detail
+    if (selectedContract) {
+      try {
+        const response = await fetch(`${API_URL}/quotations/${selectedContract.id}`, {
+          headers: {
+            'Authorization': `Bearer ${publicAnonKey}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setSelectedContract(result.data);
+          }
+        } else {
+          console.error('Failed to fetch contract:', response.status, await response.text());
+        }
+      } catch (error) {
+        console.error('Error refreshing selected contract:', error);
+      }
+    }
+
+    // If caller passed an updated contract directly, use it
+    if (updatedContract) {
+      setSelectedContract(updatedContract);
+    }
+
+    // Invalidate the contracts list cache so it's fresh when user navigates back to list
+    invalidateCache("contracts");
+  };
+
+  const handleEditContract = () => {
+    // Placeholder — parent can wire this to open QuotationBuilderV3 in contract mode
+    if (selectedContract) {
+      console.log("Edit contract requested:", selectedContract.quote_number);
+    }
+  };
+
+  // Use the current user's department to determine which view to show
+  // Same logic as ProjectsModule
+  
+  // Logic: 
+  // 1. If override provided, use it.
+  // 2. If user is BD/Pricing -> BD
+  // 3. Else -> Operations
+  
+  let department: "BD" | "Operations" | "Accounting" = "Operations";
+  
+  if (departmentOverride) {
+    department = departmentOverride;
+  } else if (
+    currentUser?.department === "BD" || 
+    currentUser?.department === "Business Development" ||
+    currentUser?.department === "Pricing"
+  ) {
+    department = "BD";
+  }
+  
+  console.log("ContractsModule - Department:", department, "- User:", currentUser?.department);
+
+  return (
+    <div className="h-full bg-white">
+      {view === "list" && (
+        <ContractsList
+          contracts={contracts}
+          onSelectContract={handleSelectContract}
+          isLoading={isLoading}
+          currentUser={currentUser}
+          department={department}
+          onRefresh={refreshContracts}
+        />
+      )}
+
+      {view === "detail" && selectedContract && (
+        <ContractDetailView
+          quotation={selectedContract}
+          onBack={handleBackToList}
+          onEdit={handleEditContract}
+          onUpdate={handleContractUpdated}
+          currentUser={currentUser}
+          initialTab={initialTab}
+          highlightId={highlightId}
+        />
+      )}
+    </div>
+  );
+}
