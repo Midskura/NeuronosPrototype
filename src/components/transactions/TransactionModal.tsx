@@ -30,7 +30,7 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
 
   useEffect(() => {
     if (isOpen) {
-      getAccounts().then(setAccounts);
+      getAccounts().then((data: any) => setAccounts(data));
       setFormData(prev => ({
         ...prev,
         currency,

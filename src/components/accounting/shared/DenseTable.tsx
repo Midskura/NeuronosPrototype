@@ -93,11 +93,7 @@ export function DenseTable<T>({
         >
           <IconComponent
             size={48}
-            style={{
-              color: "var(--neuron-ink-muted)",
-              margin: "0 auto 12px",
-              display: "block",
-            }}
+            {...{ style: { color: "var(--neuron-ink-muted)", margin: "0 auto 12px", display: "block" } } as any}
           />
           <h3
             style={{

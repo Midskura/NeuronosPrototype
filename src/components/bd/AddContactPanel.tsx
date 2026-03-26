@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { UserPlus, X, User, Building2, Target } from "lucide-react";
 import type { LifecycleStage, LeadStatus } from "../../types/bd";
 import { supabase } from "../../utils/supabase/client";
 import { CustomSelect } from "./CustomSelect";

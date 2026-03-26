@@ -306,7 +306,6 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              borderLeft: "3px solid var(--neuron-brand-green)",
               backgroundColor: "#F8FBFB",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",
@@ -497,7 +496,6 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              borderLeft: "3px solid var(--neuron-brand-green)",
               backgroundColor: "#F8FBFB",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",
@@ -742,7 +740,6 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              borderLeft: "3px solid var(--neuron-brand-green)",
               backgroundColor: "#F8FBFB",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",

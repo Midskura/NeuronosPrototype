@@ -26,7 +26,7 @@ interface PricingProps {
   view?: PricingView;
   onViewInquiry?: (inquiryId: string) => void;
   inquiryId?: string | null;
-  currentUser?: { name: string; email: string; department: string } | null;
+  currentUser?: { id?: string; name: string; email: string; department: string } | null;
   onCreateTicket?: (quotation: QuotationNew) => void;
 }
 
@@ -55,12 +55,11 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
       const { data, error } = await supabase
         .from('quotations')
         .select('*')
-        .eq('department', 'pricing')
         .order('created_at', { ascending: false });
       
       if (error) throw error;
       setQuotations(data || []);
-      console.log(`Fetched ${(data || []).length} quotations for Pricing`);
+      console.log(`Fetched ${(data || []).length} quotations for Pricing module`);
     } catch (error) {
       console.log('Error fetching quotations:', error);
       setQuotations([]);
@@ -71,7 +70,7 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
 
   // Fetch quotations when view changes to quotations
   useEffect(() => {
-    if (view === "quotations") {
+    if (view === "quotations" || view === "reports") {
       fetchQuotations();
     }
   }, [view]);
@@ -250,8 +249,8 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
     // Pre-fill customer info and open quotation builder
     const inquiryTemplate: Partial<QuotationNew> = {
       customer_id: customer.id,
-      customer_name: customer.company_name,
-      customer_company: customer.company_name,
+      customer_name: customer.name,
+      customer_company: customer.name,
       status: "Pending Pricing",
     };
     setSelectedQuotation(inquiryTemplate as QuotationNew);
@@ -375,7 +374,7 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
                     // Contract activated — return to list
                     handleBackFromQuotation();
                   }}
-                  currentUser={currentUser}
+                  currentUser={currentUser ? { id: currentUser.id || "current-user", ...currentUser } : null}
                   onDelete={handleDeleteQuotation}
                 />
             )}
@@ -411,7 +410,9 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
           </>
         )}
 
-        {view === "reports" && <PricingReports />}
+        {view === "reports" && (
+          <PricingReports quotations={quotations} isLoading={isLoading} />
+        )}
       </div>
     </div>
   );

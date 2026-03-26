@@ -10,6 +10,6 @@ const supabaseUrl = `https://${projectId}.supabase.co`;
 // A no-op lock is safe for single-tab apps where cross-tab coordination isn't needed.
 export const supabase = createClient(supabaseUrl, publicAnonKey, {
   auth: {
-    lock: (_name: string, _acquireTimeout: number, fn: () => Promise<unknown>) => fn(),
+    lock: <R>(_name: string, _acquireTimeout: number, fn: () => Promise<R>) => fn(),
   },
 });

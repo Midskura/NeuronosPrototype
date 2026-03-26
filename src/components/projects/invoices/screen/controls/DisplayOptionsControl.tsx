@@ -1,5 +1,5 @@
 import React from "react";
-import type { InvoicePrintOptions } from "../useInvoiceDocumentState";
+import type { InvoicePrintOptions } from "../../InvoiceDocument";
 import { Eye, EyeOff } from "lucide-react";
 
 interface DisplayOptionsControlProps {

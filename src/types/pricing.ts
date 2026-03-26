@@ -2,6 +2,21 @@
 // NEW QUOTATION SYSTEM (Category-based with Multi-currency & Tax)
 // ============================================
 
+// Service-specific detail types (flexible maps for inquiry/quotation service data)
+export type Incoterm = string;
+export type BrokerageDetails = Record<string, any>;
+export type ForwardingDetails = Record<string, any>;
+export type TruckingDetails = Record<string, any>;
+export type MarineInsuranceDetails = Record<string, any>;
+export type OthersDetails = Record<string, any>;
+
+// Form subtypes used by quotation form components
+export type BrokerageSubtype = string;
+export type ShipmentType = string;
+export type Mode = string;
+export type CargoType = string;
+export type TruckType = string;
+
 /**
  * @deprecated Use QuotationChargeCategory instead
  * Kept for backward compatibility during migration
@@ -39,10 +54,12 @@ export interface Vendor {
   name: string;                        // Display name (from NETWORK_PARTNERS)
   service_tag?: ServiceType;           // Which service this vendor provides
   vendor_id?: string;                  // Backend ID (e.g., "np-001") - Links to NETWORK_PARTNERS and KV store
-  
+  territory?: string;
+
   // Rate card data (copied from NETWORK_PARTNERS on add, or loaded from backend)
   charge_categories?: QuotationChargeCategory[];  // NEW format: Category-based rates
   line_items?: VendorLineItem[];                  // DEPRECATED: Old format (backward compatibility)
+  services_offered?: string[];
 }
 
 /**
@@ -60,6 +77,8 @@ export interface QuotationLineItemNew {
   rating_basis?: string;     // ✨ NEW: Phase 2 (W/M, CBM, KG)
   forex_rate: number;        // 1.0 (or actual conversion rate)
   is_taxed: boolean;         // true if VAT applies to this item
+  taxed?: boolean;           // alias for is_taxed (used by some components)
+  charge_currency?: string;  // display currency for this line item
   tax_code?: string;         // ✨ NEW: Phase 2 (VAT, NVAT, ZR)
   remarks: string;           // "PER W/M", "PER BL", "PER SET"
   amount: number;            // Calculated: price × quantity × forex_rate
@@ -209,6 +228,7 @@ export interface QuotationNew {
   customer_organization?: string;
   customer_department?: string;  // ✨ NEW: Phase 1
   customer_role?: string;        // ✨ NEW: Phase 1
+  contact_id?: string;           // Alias for contact_person_id
   contact_person_id?: string;    // Link to Contact.id for proper relationships
   contact_person_name?: string;  // Contact person display name
   
@@ -271,7 +291,6 @@ export interface QuotationNew {
   financial_summary: FinancialSummary;
   
   // Terms & Approval
-  terms_and_conditions?: string[];
   credit_terms?: string;         // "Net 30", "Net 45"
   validity_period?: string;      // "15 days", "30 days"
   prepared_by?: string;
@@ -311,50 +330,6 @@ export type Movement = "IMPORT" | "EXPORT";
 export type FreightCategory = "SEA FREIGHT" | "AIR FREIGHT" | "LAND FREIGHT";
 export type ShipmentFreight = "LCL" | "FCL" | "CONSOLIDATION" | "BREAK BULK";
 
-// ============================================
-// VENDOR TYPES (for Quotation Builder - Inline Rates Management)
-// ============================================
-
-/**
- * Service types available for vendor assignment
- * Maps to service_tag field on vendors
- */
-export type ServiceType = "Forwarding" | "Brokerage" | "Trucking" | "Marine Insurance" | "Others";
-
-/**
- * Vendor type classification
- * Used for filtering and categorization in quotation builder
- */
-export type VendorType = "International Partners" | "Local Partners" | "Subcontractors";
-
-/**
- * Vendor interface for Quotation Builder
- * Supports inline rate management with backend persistence
- * 
- * DATA FLOW:
- * 1. User selects vendor from NETWORK_PARTNERS masterlist
- * 2. vendor_id links to backend record (e.g., "np-001")
- * 3. charge_categories copied from masterlist on add (hardcoded fallback)
- * 4. On expand: Fetch from backend → Use cached/hardcoded → Show editor
- * 5. On save: POST to backend → Update cache → Import to buying price
- * 
- * BACKEND API:
- * - GET /vendors/:vendor_id/charge-categories → Fetch saved rates
- * - POST /vendors/:vendor_id/charge-categories → Save edited rates
- */
-export interface Vendor {
-  id: string;                    // Local quotation ID (e.g., "vendor-1234567890")
-  type: VendorType;              // "International Partners", "Local Partners", "Subcontractors"
-  name: string;                  // Display name (e.g., "THETIS LOGISTICS CO., LTD")
-  service_tag?: ServiceType;     // Service assignment for auto-tagging line items
-  
-  // ✨ BACKEND INTEGRATION
-  vendor_id?: string;            // Backend/masterlist ID (e.g., "np-001") - REQUIRED for KV store operations
-  
-  // ✨ RATE CARD DATA (copied from NETWORK_PARTNERS on add, editable inline)
-  charge_categories?: QuotationChargeCategory[];  // NEW format: Category-based structure
-  line_items?: VendorLineItem[];                  // @deprecated Old format - kept for backward compatibility
-}
 
 // ============================================
 // PROJECT & INQUIRY SERVICE TYPES
@@ -419,6 +394,18 @@ export interface Project {
   collection_address?: string;
   pickup_address?: AddressStruct;
   
+  shipment_type?: string;
+  transit_days?: number;
+  cargo_type?: string;
+  stackability?: string;
+  volume_cbm?: number;
+  volume_containers?: number;
+  volume_packages?: number;
+  client_po_number?: string;
+  client_po_date?: string;
+  actual_etd?: string;
+  eta?: string;
+  actual_delivery_date?: string;
   shipment_ready_date?: string | null;
   requested_etd?: string | null;
   special_instructions?: string;

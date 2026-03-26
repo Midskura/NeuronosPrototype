@@ -116,10 +116,10 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
         await submitForApproval({
             ...payload,
             totalAmount: payload.amount,
-            lineItems: items.map(i => ({ particular: i.description, amount: i.amount })), // Just for record
+            lineItems: items.map(i => ({ id: "", particular: i.description, description: i.description, amount: i.amount })), // Just for record
             preferredPayment: "Cash", // Default
-            vendor: "Neuron Treasury", 
-        });
+            vendor: "Neuron Treasury",
+        } as any);
         
         toast.success(`Liquidation submitted. ${isRefund ? "Please return funds to Treasury." : "Reimbursement request created."}`);
         onSuccess();

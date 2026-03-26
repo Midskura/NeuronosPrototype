@@ -21,11 +21,9 @@ const ContractsModule = lazy(() => import("./components/contracts/ContractsModul
 const Accounting = lazy(() => import("./components/accounting/Accounting").then((module) => ({ default: module.Accounting })));
 const HR = lazy(() => import("./components/HR").then((module) => ({ default: module.HR })));
 const InboxPage = lazy(() => import("./components/InboxPage").then((module) => ({ default: module.InboxPage })));
-const TicketQueuePage = lazy(() => import("./components/TicketQueuePage").then((module) => ({ default: module.TicketQueuePage })));
 const ActivityLogPage = lazy(() => import("./components/ActivityLogPage").then((module) => ({ default: module.ActivityLogPage })));
 const EmployeeProfile = lazy(() => import("./components/EmployeeProfile").then((module) => ({ default: module.EmployeeProfile })));
 const Admin = lazy(() => import("./components/Admin").then((module) => ({ default: module.Admin })));
-const TicketTestingDashboard = lazy(() => import("./components/TicketTestingDashboard").then((module) => ({ default: module.TicketTestingDashboard })));
 const ReportControlCenter = lazy(() => import("./components/bd/reports/ReportControlCenter").then((module) => ({ default: module.ReportControlCenter })));
 const CreateBooking = lazy(() => import("./components/operations/CreateBooking").then((module) => ({ default: module.CreateBooking })));
 const BookingFullView = lazy(() => import("./components/operations/BookingFullView").then((module) => ({ default: module.BookingFullView })));
@@ -483,11 +481,9 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
     if (path.startsWith("/hr")) return "hr";
     if (path.startsWith("/calendar")) return "calendar";
     if (path.startsWith("/inbox")) return "inbox";
-    if (path.startsWith("/ticket-queue")) return "ticket-queue";
     if (path.startsWith("/activity-log")) return "activity-log";
     if (path.startsWith("/profile")) return "profile";
     if (path.startsWith("/admin")) return "admin";
-    if (path.startsWith("/tickets")) return "ticket-testing";
     if (path.startsWith("/design-system")) return "design-system";
     return "dashboard";
   };
@@ -539,11 +535,9 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
       "hr": "/hr",
       "calendar": "/calendar",
       "inbox": "/inbox",
-      "ticket-queue": "/ticket-queue",
       "activity-log": "/activity-log",
       "profile": "/profile",
       "admin": "/admin",
-      "ticket-testing": "/tickets",
       "design-system": "/design-system"
     };
     
@@ -625,16 +619,9 @@ function BDInquiriesPage() {
   const customerData = null;
   
   const handleCreateTicket = (quotation: any) => {
-    // Navigate to tickets page with pre-filled quotation context
-    const params = new URLSearchParams({
-      entityType: 'quotation',
-      entityId: quotation.id,
-      entityName: quotation.quotation_name || quotation.id,
-      entityStatus: quotation.status || ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', quotation?.id ? { state: { compose: { entity_type: 'quotation', entity_id: quotation.id, entity_label: quotation.quotationNumber || quotation.id } } } : undefined);
   };
-  
+
   return (
     <RouteWrapper page="bd-inquiries">
       <BusinessDevelopment 
@@ -671,13 +658,7 @@ function BDContractsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
 
   return (
@@ -728,15 +709,9 @@ function ProjectsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
-  
+
   return (
     <RouteWrapper page="projects">
       <ProjectsModule 
@@ -753,15 +728,9 @@ function ContractsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
-  
+
   return (
     <RouteWrapper page="contracts">
       <ContractsModule 
@@ -817,16 +786,9 @@ function PricingQuotationsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (quotation: any) => {
-    // Navigate to tickets page with pre-filled quotation context
-    const params = new URLSearchParams({
-      entityType: 'quotation',
-      entityId: quotation.id,
-      entityName: quotation.quotation_name || quotation.id,
-      entityStatus: quotation.status || ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', quotation?.id ? { state: { compose: { entity_type: 'quotation', entity_id: quotation.id, entity_label: quotation.quotationNumber || quotation.id } } } : undefined);
   };
-  
+
   return (
     <RouteWrapper page="pricing-quotations">
       <Pricing 
@@ -844,15 +806,9 @@ function PricingProjectsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
-  
+
   return (
     <RouteWrapper page="pricing-projects">
       <ProjectsModule 
@@ -868,13 +824,7 @@ function PricingContractsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
 
   return (
@@ -924,15 +874,9 @@ function OperationsProjectsPage() {
   const navigate = useNavigate();
   
   const handleCreateTicket = (entity: { type: string; id: string; name: string }) => {
-    const params = new URLSearchParams({
-      entityType: entity.type,
-      entityId: entity.id,
-      entityName: entity.name,
-      entityStatus: ''
-    });
-    navigate(`/tickets?${params.toString()}`);
+    navigate('/inbox', { state: { compose: { entity_type: entity.type, entity_id: entity.id, entity_label: entity.name } } });
   };
-  
+
   return (
     <RouteWrapper page="ops-projects">
       <ProjectsModule 
@@ -1178,14 +1122,6 @@ function InboxPageWrapper() {
   );
 }
 
-function TicketQueuePageWrapper() {
-  return (
-    <RouteWrapper page="ticket-queue">
-      <TicketQueuePage />
-    </RouteWrapper>
-  );
-}
-
 function ActivityLogPageWrapper() {
   return (
     <RouteWrapper page="activity-log">
@@ -1200,7 +1136,7 @@ function ProfilePage() {
   
   const handleDepartmentChange = (dept: string) => {
     if (user) {
-      user.department = dept;
+      user.department = dept as 'Business Development' | 'Pricing' | 'Operations' | 'Accounting' | 'Executive' | 'HR';
       navigate('/dashboard');
     }
   };
@@ -1219,29 +1155,6 @@ function AdminPage() {
   return (
     <RouteWrapper page="admin">
       <Admin />
-    </RouteWrapper>
-  );
-}
-
-function TicketsPage() {
-  const [searchParams] = useSearchParams();
-  
-  // Extract pre-filled entity data from URL params
-  const entityType = searchParams.get('entityType');
-  const entityId = searchParams.get('entityId');
-  const entityName = searchParams.get('entityName');
-  const entityStatus = searchParams.get('entityStatus');
-  
-  const prefilledEntity = (entityType && entityId) ? {
-    entityType,
-    entityId,
-    entityName: entityName || '',
-    entityStatus: entityStatus || ''
-  } : null;
-  
-  return (
-    <RouteWrapper page="ticket-testing">
-      <TicketTestingDashboard prefilledEntity={prefilledEntity} />
     </RouteWrapper>
   );
 }
@@ -1369,7 +1282,6 @@ function AppContent() {
 
         {/* Manager+ only routes */}
         <Route element={<GuardedLayout requireMinRole="manager" />}>
-          <Route path="/ticket-queue" element={<TicketQueuePageWrapper />} />
           <Route path="/activity-log" element={<ActivityLogPageWrapper />} />
         </Route>
 
@@ -1382,7 +1294,6 @@ function AppContent() {
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/inbox" element={<InboxPageWrapper />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/tickets" element={<TicketsPage />} />
         <Route path="/design-system" element={<DesignSystemPage />} />
         
         {/* Diagnostics (hidden utility page) */}

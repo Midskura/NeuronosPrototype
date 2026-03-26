@@ -128,7 +128,7 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
             // This makes the UI show the empty state without requiring a page refresh
             setVerifiedBookings([]);
           } else {
-            console.error('Failed to clean up orphaned bookings:', await cleanupResponse.text());
+            console.error('Failed to clean up orphaned bookings:', cleanupError?.message);
           }
         } catch (error) {
           console.error('Error during automatic cleanup:', error);

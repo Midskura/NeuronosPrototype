@@ -1,4 +1,5 @@
-import type { Transaction as DBTransaction, Account, Currency } from "../../types/accounting";
+import type { Transaction as DBTransaction, Currency } from "../../types/accounting";
+import type { Account } from "../../types/accounting-core";
 
 export type ReviewStatus = 'for_review' | 'categorized' | 'excluded';
 
@@ -7,6 +8,7 @@ export interface UI_Transaction extends DBTransaction {
   payee?: string;
   review_status: ReviewStatus;
   type: 'expense' | 'deposit' | 'check' | 'transfer';
+  source_document_id?: string;
 }
 
 export interface BankAccountSummary extends Account {

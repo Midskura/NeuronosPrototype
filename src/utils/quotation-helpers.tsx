@@ -10,6 +10,7 @@
 import { Briefcase, Ship, Shield, Truck, FileText } from "lucide-react";
 import type { QuotationStatus } from "../types/pricing";
 import { getDisplayStatus, type DisplayStatus } from "./statusMapping";
+import { normalizeQuotationStatus } from "./quotationStatus";
 
 // ============================================
 // SERVICE ICONS
@@ -53,7 +54,9 @@ export function getServiceIcon(service: string, opts?: ServiceIconOptions) {
  * Used for status badges, dots, and text in list/detail views.
  */
 export function getQuotationStatusColor(status: QuotationStatus | string): string {
-  switch (status) {
+  const normalizedStatus = normalizeQuotationStatus(status);
+
+  switch (normalizedStatus) {
     case "Draft":
       return "#6B7280";
     case "Pending Pricing":
@@ -83,7 +86,9 @@ export function getQuotationStatusColor(status: QuotationStatus | string): strin
  * Used for pill-style badges.
  */
 export function getQuotationStatusBgColor(status: QuotationStatus | string): string {
-  switch (status) {
+  const normalizedStatus = normalizeQuotationStatus(status);
+
+  switch (normalizedStatus) {
     case "Draft":
       return "#F3F4F6";
     case "Pending Pricing":

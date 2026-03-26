@@ -2,10 +2,13 @@ import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { Loader2, ZoomIn, ZoomOut, Maximize, ChevronDown, User, Layout, Check, FileText, Calendar, Box, Truck, CreditCard, ArrowLeft, Download, Printer, RefreshCw, Coins } from "lucide-react";
 import { toast } from "../../ui/toast-utils";
 import type { FinancialContainer } from "../../../types/financials";
-import { Invoice, BillingLineItem, Billing, Account } from "../../../types/accounting";
+import type { Project } from "../../../types/pricing";
+import { Invoice, Billing, Account } from "../../../types/accounting";
+import type { BillingLineItem } from "../../../types/operations";
 import { getAccounts } from "../../../utils/accounting-api";
 import { supabase } from "../../../utils/supabase/client";
 import { InvoiceDocument, InvoicePrintOptions } from "./InvoiceDocument";
+import { downloadInvoicePDF } from "./InvoicePDFRenderer";
 import { SignatoryControl } from "../quotation/screen/controls/SignatoryControl";
 import { DisplayOptionsControl } from "../quotation/screen/controls/DisplayOptionsControl";
 import { CustomDropdown } from "../../bd/CustomDropdown";
@@ -78,6 +81,9 @@ export function InvoiceBuilder({
     printWindow.close();
   }, [viewInvoice]);
 
+  // PDF download handler using @react-pdf/renderer
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
   // -- Create Mode State --
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [invoiceDate, setInvoiceDate] = useState(new Date().toISOString().split('T')[0]);
@@ -139,6 +145,7 @@ export function InvoiceBuilder({
   const [displayOptions, setDisplayOptions] = useState({
       show_bank_details: true,
       show_notes: true,
+      show_letterhead: true,
       show_tax_summary: true
   });
 
@@ -148,7 +155,7 @@ export function InvoiceBuilder({
   useEffect(() => {
     if (mode === 'view' && viewInvoice) {
         // Load notes
-        setNotes(viewInvoice.notes || "");
+        setNotes((viewInvoice.notes as string) || "");
         
         // Load metadata (signatories, display options) if available
         const metadata = (viewInvoice as any).metadata || {};
@@ -156,7 +163,7 @@ export function InvoiceBuilder({
         else {
              // Fallback default for View
              setSignatories({
-                prepared_by: { name: viewInvoice.created_by_name || "System User", title: "Authorized User" },
+                prepared_by: { name: (viewInvoice.created_by_name as string) || "System User", title: "Authorized User" },
                 approved_by: { name: "MANAGEMENT", title: "Authorized Signatory" }
              });
         }
@@ -177,7 +184,7 @@ export function InvoiceBuilder({
                   return (t === 'income' || t === 'revenue') && !a.is_folder;
                 });
                 console.log(`[InvoiceBuilder] Loaded ${accs.length} accounts, ${incomeAccounts.length} income accounts`, incomeAccounts.map(a => ({ id: a.id, name: a.name, type: a.type })));
-                setAccounts(incomeAccounts);
+                setAccounts(incomeAccounts as unknown as Account[]);
                 
                 // Auto-select first revenue account only if nothing is currently selected
                 if (!revenueAccountId && incomeAccounts.length > 0) {
@@ -239,7 +246,7 @@ export function InvoiceBuilder({
     };
 
     const observer = new ResizeObserver(calculateScale);
-    observer.observe(containerRef.current);
+    observer.observe(containerRef.current!);
     calculateScale();
 
     return () => observer.disconnect();
@@ -326,7 +333,7 @@ export function InvoiceBuilder({
     let subtotal = 0;
     let taxAmount = 0;
 
-    const finalLineItems: BillingLineItem[] = selectedItems.map(item => {
+    const finalLineItems: BillingLineItem[] = (selectedItems.map((item: any) => {
         const override = itemOverrides[item.id] || { remarks: "", tax_type: "NON-VAT" };
         
         // Multi-Currency Calculation
@@ -360,7 +367,7 @@ export function InvoiceBuilder({
             original_currency: item.currency,
             exchange_rate: itemRateUsed
         };
-    });
+    })) as unknown as BillingLineItem[];
 
     const grandTotal = subtotal + taxAmount;
 
@@ -406,6 +413,18 @@ export function InvoiceBuilder({
       display: displayOptions,
       custom_notes: notes
   }), [signatories, displayOptions, notes]);
+
+  const handleDownloadPDF = useCallback(async () => {
+    setIsGeneratingPDF(true);
+    try {
+      await downloadInvoicePDF(viewInvoice as any, printOptions);
+    } catch (err) {
+      console.error("PDF generation failed:", err);
+      toast.error("PDF generation failed. Try the print option instead.");
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  }, [viewInvoice, printOptions]);
 
   // -- Actions --
 
@@ -755,9 +774,9 @@ export function InvoiceBuilder({
                               boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0,0,0,0.02)'
                            }}
                        >
-                          <InvoiceDocument 
+                          <InvoiceDocument
                               ref={componentRef}
-                              project={project}
+                              project={project as unknown as Project}
                               invoice={draftInvoice}
                               mode="preview"
                               options={printOptions}
@@ -1233,15 +1252,15 @@ export function InvoiceBuilder({
                       <div className="flex flex-col gap-1 mb-2">
                           <div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500">Subtotal</span>
-                              <span className="text-sm font-medium text-gray-700">{formatCurrency(draftInvoice.subtotal, currency)}</span>
+                              <span className="text-sm font-medium text-gray-700">{formatCurrency(Number(draftInvoice.subtotal), currency)}</span>
                           </div>
                           <div className="flex items-center justify-between">
                               <span className="text-xs text-gray-500">Tax</span>
-                              <span className="text-sm font-medium text-gray-700">{formatCurrency(draftInvoice.tax_amount || 0, currency)}</span>
+                              <span className="text-sm font-medium text-gray-700">{formatCurrency(Number(draftInvoice.tax_amount) || 0, currency)}</span>
                           </div>
                           <div className="flex items-center justify-between pt-2 border-t mt-1">
                               <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total</span>
-                              <span className="text-xl font-bold text-[#12332B]">{formatCurrency(draftInvoice.total_amount, currency)}</span>
+                              <span className="text-xl font-bold text-[#12332B]">{formatCurrency(Number(draftInvoice.total_amount), currency)}</span>
                           </div>
                       </div>
                       
@@ -1261,12 +1280,17 @@ export function InvoiceBuilder({
               ) : (
                   <>
                       {/* View Mode: Download Button */}
-                      <button 
-                          onClick={() => handlePrint()}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm group"
+                      <button
+                          onClick={handleDownloadPDF}
+                          disabled={isGeneratingPDF}
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm group disabled:opacity-60 disabled:cursor-not-allowed"
                       >
-                          <Download size={18} className="group-hover:-translate-y-0.5 transition-transform duration-300" />
-                          <span>Download PDF</span>
+                          {isGeneratingPDF ? (
+                            <Loader2 size={18} className="animate-spin" />
+                          ) : (
+                            <Download size={18} className="group-hover:-translate-y-0.5 transition-transform duration-300" />
+                          )}
+                          <span>{isGeneratingPDF ? "Generating..." : "Download PDF"}</span>
                       </button>
                   </>
               )}

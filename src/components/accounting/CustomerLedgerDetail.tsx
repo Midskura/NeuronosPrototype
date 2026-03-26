@@ -705,7 +705,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
                 createdBy: exp.created_by || "System",
                 createdAt: exp.created_at,
                 lineItems: []
-              } as OperationsExpense))}
+              })) as Record<string, unknown>[]}
               isLoading={isLoading}
               showHeader={false}
               context="customer"

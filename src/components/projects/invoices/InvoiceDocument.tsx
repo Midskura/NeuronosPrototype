@@ -1,6 +1,7 @@
 import React from "react";
 import type { Project } from "../../../types/pricing";
-import { Invoice, BillingLineItem } from "../../../types/accounting";
+import type { Invoice } from "../../../types/accounting";
+import type { BillingLineItem } from "../../../types/operations";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
 
 export interface InvoicePrintOptions {
@@ -12,6 +13,7 @@ export interface InvoicePrintOptions {
     show_bank_details: boolean;
     show_notes: boolean;
     show_tax_summary: boolean;
+    show_letterhead?: boolean;
   };
   custom_notes?: string;
 }
@@ -69,7 +71,7 @@ export const InvoiceDocument = React.forwardRef<HTMLDivElement, InvoiceDocumentP
     };
 
     // Format Date Helper
-    const fmtDate = (dateStr: string) => {
+    const fmtDate = (dateStr: string | undefined) => {
         if (!dateStr) return "-";
         return new Date(dateStr).toLocaleDateString('en-US', {
             month: '2-digit',
@@ -450,7 +452,7 @@ export const InvoiceDocument = React.forwardRef<HTMLDivElement, InvoiceDocumentP
                     </div>
                     <div className="p-h-item">
                         <span className="p-h-label">DATE ISSUED</span>
-                        <span className="p-h-val">{fmtDate(invoice.invoice_date)}</span>
+                        <span className="p-h-val">{fmtDate(invoice.invoice_date as string | undefined)}</span>
                     </div>
                     <div className="p-h-item">
                         <span className="p-h-label">CREDIT TERMS</span>
@@ -458,7 +460,7 @@ export const InvoiceDocument = React.forwardRef<HTMLDivElement, InvoiceDocumentP
                     </div>
                     <div className="p-h-item">
                         <span className="p-h-label">VALID UNTIL</span>
-                        <span className="p-h-val">{fmtDate(invoice.due_date)}</span>
+                        <span className="p-h-val">{fmtDate(invoice.due_date as string | undefined)}</span>
                     </div>
                 </div>
             </div>
@@ -590,21 +592,21 @@ export const InvoiceDocument = React.forwardRef<HTMLDivElement, InvoiceDocumentP
             <div className="p-totals-col">
                 <div className="p-total-row">
                     <span className="p-total-label">SUBTOTAL</span>
-                    <span className="p-total-val">{fmtMoney(invoice.subtotal, invoice.currency)}</span>
+                    <span className="p-total-val">{fmtMoney(invoice.subtotal as number | undefined, invoice.currency as string | undefined)}</span>
                 </div>
                 {showTax && (
                     <div className="p-total-row">
                         <span className="p-total-label">TAX</span>
-                        <span className="p-total-val">{fmtMoney(invoice.tax_amount, invoice.currency)}</span>
+                        <span className="p-total-val">{fmtMoney(invoice.tax_amount as number | undefined, invoice.currency as string | undefined)}</span>
                     </div>
                 )}
                 <div className="p-total-row">
                     <span className="p-total-label">TOTAL</span>
-                    <span className="p-total-val">{fmtMoney(invoice.total_amount, invoice.currency)}</span>
+                    <span className="p-total-val">{fmtMoney(invoice.total_amount as number | undefined, invoice.currency as string | undefined)}</span>
                 </div>
                 <div className="p-grand-total">
                     <span className="p-gt-label">BALANCE DUE</span>
-                    <span className="p-gt-val">{fmtMoney(invoice.total_amount, invoice.currency)}</span>
+                    <span className="p-gt-val">{fmtMoney(invoice.total_amount as number | undefined, invoice.currency as string | undefined)}</span>
                 </div>
             </div>
         </div>

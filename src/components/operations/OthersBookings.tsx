@@ -13,6 +13,7 @@ import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
 interface OthersBooking {
   bookingId: string;
   customerName: string;
+  movement?: string;
   status: string;
   serviceDescription?: string;
   projectNumber?: string;
@@ -181,11 +182,11 @@ export function OthersBookings({ currentUser, pendingBookingId, initialTab, high
 
   if (selectedBooking) {
     return (
-      <OthersBookingDetails 
-        booking={selectedBooking} 
-        onBack={() => { 
+      <OthersBookingDetails
+        booking={selectedBooking as any}
+        onBack={() => {
           setSelectedBooking(null);
-        }} 
+        }}
         onUpdate={fetchBookings}
         initialTab={initialTab}
         highlightId={highlightId}
@@ -567,7 +568,7 @@ export function OthersBookings({ currentUser, pendingBookingId, initialTab, high
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           onBookingCreated={handleBookingCreated}
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       )}
     </>

@@ -321,7 +321,7 @@ export function autofillExpensesFromProject(project: Project): ExpenseChargeCate
       return {
         categoryName: category.category_name || category.name,
         lineItems: expenseItems,
-        subtotal: expenseItems.reduce((sum, item) => sum + item.amount, 0),
+        subtotal: expenseItems.reduce((sum: number, item: any) => sum + item.amount, 0),
       };
     })
     .filter((cat) => cat !== null) as ExpenseChargeCategory[];

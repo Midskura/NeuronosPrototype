@@ -15,6 +15,7 @@ export interface AccountingEntry {
   date: string;
   note?: string;
   status: "Pending" | "Approved" | "Rejected";
+  enteredBy?: string;
 }
 
 interface TableAccountingEntriesProps {

@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { Search, X, Plus, Filter, Download, Loader2, Pencil, Check } from "lucide-react";
 import { CustomDropdown } from "../../bd/CustomDropdown";
 import { CustomDatePicker } from "../../common/CustomDatePicker";
@@ -17,13 +17,13 @@ export interface BillingItem {
   description: string;
   amount: number;
   currency: string;
-  status: 'unbilled' | 'billed' | 'paid' | 'voided';
+  status: 'unbilled' | 'invoiced' | 'paid' | 'voided';
   quotation_category?: string;
-  booking_id?: string;
+  booking_id?: string | null;
   // Linking fields
   source_id?: string;
   source_quotation_item_id?: string; // Matching backend field for imported items
-  source_type?: 'quotation_item' | 'billable_expense' | 'manual';
+  source_type?: 'quotation_item' | 'billable_expense' | 'manual' | 'contract_rate' | 'rate_card';
   is_virtual?: boolean;
   catalog_item_id?: string; // Catalog linkage (Item Master reference)
   [key: string]: any;
@@ -49,6 +49,8 @@ interface UnifiedBillingsTabProps {
   linkedBookings?: any[];
   /** Deep-link: highlight a specific billing item */
   highlightId?: string | null;
+  /** Amber badge count: unconverted billable expenses pending conversion */
+  pendingBillableCount?: number;
 }
 
 const formatCurrency = (amount: number, currency: string = "PHP") => {
@@ -60,14 +62,16 @@ const formatCurrency = (amount: number, currency: string = "PHP") => {
 };
 
 const EMPTY_LINKED_BOOKINGS: any[] = [];
-const IMMUTABLE_BILLING_STATUSES = new Set(["billed", "paid", "invoiced", "voided", "cancelled", "void"]);
-const VOIDED_BILLING_STATUSES = new Set(["voided", "cancelled", "void"]);
+// Canonical billing item statuses: unbilled → invoiced → paid → voided
+// Items with any of these statuses are immutable (locked from editing/deletion).
+const IMMUTABLE_BILLING_STATUSES = new Set(["invoiced", "paid", "voided"]);
+const VOIDED_BILLING_STATUSES = new Set(["voided"]);
 
-export function UnifiedBillingsTab({ 
-  items, 
+export function UnifiedBillingsTab({
+  items,
   quotation,
-  projectId, 
-  bookingId, 
+  projectId,
+  bookingId,
   onRefresh,
   isLoading = false,
   readOnly = false,
@@ -76,7 +80,8 @@ export function UnifiedBillingsTab({
   extraActions,
   enableGroupByToggle = false,
   linkedBookings,
-  highlightId
+  highlightId,
+  pendingBillableCount,
 }: UnifiedBillingsTabProps) {
   // Stable reference for empty array to prevent infinite re-render loops
   const stableLinkedBookings = linkedBookings && linkedBookings.length > 0 ? linkedBookings : EMPTY_LINKED_BOOKINGS;
@@ -496,6 +501,18 @@ export function UnifiedBillingsTab({
             status: item.status || "unbilled",
             is_taxed: item.is_taxed || false,
             catalog_item_id: item.catalog_item_id || null,
+            // Snapshot: preserve catalog metadata at creation time so renames
+            // don't alter historical billing line descriptions.
+            catalog_snapshot: item.catalog_item_id
+              ? {
+                  name: item.description || "",
+                  unit_type: item.unit_type || null,
+                  tax_code: item.tax_code || null,
+                  category_name: item.quotation_category || null,
+                  default_price: item.amount || 0,
+                  currency: item.currency || "PHP",
+                }
+              : (item.catalog_snapshot || {}),
             created_at: item.created_at || new Date().toISOString(),
           });
 
@@ -506,16 +523,16 @@ export function UnifiedBillingsTab({
 
           if (realItems.length > 0) {
             ops.push(
-              supabase.from('billing_line_items').upsert(
+              (supabase.from('billing_line_items').upsert(
                 realItems.map(i => ({ id: i.id, ...mapRow(i) }))
-              )
+              ).select() as unknown) as Promise<any>
             );
           }
           if (newItems.length > 0) {
             ops.push(
-              supabase.from('billing_line_items').insert(
+              (supabase.from('billing_line_items').insert(
                 newItems.map(i => mapRow(i))
-              )
+              ).select() as unknown) as Promise<any>
             );
           }
 
@@ -543,13 +560,49 @@ export function UnifiedBillingsTab({
       }
   };
 
+  const handleVoidItem = async (itemId: string) => {
+    const item = localItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    // Virtual / unsaved items have no DB record — just remove locally
+    if (item.is_virtual || item.id.startsWith("virtual-") || item.id.startsWith("temp-")) {
+      if (confirm("Remove this unsaved item?")) {
+        setLocalItems(prev => prev.filter(i => i.id !== itemId));
+      }
+      return;
+    }
+
+    if (!confirm("Void this billing item? The record will be preserved with status 'voided'.")) return;
+
+    const { error } = await supabase
+      .from("billing_line_items")
+      .update({ status: "voided" })
+      .eq("id", itemId);
+
+    if (error) {
+      toast.error("Failed to void billing item");
+      return;
+    }
+    toast.success("Billing item voided");
+    onRefresh();
+  };
+
   return (
     <div className="flex flex-col bg-white">
       {/* Header Section */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+          <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight flex items-center gap-2">
             {title || "Project Billings"}
+            {pendingBillableCount != null && pendingBillableCount > 0 && (
+              <span
+                className="text-[12px] font-semibold px-2 py-0.5 rounded-full"
+                style={{ backgroundColor: "#FFFBEB", color: "#D97706", border: "1px solid #FDE68A" }}
+                title={`${pendingBillableCount} billable expense${pendingBillableCount !== 1 ? "s" : ""} not yet converted to billing items`}
+              >
+                {pendingBillableCount} pending
+              </span>
+            )}
           </h1>
           <p className="text-[14px] text-[#667085]">
             {subtitle || "Manage, track, and bill charges across all linked bookings."}
@@ -660,7 +713,7 @@ export function UnifiedBillingsTab({
                 <CategoryPresetDropdown
                     isOpen={showAddCategoryDropdown}
                     onClose={() => setShowAddCategoryDropdown(false)}
-                    buttonRef={addCategoryBtnRef}
+                    buttonRef={addCategoryBtnRef as React.RefObject<HTMLButtonElement>}
                     onSelect={(cat) => {
                         handleAddCategory(cat);
                         setShowAddCategoryDropdown(false);
@@ -706,6 +759,7 @@ export function UnifiedBillingsTab({
         groupBy={groupBy}
         linkedBookings={stableLinkedBookings}
         highlightId={highlightId}
+        onVoidItem={!readOnly ? handleVoidItem : undefined}
       />
     </div>
   );

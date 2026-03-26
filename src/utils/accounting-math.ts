@@ -53,7 +53,7 @@ export function calculateInvoiceBalance(
   // Logic for Overdue
   const isOverdue = (() => {
     if (balance <= 0) return false;
-    const dueDate = new Date(invoice.due_date || invoice.created_at);
+    const dueDate = new Date((invoice.due_date || invoice.created_at) as string);
     if (!invoice.due_date) dueDate.setDate(dueDate.getDate() + 30);
     // Set to end of day for fair comparison
     dueDate.setHours(23, 59, 59, 999);

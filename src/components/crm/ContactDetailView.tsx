@@ -536,9 +536,9 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                   {isEditing ? (
                     <input
                       type="text"
-                      value={formData.name.split(" ")[0] || ""}
+                      value={(formData.name ?? "").split(" ")[0] || ""}
                       onChange={(e) => {
-                        const lastName = formData.name.split(" ").slice(1).join(" ");
+                        const lastName = (formData.name ?? "").split(" ").slice(1).join(" ");
                         setFormData({ ...formData, name: `${e.target.value} ${lastName}`.trim() });
                       }}
                       style={{
@@ -552,15 +552,15 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                     />
                   ) : (
                     <p style={{ fontSize: "14px", color: "var(--neuron-ink-primary)", margin: 0 }}>
-                      {contact.name.split(" ")[0] || "—"}
+                      {(contact.name ?? "").split(" ")[0] || "—"}
                     </p>
                   )}
                 </div>
 
                 <div style={{ marginBottom: "20px" }}>
-                  <label style={{ 
-                    fontSize: "12px", 
-                    color: "var(--neuron-ink-muted)", 
+                  <label style={{
+                    fontSize: "12px",
+                    color: "var(--neuron-ink-muted)",
                     textTransform: "uppercase",
                     letterSpacing: "0.5px",
                     display: "block",
@@ -571,9 +571,9 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                   {isEditing ? (
                     <input
                       type="text"
-                      value={formData.name.split(" ").slice(1).join(" ") || ""}
+                      value={(formData.name ?? "").split(" ").slice(1).join(" ") || ""}
                       onChange={(e) => {
-                        const firstName = formData.name.split(" ")[0];
+                        const firstName = (formData.name ?? "").split(" ")[0];
                         setFormData({ ...formData, name: `${firstName} ${e.target.value}`.trim() });
                       }}
                       style={{
@@ -587,7 +587,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                     />
                   ) : (
                     <p style={{ fontSize: "14px", color: "var(--neuron-ink-primary)", margin: 0 }}>
-                      {contact.name.split(" ").slice(1).join(" ") || "—"}
+                      {(contact.name ?? "").split(" ").slice(1).join(" ") || "—"}
                     </p>
                   )}
                 </div>

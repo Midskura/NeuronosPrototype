@@ -23,7 +23,11 @@ interface BackendContact {
   notes: string | null;
   created_by: string | null;
   created_at: string;
+  created_date?: string;
   updated_at: string;
+  status?: string;
+  company?: string;
+  last_activity?: string;
   customers?: { name: string } | null;
 }
 
@@ -174,7 +178,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   // Filter contacts - now using backend contacts
   const filteredContacts = contacts.filter(contact => {
     // Search is already handled by backend
-    const lifecycle = mapStatusToLifecycle(contact.status);
+    const lifecycle = mapStatusToLifecycle(contact.status || "");
     const matchesLifecycle = lifecycleFilter === "All" || lifecycle === lifecycleFilter;
     
     return matchesLifecycle;
@@ -214,7 +218,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   
   // New Contacts Added this month
   const newContactsAdded = contacts.filter(contact => {
-    const createdDate = new Date(contact.created_date);
+    const createdDate = new Date(contact.created_date || "");
     return createdDate.getMonth() === currentMonth && createdDate.getFullYear() === currentYear;
   }).length;
   const newContactsQuota = 25;
@@ -456,7 +460,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                 </tr>
               ) : (
                 filteredContacts.map((contact) => {
-                  const lifecycle = mapStatusToLifecycle(contact.status);
+                  const lifecycle = mapStatusToLifecycle(contact.status || "");
                   return (
                     <tr 
                       key={contact.id} 
@@ -484,7 +488,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                         </div>
                       </td>
                       <td className="px-4 py-3 text-[13px]" style={{ color: "var(--neuron-ink-primary)" }}>
-                        {formatPhoneNumber(contact.phone)}
+                        {formatPhoneNumber(contact.phone || "")}
                       </td>
                       <td className="px-4 py-3 text-[13px]" style={{ color: "var(--neuron-ink-primary)" }}>
                         {contact.email}

@@ -30,6 +30,8 @@
     "@radix-ui/react-toggle-group": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@radix-ui/react-visually-hidden": "^1.1.1",
+    "@react-pdf/renderer": "^4.3.2",
+    "@sentry/react": "^10.45.0",
     "@supabase/supabase-js": "^2",
     "class-variance-authority": "^0.7.1",
     "clsx": "*",
@@ -53,12 +55,21 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.2.1",
     "@types/node": "^20.10.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "^3.10.2",
-    "vite": "6.3.5"
+    "@vitest/ui": "^4.1.1",
+    "typescript": "^6.0.2",
+    "vite": "6.3.5",
+    "vitest": "^4.1.1"
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   }
 }

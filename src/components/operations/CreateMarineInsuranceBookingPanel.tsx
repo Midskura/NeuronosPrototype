@@ -12,7 +12,13 @@ import { useCustomerOptions } from "./shared/useCustomerOptions";
 interface CreateMarineInsuranceBookingPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (bookingData?: any) => void; // Updated to accept optional booking data
+  onSuccess?: (bookingData?: any) => void;
+  onBookingCreated?: (bookingData?: any) => void;
+  prefillData?: any;
+  source?: string;
+  customerId?: string;
+  serviceType?: string;
+  currentUser?: any;
 }
 
 export function CreateMarineInsuranceBookingPanel({
@@ -65,6 +71,14 @@ export function CreateMarineInsuranceBookingPanel({
       toast.error("Customer Name is required");
       return;
     }
+    if (!formData.commodityDescription) {
+      toast.error("Commodity description is required");
+      return;
+    }
+    if (!formData.sumInsured) {
+      toast.error("Sum insured is required");
+      return;
+    }
     
     setLoading(true);
 
@@ -78,7 +92,7 @@ export function CreateMarineInsuranceBookingPanel({
       if (error) throw new Error(error.message);
 
       toast.success("Marine insurance booking created successfully");
-      onSuccess(data);
+      onSuccess?.(data);
       onClose();
     } catch (error) {
       console.error("Error creating marine insurance booking:", error);
@@ -90,7 +104,9 @@ export function CreateMarineInsuranceBookingPanel({
 
   if (!isOpen) return null;
 
-  const isFormValid = formData.customerName.trim() !== "";
+  const isFormValid = formData.customerName.trim() !== "" &&
+    formData.commodityDescription.trim() !== "" &&
+    formData.sumInsured.trim() !== "";
 
   return (
     <BookingCreationPanel

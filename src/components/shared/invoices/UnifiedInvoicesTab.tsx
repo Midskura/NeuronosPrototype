@@ -189,7 +189,7 @@ export function UnifiedInvoicesTab({
       width: "140px",
       cell: (item) => (
         <span className="text-[12px] text-[#0A1D4D] font-medium">
-          {formatDate(item.invoice_date || item.created_at)}
+          {formatDate(item.invoice_date || item.created_at || "")}
         </span>
       )
     },
@@ -231,7 +231,7 @@ export function UnifiedInvoicesTab({
       header: "Due Date",
       width: "120px",
       cell: (item) => {
-        const dueDate = new Date(item.due_date || item.created_at);
+        const dueDate = new Date(item.due_date || item.created_at || "");
         if (!item.due_date) dueDate.setDate(dueDate.getDate() + 30);
         return (
           <span className="text-[12px] text-[#667085]">
@@ -266,7 +266,7 @@ export function UnifiedInvoicesTab({
       align: "right",
       cell: (item) => (
         <span className="text-[12px] font-bold text-[#12332B]">
-          {formatCurrency(item.total_amount || item.amount, item.currency)}
+          {formatCurrency(item.total_amount ?? item.amount ?? 0, item.currency)}
         </span>
       )
     },
@@ -447,7 +447,7 @@ export function UnifiedInvoicesTab({
                  <InvoiceBuilder 
                     mode={interfaceMode === 'create' ? 'create' : 'view'}
                     project={project}
-                    billingItems={billingItems} 
+                    billingItems={billingItems as any[]}
                     linkedBookings={resolvedLinkedBookings}
                     invoice={selectedInvoice || undefined}
                     onSuccess={handleCreateSuccess}

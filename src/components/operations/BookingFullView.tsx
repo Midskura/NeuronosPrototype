@@ -36,27 +36,27 @@ export function BookingFullView({ booking, onBack }: BookingFullViewProps) {
     // Check for explicit service type or infer from ID prefix/structure
     const serviceType = booking.serviceType || booking.type || "Forwarding";
     
+    const noop = () => {};
     switch (serviceType) {
       case "Forwarding":
       case "Freight Forwarding":
-        return <ForwardingBookingDetails booking={booking} />;
-        
+        return <ForwardingBookingDetails booking={booking} onBack={onBack} onBookingUpdated={noop} />;
+
       case "Trucking":
-        return <TruckingBookingDetails booking={booking} />;
-        
+        return <TruckingBookingDetails booking={booking} onBack={onBack} onUpdate={noop} />;
+
       case "Brokerage":
       case "Customs Brokerage":
-        return <BrokerageBookingDetails booking={booking} />;
-        
+        return <BrokerageBookingDetails booking={booking} onBack={onBack} onUpdate={noop} />;
+
       case "Marine Insurance":
-        return <MarineInsuranceBookingDetails booking={booking} />;
-        
+        return <MarineInsuranceBookingDetails booking={booking} onBack={onBack} onUpdate={noop} />;
+
       case "Others":
-        return <OthersBookingDetails booking={booking} />;
-        
+        return <OthersBookingDetails booking={booking} onBack={onBack} onUpdate={noop} />;
+
       default:
-        // Default to Forwarding or a generic view if type is unknown
-        return <ForwardingBookingDetails booking={booking} />;
+        return <ForwardingBookingDetails booking={booking} onBack={onBack} onBookingUpdated={noop} />;
     }
   };
 

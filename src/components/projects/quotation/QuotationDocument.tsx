@@ -20,7 +20,7 @@ export const QuotationDocument = React.forwardRef<HTMLDivElement, QuotationDocum
     const preparedByTitle = options?.signatories.prepared_by.title || quote?.prepared_by_title || "Sales Representative";
     
     const approvedBy = options?.signatories.approved_by.name || quote?.approved_by || "Management";
-    const approvedByTitle = options?.signatories.approved_by.title || quote?.approved_by_title || "Authorized Signatory";
+    const approvedByTitle = options?.signatories.approved_by.title || quote?.prepared_by_title || "Authorized Signatory";
     
     // Determine display toggles (default to true if options not provided)
     const showBankDetails = options ? options.display.show_bank_details : true;
@@ -52,7 +52,7 @@ export const QuotationDocument = React.forwardRef<HTMLDivElement, QuotationDocum
     
     // Helper to calculate totals if not present
     const categories = project.charge_categories || quote?.charge_categories || [];
-    let summary = project.financial_summary || quote?.financial_summary || {
+    let summary = (project as any).financial_summary || quote?.financial_summary || {
         subtotal_non_taxed: 0,
         subtotal_taxed: 0,
         tax_rate: 0.12,

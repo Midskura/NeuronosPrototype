@@ -55,7 +55,7 @@ export async function fetchActiveContractsForCustomer(
       services: q.services || [],
       validFrom: q.valid_from,
       validTo: q.valid_to,
-    })) as ContractSummary[];
+    })) as unknown as ContractSummary[];
   } catch (err) {
     console.error("[contractLookup] Error fetching active contracts:", err);
     return [];

@@ -1,5 +1,6 @@
 export interface Contact {
   id: string;
+  name?: string; // computed full name used in some views
   first_name: string | null;
   last_name: string | null;
   title?: string | null;       // Job title (backend field name)

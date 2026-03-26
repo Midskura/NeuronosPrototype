@@ -24,6 +24,7 @@
   /* UI Colors */
   --neuron-ui-border: #E5ECE9;
   --neuron-ui-divider: #EEF3F1;
+  --neuron-ui-active-border: #5FC4A1;
   
   /* States */
   --neuron-state-hover: #F1F6F4;
@@ -51,9 +52,9 @@
   --card-foreground: #1F2937;
   --popover: #FFFFFF;
   --popover-foreground: #1F2937;
-  --primary: #0A1D4D;
+  --primary: #237F66;
   --primary-foreground: #ffffff;
-  --secondary: #0A1D4D;
+  --secondary: #2E5147;
   --secondary-foreground: #ffffff;
   --muted: #F9FAFB;
   --muted-foreground: #6B7280;
@@ -68,24 +69,24 @@
   --font-weight-semibold: 600;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #0F766E;
-  --chart-1: #F25C05;
-  --chart-2: #0A1D4D;
-  --chart-3: #6B7280;
-  --chart-4: #3b82f6;
-  --chart-5: #8b5cf6;
+  --ring: #237F66;
+  --chart-1: #237F66;
+  --chart-2: #B06A4F;
+  --chart-3: #6B7A76;
+  --chart-4: #2E5147;
+  --chart-5: #C88A2B;
   --radius: 0.5rem;
   --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
-  --sidebar: #0A1D4D;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #F25C05;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #12332B;
+  --sidebar-primary: #237F66;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(242, 92, 5, 0.1);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #F25C05;
+  --sidebar-accent: rgba(35, 127, 102, 0.1);
+  --sidebar-accent-foreground: #12332B;
+  --sidebar-border: #E5ECE9;
+  --sidebar-ring: #237F66;
   
   /* Semantic text colors for accounting */
   --text-revenue: #16a34a;
@@ -178,11 +179,11 @@
     @apply border-border;
   }
   
-  /* Custom focus outline - faint green for Neuron brand */
+  /* Calmer default focus outline - still visible, less visually aggressive */
   *:focus,
   *:focus-visible {
-    outline: 2px solid rgba(15, 118, 110, 0.3);
-    outline-offset: 2px;
+    outline: 1px solid var(--neuron-ui-active-border);
+    outline-offset: 1px;
   }
   
   /* Remove outline for mouse users, keep for keyboard users (accessibility) */
@@ -190,16 +191,51 @@
     outline: none;
   }
 
-  /* Form inputs always show subtle green focus outline (overrides Tailwind focus:ring/outline) */
+  /* Inputs keep focus by border shift rather than heavy outer rings */
   input:focus,
   input:focus-visible,
   textarea:focus,
   textarea:focus-visible,
   select:focus,
   select:focus-visible {
-    outline: 2px solid rgba(15, 118, 110, 0.3) !important;
-    outline-offset: -1px;
+    outline: 1px solid var(--neuron-ui-active-border) !important;
+    outline-offset: 0;
     box-shadow: none !important;
+  }
+
+  /* Compose panel fields — no focus ring, clean composer aesthetic */
+  .compose-panel input:focus,
+  .compose-panel input:focus-visible,
+  .compose-panel textarea:focus,
+  .compose-panel textarea:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Ticketing UI uses border/tint focus states instead of outer rings */
+  .ticketing-ui *:focus,
+  .ticketing-ui *:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .ticketing-ui input:focus,
+  .ticketing-ui input:focus-visible,
+  .ticketing-ui textarea:focus,
+  .ticketing-ui textarea:focus-visible,
+  .ticketing-ui select:focus,
+  .ticketing-ui select:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: var(--neuron-ui-active-border) !important;
+  }
+
+  .ticketing-ui button:focus-visible,
+  .ticketing-ui [role="tab"]:focus-visible,
+  .ticketing-ui a:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: var(--neuron-ui-active-border) !important;
   }
 
   body {
@@ -396,12 +432,12 @@ body {
   max-height: 500px;
 }
 
-/* Badge/Pill styling with uppercase text - Small UI +0.2% tracking */
+/* Badge/Pill styling - calmer, sentence-case by default */
 .badge, [class*="badge"] {
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.002em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* Tabular numerals for numeric UI elements - Inter /tnum */
@@ -529,7 +565,7 @@ table th,
 [data-sonner-toast] [data-title] {
   font-size: 13px !important;
   font-weight: 600 !important;
-  color: #0A1D4D !important;
+  color: var(--neuron-ink-primary) !important;
   line-height: 1.4 !important;
   margin: 0 !important;
 }
@@ -545,7 +581,7 @@ table th,
 
 [data-sonner-toast] [data-button],
 [data-sonner-toast] [data-cancel-button] {
-  background: #F25C05 !important;
+  background: var(--neuron-brand-green) !important;
   color: #FFFFFF !important;
   border: none !important;
   border-radius: 8px !important;
@@ -558,7 +594,7 @@ table th,
 
 [data-sonner-toast] [data-button]:hover,
 [data-sonner-toast] [data-cancel-button]:hover {
-  background: #D84D00 !important;
+  background: var(--neuron-brand-green-600) !important;
 }
 
 [data-sonner-toast] [data-close-button] {
@@ -599,8 +635,8 @@ table th,
 /* Info toast icon color */
 [data-sonner-toast][data-type="info"] [data-icon],
 [data-sonner-toast][data-type="info"] [data-icon] > svg {
-  color: #0A1D4D !important;
-  stroke: #0A1D4D !important;
+  color: var(--neuron-brand-green) !important;
+  stroke: var(--neuron-brand-green) !important;
 }
 
 /* Warning toast icon color */

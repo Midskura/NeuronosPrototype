@@ -24,7 +24,7 @@ export interface VoidBookingChargesResult {
   evoucherBillingsVoided: number;
 }
 
-const BILLING_FINAL_STATUSES = new Set(["billed", "paid", "invoiced"]);
+const BILLING_FINAL_STATUSES = new Set(["invoiced", "paid"]);
 const EXPENSE_IGNORED_STATUSES = new Set(["cancelled", "rejected", "voided", "void"]);
 const hasBookingArrayMatch = (value: unknown, bookingId: string): boolean => (
   Array.isArray(value) &&

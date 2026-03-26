@@ -61,7 +61,7 @@ export function ContractsModule({ currentUser, onCreateTicket, initialContract, 
       .from('quotations')
       .select('*')
       .eq('quotation_type', 'contract')
-      .eq('status', 'Converted to Contract');
+      .in('status', ['Converted to Contract', 'Active Contract']);
 
     const allContracts = [...(data || [])];
     if (!convError && converted) {

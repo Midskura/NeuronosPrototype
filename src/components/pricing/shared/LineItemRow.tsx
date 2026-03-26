@@ -59,7 +59,7 @@ export function LineItemRow({
     onUpdate(categoryId, item.id, updatedItem);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<HTMLInputElement | null>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       nextRef?.current?.focus();

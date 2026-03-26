@@ -10,6 +10,7 @@ import {
   linkBookingToProject
 } from "../../utils/projectAutofill";
 import { toast } from "../ui/toast-utils";
+import { supabase } from "../../utils/supabase/client";
 
 interface CreateBookingFromProjectModalProps {
   isOpen: boolean;

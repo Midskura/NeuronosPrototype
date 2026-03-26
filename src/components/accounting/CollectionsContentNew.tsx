@@ -118,8 +118,8 @@ export function CollectionsContentNew() {
     }
 
     // Sort by collection date descending
-    filtered.sort((a, b) => 
-      new Date(b.collection_date).getTime() - new Date(a.collection_date).getTime()
+    filtered.sort((a, b) =>
+      new Date(b.collection_date || "").getTime() - new Date(a.collection_date || "").getTime()
     );
 
     return filtered;
@@ -178,115 +178,6 @@ export function CollectionsContentNew() {
         return <DollarSign {...iconProps} />;
     }
   };
-
-  // Define table columns
-  const columns: ColumnDef<Collection>[] = [
-    {
-      key: "reference",
-      label: "Reference #",
-      width: "140px",
-      sortable: true,
-      render: (collection) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          <span style={{ fontWeight: 600, fontSize: "14px" }}>
-            {collection.reference_number || collection.evoucher_number}
-          </span>
-          {collection.evoucher_id && (
-            <span
-              style={{
-                fontSize: "11px",
-                color: "#0F766E",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-              }}
-            >
-              <FileText size={10} />
-              E-Voucher
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "customer",
-      label: "Customer",
-      width: "200px",
-      sortable: true,
-      render: (collection) => (
-        <span style={{ fontWeight: 500 }}>{collection.customer_name || "N/A"}</span>
-      ),
-    },
-    {
-      key: "description",
-      label: "Description",
-      width: "1fr",
-      render: (collection) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-          <span>{collection.description}</span>
-          {collection.project_number && (
-            <span style={{ fontSize: "12px", color: "#0F766E", fontWeight: 500 }}>
-              {collection.project_number}
-            </span>
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "amount",
-      label: "Amount",
-      width: "140px",
-      align: "right",
-      sortable: true,
-      render: (collection) => (
-        <span style={{ fontWeight: 600, fontSize: "15px" }}>
-          {formatCurrency(collection.amount)}
-        </span>
-      ),
-    },
-    {
-      key: "collection_date",
-      label: "Date",
-      width: "110px",
-      sortable: true,
-      render: (collection) => (
-        <span style={{ fontSize: "13px" }}>{formatDate(collection.collection_date)}</span>
-      ),
-    },
-    {
-      key: "payment_method",
-      label: "Method",
-      width: "130px",
-      render: (collection) => {
-        const methodStyle = getPaymentMethodColor(collection.payment_method);
-        return (
-          <span
-            style={{
-              padding: "4px 10px",
-              borderRadius: "6px",
-              fontSize: "12px",
-              fontWeight: 500,
-              background: methodStyle.bg,
-              color: methodStyle.color,
-              display: "inline-block",
-            }}
-          >
-            {collection.payment_method}
-          </span>
-        );
-      },
-    },
-    {
-      key: "received_by",
-      label: "Received By",
-      width: "140px",
-      render: (collection) => (
-        <span style={{ fontSize: "13px", color: "#667085" }}>
-          {collection.received_by_name}
-        </span>
-      ),
-    },
-  ];
 
   return (
     <div
@@ -381,7 +272,7 @@ export function CollectionsContentNew() {
             onChange={(value) => setPaymentMethodFilter(value)}
             options={[
               { value: "all", label: "All Payment Methods" },
-              ...paymentMethods.map(method => ({ value: method, label: method }))
+              ...paymentMethods.map(method => ({ value: method || "", label: method || "" }))
             ]}
           />
 
@@ -507,7 +398,7 @@ export function CollectionsContentNew() {
                 >
                   {/* Icon Column */}
                   <div className="flex items-center justify-center">
-                    {getPaymentMethodIcon(collection.payment_method)}
+                    {getPaymentMethodIcon(collection.payment_method || "")}
                   </div>
 
                   {/* Description */}
@@ -529,11 +420,11 @@ export function CollectionsContentNew() {
 
                   {/* Payment Method Badge + Date */}
                   <div>
-                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getPaymentMethodColor(collection.payment_method)}`}>
+                    <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getPaymentMethodColor(collection.payment_method || "")}`}>
                       {collection.payment_method}
                     </span>
                     <div className="text-[10px] mt-1" style={{ color: "var(--neuron-ink-muted)" }}>
-                      {formatDate(collection.collection_date)}
+                      {formatDate(collection.collection_date || "")}
                     </div>
                   </div>
 
@@ -559,7 +450,7 @@ export function CollectionsContentNew() {
           context="collection"
           isOpen={showAddPanel}
           onClose={() => setShowAddPanel(false)}
-          onSave={async () => {
+          onSuccess={async () => {
             await fetchCollections();
             setShowAddPanel(false);
           }}

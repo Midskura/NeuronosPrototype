@@ -621,7 +621,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         </label>
                       </div>
                       <p className="text-[13px] pl-6" style={{ color: "var(--neuron-ink-primary)" }}>
-                        {getOwnerName(customer.owner_id)}
+                        {getOwnerName(customer.owner_id || "")}
                       </p>
                     </div>
                   )}
@@ -1027,7 +1027,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         const displayName = contact.name || `${contact.first_name || ''} ${contact.last_name || ''}`.trim();
                         const displayEmail = contact.email;
                         const displayPhone = contact.phone || contact.mobile_number;
-                        const displayStatus = contact.status || contact.lifecycle_stage;
+                        const displayStatus = (contact as any).status || contact.lifecycle_stage;
                         
                         return (
                         <div
@@ -1211,7 +1211,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                   { value: "Marketing Email", label: "Marketing Email", icon: <MessageSquare size={16} /> }
                                 ]}
                                 value={newActivity.type || "Call"}
-                                onChange={(value) => setNewActivity({ ...newActivity, type: value })}
+                                onChange={(value) => setNewActivity({ ...newActivity, type: value as any })}
                               />
                             </div>
 

@@ -174,7 +174,7 @@ export function CreateBookingFromContractPanel({
           source="pricing"
           customerId={contract.customer_id}
           serviceType="Brokerage"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -188,7 +188,7 @@ export function CreateBookingFromContractPanel({
           source="pricing"
           customerId={contract.customer_id}
           serviceType="Trucking"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -202,7 +202,7 @@ export function CreateBookingFromContractPanel({
           source="pricing"
           customerId={contract.customer_id}
           serviceType="Others"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -211,12 +211,12 @@ export function CreateBookingFromContractPanel({
         <CreateForwardingBookingPanel
           isOpen={isOpen}
           onClose={onClose}
-          onSuccess={handleSuccess}
+          onBookingCreated={handleSuccess}
           prefillData={prefillData}
           source="pricing"
           customerId={contract.customer_id}
           serviceType="Forwarding"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -230,7 +230,7 @@ export function CreateBookingFromContractPanel({
           source="pricing"
           customerId={contract.customer_id}
           serviceType="Marine Insurance"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 

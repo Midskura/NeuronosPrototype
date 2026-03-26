@@ -1,5 +1,5 @@
 import { ChevronRight, Package, Trash2, Plus, Wallet, Building2 } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import type { BuyingPriceCategory, QuotationLineItemNew } from "../../../types/pricing";
 import { CustomDropdown } from "../../bd/CustomDropdown";
 import { CategoryHeader } from "./CategoryHeader";
@@ -352,7 +352,8 @@ export function BuyingPriceSectionV2({
       {/* Preset Dropdown */}
       {showPresetDropdown && (
         <CategoryPresetDropdown
-          anchorRef={addCategoryButtonRef}
+          isOpen={showPresetDropdown}
+          anchorRef={addCategoryButtonRef as React.RefObject<HTMLButtonElement>}
           onSelect={(categoryName) => {
             onAddCategory(categoryName);
             setShowPresetDropdown(false);

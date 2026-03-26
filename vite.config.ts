@@ -1,10 +1,16 @@
-
+  /// <reference types="vitest/config" />
   import { defineConfig } from 'vite';
   import react from '@vitejs/plugin-react-swc';
+  import tailwindcss from '@tailwindcss/vite';
   import path from 'path';
 
   export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
+    test: {
+      globals: true,
+      environment: 'node',
+      include: ['src/**/*.test.ts'],
+    },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {

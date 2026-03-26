@@ -18,7 +18,13 @@ import { ConsigneePicker } from "../shared/ConsigneePicker";
 interface CreateTruckingBookingPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (bookingData?: any) => void; // Updated to accept optional booking data
+  onSuccess?: (bookingData?: any) => void;
+  onBookingCreated?: (bookingData?: any) => void;
+  prefillData?: any;
+  source?: string;
+  customerId?: string;
+  serviceType?: string;
+  currentUser?: any;
 }
 
 export function CreateTruckingBookingPanel({
@@ -104,6 +110,10 @@ export function CreateTruckingBookingPanel({
       toast.error("Customer Name is required");
       return;
     }
+    if (!formData.consignee) {
+      toast.error("Consignee is required");
+      return;
+    }
     
     setLoading(true);
 
@@ -120,7 +130,7 @@ export function CreateTruckingBookingPanel({
       if (error) throw new Error(error.message);
 
       toast.success("Trucking booking created successfully");
-      onSuccess(data);
+      onSuccess?.(data);
       onClose();
     } catch (error) {
       console.error("Error creating trucking booking:", error);
@@ -132,7 +142,7 @@ export function CreateTruckingBookingPanel({
 
   if (!isOpen) return null;
 
-  const isFormValid = formData.customerName.trim() !== "";
+  const isFormValid = formData.customerName.trim() !== "" && formData.consignee.trim() !== "";
 
   return (
     <BookingCreationPanel

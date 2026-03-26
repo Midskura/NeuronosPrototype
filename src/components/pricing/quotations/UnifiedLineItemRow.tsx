@@ -36,10 +36,10 @@ export function UnifiedLineItemRow({
       remarks: item.remarks,
       [field]: value
     };
-    onUpdate(categoryId, item.id, updatedItem);
+    onUpdate(categoryId, item.id, updatedItem as Omit<QuotationLineItemNew, "id" | "amount">);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent, nextRef?: React.RefObject<HTMLInputElement | null>) => {
     if (e.key === "Enter") {
       e.preventDefault();
       nextRef?.current?.focus();

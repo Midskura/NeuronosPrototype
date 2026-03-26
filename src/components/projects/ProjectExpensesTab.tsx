@@ -78,12 +78,12 @@ export function ProjectExpensesTab({ project, currentUser, title, subtitle }: Pr
               subCategory: ev.sub_category,
               lineItems: ev.line_items || [],
               isBillable: ev.is_billable
-            } as OperationsExpense;
+            } as unknown as OperationsExpense;
           });
 
           // Deduplicate by ID to handle potential backend data overlaps
           const uniqueExpenses = Array.from(
-            new Map(mappedExpenses.map(item => [item.id, item])).values()
+            new Map(mappedExpenses.map(item => [(item as any).id, item])).values()
           );
 
           uniqueExpenses.sort((a, b) => {
@@ -119,8 +119,8 @@ export function ProjectExpensesTab({ project, currentUser, title, subtitle }: Pr
 
   return (
     <div className={`flex flex-col bg-white ${!title ? 'p-12 min-h-[600px]' : ''}`}>
-      <UnifiedExpensesTab 
-        expenses={expenses}
+      <UnifiedExpensesTab
+        expenses={expenses as unknown as Record<string, unknown>[]}
         isLoading={isLoading}
         showHeader={true}
         linkedBookings={linkedBookings}

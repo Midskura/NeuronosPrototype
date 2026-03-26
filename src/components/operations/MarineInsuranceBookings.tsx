@@ -13,6 +13,7 @@ import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
 interface MarineInsuranceBooking {
   bookingId: string;
   customerName: string;
+  movement?: string;
   status: string;
   coverageType?: string;
   insuredValue?: string;
@@ -192,11 +193,11 @@ export function MarineInsuranceBookings({ currentUser, pendingBookingId, initial
 
   if (selectedBooking) {
     return (
-      <MarineInsuranceBookingDetails 
-        booking={selectedBooking} 
-        onBack={() => { 
+      <MarineInsuranceBookingDetails
+        booking={selectedBooking as any}
+        onBack={() => {
           setSelectedBooking(null);
-        }} 
+        }}
         onUpdate={fetchBookings}
         initialTab={initialTab}
         highlightId={highlightId}
@@ -611,7 +612,7 @@ export function MarineInsuranceBookings({ currentUser, pendingBookingId, initial
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           onBookingCreated={handleBookingCreated}
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       )}
     </>

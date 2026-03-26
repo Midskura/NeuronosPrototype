@@ -1,0 +1,176 @@
+import { Edit, Inbox, Send, FileText, Layers } from "lucide-react";
+import type { InboxTab, ThreadSummary } from "../../hooks/useInbox";
+import { ThreadListItem } from "./ThreadListItem";
+
+interface ThreadListPanelProps {
+  threads: ThreadSummary[];
+  isLoading: boolean;
+  activeTab: InboxTab;
+  draftCount: number;
+  unreadCount: number;
+  queueCount: number;
+  isManager: boolean;
+  selectedId: string | null;
+  onTabChange: (tab: InboxTab) => void;
+  onSelectThread: (id: string) => void;
+  onCompose: () => void;
+}
+
+function ThreadListSkeleton() {
+  return (
+    <div className="flex flex-col">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} style={{ padding: "14px 16px", borderBottom: "1px solid #E5E9F0" }}>
+          <div className="flex items-start gap-2.5">
+            <div style={{ width: 8, flexShrink: 0 }} />
+            <div className="flex-1 space-y-2">
+              <div style={{ height: 13, borderRadius: 4, backgroundColor: "#E5E9F0", width: `${70 + (i % 3) * 10}%`, animation: "pulse 1.5s ease-in-out infinite" }} />
+              <div style={{ height: 11, borderRadius: 4, backgroundColor: "#F3F4F6", width: "50%", animation: "pulse 1.5s ease-in-out infinite" }} />
+              <div style={{ height: 11, borderRadius: 4, backgroundColor: "#F3F4F6", width: "80%", animation: "pulse 1.5s ease-in-out infinite" }} />
+            </div>
+          </div>
+        </div>
+      ))}
+      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }`}</style>
+    </div>
+  );
+}
+
+function EmptyState({ tab, onCompose }: { tab: InboxTab; onCompose: () => void }) {
+  const messages: Record<InboxTab, string> = {
+    inbox: "Your inbox is empty",
+    queue: "No pending requests in the queue",
+    sent: "No sent tickets yet",
+    drafts: "No drafts saved",
+  };
+  return (
+    <div className="flex flex-col items-center justify-center h-full text-center" style={{ padding: 32, minHeight: 240 }}>
+      <Inbox size={32} style={{ color: "#D1D5DB", marginBottom: 12 }} />
+      <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 8 }}>{messages[tab]}</p>
+      {tab === "inbox" && (
+        <button
+          onClick={onCompose}
+          style={{ fontSize: 12, color: "#0F766E", fontWeight: 500, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+        >
+          Send your first ticket
+        </button>
+      )}
+    </div>
+  );
+}
+
+export function ThreadListPanel({
+  threads,
+  isLoading,
+  activeTab,
+  draftCount,
+  unreadCount,
+  queueCount,
+  isManager,
+  selectedId,
+  onTabChange,
+  onSelectThread,
+  onCompose,
+}: ThreadListPanelProps) {
+  const tabs: { key: InboxTab; label: string; icon: React.ReactNode; count?: number }[] = [
+    { key: "inbox", label: "Inbox", icon: <Inbox size={13} />, count: unreadCount || undefined },
+    ...(isManager ? [{ key: "queue" as InboxTab, label: "Queue", icon: <Layers size={13} />, count: queueCount || undefined }] : []),
+    { key: "sent", label: "Sent", icon: <Send size={13} /> },
+    { key: "drafts", label: "Drafts", icon: <FileText size={13} />, count: draftCount || undefined },
+  ];
+
+  return (
+    <div
+      className="ticketing-ui flex flex-col h-full"
+      style={{ width: 320, flexShrink: 0, borderRight: "1px solid #E5E9F0", backgroundColor: "#FFFFFF" }}
+    >
+      {/* Header */}
+      <div style={{ padding: "16px 16px 0", borderBottom: "1px solid #E5E9F0" }}>
+        <div className="flex items-center justify-between mb-3">
+          <h2 style={{ fontSize: 14, fontWeight: 600, color: "#12332B" }}>Tickets</h2>
+          <button
+            onClick={onCompose}
+            className="flex items-center gap-1.5"
+            style={{
+              padding: "5px 10px",
+              borderRadius: 6,
+              border: "1px solid #E5E9F0",
+              backgroundColor: "#FFFFFF",
+              fontSize: 12,
+              fontWeight: 500,
+              color: "var(--neuron-brand-green)",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#FFFFFF"; e.currentTarget.style.borderColor = "#E5E9F0"; }}
+            title="Compose new ticket (C)"
+          >
+            <Edit size={12} />
+            Compose
+          </button>
+        </div>
+
+        {/* Tab bar */}
+        <div className="flex items-end gap-0" role="tablist">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => onTabChange(tab.key)}
+                className="flex items-center gap-1"
+                style={{
+                  padding: "6px 10px",
+                  fontSize: 12,
+                  fontWeight: isActive ? 600 : 400,
+                  color: isActive ? "#0F766E" : "#667085",
+                  borderBottom: isActive ? "2px solid #0F766E" : "2px solid transparent",
+                  marginBottom: -1,
+                  whiteSpace: "nowrap",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {tab.label}
+                {tab.count !== undefined && tab.count > 0 && (
+                  <span style={{
+                    fontSize: 10,
+                    fontWeight: 600,
+                    padding: "1px 5px",
+                    borderRadius: 10,
+                    backgroundColor: isActive ? "var(--neuron-state-selected)" : "#F4F6F5",
+                    color: isActive ? "var(--neuron-brand-green)" : "#6B7A76",
+                    marginLeft: 2,
+                  }}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Thread list */}
+      <div className="flex-1 overflow-y-auto" style={{ overscrollBehavior: "contain" }}>
+        {isLoading ? (
+          <ThreadListSkeleton />
+        ) : threads.length === 0 ? (
+          <EmptyState tab={activeTab} onCompose={onCompose} />
+        ) : (
+          threads.map((thread) => (
+            <ThreadListItem
+              key={thread.id}
+              thread={thread}
+              isSelected={selectedId === thread.id}
+              onClick={() => onSelectThread(thread.id)}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  );
+}

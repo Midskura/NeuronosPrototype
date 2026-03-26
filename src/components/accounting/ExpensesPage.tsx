@@ -133,7 +133,7 @@ export function ExpensesPage() {
     let filtered = expenses.filter(expense => {
       // Search filter
       const matchesSearch = searchQuery === "" || 
-        expense.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (expense.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         expense.voucher_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         expense.vendor_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (expense.project_number && expense.project_number.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -556,7 +556,7 @@ export function ExpensesPage() {
           }}
           context="accounting"
           mode="view"
-          existingData={selectedExpense}
+          existingData={selectedExpense as any}
         />
       )}
     </div>

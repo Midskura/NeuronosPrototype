@@ -10,7 +10,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Plus, Edit, Trash2, RefreshCw, TestTube } from "lucide-react";
+import { Plus, Edit, Trash2, RefreshCw } from "lucide-react";
 
 interface User {
   id: string;
@@ -367,8 +367,8 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
                           <Label>Status</Label>
                           <Select
                             value={newUser.status}
-                            onValueChange={(value: "Active" | "Inactive") =>
-                              setNewUser({ ...newUser, status: value })
+                            onValueChange={(value: string) =>
+                              setNewUser({ ...newUser, status: value as "Active" })
                             }
                           >
                             <SelectTrigger>
@@ -886,33 +886,6 @@ export function Admin({ users = [], onAddUser, onDeleteUser }: AdminProps) {
                   </button>
                 </div>
                 
-                {/* Developer Tools */}
-                <div style={{ padding: "16px", background: "#EEF2FF", borderRadius: "12px", border: "1px solid #C7D2FE" }}>
-                  <p style={{ fontSize: "13px", color: "#4338CA", marginBottom: "8px" }}>Developer Tools</p>
-                  <p style={{ fontSize: "14px", color: "#667085", marginBottom: "12px" }}>Testing dashboard for ticketing system development</p>
-                  <button
-                    onClick={() => navigate('/tickets')}
-                    style={{
-                      height: "36px",
-                      padding: "0 20px",
-                      borderRadius: "8px",
-                      background: "#FFFFFF",
-                      border: "1px solid #C7D2FE",
-                      color: "#4338CA",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                      transition: "all 150ms ease",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px"
-                    }}
-                  >
-                    <TestTube className="w-4 h-4" />
-                    Open Ticket Testing Dashboard
-                  </button>
-                </div>
-
                 {/* Seed Data */}
                 <div style={{ padding: "16px", background: "#F0F9FF", borderRadius: "12px", border: "1px solid #BAE6FD" }}>
                   <p style={{ fontSize: "13px", color: "#0369A1", marginBottom: "8px" }}>Seed Data</p>

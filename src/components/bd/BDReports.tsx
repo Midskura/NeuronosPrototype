@@ -3,6 +3,13 @@ import { Search, Plus, BarChart, FileText } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
+// Stub sub-components (not yet implemented)
+const ReportTemplates = ({ onBack, onRunReport }: { onBack: () => void; onRunReport: (cfg: any) => void }) => <div />;
+const CustomReportBuilder = ({ onBack, onRunReport }: { onBack: () => void; onRunReport: (cfg: any) => void }) => <div />;
+const SavedReports = ({ onBack, onRunReport }: { onBack: () => void; onRunReport: (id: string) => void }) => <div />;
+const ReportResults = ({ config, savedReport, onBack }: { config: any; savedReport: any; onBack: () => void }) => <div />;
+const ReportControlCenter = ({ onBack }: { onBack: () => void }) => <div />;
+
 type ViewMode = 'list' | 'templates' | 'custom' | 'saved' | 'results' | 'control-center';
 type MainTab = 'all' | 'templates' | 'saved';
 

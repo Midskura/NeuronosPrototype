@@ -1,0 +1,290 @@
+import { useState, useEffect, useCallback } from "react";
+import { supabase } from "../utils/supabase/client";
+import { useUser } from "./useUser";
+
+export type TicketType = "fyi" | "request" | "approval";
+export type TicketStatus = "draft" | "open" | "acknowledged" | "in_progress" | "done" | "returned" | "archived";
+export type TicketPriority = "normal" | "urgent";
+
+export interface ThreadSummary {
+  id: string;
+  subject: string;
+  type: TicketType;
+  priority: TicketPriority;
+  status: TicketStatus;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+  last_message_at: string;
+  linked_record_type: string | null;
+  linked_record_id: string | null;
+  auto_created: boolean;
+  // enriched
+  last_message_preview?: string;
+  last_message_sender?: string;
+  participants?: ParticipantSummary[];
+  attachment_count?: number;
+  is_unread?: boolean;
+}
+
+export interface ParticipantSummary {
+  id: string;
+  participant_type: "user" | "department";
+  participant_user_id: string | null;
+  participant_dept: string | null;
+  role: "sender" | "to" | "cc";
+  user_name?: string;
+}
+
+export type InboxTab = "inbox" | "queue" | "sent" | "drafts";
+
+export function useInbox() {
+  const { user, effectiveDepartment, effectiveRole } = useUser();
+  const [threads, setThreads] = useState<ThreadSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<InboxTab>("inbox");
+  const [draftCount, setDraftCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [queueCount, setQueueCount] = useState(0);
+
+  const isManager = effectiveRole === "manager" || effectiveRole === "director";
+
+  const fetchThreads = useCallback(async () => {
+    if (!user) return;
+    setIsLoading(true);
+
+    try {
+      let ticketIds: string[] = [];
+
+      if (activeTab === "inbox" || activeTab === "queue") {
+        // Use RPC for inbox + queue — single query replaces 2-step participant→ticket chain
+        const { data: rpcThreads } = await supabase.rpc("get_inbox_threads", {
+          p_user_id: user.id,
+          p_dept: effectiveDepartment || "",
+          p_role: effectiveRole || "rep",
+        });
+
+        if (!rpcThreads || rpcThreads.length === 0) {
+          setThreads([]);
+          setIsLoading(false);
+          return;
+        }
+
+        if (activeTab === "queue" && isManager) {
+          // Queue: filter to dept-addressed only (exclude personally addressed)
+          const deptTicketIds = new Set<string>();
+          const { data: deptParticipants } = await supabase
+            .from("ticket_participants")
+            .select("ticket_id")
+            .eq("participant_type", "department")
+            .eq("participant_dept", effectiveDepartment || "");
+
+          (deptParticipants || []).forEach((p) => deptTicketIds.add(p.ticket_id));
+          ticketIds = rpcThreads
+            .filter((t: { id: string }) => deptTicketIds.has(t.id))
+            .map((t: { id: string }) => t.id);
+        } else {
+          // Inbox: exclude own sent tickets
+          ticketIds = rpcThreads
+            .filter((t: { id: string; created_by: string }) => t.created_by !== user.id)
+            .map((t: { id: string }) => t.id);
+        }
+      } else if (activeTab === "sent") {
+        const { data } = await supabase
+          .from("tickets")
+          .select("id")
+          .eq("created_by", user.id)
+          .neq("status", "draft")
+          .neq("status", "archived")
+          .order("last_message_at", { ascending: false });
+        ticketIds = (data || []).map((t) => t.id);
+      } else if (activeTab === "drafts") {
+        const { data } = await supabase
+          .from("tickets")
+          .select("id")
+          .eq("created_by", user.id)
+          .eq("status", "draft")
+          .order("updated_at", { ascending: false });
+        ticketIds = (data || []).map((t) => t.id);
+      }
+
+      if (ticketIds.length === 0) {
+        setThreads([]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Fetch full ticket data + enrichment in parallel
+      const [
+        { data: ticketsData },
+        { data: participantsData },
+        { data: messagesData },
+        { data: readData },
+        { data: attachData },
+      ] = await Promise.all([
+        supabase
+          .from("tickets")
+          .select("*")
+          .in("id", ticketIds)
+          .order("last_message_at", { ascending: false }),
+        supabase
+          .from("ticket_participants")
+          .select("id, ticket_id, participant_type, participant_user_id, participant_dept, role")
+          .in("ticket_id", ticketIds),
+        supabase
+          .from("ticket_messages")
+          .select("ticket_id, body, sender_id, created_at")
+          .in("ticket_id", ticketIds)
+          .eq("is_system", false)
+          .eq("is_retracted", false)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("ticket_read_receipts")
+          .select("ticket_id, last_read_at")
+          .eq("user_id", user.id)
+          .in("ticket_id", ticketIds),
+        supabase
+          .from("ticket_attachments")
+          .select("ticket_id")
+          .in("ticket_id", ticketIds),
+      ]);
+
+      if (!ticketsData) {
+        setThreads([]);
+        setIsLoading(false);
+        return;
+      }
+
+      // Enrich user names from participant data
+      const userIds = [
+        ...new Set(
+          (participantsData || [])
+            .filter((p) => p.participant_user_id)
+            .map((p) => p.participant_user_id as string)
+        ),
+      ];
+      let userMap: Record<string, string> = {};
+      if (userIds.length > 0) {
+        const { data: usersData } = await supabase
+          .from("users")
+          .select("id, name")
+          .in("id", userIds);
+        userMap = Object.fromEntries((usersData || []).map((u) => [u.id, u.name]));
+      }
+
+      // Build maps
+      const readMap = Object.fromEntries(
+        (readData || []).map((r) => [r.ticket_id, r.last_read_at])
+      );
+
+      const attachCountMap: Record<string, number> = {};
+      (attachData || []).forEach((a) => {
+        attachCountMap[a.ticket_id] = (attachCountMap[a.ticket_id] || 0) + 1;
+      });
+
+      const lastMsgMap: Record<string, { body: string; sender_id: string }> = {};
+      (messagesData || []).forEach((m) => {
+        if (!lastMsgMap[m.ticket_id]) {
+          lastMsgMap[m.ticket_id] = { body: m.body || "", sender_id: m.sender_id };
+        }
+      });
+
+      // Assemble enriched threads
+      const enriched: ThreadSummary[] = ticketsData.map((t) => {
+        const tParticipants = (participantsData || [])
+          .filter((p) => p.ticket_id === t.id)
+          .map((p) => ({
+            ...p,
+            user_name: p.participant_user_id ? userMap[p.participant_user_id] : undefined,
+          }));
+
+        const lastMsg = lastMsgMap[t.id];
+        const lastReadAt = readMap[t.id];
+        const isUnread =
+          (activeTab === "inbox" || activeTab === "queue") &&
+          (!lastReadAt || new Date(t.last_message_at) > new Date(lastReadAt));
+
+        return {
+          ...t,
+          priority: t.priority ?? "normal",
+          linked_record_type: t.linked_record_type ?? null,
+          linked_record_id: t.linked_record_id ?? null,
+          auto_created: t.auto_created ?? false,
+          last_message_preview: lastMsg?.body ? lastMsg.body.slice(0, 120) : undefined,
+          last_message_sender: lastMsg?.sender_id ? userMap[lastMsg.sender_id] : undefined,
+          participants: tParticipants,
+          attachment_count: attachCountMap[t.id] || 0,
+          is_unread: isUnread,
+        };
+      });
+
+      setThreads(enriched);
+    } catch (err) {
+      console.error("useInbox fetch error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user, effectiveDepartment, effectiveRole, activeTab, isManager]);
+
+  const fetchCounts = useCallback(async () => {
+    if (!user) return;
+
+    // Draft count + unread count in parallel
+    const [{ count: dc }, { data: uc }] = await Promise.all([
+      supabase
+        .from("tickets")
+        .select("id", { count: "exact", head: true })
+        .eq("created_by", user.id)
+        .eq("status", "draft"),
+      supabase.rpc("get_unread_count", {
+        p_user_id: user.id,
+        p_dept: effectiveDepartment || "",
+        p_role: effectiveRole || "rep",
+      }),
+    ]);
+
+    setDraftCount(dc || 0);
+    setUnreadCount(uc || 0);
+
+    // Queue count (managers only)
+    if (isManager) {
+      const { data: queueParticipants } = await supabase
+        .from("ticket_participants")
+        .select("ticket_id")
+        .eq("participant_type", "department")
+        .eq("participant_dept", effectiveDepartment || "");
+
+      const queueIds = (queueParticipants || []).map((p) => p.ticket_id);
+      if (queueIds.length > 0) {
+        const { count: qc } = await supabase
+          .from("tickets")
+          .select("id", { count: "exact", head: true })
+          .in("id", queueIds)
+          .eq("status", "open");
+        setQueueCount(qc || 0);
+      } else {
+        setQueueCount(0);
+      }
+    }
+  }, [user, effectiveDepartment, effectiveRole, isManager]);
+
+  useEffect(() => { fetchThreads(); }, [fetchThreads]);
+  useEffect(() => { fetchCounts(); }, [fetchCounts]);
+
+  const refresh = useCallback(() => {
+    fetchThreads();
+    fetchCounts();
+  }, [fetchThreads, fetchCounts]);
+
+  return {
+    threads,
+    isLoading,
+    activeTab,
+    setActiveTab,
+    draftCount,
+    unreadCount,
+    queueCount,
+    isManager,
+    refresh,
+  };
+}

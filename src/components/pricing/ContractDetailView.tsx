@@ -33,6 +33,10 @@ import { CommentsTab } from "../shared/CommentsTab";
 import { ContractStatusSelector } from "../contracts/ContractStatusSelector";
 import { getServiceIcon as getServiceIconShared, formatShortDate } from "../../utils/quotation-helpers";
 import { BookingsTable } from "../shared/BookingsTable";
+import {
+  getNormalizedContractStatus,
+  getNormalizedQuotationStatus,
+} from "../../utils/quotationStatus";
 
 // ============================================
 // TYPES
@@ -150,14 +154,18 @@ export function ContractDetailView({
   const handleActivateContract = async () => {
     setIsActivating(true);
     try {
-      const updatedQuotation: QuotationNew = {
-        ...quotation,
-        contract_status: "Active",
-        status: "Converted to Contract" as any,
+      const activationPayload = {
+        contract_status: "Active" as QuotationNew["contract_status"],
+        status: "Converted to Contract" as QuotationNew["status"],
+        activated_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
+      const updatedQuotation: QuotationNew = {
+        ...quotation,
+        ...activationPayload,
+      };
 
-      const { error } = await supabase.from('quotations').update(updatedQuotation).eq('id', quotation.id);
+      const { error } = await supabase.from('quotations').update(activationPayload).eq('id', quotation.id);
       if (!error) {
         toast.success("Contract activated successfully! Operations can now link bookings.");
         if (onUpdate) {
@@ -174,14 +182,15 @@ export function ContractDetailView({
     }
   };
 
-  const contractStatus = quotation.contract_status || "Draft";
+  const normalizedStatus = getNormalizedQuotationStatus(quotation);
+  const contractStatus = getNormalizedContractStatus(quotation) || "Draft";
   const statusStyle = getStatusColor(contractStatus);
   const daysRemaining = getDaysRemaining(quotation.contract_validity_end);
   const rateMatrices = quotation.rate_matrices || [];
 
   // Determine if the "Activate Contract" CTA should show
   // Show when: quotation status is "Accepted by Client" AND contract_status is not yet "Active"
-  const showActivateCTA = quotation.status === "Accepted by Client" && contractStatus !== "Active";
+  const showActivateCTA = normalizedStatus === "Accepted by Client" && contractStatus !== "Active";
 
   // Fetch linked bookings when Bookings or Billings tab is active
   useEffect(() => {
@@ -742,7 +751,7 @@ export function ContractDetailView({
                     toast.success(`Status changed to ${newStatus}`);
                     if (onUpdate) onUpdate({ ...quotation, contract_status: newStatus });
                   } else {
-                    toast.error(data.error || "Failed to update status");
+                    toast.error(statusError.message || "Failed to update status");
                   }
                 } catch (err) {
                   console.error("Error updating contract status:", err);

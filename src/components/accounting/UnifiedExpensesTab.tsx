@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, X, CheckCircle2, Clock, User, Layers, Plus } from "lucide-react";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { CustomDatePicker } from "../common/CustomDatePicker";
@@ -6,10 +6,13 @@ import { ExpensesTable } from "./ExpensesTable";
 import { CreateEVoucherForm } from "./evouchers/CreateEVoucherForm";
 import { AddRequestForPaymentPanel } from "./AddRequestForPaymentPanel";
 import { toast } from "../ui/toast-utils";
-import type { Expense as OperationsExpense } from "../../types/operations";
+import { supabase } from "../../utils/supabase/client";
+// Expenses received here are raw Supabase evoucher rows, not the OperationsExpense type
+const str = (v: unknown): string => (v == null ? "" : String(v));
+const num = (v: unknown): number => Number(v ?? 0);
 
 interface UnifiedExpensesTabProps {
-  expenses: OperationsExpense[];
+  expenses: Record<string, unknown>[];
   isLoading: boolean;
   showHeader?: boolean;
   linkedBookings?: { bookingId: string; serviceType?: string }[];
@@ -22,6 +25,10 @@ interface UnifiedExpensesTabProps {
   subtitle?: string;
   readOnly?: boolean;
   highlightId?: string | null;
+  /** Billing items already saved for this booking/project — used to compute which billable expenses are not yet converted */
+  existingBillingItems?: { source_id?: string | null; [key: string]: any }[];
+  /** Called whenever the pending billable count changes — lets parent show a badge on the Billings tab */
+  onPendingCountChange?: (count: number) => void;
 }
 
 const formatCurrency = (amount: number, currency: string = "PHP") => {
@@ -42,10 +49,10 @@ const formatDate = (dateStr: string) => {
   });
 };
 
-export function UnifiedExpensesTab({ 
-  expenses, 
-  isLoading, 
-  showHeader = true, 
+export function UnifiedExpensesTab({
+  expenses,
+  isLoading,
+  showHeader = true,
   linkedBookings = [],
   context = "project",
   onRefresh,
@@ -56,6 +63,8 @@ export function UnifiedExpensesTab({
   subtitle,
   readOnly = false,
   highlightId = null,
+  existingBillingItems = [],
+  onPendingCountChange,
 }: UnifiedExpensesTabProps) {
   
   // -- Local State for Filters & UI --
@@ -66,27 +75,91 @@ export function UnifiedExpensesTab({
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedBooking, setSelectedBooking] = useState("");
   
-  const [selectedExpense, setSelectedExpense] = useState<OperationsExpense | null>(null);
+  const [selectedExpense, setSelectedExpense] = useState<Record<string, unknown> | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
+  const [showBillablePending, setShowBillablePending] = useState(false);
+  const [convertingId, setConvertingId] = useState<string | null>(null);
+
+  const BILLABLE_ELIGIBLE_STATUSES = ["approved", "posted", "paid", "partial"];
+
+  // Set of source_ids already tracked in billing_line_items
+  const billedSourceIds = useMemo(() => {
+    return new Set(existingBillingItems.map(b => b.source_id).filter(Boolean) as string[]);
+  }, [existingBillingItems]);
+
+  // Set of expense IDs that are billable and not yet converted
+  const convertibleIds = useMemo(() => {
+    const ids = new Set<string>();
+    expenses.forEach(e => {
+      if (
+        e.isBillable &&
+        BILLABLE_ELIGIBLE_STATUSES.includes(str(e.status)) &&
+        !billedSourceIds.has(str(e.id))
+      ) {
+        ids.add(str(e.id));
+      }
+    });
+    return ids;
+  }, [expenses, billedSourceIds]);
+
+  const handleConvert = async (expenseData: any) => {
+    const expenseId: string = expenseData?.id;
+    if (!expenseId) return;
+    if (convertingId === expenseId) return; // prevent double-click
+    setConvertingId(expenseId);
+
+    const resolvedBookingId = expenseData?.bookingId || expenseData?.booking_id || bookingId;
+    if (!resolvedBookingId) {
+      toast.error("Cannot convert: expense has no linked booking.");
+      setConvertingId(null);
+      return;
+    }
+
+    const { error } = await supabase.from("billing_line_items").insert({
+      booking_id: resolvedBookingId,
+      project_number: expenseData?.projectNumber || expenseData?.project_number || projectNumber,
+      source_id: expenseData?.id,
+      source_type: "billable_expense",
+      description: expenseData?.description || expenseData?.expenseName || "Billable Expense",
+      service_type: "Reimbursable Expense",
+      amount: expenseData?.amount || 0,
+      currency: expenseData?.currency || "PHP",
+      status: "unbilled",
+      category: expenseData?.expenseCategory || expenseData?.expense_category || "Billable Expenses",
+    });
+
+    setConvertingId(null);
+    if (error) {
+      toast.error("Failed to convert expense to billing item");
+      return;
+    }
+    toast.success("Converted to billing item — visible in the Billings tab");
+    onRefresh?.();
+  };
 
   // -- Derived Data --
   const categories = useMemo(() => 
-    Array.from(new Set(expenses.map(e => e.expenseCategory).filter(Boolean))),
+    Array.from(new Set(expenses.map(e => str(e.expenseCategory)).filter(Boolean))),
   [expenses]);
 
   const totalApprovedAmount = useMemo(() => {
     return expenses
-      .filter(e => !deletedIds.includes(e.id) && (e.status === "approved" || e.status === "posted"))
-      .reduce((sum, e) => sum + e.amount, 0);
+      .filter(e => !deletedIds.includes(str(e.id)) && (str(e.status) === "approved" || str(e.status) === "posted"))
+      .reduce((sum, e) => sum + num(e.amount), 0);
   }, [expenses, deletedIds]);
 
   const totalGrossAmount = useMemo(() => {
     return expenses
-      .filter(e => !deletedIds.includes(e.id) && e.status !== "rejected" && e.status !== "cancelled")
-      .reduce((sum, e) => sum + e.amount, 0);
+      .filter(e => !deletedIds.includes(str(e.id)) && str(e.status) !== "rejected" && str(e.status) !== "cancelled")
+      .reduce((sum, e) => sum + num(e.amount), 0);
   }, [expenses, deletedIds]);
+
+  // Notify parent of pending count changes (for Billings tab badge)
+  useEffect(() => {
+    onPendingCountChange?.(convertibleIds.size);
+  }, [convertibleIds.size]);
 
   const resolvedCreateBookingId = useMemo(() => {
     if (context === "booking") return bookingId || "";
@@ -99,49 +172,53 @@ export function UnifiedExpensesTab({
   const filteredExpenses = useMemo(() => {
     return expenses.filter((expense) => {
       // 0. Exclude locally deleted items
-      if (deletedIds.includes(expense.id)) return false;
+      if (deletedIds.includes(str(expense.id))) return false;
 
       // 1. Search Query
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
-        const matchesSearch = 
-          expense.expenseName.toLowerCase().includes(query) ||
-          (expense.vendorName || "").toLowerCase().includes(query) ||
-          (expense.description || "").toLowerCase().includes(query) ||
-          (expense.bookingId || "").toLowerCase().includes(query);
+        const matchesSearch =
+          str(expense.expenseName).toLowerCase().includes(query) ||
+          str(expense.vendorName).toLowerCase().includes(query) ||
+          str(expense.description).toLowerCase().includes(query) ||
+          str(expense.bookingId).toLowerCase().includes(query);
         
         if (!matchesSearch) return false;
       }
 
       // 2. Status Filter
-      if (selectedStatus && expense.status !== selectedStatus) {
-        if (selectedStatus === "pending" && (expense.status === "draft" || expense.status === "pending")) return true; 
-        if (selectedStatus === "posted" && (expense.status === "paid")) return true;
-        if (expense.status !== selectedStatus) return false;
+      const eStatus = str(expense.status);
+      if (selectedStatus && eStatus !== selectedStatus) {
+        if (selectedStatus === "pending" && (eStatus === "draft" || eStatus === "pending")) return true;
+        if (selectedStatus === "posted" && eStatus === "paid") return true;
+        if (eStatus !== selectedStatus) return false;
       }
 
       // 3. Date Filter
       if (dateFrom) {
-        const expenseDate = new Date(expense.expenseDate || expense.createdAt);
+        const expenseDate = new Date(str(expense.expenseDate || expense.createdAt));
         const fromDate = new Date(dateFrom);
         if (expenseDate < fromDate) return false;
       }
       if (dateTo) {
-        const expenseDate = new Date(expense.expenseDate || expense.createdAt);
+        const expenseDate = new Date(str(expense.expenseDate || expense.createdAt));
         const toDate = new Date(dateTo);
         toDate.setHours(23, 59, 59, 999);
         if (expenseDate > toDate) return false;
       }
 
       // 4. Dropdown Filters
-      if (selectedCategory && expense.expenseCategory !== selectedCategory) return false;
-      if (selectedBooking && expense.bookingId !== selectedBooking) return false;
+      if (selectedCategory && str(expense.expenseCategory) !== selectedCategory) return false;
+      if (selectedBooking && str(expense.bookingId) !== selectedBooking) return false;
+
+      // 5. Billable Pending filter
+      if (showBillablePending && !convertibleIds.has(str(expense.id))) return false;
 
       return true;
     });
   }, [expenses, searchQuery, selectedStatus, dateFrom, dateTo, selectedCategory, selectedBooking]);
 
-  const hasActiveFilters = dateFrom || dateTo || selectedCategory || selectedBooking || selectedStatus || searchQuery;
+  const hasActiveFilters = dateFrom || dateTo || selectedCategory || selectedBooking || selectedStatus || searchQuery || showBillablePending;
 
   const handleClearFilters = () => {
     setDateFrom("");
@@ -150,6 +227,7 @@ export function UnifiedExpensesTab({
     setSelectedBooking("");
     setSelectedStatus("");
     setSearchQuery("");
+    setShowBillablePending(false);
   };
 
   const handleOpenAddExpense = () => {
@@ -246,6 +324,34 @@ export function UnifiedExpensesTab({
           />
         </div>
         
+        {/* Billable Pending filter — shown when existingBillingItems context is available */}
+        {existingBillingItems.length >= 0 && convertibleIds.size > 0 && (
+          <button
+            onClick={() => setShowBillablePending(v => !v)}
+            style={{
+              display: "flex", alignItems: "center", gap: "5px",
+              padding: "7px 12px", fontSize: "12px", fontWeight: 600,
+              border: `1px solid ${showBillablePending ? "#FDE68A" : "#E5E9F0"}`,
+              borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap",
+              backgroundColor: showBillablePending ? "#FFFBEB" : "#FFFFFF",
+              color: showBillablePending ? "#D97706" : "#667085",
+            }}
+            title="Show only billable expenses not yet converted to billing items"
+          >
+            Billable: Pending
+            <span
+              style={{
+                fontSize: "10px", fontWeight: 700,
+                padding: "1px 5px", borderRadius: "9999px",
+                backgroundColor: showBillablePending ? "#FDE68A" : "#F3F4F6",
+                color: showBillablePending ? "#92400E" : "#6B7280",
+              }}
+            >
+              {convertibleIds.size}
+            </span>
+          </button>
+        )}
+
         {/* Booking Filter (Only show if we have linked bookings AND we are in project context) */}
         {linkedBookings.length > 0 && context === 'project' && (
           <div style={{ minWidth: "140px" }}>
@@ -272,15 +378,15 @@ export function UnifiedExpensesTab({
       {/* Shared Table Component */}
       <ExpensesTable
         data={filteredExpenses.map(item => ({
-          id: item.id,
-          date: item.expenseDate || item.createdAt,
-          reference: item.expenseName.replace('EVRN-', ''),
-          category: item.expenseCategory,
-          description: item.description,
-          payee: item.vendorName !== "—" ? item.vendorName : "Unspecified",
-          status: item.status,
-          amount: item.amount,
-          currency: item.currency,
+          id: str(item.id),
+          date: str(item.expenseDate || item.createdAt),
+          reference: str(item.expenseName).replace('EVRN-', ''),
+          category: str(item.expenseCategory),
+          description: str(item.description),
+          payee: str(item.vendorName) !== "—" ? str(item.vendorName) : "Unspecified",
+          status: str(item.status),
+          amount: num(item.amount),
+          currency: str(item.currency),
           originalData: item
         }))}
         isLoading={isLoading}
@@ -299,6 +405,8 @@ export function UnifiedExpensesTab({
           amount: totalGrossAmount
         } : undefined}
         highlightId={highlightId}
+        convertibleIds={existingBillingItems.length >= 0 && convertibleIds.size > 0 ? convertibleIds : undefined}
+        onConvertItem={!readOnly ? handleConvert : undefined}
       />
 
       {/* Detail Panel */}
@@ -309,7 +417,7 @@ export function UnifiedExpensesTab({
         context="operations"
         onSuccess={() => {
           if (selectedExpense) {
-            setDeletedIds(prev => [...prev, selectedExpense.id]);
+            setDeletedIds(prev => [...prev, str(selectedExpense.id)]);
           }
           onRefresh?.();
           setShowDetailPanel(false);

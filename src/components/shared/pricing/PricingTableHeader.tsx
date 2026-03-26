@@ -1,4 +1,4 @@
-import { Memo } from "react";
+import { memo } from "react";
 
 interface PricingTableHeaderProps {
   showCost?: boolean;

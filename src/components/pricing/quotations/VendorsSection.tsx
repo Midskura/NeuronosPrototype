@@ -229,7 +229,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
         id: `vendor-${Date.now()}`,
         type: newVendorType as VendorType,
         name: vendorDisplayName,
-        service_tag: newVendorServiceTag || undefined,
+        service_tag: (newVendorServiceTag || undefined) as any,
         vendor_id: selectedVendor ? selectedVendor.value : undefined,
         // Support both old and new formats
         charge_categories: selectedVendor ? selectedVendor.charge_categories : undefined,

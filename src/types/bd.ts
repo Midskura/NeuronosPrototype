@@ -45,6 +45,7 @@ export type TaskStatus = "Ongoing" | "Pending" | "Completed" | "Cancelled";
 export type CancelReason = "Reschedule" | "Others";
 
 export type ActivityType =
+  | "Call"
   | "Call Logged"
   | "Email Logged"
   | "Meeting Logged"
@@ -83,6 +84,8 @@ export interface Contact {
 export interface Customer {
   id: string;
   name: string; // ✅ Primary field (backend uses 'name')
+  company_name?: string; // alias used in some views
+  type?: string; // customer classification (e.g. "Prospect")
   industry: Industry;
   registered_address?: string;
   status: CustomerStatus;
@@ -121,6 +124,8 @@ export interface Task {
   status: TaskStatus;
   cancel_reason: CancelReason | null;
   remarks: string;
+  notes?: string;
+  description?: string;
   contact_id: string | null;
   customer_id: string | null;
   owner_id: string;
@@ -132,6 +137,7 @@ export interface Task {
 export interface Activity {
   id: string;
   type: ActivityType;
+  title?: string;
   description: string;
   date: string;
   contact_id: string | null;

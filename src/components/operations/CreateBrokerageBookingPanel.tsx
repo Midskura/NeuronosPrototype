@@ -179,6 +179,10 @@ export function CreateBrokerageBookingPanel({
       toast.error("Customer Name is required");
       return;
     }
+    if (!formData.consignee) {
+      toast.error("Consignee is required");
+      return;
+    }
 
     // If from Pricing module, require team assignments
     if (source === "pricing" && !teamAssignment) {
@@ -241,7 +245,8 @@ export function CreateBrokerageBookingPanel({
 
   if (!isOpen) return null;
 
-  const isFormValid = formData.customerName.trim() !== "" && 
+  const isFormValid = formData.customerName.trim() !== "" &&
+    formData.consignee.trim() !== "" &&
     (source === "operations" || (source === "pricing" && teamAssignment !== null));
   
   // Helper function to get input style
@@ -540,7 +545,7 @@ export function CreateBrokerageBookingPanel({
                   <div className="grid grid-cols-2 gap-4">
                     <CustomDropdown
                       label="POD (Port of Discharge)"
-                      value={formData.pod}
+                      value={formData.pod || ""}
                       onChange={(value) => handleChange({ target: { name: "pod", value } } as any)}
                       options={[
                         { value: "NAIA", label: "NAIA" },
@@ -553,7 +558,7 @@ export function CreateBrokerageBookingPanel({
 
                     <CustomDropdown
                       label="Mode"
-                      value={formData.mode}
+                      value={formData.mode || ""}
                       onChange={(value) => handleChange({ target: { name: "mode", value } } as any)}
                       options={[
                         { value: "FCL", label: "FCL" },
@@ -569,7 +574,7 @@ export function CreateBrokerageBookingPanel({
                   {/* Cargo Type */}
                   <CustomDropdown
                     label="Cargo Type"
-                    value={formData.cargoType}
+                    value={formData.cargoType || ""}
                     onChange={(value) => handleChange({ target: { name: "cargoType", value } } as any)}
                     options={[
                       { value: "Dry", label: "Dry" },
@@ -602,7 +607,7 @@ export function CreateBrokerageBookingPanel({
 
                         <CustomDropdown
                           label="Preferential Treatment"
-                          value={formData.preferentialTreatment}
+                          value={formData.preferentialTreatment || ""}
                           onChange={(value) => handleChange({ target: { name: "preferentialTreatment", value } } as any)}
                           options={[
                             { value: "Form E", label: "Form E" },

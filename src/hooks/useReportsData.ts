@@ -1,15 +1,13 @@
 // useReportsData — Shared data hook for the Reports module.
-// Fetches all 5 raw data streams in parallel (projects, billing items, invoices,
-// collections, expenses) and returns them as raw arrays. Each report component
-// filters and computes what it needs from these streams.
-//
-// Pattern cloned from useFinancialHealthReport but returns raw arrays instead of
-// pre-computed project rows.
+// Fetches all raw data streams in parallel via useCachedFetch (dedup + SWR).
+// WHERE filters limit data to the last 2 years to avoid full-table scans.
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { supabase } from "../utils/supabase/client";
+import { useCachedFetch } from "./useNeuronCache";
 
 export interface ReportsData {
+  bookings: any[];
   projects: any[];
   billingItems: any[];
   invoices: any[];
@@ -20,59 +18,98 @@ export interface ReportsData {
   refresh: () => Promise<void>;
 }
 
+/** Only fetch records from the last 2 years */
+function twoYearsAgo(): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - 2);
+  return d.toISOString();
+}
+
+interface ReportsPayload {
+  bookings: any[];
+  projects: any[];
+  billingItems: any[];
+  invoices: any[];
+  collections: any[];
+  expenses: any[];
+}
+
+const EMPTY_PAYLOAD: ReportsPayload = {
+  bookings: [],
+  projects: [],
+  billingItems: [],
+  invoices: [],
+  collections: [],
+  expenses: [],
+};
+
 export function useReportsData(): ReportsData {
-  const [projects, setProjects] = useState<any[]>([]);
-  const [billingItems, setBillingItems] = useState<any[]>([]);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [collections, setCollections] = useState<any[]>([]);
-  const [expenses, setExpenses] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const cutoff = twoYearsAgo();
 
-  const fetchAll = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const fetcher = useCallback(async (): Promise<ReportsPayload> => {
+    const [
+      { data: bk },
+      { data: p },
+      { data: b },
+      { data: e },
+      { data: i },
+      { data: c },
+    ] = await Promise.all([
+      supabase
+        .from("bookings")
+        .select("id, booking_number, service_type, customer_name, project_id, status, created_at")
+        .gte("created_at", cutoff)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("projects")
+        .select("*, customers(id, name)")
+        .gte("created_at", cutoff),
+      supabase
+        .from("billing_line_items")
+        .select("*")
+        .gte("created_at", cutoff),
+      supabase
+        .from("evouchers")
+        .select("*")
+        .in("transaction_type", ["expense", "budget_request"])
+        .in("status", ["approved", "posted", "paid", "partial"])
+        .gte("created_at", cutoff),
+      supabase
+        .from("invoices")
+        .select("*")
+        .gte("created_at", cutoff),
+      supabase
+        .from("collections")
+        .select("*")
+        .gte("created_at", cutoff),
+    ]);
 
-      const [
-        { data: p, error: e1 },
-        { data: b, error: e2 },
-        { data: e, error: e3 },
-        { data: i, error: e4 },
-        { data: c, error: e5 },
-      ] = await Promise.all([
-        supabase.from("projects").select("*, customers(id, name)"),
-        supabase.from("billing_line_items").select("*"),
-        supabase.from("expenses").select("*"),
-        supabase.from("invoices").select("*"),
-        supabase.from("collections").select("*"),
-      ]);
+    return {
+      bookings: bk || [],
+      projects: p || [],
+      billingItems: b || [],
+      invoices: i || [],
+      collections: c || [],
+      expenses: e || [],
+    };
+  }, [cutoff]);
 
-      setProjects(p || []);
-      setBillingItems(b || []);
-      setExpenses(e || []);
-      setInvoices(i || []);
-      setCollections(c || []);
-    } catch (err: any) {
-      console.error("Reports: Error fetching data:", err);
-      setError(err?.message || "Failed to load report data");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+  const { data, isLoading, refresh } = useCachedFetch<ReportsPayload>(
+    "reports-data",
+    fetcher,
+    EMPTY_PAYLOAD,
+    { ttl: 300_000 } // 5-min TTL
+  );
 
   return {
-    projects,
-    billingItems,
-    invoices,
-    collections,
-    expenses,
+    bookings: data.bookings,
+    projects: data.projects,
+    billingItems: data.billingItems,
+    invoices: data.invoices,
+    collections: data.collections,
+    expenses: data.expenses,
     isLoading,
-    error,
-    refresh: fetchAll,
+    error: null,
+    refresh,
   };
 }

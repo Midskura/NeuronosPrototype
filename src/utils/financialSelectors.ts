@@ -1,5 +1,8 @@
 import { isInvoiceVisibleDocument } from "./invoiceReversal";
 
+/** Raw DB row type — used for Supabase query results */
+type RawRow = Record<string, unknown>;
+
 type LinkedBookingInput = string | { bookingId?: string; id?: string };
 
 const asString = (value: unknown): string | null => {
@@ -59,7 +62,7 @@ export const resolveBookingIdForService = ({
   return buildServiceToBookingMap(linkedBookings).get(serviceKey) ?? null;
 };
 
-const hasBookingMatch = (row: any, bookingIds: Set<string>): boolean => {
+const hasBookingMatch = (row: RawRow, bookingIds: Set<string>): boolean => {
   const directBookingId = asString(row.booking_id) ?? asString(row.bookingId);
   const sourceBookingId = asString(row.source_booking_id) ?? asString(row.sourceBookingId);
   const bookingIdsList = Array.isArray(row.booking_ids) ? row.booking_ids : row.bookingIds;
@@ -67,7 +70,7 @@ const hasBookingMatch = (row: any, bookingIds: Set<string>): boolean => {
   if (directBookingId && bookingIds.has(directBookingId)) return true;
   if (sourceBookingId && bookingIds.has(sourceBookingId)) return true;
   if (Array.isArray(bookingIdsList)) {
-    return bookingIdsList.some((entry) => {
+    return bookingIdsList.some((entry: unknown) => {
       const normalized = asString(entry);
       return normalized ? bookingIds.has(normalized) : false;
     });
@@ -76,7 +79,7 @@ const hasBookingMatch = (row: any, bookingIds: Set<string>): boolean => {
   return false;
 };
 
-const hasLegacyContainerMatch = (row: any, containerReference?: string): boolean => {
+const hasLegacyContainerMatch = (row: RawRow, containerReference?: string): boolean => {
   if (!containerReference) return false;
 
   return (
@@ -88,25 +91,25 @@ const hasLegacyContainerMatch = (row: any, containerReference?: string): boolean
   );
 };
 
-export const isActiveInvoice = (row: any): boolean => {
+export const isActiveInvoice = (row: RawRow): boolean => {
   return isInvoiceVisibleDocument(row);
 };
 
 export const filterBillingItemsForScope = (
-  rows: any[],
+  rows: RawRow[],
   linkedBookingIds: string[],
   containerReference?: string,
-): any[] => {
+): RawRow[] => {
   const bookingIds = new Set(linkedBookingIds);
 
   return rows.filter((row) => hasBookingMatch(row, bookingIds) || hasLegacyContainerMatch(row, containerReference));
 };
 
 export const filterInvoicesForScope = (
-  rows: any[],
+  rows: RawRow[],
   linkedBookingIds: string[],
   containerReference?: string,
-): any[] => {
+): RawRow[] => {
   const bookingIds = new Set(linkedBookingIds);
 
   return rows.filter((row) => {
@@ -116,10 +119,10 @@ export const filterInvoicesForScope = (
 };
 
 export const filterCollectionsForScope = (
-  rows: any[],
+  rows: RawRow[],
   invoiceIds: string[],
   containerReference?: string,
-): any[] => {
+): RawRow[] => {
   const invoiceIdSet = new Set(invoiceIds.filter(Boolean));
 
   return rows.filter((row) => {
@@ -132,7 +135,7 @@ export const filterCollectionsForScope = (
         ? row.linkedBillings
         : [];
 
-    const hasLinkedInvoiceMatch = linkedBillings.some((entry: any) => {
+    const hasLinkedInvoiceMatch = (linkedBillings as RawRow[]).some((entry) => {
       const linkedInvoiceId =
         asString(entry?.id) ??
         asString(entry?.invoice_id) ??
@@ -146,20 +149,20 @@ export const filterCollectionsForScope = (
 };
 
 export const mapExpenseRowsForScope = (
-  rows: any[],
+  rows: RawRow[],
   linkedBookingIds: string[],
   containerReference?: string,
-): any[] => {
+): RawRow[] => {
   const bookingIds = new Set(linkedBookingIds);
 
   return rows
     .filter((row) => {
-      const status = (row.status || "").toLowerCase();
+      const status = ((row.status as string) || "").toLowerCase();
       const isRelevant = hasBookingMatch(row, bookingIds) || hasLegacyContainerMatch(row, containerReference);
       if (!isRelevant) return false;
       return ["approved", "posted", "paid", "partial"].includes(status);
     })
-    .map((row) => ({
+    .map((row): RawRow => ({
       id: row.id,
       expenseName: row.receipt_number || row.expense_name || row.id,
       expenseCategory: row.category || row.expense_category || "General",
@@ -179,24 +182,24 @@ export const mapExpenseRowsForScope = (
 };
 
 export const mapEvoucherExpensesForScope = (
-  rows: any[],
+  rows: RawRow[],
   linkedBookingIds: string[],
   containerReference?: string,
-): any[] => {
+): RawRow[] => {
   const bookingIds = new Set(linkedBookingIds);
 
   return rows
     .filter((row) => {
-      const type = (row.transaction_type || "").toLowerCase();
+      const type = ((row.transaction_type as string) || "").toLowerCase();
       if (!["expense", "budget_request"].includes(type)) return false;
 
-      const status = (row.status || "").toLowerCase();
+      const status = ((row.status as string) || "").toLowerCase();
       const isRelevant = hasBookingMatch(row, bookingIds) || hasLegacyContainerMatch(row, containerReference);
       if (!isRelevant) return false;
 
       return ["approved", "posted", "paid", "partial"].includes(status);
     })
-    .map((row) => ({
+    .map((row): RawRow => ({
       id: row.id,
       evoucher_id: row.id,
       created_at: row.created_at || row.request_date,
@@ -211,6 +214,6 @@ export const mapEvoucherExpensesForScope = (
       booking_id: row.booking_id || "",
       vendor_name: row.vendor_name,
       contract_id: row.contract_id || null,
-      payment_status: (row.status || "").toLowerCase() === "paid" ? "paid" : "unpaid",
+      payment_status: ((row.status as string) || "").toLowerCase() === "paid" ? "paid" : "unpaid",
     }));
 };

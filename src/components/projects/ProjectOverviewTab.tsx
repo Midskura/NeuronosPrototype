@@ -57,7 +57,7 @@ export function ProjectOverviewTab({ project, currentUser, onUpdate, onViewBooki
 
   const financialSummary = {
     subtotal_non_taxed: displayProject.quotation?.financial_summary?.subtotal_non_taxed || 0,
-    subtotal_taxable: displayProject.quotation?.financial_summary?.subtotal_taxable || subtotalTaxable,
+    subtotal_taxable: displayProject.quotation?.financial_summary?.subtotal_taxed || subtotalTaxable,
     tax_rate: displayProject.quotation?.financial_summary?.tax_rate || 0.12,
     tax_amount: displayProject.quotation?.financial_summary?.tax_amount || (subtotalTaxable * 0.12),
     other_charges: displayProject.quotation?.financial_summary?.other_charges || 0,

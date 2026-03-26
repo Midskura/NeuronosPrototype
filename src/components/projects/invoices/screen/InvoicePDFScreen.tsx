@@ -202,7 +202,7 @@ export function InvoicePDFScreen({ project, invoice, onClose, currentUser, isEmb
                 <CollapsibleSection title="Display Options" icon={<Layout size={18} />} defaultOpen={true}>
                     <DisplayOptionsControl 
                         options={options.display}
-                        onToggle={toggleDisplay}
+                        onToggle={toggleDisplay as any}
                     />
                 </CollapsibleSection>
 

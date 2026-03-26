@@ -12,14 +12,18 @@ interface ExpensesTabProps {
   currentUser?: { name: string; email: string; department: string } | null;
   readOnly?: boolean;
   highlightId?: string | null;
+  existingBillingItems?: { source_id?: string | null; [key: string]: any }[];
+  onPendingCountChange?: (count: number) => void;
 }
 
-export function ExpensesTab({ 
-  bookingId, 
-  bookingType, 
-  currentUser, 
+export function ExpensesTab({
+  bookingId,
+  bookingType,
+  currentUser,
   readOnly = false,
-  highlightId
+  highlightId,
+  existingBillingItems = [],
+  onPendingCountChange,
 }: ExpensesTabProps) {
   // Data State
   const [expenses, setExpenses] = useState<OperationsExpense[]>([]);
@@ -77,7 +81,7 @@ export function ExpensesTab({
               subCategory: ev.sub_category,
               lineItems: ev.line_items || [],
               isBillable: ev.is_billable
-            } as OperationsExpense;
+            } as unknown as OperationsExpense;
           });
 
           // Sort by Date (Newest first)
@@ -98,8 +102,8 @@ export function ExpensesTab({
 
   return (
     <div className="flex flex-col bg-white p-12 min-h-[600px]">
-      <UnifiedExpensesTab 
-        expenses={expenses}
+      <UnifiedExpensesTab
+        expenses={expenses as unknown as Record<string, unknown>[]}
         isLoading={isLoading}
         showHeader={true}
         linkedBookings={[]}
@@ -108,6 +112,8 @@ export function ExpensesTab({
         bookingId={bookingId}
         bookingType={bookingType}
         highlightId={highlightId}
+        existingBillingItems={existingBillingItems}
+        onPendingCountChange={onPendingCountChange}
       />
     </div>
   );

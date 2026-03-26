@@ -18,6 +18,10 @@ import {
 } from "lucide-react";
 import { useReportsData } from "../../../hooks/useReportsData";
 import { SalesReport } from "./SalesReport";
+import { BookingCashFlowReport } from "./BookingCashFlowReport";
+import { ReceivablesAgingReport } from "./ReceivablesAgingReport";
+import { CollectionsReport } from "./CollectionsReport";
+import { UnbilledRevenueReport } from "./UnbilledRevenueReport";
 import { ScopeBar } from "../aggregate/ScopeBar";
 import { createDateScope } from "../aggregate/types";
 import type { DateScope } from "../aggregate/types";
@@ -45,28 +49,28 @@ const REPORTS: ReportEntry[] = [
     label: "Booking Cash Flow",
     icon: ArrowUpDown,
     description: "Cash in/out per booking",
-    ready: false,
+    ready: true,
   },
   {
     id: "aging",
     label: "Receivables Aging",
     icon: Clock,
     description: "Outstanding AR by age",
-    ready: false,
+    ready: true,
   },
   {
     id: "collections",
     label: "Collections",
     icon: Banknote,
     description: "Payment receipts for reconciliation",
-    ready: false,
+    ready: true,
   },
   {
     id: "unbilled",
     label: "Unbilled Revenue",
     icon: AlertTriangle,
     description: "Work not yet invoiced",
-    ready: false,
+    ready: true,
   },
 ];
 
@@ -83,7 +87,14 @@ export function ReportsModule() {
     switch (activeReport) {
       case "sales":
         return <SalesReport data={data} scope={scope} />;
-      // Phase 2-5 reports will go here
+      case "cashflow":
+        return <BookingCashFlowReport scope={scope} />;
+      case "aging":
+        return <ReceivablesAgingReport scope={scope} />;
+      case "collections":
+        return <CollectionsReport scope={scope} />;
+      case "unbilled":
+        return <UnbilledRevenueReport scope={scope} />;
       default:
         return (
           <div className="flex-1 flex items-center justify-center">

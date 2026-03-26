@@ -153,7 +153,7 @@ export function CreateBookingFromProjectPanel({
           source="pricing"
           customerId={project.customer_id}
           serviceType="Forwarding"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -167,7 +167,7 @@ export function CreateBookingFromProjectPanel({
           source="pricing"
           customerId={project.customer_id}
           serviceType="Brokerage"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -181,7 +181,7 @@ export function CreateBookingFromProjectPanel({
           source="pricing"
           customerId={project.customer_id}
           serviceType="Trucking"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -195,7 +195,7 @@ export function CreateBookingFromProjectPanel({
           source="pricing"
           customerId={project.customer_id}
           serviceType="Marine Insurance"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 
@@ -209,7 +209,7 @@ export function CreateBookingFromProjectPanel({
           source="pricing"
           customerId={project.customer_id}
           serviceType="Others"
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       );
 

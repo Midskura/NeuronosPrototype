@@ -9,7 +9,7 @@ interface CreateBookingsFromProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
   project: Project;
-  currentUser: User;
+  currentUser: any;
   onSuccess: () => void;
 }
 

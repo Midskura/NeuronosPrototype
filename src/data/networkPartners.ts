@@ -28,7 +28,7 @@ export interface NetworkPartner {
   is_wca_conference: boolean;
   services: string[];
   notes?: string;
-  partner_type: PartnerType;
+  partner_type?: PartnerType;
   phone?: string;
   mobile?: string;
   website?: string;

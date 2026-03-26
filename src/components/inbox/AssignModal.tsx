@@ -1,0 +1,180 @@
+import { useState, useEffect } from "react";
+import { X, UserCheck } from "lucide-react";
+import { supabase } from "../../utils/supabase/client";
+import { useUser } from "../../hooks/useUser";
+import { toast } from "sonner@2.0.3";
+
+interface AssignModalProps {
+  ticketId: string;
+  department: string;
+  onAssigned: () => void;
+  onClose: () => void;
+}
+
+interface DeptMember { id: string; name: string; role: string; }
+
+export function AssignModal({ ticketId, department, onAssigned, onClose }: AssignModalProps) {
+  const { user } = useUser();
+  const [members, setMembers] = useState<DeptMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAssigning, setIsAssigning] = useState(false);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    supabase
+      .from("users")
+      .select("id, name, role")
+      .eq("department", department)
+      .then(({ data }) => {
+        setMembers(data || []);
+        setIsLoading(false);
+      });
+  }, [department]);
+
+  const handleAssign = async (memberId: string, memberName: string) => {
+    if (!user) return;
+    setIsAssigning(true);
+    try {
+      // Insert assignment record
+      await supabase.from("ticket_assignments").insert({
+        ticket_id: ticketId,
+        department,
+        assigned_to: memberId,
+        assigned_by: user.id,
+        assigned_at: new Date().toISOString(),
+        note: note.trim() || null,
+      });
+
+      // Add assignee as participant if not already
+      await supabase.from("ticket_participants").upsert(
+        {
+          ticket_id: ticketId,
+          participant_type: "user",
+          user_id: memberId,
+          department: null,
+          role: "to",
+          added_by: user.id,
+        },
+        { onConflict: "ticket_id,user_id" }
+      );
+
+      // Insert system message
+      await supabase.from("ticket_messages").insert({
+        ticket_id: ticketId,
+        sender_id: user.id,
+        is_system: true,
+        system_event: "assigned",
+        system_metadata: {
+          assigned_to_name: memberName,
+          assigned_by_name: user.name,
+          department,
+        },
+      });
+
+      // Update ticket last_message_at
+      await supabase
+        .from("tickets")
+        .update({ last_message_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+        .eq("id", ticketId);
+
+      toast.success(`Thread assigned to ${memberName}`);
+      onAssigned();
+    } catch (err) {
+      toast.error("Failed to assign thread");
+    } finally {
+      setIsAssigning(false);
+    }
+  };
+
+  return (
+    <div
+      className="ticketing-ui fixed inset-0 z-50 flex items-center justify-center"
+      style={{ backgroundColor: "rgba(18,51,43,0.15)" }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          width: 400,
+          backgroundColor: "#FFFFFF",
+          border: "1px solid #E5E9F0",
+          borderRadius: 12,
+          overflow: "hidden",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between" style={{ padding: "16px 20px", borderBottom: "1px solid #E5E9F0" }}>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: "#12332B" }}>
+            Assign to {department} member
+          </h3>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#667085", display: "flex" }}>
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Optional note */}
+        <div style={{ padding: "12px 20px", borderBottom: "1px solid #E5E9F0" }}>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Optional note for the assignee…"
+            rows={2}
+            style={{
+              width: "100%",
+              resize: "none",
+              border: "1px solid #E5E9F0",
+              borderRadius: 6,
+              padding: "8px 10px",
+              fontSize: 12,
+              color: "#12332B",
+              fontFamily: "inherit",
+              outline: "none",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#E5E9F0")}
+          />
+        </div>
+
+        {/* Member list */}
+        <div style={{ maxHeight: 280, overflowY: "auto" }}>
+          {isLoading ? (
+            <div style={{ padding: 24, textAlign: "center", color: "#9CA3AF", fontSize: 13 }}>Loading…</div>
+          ) : members.length === 0 ? (
+            <div style={{ padding: 24, textAlign: "center", color: "#9CA3AF", fontSize: 13 }}>No members found</div>
+          ) : (
+            members.map((m) => (
+              <button
+                key={m.id}
+                disabled={isAssigning}
+                onClick={() => handleAssign(m.id, m.name)}
+                className="w-full text-left flex items-center gap-3 transition-colors duration-150"
+                style={{
+                  padding: "12px 20px",
+                  background: "none",
+                  border: "none",
+                  borderBottom: "1px solid #F3F4F6",
+                  cursor: isAssigning ? "wait" : "pointer",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#F9FAFB")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+              >
+                <div style={{
+                  width: 32, height: 32, borderRadius: "50%",
+                  backgroundColor: "#EEF4F1", border: "1px solid #D7E5E0",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 11, fontWeight: 700, color: "#2E5147", flexShrink: 0,
+                }}>
+                  {m.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
+                </div>
+                <div>
+                  <p style={{ fontSize: 13, fontWeight: 500, color: "#12332B" }}>{m.name}</p>
+                  <p style={{ fontSize: 11, color: "#9CA3AF", textTransform: "capitalize" }}>{m.role}</p>
+                </div>
+                <UserCheck size={14} style={{ color: "#2E5147", marginLeft: "auto" }} />
+              </button>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

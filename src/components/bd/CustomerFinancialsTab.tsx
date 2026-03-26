@@ -2,6 +2,7 @@ import type { Customer } from "../../types/bd";
 import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect } from "react";
 import { TrendingUp, CreditCard, DollarSign, Activity, FileText } from "lucide-react";
+import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Cell } from "recharts";
 
 interface CustomerFinancialsTabProps {
   customer: Customer;
@@ -245,7 +246,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                   <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
-                    <YAxis axisLine={false} tickLine={false} tickFormatter={(val) => `₱${val/1000}k`} tick={{ fontSize: 12 }} />
+                    <YAxis axisLine={false} tickLine={false} tickFormatter={(val: number) => `₱${val/1000}k`} tick={{ fontSize: 12 }} />
                     <Tooltip 
                       formatter={(value: number) => formatCurrency(value)}
                       cursor={{ fill: 'transparent' }}

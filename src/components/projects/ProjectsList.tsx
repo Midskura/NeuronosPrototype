@@ -106,9 +106,9 @@ export function ProjectsList({
     if (department === "Accounting") {
       // Margin Filter
       if (marginFilter !== "all") {
-        if (marginFilter === "high" && stats.margin < 20) return false;
-        if (marginFilter === "low" && (stats.margin >= 20 || stats.margin < 0)) return false;
-        if (marginFilter === "loss" && stats.margin >= 0) return false;
+        if (marginFilter === "high" && (stats.margin ?? 0) < 20) return false;
+        if (marginFilter === "low" && ((stats.margin ?? 0) >= 20 || (stats.margin ?? 0) < 0)) return false;
+        if (marginFilter === "loss" && (stats.margin ?? 0) >= 0) return false;
       }
 
       // Profit Filter
@@ -290,10 +290,10 @@ export function ProjectsList({
                   onChange={setOwnerFilter}
                   options={[
                     { value: "all", label: "All Owners", icon: <User size={16} /> },
-                    ...uniqueOwners.map(owner => ({ 
-                      value: owner, 
-                      label: owner, 
-                      icon: <User size={16} style={{ color: "#0F766E" }} /> 
+                    ...uniqueOwners.map(owner => ({
+                      value: owner || "",
+                      label: owner || "",
+                      icon: <User size={16} style={{ color: "#0F766E" }} />
                     }))
                   ]}
                   placeholder="Select owner"
@@ -574,10 +574,10 @@ export function ProjectsList({
                       borderRadius: "12px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      backgroundColor: stats.margin >= 20 ? "#ECFDF5" : stats.margin >= 0 ? "#FFF7ED" : "#FEF2F2",
-                      color: stats.margin >= 20 ? "#059669" : stats.margin >= 0 ? "#C2410C" : "#B91C1C"
+                      backgroundColor: (stats.margin ?? 0) >= 20 ? "#ECFDF5" : (stats.margin ?? 0) >= 0 ? "#FFF7ED" : "#FEF2F2",
+                      color: (stats.margin ?? 0) >= 20 ? "#059669" : (stats.margin ?? 0) >= 0 ? "#C2410C" : "#B91C1C"
                     }}>
-                      {stats.margin.toFixed(1)}%
+                      {(stats.margin ?? 0).toFixed(1)}%
                     </div>
                   </div>
 

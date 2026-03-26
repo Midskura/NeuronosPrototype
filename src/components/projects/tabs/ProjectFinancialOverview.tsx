@@ -1,4 +1,4 @@
-import { formatCurrency } from "../../ui/toast-utils";
+import { formatCurrency } from "../../../utils/accounting-math";
 import { CheckCircle2, FileText, TrendingUp, AlertCircle, Clock } from "lucide-react";
 import type { FinancialData } from "../../../hooks/useProjectFinancials";
 

@@ -79,7 +79,7 @@ export function CustomerAutocomplete({
   }, []);
 
   const handleSelect = (contact: Contact) => {
-    onChange(contact.name, contact.id);
+    onChange(contact.name || "", contact.id);
     setIsOpen(false);
     setSearchQuery("");
     setHighlightedIndex(0);

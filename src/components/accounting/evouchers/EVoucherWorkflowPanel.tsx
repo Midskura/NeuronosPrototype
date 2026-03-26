@@ -24,7 +24,7 @@ export function EVoucherWorkflowPanel({
   const canApprove = isAccounting && currentStatus === "pending";
   const canReject = isAccounting && currentStatus === "pending";
   const canCancel = currentStatus === "draft" || currentStatus === "rejected";
-  const canPostToLedger = isAccounting && currentStatus === "Approved" && currentStatus !== "Posted";
+  const canPostToLedger = isAccounting && (currentStatus === "Approved" || currentStatus === "approved") && (currentStatus as string) !== "Posted";
 
   const handleSubmit = async () => {
     setIsSubmitting(true);

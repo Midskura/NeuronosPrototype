@@ -38,7 +38,30 @@ interface MatrixData {
   meta: MatrixMeta;
 }
 
-type ViewMode = "charges" | "expenses" | "both";
+type ViewMode = "charges" | "expenses";
+
+const VIEW_THEME = {
+  charges: {
+    accent: "#0F766E",
+    footerBg: "#F0FDF9",
+    footerBgAlt: "#ECFDF5",
+    footerBorder: "#0F766E",
+    grandTotalColor: "#0F766E",
+    segmentBg: "#E8F5F3",
+    segmentColor: "#0F766E",
+    label: "Charges",
+  },
+  expenses: {
+    accent: "#D97706",
+    footerBg: "#FFFBEB",
+    footerBgAlt: "#FEF3C7",
+    footerBorder: "#D97706",
+    grandTotalColor: "#D97706",
+    segmentBg: "#FEF9C3",
+    segmentColor: "#92400E",
+    label: "Expenses",
+  },
+} as const;
 
 const SERVICE_TYPES = ["All", "Brokerage", "Trucking", "Forwarding", "Marine Insurance", "Others"];
 
@@ -151,16 +174,44 @@ export function ChargeExpenseMatrix() {
         supabase.from('catalog_items').select('*').eq('is_active', true),
       ]);
 
-      if (!lineItems || !catalogItems) {
-        setData({ columns: [], rows: [] });
+      const emptyMeta = (): MatrixMeta => ({
+        total_bookings: 0,
+        total_line_items: 0,
+        unlinked_count: 0,
+        linked_count: 0,
+        linked_percentage: 0,
+        period,
+        service_type: serviceType,
+        view,
+      });
+
+      if (!catalogItems || catalogItems.length === 0) {
+        setData({ columns: [], rows: [], totals: {}, meta: emptyMeta() });
         return;
       }
 
-      // Build pivot: columns = catalog items, rows = bookings
-      const columns = catalogItems.map((ci: any) => ({
+      // Filter catalog items by view type
+      const filteredCatalog = (catalogItems as any[]).filter((ci: any) => {
+        if (view === "charges") return ci.type === "charge" || ci.type === "both" || !ci.type;
+        if (view === "expenses") return ci.type === "expense" || ci.type === "both";
+        return true;
+      });
+
+      // Build pivot: columns = catalog items filtered by view, rows = bookings
+      const columns = filteredCatalog.map((ci: any) => ({
         catalog_item_id: ci.id,
         name: ci.name,
       }));
+
+      if (!lineItems || lineItems.length === 0) {
+        setData({
+          columns,
+          rows: [],
+          totals: Object.fromEntries(columns.map((c: MatrixColumn) => [c.catalog_item_id, 0])),
+          meta: emptyMeta(),
+        });
+        return;
+      }
 
       // Group line items by booking
       const byBooking = new Map<string, any[]>();
@@ -173,15 +224,40 @@ export function ChargeExpenseMatrix() {
       const rows = Array.from(byBooking.entries()).map(([bookingId, items]) => ({
         booking_id: bookingId,
         project_number: items[0]?.project_number || bookingId,
+        service_type: items[0]?.service_type || '',
         cells: Object.fromEntries(
           columns.map((col: any) => {
             const match = items.find((li: any) => li.catalog_item_id === col.catalog_item_id);
-            return [col.catalog_item_id, match ? match.amount || 0 : null];
+            return [col.catalog_item_id, match ? { amount: Number(match.amount) || 0, currency: match.currency || 'PHP' } : null];
           })
         ),
       }));
 
-      setData({ columns, rows });
+      // Compute column totals
+      const totals: Record<string, number> = {};
+      for (const col of columns) {
+        totals[col.catalog_item_id] = rows.reduce(
+          (sum, row) => sum + (row.cells[col.catalog_item_id]?.amount || 0), 0
+        );
+      }
+
+      // Compute meta stats
+      const linkedItems = lineItems.filter((li: any) => li.catalog_item_id);
+      const linkedPct = lineItems.length > 0
+        ? Math.round((linkedItems.length / lineItems.length) * 100)
+        : 0;
+      const meta: MatrixMeta = {
+        total_bookings: byBooking.size,
+        total_line_items: lineItems.length,
+        unlinked_count: lineItems.length - linkedItems.length,
+        linked_count: linkedItems.length,
+        linked_percentage: linkedPct,
+        period,
+        service_type: serviceType,
+        view,
+      };
+
+      setData({ columns, rows, totals, meta });
     } catch (err) {
       console.error("Matrix fetch error:", err);
       setError(String(err));
@@ -252,29 +328,45 @@ export function ChargeExpenseMatrix() {
           </select>
         </div>
 
-        {/* View radio */}
+        {/* View segment control */}
         <div style={{
           display: "flex",
           alignItems: "center",
-          gap: "12px",
+          gap: "6px",
           padding: "0 8px",
         }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>View:</span>
-          {(["charges", "expenses", "both"] as ViewMode[]).map(v => (
-            <label key={v} style={{
-              display: "flex", alignItems: "center", gap: "4px",
-              fontSize: "13px", color: view === v ? "#0F766E" : "#6B7280",
-              fontWeight: view === v ? 600 : 400, cursor: "pointer",
-            }}>
-              <input
-                type="radio" name="matrixView" value={v}
-                checked={view === v}
-                onChange={() => setView(v)}
-                style={{ accentColor: "#0F766E" }}
-              />
-              {v.charAt(0).toUpperCase() + v.slice(1)}
-            </label>
-          ))}
+          <div style={{
+            display: "flex",
+            background: "#F3F4F6",
+            borderRadius: "10px",
+            padding: "3px",
+            gap: "2px",
+          }}>
+            {(["charges", "expenses"] as ViewMode[]).map(v => {
+              const theme = VIEW_THEME[v];
+              const isActive = view === v;
+              return (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  style={{
+                    padding: "6px 14px",
+                    fontSize: "13px",
+                    fontWeight: isActive ? 600 : 500,
+                    border: "none",
+                    borderRadius: "7px",
+                    cursor: "pointer",
+                    background: isActive ? theme.segmentBg : "transparent",
+                    color: isActive ? theme.segmentColor : "#6B7280",
+                    transition: "all 0.15s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {theme.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Right side: meta chips + export */}
@@ -309,9 +401,10 @@ export function ChargeExpenseMatrix() {
       <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
         {loading && <LoadingOverlay />}
         {error && <ErrorState message={error} onRetry={fetchMatrix} />}
-        {!loading && !error && data && data.rows.length === 0 && <EmptyState period={period} />}
-        {!loading && !error && data && data.rows.length > 0 && (
-          <MatrixTable data={data} containerRef={tableContainerRef} />
+        {!loading && !error && data && data.columns.length === 0 && <NoCatalogState />}
+        {!loading && !error && data && data.columns.length > 0 && data.rows.length === 0 && <EmptyState period={period} />}
+        {!loading && !error && data && data.columns.length > 0 && data.rows.length > 0 && (
+          <MatrixTable data={data} containerRef={tableContainerRef} view={view} />
         )}
       </div>
     </div>
@@ -320,8 +413,9 @@ export function ChargeExpenseMatrix() {
 
 // ==================== MATRIX TABLE ====================
 
-function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: React.RefObject<HTMLDivElement | null> }) {
+function MatrixTable({ data, containerRef, view }: { data: MatrixData; containerRef: React.RefObject<HTMLDivElement | null>; view: ViewMode }) {
   const { columns, rows, totals } = data;
+  const theme = VIEW_THEME[view];
 
   return (
     <div
@@ -527,8 +621,8 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
               fontWeight: 700,
               fontSize: "13px",
               color: "#12332B",
-              background: "#F0FDF9",
-              borderTop: "2px solid #0F766E",
+              background: theme.footerBg,
+              borderTop: `2px solid ${theme.footerBorder}`,
               borderRight: "2px solid #E5E7EB",
             }}>
               TOTAL
@@ -538,8 +632,8 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
               position: "sticky",
               bottom: 0,
               zIndex: 1,
-              background: "#F0FDF9",
-              borderTop: "2px solid #0F766E",
+              background: theme.footerBg,
+              borderTop: `2px solid ${theme.footerBorder}`,
               borderRight: "1px solid #F3F4F6",
               minWidth: 70,
               maxWidth: 70,
@@ -565,8 +659,8 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
                     zIndex: 1,
                     fontWeight: 700,
                     color: isNegative ? "#DC2626" : isEmpty ? "#D1D5DB" : "#12332B",
-                    background: isUnlinked ? "#FEF9C3" : "#F0FDF9",
-                    borderTop: "2px solid #0F766E",
+                    background: isUnlinked ? "#FEF9C3" : theme.footerBg,
+                    borderTop: `2px solid ${theme.footerBorder}`,
                     borderRight: "1px solid #F3F4F6",
                   }}
                 >
@@ -587,10 +681,10 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
               bottom: 0,
               zIndex: 1,
               fontWeight: 700,
-              background: "#ECFDF5",
-              borderTop: "2px solid #0F766E",
+              background: theme.footerBgAlt,
+              borderTop: `2px solid ${theme.footerBorder}`,
               borderLeft: "2px solid #E5E7EB",
-              color: "#0F766E",
+              color: theme.grandTotalColor,
             }}>
               {fmtAmount(Object.values(totals).reduce((a, b) => a + b, 0)).text}
             </td>
@@ -648,6 +742,23 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
       }}>
         Retry
       </button>
+    </div>
+  );
+}
+
+function NoCatalogState() {
+  return (
+    <div style={{ padding: "64px", textAlign: "center", maxWidth: "600px", margin: "0 auto" }}>
+      <div style={{ textAlign: "center", padding: "48px 0" }}>
+        <Grid3X3 size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
+        <p style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+          No catalog items configured
+        </p>
+        <p style={{ fontSize: "13px", color: "#9CA3AF" }}>
+          Go to <strong>Accounting → Admin → Item Catalog</strong> to add charge types.
+          The matrix columns are built from your active catalog items.
+        </p>
+      </div>
     </div>
   );
 }

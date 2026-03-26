@@ -496,12 +496,12 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                 onCreateInquiry={async (customer, contact) => {
                   let customerToUse = customer;
                   
-                  if (!customerToUse && contact.customer_id) {
+                  if (!customerToUse && contact?.customer_id) {
                     try {
                       const { data: custData } = await supabase
                         .from('customers')
                         .select('*')
-                        .eq('id', contact.customer_id)
+                        .eq('id', contact.customer_id!)
                         .maybeSingle();
                       
                       if (custData) {
@@ -513,7 +513,7 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                   }
                   
                   setSelectedCustomer(customerToUse || null);
-                  setSelectedContact(contact);
+                  setSelectedContact(contact ?? null);
                   setView("inquiries");
                   setSubView("builder");
                 }}
@@ -691,7 +691,7 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
                   // User can navigate to Contracts module via sidebar
                   handleBackFromInquiry();
                 }}
-                currentUser={currentUser}
+                currentUser={currentUser as any}
                 onDelete={handleDeleteQuotation}
               />
             )}
@@ -722,7 +722,7 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
               email: currentUser.email,
               department: currentUser.department
             } : undefined}
-            onCreateTicket={onCreateTicket}
+            onCreateTicket={onCreateTicket as any}
             initialProject={selectedProject}
           />
         )}

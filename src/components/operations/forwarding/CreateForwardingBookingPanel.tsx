@@ -169,6 +169,18 @@ export function CreateForwardingBookingPanel({
       toast.error("Customer Name is required");
       return false;
     }
+    if (!consignee) {
+      toast.error("Consignee is required");
+      return false;
+    }
+    if (!aolPol) {
+      toast.error("Port of Loading is required");
+      return false;
+    }
+    if (!aodPod) {
+      toast.error("Port of Discharge is required");
+      return false;
+    }
 
     // If from Pricing module, require team assignments
     if (source === "pricing" && !teamAssignment) {
@@ -337,7 +349,10 @@ export function CreateForwardingBookingPanel({
 
   if (!isOpen) return null;
 
-  const isFormValid = customerName.trim() !== "" && 
+  const isFormValid = customerName.trim() !== "" &&
+    consignee.trim() !== "" &&
+    aolPol.trim() !== "" &&
+    aodPod.trim() !== "" &&
     (source === "operations" || (source === "pricing" && teamAssignment !== null));
 
   return (

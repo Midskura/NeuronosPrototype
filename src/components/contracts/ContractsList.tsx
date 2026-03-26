@@ -16,6 +16,7 @@ import { CustomDropdown } from "../bd/CustomDropdown";
 import { CustomDatePicker } from "../common/CustomDatePicker";
 import { SkeletonTable, SkeletonControlBar } from "../shared/NeuronSkeleton";
 import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
+import { getNormalizedContractStatus } from "../../utils/quotationStatus";
 
 interface ContractsListProps {
   contracts: QuotationNew[];
@@ -65,11 +66,11 @@ export function ContractsList({
     return Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
   };
 
-  const uniqueOwners = Array.from(new Set(contracts.map(c => c.bd_owner).filter(Boolean)));
+  const uniqueOwners = Array.from(new Set(contracts.map(c => c.prepared_by).filter(Boolean)));
   const uniqueCustomers = Array.from(new Set(contracts.map(c => c.customer_name).filter(Boolean))).sort();
 
   // Derive contract_status for filtering
-  const getContractStatus = (c: QuotationNew) => c.contract_status || "Draft";
+  const getContractStatus = (c: QuotationNew) => getNormalizedContractStatus(c) || "Draft";
 
   // Filter contracts based on active tab
   const getFilteredByTab = () => {
@@ -116,7 +117,7 @@ export function ContractsList({
     if (customerFilter !== "all" && contract.customer_name !== customerFilter) return false;
     
     // Owner filter
-    if (ownerFilter !== "all" && contract.bd_owner !== ownerFilter) return false;
+    if (ownerFilter !== "all" && contract.prepared_by !== ownerFilter) return false;
     
     return true;
   });

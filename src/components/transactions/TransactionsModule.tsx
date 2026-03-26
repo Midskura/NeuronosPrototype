@@ -2,7 +2,8 @@ import { useState, useMemo, useEffect } from "react";
 import { Settings, ChevronDown, Globe, Wallet } from "lucide-react";
 import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
 import { getAccounts, saveAccount, deleteAccount, getTransactions, getTransactionViewSettings, saveTransactionViewSettings } from "../../utils/accounting-api";
-import type { Account, Transaction, Currency } from "../../types/accounting";
+import type { Account } from "../../types/accounting-core";
+import type { Transaction, Currency } from "../../types/accounting";
 import { BankCardsCarousel, type BankAccountSummary } from "./BankCardsCarousel";
 import { TransactionsTable, type UI_Transaction, type ReviewStatus } from "./TransactionsTable";
 import { TransactionsControlBar } from "./TransactionsControlBar";
@@ -97,7 +98,7 @@ export function TransactionsModule() {
       }
 
       // Default behavior (if no settings): Assets, non-folder, matching currency
-      return a.type === 'asset' && !a.is_folder && a.currency === currency;
+      return a.type === 'Asset' && !a.is_folder && a.currency === currency;
     });
     
     return banks.map(bank => {
@@ -321,7 +322,7 @@ export function TransactionsModule() {
         width="480px"
       >
         <AddAccountForm 
-            onSuccess={handleAddAccount}
+            onSuccess={handleAddAccount as any}
             onCancel={() => setIsAddAccountOpen(false)}
         />
       </SidePanel>

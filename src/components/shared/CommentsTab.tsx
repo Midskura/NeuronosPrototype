@@ -105,11 +105,10 @@ export function CommentsTab({
 
           const { data: urlData } = supabase.storage.from('attachments').getPublicUrl(filePath);
           uploadedAttachments.push({
-            id: filePath,
-            name: file.name,
-            url: urlData.publicUrl,
-            type: file.type,
-            size: file.size,
+            file_name: file.name,
+            file_url: urlData.publicUrl,
+            file_type: file.type,
+            file_size: file.size,
           });
         }
         

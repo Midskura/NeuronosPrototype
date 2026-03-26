@@ -203,11 +203,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
 
   if (selectedBooking) {
     return (
-      <BrokerageBookingDetails 
-        booking={selectedBooking} 
-        onBack={() => { 
+      <BrokerageBookingDetails
+        booking={selectedBooking as any}
+        onBack={() => {
           setSelectedBooking(null);
-        }} 
+        }}
         onUpdate={fetchBookings}
         initialTab={initialTab}
         highlightId={highlightId}
@@ -637,8 +637,8 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
         <CreateBrokerageBookingPanel
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
-          onBookingCreated={handleBookingCreated}
-          currentUser={currentUser}
+          onSuccess={handleBookingCreated}
+          currentUser={currentUser as any}
         />
       )}
     </>

@@ -36,7 +36,7 @@ function mapToForwardingBooking(row: Record<string, any>): ForwardingBooking {
     mode: d.mode,
     portOfLoading: d.origin,
     portOfDischarge: d.destination,
-  } as ForwardingBooking;
+  } as unknown as ForwardingBooking;
 }
 
 export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookingId }: ForwardingBookingsProps) {

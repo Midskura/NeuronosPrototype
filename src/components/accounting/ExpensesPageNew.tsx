@@ -113,8 +113,8 @@ export function ExpensesPageNew() {
     }
 
     // Sort by date descending
-    filtered.sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
+    filtered.sort((a, b) =>
+      new Date(b.date || "").getTime() - new Date(a.date || "").getTime()
     );
 
     return filtered;
@@ -219,7 +219,7 @@ export function ExpensesPageNew() {
             onChange={(value) => setCategoryFilter(value)}
             options={[
               { value: "all", label: "All Categories" },
-              ...categories.map(cat => ({ value: cat, label: cat }))
+              ...categories.map(cat => ({ value: cat || "", label: cat || "" }))
             ]}
           />
 
@@ -251,7 +251,7 @@ export function ExpensesPageNew() {
       {/* Add Expense Panel */}
       {showAddPanel && (
         <AddRequestForPaymentPanel
-          context="expense"
+          context="accounting"
           isOpen={showAddPanel}
           onClose={() => setShowAddPanel(false)}
           onSave={async () => {

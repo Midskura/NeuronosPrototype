@@ -99,7 +99,7 @@ export function AuditingSummary() {
       ]);
 
       if (!lineItems || !catalogItems) {
-        setData({ items: [], meta: { total_line_items: 0, linked_count: 0, unlinked_count: 0, linked_percentage: 0, period, service_type: serviceType, view } });
+        setData({ items: [], meta: { total_catalog_items: 0, total_line_items: 0, linked_count: 0, unlinked_count: 0, linked_percentage: 0, period, service_type: serviceType, view } });
         return;
       }
 
@@ -139,6 +139,7 @@ export function AuditingSummary() {
       setData({
         items,
         meta: {
+          total_catalog_items: catalogItems.length,
           total_line_items: lineItems.length,
           linked_count: linkedCount,
           unlinked_count: lineItems.length - linkedCount,

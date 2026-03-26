@@ -189,9 +189,9 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
                     <div className="text-[13px] font-semibold" style={{ color: "var(--neuron-ink-primary)" }}>
                       {formatCurrency(billing.total_amount || (billing as any).amount || 0, (billing as any).currency || "PHP")}
                     </div>
-                    {billing.amount_due > 0 && status !== "unpaid" && status !== "Paid" && (
+                    {(billing.amount_due ?? 0) > 0 && status !== "unpaid" && status !== "Paid" && (
                       <div className="text-[10px] mt-0.5" style={{ color: "#DC2626" }}>
-                        {formatCurrency(billing.amount_due, (billing as any).currency || "PHP")} due
+                        {formatCurrency(billing.amount_due ?? 0, (billing as any).currency || "PHP")} due
                       </div>
                     )}
                   </div>
@@ -202,7 +202,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
                       {status}
                     </span>
                     <div className="text-[10px] mt-1" style={{ color: isOverdue(billing) ? "#DC2626" : "var(--neuron-ink-muted)" }}>
-                      Due: {formatDate(billing.due_date)}
+                      Due: {formatDate(billing.due_date || "")}
                     </div>
                   </div>
 

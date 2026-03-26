@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Loader2, ArrowRight, Check } from "lucide-react";
+import { Loader2, ArrowRight, Check, Trash2 } from "lucide-react";
 import { toast } from "../../ui/toast-utils";
 import type { FinancialContainer } from "../../../types/financials";
 import type { LinkedBilling } from "../../../types/evoucher";
@@ -10,6 +10,8 @@ import { SidePanel } from "../../common/SidePanel";
 import { CustomDatePicker } from "../../common/CustomDatePicker";
 import { CustomDropdown } from "../../bd/CustomDropdown";
 import { calculateInvoiceBalance } from "../../../utils/accounting-math";
+import { supabase } from "../../../utils/supabase/client";
+import { REVERSED_INVOICE_STATUS } from "../../../utils/invoiceReversal";
 
 interface CollectionCreatorPanelProps {
   isOpen: boolean;
@@ -33,6 +35,7 @@ interface OpenInvoice {
   remaining_balance: number;
   payment_amount: number; // For the form
   isSelected: boolean;
+  isReversed?: boolean;
 }
 
 export function CollectionCreatorPanel({ 
@@ -65,8 +68,8 @@ export function CollectionCreatorPanel({
     if (isOpen) {
       if (mode === 'view' && initialData) {
         // --- VIEW MODE INITIALIZATION ---
-        setPaymentDate(initialData.collection_date || initialData.created_at);
-        setPaymentMethod(initialData.payment_method);
+        setPaymentDate(initialData.collection_date || initialData.created_at || "");
+        setPaymentMethod(initialData.payment_method || "Bank Transfer");
         setReferenceNo(initialData.reference_number || "");
         setNotes(initialData.notes || "");
         setAmountReceived(initialData.amount);
@@ -79,14 +82,14 @@ export function CollectionCreatorPanel({
           .map(inv => {
             const link = initialData.linked_billings?.find(lb => lb.id === inv.id);
             const paymentAmount = link ? link.amount : 0;
-            
+
             return {
               id: inv.id,
-              voucher_number: inv.invoice_number,
-              statement_reference: inv.invoice_number,
-              description: inv.description,
-              due_date: inv.due_date || inv.created_at,
-              amount: inv.total_amount || inv.amount,
+              voucher_number: inv.invoice_number || "",
+              statement_reference: inv.invoice_number || "",
+              description: inv.description || "",
+              due_date: inv.due_date || inv.created_at || "",
+              amount: (inv.total_amount ?? inv.amount) ?? 0,
               remaining_balance: 0, // In view mode, we don't care about balance
               payment_amount: paymentAmount,
               isSelected: true
@@ -104,31 +107,44 @@ export function CollectionCreatorPanel({
         setNotes("");
         setAmountReceived(0);
 
-        const openItems = existingInvoices
+        // Separate reversed invoices from open ones so reversed show in the list
+        // but cannot be selected for payment.
+        const reversedItems: OpenInvoice[] = existingInvoices
+          .filter(inv => String(inv.status || "").toLowerCase() === REVERSED_INVOICE_STATUS)
+          .map(inv => ({
+            id: inv.id,
+            voucher_number: inv.invoice_number || "",
+            statement_reference: inv.invoice_number || "",
+            description: inv.description || "",
+            due_date: inv.due_date || inv.created_at || "",
+            amount: (inv.total_amount ?? inv.amount) ?? 0,
+            remaining_balance: 0,
+            payment_amount: 0,
+            isSelected: false,
+            isReversed: true,
+          }));
+
+        const openItems: OpenInvoice[] = existingInvoices
+          .filter(inv => String(inv.status || "").toLowerCase() !== REVERSED_INVOICE_STATUS)
           .map(inv => {
             const { balance, status } = calculateInvoiceBalance(inv, existingCollections);
-
-            return {
-              invoice: inv,
-              balance,
-              status,
-            };
+            return { invoice: inv, balance, status };
           })
           .filter(({ balance, status }) => balance > 0.01 && status !== 'paid')
           .map(({ invoice: inv, balance }) => ({
             id: inv.id,
-            voucher_number: inv.invoice_number,
-            statement_reference: inv.invoice_number,
-            description: inv.description,
-            due_date: inv.due_date || inv.created_at,
-            amount: inv.total_amount || inv.amount,
+            voucher_number: inv.invoice_number || "",
+            statement_reference: inv.invoice_number || "",
+            description: inv.description || "",
+            due_date: inv.due_date || inv.created_at || "",
+            amount: (inv.total_amount ?? inv.amount) ?? 0,
             remaining_balance: balance,
             payment_amount: 0,
-            isSelected: false
+            isSelected: false,
           }))
           .sort((a, b) => new Date(a.due_date).getTime() - new Date(b.due_date).getTime());
 
-        setInvoices(openItems);
+        setInvoices([...openItems, ...reversedItems]);
       }
     }
   }, [isOpen, mode, initialData, existingInvoices, existingCollections]);
@@ -166,6 +182,9 @@ export function CollectionCreatorPanel({
   // 2. Handle Invoice Selection (Manual Toggle)
   const toggleInvoice = (id: string) => {
     if (isReadOnly) return;
+    // Reversed invoices cannot be selected for payment
+    const target = invoices.find(inv => inv.id === id);
+    if (target?.isReversed) return;
     let amountDelta = 0;
 
     const newInvoices = invoices.map(inv => {
@@ -214,11 +233,37 @@ export function CollectionCreatorPanel({
     setAmountReceived(prev => Math.max(0, parseFloat((prev + amountDelta).toFixed(2))));
   };
 
+  // Delete a reversed invoice — only allowed when status='reversed'
+  const handleDeleteInvoice = async (id: string) => {
+    const target = invoices.find(inv => inv.id === id);
+    if (!target?.isReversed) return;
+
+    const confirmed = window.confirm(
+      `Delete reversed invoice "${target.voucher_number}"?\n\nThis permanently removes the record. This action cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    const { error } = await supabase.from("invoices").delete().eq("id", id);
+    if (error) {
+      toast.error("Failed to delete invoice: " + error.message);
+      return;
+    }
+
+    setInvoices(prev => prev.filter(inv => inv.id !== id));
+    toast.success(`Reversed invoice ${target.voucher_number} deleted.`);
+  };
 
   // -- Submission --
   const handleSubmit = async () => {
     if (amountReceived <= 0) {
       toast.error("Please enter a valid amount");
+      return;
+    }
+
+    // Belt-and-suspenders: never allow applying a collection to a reversed invoice
+    const selectedInvoicesPreCheck = invoices.filter(inv => inv.payment_amount > 0 && inv.isReversed);
+    if (selectedInvoicesPreCheck.length > 0) {
+      toast.error("Cannot apply a payment to a reversed invoice. Deselect it and try again.");
       return;
     }
 
@@ -404,7 +449,12 @@ export function CollectionCreatorPanel({
                   {mode === 'view' ? "Linked Invoices" : "Outstanding Transactions"}
                 </h3>
                 <span className="text-xs text-gray-500 font-medium">
-                  {invoices.length} {mode === 'view' ? "linked" : "open"} invoices
+                  {invoices.filter(inv => !inv.isReversed).length} {mode === 'view' ? "linked" : "open"} invoices
+                  {invoices.some(inv => inv.isReversed) && (
+                    <span className="ml-2 text-red-400">
+                      · {invoices.filter(inv => inv.isReversed).length} reversed
+                    </span>
+                  )}
                 </span>
               </div>
 
@@ -432,11 +482,15 @@ export function CollectionCreatorPanel({
                     </thead>
                     <tbody className="divide-y divide-[#F3F4F6]">
                       {invoices.map((inv) => (
-                        <tr 
-                          key={inv.id} 
-                          className={`transition-colors hover:bg-gray-50 ${inv.isSelected ? "bg-[#F0FDFA]" : ""} ${isReadOnly ? 'pointer-events-none' : ''}`}
+                        <tr
+                          key={inv.id}
+                          className={`transition-colors ${
+                            inv.isReversed
+                              ? "opacity-60 bg-gray-50"
+                              : `hover:bg-gray-50 ${inv.isSelected ? "bg-[#F0FDFA]" : ""}`
+                          } ${isReadOnly ? 'pointer-events-none' : ''}`}
                           onClick={(e) => {
-                            if (!isReadOnly) {
+                            if (!isReadOnly && !inv.isReversed) {
                                 if ((e.target as HTMLElement).tagName !== 'INPUT') {
                                     toggleInvoice(inv.id);
                                 }
@@ -444,22 +498,31 @@ export function CollectionCreatorPanel({
                           }}
                         >
                           <td className="px-6 py-4 text-center">
-                             <div 
+                             <div
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  if (!isReadOnly) toggleInvoice(inv.id);
+                                  if (!isReadOnly && !inv.isReversed) toggleInvoice(inv.id);
                                 }}
-                                className={`w-5 h-5 rounded border flex items-center justify-center transition-colors cursor-pointer mx-auto ${
-                                  inv.isSelected 
-                                    ? "bg-[#0F766E] border-[#0F766E]" 
-                                    : "bg-white border-gray-300 hover:border-[#0F766E]"
+                                className={`w-5 h-5 rounded border flex items-center justify-center transition-colors mx-auto ${
+                                  inv.isReversed
+                                    ? "bg-gray-100 border-gray-300 cursor-not-allowed"
+                                    : inv.isSelected
+                                      ? "bg-[#0F766E] border-[#0F766E] cursor-pointer"
+                                      : "bg-white border-gray-300 hover:border-[#0F766E] cursor-pointer"
                                 }`}
                               >
-                                {inv.isSelected && <Check size={14} className="text-white" strokeWidth={3} />}
+                                {inv.isSelected && !inv.isReversed && <Check size={14} className="text-white" strokeWidth={3} />}
                               </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-sm font-medium text-[#12332B]">{inv.voucher_number}</div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium text-[#12332B]">{inv.voucher_number}</span>
+                              {inv.isReversed && (
+                                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-red-100 text-red-600 rounded uppercase tracking-wide">
+                                  Reversed
+                                </span>
+                              )}
+                            </div>
                             <div className="text-xs text-gray-500">{inv.description}</div>
                           </td>
                           <td className="px-6 py-4 text-sm text-gray-600">
@@ -469,22 +532,34 @@ export function CollectionCreatorPanel({
                             {formatCurrency(inv.amount)}
                           </td>
                           <td className="px-6 py-4 text-sm font-medium text-[#12332B] text-right">
-                            {mode === 'view' ? "-" : formatCurrency(inv.remaining_balance)}
+                            {mode === 'view' ? "-" : inv.isReversed ? "—" : formatCurrency(inv.remaining_balance)}
                           </td>
                           <td className="px-6 py-4 text-right">
-                            <input
-                              type="number"
-                              value={inv.payment_amount > 0 ? inv.payment_amount : ""}
-                              onClick={(e) => e.stopPropagation()}
-                              onChange={(e) => handleInvoicePaymentChange(inv.id, parseFloat(e.target.value) || 0)}
-                              readOnly={isReadOnly}
-                              className={`w-full text-right px-3 py-2 border rounded-md text-sm outline-none transition-all ${
-                                inv.isSelected 
-                                  ? "border-[#0F766E] ring-1 ring-[#0F766E] font-bold text-[#0F766E] bg-white" 
-                                  : "border-gray-200 text-gray-700 bg-transparent"
-                              }`}
-                              placeholder="0.00"
-                            />
+                            {inv.isReversed ? (
+                              !isReadOnly && (
+                                <button
+                                  onClick={(e) => { e.stopPropagation(); handleDeleteInvoice(inv.id); }}
+                                  title="Delete reversed invoice"
+                                  className="ml-auto flex items-center justify-center w-8 h-8 rounded-md text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              )
+                            ) : (
+                              <input
+                                type="number"
+                                value={inv.payment_amount > 0 ? inv.payment_amount : ""}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => handleInvoicePaymentChange(inv.id, parseFloat(e.target.value) || 0)}
+                                readOnly={isReadOnly}
+                                className={`w-full text-right px-3 py-2 border rounded-md text-sm outline-none transition-all ${
+                                  inv.isSelected
+                                    ? "border-[#0F766E] ring-1 ring-[#0F766E] font-bold text-[#0F766E] bg-white"
+                                    : "border-gray-200 text-gray-700 bg-transparent"
+                                }`}
+                                placeholder="0.00"
+                              />
+                            )}
                           </td>
                         </tr>
                       ))}

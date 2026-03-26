@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
 import { supabase } from "../../../utils/supabase/client";
-import type { Expense } from "../../types/accounting";
+import type { Expense } from "../../../types/accounting";
 
 interface ExpenseDetailsSheetProps {
   isOpen: boolean;

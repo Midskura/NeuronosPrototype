@@ -11,6 +11,14 @@ import { SegmentedToggle } from "../ui/SegmentedToggle";
 import { QuotationPDFScreen } from "../projects/quotation/screen/QuotationPDFScreen";
 import { QuotationFormView } from "../projects/quotation/QuotationFormView";
 import { supabase } from "../../utils/supabase/client";
+import { createWorkflowTicket, getOpenWorkflowTicket } from "../../utils/workflowTickets";
+import { LinkedTicketBadge } from "../common/LinkedTicketBadge";
+import {
+  getNormalizedContractStatus,
+  getNormalizedQuotationStatus,
+  isQuotationLocked,
+  normalizeQuotationStatus,
+} from "../../utils/quotationStatus";
 
 interface QuotationFileViewProps {
   quotation: QuotationNew;
@@ -37,6 +45,9 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
   const [showCreateBookingsModal, setShowCreateBookingsModal] = useState(false);
   const [createdProject, setCreatedProject] = useState<Project | null>(null);
   const [isActivatingContract, setIsActivatingContract] = useState(false);
+  const normalizedStatus = getNormalizedQuotationStatus(quotation);
+  const normalizedContractStatus = getNormalizedContractStatus(quotation);
+  const isLocked = isQuotationLocked(quotation);
   
   // TODO: Replace with actual user data from context/auth
   const currentUserId = currentUser?.id || "user-123";
@@ -103,15 +114,15 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
   // Check if pricing information should be visible
   // Visible if: user is PD, OR status indicates quotation has been priced
   const showPricing = userDepartment === "Pricing" || 
-    quotation.status === "Priced" || 
-    quotation.status === "Sent to Client" ||
-    quotation.status === "Accepted by Client" ||
-    quotation.status === "Rejected by Client" ||
-    quotation.status === "Needs Revision" ||
-    quotation.status === "Disapproved" ||
-    quotation.status === "Cancelled" ||
-    quotation.status === "Converted to Project" ||
-    quotation.status === "Converted to Contract";
+    normalizedStatus === "Priced" || 
+    normalizedStatus === "Sent to Client" ||
+    normalizedStatus === "Accepted by Client" ||
+    normalizedStatus === "Rejected by Client" ||
+    normalizedStatus === "Needs Revision" ||
+    normalizedStatus === "Disapproved" ||
+    normalizedStatus === "Cancelled" ||
+    normalizedStatus === "Converted to Project" ||
+    normalizedStatus === "Converted to Contract";
 
   // Calculate financial totals
   const subtotalTaxable = quotation.charge_categories?.reduce((total, category) => {
@@ -120,7 +131,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
 
   const financialSummary = {
     subtotal_non_taxed: quotation.financial_summary?.subtotal_non_taxed || 0,
-    subtotal_taxable: quotation.financial_summary?.subtotal_taxable || subtotalTaxable,
+    subtotal_taxable: quotation.financial_summary?.subtotal_taxed || subtotalTaxable,
     tax_rate: quotation.financial_summary?.tax_rate || 0.12,
     tax_amount: quotation.financial_summary?.tax_amount || (subtotalTaxable * (quotation.financial_summary?.tax_rate || 0.12)),
     other_charges: quotation.financial_summary?.other_charges || 0,
@@ -167,18 +178,39 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     }
   };
 
-  const handleStatusChange = (newStatus: string, reason?: string) => {
-    const updatedQuotation = { 
-      ...quotation, 
-      status: newStatus as QuotationNew["status"],
+  const handleStatusChange = async (newStatus: string, reason?: string) => {
+    // Contract expiry — update contract_status only, leave status untouched
+    if (newStatus === "Mark as Expired") {
+      onUpdate({ ...quotation, contract_status: "Expired" });
+      return;
+    }
+
+    const updatedQuotation = {
+      ...quotation,
+      status: normalizeQuotationStatus(newStatus, quotation),
       disapproval_reason: reason,
       cancellation_reason: reason
     };
     onUpdate(updatedQuotation);
-    
-    // If status changed to "Approved", trigger project creation
-    if (newStatus === "Approved") {
-      handleAcceptQuotation();
+
+    // BD → Pricing handoff: create workflow ticket when submitting for pricing
+    if (normalizeQuotationStatus(newStatus, quotation) === "Pending Pricing" && currentUser) {
+      const existing = await getOpenWorkflowTicket("quotation", quotation.id);
+      if (!existing) {
+        await createWorkflowTicket({
+          subject: `Price Quotation: ${quotation.quote_number || quotation.quotation_name}`,
+          body: `${currentUser.name} has submitted quotation "${quotation.quotation_name}" (${quotation.quote_number}) for pricing. Please review and add pricing.`,
+          type: "request",
+          priority: "normal",
+          recipientDept: "Pricing",
+          linkedRecordType: "quotation",
+          linkedRecordId: quotation.id,
+          resolutionAction: "set_quotation_priced",
+          createdBy: currentUser.id,
+          createdByName: currentUser.name,
+          createdByDept: currentUser.department,
+        });
+      }
     }
   };
 
@@ -219,21 +251,14 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     setIsCreatingProject(true);
 
     try {
-      // Accept quotation: update status to 'Accepted' and create project
-      const { error: qError } = await supabase.from('quotations').update({
-        status: 'Accepted',
-        accepted_at: new Date().toISOString(),
-      }).eq('id', quotation.id);
-      if (qError) throw new Error(qError.message);
-
-      // Create the project
+      // Create the project first, then persist the conversion markers on the quotation.
       const projectNumber = `PRJ-${Date.now().toString().slice(-6)}`;
       const projectData = {
         id: `proj-${Date.now()}`,
         project_number: projectNumber,
         quotation_id: quotation.id,
         customer_id: quotation.customer_id,
-        customer_name: quotation.customer_name || quotation.company_name,
+        customer_name: quotation.customer_name || quotation.customer_company,
         status: 'Active',
         bd_owner_user_id: currentUser.id,
         bd_owner_user_name: currentUser.name,
@@ -242,7 +267,20 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
       const { data: project, error: pError } = await supabase.from('projects').insert(projectData).select().single();
       if (pError) throw new Error(pError.message);
 
-      const updatedQuotation = { ...quotation, status: 'Accepted', project_id: project.id, project_number: project.project_number };
+      const projectConversionPayload = {
+        status: "Converted to Project" as QuotationNew["status"],
+        accepted_at: new Date().toISOString(),
+        project_id: project.id,
+        project_number: project.project_number,
+        updated_at: new Date().toISOString(),
+      };
+      const { error: qError } = await supabase
+        .from('quotations')
+        .update(projectConversionPayload)
+        .eq('id', quotation.id);
+      if (qError) throw new Error(qError.message);
+
+      const updatedQuotation = { ...quotation, ...projectConversionPayload };
       onUpdate(updatedQuotation);
 
       toast.success(`✓ Project ${project.project_number} created successfully!`);
@@ -275,14 +313,20 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     setIsActivatingContract(true);
 
     try {
-      const { error: activateError } = await supabase.from('quotations').update({
-        status: 'Active Contract',
+      const contractActivationPayload = {
+        status: "Converted to Contract" as QuotationNew["status"],
+        contract_status: "Active" as QuotationNew["contract_status"],
         activated_at: new Date().toISOString(),
-      }).eq('id', quotation.id);
+        updated_at: new Date().toISOString(),
+      };
+      const { error: activateError } = await supabase
+        .from('quotations')
+        .update(contractActivationPayload)
+        .eq('id', quotation.id);
 
       if (activateError) throw new Error(activateError.message);
 
-      const updatedContract = { ...quotation, status: 'Active Contract' };
+      const updatedContract = { ...quotation, ...contractActivationPayload };
       onUpdate(updatedContract);
 
       toast.success(`✓ Contract ${quotation.quote_number} activated! View in Contracts module.`);
@@ -373,8 +417,11 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
           <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: 0 }}>
             {quotation.quote_number}
           </p>
+          <div style={{ marginTop: 8 }}>
+            <LinkedTicketBadge recordType="quotation" recordId={quotation.id} />
+          </div>
         </div>
-        
+
         {/* No action buttons here anymore - moved to toolbar */}
       </div>
 
@@ -432,7 +479,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
         {/* Action Controls - Right Side */}
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
           {/* Edit Button (Ghost Style) — hidden when locked (converted to project or contract) */}
-          {!quotation.project_id && quotation.status !== "Converted to Contract" && (
+          {!isLocked && (
             <button
               onClick={onEdit}
               style={{
@@ -470,7 +517,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
           />
           
           {/* Edit Pricing - PD Only, Pending Pricing Status */}
-          {userDepartment === "Pricing" && quotation.status === "Pending Pricing" && (
+          {userDepartment === "Pricing" && normalizedStatus === "Pending Pricing" && (
             <button
               onClick={onEdit}
               style={{
@@ -500,7 +547,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
           )}
 
           {/* Create Project - BD and PD, Accepted by Client Status (Project quotations only) */}
-          {(userDepartment === "Business Development" || userDepartment === "Pricing") && quotation.status === "Accepted by Client" && !quotation.project_id && quotation.quotation_type !== "contract" && (
+          {(userDepartment === "Business Development" || userDepartment === "Pricing") && normalizedStatus === "Accepted by Client" && !quotation.project_id && quotation.quotation_type !== "contract" && (
             <button
               onClick={handleAcceptAndCreateProject}
               disabled={isCreatingProject}
@@ -536,7 +583,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
           )}
 
           {/* Activate Contract - BD and PD, Accepted by Client Status (Contract quotations only) */}
-          {(userDepartment === "Business Development" || userDepartment === "Pricing") && quotation.status === "Accepted by Client" && quotation.quotation_type === "contract" && quotation.contract_status !== "Active" && (
+          {(userDepartment === "Business Development" || userDepartment === "Pricing") && normalizedStatus === "Accepted by Client" && quotation.quotation_type === "contract" && normalizedContractStatus !== "Active" && (
             <button
               onClick={handleActivateContract}
               disabled={isActivatingContract}
@@ -572,7 +619,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
           )}
           
           {/* Locked Indicator — shown for converted projects or activated contracts */}
-          {(quotation.project_id || quotation.status === "Converted to Contract") && (
+          {isLocked && (
             <div style={{
               display: "flex",
               alignItems: "center",
@@ -594,7 +641,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
             onEdit={onEdit}
             onDuplicate={handleDuplicate}
             onDelete={handleDelete}
-            onCreateTicket={onCreateTicket}
+            onCreateTicket={onCreateTicket ? handleCreateTicket : undefined}
           />
         </div>
       </div>

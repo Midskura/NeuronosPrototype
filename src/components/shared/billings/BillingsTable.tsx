@@ -1,4 +1,4 @@
-import { Receipt, Plus, DollarSign, LoaderCircle, ChevronDown, ChevronRight, Briefcase, Ship, Truck, Shield, Package } from "lucide-react";
+import { Receipt, Plus, DollarSign, LoaderCircle, ChevronDown, ChevronRight, Briefcase, Ship, Truck, Shield, Package, Ban, Trash2 } from "lucide-react";
 import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 // Shared Components
 import { PricingTableHeader } from "../pricing/PricingTableHeader";
@@ -49,6 +49,8 @@ interface BillingsTableProps {
   linkedBookings?: any[];
   /** Deep-link: highlight a specific billing item row */
   highlightId?: string | null;
+  /** Void an unbilled billing item (sets status=voided, preserves record) */
+  onVoidItem?: (itemId: string) => void;
 }
 
 const formatCurrency = (amount: number, currency: string = "PHP") => {
@@ -62,9 +64,9 @@ const formatCurrency = (amount: number, currency: string = "PHP") => {
 // Helper: Compute aggregate billing status from a list of items
 const getBookingBillingStatus = (items: BillingTableItem[]): "Unbilled" | "Partially Billed" | "Fully Billed" | "Voided" => {
   if (items.length === 0) return "Unbilled";
-  const voidedCount = items.filter(i => ["voided", "cancelled", "void"].includes((i.status || "").toLowerCase())).length;
+  const voidedCount = items.filter(i => (i.status || "").toLowerCase() === "voided").length;
   if (voidedCount === items.length) return "Voided";
-  const billedCount = items.filter(i => i.status === "billed" || i.status === "paid" || i.status === "invoiced").length;
+  const billedCount = items.filter(i => i.status === "invoiced" || i.status === "paid").length;
   if (billedCount === 0) return "Unbilled";
   if (billedCount === items.length) return "Fully Billed";
   return "Partially Billed";
@@ -94,6 +96,7 @@ export function BillingsTable({
   groupBy = "category",
   linkedBookings,
   highlightId = null,
+  onVoidItem,
 }: BillingsTableProps) {
   // Ref for scrolling to highlighted item
   const highlightRef = useRef<HTMLDivElement>(null);
@@ -199,6 +202,46 @@ export function BillingsTable({
       status: item.status,
       created_at: item.date
     };
+  };
+
+  // Build custom action buttons (Void + Delete) for unbilled rows.
+  // Replaces UniversalPricingRow's single onRemove button.
+  const buildRowActions = (item: BillingTableItem): React.ReactNode | undefined => {
+    if (viewMode) return undefined;
+    const isUnbilled = (item.status || "").toLowerCase() === "unbilled";
+    if (!isUnbilled) return undefined;
+    return (
+      <div style={{ display: "flex", gap: "4px" }}>
+        {onVoidItem && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onVoidItem(item.id); }}
+            style={{
+              display: "flex", alignItems: "center", gap: "4px",
+              padding: "5px 9px", fontSize: "12px", fontWeight: 500,
+              border: "1px solid #FDE68A", borderRadius: "6px",
+              backgroundColor: "white", color: "#D97706", cursor: "pointer",
+            }}
+            title="Void Item — sets status to voided, preserves the record for audit"
+          >
+            <Ban size={12} />
+            Void
+          </button>
+        )}
+        <button
+          onClick={(e) => { e.stopPropagation(); onItemChange?.(item.id, "delete", true); }}
+          style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            padding: "5px 9px", fontSize: "12px", fontWeight: 500,
+            border: "1px solid #FCD4D1", borderRadius: "6px",
+            backgroundColor: "white", color: "#DC2626", cursor: "pointer",
+          }}
+          title="Delete — permanently removes this record"
+        >
+          <Trash2 size={12} />
+          Delete
+        </button>
+      </div>
+    );
   };
 
   if (displayedCategories.length === 0 && groupBy === "category" && !onAddCategory) {
@@ -439,7 +482,7 @@ export function BillingsTable({
                                   <UniversalPricingRow
                                     data={mapToPricingData(item)}
                                     mode={viewMode || isBilled ? "view" : "edit"}
-                                    serviceType={item.service_type}
+                                    serviceType={item.serviceType}
                                     itemType="charge"
                                     config={{
                                       showCost: false,
@@ -450,10 +493,10 @@ export function BillingsTable({
                                       priceEditable: true,
                                     }}
                                     handlers={{
-                                      onFieldChange: isBilled ? undefined : (field, value) => onItemChange?.(item.id, field, value),
+                                      onFieldChange: isBilled ? (_f: string, _v: any) => {} : (field, value) => { onItemChange?.(item.id, field, value); },
                                       onPriceChange: isBilled ? undefined : (value) => onItemChange?.(item.id, "amount", value),
-                                      onRemove: isBilled ? undefined : () => onItemChange?.(item.id, "delete", true),
                                     }}
+                                    customActions={buildRowActions(item)}
                                   />
                                   </div>
                                 );
@@ -581,21 +624,21 @@ export function BillingsTable({
                                     key={item.id}
                                     data={mapToPricingData(item)}
                                     mode={viewMode || isBilled ? "view" : "edit"}
-                                    serviceType={item.service_type}
+                                    serviceType={item.serviceType}
                                     itemType="charge"
                                     config={{
                                         showCost: false,
                                         showMarkup: false,
-                                        showForex: true, 
+                                        showForex: true,
                                         showTax: true,
-                                        simpleMode: true, 
-                                        priceEditable: true 
+                                        simpleMode: true,
+                                        priceEditable: true
                                     }}
                                     handlers={{
-                                        onFieldChange: isBilled ? undefined : (field, value) => onItemChange?.(item.id, field, value),
+                                        onFieldChange: isBilled ? (_f: string, _v: any) => {} : (field, value) => { onItemChange?.(item.id, field, value); },
                                         onPriceChange: isBilled ? undefined : (value) => onItemChange?.(item.id, 'amount', value),
-                                        onRemove: isBilled ? undefined : () => onDeleteCategory ? onItemChange?.(item.id, 'delete', true) : undefined
                                     }}
+                                    customActions={buildRowActions(item)}
                                     />
                                     );
                                 })}

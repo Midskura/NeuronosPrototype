@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
-import { Clock, CheckCircle, XCircle, AlertCircle, ChevronDown, Send } from "lucide-react";
+import { Clock, CheckCircle, XCircle, AlertCircle, ChevronDown, Send, RotateCcw } from "lucide-react";
 import type { QuotationNew, QuotationStatus } from "../../types/pricing";
 import { FormDropdown } from "./FormDropdown";
 import { getDisplayStatus, getStatusStyle } from "../../utils/statusMapping";
+import { getNormalizedQuotationStatus } from "../../utils/quotationStatus";
 
 interface StatusChangeButtonProps {
   quotation: QuotationNew;
@@ -16,9 +17,10 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
   const [selectedDisapprovalStatus, setSelectedDisapprovalStatus] = useState<"Rejected by Client" | "Disapproved" | "Cancelled">("Disapproved");
   const [reason, setReason] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
+  const normalizedStatus = getNormalizedQuotationStatus(quotation);
 
   // Get display status and styling
-  const displayStatus = getDisplayStatus(quotation.status);
+  const displayStatus = getDisplayStatus(normalizedStatus);
   const statusStyle = getStatusStyle(displayStatus);
   const StatusIcon = statusStyle.icon;
 
@@ -68,8 +70,36 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
   const getAvailableActions = () => {
     const actions = [];
 
+    // Contract lifecycle: Mark as Expired — available when contract is Active or Expiring
+    if (normalizedStatus === "Converted to Contract" && (quotation.contract_status === "Active" || quotation.contract_status === "Expiring")) {
+      actions.push({
+        label: "Mark as Expired",
+        sublabel: "End this contract's active period",
+        value: "Mark as Expired",
+        icon: <Clock size={16} style={{ color: "#D97706" }} />,
+        action: () => {
+          onStatusChange("Mark as Expired");
+          setShowMenu(false);
+        }
+      });
+    }
+
+    // BD WORKFLOW: Submit for Pricing - BD ONLY (when status = "Draft")
+    if (normalizedStatus === "Draft" && userDepartment === "Business Development") {
+      actions.push({
+        label: "Submit for Pricing",
+        sublabel: "Send to Pricing department for review",
+        value: "Pending Pricing",
+        icon: <Send size={16} style={{ color: "#1D4ED8" }} />,
+        action: () => {
+          onStatusChange("Pending Pricing");
+          setShowMenu(false);
+        }
+      });
+    }
+
     // PD WORKFLOW: Mark as Priced - PD ONLY (when quotation is awaiting pricing)
-    if (quotation.status === "Pending Pricing" && userDepartment === "Pricing") {
+    if (normalizedStatus === "Pending Pricing" && userDepartment === "Pricing") {
       actions.push({
         label: "Mark as Priced",
         sublabel: "Pricing complete, ready for BD",
@@ -83,7 +113,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
     }
 
     // PD WORKFLOW: Send back for revision - PD ONLY (if quotation needs more info)
-    if (quotation.status === "Pending Pricing" && userDepartment === "Pricing") {
+    if (normalizedStatus === "Pending Pricing" && userDepartment === "Pricing") {
       actions.push({
         label: "Request Revision",
         sublabel: "Need more information from BD",
@@ -97,7 +127,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
     }
 
     // Mark as Ongoing (for revisions/negotiations) - BD ONLY
-    if ((quotation.status === "Sent to Client" || quotation.status === "Priced") && userDepartment === "Business Development") {
+    if ((normalizedStatus === "Sent to Client" || normalizedStatus === "Priced") && userDepartment === "Business Development") {
       actions.push({
         label: "Mark as Ongoing",
         sublabel: "Send back for revisions",
@@ -110,8 +140,22 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
       });
     }
 
+    // Recall for Edits - BD ONLY (pull back a sent or ongoing quotation to Draft)
+    if ((normalizedStatus === "Sent to Client" || normalizedStatus === "Needs Revision") && userDepartment === "Business Development") {
+      actions.push({
+        label: "Recall for Edits",
+        sublabel: "Pull back to Draft for corrections",
+        value: "Draft",
+        icon: <RotateCcw size={16} style={{ color: "#667085" }} />,
+        action: () => {
+          onStatusChange("Draft");
+          setShowMenu(false);
+        }
+      });
+    }
+
     // Send to Client - BD ONLY (after PD finishes pricing)
-    if ((quotation.status === "Priced" || quotation.status === "Needs Revision") && userDepartment === "Business Development") {
+    if ((normalizedStatus === "Priced" || normalizedStatus === "Needs Revision") && userDepartment === "Business Development") {
       actions.push({
         label: "Send to Client",
         sublabel: "Mark as Waiting Approval",
@@ -125,7 +169,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
     }
 
     // Mark as Approved - BD ONLY (client accepted)
-    if (quotation.status === "Sent to Client" && userDepartment === "Business Development") {
+    if (normalizedStatus === "Sent to Client" && userDepartment === "Business Development") {
       actions.push({
         label: "Mark as Approved",
         sublabel: "Client accepted quotation",
@@ -144,7 +188,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
   const availableActions = getAvailableActions();
 
   // Don't show status button if there are no actions available
-  if (availableActions.length === 0 && (quotation.status === "Converted to Project" || quotation.status === "Converted to Contract")) {
+  if (availableActions.length === 0 && (normalizedStatus === "Converted to Project" || normalizedStatus === "Converted to Contract")) {
     return null;
   }
 
@@ -241,17 +285,18 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
             </button>
           ))}
           
-          {/* Separator before Disapproved/Cancelled */}
-          {availableActions.length > 0 && (
-            <div style={{
-              height: "1px",
-              backgroundColor: "#E5E7EB",
-              margin: "4px 0"
-            }} />
-          )}
-          
-          <button
-            onClick={handleDisapproveOrCancel}
+          {/* Separator + Disapproved/Cancelled — hidden if already converted to project or contract */}
+          {normalizedStatus !== "Converted to Project" && normalizedStatus !== "Converted to Contract" && normalizedStatus !== "Disapproved" && normalizedStatus !== "Cancelled" && (
+            <>
+              {availableActions.length > 0 && (
+                <div style={{
+                  height: "1px",
+                  backgroundColor: "#E5E7EB",
+                  margin: "4px 0"
+                }} />
+              )}
+              <button
+                onClick={handleDisapproveOrCancel}
             style={{
               width: "100%",
               display: "flex",
@@ -293,6 +338,8 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               </div>
             </div>
           </button>
+            </>
+          )}
         </div>
       )}
 

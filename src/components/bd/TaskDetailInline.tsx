@@ -26,6 +26,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [attachments, setAttachments] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
 
   const isCompleted = editedTask.status === 'Completed';
 

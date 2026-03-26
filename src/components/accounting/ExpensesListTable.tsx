@@ -192,7 +192,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
           >
             {/* Icon Column */}
             <div className="flex items-center justify-center">
-              {getCategoryIcon(expense.category)}
+              {getCategoryIcon(expense.category || "")}
             </div>
 
             {/* Description */}
@@ -209,11 +209,11 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
 
             {/* Category Badge + Date */}
             <div>
-              <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getCategoryColor(expense.category)}`}>
+              <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getCategoryColor(expense.category || "")}`}>
                 {expense.category || "Uncategorized"}
               </span>
               <div className="text-[10px] mt-1" style={{ color: "var(--neuron-ink-muted)" }}>
-                {formatDate(expense.date)}
+                {formatDate(expense.date || "")}
               </div>
             </div>
 

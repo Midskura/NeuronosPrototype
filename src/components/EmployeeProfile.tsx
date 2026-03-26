@@ -73,7 +73,7 @@ export function EmployeeProfile({ currentUser, onDepartmentChange }: EmployeePro
     employeeId: "EMP-2024-001",
   };
   
-  const isDevMode = process.env.NODE_ENV === 'development' || localStorage.getItem('neuron_dev_tools_enabled') === 'true';
+  const isDevMode = import.meta.env.DEV || localStorage.getItem('neuron_dev_tools_enabled') === 'true';
 
   return (
     <div className="h-full overflow-auto" style={{ background: "var(--neuron-bg-page)" }}>

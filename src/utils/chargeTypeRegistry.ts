@@ -1,18 +1,19 @@
 /**
  * Charge Type Registry
  *
- * Hardcoded presets for contract charge line items, grouped by service type.
- * Designed for future migration to a dynamic KV-backed registry with admin CRUD.
+ * Provides charge type options for contract rate line items.
+ * Matches on stable `charge_type_code` (never the display label), so users can
+ * freely rename catalog items without breaking the rate engine.
  *
  * Architecture:
- *   - Each preset has a stable `id` used for downstream matching
- *     (Contract -> Project rates, Contract -> Booking autofill)
- *   - The `label` is the display name shown in the combobox
- *   - Users can always type a custom value (not locked to presets)
- *   - Custom entries have charge_type_id = undefined on the row
+ *   - loadChargeTypesFromCatalog() reads catalog_items where charge_type_code IS NOT NULL
+ *   - CHARGE_TYPE_PRESETS is the fallback used only if the DB call fails
+ *   - Custom user entries (not in catalog) get charge_type_id = undefined on the row
  *
  * @see /docs/blueprints/RATE_MATRIX_REDESIGN_BLUEPRINT.md
  */
+
+import { supabase } from "./supabase/client";
 
 // ============================================
 // TYPES
@@ -201,4 +202,49 @@ export function findPresetByLabel(
       p.label.toLowerCase() === label.toLowerCase() &&
       p.serviceTypes.includes(serviceType)
   );
+}
+
+// ============================================
+// DYNAMIC CATALOG LOADER
+// ============================================
+
+/**
+ * Load charge type options from the catalog_items table.
+ * Matches on charge_type_code (stable), not the display name — so renaming
+ * a catalog item never breaks contract rate calculations.
+ *
+ * Falls back to CHARGE_TYPE_PRESETS if the DB call fails.
+ */
+export async function loadChargeTypesFromCatalog(): Promise<ChargeTypeOption[]> {
+  try {
+    const { data, error } = await supabase
+      .from("catalog_items")
+      .select("id, name, charge_type_code, service_types, unit_type, category_id")
+      .not("charge_type_code", "is", null)
+      .eq("is_active", true);
+
+    if (error || !data || data.length === 0) {
+      return CHARGE_TYPE_PRESETS;
+    }
+
+    // Map catalog rows to ChargeTypeOption shape.
+    // category_id → category mapping: use a best-effort default.
+    const categoryMap: Record<string, string> = {
+      "cat-001": "other",
+      "cat-002": "other",
+      "cat-003": "delivery",
+      "cat-004": "standard",
+    };
+
+    return data.map((row: any) => ({
+      id: row.charge_type_code,
+      label: row.name,
+      serviceTypes: row.service_types ?? [],
+      category: categoryMap[row.category_id] ?? "other",
+      defaultUnit: row.unit_type ?? undefined,
+      isSystem: false, // sourced from DB, not hardcoded
+    }));
+  } catch {
+    return CHARGE_TYPE_PRESETS;
+  }
 }

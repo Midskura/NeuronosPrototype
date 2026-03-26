@@ -1,4 +1,4 @@
-import { Receipt, FileText, LoaderCircle } from "lucide-react";
+import { Receipt, FileText, LoaderCircle, ArrowRightLeft, CheckCircle } from "lucide-react";
 import { useRef, useEffect } from "react";
 
 export interface ExpenseTableItem {
@@ -31,6 +31,10 @@ interface ExpensesTableProps {
     currency?: string;
   };
   highlightId?: string | null;
+  /** IDs of billable expenses not yet converted — shows Convert button on matching rows */
+  convertibleIds?: Set<string>;
+  /** Called when user clicks Convert on a row */
+  onConvertItem?: (item: any) => void;
 }
 
 const formatCurrency = (amount: number, currency: string = "PHP") => {
@@ -51,15 +55,17 @@ const formatDate = (dateStr: string) => {
   });
 };
 
-export function ExpensesTable({ 
-  data, 
-  isLoading = false, 
-  emptyMessage = "No expenses found.", 
+export function ExpensesTable({
+  data,
+  isLoading = false,
+  emptyMessage = "No expenses found.",
   onRowClick,
   showBookingColumn = false,
   footerSummary,
   grossSummary,
-  highlightId = null
+  highlightId = null,
+  convertibleIds,
+  onConvertItem,
 }: ExpensesTableProps) {
   const highlightRef = useRef<HTMLDivElement>(null);
 
@@ -97,11 +103,12 @@ export function ExpensesTable({
     return "bg-[#F1F6F4] text-[#6B7A76]";
   };
 
-  // Define grid columns based on props
-  // Layout: Icon | Category/Date | Reference | Description | Payee | [Booking] | Status | Amount
+  const hasConvertCol = !!(convertibleIds && onConvertItem);
+
+  // Layout: Icon | Category/Date | Reference | Description | Payee | [Booking] | Status | Amount | [Action]
   const gridClass = showBookingColumn
-    ? "grid grid-cols-[32px_140px_120px_minmax(200px,1fr)_150px_120px_100px_120px]"
-    : "grid grid-cols-[32px_140px_120px_minmax(200px,1fr)_150px_100px_120px]";
+    ? `grid grid-cols-[32px_140px_120px_minmax(200px,1fr)_150px_120px_100px_120px${hasConvertCol ? "_100px" : ""}]`
+    : `grid grid-cols-[32px_140px_120px_minmax(200px,1fr)_150px_100px_120px${hasConvertCol ? "_100px" : ""}]`;
 
   if (isLoading) {
     return (
@@ -143,6 +150,7 @@ export function ExpensesTable({
         )}
         <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Status</div>
         <div className="text-right text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Amount</div>
+        {hasConvertCol && <div></div>}
       </div>
 
       {/* Rows */}
@@ -212,6 +220,39 @@ export function ExpensesTable({
                 {formatCurrency(item.amount, item.currency)}
               </span>
             </div>
+
+            {/* Convert action (only when convertibleIds provided) */}
+            {hasConvertCol && (
+              <div className="flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+                {convertibleIds!.has(item.id) ? (
+                  <button
+                    onClick={() => onConvertItem!(item.originalData || item)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: "4px",
+                      padding: "4px 8px", fontSize: "11px", fontWeight: 600,
+                      border: "1px solid #99F6E4", borderRadius: "6px",
+                      backgroundColor: "#F0FDF9", color: "#0F766E", cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                    title="Convert this billable expense to an unbilled billing item"
+                  >
+                    <ArrowRightLeft size={11} />
+                    Convert
+                  </button>
+                ) : item.originalData?.isBillable ? (
+                  <span
+                    style={{
+                      display: "flex", alignItems: "center", gap: "4px",
+                      fontSize: "11px", fontWeight: 500, color: "#9CA3AF",
+                    }}
+                    title="Already converted to billing item"
+                  >
+                    <CheckCircle size={11} />
+                    Billed
+                  </span>
+                ) : null}
+              </div>
+            )}
           </div>
           );
         })}

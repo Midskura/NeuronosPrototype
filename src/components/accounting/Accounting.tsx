@@ -3,7 +3,6 @@ import { CollectionsContentNew } from "./CollectionsContentNew";
 import { BillingsContentNew } from "./BillingsContentNew";
 import { ExpensesPageNew } from "./ExpensesPageNew";
 import { ChartOfAccounts } from "./coa/ChartOfAccounts";
-import { FinancialReports } from "./reports/FinancialReports";
 import { ProjectsModule } from "../projects/ProjectsModule";
 import { ContractsModule } from "../contracts/ContractsModule";
 import { AccountingCustomers } from "./AccountingCustomers";

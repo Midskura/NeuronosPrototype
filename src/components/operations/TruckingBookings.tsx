@@ -191,11 +191,11 @@ export function TruckingBookings({ currentUser, pendingBookingId, initialTab, hi
 
   if (selectedBooking) {
     return (
-      <TruckingBookingDetails 
-        booking={selectedBooking} 
-        onBack={() => { 
+      <TruckingBookingDetails
+        booking={selectedBooking as any}
+        onBack={() => {
           setSelectedBooking(null);
-        }} 
+        }}
         onUpdate={fetchBookings}
         initialTab={initialTab}
         highlightId={highlightId}
@@ -626,7 +626,7 @@ export function TruckingBookings({ currentUser, pendingBookingId, initialTab, hi
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
           onBookingCreated={handleBookingCreated}
-          currentUser={currentUser}
+          currentUser={currentUser as any}
         />
       )}
     </>

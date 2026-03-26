@@ -180,10 +180,9 @@ export function DiagnosticsPage() {
 
                       {/* Warning if booking count doesn't match */}
                       {hasBookings && (
-                        <AlertCircle 
-                          size={20} 
+                        <AlertCircle
+                          size={20}
                           style={{ color: "#F59E0B" }}
-                          title="This project has bookings - check console for details"
                         />
                       )}
                     </div>

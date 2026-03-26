@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
-import type { Vendor, VendorType } from "../../types/pricing";
+import { Plus, Search, Globe, MapPin, Building2 } from "lucide-react";
+import { supabase } from "../../utils/supabase/client";
+import { toast } from "../ui/toast-utils";
+
+type NetworkVendorType = "Overseas Agent" | "Local Agent" | "Subcontractor";
+
+interface NetworkVendor {
+  id: string;
+  company_name: string;
+  country: string;
+  territory?: string;
+  contact_person?: string;
+  type: NetworkVendorType;
+  services_offered: string[];
+  total_shipments?: number;
+  wca_number?: string;
+}
 
 export function VendorsList() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState<VendorType | "All">("All");
-  const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [typeFilter, setTypeFilter] = useState<NetworkVendorType | "All">("All");
+  const [vendors, setVendors] = useState<NetworkVendor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch vendors from backend
@@ -52,7 +68,7 @@ export function VendorsList() {
     Subcontractor: vendors.filter(v => v.type === "Subcontractor").length,
   };
 
-  const getTypeBadgeColor = (type: VendorType) => {
+  const getTypeBadgeColor = (type: NetworkVendorType) => {
     switch (type) {
       case "Overseas Agent": 
         return { bg: "#E8F5F3", text: "#2B8A6E", border: "#2B8A6E" };
@@ -179,7 +195,7 @@ export function VendorsList() {
           {/* Type Filter */}
           <select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value as VendorType | "All")}
+            onChange={(e) => setTypeFilter(e.target.value as NetworkVendorType | "All")}
             style={{
               padding: "10px 36px 10px 14px",
               border: "1px solid var(--neuron-ui-border)",

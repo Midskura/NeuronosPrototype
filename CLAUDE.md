@@ -95,6 +95,7 @@ This project is **blueprint-driven**:
 2. Create/update a blueprint with a phased plan
 3. Wait for explicit "Go Ahead" before writing code
 4. Implement one phase at a time, update the blueprint after each phase
+5. Check `AGENT_COORDINATION.md` in the project root when Marcus says "check the board." Claim tasks before starting them, update when done, and leave messages for Claude if needed.
 
 ## Protected Files (NEVER modify)
 

@@ -188,7 +188,7 @@ export function DrawerEntryDetails({
           )}
 
           {/* Attachment */}
-          {entry.attachment && (
+          {(entry as any).attachment && (
             <>
               <Separator />
               <div className="space-y-2">
@@ -199,7 +199,7 @@ export function DrawerEntryDetails({
                   style={{ borderRadius: 'var(--radius-sm)' }}
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  {entry.attachment}
+                  {(entry as any).attachment}
                 </Button>
               </div>
             </>

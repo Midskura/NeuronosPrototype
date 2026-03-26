@@ -1,5 +1,5 @@
 import { Plus, Receipt } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BillingCategorySection, BillingCategoryItem } from "./BillingCategorySection";
 import { CategoryPresetDropdown } from "../../pricing/quotations/CategoryPresetDropdown";
 
@@ -300,7 +300,7 @@ export function BillingsSection({
       {/* Category Preset Dropdown */}
       <CategoryPresetDropdown
         isOpen={showPresetDropdown}
-        buttonRef={addCategoryButtonRef}
+        buttonRef={addCategoryButtonRef as React.RefObject<HTMLButtonElement>}
         onClose={() => setShowPresetDropdown(false)}
         onSelect={(categoryName) => {
           handleAddCategory(categoryName);

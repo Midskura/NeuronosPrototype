@@ -205,10 +205,10 @@ export function ActivityTab({ project }: ActivityTabProps) {
             Project Team
           </h3>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            <TeamMember 
-              role="BD Owner" 
-              name={project.bd_owner_user_name} 
-              email={project.bd_owner_email} 
+            <TeamMember
+              role="BD Owner"
+              name={project.bd_owner_user_name || ""}
+              email={(project as any).bd_owner_email}
             />
             {project.ops_assigned_user_name && (
               <TeamMember 

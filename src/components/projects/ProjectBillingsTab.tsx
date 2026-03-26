@@ -49,11 +49,11 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
     try {
       // Generate invoice client-side: create billing evouchers from quotation charges
       const quotation = project.quotation;
-      if (!quotation?.selling_price_charges?.length) {
+      if (!(quotation as any)?.selling_price_charges?.length) {
         throw new Error("No quotation charges found to generate billing from");
       }
-      
-      const billingItems = quotation.selling_price_charges.map((charge: any) => ({
+
+      const billingItems = (quotation as any).selling_price_charges.map((charge: any) => ({
         id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         transaction_type: 'billing',
         project_number: project.project_number,
@@ -469,7 +469,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                   const totalAmount = items.reduce((sum, i) => sum + i.amount, 0);
                   const remainingAmount = items.reduce((sum, i) => sum + (i.remaining_balance ?? i.amount), 0);
                   const isPaid = remainingAmount <= 0.01; // Floating point tolerance
-                  const isPosted = items.some(i => i.status === "Posted" || i.posted_to_ledger);
+                  const isPosted = items.some(i => i.status === "posted" || i.posted_to_ledger);
                   const isExpanded = expandedStatements.has(ref);
                   const date = new Date(items[0].updated_at || items[0].created_at).toLocaleDateString();
 

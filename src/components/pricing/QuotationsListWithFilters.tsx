@@ -6,6 +6,12 @@ import { CustomDropdown } from "../bd/CustomDropdown";
 import { CustomDatePicker } from "../common/CustomDatePicker";
 import { CreateQuotationMenu } from "./CreateQuotationMenu";
 import { QuotationTypeIcon, QuotationTypeSubLabel, getQuotationTypeAccentStyle } from "./QuotationTypeIcons";
+import {
+  getNormalizedQuotationStatus,
+  QUOTATION_COMPLETED_STATUSES,
+  QUOTATION_INQUIRY_STATUSES,
+  QUOTATION_NEGOTIATION_STATUSES,
+} from "../../utils/quotationStatus";
 
 // Default column widths
 const DEFAULT_COLUMN_WIDTHS = {
@@ -57,7 +63,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
 
   // ✨ CONTRACT: Detect contract quotations
   const isContract = item.quotation_type === "contract";
-  const contractStatus = isContract ? (item.contract_status || item.status) : null;
+  const normalizedStatus = getNormalizedQuotationStatus(item);
 
   const handleMouseEnter = () => {
     if (iconRef.current) {
@@ -84,7 +90,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
   // Calculate total (sum of all line items)
   const total = item.charge_categories?.reduce((sum, category) => {
     const categoryTotal = category.line_items?.reduce((lineSum, lineItem) => {
-      return lineSum + (lineItem.total || 0);
+      return lineSum + (lineItem.amount || 0);
     }, 0) || 0;
     return sum + categoryTotal;
   }, 0) || 0;
@@ -208,14 +214,14 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
           <span
             style={{
               fontSize: "13px",
-              color: getQuotationStatusColor(isContract ? (contractStatus || "Draft") : item.status),
-              backgroundColor: getQuotationStatusBgColor(isContract ? (contractStatus || "Draft") : item.status),
+              color: getQuotationStatusColor(normalizedStatus),
+              backgroundColor: getQuotationStatusBgColor(normalizedStatus),
               padding: "4px 8px",
               borderRadius: "4px",
               fontWeight: 500
             }}
           >
-            {isContract ? (contractStatus || "Draft") : item.status}
+            {normalizedStatus}
           </span>
         </div>
       )}
@@ -340,7 +346,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
 
     // Status filter
     if (statusFilter !== "All Statuses") {
-      filtered = filtered.filter(item => item.status === statusFilter);
+      filtered = filtered.filter(item => getNormalizedQuotationStatus(item) === statusFilter);
     }
 
     // Service filter
@@ -368,24 +374,17 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
     if (workflowTab === "Inquiries") {
       // Unpriced quotations (Draft + Pending Pricing + Needs Revision)
       filtered = filtered.filter(item => 
-        item.status === "Draft" || 
-        item.status === "Pending Pricing" ||
-        item.status === "Needs Revision"
+        QUOTATION_INQUIRY_STATUSES.includes(getNormalizedQuotationStatus(item))
       );
     } else if (workflowTab === "Quotations") {
       // Priced quotations being negotiated
-      filtered = filtered.filter(item => 
-        item.status === "Priced" || 
-        item.status === "Sent to Client"
+      filtered = filtered.filter(item =>
+        QUOTATION_NEGOTIATION_STATUSES.includes(getNormalizedQuotationStatus(item))
       );
     } else if (workflowTab === "Completed") {
       // Accepted or disapproved
-      filtered = filtered.filter(item => 
-        item.status === "Accepted by Client" || 
-        item.status === "Rejected by Client" ||
-        item.status === "Disapproved" || 
-        item.status === "Cancelled" ||
-        item.status === "Converted to Project"
+      filtered = filtered.filter(item =>
+        QUOTATION_COMPLETED_STATUSES.includes(getNormalizedQuotationStatus(item))
       );
     }
 
@@ -396,22 +395,9 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
   const tabCounts = useMemo(() => {
     const all = quotations || [];
     return {
-      Inquiries: all.filter(q => 
-        q.status === "Draft" || 
-        q.status === "Pending Pricing" ||
-        q.status === "Needs Revision"
-      ).length,
-      Quotations: all.filter(q => 
-        q.status === "Priced" || 
-        q.status === "Sent to Client"
-      ).length,
-      Completed: all.filter(q => 
-        q.status === "Accepted by Client" || 
-        q.status === "Rejected by Client" ||
-        q.status === "Disapproved" || 
-        q.status === "Cancelled" ||
-        q.status === "Converted to Project"
-      ).length
+      Inquiries: all.filter(q => QUOTATION_INQUIRY_STATUSES.includes(getNormalizedQuotationStatus(q))).length,
+      Quotations: all.filter(q => QUOTATION_NEGOTIATION_STATUSES.includes(getNormalizedQuotationStatus(q))).length,
+      Completed: all.filter(q => QUOTATION_COMPLETED_STATUSES.includes(getNormalizedQuotationStatus(q))).length
     };
   }, [quotations]);
 
@@ -550,6 +536,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                 { value: "Rejected by Client", label: "Rejected by Client", icon: <CircleDot size={16} style={{ color: "#EF4444" }} /> },
                 { value: "Disapproved", label: "Disapproved", icon: <CircleDot size={16} style={{ color: "#DC2626" }} /> },
                 { value: "Converted to Project", label: "Converted to Project", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
+                { value: "Converted to Contract", label: "Converted to Contract", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
                 { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> }
               ]}
               placeholder="Select status"

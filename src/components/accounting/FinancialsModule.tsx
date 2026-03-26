@@ -253,7 +253,7 @@ export function FinancialsModule() {
 
       // Expenses (map to OperationsExpense shape)
       if (!e4 && expenseRows) {
-        const mapped: OperationsExpense[] = expenseRows.map((ev: any) => ({
+        const mapped = expenseRows.map((ev: any) => ({
           id: ev.id,
           expenseName: ev.voucher_number || ev.expense_name || ev.id,
           description: ev.purpose || ev.description || "",
@@ -272,7 +272,7 @@ export function FinancialsModule() {
           hasProject: ev.has_project || false,
           service_type: ev.service_type || "",
         }));
-        setExpenses(mapped);
+        setExpenses(mapped as any);
       }
     } catch (error) {
       console.error("Error fetching financials data:", error);

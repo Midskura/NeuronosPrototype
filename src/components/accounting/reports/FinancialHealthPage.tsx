@@ -364,8 +364,8 @@ export function FinancialHealthPage() {
       {/* Table */}
       <div className="flex-1 overflow-auto">
         <DataTable
-          data={filteredRows}
-          columns={columns}
+          data={filteredRows as any}
+          columns={columns as any}
           isLoading={isLoading}
           footerSummary={footerSummary}
           emptyMessage={

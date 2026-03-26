@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
-import { 
-  Home, 
-  Users, 
-  ShoppingCart, 
-  Package, 
-  FileText, 
-  BarChart3, 
-  User, 
-  Calendar, 
-  Activity, 
-  Inbox, 
-  ChevronDown, 
-  ChevronRight, 
-  ChevronLeft, 
-  Menu, 
-  HelpCircle, 
+import { useState, useEffect, useCallback } from "react";
+import {
+  Home,
+  Users,
+  ShoppingCart,
+  Package,
+  FileText,
+  BarChart3,
+  User,
+  Calendar,
+  Activity,
+  Inbox,
+  ChevronDown,
+  ChevronRight,
+  ChevronLeft,
+  Menu,
+  HelpCircle,
   Settings,
   Banknote,
   ListTodo,
@@ -31,6 +31,7 @@ import {
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
 import { useUser } from "../hooks/useUser";
 import { useAppMode } from "../config/appMode";
+import { supabase } from "../utils/supabase/client";
 
 type Page = "dashboard" | "bd-contacts" | "bd-customers" | "bd-inquiries" | "projects" | "bd-projects" | "bd-contracts" | "bd-tasks" | "bd-activities" | "bd-budget-requests" | "bd-reports" | "pricing-contacts" | "pricing-customers" | "pricing-quotations" | "pricing-projects" | "pricing-contracts" | "pricing-vendors" | "pricing-reports" | "ops-forwarding" | "ops-brokerage" | "ops-trucking" | "ops-marine-insurance" | "ops-others" | "ops-reports" | "operations" | "acct-transactions" | "acct-evouchers" | "acct-billings" | "acct-invoices" | "acct-collections" | "acct-expenses" | "acct-coa" | "acct-reports" | "acct-projects" | "acct-contracts" | "acct-customers" | "acct-bookings" | "acct-catalog" | "acct-financials" | "hr" | "calendar" | "inbox" | "ticket-queue" | "profile" | "admin" | "ticket-testing" | "activity-log" | "design-system";
 
@@ -40,6 +41,12 @@ const Vector = () => (
     <path d="M20 11H4"/><path d="M20 7H4"/><path d="M7 21V4a1 1 0 0 1 1-1h4a1 1 0 0 1 0 12H7"/>
   </svg>
 );
+
+interface NeuronSidebarProps {
+  currentPage: Page;
+  onNavigate: (page: Page) => void;
+  currentUser?: { name?: string; email?: string; department?: string; role?: string } | null;
+}
 
 // Wrapper component for the Philippine Peso icon
 const PesoIcon = ({ size = 20, style }: { size?: number; style?: React.CSSProperties }) => (
@@ -58,6 +65,8 @@ const PesoIcon = ({ size = 20, style }: { size?: number; style?: React.CSSProper
 );
 
 export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSidebarProps) {
+  const [inboxUnreadCount, setInboxUnreadCount] = useState(0);
+
   // Initialize collapsed state from localStorage, default to false (expanded)
   const [isCollapsed, setIsCollapsed] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -123,8 +132,26 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
   }, [isAcctExpanded]);
   
   // Use effectiveDepartment from context for dev role override support
-  const { effectiveDepartment, effectiveRole } = useUser();
+  const { user, effectiveDepartment, effectiveRole } = useUser();
   const { isEssentials } = useAppMode();
+
+  // Fetch inbox unread count
+  const fetchUnreadCount = useCallback(async () => {
+    if (!user) return;
+    const { data } = await supabase.rpc("get_unread_count", {
+      p_user_id: user.id,
+      p_dept: effectiveDepartment || "",
+      p_role: effectiveRole || "rep",
+    });
+    setInboxUnreadCount(data || 0);
+  }, [user, effectiveDepartment, effectiveRole]);
+
+  useEffect(() => {
+    fetchUnreadCount();
+    // Refresh count every 60s
+    const interval = setInterval(fetchUnreadCount, 60_000);
+    return () => clearInterval(interval);
+  }, [fetchUnreadCount]);
   
   // Determine what modules to show based on effective department
   const userDepartment = effectiveDepartment || currentUser?.department || "Operations";
@@ -250,7 +277,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
         style={{
           height: isSubItem ? "36px" : "40px",
           backgroundColor: isActive ? "var(--neuron-state-selected)" : "transparent",
-          border: isActive ? "1.5px solid #5FC4A1" : "1.5px solid transparent",
+          border: isActive ? "1.5px solid var(--neuron-ui-active-border)" : "1.5px solid transparent",
           color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-secondary)",
           fontWeight: isActive ? 600 : 400,
           justifyContent: isCollapsed ? "center" : "flex-start",
@@ -680,7 +707,87 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
         
         {/* Personal Section */}
         {renderSectionHeader("PERSONAL")}
-        {personalItems.map(item => renderNavButton(item))}
+        {personalItems.map(item => {
+          if (item.id === "inbox") {
+            const isActive = currentPage === "inbox";
+            return (
+              <button
+                key="inbox"
+                onClick={() => onNavigate("inbox")}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150"
+                style={{
+                  height: "40px",
+                  backgroundColor: isActive ? "var(--neuron-state-selected)" : "transparent",
+                  border: isActive ? "1.5px solid var(--neuron-ui-active-border)" : "1.5px solid transparent",
+                  color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-secondary)",
+                  fontWeight: isActive ? 600 : 400,
+                  justifyContent: isCollapsed ? "center" : "flex-start",
+                  paddingLeft: isCollapsed ? "0" : "12px",
+                  paddingRight: isCollapsed ? "0" : "12px",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+                }}
+                title={isCollapsed ? "My Inbox" : undefined}
+              >
+                <div style={{ position: "relative", flexShrink: 0 }}>
+                  <Inbox
+                    size={20}
+                    style={{ color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-muted)" }}
+                  />
+                  {inboxUnreadCount > 0 && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: -4,
+                        right: -5,
+                        minWidth: 14,
+                        height: 14,
+                        borderRadius: 7,
+                        backgroundColor: "#DC2626",
+                        color: "#FFFFFF",
+                        fontSize: 9,
+                        fontWeight: 700,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "0 3px",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {inboxUnreadCount > 99 ? "99+" : inboxUnreadCount}
+                    </span>
+                  )}
+                </div>
+                {!isCollapsed && (
+                  <span style={{ fontSize: "14px", lineHeight: "20px", flex: 1, textAlign: "left" }}>
+                    My Inbox
+                  </span>
+                )}
+                {!isCollapsed && inboxUnreadCount > 0 && (
+                  <span
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      padding: "1px 6px",
+                      borderRadius: 10,
+                      backgroundColor: "#FEE2E2",
+                      color: "#DC2626",
+                      marginLeft: "auto",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {inboxUnreadCount > 99 ? "99+" : inboxUnreadCount}
+                  </span>
+                )}
+              </button>
+            );
+          }
+          return renderNavButton(item);
+        })}
 
         {/* Other Section */}
         {renderSectionHeader("OTHER")}
@@ -718,7 +825,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
             className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150"
             style={{
               backgroundColor: currentPage === "profile" ? "var(--neuron-state-selected)" : "var(--neuron-bg-page)",
-              border: currentPage === "profile" ? "1.5px solid #5FC4A1" : "1.5px solid transparent",
+              border: currentPage === "profile" ? "1.5px solid var(--neuron-ui-active-border)" : "1.5px solid transparent",
               minHeight: "48px",
               justifyContent: isCollapsed ? "center" : "flex-start",
               paddingLeft: isCollapsed ? "0" : "12px",

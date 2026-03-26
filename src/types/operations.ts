@@ -2,16 +2,13 @@ import type { AppliedRate } from "./pricing";
 
 // ==================== STATUS TYPES ====================
 
-export type ExecutionStatus = 
+export type ExecutionStatus =
   | "Draft"
-  | "Created"
+  | "Pending"
   | "Confirmed"
-  | "For Delivery"
-  | "In Transit"
   | "In Progress"
   | "Delivered"
   | "Completed"
-  | "Pending"
   | "On Hold"
   | "Cancelled"
   | "Closed";
@@ -176,6 +173,12 @@ export interface ForwardingBooking {
 
   // LCL/AIR-specific fields
   warehouseLocation?: string;
+
+  // DB/legacy fields
+  id?: string;
+  booking_number?: string;
+  portOfLoading?: string;
+  portOfDischarge?: string;
 }
 
 // ==================== BROKERAGE BOOKING ====================
@@ -425,6 +428,9 @@ export interface BillingLineItem {
   unit?: string;
   amount: number;
   remarks?: string;
+  original_currency?: string;
+  exchange_rate?: number;
+  original_amount?: number;
 }
 
 export interface BillingChargeCategory {

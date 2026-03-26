@@ -117,8 +117,8 @@ export function BillingsContentNew() {
     }
 
     // Sort by invoice date descending
-    filtered.sort((a, b) => 
-      new Date(b.invoice_date).getTime() - new Date(a.invoice_date).getTime()
+    filtered.sort((a, b) =>
+      new Date(b.invoice_date || "").getTime() - new Date(a.invoice_date || "").getTime()
     );
 
     return filtered;

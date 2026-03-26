@@ -29,6 +29,7 @@ interface EVoucherData {
   transactionType?: string;
   isBillable?: boolean;
   sourceAccountId?: string;
+  linkedBillings?: { id: string; amount: number }[];
 }
 
 export function useEVoucherSubmit(context: EVoucherContext = "bd") {

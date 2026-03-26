@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { ArrowLeft, MoreVertical, Lock, Clock, ChevronRight } from "lucide-react";
 import type { TruckingBooking, ExecutionStatus } from "../../types/operations";
 import { UnifiedBillingsTab } from "../shared/billings/UnifiedBillingsTab";
@@ -15,7 +15,10 @@ import { ConsigneeInfoBadge } from "../shared/ConsigneeInfoBadge";
 import { normalizeTruckingLineItems } from "../../utils/contractQuantityExtractor";
 import { Truck as TruckIcon } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
-import { assessBookingFinancialState, canTransitionBookingToCancelled, getBookingCancellationStatusMessage, voidBookingUnbilledCharges } from "../../utils/bookingCancellation";
+import { assessBookingFinancialState, canTransitionBookingToCancelled, getBookingCancellationStatusMessage, voidBookingUnbilledCharges, canHardDeleteBooking, getBookingCancellationMessage } from "../../utils/bookingCancellation";
+import { LinkedTicketBadge } from "../common/LinkedTicketBadge";
+import { RequestBillingButton } from "../common/RequestBillingButton";
+import { loadBookingActivityLog, appendBookingActivity } from "../../utils/bookingActivityLog";
 
 interface TruckingBookingDetailsProps {
   booking: TruckingBooking;
@@ -97,7 +100,7 @@ function LockedField({ label, value, tooltip }: { label: string; value: string; 
     <div>
       <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-base)", marginBottom: "8px" }}>
         {label}
-        <Lock size={12} color="#9CA3AF" title={tooltip} style={{ cursor: "help" }} />
+        <Lock size={12} color="#9CA3AF" style={{ cursor: "help" }} />
       </label>
       <div style={{ padding: "10px 14px", backgroundColor: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "6px", fontSize: "14px", color: "#6B7280", cursor: "not-allowed" }}>
         {value || "—"}
@@ -148,9 +151,47 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
   const [showTimeline, setShowTimeline] = useState(false);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(initialActivityLog);
   const [editedBooking, setEditedBooking] = useState<TruckingBooking>(booking);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    loadBookingActivityLog(booking.bookingId).then((entries) => {
+      if (entries.length > 0) setActivityLog(entries as ActivityLogEntry[]);
+    });
+  }, [booking.bookingId]);
+
+  useEffect(() => {
+    if (!showMoreMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
+        setShowMoreMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showMoreMenu]);
+
+  const handleDeleteFromDetail = async () => {
+    setShowMoreMenu(false);
+    try {
+      const financialState = await assessBookingFinancialState(booking.bookingId);
+      if (!canHardDeleteBooking(financialState)) {
+        toast.error(getBookingCancellationMessage(financialState));
+        return;
+      }
+      if (!window.confirm(`Delete booking ${booking.bookingId}? This cannot be undone.`)) return;
+      const { error } = await supabase.from('bookings').delete().eq('id', booking.bookingId);
+      if (error) throw error;
+      toast.success('Booking deleted');
+      onBack();
+    } catch (err) {
+      toast.error('Unable to delete booking');
+    }
+  };
 
   const addActivity = (fieldName: string, oldValue: string, newValue: string) => {
     setActivityLog(prev => [{ id: `activity-${Date.now()}-${Math.random()}`, timestamp: new Date(), user: currentUser?.name || "Current User", action: "field_updated", fieldName, oldValue, newValue }, ...prev]);
+    appendBookingActivity(booking.bookingId, { action: "field_updated", fieldName, oldValue, newValue, user: currentUser?.name || "Current User" }, { name: currentUser?.name || "Current User", department: currentUser?.department || "Operations" });
   };
 
   const handleStatusUpdate = async (newStatus: ExecutionStatus) => {
@@ -180,6 +221,7 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
 
     setEditedBooking(prev => ({ ...prev, status: newStatus }));
     setActivityLog(prev => [{ id: `activity-${Date.now()}`, timestamp: new Date(), user: currentUser?.name || "Current User", action: "status_changed", statusFrom: oldStatus, statusTo: newStatus }, ...prev]);
+    appendBookingActivity(booking.bookingId, { action: "status_changed", statusFrom: oldStatus, statusTo: newStatus, user: currentUser?.name || "Current User" }, { name: currentUser?.name || "Current User", department: currentUser?.department || "Operations" });
     try {
       const { error } = await supabase.from('trucking_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
       if (error) throw error;
@@ -194,6 +236,7 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
 
   const financials = useProjectFinancials(booking.projectNumber || "");
   const bookingBillingItems = financials.billingItems.filter(item => item.booking_id === booking.bookingId);
+  const [pendingBillableCount, setPendingBillableCount] = useState(0);
 
   const tabStyle = (tab: DetailTab) => ({
     padding: "0 4px", fontSize: "14px", fontWeight: 500,
@@ -214,8 +257,20 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
           </button>
           <h1 style={{ fontSize: "20px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "4px" }}>{booking.customerName}</h1>
           <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: 0 }}>{booking.bookingId}</p>
+          <div style={{ marginTop: 8 }}>
+            <LinkedTicketBadge recordType="booking" recordId={booking.bookingId} />
+          </div>
         </div>
-        <StatusSelector status={editedBooking.status} onUpdateStatus={handleStatusUpdate} />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {(editedBooking.status === "Completed" || (editedBooking.status === "Cancelled" && bookingBillingItems.some(item => item.status === "unbilled"))) && (
+            <RequestBillingButton
+              bookingId={booking.bookingId}
+              bookingNumber={booking.bookingId}
+              currentUser={currentUser}
+            />
+          )}
+          <StatusSelector status={editedBooking.status} onUpdateStatus={handleStatusUpdate} />
+        </div>
       </div>
 
       <div style={{ padding: "0 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "white", display: "flex", justifyContent: "space-between", alignItems: "center", height: "56px" }}>
@@ -232,17 +287,43 @@ export function TruckingBookingDetails({ booking, onBack, onUpdate, currentUser,
           <div style={{ padding: "8px 16px", borderRadius: "6px", fontSize: "13px", fontWeight: 600, backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA", color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E", border: `1px solid ${booking.movement === "EXPORT" ? "#FED7AA" : "#99F6E4"}` }}>
             {booking.movement || "IMPORT"}
           </div>
-          <button style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}>
-            <MoreVertical size={18} />
-          </button>
+          <div style={{ position: "relative" }} ref={moreMenuRef}>
+            <button
+              onClick={() => setShowMoreMenu(v => !v)}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}
+            >
+              <MoreVertical size={18} />
+            </button>
+            {showMoreMenu && (
+              <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", width: "180px", backgroundColor: "white", border: "1px solid #E5E9F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", zIndex: 100, overflow: "hidden" }}>
+                <button
+                  onClick={() => { setShowMoreMenu(false); handleStatusUpdate("Cancelled"); }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#344054", textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F9FAFB")}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+                >
+                  Cancel Booking
+                </button>
+                <div style={{ height: "1px", backgroundColor: "#F3F4F6" }} />
+                <button
+                  onClick={handleDeleteFromDetail}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#DC2626", textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEF2F2")}
+                  onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
+                >
+                  Delete Booking
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
       <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
         <div style={{ flex: showTimeline ? "0 0 65%" : "1", overflow: "auto", transition: "flex 0.3s ease" }}>
           {activeTab === "booking-info" && <BookingInformationTab booking={editedBooking} onBookingUpdated={onUpdate} addActivity={addActivity} setEditedBooking={setEditedBooking} />}
-          {activeTab === "billings" && <div className="flex flex-col bg-white p-12 min-h-[600px]"><UnifiedBillingsTab items={bookingBillingItems} projectId={booking.projectNumber || ""} bookingId={booking.bookingId} onRefresh={financials.refresh} isLoading={financials.isLoading} extraActions={<BookingRateCardButton booking={booking} serviceType="Trucking" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />} /></div>}
-          {activeTab === "expenses" && <ExpensesTab bookingId={booking.bookingId} bookingType="trucking" currentUser={currentUser} highlightId={activeTab === "expenses" ? highlightId : undefined} />}
+          {activeTab === "billings" && <div className="flex flex-col bg-white p-12 min-h-[600px]"><UnifiedBillingsTab items={bookingBillingItems} projectId={booking.projectNumber || ""} bookingId={booking.bookingId} onRefresh={financials.refresh} isLoading={financials.isLoading} extraActions={<BookingRateCardButton booking={booking} serviceType="Trucking" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />} pendingBillableCount={pendingBillableCount} /></div>}
+          {activeTab === "expenses" && <ExpensesTab bookingId={booking.bookingId} bookingType="trucking" currentUser={currentUser} highlightId={activeTab === "expenses" ? highlightId : undefined} existingBillingItems={bookingBillingItems} onPendingCountChange={setPendingBillableCount} />}
           {activeTab === "comments" && <BookingCommentsTab bookingId={booking.bookingId} currentUserId={currentUser?.email || "unknown"} currentUserName={currentUser?.name || "Unknown User"} currentUserDepartment={currentUser?.department || "Operations"} />}
         </div>
         {showTimeline && <div style={{ flex: "0 0 35%", borderLeft: "1px solid var(--neuron-ui-border)", backgroundColor: "#FAFBFC", overflow: "auto" }}><ActivityTimeline activities={activityLog} /></div>}

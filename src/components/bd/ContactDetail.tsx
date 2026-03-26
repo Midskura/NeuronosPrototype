@@ -1,6 +1,6 @@
 import { ArrowLeft, Mail, Phone, Building2, User, Edit, Trash2, Paperclip, Download, FileText, Image as ImageIcon, File, Upload, CheckCircle2, AlertCircle, MessageSquare, Send, Plus, Users, MessageCircle, Linkedin, StickyNote, Flag, CheckSquare } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import type { Contact, LifecycleStage, LeadStatus, Task, Activity, Customer } from "../../types/bd";
+import type { Contact, LifecycleStage, LeadStatus, Task, Activity, Customer, ActivityType, TaskType } from "../../types/bd";
 import type { QuotationNew } from "../../types/pricing";
 import { CustomDropdown } from "./CustomDropdown";
 import { ActivityTimelineTable } from "./ActivityTimelineTable";
@@ -197,10 +197,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
     try {
       const { data, error } = await supabase.from('crm_activities').select('*').eq('contact_id', contact.id).order('created_at', { ascending: false });
       if (!error && data) {
-        const result = { success: true, data };
-        setActivities(result.data);
+        setActivities(data);
       } else {
-        console.error("Failed to fetch activities:", result.error);
+        console.error("Failed to fetch activities:", error);
         setActivities([]);
       }
     } catch (error) {
@@ -469,15 +468,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         {contact.first_name} {contact.last_name}
                       </h1>
                       <div className="flex items-center gap-2 mb-2">
-                        <span 
+                        <span
                           className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-medium text-white uppercase tracking-wide"
-                          style={{ backgroundColor: getLifecycleStageColor(contact.lifecycle_stage) }}
+                          style={{ backgroundColor: getLifecycleStageColor(contact.lifecycle_stage ?? 'Lead') }}
                         >
                           {contact.lifecycle_stage}
                         </span>
-                        <span 
+                        <span
                           className="inline-flex items-center px-2.5 py-0.5 rounded text-[10px] font-medium text-white uppercase tracking-wide"
-                          style={{ backgroundColor: getLeadStatusColor(contact.lead_status) }}
+                          style={{ backgroundColor: getLeadStatusColor(contact.lead_status ?? '') }}
                         >
                           {contact.lead_status}
                         </span>
@@ -778,7 +777,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                   </div>
                   {isEditing ? (
                     <CustomDropdown
-                      value={editedContact.lifecycle_stage}
+                      value={editedContact.lifecycle_stage ?? ''}
                       onChange={(value) => setEditedContact({ ...editedContact, lifecycle_stage: value as LifecycleStage })}
                       options={[
                         { value: "Lead", label: "Lead" },
@@ -788,9 +787,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       ]}
                     />
                   ) : (
-                    <span 
+                    <span
                       className="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-medium text-white uppercase tracking-wide"
-                      style={{ backgroundColor: getLifecycleStageColor(contact.lifecycle_stage) }}
+                      style={{ backgroundColor: getLifecycleStageColor(contact.lifecycle_stage ?? 'Lead') }}
                     >
                       {contact.lifecycle_stage}
                     </span>
@@ -806,7 +805,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                   </div>
                   {isEditing ? (
                     <CustomDropdown
-                      value={editedContact.lead_status}
+                      value={editedContact.lead_status ?? ''}
                       onChange={(value) => setEditedContact({ ...editedContact, lead_status: value as LeadStatus })}
                       options={[
                         { value: "New", label: "New" },
@@ -819,9 +818,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       ]}
                     />
                   ) : (
-                    <span 
+                    <span
                       className="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-medium text-white uppercase tracking-wide"
-                      style={{ backgroundColor: getLeadStatusColor(contact.lead_status) }}
+                      style={{ backgroundColor: getLeadStatusColor(contact.lead_status ?? '') }}
                     >
                       {contact.lead_status}
                     </span>
@@ -1086,7 +1085,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   { value: "Marketing Email", label: "Marketing Email", icon: <MessageSquare size={16} /> }
                                 ]}
                                 value={newActivity.type || "Call"}
-                                onChange={(value) => setNewActivity({ ...newActivity, type: value })}
+                                onChange={(value) => setNewActivity({ ...newActivity, type: value as ActivityType })}
                               />
                             </div>
 
@@ -1246,7 +1245,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       // Refresh activities list
                                       fetchActivities();
                                     } else {
-                                      console.error("Error saving activity:", result.error);
+                                      console.error("Error saving activity:", actErr);
                                     }
                                   } catch (error) {
                                     console.error("Error saving activity:", error);
@@ -1664,7 +1663,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   { value: "Marketing Email", label: "Marketing Email", icon: <MessageSquare size={16} /> }
                                 ]}
                                 value={newTask.type || "Call"}
-                                onChange={(value) => setNewTask({ ...newTask, type: value })}
+                                onChange={(value) => setNewTask({ ...newTask, type: value as TaskType })}
                               />
                             </div>
 
@@ -1863,7 +1862,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       // Refresh tasks list
                                       fetchTasks();
                                     } else {
-                                      console.error("Error saving task:", result.error);
+                                      console.error("Error saving task:", taskErr);
                                     }
                                   } catch (error) {
                                     console.error("Error creating task:", error);
@@ -2001,15 +2000,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 }}
                               />
                             ) : (
-                              <div 
+                              <div
                                 className="text-[14px]"
-                                style={{ 
+                                style={{
                                   color: "#12332B",
                                   whiteSpace: "pre-wrap",
                                   lineHeight: "1.6"
                                 }}
                               >
-                                {selectedTask.title}
+                                {selectedTask?.title}
                               </div>
                             )}
                           </div>
@@ -2040,7 +2039,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               />
                             ) : (
                               <div className="text-[14px]" style={{ color: "#12332B" }}>
-                                {selectedTask.type}
+                                {selectedTask?.type}
                               </div>
                             )}
                           </div>
@@ -2072,7 +2071,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               />
                             ) : (
                               <div className="text-[14px]" style={{ color: "#12332B" }}>
-                                {formatDate(selectedTask.due_date)}
+                                {formatDate(selectedTask?.due_date ?? '')}
                               </div>
                             )}
                           </div>
@@ -2106,13 +2105,13 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             ) : (
                               <div 
                                 className="text-[14px]"
-                                style={{ 
-                                  color: selectedTask.notes ? "#12332B" : "#667085",
+                                style={{
+                                  color: selectedTask?.notes ? "#12332B" : "#667085",
                                   whiteSpace: "pre-wrap",
                                   lineHeight: "1.6"
                                 }}
                               >
-                                {selectedTask.notes || "No remarks added"}
+                                {selectedTask?.notes || "No remarks added"}
                               </div>
                             )}
                           </div>
@@ -2135,14 +2134,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 ]}
                               />
                             ) : (
-                              <span 
+                              <span
                                 className="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-medium uppercase tracking-wide"
                                 style={{
-                                  backgroundColor: selectedTask.priority === "High" ? "#FFE5E5" : selectedTask.priority === "Medium" ? "#FEF3E7" : "#F3F4F6",
-                                  color: selectedTask.priority === "High" ? "#C94F3D" : selectedTask.priority === "Medium" ? "#C88A2B" : "#667085"
+                                  backgroundColor: selectedTask?.priority === "High" ? "#FFE5E5" : selectedTask?.priority === "Medium" ? "#FEF3E7" : "#F3F4F6",
+                                  color: selectedTask?.priority === "High" ? "#C94F3D" : selectedTask?.priority === "Medium" ? "#C88A2B" : "#667085"
                                 }}
                               >
-                                {selectedTask.priority}
+                                {selectedTask?.priority}
                               </span>
                             )}
                           </div>

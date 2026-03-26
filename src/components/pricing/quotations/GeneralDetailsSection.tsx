@@ -8,6 +8,8 @@ import { CustomDropdown } from "../../bd/CustomDropdown";
 import { CustomDatePicker } from "../../common/CustomDatePicker";
 import type { QuotationType } from "../../../types/pricing";
 
+type ContractDetection = { contractId?: string; contractNumber?: string; [key: string]: any };
+
 // Helper component for read-only field display
 function DisplayField({ label, value }: { label: string; value: string }) {
   return (
@@ -84,6 +86,7 @@ interface GeneralDetailsSectionProps {
   setContractValidityStart?: (value: string) => void;
   contractValidityEnd?: string;
   setContractValidityEnd?: (value: string) => void;
+  showValidityEndError?: boolean;
   isEditMode?: boolean; // When true, lock quotation type toggle
 
   // ✨ CONTRACT REFERENCE: Inline contract detection display
@@ -134,6 +137,7 @@ export function GeneralDetailsSection({
   setContractValidityStart,
   contractValidityEnd = "",
   setContractValidityEnd,
+  showValidityEndError = false,
   isEditMode = false,
   contractDetection,
 }: GeneralDetailsSectionProps) {
@@ -482,7 +486,7 @@ export function GeneralDetailsSection({
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-base)", marginBottom: "8px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: showValidityEndError ? "#DC2626" : "var(--neuron-ink-base)", marginBottom: "8px" }}>
                     Valid Until *
                   </label>
                   <CustomDatePicker
@@ -491,6 +495,11 @@ export function GeneralDetailsSection({
                     placeholder="dd/mm/yyyy"
                     minWidth="100%"
                   />
+                  {showValidityEndError && (
+                    <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#DC2626" }}>
+                      Valid Until date is required before saving.
+                    </p>
+                  )}
                 </div>
               </>
             )}

@@ -1,5 +1,5 @@
 import { Plus, DollarSign } from "lucide-react";
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import type { SellingPriceCategory } from "../../../types/pricing";
 import { CategoryHeader } from "./CategoryHeader";
 import { CategoryPresetDropdown } from "./CategoryPresetDropdown";
@@ -429,7 +429,7 @@ export function SellingPriceSection({
       <CategoryPresetDropdown
         isOpen={showPresetDropdown}
         onClose={() => setShowPresetDropdown(false)}
-        buttonRef={addCategoryButtonRef} // ✨ ADDED THIS
+        buttonRef={addCategoryButtonRef as React.RefObject<HTMLButtonElement>} // ✨ ADDED THIS
         onSelect={(categoryName) => {
           onAddCategory(categoryName);
           setShowPresetDropdown(false);

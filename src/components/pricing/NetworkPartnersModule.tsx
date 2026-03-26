@@ -18,10 +18,10 @@ type Tab = "international" | "co-loader" | "all-in";
 const getServiceIcon = (service: string) => {
   const serviceLower = service.toLowerCase();
   if (serviceLower.includes("ocean")) {
-    return <Ship size={13} color="#6B7280" title={service} />;
+    return <Ship size={13} color="#6B7280" />;
   }
   if (serviceLower.includes("air")) {
-    return <Plane size={13} color="#6B7280" title={service} />;
+    return <Plane size={13} color="#6B7280" />;
   }
   // Fallback to first letter for other services
   return <span style={{ fontSize: "11px", color: "#6B7280", fontWeight: 600 }} title={service}>{service.charAt(0).toUpperCase()}</span>;
@@ -649,7 +649,7 @@ export function NetworkPartnersModule({
                                             {partner.company_name}
                                           </span>
                                           {partner.is_wca_conference && (
-                                            <Award size={14} className="text-purple-600" title="WCA Conference Member" />
+                                            <Award size={14} className="text-purple-600" />
                                           )}
                                         </div>
                                       </td>

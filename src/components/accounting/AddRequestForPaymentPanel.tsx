@@ -9,7 +9,7 @@ import { useEVoucherSubmit } from "../../hooks/useEVoucherSubmit";
 import { useUser } from "../../hooks/useUser";
 import { supabase } from "../../utils/supabase/client";
 import { getAccounts } from "../../utils/accounting-api";
-import type { Account } from "../../types/accounting";
+import type { Account } from "../../types/accounting-core";
 
 interface LineItem {
   id: string;
@@ -22,6 +22,8 @@ interface AddRequestForPaymentPanelProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void; // Called after successful save to backend
+  onSave?: (expenseData: any) => void | Promise<void>; // Alias for onSuccess, used by some callers
+  onSaveDraft?: (draftData: any) => void | Promise<void>; // Draft save callback
   context?: "bd" | "accounting" | "operations" | "collection" | "billing"; // Extended to support all E-Voucher types
   defaultRequestor?: string; // For pre-filling requestor name
   mode?: "create" | "view"; // View mode for displaying existing expense
@@ -68,7 +70,7 @@ interface SubCategory {
 }
 
 // UI Subtypes for Operations/Accounting to distinguish between expense types
-type TransactionSubtype = "regular_expense" | "billable_expense";
+type TransactionSubtype = "regular_expense" | "billable_expense" | "cash_advance";
 
 const EXPENSE_CATEGORIES: ExpenseCategory[] = [
   "Brokerage - FCL",
@@ -416,12 +418,12 @@ export function AddRequestForPaymentPanel({
         // Map GL Category back if needed (simplified)
       }
       
-      if (dataToLoad.sub_category) setSubCategory(dataToLoad.sub_category || "");
+      if (dataToLoad.gl_sub_category) setSubCategory(dataToLoad.gl_sub_category || "");
       if (dataToLoad.project_number) setProjectNumber(dataToLoad.project_number || "");
       
       // Handle line items
       if (dataToLoad.line_items && dataToLoad.line_items.length > 0) {
-        setLineItems(dataToLoad.line_items);
+        setLineItems(dataToLoad.line_items as LineItem[]);
       } else if (dataToLoad.amount) {
         // Create single line item from total amount
         setLineItems([{ 
@@ -1167,7 +1169,6 @@ export function AddRequestForPaymentPanel({
                               { value: "cash_advance", label: "Cash Advance" }
                             ]}
                             placeholder="Select type"
-                            icon={Receipt}
                             disabled={isViewMode}
                           />
                         </div>
@@ -1469,7 +1470,6 @@ export function AddRequestForPaymentPanel({
                     onChange={(value) => setSourceAccountId(value)}
                     placeholder="Select account (Optional)"
                     disabled={isViewMode || accounts.length === 0}
-                    searchable
                   />
                 </div>
 

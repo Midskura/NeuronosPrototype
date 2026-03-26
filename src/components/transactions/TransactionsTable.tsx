@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronRight, Check, Search, AlertCircle, FileText } from "lucide-react";
 import { formatCurrency } from "../../utils/accounting-math";
 import type { UI_Transaction, ReviewStatus } from "./types";
+export type { UI_Transaction, ReviewStatus };
 import { CustomDropdown } from "../bd/CustomDropdown";
 
 interface TransactionsTableProps {

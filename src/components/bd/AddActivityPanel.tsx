@@ -2,6 +2,7 @@ import { CustomDropdown } from "./CustomDropdown";
 import { supabase } from "../../utils/supabase/client";
 import { useState, useEffect, useRef } from "react";
 import type { Activity, ActivityType } from "../../types/bd";
+import { X, Phone, Mail, Users, MessageSquare, Send, MessageCircle, Linkedin, StickyNote, Upload, FileText, Trash2 } from "lucide-react";
 
 interface AddActivityPanelProps {
   isOpen: boolean;

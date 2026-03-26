@@ -36,7 +36,7 @@ export function BudgetRequestList() {
 
   // Extract unique values for filters
   const categories = useMemo(() => 
-    Array.from(new Set(budgetRequests.map(r => r.sub_category).filter(Boolean)))
+    Array.from(new Set(budgetRequests.map(r => r.gl_sub_category).filter(Boolean)))
   , [budgetRequests]);
 
   const customers = useMemo(() => 
@@ -92,7 +92,7 @@ export function BudgetRequestList() {
     let filtered = budgetRequests.filter(request => {
       // Search filter
       const matchesSearch = searchQuery === "" || 
-        request.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (request.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         request.voucher_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
         request.requestor_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (request.customer_name && request.customer_name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -109,7 +109,7 @@ export function BudgetRequestList() {
       const matchesDateRange = dateRangeFilter === "all" || isWithinDateRange(request.request_date, dateRangeFilter);
 
       // Category filter
-      const matchesCategory = categoryFilter.length === 0 || (request.sub_category && categoryFilter.includes(request.sub_category));
+      const matchesCategory = categoryFilter.length === 0 || (request.gl_sub_category && categoryFilter.includes(request.gl_sub_category));
 
       // Customer filter
       const matchesCustomer = customerFilter.length === 0 || (request.customer_name && customerFilter.includes(request.customer_name));
@@ -279,7 +279,7 @@ export function BudgetRequestList() {
         console.log(`✅ [Budget Requests] Fetched ${normalizedData.length} budget requests`);
         console.log('📋 [Budget Requests] First item:', normalizedData[0]);
       } else {
-        console.error('❌ [Budget Requests] API returned error:', data.error);
+        console.error('❌ [Budget Requests] API returned error:', (data as any).error);
         setBudgetRequests([]); // Set empty array on error
       }
     } catch (error) {
@@ -448,7 +448,7 @@ export function BudgetRequestList() {
             <MultiSelectDropdown
               values={categoryFilter}
               onChange={setCategoryFilter}
-              options={categories}
+              options={categories as string[]}
               placeholder="All Categories"
             />
           </div>
@@ -573,7 +573,7 @@ export function BudgetRequestList() {
               label="Customer"
               values={customerFilter}
               onChange={setCustomerFilter}
-              options={customers}
+              options={customers as string[]}
               placeholder="All Customers"
             />
           </div>
@@ -665,7 +665,7 @@ export function BudgetRequestList() {
                 >
                   {/* Icon Column */}
                   <div className="flex items-center justify-center">
-                    {getCategoryIcon(request.sub_category)}
+                    {getCategoryIcon(request.gl_sub_category || "")}
                   </div>
 
                   {/* Request */}
@@ -685,7 +685,7 @@ export function BudgetRequestList() {
 
                   {/* Category */}
                   <div className="text-[12px]" style={{ color: "var(--neuron-ink-secondary)" }}>
-                    {request.sub_category || "—"}
+                    {request.gl_sub_category || "—"}
                   </div>
 
                   {/* Requestor */}

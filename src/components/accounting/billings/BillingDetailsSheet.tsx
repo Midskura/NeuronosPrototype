@@ -2,7 +2,7 @@ import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock,
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
 import { supabase } from "../../../utils/supabase/client";
-import type { Billing } from "../../types/accounting";
+import type { Billing } from "../../../types/accounting";
 import { SidePanel } from "../../common/SidePanel";
 import {
   completeInvoiceReversalDraft,
@@ -384,22 +384,22 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       <tr className="bg-gray-50/50">
                         <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Subtotal</td>
                         <td className="px-4 py-2 text-right font-medium text-gray-900">
-                          {formatCurrency(billing.subtotal)}
+                          {formatCurrency(billing.subtotal ?? 0)}
                         </td>
                       </tr>
-                      {billing.tax_amount > 0 && (
+                      {(billing.tax_amount ?? 0) > 0 && (
                         <tr className="bg-gray-50/50">
                            <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Tax</td>
                            <td className="px-4 py-2 text-right font-medium text-gray-900">
-                             {formatCurrency(billing.tax_amount)}
+                             {formatCurrency(billing.tax_amount ?? 0)}
                            </td>
                         </tr>
                       )}
-                      {billing.discount_amount > 0 && (
+                      {(billing.discount_amount ?? 0) > 0 && (
                         <tr className="bg-gray-50/50">
                            <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Discount</td>
                            <td className="px-4 py-2 text-right font-medium text-red-600">
-                             -{formatCurrency(billing.discount_amount)}
+                             -{formatCurrency(billing.discount_amount ?? 0)}
                            </td>
                         </tr>
                       )}
@@ -420,11 +420,11 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                  <div className="flex gap-8">
                     <div>
                        <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Amount Paid</div>
-                       <div className="text-lg font-bold text-emerald-600">{formatCurrency(billing.amount_paid)}</div>
+                       <div className="text-lg font-bold text-emerald-600">{formatCurrency(billing.amount_paid ?? 0)}</div>
                     </div>
                     <div>
                        <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Balance Due</div>
-                       <div className="text-lg font-bold text-red-600">{formatCurrency(billing.amount_due)}</div>
+                       <div className="text-lg font-bold text-red-600">{formatCurrency(billing.amount_due ?? 0)}</div>
                     </div>
                  </div>
               </div>

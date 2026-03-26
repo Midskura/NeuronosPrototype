@@ -54,6 +54,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { toast } from "sonner@2.0.3";
 import { X, Save, FileText, Handshake } from "lucide-react";
 import { GeneralDetailsSection } from "./GeneralDetailsSection";
 import { ContractGeneralDetailsSection } from "./ContractGeneralDetailsSection";
@@ -79,6 +80,7 @@ import type { TruckingLineItem } from "../../../types/pricing";
 import { QuotationRateBreakdownSheet } from "./QuotationRateBreakdownSheet";
 import type { BookingQuantities } from "../../../utils/contractRateEngine";
 import { ContractRateToolbar } from "./ContractRateToolbar";
+import { normalizeQuotationStatus } from "../../../utils/quotationStatus";
 
 interface ContainerEntry {
   id: string;
@@ -127,6 +129,7 @@ interface BrokerageFormData {
 interface ForwardingFormData {
   incoterms?: string;
   cargoType?: string;
+  commodity?: string;
   commodityDescription?: string;
   deliveryAddress?: string;
   aodPod?: string;
@@ -215,7 +218,7 @@ interface QuotationBuilderV3Props {
 
 export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "create", customerData, contactData, builderMode = "quotation", viewMode = false, hideHeader = false, isAmendment = false, onAmend, initialQuotationType }: QuotationBuilderV3Props) {
   // Check if quotation is locked (converted to project)
-  const isLocked = mode === "edit" && initialData?.project_id;
+  const isLocked = mode === "edit" && !!initialData?.project_id;
   
   // Generate quotation number (CQ prefix for contracts, QUO prefix for projects)
   const generateQuoteNumber = (type?: QuotationType) => {
@@ -283,6 +286,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
     releasing: initialData?.contract_general_details?.releasing || "",
   });
   const isContractMode = quotationType === "contract";
+  const [contractValidationAttempted, setContractValidationAttempted] = useState(false);
 
   // ✨ CONTRACT RATE BRIDGE: Generalized state for ALL contract-covered services
   const [detectedContract, setDetectedContract] = useState<ContractSummary | null>(null);
@@ -1721,21 +1725,24 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
     if (isAmendment) {
       // Use existing status if available
       if (initialData?.status) {
-        saveQuotation(initialData.status);
+        saveQuotation(normalizeQuotationStatus(initialData.status, initialData));
         return;
       }
       
       // Fallback: If no status is provided but we have a project number,
       // it means this quotation is converted/linked to a project.
-      if (initialData?.project_number) {
-        // Use "Converted to Project" if it's a valid status in the system, 
-        // otherwise "Approved" is a safe state for an active project's quotation.
+      if (initialData?.project_id || initialData?.project_number) {
         saveQuotation("Converted to Project" as QuotationStatus);
         return;
       }
       
-      // Default fallback for amendments without status or project link
-      saveQuotation("Approved" as QuotationStatus);
+      if (initialData?.quotation_type === "contract" && initialData?.contract_status === "Active") {
+        saveQuotation("Converted to Contract" as QuotationStatus);
+        return;
+      }
+
+      // Default fallback for amendments without status or a linked downstream record
+      saveQuotation("Draft" as QuotationStatus);
       return;
     }
 
@@ -1750,6 +1757,13 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
   };
 
   const saveQuotation = (targetStatus: QuotationStatus) => {
+    // ✨ CONTRACT: Require validity end date before saving
+    if (isContractMode && !contractValidityEnd) {
+      setContractValidationAttempted(true);
+      toast.error("Please set a 'Valid Until' date before saving this contract.");
+      return;
+    }
+
     // Build services_metadata from form data
     const services_metadata: InquiryService[] = [];
     
@@ -2249,6 +2263,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
             setContractValidityStart={setContractValidityStart}
             contractValidityEnd={contractValidityEnd}
             setContractValidityEnd={setContractValidityEnd}
+            showValidityEndError={contractValidationAttempted && isContractMode && !contractValidityEnd}
             isEditMode={mode === "edit"}
             contractDetection={!isContractMode ? {
               loading: contractBridgeLoading,

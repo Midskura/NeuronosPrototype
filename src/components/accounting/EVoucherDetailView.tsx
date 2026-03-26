@@ -315,11 +315,11 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                       {evoucher.expense_category}
                     </span>
                   </div>
-                  {evoucher.sub_category && (
+                  {evoucher.gl_sub_category && (
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                       <span style={{ fontSize: "14px", color: "#667085" }}>Sub-Category:</span>
                       <span style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
-                        {evoucher.sub_category}
+                        {evoucher.gl_sub_category}
                       </span>
                     </div>
                   )}

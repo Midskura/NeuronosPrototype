@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MoreVertical, Edit, Copy, Download, Trash2, FileText, FolderOpen, Ticket } from "lucide-react";
 import type { QuotationNew } from "../../types/pricing";
+import { getNormalizedQuotationStatus } from "../../utils/quotationStatus";
 
 interface QuotationActionMenuProps {
   quotation: QuotationNew;
@@ -22,6 +23,7 @@ export function QuotationActionMenu({
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const normalizedStatus = getNormalizedQuotationStatus(quotation);
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -124,7 +126,7 @@ export function QuotationActionMenu({
           </button>
 
           {/* Convert to Project - Only visible for "Accepted by Client" */}
-          {onConvertToProject && quotation.status === "Accepted by Client" && (
+          {onConvertToProject && normalizedStatus === "Accepted by Client" && (
             <button
               onClick={() => {
                 onConvertToProject();
@@ -193,7 +195,8 @@ export function QuotationActionMenu({
             </button>
           )}
 
-          {/* Delete */}
+          {/* Delete — only available for Draft, Disapproved, or Cancelled quotations */}
+          {(normalizedStatus === "Draft" || normalizedStatus === "Disapproved" || normalizedStatus === "Cancelled") && (
           <button
             onClick={() => {
               setShowMenu(false);
@@ -224,6 +227,7 @@ export function QuotationActionMenu({
             <Trash2 size={16} />
             <span>Delete</span>
           </button>
+          )}
         </div>
       )}
 

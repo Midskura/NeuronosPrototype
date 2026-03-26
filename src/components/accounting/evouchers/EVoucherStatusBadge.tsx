@@ -1,5 +1,5 @@
 import { FileText, Clock, CheckCircle, XCircle, Ban } from "lucide-react";
-import type { EVoucherStatus } from "../../types/evoucher";
+import type { EVoucherStatus } from "../../../types/evoucher";
 
 interface EVoucherStatusBadgeProps {
   status: EVoucherStatus;

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { Plus } from "lucide-react";
 import type { BankAccountSummary } from "./types";
+export type { BankAccountSummary };
 import { BankCard } from "./BankCard";
 
 interface BankCardsCarouselProps {

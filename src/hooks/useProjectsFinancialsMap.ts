@@ -20,6 +20,7 @@ import { useCachedFetch } from "./useNeuronCache";
 export interface ProjectFinancials extends FinancialTotals {
   income: number;
   costs: number;
+  margin?: number;
 }
 
 export function useProjectsFinancialsMap(projects: Project[]) {
@@ -102,7 +103,7 @@ export function useProjectsFinancialsMap(projects: Project[]) {
 
       const linkedQuotation = quotationsMap.get(project.quotation_id);
       if (linkedQuotation) {
-        const virtualItems = convertQuotationToVirtualItems(linkedQuotation, containerReference);
+        const virtualItems = convertQuotationToVirtualItems(linkedQuotation as any, containerReference);
         projectBillingItems = mergeVirtualItemsWithRealItems(projectBillingItems, virtualItems);
       }
 

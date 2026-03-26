@@ -24,21 +24,20 @@ export function StatusSelector({
   const style = getBookingStatusStyles(status);
   const Icon = style.icon;
 
-  // Full list of selectable statuses
-  const availableStatuses: ExecutionStatus[] = [
-    "Draft",
-    "Created",
-    "Confirmed",
-    "Pending",
-    "For Delivery",
-    "In Transit",
-    "In Progress",
-    "Delivered",
-    "Completed", 
-    "On Hold",
-    "Cancelled",
-    "Closed"
-  ];
+  // Valid transitions per status — only allowed next states are shown
+  const BOOKING_STATUS_TRANSITIONS: Record<ExecutionStatus, ExecutionStatus[]> = {
+    "Draft":       ["Confirmed", "Cancelled"],
+    "Pending":     ["Confirmed", "Cancelled"],
+    "Confirmed":   ["In Progress", "On Hold", "Cancelled"],
+    "In Progress": ["Delivered", "On Hold", "Cancelled"],
+    "Delivered":   ["Completed", "Closed"],
+    "Completed":   ["Closed"],
+    "On Hold":     ["Confirmed", "Cancelled"],
+    "Cancelled":   [],
+    "Closed":      [],
+  };
+
+  const availableStatuses: ExecutionStatus[] = BOOKING_STATUS_TRANSITIONS[status] ?? [];
 
   // Map to CustomDropdown options
   const options = availableStatuses.map(s => {
@@ -51,8 +50,11 @@ export function StatusSelector({
     };
   });
 
+  // Terminal statuses (no valid transitions) — force read-only
+  const isTerminal = availableStatuses.length === 0;
+
   // Read-only view (just a badge)
-  if (readOnly) {
+  if (readOnly || isTerminal) {
     return (
       <button 
         type="button"

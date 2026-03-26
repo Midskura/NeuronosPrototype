@@ -12,7 +12,13 @@ import { useCustomerOptions } from "./shared/useCustomerOptions";
 interface CreateOthersBookingPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (bookingData?: any) => void; // Updated to accept optional booking data
+  onSuccess?: (bookingData?: any) => void;
+  onBookingCreated?: (bookingData?: any) => void;
+  prefillData?: any;
+  source?: string;
+  customerId?: string;
+  serviceType?: string;
+  currentUser?: any;
 }
 
 export function CreateOthersBookingPanel({
@@ -70,7 +76,7 @@ export function CreateOthersBookingPanel({
       if (error) throw new Error(error.message);
 
       toast.success("Service booking created successfully");
-      onSuccess(data);
+      onSuccess?.(data);
       onClose();
     } catch (error) {
       console.error("Error creating others booking:", error);

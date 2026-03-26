@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { supabase } from '../utils/supabase/client';
 import type { Session } from '@supabase/supabase-js';
@@ -86,8 +87,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [devOverride, setDevOverrideState] = useState<DevRoleOverride | null>(null);
 
-  // Load dev override from localStorage on mount
+  // Load dev override from localStorage on mount — DEV only
   useEffect(() => {
+    if (!import.meta.env.DEV) return;
     const storedOverride = localStorage.getItem('neuron_dev_role_override');
     if (storedOverride) {
       try {
@@ -102,8 +104,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Wrapper to save override to localStorage
+  // Wrapper to save override to localStorage — DEV only
   const setDevOverride = (override: DevRoleOverride | null) => {
+    if (!import.meta.env.DEV) return;
     setDevOverrideState(override);
     if (override) {
       localStorage.setItem('neuron_dev_role_override', JSON.stringify(override));
@@ -112,13 +115,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Computed effective values
-  const effectiveDepartment = devOverride?.enabled && devOverride.department 
-    ? devOverride.department 
+  // Computed effective values — override only applies in DEV builds
+  const effectiveDepartment = (import.meta.env.DEV && devOverride?.enabled && devOverride.department)
+    ? devOverride.department
     : user?.department || 'Operations';
-    
-  const effectiveRole = devOverride?.enabled && devOverride.role 
-    ? devOverride.role 
+
+  const effectiveRole = (import.meta.env.DEV && devOverride?.enabled && devOverride.role)
+    ? devOverride.role
     : user?.role || 'rep';
 
   // Initialize auth — listen for Supabase session changes

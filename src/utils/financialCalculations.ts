@@ -4,31 +4,56 @@ import { isInvoiceFinanciallyActive } from "./invoiceReversal";
 
 export type FinancialTotals = FinancialTotalsV2;
 
+/** Raw DB row — used as input type for functions accepting Supabase rows */
+type RawRow = Record<string, unknown>;
+
+const num = (value: unknown): number => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const str = (value: unknown): string => {
+  return typeof value === "string" ? value.toLowerCase() : "";
+};
+
 export const calculateFinancialTotals = (
-  invoices: any[],
-  billingItems: any[],
-  expenses: any[],
-  collections: any[]
+  invoices: RawRow[],
+  billingItems: RawRow[],
+  expenses: RawRow[],
+  collections: RawRow[]
 ): FinancialTotals => {
   const activeInvoices = invoices.filter((invoice) => isInvoiceFinanciallyActive(invoice));
-  
-  const invoicedAmount = activeInvoices.reduce((sum, item) => sum + (Number(item.amount) || Number(item.total_amount) || 0), 0);
-  
+
+  const invoicedAmount = activeInvoices.reduce(
+    (sum, item) => sum + (num(item.amount) || num(item.total_amount)), 0
+  );
+
   const unbilledCharges = billingItems
-    .filter(item => (item.status || "").toLowerCase() === 'unbilled')
-    .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-    
+    .filter(item => str(item.status) === "unbilled")
+    .reduce((sum, item) => sum + num(item.amount), 0);
+
   const bookedCharges = invoicedAmount + unbilledCharges;
 
-  const directCost = expenses.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  // Canonical expense status filter — matches mapEvoucherExpensesForScope in financialSelectors.ts
+  const APPROVED_EXPENSE_STATUSES = ["approved", "posted", "paid", "partial"];
+
+  const approvedExpenses = expenses.filter(item =>
+    APPROVED_EXPENSE_STATUSES.includes(str(item.status))
+  );
+
+  const directCost = approvedExpenses.reduce((sum, item) => sum + num(item.amount), 0);
 
   const collectedAmount = collections
     .filter((item) => isCollectionAppliedToInvoice(item))
-    .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-  
-  const paidDirectCost = expenses
-    .filter(item => ["paid", "cleared"].includes((item.status || "").toLowerCase()) || ["paid", "cleared"].includes((item.payment_status || "").toLowerCase()))
-    .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+    .reduce((sum, item) => sum + num(item.amount), 0);
+
+  // paidDirectCost = only expenses where cash has actually gone out
+  const paidDirectCost = approvedExpenses
+    .filter(item =>
+      ["paid", "partial"].includes(str(item.status)) ||
+      ["paid", "cleared"].includes(str(item.payment_status))
+    )
+    .reduce((sum, item) => sum + num(item.amount), 0);
 
   const netCashFlow = collectedAmount - paidDirectCost;
 
@@ -36,34 +61,37 @@ export const calculateFinancialTotals = (
   const grossMargin = bookedCharges > 0 ? (grossProfit / bookedCharges) * 100 : 0;
 
   // Helper to check overdue
-  const checkOverdue = (item: any) => {
-    if (["paid", "cleared"].includes((item.payment_status || "").toLowerCase())) return false;
-    
-    const balance = item.remaining_balance ?? item.amount ?? item.total_amount ?? 0;
+  const checkOverdue = (item: RawRow): boolean => {
+    if (["paid", "cleared"].includes(str(item.payment_status))) return false;
+
+    const balance = num(item.remaining_balance ?? item.amount ?? item.total_amount);
     if (balance <= 0.01) return false;
 
-    const dueDateStr = item.due_date || item.created_at;
+    const dueDateStr = (item.due_date || item.created_at) as string | undefined;
     if (!dueDateStr) return false;
-    
+
     const dueDate = new Date(dueDateStr);
     if (!item.due_date) dueDate.setDate(dueDate.getDate() + 30);
-    
+
     return new Date() > dueDate;
   };
 
   const outstandingAmount = activeInvoices
     .reduce((sum, item) => {
-      const isPaid = ["paid", "cleared"].includes((item.payment_status || "").toLowerCase());
-      if (isPaid) return sum;
-      
-      const balance = item.remaining_balance !== undefined ? Number(item.remaining_balance) : (Number(item.amount) || Number(item.total_amount) || 0);
+      if (["paid", "cleared"].includes(str(item.payment_status))) return sum;
+
+      const balance = item.remaining_balance !== undefined
+        ? num(item.remaining_balance)
+        : (num(item.amount) || num(item.total_amount));
       return sum + balance;
     }, 0);
-  
+
   const overdueAmount = activeInvoices
     .filter(b => checkOverdue(b))
     .reduce((sum, item) => {
-      const balance = item.remaining_balance !== undefined ? Number(item.remaining_balance) : (Number(item.amount) || Number(item.total_amount) || 0);
+      const balance = item.remaining_balance !== undefined
+        ? num(item.remaining_balance)
+        : (num(item.amount) || num(item.total_amount));
       return sum + balance;
     }, 0);
 
@@ -87,33 +115,33 @@ export const calculateFinancialTotals = (
  * This ensures "pass-through" costs are counted as potential (unbilled) revenue.
  */
 export const mergeBillableExpenses = (
-  existingBillingItems: any[],
-  expenses: any[]
-): any[] => {
-  // Deduplication: Create a Set of existing source_ids from real billing items
-  const existingSourceIds = new Set(existingBillingItems.map((b: any) => b.source_id));
+  existingBillingItems: RawRow[],
+  expenses: RawRow[]
+): RawRow[] => {
+  const existingSourceIds = new Set(
+    existingBillingItems.map((b) => b.source_id as string | undefined).filter(Boolean)
+  );
 
-  // Merge Billable Expenses into Billing Items
   const billableExpenses = expenses
-    .filter((e: any) => 
-      e.is_billable && 
-      ["approved", "posted", "paid", "partial"].includes((e.status || "").toLowerCase()) &&
-      !existingSourceIds.has(e.evoucher_id || e.id) // Exclude if already exists as a billing item
+    .filter((e) =>
+      e.is_billable &&
+      ["approved", "posted", "paid", "partial"].includes(str(e.status)) &&
+      !existingSourceIds.has((e.evoucher_id || e.id) as string)
     )
-    .map((e: any) => ({
+    .map((e): RawRow => ({
       id: e.id,
       created_at: e.created_at || e.request_date,
       service_type: "Reimbursable Expense",
       description: e.description || e.purpose,
       amount: e.amount || e.total_amount,
       currency: e.currency || "PHP",
-      status: 'unbilled', // Default for virtual items
+      status: "unbilled",
       quotation_category: e.expense_category || "Billable Expenses",
       booking_id: e.booking_id || null,
       source_id: e.evoucher_id || e.id,
-      source_type: 'billable_expense',
+      source_type: "billable_expense",
       vendor: e.vendor_name,
-      project_number: e.project_number
+      project_number: e.project_number,
     }));
 
   return [...existingBillingItems, ...billableExpenses];
@@ -122,34 +150,35 @@ export const mergeBillableExpenses = (
 /**
  * Helper to convert Quotation Selling Price Items to Virtual Billing Items
  */
-export const convertQuotationToVirtualItems = (quotation: any, projectNumber: string): any[] => {
-  if (!quotation?.selling_price) return [];
+export const convertQuotationToVirtualItems = (quotation: RawRow, projectNumber: string): RawRow[] => {
+  const sellingPrice = quotation?.selling_price;
+  if (!Array.isArray(sellingPrice)) return [];
 
-  const virtualItems: any[] = [];
+  const virtualItems: RawRow[] = [];
 
-  quotation.selling_price.forEach((cat: any) => {
-    if (!cat.line_items) return;
-    
-    cat.line_items.forEach((item: any) => {
+  sellingPrice.forEach((cat: Record<string, unknown>) => {
+    const lineItems = cat.line_items;
+    if (!Array.isArray(lineItems)) return;
+
+    lineItems.forEach((item: Record<string, unknown>) => {
       virtualItems.push({
         id: `virtual-${item.id}`,
-        source_id: item.id, // Generic source ID for tracking
-        source_quotation_item_id: item.id, // Specific ID for backend matching
-        source_type: 'quotation_item',
+        source_id: item.id,
+        source_quotation_item_id: item.id,
+        source_type: "quotation_item",
         is_virtual: true,
-        created_at: quotation.created_at || new Date().toISOString(),
+        created_at: (quotation.created_at as string) || new Date().toISOString(),
         service_type: item.service || "General",
         description: item.description,
-        amount: item.amount, // This is final_price (unit * qty * forex)
+        amount: item.amount,
         currency: item.currency,
-        status: 'unbilled', // Virtual items are always unbilled
+        status: "unbilled",
         quotation_category: cat.category_name,
         booking_id: null,
         project_number: projectNumber,
-        // Extended fields
         quantity: item.quantity,
         forex_rate: item.forex_rate,
-        is_taxed: item.is_taxed
+        is_taxed: item.is_taxed,
       });
     });
   });
@@ -162,22 +191,24 @@ export const convertQuotationToVirtualItems = (quotation: any, projectNumber: st
  * Prevents double-counting by excluding virtual items that have been "realized" (saved)
  */
 export const mergeVirtualItemsWithRealItems = (
-  realItems: any[], 
-  virtualItems: any[]
-): any[] => {
-  // Identify which Quotation Items are already saved as Real Billing Items
+  realItems: RawRow[],
+  virtualItems: RawRow[]
+): RawRow[] => {
   const existingSourceIds = new Set<string>();
-  
-  realItems.forEach((item: any) => {
-    if (item.source_quotation_item_id) existingSourceIds.add(item.source_quotation_item_id);
-    if (item.source_id && item.source_type === 'quotation_item') existingSourceIds.add(item.source_id);
+
+  realItems.forEach((item) => {
+    const sqid = item.source_quotation_item_id as string | undefined;
+    const sid = item.source_id as string | undefined;
+    const stype = item.source_type as string | undefined;
+    if (sqid) existingSourceIds.add(sqid);
+    if (sid && stype === "quotation_item") existingSourceIds.add(sid);
   });
 
-  // Only add Virtual Items that don't have a Real counterpart yet
-  const newVirtualItems = virtualItems.filter(v => 
-      !existingSourceIds.has(v.source_quotation_item_id) && 
-      !existingSourceIds.has(v.source_id)
-  );
+  const newVirtualItems = virtualItems.filter(v => {
+    const sqid = v.source_quotation_item_id as string | undefined;
+    const sid = v.source_id as string | undefined;
+    return (!sqid || !existingSourceIds.has(sqid)) && (!sid || !existingSourceIds.has(sid));
+  });
 
   return [...realItems, ...newVirtualItems];
 };

@@ -93,7 +93,7 @@ export function CommandBarAccounting({
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
-                selected={dateRange}
+                selected={dateRange as any}
                 onSelect={(range) => {
                   onDateRangeChange?.(range || {});
                   if (range?.from && range?.to) {

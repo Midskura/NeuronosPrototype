@@ -14,7 +14,7 @@ const mockEVouchers: EVoucher[] = [
     requestor_name: "Juan Dela Cruz",
     request_date: "2024-12-10",
     expense_category: "Miscellaneous",
-    sub_category: "Client Entertainment",
+    gl_sub_category: "Client Entertainment",
     amount: 25000,
     currency: "PHP",
     purpose: "Holiday client appreciation dinner",
@@ -42,7 +42,7 @@ const mockEVouchers: EVoucher[] = [
     requestor_name: "Maria Santos",
     request_date: "2024-12-11",
     expense_category: "Brokerage",
-    sub_category: "Customs Clearance",
+    gl_sub_category: "Customs Clearance",
     amount: 75000,
     currency: "PHP",
     purpose: "Customs brokerage for shipment BK-2024-1234",
@@ -71,7 +71,7 @@ const mockEVouchers: EVoucher[] = [
     requestor_name: "Pedro Reyes",
     request_date: "2024-12-12",
     expense_category: "Trucking",
-    sub_category: "Delivery Services",
+    gl_sub_category: "Delivery Services",
     amount: 15000,
     currency: "PHP",
     purpose: "Last mile delivery for Manila-Cebu route",
@@ -95,7 +95,7 @@ const mockEVouchers: EVoucher[] = [
     requestor_name: "Juan Dela Cruz",
     request_date: "2024-12-09",
     expense_category: "Forwarding",
-    sub_category: "Freight Services",
+    gl_sub_category: "Freight Services",
     amount: 250000,
     currency: "PHP",
     purpose: "International freight forwarding for export shipment",
@@ -343,7 +343,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {filteredEVouchers.map((voucher) => {
               const statusStyle = getStatusColor(voucher.status);
-              const categoryStyle = getCategoryColor(voucher.expense_category);
+              const categoryStyle = getCategoryColor(voucher.expense_category || "");
               
               return (
                 <div

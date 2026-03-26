@@ -1,5 +1,6 @@
 import { Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import type { QuotationStatus } from "../types/pricing";
+import { normalizeQuotationStatus } from "./quotationStatus";
 
 // Display statuses - what users see in the UI (client's 4-status system)
 export type DisplayStatus = 
@@ -10,8 +11,10 @@ export type DisplayStatus =
   | "Cancelled";           // Cancelled
 
 // Map internal technical status to display status
-export function getDisplayStatus(internalStatus: QuotationStatus): DisplayStatus {
-  switch (internalStatus) {
+export function getDisplayStatus(internalStatus: QuotationStatus | string): DisplayStatus {
+  const normalizedStatus = normalizeQuotationStatus(internalStatus);
+
+  switch (normalizedStatus) {
     case "Draft":
     case "Pending Pricing":
     case "Priced":
@@ -77,8 +80,10 @@ export function getStatusStyle(displayStatus: DisplayStatus) {
 }
 
 // Get detailed internal status label for tooltips/debugging
-export function getInternalStatusLabel(status: QuotationStatus): string {
-  switch (status) {
+export function getInternalStatusLabel(status: QuotationStatus | string): string {
+  const normalizedStatus = normalizeQuotationStatus(status);
+
+  switch (normalizedStatus) {
     case "Draft":
       return "Draft (BD editing)";
     case "Pending Pricing":

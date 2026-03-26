@@ -13,7 +13,10 @@ export type EVoucherStatus =
   | "Processing"      // Legacy
   | "Disbursed"       // Legacy
   | "Recorded"        // Legacy
-  | "Audited";        // Legacy
+  | "Audited"         // Legacy
+  | "Draft"           // Legacy (capitalized)
+  | "Cancelled"       // Legacy (capitalized)
+  | "Disapproved";    // Legacy
 
 // Transaction Types - Universal E-Voucher System
 export type EVoucherTransactionType = 
@@ -99,6 +102,8 @@ export type GLSubCategory = {
     | "Drawings";
 };
 
+export type EVoucherCategory = string;
+
 export type PaymentMethod = "Cash" | "Bank Transfer" | "Check" | "Credit Card" | "Online Payment";
 
 export type PaymentType = "Full" | "Partial";
@@ -136,8 +141,8 @@ export interface EVoucher {
   voucher_number: string; // e.g., EVRN-2025-001 or BR-001
   
   // Universal Transaction Fields
-  transaction_type: EVoucherTransactionType; // Type of transaction
-  source_module: EVoucherSourceModule; // Which module created this
+  transaction_type?: EVoucherTransactionType; // Type of transaction
+  source_module?: EVoucherSourceModule; // Which module created this
   
   // Request Details
   requestor_id: string;
@@ -154,6 +159,7 @@ export interface EVoucher {
   // GL Categorization (filled by Accounting during approval)
   gl_category?: GLCategory;
   gl_sub_category?: string; // Varies based on gl_category
+  expense_category?: string;
   
   // Linking
   project_number?: string; // Booking ID
@@ -207,6 +213,15 @@ export interface EVoucher {
   audited_date?: string;
   pre_audit_remarks?: string;
   
+  // Source tracking (used by billing_line_items and conversion flows)
+  source_type?: string;
+  source_id?: string;
+  posted_to_ledger?: boolean;
+
+  // Line Items (for multi-line vouchers)
+  line_items?: unknown[];
+  notes?: string;
+
   // Attachments & History
   attachments?: string[];
   workflow_history: EVoucherWorkflowHistory[];
