@@ -193,7 +193,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
   // Determine what modules to show based on effective department
   const userDepartment = effectiveDepartment || currentUser?.department || "Operations";
   const isExecutive = userDepartment === "Executive";
-  const isManager = effectiveRole === 'manager' || effectiveRole === 'director';
+  const isManager = effectiveRole === 'manager';
   const showBD = isExecutive || userDepartment === "Business Development";
   const showPricing = isExecutive || userDepartment === "Pricing";
   const showOperations = isExecutive || userDepartment === "Operations";
@@ -866,7 +866,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
             aria-hidden="true"
             className="pointer-events-none absolute right-4 top-0 left-4 h-8"
             style={{
-              background: "linear-gradient(to top, rgba(255,255,255,0), var(--sidebar, #FFFFFF) 88%)",
+              background: "linear-gradient(to top, transparent, var(--neuron-bg-elevated) 88%)",
             }}
           />
         )}
@@ -876,7 +876,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
             aria-hidden="true"
             className="pointer-events-none absolute right-4 bottom-0 left-4 h-12"
             style={{
-              background: "linear-gradient(to bottom, rgba(255,255,255,0), var(--sidebar, #FFFFFF) 78%)",
+              background: "linear-gradient(to bottom, transparent, var(--neuron-bg-elevated) 78%)",
             }}
           />
         )}
