@@ -96,7 +96,7 @@ function LoginPage() {
     setDebugInfo(`Calling signUp for ${email} against project ${projectId}...`);
     const result = await signup(email, password, name || email, {
       department: department || 'Executive',
-      role: role || 'rep',
+      role: role || 'staff',
       service_type: department === 'Operations' ? (serviceType || null) : null,
       operations_role: department === 'Operations' ? (operationsRole || null) : null,
     });

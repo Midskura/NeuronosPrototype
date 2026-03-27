@@ -3,38 +3,109 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* ===== WORKSPACE THEME TOKENS ===== */
+  --theme-bg-page: #F7FAF8;
+  --theme-bg-surface: #FFFFFF;
+  --theme-bg-surface-subtle: #F1F6F4;
+  --theme-bg-surface-tint: #E8F2EE;
+  --theme-text-primary: #12332B;
+  --theme-text-secondary: #2E5147;
+  --theme-text-muted: #6B7A76;
+  --theme-text-inverse: #FFFFFF;
+  --theme-border-default: #E5ECE9;
+  --theme-border-subtle: #EEF3F1;
+  --theme-border-strong: #5FC4A1;
+  --theme-action-primary-bg: #237F66;
+  --theme-action-primary-text: #FFFFFF;
+  --theme-action-primary-border: #1E6D59;
+  --theme-action-accent-bg: #B06A4F;
+  --theme-action-accent-text: #FFFFFF;
+  --theme-action-accent-border: #995640;
+  --theme-state-hover: #F1F6F4;
+  --theme-state-selected: #E4EFEA;
+  --theme-state-focus-ring: #5FC4A1;
+  --theme-status-success-bg: #ECFDF5;
+  --theme-status-success-fg: #027A48;
+  --theme-status-success-border: #6CE9A6;
+  --theme-status-warning-bg: #FEF3C7;
+  --theme-status-warning-fg: #9A6700;
+  --theme-status-warning-border: #FEC84B;
+  --theme-status-danger-bg: #FEF2F2;
+  --theme-status-danger-fg: #B42318;
+  --theme-status-danger-border: #FCA5A5;
+
   /* ===== NEURON DESIGN TOKENS ===== */
   /* Backgrounds */
-  --neuron-bg-page: #F7FAF8;
-  --neuron-bg-elevated: #FFFFFF;
+  --neuron-bg-page: var(--theme-bg-page);
+  --neuron-bg-elevated: var(--theme-bg-surface);
   
   /* Ink (Text Colors) */
-  --neuron-ink-primary: #12332B;
-  --neuron-ink-secondary: #2E5147;
-  --neuron-ink-muted: #6B7A76;
+  --neuron-ink-primary: var(--theme-text-primary);
+  --neuron-ink-secondary: var(--theme-text-secondary);
+  --neuron-ink-muted: var(--theme-text-muted);
   
   /* Brand Colors */
-  --neuron-brand-green: #237F66;
-  --neuron-brand-green-600: #1E6D59;
-  --neuron-brand-green-100: #E8F2EE;
+  --neuron-brand-green: var(--theme-action-primary-bg);
+  --neuron-brand-green-600: var(--theme-action-primary-border);
+  --neuron-brand-green-100: var(--theme-bg-surface-tint);
   
   /* Accent */
-  --neuron-accent-terracotta: #B06A4F;
+  --neuron-accent-terracotta: var(--theme-action-accent-bg);
   
   /* UI Colors */
-  --neuron-ui-border: #E5ECE9;
-  --neuron-ui-divider: #EEF3F1;
-  --neuron-ui-active-border: #5FC4A1;
+  --neuron-ui-border: var(--theme-border-default);
+  --neuron-ui-divider: var(--theme-border-subtle);
+  --neuron-ui-active-border: var(--theme-border-strong);
   
   /* States */
-  --neuron-state-hover: #F1F6F4;
-  --neuron-state-selected: #E4EFEA;
+  --neuron-state-hover: var(--theme-state-hover);
+  --neuron-state-selected: var(--theme-state-selected);
+  --neuron-state-focus-ring: 0 0 0 3px rgba(95, 196, 161, 0.18);
   
   /* Semantic */
-  --neuron-semantic-success: #2B8A6E;
-  --neuron-semantic-warn: #C88A2B;
-  --neuron-semantic-danger: #C94F3D;
-  
+  --neuron-semantic-success: var(--theme-status-success-fg);
+  --neuron-semantic-success-bg: var(--theme-status-success-bg);
+  --neuron-semantic-success-border: var(--theme-status-success-border);
+  --neuron-semantic-success-text: var(--theme-status-success-fg);
+  --neuron-semantic-warn: var(--theme-status-warning-fg);
+  --neuron-semantic-warn-bg: var(--theme-status-warning-bg);
+  --neuron-semantic-danger: var(--theme-status-danger-fg);
+  --neuron-semantic-danger-bg: var(--theme-status-danger-bg);
+  --neuron-semantic-danger-border: var(--theme-status-danger-border);
+  --neuron-semantic-info: #0369A1;
+  --neuron-semantic-info-bg: #F0F9FF;
+  --neuron-semantic-info-border: #BAE6FD;
+
+  /* Action (Primary CTA) */
+  --neuron-action-primary: var(--theme-action-primary-bg);
+  --neuron-action-primary-hover: var(--theme-action-primary-border);
+  --neuron-action-primary-text: var(--theme-action-primary-text);
+
+  /* UI Muted (empty states, inactive toggles) */
+  --neuron-ui-muted: #D0D5DD;
+
+  /* Department Badge Colors */
+  --neuron-dept-bd-bg: #ECFDF5;
+  --neuron-dept-bd-text: #065F46;
+  --neuron-dept-pricing-bg: #EFF6FF;
+  --neuron-dept-pricing-text: #1E40AF;
+  --neuron-dept-ops-bg: #FFF7ED;
+  --neuron-dept-ops-text: #9A3412;
+  --neuron-dept-accounting-bg: #F5F3FF;
+  --neuron-dept-accounting-text: #5B21B6;
+  --neuron-dept-hr-bg: #FDF2F8;
+  --neuron-dept-hr-text: #9D174D;
+  --neuron-dept-executive-bg: #F0FDF4;
+  --neuron-dept-executive-text: #14532D;
+  --neuron-dept-default-bg: #F3F4F6;
+  --neuron-dept-default-text: #374151;
+
+  /* Status Toggle */
+  --neuron-toggle-active-bg: #12B76A;
+  --neuron-toggle-inactive-bg: #D0D5DD;
+  --neuron-toggle-active-text: #027A48;
+  --neuron-toggle-inactive-text: #6B7A76;
+
   /* Elevations (Shadows) */
   --elevation-1: 0 1px 2px 0 rgba(16, 24, 20, 0.04);
   --elevation-2: 0 2px 8px 0 rgba(16, 24, 20, 0.06);
@@ -46,90 +117,84 @@
   
   /* ===== LEGACY TOKENS (for backwards compatibility) ===== */
   --font-size: 15px;
-  --background: #FFFFFF;
-  --foreground: #1F2937;
-  --card: #FFFFFF;
-  --card-foreground: #1F2937;
-  --popover: #FFFFFF;
-  --popover-foreground: #1F2937;
-  --primary: #237F66;
-  --primary-foreground: #ffffff;
-  --secondary: #2E5147;
-  --secondary-foreground: #ffffff;
-  --muted: #F9FAFB;
-  --muted-foreground: #6B7280;
-  --accent: #0F766E;
-  --accent-foreground: #ffffff;
+  --background: var(--theme-bg-surface);
+  --foreground: var(--theme-text-primary);
+  --card: var(--theme-bg-surface);
+  --card-foreground: var(--theme-text-primary);
+  --popover: var(--theme-bg-surface);
+  --popover-foreground: var(--theme-text-primary);
+  --primary: var(--theme-action-primary-bg);
+  --primary-foreground: var(--theme-action-primary-text);
+  --secondary: var(--theme-text-secondary);
+  --secondary-foreground: var(--theme-text-inverse);
+  --muted: var(--theme-bg-surface-subtle);
+  --muted-foreground: var(--theme-text-muted);
+  --accent: var(--theme-action-accent-bg);
+  --accent-foreground: var(--theme-action-accent-text);
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #E5E7EB;
+  --border: var(--theme-border-default);
   --input: transparent;
-  --input-background: #FFFFFF;
-  --switch-background: #E5E7EB;
+  --input-background: var(--theme-bg-surface);
+  --switch-background: var(--theme-border-default);
   --font-weight-semibold: 600;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: #237F66;
-  --chart-1: #237F66;
-  --chart-2: #B06A4F;
-  --chart-3: #6B7A76;
-  --chart-4: #2E5147;
-  --chart-5: #C88A2B;
+  --ring: var(--theme-state-focus-ring);
+  --chart-1: var(--theme-action-primary-bg);
+  --chart-2: var(--theme-action-accent-bg);
+  --chart-3: var(--theme-text-muted);
+  --chart-4: var(--theme-text-secondary);
+  --chart-5: var(--theme-status-warning-fg);
   --radius: 0.5rem;
   --radius-xs: 6px;
   --radius-sm: 8px;
   --radius-md: 12px;
-  --sidebar: #FFFFFF;
-  --sidebar-foreground: #12332B;
-  --sidebar-primary: #237F66;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: rgba(35, 127, 102, 0.1);
-  --sidebar-accent-foreground: #12332B;
-  --sidebar-border: #E5ECE9;
-  --sidebar-ring: #237F66;
+  --sidebar: var(--theme-bg-surface);
+  --sidebar-foreground: var(--theme-text-primary);
+  --sidebar-primary: var(--theme-action-primary-bg);
+  --sidebar-primary-foreground: var(--theme-action-primary-text);
+  --sidebar-accent: var(--theme-state-selected);
+  --sidebar-accent-foreground: var(--theme-text-primary);
+  --sidebar-border: var(--theme-border-default);
+  --sidebar-ring: var(--theme-state-focus-ring);
   
   /* Semantic text colors for accounting */
-  --text-revenue: #16a34a;
-  --text-expense: #dc2626;
-  --text-transfer: #374151;
+  --text-revenue: var(--theme-status-success-fg);
+  --text-expense: var(--theme-status-danger-fg);
+  --text-transfer: var(--theme-text-secondary);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --font-weight-semibold: 600;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  --theme-bg-page: #101614;
+  --theme-bg-surface: #161D1B;
+  --theme-bg-surface-subtle: #1B2321;
+  --theme-bg-surface-tint: #20302C;
+  --theme-text-primary: #F3F7F5;
+  --theme-text-secondary: #D6E0DB;
+  --theme-text-muted: #A9B6B1;
+  --theme-text-inverse: #10201B;
+  --theme-border-default: #25302D;
+  --theme-border-subtle: #202927;
+  --theme-border-strong: #4AAE8E;
+  --theme-action-primary-bg: #2C8E74;
+  --theme-action-primary-text: #FFFFFF;
+  --theme-action-primary-border: #54A98F;
+  --theme-action-accent-bg: #BD7658;
+  --theme-action-accent-text: #FFFFFF;
+  --theme-action-accent-border: #D18E72;
+  --theme-state-hover: #202927;
+  --theme-state-selected: #213A33;
+  --theme-state-focus-ring: #65C4A5;
+  --theme-status-success-bg: #123126;
+  --theme-status-success-fg: #8FE3BC;
+  --theme-status-success-border: #2B8A6E;
+  --theme-status-warning-bg: #35260E;
+  --theme-status-warning-fg: #F4C979;
+  --theme-status-warning-border: #C88A2B;
+  --theme-status-danger-bg: #351815;
+  --theme-status-danger-fg: #F0AAA1;
+  --theme-status-danger-border: #C94F3D;
 }
 
 @theme inline {

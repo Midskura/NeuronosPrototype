@@ -3,19 +3,7 @@ import { Plus, Users } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { DataTable, ColumnDef } from "../common/DataTable";
 import { CreateUserPanel } from "./CreateUserPanel";
-import { EditUserPanel } from "./EditUserPanel";
-
-type UserRow = {
-  id: string;
-  email: string;
-  name: string;
-  department: string;
-  role: string;
-  team_id: string | null;
-  is_active: boolean;
-  avatar_url?: string | null;
-  teams: { name: string } | null;
-};
+import { EditUserPanel, type UserRow } from "./EditUserPanel";
 
 const DEPT_BADGE: Record<string, { bg: string; text: string }> = {
   "Business Development": { bg: "var(--neuron-dept-bd-bg)",         text: "var(--neuron-dept-bd-text)" },

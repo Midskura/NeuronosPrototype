@@ -212,6 +212,16 @@ export function Settings() {
         newAvatarUrl = urlData.publicUrl;
       }
 
+      // If avatar was removed (avatarUrl is null, no new file, but user had one before), delete storage files
+      if (!avatarFile && avatarUrl === null && user?.avatar_url && authUid) {
+        const { data: files } = await supabase.storage.from("avatars").list(authUid);
+        if (files && files.length > 0) {
+          await supabase.storage.from("avatars").remove(
+            files.map((f) => `${authUid}/${f.name}`)
+          );
+        }
+      }
+
       const { error } = await supabase
         .from("users")
         .update({ name: trimmedName, phone: phone.trim() || null, avatar_url: newAvatarUrl })
@@ -222,7 +232,9 @@ export function Settings() {
       setAvatarUrl(newAvatarUrl);
       setAvatarFile(null);
       setAvatarPreview(null);
-      setUser({ ...user!, name: trimmedName, phone: phone.trim() || null, avatar_url: newAvatarUrl });
+      const updated = { ...user!, name: trimmedName, phone: phone.trim() || null, avatar_url: newAvatarUrl };
+      setUser(updated);
+      localStorage.setItem("neuron_user", JSON.stringify(updated));
       toast.success("Profile updated");
     } catch (err) {
       toast.error("Failed to update — try again");
@@ -357,7 +369,7 @@ export function Settings() {
           {/* Phone */}
           <div style={{ marginBottom: "24px" }}>
             <FieldLabel>Contact number</FieldLabel>
-            <TextInput value={phone} onChange={setPhone} placeholder="e.g. +63 917 123 4567" />
+            <TextInput value={phone} onChange={setPhone} />
             <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)", marginTop: "4px" }}>e.g. +63 917 123 4567</p>
           </div>
 
@@ -444,9 +456,6 @@ export function Settings() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
     </div>
   );
 }

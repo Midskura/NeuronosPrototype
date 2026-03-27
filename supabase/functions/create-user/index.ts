@@ -91,19 +91,30 @@ serve(async (req) => {
 
     // The handle_new_auth_user trigger fires and creates a public.users row with email + name from metadata.
     // Now update it with the provided department, role, and team.
-    const { data: updatedUser, error: updateError } = await adminClient
+    let updateResult = await adminClient
       .from("users")
       .update({ name, department, role, team_id: team_id || null })
       .eq("auth_id", newAuthUserId)
       .select("id, name, email, department, role")
-      .single();
+      .maybeSingle();
 
-    if (updateError) {
-      return new Response(
-        JSON.stringify({ success: false, error: `Profile update failed: ${updateError.message}` }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    // Retry once if trigger hasn't fired yet
+    if (!updateResult.data) {
+      await new Promise((r) => setTimeout(r, 500));
+      updateResult = await adminClient
+        .from("users")
+        .update({ name, department, role, team_id: team_id || null })
+        .eq("auth_id", newAuthUserId)
+        .select("id, name, email, department, role")
+        .maybeSingle();
     }
+
+    if (updateResult.error) {
+      console.error("Profile update error:", updateResult.error);
+      // Auth user was created — log for manual recovery but don't fail the whole request
+    }
+
+    const updatedUser = updateResult.data;
 
     return new Response(
       JSON.stringify({ success: true, user: updatedUser }),

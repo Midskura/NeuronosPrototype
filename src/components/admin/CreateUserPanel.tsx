@@ -289,7 +289,6 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
         </div>
 
       </div>
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </SidePanel>
   );
 }
