@@ -149,7 +149,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
 
       {/* Slide-out Panel */}
       <div
-        className="fixed right-0 top-0 h-full w-[600px] bg-white shadow-2xl z-50 flex flex-col animate-slide-in"
+        className="fixed right-0 top-0 h-full w-[600px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col animate-slide-in"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -160,10 +160,10 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
           style={{ borderColor: "var(--neuron-ui-divider)" }}
         >
           <div>
-            <h2 className="text-[24px] font-semibold" style={{ color: "#12332B" }}>
+            <h2 className="text-[24px] font-semibold" style={{ color: "var(--theme-text-primary)" }}>
               Log Activity
             </h2>
-            <p className="text-[13px] mt-1" style={{ color: "#667085" }}>
+            <p className="text-[13px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
               Record a completed interaction or event
             </p>
           </div>
@@ -187,7 +187,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
           <div className="space-y-6">
             {/* Activity Type */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Activity Type *
               </label>
               <CustomDropdown
@@ -210,7 +210,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
 
             {/* Date & Time */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Date & Time *
               </label>
               <input
@@ -221,18 +221,18 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
                 className="w-full px-3 py-2.5 rounded-lg text-[13px] focus:outline-none focus:ring-2"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
-              <p className="text-[11px] mt-1" style={{ color: "#667085" }}>
+              <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                 When did this activity occur?
               </p>
             </div>
 
             {/* Description */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Description *
               </label>
               <textarea
@@ -244,18 +244,18 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
                 rows={6}
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
-              <p className="text-[11px] mt-1" style={{ color: "#667085" }}>
+              <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                 Be specific about outcomes, next steps, or key points discussed
               </p>
             </div>
 
             {/* Customer Selection */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Related Customer (Optional)
               </label>
               <CustomDropdown
@@ -273,7 +273,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
 
             {/* Contact Selection - Only show contacts from selected customer */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Related Contact (Optional)
               </label>
               <div style={{ opacity: activityData.customer_id ? 1 : 0.6, pointerEvents: activityData.customer_id ? 'auto' : 'none' }}>
@@ -292,7 +292,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
                 />
               </div>
               {!activityData.customer_id && (
-                <p className="text-[11px] mt-1" style={{ color: "#667085" }}>
+                <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                   Select a customer first to choose a contact
                 </p>
               )}
@@ -300,7 +300,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
 
             {/* Attachments */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Attachments (Optional)
               </label>
               
@@ -314,24 +314,24 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
               
               <div 
                 className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors"
-                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "#FFFFFF" }}
+                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}
                 onClick={() => fileInputRef.current?.click()}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
-                  e.currentTarget.style.backgroundColor = "#E8F5F3";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
-                <Upload size={24} className="mx-auto mb-2" style={{ color: "#667085" }} />
-                <p className="text-[13px]" style={{ color: "#667085" }}>
+                <Upload size={24} className="mx-auto mb-2" style={{ color: "var(--theme-text-muted)" }} />
+                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                   Click to upload or drag and drop files
                 </p>
-                <p className="text-[11px] mt-1" style={{ color: "#9CA3AF" }}>
+                <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                   Supported: PDF, DOC, XLS, images, screenshots
                 </p>
               </div>
@@ -342,19 +342,19 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
                   {attachments.map((file, index) => (
                     <div 
                       key={index} 
-                      className="flex items-center justify-between p-2 rounded-lg border border-gray-200 bg-gray-50"
+                      className="flex items-center justify-between p-2 rounded-lg border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface-subtle)]"
                     >
                       <div className="flex items-center gap-2 overflow-hidden">
-                        <FileText size={14} className="text-gray-500 flex-shrink-0" />
-                        <span className="text-[12px] text-gray-700 truncate">{file.name}</span>
-                        <span className="text-[11px] text-gray-400 flex-shrink-0">
+                        <FileText size={14} className="text-[var(--theme-text-muted)] flex-shrink-0" />
+                        <span className="text-[12px] text-[var(--theme-text-secondary)] truncate">{file.name}</span>
+                        <span className="text-[11px] text-[var(--theme-text-muted)] flex-shrink-0">
                           ({(file.size / 1024).toFixed(0)} KB)
                         </span>
                       </div>
                       <button
                         type="button"
                         onClick={() => removeAttachment(index)}
-                        className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                        className="text-[var(--theme-text-muted)] hover:text-red-500 transition-colors p-1"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -378,13 +378,13 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
             style={{
               border: "1px solid var(--neuron-ui-border)",
               color: "var(--neuron-ink-secondary)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             Cancel
@@ -392,12 +392,12 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
           <button
             onClick={handleSubmit}
             className="flex-1 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white transition-colors"
-            style={{ backgroundColor: "#0F766E" }}
+            style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0D6560";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#0F766E";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
             }}
           >
             Log Activity

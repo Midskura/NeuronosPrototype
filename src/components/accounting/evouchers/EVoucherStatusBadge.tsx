@@ -14,7 +14,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
       case "draft":
         return {
           bg: "#F9FAFB",
-          color: "#6B7280",
+          color: "var(--theme-text-muted)",
           border: "#E5E7EB",
           icon: FileText,
           label: "Draft"
@@ -30,7 +30,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
       case "posted":
         return {
           bg: "#E8F5F3",
-          color: "#0F766E",
+          color: "var(--theme-action-primary-bg)",
           border: "#99F6E4",
           icon: CheckCircle,
           label: "Posted"
@@ -46,7 +46,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
       case "cancelled":
         return {
           bg: "#F3F4F6",
-          color: "#9CA3AF",
+          color: "var(--theme-text-muted)",
           border: "#D1D5DB",
           icon: Ban,
           label: "Cancelled"
@@ -79,7 +79,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
       default:
         return {
           bg: "#F9FAFB",
-          color: "#6B7280",
+          color: "var(--theme-text-muted)",
           border: "#E5E7EB",
           icon: FileText,
           label: status

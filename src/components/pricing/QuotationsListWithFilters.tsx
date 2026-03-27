@@ -109,7 +109,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
       }}
       onClick={() => onItemClick(item)}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = "#F3F4F6";
+        e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = index % 2 === 0 ? "white" : "#FAFBFC";
@@ -165,7 +165,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
 
       {/* Customer */}
       <div style={{ display: "flex", alignItems: "center" }}>
-        <span style={{ fontSize: "13px", color: "#6B7280" }}>
+        <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
           {item.customer_name || "—"}
         </span>
       </div>
@@ -184,7 +184,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
         {isContract ? (
           <span style={{
             fontSize: "12px",
-            color: "#6B7280",
+            color: "var(--theme-text-muted)",
           }}>
             {item.contract_validity_start && item.contract_validity_end
               ? `${formatShortDate(item.contract_validity_start)} - ${formatShortDate(item.contract_validity_end)}`
@@ -203,7 +203,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
 
       {/* Date */}
       <div style={{ display: "flex", alignItems: "center" }}>
-        <span style={{ fontSize: "13px", color: "#6B7280" }}>
+        <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
           {formatShortDate(item.created_date)}
         </span>
       </div>
@@ -417,7 +417,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
       display: "flex", 
       flexDirection: "column", 
       height: "100%",
-      backgroundColor: "white"
+      backgroundColor: "var(--theme-bg-surface)"
     }}>
       {/* Header Section */}
       <div style={{ 
@@ -435,7 +435,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
             <h1 style={{ 
               fontSize: "32px",
               fontWeight: 600,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               marginBottom: "4px",
               letterSpacing: "-1.2px"
             }}>
@@ -443,7 +443,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
             </h1>
             <p style={{ 
               fontSize: "14px",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               margin: 0
             }}>
               {headerSubtitle}
@@ -466,7 +466,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
             }}
           />
           <input
@@ -477,12 +477,12 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
             style={{
               width: "100%",
               padding: "10px 12px 10px 40px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
               outline: "none",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           />
         </div>
@@ -498,7 +498,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
           <div style={{ minWidth: "140px" }}>
             <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2" />
           </div>
-          <span className="text-[13px] text-[#6B7280] font-medium px-2">to</span>
+          <span className="text-[13px] text-[var(--theme-text-muted)] font-medium px-2">to</span>
           <div style={{ minWidth: "140px" }}>
             <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2" />
           </div>
@@ -513,8 +513,8 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               }}
               options={[
                 { value: "All Types", label: "All Types", icon: <FileText size={16} /> },
-                { value: "Project", label: "Project", icon: <FileText size={16} style={{ color: "#0F766E" }} /> },
-                { value: "Contract", label: "Contract", icon: <FileText size={16} style={{ color: "#12332B" }} /> },
+                { value: "Project", label: "Project", icon: <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> },
+                { value: "Contract", label: "Contract", icon: <FileText size={16} style={{ color: "var(--theme-text-primary)" }} /> },
               ]}
               placeholder="Select type"
             />
@@ -527,7 +527,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               onChange={setStatusFilter}
               options={[
                 { value: "All Statuses", label: "All Statuses", icon: <CircleDot size={16} /> },
-                { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> },
+                { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
                 { value: "Pending Pricing", label: "Pending Pricing", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
                 { value: "Priced", label: "Priced", icon: <CircleDot size={16} style={{ color: "#8B5CF6" }} /> },
                 { value: "Sent to Client", label: "Sent to Client", icon: <CircleDot size={16} style={{ color: "#3B82F6" }} /> },
@@ -537,7 +537,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                 { value: "Disapproved", label: "Disapproved", icon: <CircleDot size={16} style={{ color: "#DC2626" }} /> },
                 { value: "Converted to Project", label: "Converted to Project", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
                 { value: "Converted to Contract", label: "Converted to Contract", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
-                { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> }
+                { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }
               ]}
               placeholder="Select status"
             />
@@ -550,11 +550,11 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               onChange={setServiceFilter}
               options={uniqueServices.map(service => {
                 if (service === "All Services") return { value: service, label: service, icon: <Briefcase size={16} /> };
-                if (service === "Brokerage") return { value: service, label: service, icon: <Briefcase size={16} style={{ color: "#0F766E" }} /> };
-                if (service === "Forwarding") return { value: service, label: service, icon: <Ship size={16} style={{ color: "#0F766E" }} /> };
-                if (service === "Marine Insurance") return { value: service, label: service, icon: <Shield size={16} style={{ color: "#0F766E" }} /> };
-                if (service === "Trucking") return { value: service, label: service, icon: <Truck size={16} style={{ color: "#0F766E" }} /> };
-                return { value: service, label: service, icon: <FileText size={16} style={{ color: "#0F766E" }} /> };
+                if (service === "Brokerage") return { value: service, label: service, icon: <Briefcase size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> };
+                if (service === "Forwarding") return { value: service, label: service, icon: <Ship size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> };
+                if (service === "Marine Insurance") return { value: service, label: service, icon: <Shield size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> };
+                if (service === "Trucking") return { value: service, label: service, icon: <Truck size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> };
+                return { value: service, label: service, icon: <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> };
               })}
               placeholder="Select service"
             />
@@ -568,7 +568,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               options={uniqueCustomers.map(customer => ({
                 value: customer,
                 label: customer,
-                icon: customer === "All Customers" ? <Building2 size={16} /> : <Building2 size={16} style={{ color: "#0F766E" }} />
+                icon: customer === "All Customers" ? <Building2 size={16} /> : <Building2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
               }))}
               placeholder="Select customer"
             />
@@ -661,10 +661,10 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
           </div>
         ) : (
           <div style={{ 
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "12px",
             overflow: "hidden",
-            backgroundColor: "white"
+            backgroundColor: "var(--theme-bg-surface)"
           }}>
             {/* Table Header */}
             <div 
@@ -675,10 +675,10 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                 gap: "12px",
                 padding: "0 16px",
                 backgroundColor: "transparent",
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: "1px solid var(--theme-border-default)",
                 fontSize: "10px",
                 fontWeight: 600,
-                color: "#9CA3AF",
+                color: "var(--theme-text-muted)",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px"
               }}

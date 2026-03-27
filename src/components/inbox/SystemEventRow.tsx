@@ -62,13 +62,13 @@ export function SystemEventRow({ message }: SystemEventRowProps) {
         style={{
           flex: 1,
           height: 1,
-          backgroundColor: "#F3F4F6",
+          backgroundColor: "var(--theme-bg-surface-subtle)",
         }}
       />
       <p
         style={{
           fontSize: 11,
-          color: "#9CA3AF",
+          color: "var(--theme-text-muted)",
           fontStyle: "italic",
           whiteSpace: "nowrap",
           padding: "0 8px",
@@ -80,7 +80,7 @@ export function SystemEventRow({ message }: SystemEventRowProps) {
         style={{
           flex: 1,
           height: 1,
-          backgroundColor: "#F3F4F6",
+          backgroundColor: "var(--theme-bg-surface-subtle)",
         }}
       />
     </div>

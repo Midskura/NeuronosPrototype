@@ -260,7 +260,7 @@ export function ChargeTypeCombobox({
               top: `${dropdownPos.top}px`,
               left: `${dropdownPos.left}px`,
               width: `${dropdownPos.width}px`,
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #E0E6E4",
               borderRadius: "8px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
@@ -351,7 +351,7 @@ export function ChargeTypeCombobox({
                         <span
                           style={{
                             fontSize: "10px",
-                            color: "#0F766E",
+                            color: "var(--theme-action-primary-bg)",
                             fontWeight: 600,
                           }}
                         >

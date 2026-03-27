@@ -119,14 +119,14 @@ export function OperationsReports() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FFFFFF" }}>
+    <div style={{ minHeight: "100vh", background: "var(--theme-bg-surface)" }}>
       {/* Header */}
       <div style={{ padding: "32px 48px 24px 48px" }}>
         <div style={{ marginBottom: "24px" }}>
           <h1 style={{ 
             fontSize: "32px", 
             fontWeight: 600, 
-            color: "#12332B", 
+            color: "var(--theme-text-primary)", 
             marginBottom: "4px",
             letterSpacing: "-1.2px"
           }}>
@@ -134,7 +134,7 @@ export function OperationsReports() {
           </h1>
           <p style={{ 
             fontSize: "14px", 
-            color: "#667085"
+            color: "var(--theme-text-muted)"
           }}>
             Generate reports and analytics across all operational services
           </p>

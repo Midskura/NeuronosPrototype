@@ -72,23 +72,23 @@ export function ImportPreviewTable({
   return (
     <div className="space-y-4">
       {/* Summary */}
-      <div className="flex items-center justify-between p-4 bg-[#F9FAFB] border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="flex items-center justify-between p-4 bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-green-600" />
-            <span className="text-[14px] text-[#374151]">
+            <span className="text-[14px] text-[var(--theme-text-secondary)]">
               <span className="font-medium tabular-nums">{validCount}</span> Valid
             </span>
           </div>
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-orange-600" />
-            <span className="text-[14px] text-[#374151]">
+            <span className="text-[14px] text-[var(--theme-text-secondary)]">
               <span className="font-medium tabular-nums">{warningCount}</span> Warnings
             </span>
           </div>
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-600" />
-            <span className="text-[14px] text-[#374151]">
+            <span className="text-[14px] text-[var(--theme-text-secondary)]">
               <span className="font-medium tabular-nums">{errorCount}</span> Errors
             </span>
           </div>
@@ -113,26 +113,26 @@ export function ImportPreviewTable({
       </div>
 
       {/* Preview Table */}
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-              <TableHead className="text-[12px] text-[#6B7280] h-12 w-16">Line</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Date</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Booking</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Client</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Type</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Amount</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Account</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Category</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Status</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Error</TableHead>
+            <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 w-16">Line</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Date</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Client</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Type</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Amount</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Account</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Category</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Status</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Error</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {rows.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="text-center text-[14px] text-[#6B7280] h-24">
+                <TableCell colSpan={10} className="text-center text-[14px] text-[var(--theme-text-muted)] h-24">
                   No data to preview
                 </TableCell>
               </TableRow>
@@ -140,33 +140,33 @@ export function ImportPreviewTable({
               rows.map((row) => (
                 <TableRow
                   key={row.line}
-                  className={`border-b border-[#E5E7EB] ${
+                  className={`border-b border-[var(--theme-border-default)] ${
                     row.status === "error" ? "bg-red-50" : ""
                   }`}
                   style={{ minHeight: '48px' }}
                 >
-                  <TableCell className="text-[14px] text-[#6B7280] font-mono tabular-nums">
+                  <TableCell className="text-[14px] text-[var(--theme-text-muted)] font-mono tabular-nums">
                     {row.line}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                     {row.parsed.date || "—"}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#0A1D4D]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-primary)]">
                     {row.parsed.bookingNo || "—"}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                     {row.parsed.client || "—"}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151] capitalize">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)] capitalize">
                     {row.parsed.type || "—"}
                   </TableCell>
                   <TableCell className="text-[14px] text-right tabular-nums">
                     {row.parsed.amount ? `₱${parseFloat(row.parsed.amount).toLocaleString()}` : "—"}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                     {row.parsed.account || "—"}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                     {row.parsed.category || "—"}
                   </TableCell>
                   <TableCell>

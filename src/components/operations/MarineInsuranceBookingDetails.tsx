@@ -99,9 +99,9 @@ function LockedField({ label, value, tooltip }: { label: string; value: string; 
     <div>
       <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-base)", marginBottom: "8px" }}>
         {label}
-        <Lock size={12} color="#9CA3AF" style={{ cursor: "help" }} />
+        <Lock size={12} color="var(--theme-text-muted)" style={{ cursor: "help" }} />
       </label>
-      <div style={{ padding: "10px 14px", backgroundColor: "#F9FAFB", border: "1px solid #E5E7EB", borderRadius: "6px", fontSize: "14px", color: "#6B7280", cursor: "not-allowed" }}>
+      <div style={{ padding: "10px 14px", backgroundColor: "var(--theme-bg-page)", border: "1px solid var(--theme-border-default)", borderRadius: "6px", fontSize: "14px", color: "var(--theme-text-muted)", cursor: "not-allowed" }}>
         {value || "—"}
       </div>
     </div>
@@ -118,7 +118,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
           {activities.map((activity) => (
             <div key={activity.id} style={{ position: "relative", paddingLeft: "40px" }}>
               <div style={{ position: "absolute", left: "8px", top: "4px", width: "16px", height: "16px", borderRadius: "50%", backgroundColor: activity.action === "status_changed" ? "#0F766E" : activity.action === "created" ? "#6B7280" : "#3B82F6", border: "3px solid #FAFBFC" }} />
-              <div style={{ backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "8px", padding: "12px 16px" }}>
+              <div style={{ backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)", borderRadius: "8px", padding: "12px 16px" }}>
                 <div style={{ fontSize: "11px", color: "var(--neuron-ink-muted)", marginBottom: "6px" }}>{activity.timestamp.toLocaleString()}</div>
                 {activity.action === "field_updated" && (
                   <div>
@@ -246,8 +246,8 @@ export function MarineInsuranceBookingDetails({ booking, onBack, onUpdate, curre
   });
 
   return (
-    <div style={{ backgroundColor: "white", display: "flex", flexDirection: "column", height: "100vh" }}>
-      <div style={{ padding: "20px 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "white", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <div style={{ backgroundColor: "var(--theme-bg-surface)", display: "flex", flexDirection: "column", height: "100vh" }}>
+      <div style={{ padding: "20px 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
           <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: "8px", background: "none", border: "none", color: "var(--neuron-ink-secondary)", cursor: "pointer", fontSize: "13px", marginBottom: "12px", padding: "0" }}
             onMouseEnter={(e) => { e.currentTarget.style.color = "var(--neuron-brand-green)"; }}
@@ -272,7 +272,7 @@ export function MarineInsuranceBookingDetails({ booking, onBack, onUpdate, curre
         </div>
       </div>
 
-      <div style={{ padding: "0 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "white", display: "flex", justifyContent: "space-between", alignItems: "center", height: "56px" }}>
+      <div style={{ padding: "0 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)", display: "flex", justifyContent: "space-between", alignItems: "center", height: "56px" }}>
         <div style={{ display: "flex", gap: "24px", height: "100%" }}>
           <button onClick={() => setActiveTab("booking-info")} style={tabStyle("booking-info")}>Booking Information</button>
           <button onClick={() => setActiveTab("billings")} style={tabStyle("billings")}>Billings</button>
@@ -286,21 +286,21 @@ export function MarineInsuranceBookingDetails({ booking, onBack, onUpdate, curre
           <div style={{ position: "relative" }} ref={moreMenuRef}>
             <button
               onClick={() => setShowMoreMenu(v => !v)}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}
             >
               <MoreVertical size={18} />
             </button>
             {showMoreMenu && (
-              <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", width: "180px", backgroundColor: "white", border: "1px solid #E5E9F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", zIndex: 100, overflow: "hidden" }}>
+              <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", width: "180px", backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--theme-border-default)", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", zIndex: 100, overflow: "hidden" }}>
                 <button
                   onClick={() => { setShowMoreMenu(false); handleStatusUpdate("Cancelled"); }}
-                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#344054", textAlign: "left" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F9FAFB")}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-text-secondary)", textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-bg-page)")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
                   Cancel Booking
                 </button>
-                <div style={{ height: "1px", backgroundColor: "#F3F4F6" }} />
+                <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)" }} />
                 <button
                   onClick={handleDeleteFromDetail}
                   style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#DC2626", textAlign: "left" }}
@@ -318,7 +318,7 @@ export function MarineInsuranceBookingDetails({ booking, onBack, onUpdate, curre
       <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
         <div style={{ flex: showTimeline ? "0 0 65%" : "1", overflow: "auto", transition: "flex 0.3s ease" }}>
           {activeTab === "booking-info" && <BookingInformationTab booking={editedBooking} onBookingUpdated={onUpdate} addActivity={addActivity} setEditedBooking={setEditedBooking} />}
-          {activeTab === "billings" && <div className="flex flex-col bg-white p-12 min-h-[600px]"><UnifiedBillingsTab items={bookingBillingItems} projectId={booking.projectNumber || ""} bookingId={booking.bookingId} onRefresh={financials.refresh} isLoading={financials.isLoading} pendingBillableCount={pendingBillableCount} extraActions={<BookingRateCardButton booking={booking} serviceType="Marine Insurance" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />} /></div>}
+          {activeTab === "billings" && <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]"><UnifiedBillingsTab items={bookingBillingItems} projectId={booking.projectNumber || ""} bookingId={booking.bookingId} onRefresh={financials.refresh} isLoading={financials.isLoading} pendingBillableCount={pendingBillableCount} extraActions={<BookingRateCardButton booking={booking} serviceType="Marine Insurance" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />} /></div>}
           {activeTab === "expenses" && <ExpensesTab bookingId={booking.bookingId} bookingType="marine-insurance" currentUser={currentUser} highlightId={activeTab === "expenses" ? highlightId : undefined} existingBillingItems={bookingBillingItems} onPendingCountChange={setPendingBillableCount} />}
           {activeTab === "comments" && <BookingCommentsTab bookingId={booking.bookingId} currentUserId={currentUser?.email || "unknown"} currentUserName={currentUser?.name || "Unknown User"} currentUserDepartment={currentUser?.department || "Operations"} />}
         </div>

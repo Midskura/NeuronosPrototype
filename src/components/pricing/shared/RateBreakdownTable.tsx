@@ -51,17 +51,17 @@ export function RateBreakdownTable({
   return (
     <div>
       {!hideTotal && (
-        <h3 className="text-[13px] font-semibold text-[#12332B] uppercase tracking-wide mb-4">
+        <h3 className="text-[13px] font-semibold text-[var(--theme-text-primary)] uppercase tracking-wide mb-4">
           {heading}
         </h3>
       )}
 
       {appliedRates.length === 0 ? (
-        <div className="py-8 text-center text-[13px] text-[#667085]">
+        <div className="py-8 text-center text-[13px] text-[var(--theme-text-muted)]">
           No applicable rates found for this mode and quantities.
         </div>
       ) : (
-        <div className="border border-[#E5E9F0] rounded-lg overflow-hidden">
+        <div className="border border-[var(--theme-border-default)] rounded-lg overflow-hidden">
           <table
             className="w-full border-collapse text-[13px]"
             style={{ tableLayout: "fixed" }}
@@ -75,7 +75,7 @@ export function RateBreakdownTable({
 
             {/* Header */}
             <thead>
-              <tr className="text-[11px] font-semibold text-[#667085] uppercase tracking-wide bg-[#F8FAFC] border-b border-[#E5E9F0]">
+              <tr className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide bg-[#F8FAFC] border-b border-[var(--theme-border-default)]">
                 <th className="text-left px-4 py-2.5 font-semibold">Particular</th>
                 <th className="text-right px-4 py-2.5 font-semibold">Unit Rate</th>
                 <th className="text-center px-2 py-2.5 font-semibold">Qty</th>
@@ -89,18 +89,18 @@ export function RateBreakdownTable({
                 const rows = [
                   <tr
                     key={`rate-${rate.particular}-${idx}`}
-                    className="border-b border-[#E5E9F0] hover:bg-[#FAFBFC] transition-colors"
+                    className="border-b border-[var(--theme-border-default)] hover:bg-[#FAFBFC] transition-colors"
                   >
-                    <td className="px-4 py-3 font-medium text-[#12332B] truncate">
+                    <td className="px-4 py-3 font-medium text-[var(--theme-text-primary)] truncate">
                       {rate.particular}
                     </td>
-                    <td className="px-4 py-3 text-right text-[#667085] whitespace-nowrap">
+                    <td className="px-4 py-3 text-right text-[var(--theme-text-muted)] whitespace-nowrap">
                       {formatCurrency(rate.rate, currency)}
                     </td>
-                    <td className="px-2 py-3 text-center text-[#12332B] font-medium">
+                    <td className="px-2 py-3 text-center text-[var(--theme-text-primary)] font-medium">
                       {rate.quantity}
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-[#12332B] whitespace-nowrap">
+                    <td className="px-4 py-3 text-right font-semibold text-[var(--theme-text-primary)] whitespace-nowrap">
                       {formatCurrency(rate.subtotal, currency)}
                     </td>
                   </tr>,
@@ -110,10 +110,10 @@ export function RateBreakdownTable({
                   rows.push(
                     <tr
                       key={`rule-${rate.particular}-${idx}`}
-                      className="border-b border-[#E5E9F0]"
+                      className="border-b border-[var(--theme-border-default)]"
                     >
                       <td colSpan={4} className="px-4 pt-1 pb-1">
-                        <div className="text-[11px] text-[#0F766E] bg-[#F0FDF9] inline-block px-2 py-0.5 rounded">
+                        <div className="text-[11px] text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface-tint)] inline-block px-2 py-0.5 rounded">
                           {rate.rule_applied}
                         </div>
                       </td>
@@ -128,11 +128,11 @@ export function RateBreakdownTable({
             {/* Footer — total */}
             {!hideTotal && (
             <tfoot>
-              <tr className="bg-[#F8FAFC] border-t border-[#E5E9F0]">
-                <td className="px-4 py-3 font-semibold text-[#12332B]">Total</td>
+              <tr className="bg-[#F8FAFC] border-t border-[var(--theme-border-default)]">
+                <td className="px-4 py-3 font-semibold text-[var(--theme-text-primary)]">Total</td>
                 <td />
                 <td />
-                <td className="px-4 py-3 text-right text-[15px] font-bold text-[#0F766E] whitespace-nowrap">
+                <td className="px-4 py-3 text-right text-[15px] font-bold text-[var(--theme-action-primary-bg)] whitespace-nowrap">
                   {formatCurrency(total, currency)}
                 </td>
               </tr>

@@ -17,7 +17,7 @@ export function ProjectCollectionsTab({
 }: ProjectCollectionsTabProps) {
   // Simple wrapper around the unified component with consistent padding
   return (
-    <div className="flex flex-col bg-white p-12 min-h-[600px]">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]">
       <UnifiedCollectionsTab 
         financials={financials}
         project={project}

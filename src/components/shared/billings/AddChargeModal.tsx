@@ -93,13 +93,13 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[500px] bg-white p-0 overflow-hidden gap-0 border border-[#E5E9F0] shadow-xl sm:rounded-xl">
-        <DialogHeader className="px-6 py-5 border-b border-[#E5E9F0] bg-white">
+      <DialogContent className="sm:max-w-[500px] bg-[var(--theme-bg-surface)] p-0 overflow-hidden gap-0 border border-[var(--theme-border-default)] shadow-xl sm:rounded-xl">
+        <DialogHeader className="px-6 py-5 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-lg font-semibold text-[#12332B]">Add Billing Charge</DialogTitle>
+            <DialogTitle className="text-lg font-semibold text-[var(--theme-text-primary)]">Add Billing Charge</DialogTitle>
             <button 
               onClick={onClose}
-              className="p-1 rounded-md text-[#98A2B3] hover:text-[#475467] hover:bg-[#F2F4F7] transition-colors"
+              className="p-1 rounded-md text-[var(--theme-text-muted)] hover:text-[#475467] hover:bg-[#F2F4F7] transition-colors"
             >
               <X size={20} />
             </button>
@@ -113,23 +113,23 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
           <div className="space-y-4">
             {/* Description */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-[#344054]">Description <span className="text-red-500">*</span></Label>
+              <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Description <span className="text-red-500">*</span></Label>
               <Input
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 placeholder="e.g. Handling Fee"
-                className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E]"
+                className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
               />
             </div>
 
             {/* Category */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-[#344054]">Charge Category</Label>
+              <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Charge Category</Label>
               <Select
                 value={formData.category}
                 onValueChange={(val) => setFormData({...formData, category: val})}
               >
-                <SelectTrigger className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E]">
+                <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -146,7 +146,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
             <div className="grid grid-cols-2 gap-4">
               {/* Amount */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-[#344054]">Amount <span className="text-red-500">*</span></Label>
+                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Amount <span className="text-red-500">*</span></Label>
                 <div className="relative">
                   <Input
                     type="number"
@@ -155,19 +155,19 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                     value={formData.amount}
                     onChange={(e) => setFormData({...formData, amount: e.target.value})}
                     placeholder="0.00"
-                    className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E] pl-3"
+                    className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E] pl-3"
                   />
                 </div>
               </div>
 
               {/* Currency */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-[#344054]">Currency</Label>
+                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Currency</Label>
                 <Select
                   value={formData.currency}
                   onValueChange={(val) => setFormData({...formData, currency: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -183,12 +183,12 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
             <div className="grid grid-cols-2 gap-4">
               {/* Service Type */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-[#344054]">Service Type</Label>
+                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Service Type</Label>
                 <Select
                   value={formData.service_type}
                   onValueChange={(val) => setFormData({...formData, service_type: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -203,12 +203,12 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
 
               {/* Charge Type */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-[#344054]">Charge Type</Label>
+                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Charge Type</Label>
                 <Select
                   value={formData.charge_type}
                   onValueChange={(val) => setFormData({...formData, charge_type: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[#D0D5DD] focus:border-[#0F766E] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -225,14 +225,14 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
               type="button"
               variant="outline"
               onClick={onClose}
-              className="h-9 text-xs font-medium border-[#D0D5DD] text-[#344054] hover:bg-[#F9FAFB] hover:text-[#344054]"
+              className="h-9 text-xs font-medium border-[var(--theme-border-default)] text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-page)] hover:text-[var(--theme-text-secondary)]"
             >
               Cancel
             </Button>
             <Button
               type="submit"
               disabled={loading}
-              className="h-9 text-xs font-medium bg-[#0F766E] hover:bg-[#0D6259] text-white gap-2"
+              className="h-9 text-xs font-medium bg-[var(--theme-action-primary-bg)] hover:bg-[#0D6259] text-white gap-2"
             >
               {loading && <Loader2 size={14} className="animate-spin" />}
               Add Charge

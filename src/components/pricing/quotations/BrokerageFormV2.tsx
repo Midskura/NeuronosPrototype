@@ -23,7 +23,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
         alignItems: "center",
         gap: "6px"
       }}>
-        <FileText size={14} style={{ color: "#0F766E" }} />
+        <FileText size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         SERVICE DETAILS
       </div>
 
@@ -34,7 +34,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
       }}>
         {/* Subtype */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Brokerage Subtype *
           </label>
           <CustomDropdown
@@ -52,7 +52,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
 
         {/* Shipment Type */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Shipment Type *
           </label>
           <CustomDropdown
@@ -70,7 +70,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
 
         {/* Type of Entry */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Type of Entry
           </label>
           <input
@@ -84,14 +84,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* POD */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             POD (Port of Discharge)
           </label>
           <input
@@ -105,14 +105,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Mode */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Mode
           </label>
           <CustomDropdown
@@ -129,7 +129,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
 
         {/* Cargo Type */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Cargo Type
           </label>
           <CustomDropdown
@@ -148,7 +148,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
 
         {/* Commodity */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Commodity
           </label>
           <input
@@ -162,14 +162,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Declared Value */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Declared Value (₱)
           </label>
           <input
@@ -185,7 +185,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               textAlign: "right"
             }}
           />
@@ -193,7 +193,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
 
         {/* Delivery Address */}
         <div style={{ gridColumn: "2 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Delivery Address
           </label>
           <input
@@ -207,14 +207,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Country of Origin */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Country of Origin
           </label>
           <input
@@ -228,14 +228,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Preferential Treatment */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Preferential Treatment
           </label>
           <input
@@ -249,14 +249,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* PSIC */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             PSIC
           </label>
           <input
@@ -270,14 +270,14 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* AEO */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             AEO
           </label>
           <CustomDropdown

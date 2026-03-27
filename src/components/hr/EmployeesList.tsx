@@ -42,7 +42,7 @@ interface CompanyGroup {
 
 interface EmployeesListProps {
   filterCompany: string;
-  userRole: 'rep' | 'manager' | 'director';
+  userRole: 'staff' | 'team_leader' | 'manager';
   onEmployeeClick: (employee: EmployeeRowData) => void;
 }
 
@@ -386,7 +386,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
     ? EMPLOYEE_DATA
     : EMPLOYEE_DATA.filter((group) => group.companyName === filterCompany);
 
-  const isAdmin = userRole === "director";
+  const isAdmin = userRole === "manager";
 
   const handleSuspendEmployee = (employee: EmployeeRowData, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -395,15 +395,15 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
 
   return (
     <div
-      className="bg-white border border-[#E5E7EB] rounded-[20px] overflow-visible flex flex-col"
+      className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[20px] overflow-visible flex flex-col"
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between border-b border-[#E5E7EB] flex-shrink-0"
+        className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
         style={{ padding: "20px 24px" }}
       >
         <h2
-          className="text-[#0A1D4D]"
+          className="text-[var(--theme-text-primary)]"
           style={{ fontSize: "18px", fontWeight: 600 }}
         >
           Employees (by company roster)
@@ -413,27 +413,27 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
       {/* List (no scroll - page-level scrolling) */}
       <div className="flex-1" style={{ padding: "0" }}>
         {filteredData.map((group, groupIdx) => (
-          <div key={groupIdx} className="border-b border-[#E5E7EB] last:border-b-0">
+          <div key={groupIdx} className="border-b border-[var(--theme-border-default)] last:border-b-0">
             {/* Company Section Header */}
             <div
-              className="sticky top-0 bg-[#F9FAFB] border-b border-[#E5E7EB] z-10"
+              className="sticky top-0 bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)] z-10"
               style={{ padding: "16px 24px" }}
             >
               <h3
-                className="text-[#0A1D4D]"
+                className="text-[var(--theme-text-primary)]"
                 style={{ fontSize: "14px", fontWeight: 600 }}
               >
                 {group.companyName}
               </h3>
-              <p className="text-[11px] text-[#6B7280] mt-1">{group.subtitle}</p>
+              <p className="text-[11px] text-[var(--theme-text-muted)] mt-1">{group.subtitle}</p>
             </div>
 
             {/* Table Header */}
-            <div className="bg-white border-b border-[#E5E7EB]" style={{ padding: "0 24px" }}>
+            <div className="bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)]" style={{ padding: "0 24px" }}>
               <div className="grid grid-cols-12 gap-4 py-3">
                 <div className="col-span-4">
                   <p
-                    className="text-[#6B7280] uppercase tracking-wide"
+                    className="text-[var(--theme-text-muted)] uppercase tracking-wide"
                     style={{ fontSize: "11px", fontWeight: 600 }}
                   >
                     Name
@@ -441,7 +441,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                 </div>
                 <div className="col-span-3">
                   <p
-                    className="text-[#6B7280] uppercase tracking-wide"
+                    className="text-[var(--theme-text-muted)] uppercase tracking-wide"
                     style={{ fontSize: "11px", fontWeight: 600 }}
                   >
                     Position / Designation
@@ -449,7 +449,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                 </div>
                 <div className="col-span-2">
                   <p
-                    className="text-[#6B7280] uppercase tracking-wide"
+                    className="text-[var(--theme-text-muted)] uppercase tracking-wide"
                     style={{ fontSize: "11px", fontWeight: 600 }}
                   >
                     Date Hired
@@ -457,7 +457,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                 </div>
                 <div className="col-span-2">
                   <p
-                    className="text-[#6B7280] uppercase tracking-wide"
+                    className="text-[var(--theme-text-muted)] uppercase tracking-wide"
                     style={{ fontSize: "11px", fontWeight: 600 }}
                   >
                     Contact
@@ -465,7 +465,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                 </div>
                 <div className="col-span-1 text-right">
                   <p
-                    className="text-[#6B7280] uppercase tracking-wide"
+                    className="text-[var(--theme-text-muted)] uppercase tracking-wide"
                     style={{ fontSize: "11px", fontWeight: 600 }}
                   >
                     Action
@@ -480,7 +480,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                 <div
                   key={employee.id}
                   onClick={() => onEmployeeClick(employee)}
-                  className="grid grid-cols-12 gap-4 py-4 border-b border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors cursor-pointer"
+                  className="grid grid-cols-12 gap-4 py-4 border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors cursor-pointer"
                   style={{ padding: "16px 24px" }}
                 >
                   {/* Name with Avatar */}
@@ -497,12 +497,12 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                     </div>
                     <div className="min-w-0">
                       <p
-                        className="text-[#0A1D4D] truncate"
+                        className="text-[var(--theme-text-primary)] truncate"
                         style={{ fontSize: "13px", fontWeight: 600 }}
                       >
                         {employee.fullName}
                       </p>
-                      <p className="text-[#9CA3AF] text-[11px] truncate">
+                      <p className="text-[var(--theme-text-muted)] text-[11px] truncate">
                         {employee.employeeId}
                       </p>
                     </div>
@@ -510,21 +510,21 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
 
                   {/* Position */}
                   <div className="col-span-3 flex items-center">
-                    <p className="text-[#6B7280] text-[13px] truncate">
+                    <p className="text-[var(--theme-text-muted)] text-[13px] truncate">
                       {employee.designation}
                     </p>
                   </div>
 
                   {/* Date Hired */}
                   <div className="col-span-2 flex items-center">
-                    <p className="text-[#6B7280] text-[13px]">
+                    <p className="text-[var(--theme-text-muted)] text-[13px]">
                       {employee.regularization}
                     </p>
                   </div>
 
                   {/* Contact */}
                   <div className="col-span-2 flex items-center">
-                    <p className="text-[#6B7280] text-[13px] truncate">
+                    <p className="text-[var(--theme-text-muted)] text-[13px] truncate">
                       {employee.contactNumber}
                     </p>
                   </div>
@@ -535,7 +535,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button
-                            className="flex items-center gap-1 text-[#0F766E] hover:text-[#0D6560] text-[12px]"
+                            className="flex items-center gap-1 text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] text-[12px]"
                             style={{ fontWeight: 600 }}
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -562,7 +562,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                       </DropdownMenu>
                     ) : (
                       <button
-                        className="text-[#0F766E] hover:text-[#0D6560] text-[12px]"
+                        className="text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] text-[12px]"
                         style={{ fontWeight: 600 }}
                       >
                         View file

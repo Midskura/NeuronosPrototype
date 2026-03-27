@@ -32,12 +32,12 @@ export function ListCategories({
 }: ListCategoriesProps) {
   const CategoryRow = ({ category }: { category: Category }) => (
     <div
-      className="flex items-center justify-between px-4 py-3 border-b border-[#E5E7EB] hover:bg-[#F9FAFB] group"
+      className="flex items-center justify-between px-4 py-3 border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] group"
     >
       <div className="flex-1">
-        <p className="text-[14px] text-[#0A1D4D] font-medium">{category.name}</p>
+        <p className="text-[14px] text-[var(--theme-text-primary)] font-medium">{category.name}</p>
         {category.parent && (
-          <p className="text-[12px] text-[#6B7280] mt-0.5">
+          <p className="text-[12px] text-[var(--theme-text-muted)] mt-0.5">
             Parent: {category.parent}
           </p>
         )}
@@ -49,7 +49,7 @@ export function ListCategories({
             size="sm"
             className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
           >
-            <MoreVertical className="w-4 h-4 text-[#6B7280]" />
+            <MoreVertical className="w-4 h-4 text-[var(--theme-text-muted)]" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -77,12 +77,12 @@ export function ListCategories({
     return (
       <div className="grid grid-cols-2 gap-6">
         {[1, 2].map((i) => (
-          <div key={i} className="border border-[#E5E7EB] animate-pulse" style={{ borderRadius: 'var(--radius-sm)' }}>
-            <div className="h-12 bg-gray-200"></div>
+          <div key={i} className="border border-[var(--theme-border-default)] animate-pulse" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="h-12 bg-[var(--theme-bg-surface-tint)]"></div>
             <div className="p-4 space-y-3">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-[var(--theme-bg-surface-tint)] rounded"></div>
+              <div className="h-4 bg-[var(--theme-bg-surface-tint)] rounded"></div>
+              <div className="h-4 bg-[var(--theme-bg-surface-tint)] rounded"></div>
             </div>
           </div>
         ))}
@@ -101,9 +101,9 @@ export function ListCategories({
   return (
     <div className="grid grid-cols-2 gap-6">
       {/* Revenue Categories */}
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <div className="flex items-center justify-between px-4 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
-          <h3 className="text-[14px] text-[#0A1D4D] font-medium">
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <div className="flex items-center justify-between px-4 py-3 bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+          <h3 className="text-[14px] text-[var(--theme-text-primary)] font-medium">
             Revenue Categories
           </h3>
           {onAddRevenue && (
@@ -119,7 +119,7 @@ export function ListCategories({
         </div>
         <div>
           {revenueCategories.length === 0 ? (
-            <div className="px-4 py-8 text-center text-[14px] text-[#6B7280]">
+            <div className="px-4 py-8 text-center text-[14px] text-[var(--theme-text-muted)]">
               No revenue categories
             </div>
           ) : (
@@ -131,9 +131,9 @@ export function ListCategories({
       </div>
 
       {/* Expense Categories */}
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <div className="flex items-center justify-between px-4 py-3 bg-[#F9FAFB] border-b border-[#E5E7EB]">
-          <h3 className="text-[14px] text-[#0A1D4D] font-medium">
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <div className="flex items-center justify-between px-4 py-3 bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+          <h3 className="text-[14px] text-[var(--theme-text-primary)] font-medium">
             Expense Categories
           </h3>
           {onAddExpense && (
@@ -149,7 +149,7 @@ export function ListCategories({
         </div>
         <div>
           {expenseCategories.length === 0 ? (
-            <div className="px-4 py-8 text-center text-[14px] text-[#6B7280]">
+            <div className="px-4 py-8 text-center text-[14px] text-[var(--theme-text-muted)]">
               No expense categories
             </div>
           ) : (

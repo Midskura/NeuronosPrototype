@@ -217,8 +217,8 @@ export function EditableMultiInputField({
                 style={{
                   flex: 1,
                   padding: "7px 10px",
-                  backgroundColor: "white",
-                  border: "1px solid #D1D5DB",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "6px",
                   fontSize: "13px",
                   color: "var(--neuron-ink-primary, #12332B)",
@@ -226,11 +226,11 @@ export function EditableMultiInputField({
                   transition: "border-color 0.15s, box-shadow 0.15s",
                 }}
                 onFocus={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                   e.currentTarget.style.boxShadow = "0 0 0 2px rgba(15, 118, 110, 0.15)";
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.borderColor = "#D1D5DB";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
                   e.currentTarget.style.boxShadow = "none";
                 }}
               />
@@ -248,7 +248,7 @@ export function EditableMultiInputField({
                     border: "none",
                     background: "transparent",
                     cursor: "pointer",
-                    color: "#0F766E",
+                    color: "var(--theme-action-primary-bg)",
                     flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
@@ -276,7 +276,7 @@ export function EditableMultiInputField({
                     border: "none",
                     background: "transparent",
                     cursor: "pointer",
-                    color: "#9CA3AF",
+                    color: "var(--theme-text-muted)",
                     flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
@@ -285,7 +285,7 @@ export function EditableMultiInputField({
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    e.currentTarget.style.color = "#9CA3AF";
+                    e.currentTarget.style.color = "var(--theme-text-muted)";
                   }}
                   title="Remove"
                 >
@@ -320,15 +320,15 @@ export function EditableMultiInputField({
           onClick={isControlled ? undefined : handleStartEditing}
           style={{
             padding: "7px 10px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: `1px solid ${required ? "#FCD34D" : "#E5E7EB"}`,
             borderRadius: "6px",
             fontSize: "13px",
-            color: "#9CA3AF",
+            color: "var(--theme-text-muted)",
             cursor: isControlled ? "default" : "pointer",
             transition: "border-color 0.15s",
           }}
-          onMouseEnter={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = "#0F766E"; }}
+          onMouseEnter={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)"; }}
           onMouseLeave={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = required ? "#FCD34D" : "#E5E7EB"; }}
         >
           {isEmpty ? "—" : placeholder}
@@ -340,11 +340,11 @@ export function EditableMultiInputField({
           onClick={isControlled ? undefined : handleStartEditing}
           onMouseEnter={isControlled ? undefined : (e) => {
             const inputs = e.currentTarget.querySelectorAll<HTMLElement>("[data-view-row]");
-            inputs.forEach((el) => { el.style.borderColor = "#0F766E"; });
+            inputs.forEach((el) => { el.style.borderColor = "var(--theme-action-primary-bg)"; });
           }}
           onMouseLeave={isControlled ? undefined : (e) => {
             const inputs = e.currentTarget.querySelectorAll<HTMLElement>("[data-view-row]");
-            inputs.forEach((el) => { el.style.borderColor = "#E5E7EB"; });
+            inputs.forEach((el) => { el.style.borderColor = "var(--theme-border-default)"; });
           }}
         >
           {displayValues.map((val, i) => (
@@ -354,7 +354,7 @@ export function EditableMultiInputField({
               style={{
                 padding: "7px 10px",
                 backgroundColor: "#FAFBFC",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 fontSize: "13px",
                 color: "var(--neuron-ink-primary, #12332B)",
@@ -372,7 +372,7 @@ export function EditableMultiInputField({
                 right: "10px",
                 top: "7px",
                 fontSize: "11px",
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 fontWeight: 500,
               }}
             >

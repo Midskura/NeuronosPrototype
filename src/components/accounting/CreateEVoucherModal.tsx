@@ -117,7 +117,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
     >
       <div
         style={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           borderRadius: "16px",
           width: "100%",
           maxWidth: "720px",
@@ -139,10 +139,10 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
           }}
         >
           <div>
-            <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+            <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
               {isCollection ? "Record Collection" : context === "bd" ? "New Budget Request" : "Create New E-Voucher"}
             </h2>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               {isCollection 
                 ? "Record payment received for an invoice" 
                 : "Fill in the details for approval and payment"}
@@ -156,14 +156,14 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
               borderRadius: "8px",
               border: "none",
               backgroundColor: "transparent",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#F3F4F6";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
@@ -181,7 +181,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
               {/* Type Selection (Hidden if context is fixed) */}
               {!invoiceData && !budgetRequestData && (
                  <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Transaction Type
                     </label>
                     <select
@@ -205,13 +205,13 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
               {/* Amount & Purpose */}
               <div>
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   {isCollection ? "Payment Details" : "Transaction Details"}
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {/* Amount */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Amount (PHP) *
                     </label>
                     <input
@@ -234,7 +234,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
                   {/* Purpose */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Purpose *
                     </label>
                     <input
@@ -260,13 +260,13 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
               {/* Vendor/Payer Information Section */}
               {!isCollection && (
               <div>
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Vendor/Payee Information
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {/* Vendor Name */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Vendor/Payee Name *
                     </label>
                     <input
@@ -292,14 +292,14 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
               {/* Linking & Payment Terms Section */}
               <div>
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Linking & Payment Terms
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   
                   {/* Project Number */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Project/Booking Number
                     </label>
                     <input
@@ -323,7 +323,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
                   {/* Customer Name */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Related Customer
                     </label>
                     <input
@@ -348,7 +348,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                   {/* Invoice Number (If Collection) */}
                   {isCollection && (
                       <div>
-                        <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                        <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                           Invoice Number
                         </label>
                         <input
@@ -363,7 +363,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                             fontSize: "14px",
                             outline: "none",
                             color: "var(--neuron-ink-primary)",
-                            backgroundColor: "#F3F4F6"
+                            backgroundColor: "var(--theme-bg-surface-subtle)"
                           }}
                         />
                       </div>
@@ -371,7 +371,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
                   {/* Payment Method */}
                   <div>
-                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "6px" }}>
+                    <label style={{ display: "block", fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "6px" }}>
                       Payment Method
                     </label>
                     <select
@@ -400,7 +400,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
 
               {/* Attachments Section */}
               <div>
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Supporting Documents
                 </h3>
                 <div
@@ -412,19 +412,19 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                     cursor: "pointer",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#0F766E";
-                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                     e.currentTarget.style.backgroundColor = "transparent";
                   }}
                 >
-                  <Upload size={32} style={{ color: "#667085", margin: "0 auto 8px" }} />
-                  <p style={{ fontSize: "14px", color: "#374151", fontWeight: 500, marginBottom: "4px" }}>
+                  <Upload size={32} style={{ color: "var(--theme-text-muted)", margin: "0 auto 8px" }} />
+                  <p style={{ fontSize: "14px", color: "var(--theme-text-secondary)", fontWeight: 500, marginBottom: "4px" }}>
                     Click to upload or drag and drop
                   </p>
-                  <p style={{ fontSize: "12px", color: "#667085" }}>
+                  <p style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                     Invoices, receipts, or supporting documents (PDF, PNG, JPG)
                   </p>
                 </div>
@@ -450,17 +450,17 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                 padding: "10px 20px",
                 borderRadius: "8px",
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
-                color: "#374151",
+                backgroundColor: "var(--theme-bg-surface)",
+                color: "var(--theme-text-secondary)",
                 fontSize: "14px",
                 fontWeight: 500,
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }}
             >
               Cancel
@@ -471,17 +471,17 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                 padding: "10px 20px",
                 borderRadius: "8px",
                 border: "none",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 color: "#FFFFFF",
                 fontSize: "14px",
                 fontWeight: 500,
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               Submit for Approval

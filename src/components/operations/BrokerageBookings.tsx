@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Plus, Search, Briefcase, UserCheck, FileEdit, Clock, CheckCircle, Trash2, FileCheck } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { assessBookingFinancialState, canHardDeleteBooking, getBookingCancellationMessage } from "../../utils/bookingCancellation";
@@ -7,6 +7,7 @@ import { BrokerageBookingDetails } from "./BrokerageBookingDetails";
 import { NeuronStatusPill } from "../NeuronStatusPill";
 import { toast } from "../ui/toast-utils";
 import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
+import { useDataScope } from "../../hooks/useDataScope";
 import { SkeletonTable } from "../shared/NeuronSkeleton";
 import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
 
@@ -74,11 +75,20 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
     });
   };
 
-  const { data: bookings, isLoading, refresh: fetchBookings } = useCachedFetch<BrokerageBooking[]>(
+  const { scope, isLoaded: scopeLoaded } = useDataScope();
+
+  const { data: rawBookings, isLoading, refresh: fetchBookings } = useCachedFetch<BrokerageBooking[]>(
     "brokerage-bookings",
     bookingsFetcher,
     [],
   );
+
+  const bookings = useMemo(() => {
+    if (!scopeLoaded) return [];
+    if (scope.type === 'all') return rawBookings;
+    if (scope.type === 'userIds') return rawBookings.filter(b => scope.ids.includes((b as any).created_by || ''));
+    return rawBookings.filter(b => (b as any).created_by === scope.userId);
+  }, [rawBookings, scope, scopeLoaded]);
 
   // Keep selectedBooking in sync with latest bookings data after refresh
   useEffect(() => {
@@ -217,7 +227,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
 
   return (
     <>
-      <div style={{ minHeight: "100vh", background: "#FFFFFF" }}>
+      <div style={{ minHeight: "100vh", background: "var(--theme-bg-surface)" }}>
         {/* Header */}
         <div style={{ padding: "32px 48px 24px 48px" }}>
           <div style={{ 
@@ -230,7 +240,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               <h1 style={{ 
                 fontSize: "32px", 
                 fontWeight: 600, 
-                color: "#12332B", 
+                color: "var(--theme-text-primary)", 
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}>
@@ -238,7 +248,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               </h1>
               <p style={{ 
                 fontSize: "14px", 
-                color: "#667085"
+                color: "var(--theme-text-muted)"
               }}>
                 Manage customs brokerage bookings and clearance
               </p>
@@ -281,7 +291,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -292,12 +302,12 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               style={{
                 width: "100%",
                 padding: "10px 12px 10px 40px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
                 outline: "none",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             />
           </div>
@@ -315,11 +325,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               onChange={(e) => setTimePeriodFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -336,11 +346,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               onChange={(e) => setStatusFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -361,11 +371,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               onChange={(e) => setMovementFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -381,11 +391,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               onChange={(e) => setOwnerFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -402,11 +412,11 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               onChange={(e) => setEntryTypeFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -422,7 +432,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
           <div style={{ 
             display: "flex", 
             gap: "8px", 
-            borderBottom: "1px solid #E5E7EB",
+            borderBottom: "1px solid var(--theme-border-default)",
             marginBottom: "24px"
           }}>
             <TabButton
@@ -430,7 +440,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               label="All Bookings"
               count={allCount}
               isActive={activeTab === "all"}
-              color="#0F766E"
+              color="var(--theme-action-primary-bg)"
               onClick={() => setActiveTab("all")}
             />
             <TabButton
@@ -446,7 +456,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               label="Draft"
               count={draftCount}
               isActive={activeTab === "draft"}
-              color="#6B7280"
+              color="var(--theme-text-muted)"
               onClick={() => setActiveTab("draft")}
             />
             <TabButton
@@ -454,7 +464,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               label="In Progress"
               count={inProgressCount}
               isActive={activeTab === "in-progress"}
-              color="#0F766E"
+              color="var(--theme-action-primary-bg)"
               onClick={() => setActiveTab("in-progress")}
             />
             <TabButton
@@ -476,50 +486,50 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
             </div>
           ) : filteredBookings.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64">
-              <div className="text-[#12332B]/60 mb-2">
+              <div className="text-[var(--theme-text-primary)]/60 mb-2">
                 {searchTerm || statusFilter !== "all" 
                   ? "No bookings match your filters" 
                   : "No brokerage bookings yet"}
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="text-[#0F766E] hover:underline"
+                className="text-[var(--theme-action-primary-bg)] hover:underline"
               >
                 Create your first booking
               </button>
             </div>
           ) : (
             <div style={{
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "12px",
               overflow: "hidden",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}>
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[#12332B]/10">
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                  <tr className="border-b border-[var(--theme-text-primary)]/10">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Booking Details
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Customer
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Movement
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       MBL/MAWB
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Entry Type
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Status
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Created
                     </th>
-                    <th className="text-center py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide" style={{ width: "80px" }}>
+                    <th className="text-center py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide" style={{ width: "80px" }}>
                       Actions
                     </th>
                   </tr>
@@ -528,17 +538,17 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                   {filteredBookings.map((booking) => (
                     <tr
                       key={booking.bookingId}
-                      className="border-b border-[#12332B]/5 hover:bg-[#0F766E]/5 transition-colors cursor-pointer"
+                      className="border-b border-[var(--theme-text-primary)]/5 hover:bg-[var(--theme-action-primary-bg)]/5 transition-colors cursor-pointer"
                       onClick={() => setSelectedBooking(booking)}
                     >
                       <td className="py-4 px-4">
                         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                          <FileCheck size={20} color="#0F766E" style={{ flexShrink: 0 }} />
+                          <FileCheck size={20} color="var(--theme-action-primary-bg)" style={{ flexShrink: 0 }} />
                           <div>
                             <div style={{ 
                               fontSize: "14px", 
                               fontWeight: 600, 
-                              color: "#12332B",
+                              color: "var(--theme-text-primary)",
                               marginBottom: "2px"
                             }}>
                               {(booking as any).booking_number || booking.bookingId}
@@ -546,7 +556,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                             {booking.projectNumber && (
                               <div style={{ 
                                 fontSize: "13px", 
-                                color: "#667085"
+                                color: "var(--theme-text-muted)"
                               }}>
                                 Project: {booking.projectNumber}
                               </div>
@@ -555,7 +565,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "14px", color: "#12332B" }}>
+                        <div style={{ fontSize: "14px", color: "var(--theme-text-primary)" }}>
                           {booking.customerName}
                         </div>
                       </td>
@@ -573,15 +583,15 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                         </span>
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "13px", color: "#12332B" }}>
-                          {booking.mblMawb || <span style={{ color: "#667085" }}>—</span>}
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-primary)" }}>
+                          {booking.mblMawb || <span style={{ color: "var(--theme-text-muted)" }}>—</span>}
                         </div>
                       </td>
                       <td className="py-4 px-4">
                         <div style={{ 
                           fontSize: "13px", 
                           fontWeight: 500,
-                          color: "#12332B" 
+                          color: "var(--theme-text-primary)" 
                         }}>
                           {booking.entryType || "—"}
                         </div>
@@ -590,7 +600,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                         <NeuronStatusPill status={booking.status} />
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "13px", color: "#667085" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                           {new Date(booking.createdAt).toLocaleDateString()}
                         </div>
                       </td>
@@ -607,7 +617,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                             fontWeight: 600,
                             border: "1px solid #FCA5A5",
                             borderRadius: "6px",
-                            background: "white",
+                            background: "var(--theme-bg-surface)",
                             color: "#DC2626",
                             cursor: "pointer",
                             transition: "all 150ms"

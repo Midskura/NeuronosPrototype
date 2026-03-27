@@ -19,10 +19,10 @@ export function CompanySwitcher({
   return (
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger 
-        className="w-[200px] h-10 text-[14px] border-[#E5E7EB]" 
+        className="w-[200px] h-10 text-[14px] border-[var(--theme-border-default)]" 
         style={{ borderRadius: 'var(--radius-sm)' }}
       >
-        <Building2 className="w-4 h-4 mr-2 text-[#6B7280]" />
+        <Building2 className="w-4 h-4 mr-2 text-[var(--theme-text-muted)]" />
         <SelectValue placeholder="Select company" />
       </SelectTrigger>
       <SelectContent>

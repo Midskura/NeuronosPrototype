@@ -62,8 +62,8 @@ export function Operations({ view = "forwarding", currentUser }: OperationsProps
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <h2 className="text-[#12332B] mb-2">Coming Soon</h2>
-          <p className="text-[#12332B]/60">
+          <h2 className="text-[var(--theme-text-primary)] mb-2">Coming Soon</h2>
+          <p className="text-[var(--theme-text-primary)]/60">
             {view.charAt(0).toUpperCase() + view.slice(1)} module is under development
           </p>
         </div>
@@ -72,7 +72,7 @@ export function Operations({ view = "forwarding", currentUser }: OperationsProps
   };
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-[var(--theme-bg-surface)]">
       {renderContent()}
     </div>
   );

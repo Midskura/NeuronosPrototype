@@ -172,7 +172,7 @@ export function UnifiedCollectionsTab({
       header: "Date",
       width: "140px",
       cell: (item) => (
-        <span className="text-[12px] text-[#0A1D4D] font-medium">
+        <span className="text-[12px] text-[var(--theme-text-primary)] font-medium">
           {formatDate(item.collection_date || item.created_at)}
         </span>
       ),
@@ -181,7 +181,7 @@ export function UnifiedCollectionsTab({
       header: "Reference",
       width: "140px",
       cell: (item) => (
-        <span className="text-[12px] font-mono text-[#0F766E] font-medium">
+        <span className="text-[12px] font-mono text-[var(--theme-action-primary-bg)] font-medium">
           {item.collection_number}
         </span>
       ),
@@ -189,7 +189,7 @@ export function UnifiedCollectionsTab({
     {
       header: "Received From",
       cell: (item) => (
-        <span className="text-[12px] text-[#344054] font-medium max-w-[200px] truncate block">
+        <span className="text-[12px] text-[var(--theme-text-secondary)] font-medium max-w-[200px] truncate block">
           {item.customer_name || "-"}
         </span>
       ),
@@ -198,7 +198,7 @@ export function UnifiedCollectionsTab({
       header: "Method",
       width: "140px",
       cell: (item) => (
-        <span className="text-[12px] text-[#667085]">
+        <span className="text-[12px] text-[var(--theme-text-muted)]">
           {item.payment_method || "-"}
         </span>
       ),
@@ -207,7 +207,7 @@ export function UnifiedCollectionsTab({
       header: "Applied To",
       width: "180px",
       cell: (item) => (
-        <span className="text-[12px] text-[#667085]">
+        <span className="text-[12px] text-[var(--theme-text-muted)]">
           {describeApplication(item)}
         </span>
       ),
@@ -236,7 +236,7 @@ export function UnifiedCollectionsTab({
           styles = "bg-[#EFF6FF] text-[#1D4ED8] border-[#B2DDFF]";
           label = getCollectionResolutionLabel(item) || "Credited";
         } else if (status === "refunded") {
-          styles = "bg-[#F3F4F6] text-[#475467] border-[#D0D5DD]";
+          styles = "bg-[var(--theme-bg-surface-subtle)] text-[#475467] border-[var(--theme-border-default)]";
           label = getCollectionResolutionLabel(item) || "Refunded";
         } else if (isCleared) {
           styles = "bg-[#ECFDF5] text-[#027A48] border-[#A6F4C5]";
@@ -264,22 +264,22 @@ export function UnifiedCollectionsTab({
 
   const EmptyState = (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-12 h-12 bg-[#F3F4F6] rounded-full flex items-center justify-center mb-3">
-        <Receipt className="text-[#98A2B3]" size={20} />
+      <div className="w-12 h-12 bg-[var(--theme-bg-surface-subtle)] rounded-full flex items-center justify-center mb-3">
+        <Receipt className="text-[var(--theme-text-muted)]" size={20} />
       </div>
-      <p className="text-[14px] font-medium text-[#101828]">No collections found</p>
-      <p className="text-[13px] text-[#667085] mt-1">Record a payment to get started.</p>
+      <p className="text-[14px] font-medium text-[var(--theme-text-primary)]">No collections found</p>
+      <p className="text-[13px] text-[var(--theme-text-muted)] mt-1">Record a payment to get started.</p>
     </div>
   );
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)]">
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+          <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
             {title || "Project Collections"}
           </h1>
-          <p className="text-[14px] text-[#667085]">
+          <p className="text-[14px] text-[var(--theme-text-muted)]">
             {subtitle || `Track payments received from ${project.customer_name}`}
           </p>
         </div>
@@ -288,7 +288,7 @@ export function UnifiedCollectionsTab({
           {!readOnly && (
             <button
               onClick={() => setInterfaceMode("create")}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
+              className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
             >
               <Plus size={16} />
               Record Collection
@@ -299,20 +299,20 @@ export function UnifiedCollectionsTab({
 
       <div className="flex items-center gap-2 mb-6">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98A2B3]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
           <input
             type="text"
             placeholder="Search by Reference, Customer, or Method..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[#E5E9F0] bg-white text-[#101828] placeholder-[#98A2B3]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[#98A2B3]"
           />
         </div>
 
         <div style={{ minWidth: "140px" }}>
           <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
-        <span className="text-[13px] text-[#6B7280] font-medium">to</span>
+        <span className="text-[13px] text-[var(--theme-text-muted)] font-medium">to</span>
         <div style={{ minWidth: "140px" }}>
           <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
@@ -348,7 +348,7 @@ export function UnifiedCollectionsTab({
         footerSummary={[
           {
             label: "Total Collections",
-            value: <span className="text-[#374151]">{formatCurrency(totalCollections)}</span>,
+            value: <span className="text-[var(--theme-text-secondary)]">{formatCurrency(totalCollections)}</span>,
           },
         ]}
       />

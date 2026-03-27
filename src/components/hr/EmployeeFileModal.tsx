@@ -77,24 +77,24 @@ export function EmployeeFileModal({
 
       {/* Modal - Enlarged and following Neuron design system */}
       <div
-        className="relative bg-white rounded-[24px] flex flex-col overflow-hidden"
+        className="relative bg-[var(--theme-bg-surface)] rounded-[24px] flex flex-col overflow-hidden"
         style={{ 
           width: "1400px", 
           maxWidth: "95vw", 
           maxHeight: "90vh",
-          border: "1px solid #E5E9F0",
+          border: "1px solid var(--theme-border-default)",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
         }}
       >
         {/* Header */}
         <div
-          className="flex items-center justify-between border-b border-[#E5E9F0] flex-shrink-0"
-          style={{ padding: "24px 32px", background: "#FFFFFF" }}
+          className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
+          style={{ padding: "24px 32px", background: "var(--theme-bg-surface)" }}
         >
           <div>
             <div className="flex items-center gap-3">
               <h2
-                style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", letterSpacing: "-0.5px" }}
+                style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", letterSpacing: "-0.5px" }}
               >
                 {employee.fullName}
               </h2>
@@ -117,7 +117,7 @@ export function EmployeeFileModal({
                 {employee.company}
               </span>
             </div>
-            <p style={{ fontSize: "13px", color: "#667085", marginTop: "4px" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
               Employee ID: {employee.employeeId} • {employee.designation}
             </p>
           </div>
@@ -150,8 +150,8 @@ export function EmployeeFileModal({
                 padding: 0,
                 borderRadius: "12px",
                 background: "transparent",
-                border: "1px solid #E5E9F0",
-                color: "#667085",
+                border: "1px solid var(--theme-border-default)",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -166,36 +166,36 @@ export function EmployeeFileModal({
 
         {/* Employee Header Block */}
         <div
-          className="border-b border-[#E5E9F0] flex-shrink-0"
-          style={{ padding: "24px 32px", background: "#F9FAFB" }}
+          className="border-b border-[var(--theme-border-default)] flex-shrink-0"
+          style={{ padding: "24px 32px", background: "var(--theme-bg-page)" }}
         >
           <div className="grid grid-cols-4 gap-8">
             <div>
-              <p style={{ fontSize: "11px", color: "#667085", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+              <p style={{ fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
                 Designation
               </p>
-              <p style={{ fontSize: "15px", color: "#12332B", fontWeight: 600 }}>
+              <p style={{ fontSize: "15px", color: "var(--theme-text-primary)", fontWeight: 600 }}>
                 {employee.designation}
               </p>
             </div>
             <div>
-              <p style={{ fontSize: "11px", color: "#667085", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+              <p style={{ fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
                 Date Hired / Regularization
               </p>
-              <p style={{ fontSize: "15px", color: "#12332B", fontWeight: 600 }}>
+              <p style={{ fontSize: "15px", color: "var(--theme-text-primary)", fontWeight: 600 }}>
                 {employee.regularization}
               </p>
             </div>
             <div>
-              <p style={{ fontSize: "11px", color: "#667085", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+              <p style={{ fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
                 Employee ID
               </p>
-              <p style={{ fontSize: "15px", color: "#12332B", fontWeight: 600 }}>
+              <p style={{ fontSize: "15px", color: "var(--theme-text-primary)", fontWeight: 600 }}>
                 {employee.employeeId}
               </p>
             </div>
             <div>
-              <p style={{ fontSize: "11px", color: "#667085", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
+              <p style={{ fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "6px" }}>
                 Status
               </p>
               <span
@@ -219,7 +219,7 @@ export function EmployeeFileModal({
         {/* Tabs */}
         <div className="flex-1 overflow-hidden flex flex-col">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-            <div className="border-b border-[#E5E9F0] flex-shrink-0" style={{ padding: "0 32px", background: "#FFFFFF" }}>
+            <div className="border-b border-[var(--theme-border-default)] flex-shrink-0" style={{ padding: "0 32px", background: "var(--theme-bg-surface)" }}>
               <div style={{ display: "flex", gap: "32px" }}>
                 <button
                   onClick={() => setActiveTab("personal")}
@@ -273,81 +273,81 @@ export function EmployeeFileModal({
             </div>
 
             {/* Divider under tabs */}
-            <div className="border-b border-[#E5E9F0] flex-shrink-0" />
+            <div className="border-b border-[var(--theme-border-default)] flex-shrink-0" />
 
             <div className="flex-1 overflow-y-auto" style={{ padding: "32px" }}>
               {/* Tab 1: Personal Info */}
               <TabsContent value="personal" className="mt-0">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Last Name
                     </Label>
                     <Input
                       value={employee.lastName}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       First Name
                     </Label>
                     <Input
                       value={employee.firstName}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Middle Name
                     </Label>
                     <Input
                       value={employee.middleName}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Birthdate
                     </Label>
                     <Input
                       value={employee.birthdate}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Email
                     </Label>
                     <a
                       href={`mailto:${employee.email}`}
-                      className="block text-[14px] text-[#0F766E] underline hover:text-[#0D6560] py-2"
+                      className="block text-[14px] text-[var(--theme-action-primary-bg)] underline hover:text-[#0D6560] py-2"
                     >
                       {employee.email}
                     </a>
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Contact Number
                     </Label>
                     <Input
                       value={employee.contactNumber}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div className="col-span-2">
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Address
                     </Label>
                     <Input
                       value={employee.address || "Not provided"}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                 </div>
@@ -357,11 +357,11 @@ export function EmployeeFileModal({
               <TabsContent value="employment" className="mt-0">
                 <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Company
                     </Label>
                     <Select value={employee.company} disabled>
-                      <SelectTrigger className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]">
+                      <SelectTrigger className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -381,21 +381,21 @@ export function EmployeeFileModal({
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Designation
                     </Label>
                     <Input
                       value={employee.designation}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Rate Type
                     </Label>
                     <Select value={employee.rateType || "Monthly"} disabled>
-                      <SelectTrigger className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]">
+                      <SelectTrigger className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -405,12 +405,12 @@ export function EmployeeFileModal({
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       {employee.rateType === "Daily" ? "Daily Rate" : "Monthly Salary"}
                     </Label>
                     <div className="relative">
                       <span 
-                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[#6B7280]"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[14px] text-[var(--theme-text-muted)]"
                         style={{ fontWeight: 500 }}
                       >
                         ₱
@@ -418,17 +418,17 @@ export function EmployeeFileModal({
                       <Input
                         value={employee.salary ? employee.salary.toLocaleString() : "Not set"}
                         disabled
-                        className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px] pl-8"
+                        className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px] pl-8"
                         style={{ fontWeight: 600 }}
                       />
                     </div>
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Status
                     </Label>
                     <Select value={employee.status} disabled>
-                      <SelectTrigger className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]">
+                      <SelectTrigger className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -438,28 +438,28 @@ export function EmployeeFileModal({
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Date Hired / Regularization
                     </Label>
                     <Input
                       value={employee.regularization}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                     />
                   </div>
                   <div className="col-span-2">
-                    <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                    <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                       Notes
                     </Label>
                     <Textarea
                       value={employee.notes || "No notes"}
                       disabled
-                      className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px] min-h-[80px]"
+                      className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px] min-h-[80px]"
                     />
                   </div>
                   <div className="col-span-2">
-                    <div className="flex items-center justify-between p-4 bg-[#F9FAFB] rounded-lg border border-[#E5E7EB]">
-                      <Label className="text-[13px] text-[#0A1D4D]" style={{ fontWeight: 500 }}>
+                    <div className="flex items-center justify-between p-4 bg-[var(--theme-bg-page)] rounded-lg border border-[var(--theme-border-default)]">
+                      <Label className="text-[13px] text-[var(--theme-text-primary)]" style={{ fontWeight: 500 }}>
                         Included in Payroll?
                       </Label>
                       <Switch checked={employee.includedInPayroll !== false} disabled />
@@ -474,40 +474,40 @@ export function EmployeeFileModal({
                   {/* Emergency Contact Section */}
                   <div>
                     <h3
-                      className="text-[#0A1D4D] mb-4"
+                      className="text-[var(--theme-text-primary)] mb-4"
                       style={{ fontSize: "14px", fontWeight: 600 }}
                     >
                       In Case of Emergency
                     </h3>
                     <div className="grid grid-cols-2 gap-6">
                       <div className="col-span-2">
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           Emergency Contact Name
                         </Label>
                         <Input
                           value={employee.emergencyName}
                           disabled
-                          className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                          className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                         />
                       </div>
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           Relationship
                         </Label>
                         <Input
                           value={employee.emergencyRelationship}
                           disabled
-                          className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                          className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                         />
                       </div>
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           Emergency Contact No.
                         </Label>
                         <Input
                           value={employee.emergencyContact}
                           disabled
-                          className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                          className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                         />
                       </div>
                     </div>
@@ -516,14 +516,14 @@ export function EmployeeFileModal({
                   {/* Government IDs Section */}
                   <div>
                     <h3
-                      className="text-[#0A1D4D] mb-4"
+                      className="text-[var(--theme-text-primary)] mb-4"
                       style={{ fontSize: "14px", fontWeight: 600 }}
                     >
                       Government IDs
                     </h3>
                     <div className="grid grid-cols-2 gap-6">
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           SSS Number
                         </Label>
                         <Input
@@ -533,7 +533,7 @@ export function EmployeeFileModal({
                         />
                       </div>
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           PhilHealth Number
                         </Label>
                         <Input
@@ -543,7 +543,7 @@ export function EmployeeFileModal({
                         />
                       </div>
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           Pag-IBIG Number
                         </Label>
                         <div className="space-y-2">
@@ -568,13 +568,13 @@ export function EmployeeFileModal({
                         </div>
                       </div>
                       <div>
-                        <Label className="text-[11px] text-[#6B7280] uppercase tracking-wide mb-2 block">
+                        <Label className="text-[11px] text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 block">
                           TIN Number
                         </Label>
                         <Input
                           value={employee.tinNumber || "Not provided"}
                           disabled
-                          className="bg-[#F9FAFB] border-[#E5E7EB] text-[14px]"
+                          className="bg-[var(--theme-bg-page)] border-[var(--theme-border-default)] text-[14px]"
                         />
                       </div>
                     </div>

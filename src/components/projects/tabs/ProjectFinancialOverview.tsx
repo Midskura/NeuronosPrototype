@@ -56,18 +56,18 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
   return (
     <div className="space-y-8 p-6">
       {/* Hero Section (QuickBooks Style Profit & Cash Flow) */}
-      <div className="bg-white rounded-xl border border-[#E5E9F0] p-6 flex items-stretch">
+      <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] p-6 flex items-stretch">
           
           {/* 1. Profit Margin (Left) */}
-          <div className="w-[200px] flex flex-col justify-center pr-8 border-r border-[#E5E9F0]">
-                <div className="text-[11px] font-semibold text-[#667085] uppercase tracking-wider mb-1">Profit Margin</div>
-                <div className={`text-[32px] font-bold ${grossMargin >= 0 ? 'text-[#12332B]' : 'text-[#DC2626]'}`}>
+          <div className="w-[200px] flex flex-col justify-center pr-8 border-r border-[var(--theme-border-default)]">
+                <div className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider mb-1">Profit Margin</div>
+                <div className={`text-[32px] font-bold ${grossMargin >= 0 ? 'text-[var(--theme-text-primary)]' : 'text-[#DC2626]'}`}>
                   {grossMargin.toFixed(1)}%
                 </div>
-                <div className="text-[13px] text-[#667085] mt-1">
-                  {grossProfit >= 0 ? "Net Profit" : "Net Loss"}: <span className="font-medium text-[#12332B]">{fmt(grossProfit)}</span>
+                <div className="text-[13px] text-[var(--theme-text-muted)] mt-1">
+                  {grossProfit >= 0 ? "Net Profit" : "Net Loss"}: <span className="font-medium text-[var(--theme-text-primary)]">{fmt(grossProfit)}</span>
                 </div>
-                <div className="text-[10px] text-[#9CA3AF] mt-1 italic">
+                <div className="text-[10px] text-[var(--theme-text-muted)] mt-1 italic">
                   (Based on Total Work)
                 </div>
           </div>
@@ -77,12 +77,12 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
               
               {/* Income Row */}
               <div className="flex items-center gap-4">
-                  <div className="w-16 text-[13px] font-medium text-[#667085]">
+                  <div className="w-16 text-[13px] font-medium text-[var(--theme-text-muted)]">
                     Income
                   </div>
-                  <div className="flex-1 h-3 bg-[#F3F4F6] rounded-full overflow-hidden relative group">
+                  <div className="flex-1 h-3 bg-[var(--theme-bg-surface-subtle)] rounded-full overflow-hidden relative group">
                       <div 
-                        className="h-full bg-[#0F766E] rounded-full transition-all duration-500 ease-out" 
+                        className="h-full bg-[var(--theme-action-primary-bg)] rounded-full transition-all duration-500 ease-out" 
                         style={{ width: `${incomeWidth}%` }}
                       ></div>
                       {/* Tooltip for unbilled */}
@@ -90,27 +90,27 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                         Invoiced: {fmt(invoicedAmount)} | Unbilled: {fmt(unbilledCharges)}
                       </div>
                   </div>
-                  <div className="w-24 text-right text-[14px] font-bold text-[#12332B]" title={`Invoiced: ${fmt(invoicedAmount)} + Unbilled: ${fmt(unbilledCharges)}`}>
+                  <div className="w-24 text-right text-[14px] font-bold text-[var(--theme-text-primary)]" title={`Invoiced: ${fmt(invoicedAmount)} + Unbilled: ${fmt(unbilledCharges)}`}>
                     {fmt(bookedCharges)}
                   </div>
               </div>
               
               {/* Costs Row */}
               <div className="flex items-center gap-4">
-                  <div className="w-16 text-[13px] font-medium text-[#667085]">Costs</div>
-                  <div className="flex-1 h-3 bg-[#F3F4F6] rounded-full overflow-hidden">
+                  <div className="w-16 text-[13px] font-medium text-[var(--theme-text-muted)]">Costs</div>
+                  <div className="flex-1 h-3 bg-[var(--theme-bg-surface-subtle)] rounded-full overflow-hidden">
                       <div 
                           className="h-full bg-[#C05621] rounded-full transition-all duration-500 ease-out" 
                           style={{ width: `${costWidth}%` }}
                       ></div>
                   </div>
-                  <div className="w-24 text-right text-[14px] font-bold text-[#12332B]">{fmt(directCost)}</div>
+                  <div className="w-24 text-right text-[14px] font-bold text-[var(--theme-text-primary)]">{fmt(directCost)}</div>
               </div>
 
               {/* Collections Row */}
-              <div className="flex items-center gap-4 pt-6 mt-2 border-t border-[#E5E9F0] border-dashed">
-                  <div className="w-16 text-[13px] font-medium text-[#667085]">Collected</div>
-                  <div className="flex-1 h-3 bg-[#F3F4F6] rounded-full overflow-hidden relative" title={`Invoiced: ${fmt(invoicedAmount)}`}>
+              <div className="flex items-center gap-4 pt-6 mt-2 border-t border-[var(--theme-border-default)] border-dashed">
+                  <div className="w-16 text-[13px] font-medium text-[var(--theme-text-muted)]">Collected</div>
+                  <div className="flex-1 h-3 bg-[var(--theme-bg-surface-subtle)] rounded-full overflow-hidden relative" title={`Invoiced: ${fmt(invoicedAmount)}`}>
                       <div 
                           className="h-full bg-[#10B981] rounded-full transition-all duration-500 ease-out" 
                           style={{ width: `${collectedWidth}%` }}
@@ -122,17 +122,17 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
           </div>
 
           {/* 3. Invoices / Cash Flow (Right) */}
-          <div className="w-[240px] pl-8 border-l border-[#E5E9F0] flex flex-col justify-center gap-4">
+          <div className="w-[240px] pl-8 border-l border-[var(--theme-border-default)] flex flex-col justify-center gap-4">
                 <div className="flex justify-between items-center">
-                    <div className="text-[13px] font-medium text-[#667085]">Open Invoices</div>
-                    <div className="text-[14px] font-bold text-[#12332B]">{fmt(outstandingAmount)}</div>
+                    <div className="text-[13px] font-medium text-[var(--theme-text-muted)]">Open Invoices</div>
+                    <div className="text-[14px] font-bold text-[var(--theme-text-primary)]">{fmt(outstandingAmount)}</div>
                 </div>
                 <div className="flex justify-between items-center">
-                    <div className="text-[13px] font-medium text-[#667085]">Overdue</div>
+                    <div className="text-[13px] font-medium text-[var(--theme-text-muted)]">Overdue</div>
                     <div className="text-[14px] font-bold text-[#DC2626]">{fmt(overdueAmount)}</div>
                 </div>
-                <div className="flex justify-between items-center pt-2 border-t border-[#E5E9F0]">
-                    <div className="text-[13px] font-medium text-[#667085]">Paid</div>
+                <div className="flex justify-between items-center pt-2 border-t border-[var(--theme-border-default)]">
+                    <div className="text-[13px] font-medium text-[var(--theme-text-muted)]">Paid</div>
                     <div className="text-[14px] font-bold text-[#059669]">{fmt(collectedAmount)}</div>
                 </div>
           </div>
@@ -143,40 +143,40 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Income Breakdown */}
-          <div className="bg-white rounded-xl border border-[#E5E9F0] overflow-hidden">
-              <div className="px-6 py-4 border-b border-[#E5E9F0] bg-[#F0FDF9] flex justify-between items-center">
-                  <h3 className="text-[13px] font-bold text-[#0F766E] uppercase tracking-wide">Income Breakdown</h3>
+          <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] overflow-hidden">
+              <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface-tint)] flex justify-between items-center">
+                  <h3 className="text-[13px] font-bold text-[var(--theme-action-primary-bg)] uppercase tracking-wide">Income Breakdown</h3>
                   {unbilledCharges > 0 && (
-                     <span className="text-[11px] font-medium text-[#0F766E] bg-white px-2 py-0.5 rounded border border-[#CCFBEF]">
+                     <span className="text-[11px] font-medium text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)] px-2 py-0.5 rounded border border-[#CCFBEF]">
                        Includes {fmt(unbilledCharges)} Unbilled
                      </span>
                   )}
               </div>
               <div className="p-0">
                   <table className="w-full">
-                      <thead className="bg-[#F8F9FB] border-b border-[#E5E9F0]">
+                      <thead className="bg-[#F8F9FB] border-b border-[var(--theme-border-default)]">
                           <tr>
-                              <th className="px-6 py-3 text-left text-[11px] font-semibold text-[#667085] uppercase tracking-[0.02em]">Category</th>
-                              <th className="px-6 py-3 text-right text-[11px] font-semibold text-[#667085] uppercase tracking-[0.02em]">Amount</th>
+                              <th className="px-6 py-3 text-left text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Category</th>
+                              <th className="px-6 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Amount</th>
                           </tr>
                       </thead>
                       <tbody className="divide-y divide-[#E5E9F0]">
                           {Object.entries(incomeByCategory).map(([category, amount], idx) => (
-                              <tr key={idx} className="hover:bg-[#F9FAFB]">
-                                  <td className="px-6 py-3 text-[13px] text-[#12332B] font-medium">{category}</td>
+                              <tr key={idx} className="hover:bg-[var(--theme-bg-page)]">
+                                  <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)] font-medium">{category}</td>
                                   <td className="px-6 py-3 text-[13px] text-right text-[#059669] font-medium">{fmt(amount)}</td>
                               </tr>
                           ))}
                           {Object.keys(incomeByCategory).length === 0 && (
                               <tr>
-                                  <td colSpan={2} className="px-6 py-8 text-center text-[13px] text-[#9CA3AF]">No income recorded</td>
+                                  <td colSpan={2} className="px-6 py-8 text-center text-[13px] text-[var(--theme-text-muted)]">No income recorded</td>
                               </tr>
                           )}
                       </tbody>
-                      <tfoot className="bg-[#F8F9FB] border-t border-[#E5E9F0]">
+                      <tfoot className="bg-[#F8F9FB] border-t border-[var(--theme-border-default)]">
                           <tr>
-                              <td className="px-6 py-3 text-[13px] font-bold text-[#12332B]">Total Income</td>
-                              <td className="px-6 py-3 text-[13px] font-bold text-right text-[#0F766E]">{fmt(bookedCharges)}</td>
+                              <td className="px-6 py-3 text-[13px] font-bold text-[var(--theme-text-primary)]">Total Income</td>
+                              <td className="px-6 py-3 text-[13px] font-bold text-right text-[var(--theme-action-primary-bg)]">{fmt(bookedCharges)}</td>
                           </tr>
                       </tfoot>
                   </table>
@@ -184,34 +184,34 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
           </div>
 
           {/* Cost Breakdown */}
-          <div className="bg-white rounded-xl border border-[#E5E9F0] overflow-hidden">
-              <div className="px-6 py-4 border-b border-[#E5E9F0] bg-[#FFF7ED]">
+          <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] overflow-hidden">
+              <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[#FFF7ED]">
                   <h3 className="text-[13px] font-bold text-[#C05621] uppercase tracking-wide">Cost Breakdown</h3>
               </div>
               <div className="p-0">
                   <table className="w-full">
-                      <thead className="bg-[#F8F9FB] border-b border-[#E5E9F0]">
+                      <thead className="bg-[#F8F9FB] border-b border-[var(--theme-border-default)]">
                           <tr>
-                              <th className="px-6 py-3 text-left text-[11px] font-semibold text-[#667085] uppercase tracking-[0.02em]">Expense Type</th>
-                              <th className="px-6 py-3 text-right text-[11px] font-semibold text-[#667085] uppercase tracking-[0.02em]">Amount</th>
+                              <th className="px-6 py-3 text-left text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Expense Type</th>
+                              <th className="px-6 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Amount</th>
                           </tr>
                       </thead>
                       <tbody className="divide-y divide-[#E5E9F0]">
                           {Object.entries(costByCategory).map(([category, amount], idx) => (
-                              <tr key={idx} className="hover:bg-[#F9FAFB]">
-                                  <td className="px-6 py-3 text-[13px] text-[#12332B] font-medium">{category}</td>
+                              <tr key={idx} className="hover:bg-[var(--theme-bg-page)]">
+                                  <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)] font-medium">{category}</td>
                                   <td className="px-6 py-3 text-[13px] text-right text-[#C05621] font-medium">{fmt(amount)}</td>
                               </tr>
                           ))}
                           {Object.keys(costByCategory).length === 0 && (
                               <tr>
-                                  <td colSpan={2} className="px-6 py-8 text-center text-[13px] text-[#9CA3AF]">No costs recorded</td>
+                                  <td colSpan={2} className="px-6 py-8 text-center text-[13px] text-[var(--theme-text-muted)]">No costs recorded</td>
                               </tr>
                           )}
                       </tbody>
-                      <tfoot className="bg-[#F8F9FB] border-t border-[#E5E9F0]">
+                      <tfoot className="bg-[#F8F9FB] border-t border-[var(--theme-border-default)]">
                           <tr>
-                              <td className="px-6 py-3 text-[13px] font-bold text-[#12332B]">Total Costs</td>
+                              <td className="px-6 py-3 text-[13px] font-bold text-[var(--theme-text-primary)]">Total Costs</td>
                               <td className="px-6 py-3 text-[13px] font-bold text-right text-[#C05621]">{fmt(directCost)}</td>
                           </tr>
                       </tfoot>

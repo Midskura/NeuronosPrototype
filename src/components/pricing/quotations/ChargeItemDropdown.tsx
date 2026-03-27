@@ -101,9 +101,9 @@ export function ChargeItemDropdown({
           width: "100%",
           padding: "8px 10px",
           fontSize: "13px",
-          border: hasStartedEditing ? "1px solid #F59E0B" : "1px solid #E5E7EB",
+          border: hasStartedEditing ? "1px solid #F59E0B" : "1px solid var(--theme-border-default)",
           borderRadius: "4px",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           outline: "none",
           fontFamily: "inherit",
           color: "var(--neuron-ink-primary)",
@@ -121,7 +121,7 @@ export function ChargeItemDropdown({
             right: 0,
             maxHeight: "200px",
             overflowY: "auto",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -138,11 +138,11 @@ export function ChargeItemDropdown({
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "var(--neuron-ink-primary)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "none",
                 borderBottom:
                   index < filteredCharges.length - 1
-                    ? "1px solid #F3F4F6"
+                    ? "1px solid var(--theme-border-subtle)"
                     : "none",
                 cursor: "pointer",
                 textAlign: "left",

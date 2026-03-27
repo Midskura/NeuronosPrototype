@@ -62,7 +62,7 @@ const sectionHeaderStyle: React.CSSProperties = {
   alignItems: "center",
   justifyContent: "space-between",
   padding: "14px 16px",
-  backgroundColor: "#F8FBFB",
+  backgroundColor: "var(--theme-bg-page)",
   borderBottom: "1px solid var(--neuron-ui-border)",
   cursor: "pointer",
   userSelect: "none",
@@ -202,7 +202,7 @@ function SucceedingRuleEditor({
           padding: "4px 6px",
           fontSize: "12px",
           color: "var(--neuron-ink-muted)",
-          backgroundColor: "#F3F4F6",
+          backgroundColor: "var(--theme-bg-surface-subtle)",
           borderRight: "1px solid var(--neuron-ui-border)",
         }}>
           PHP
@@ -403,7 +403,7 @@ export function ContractRateMatrixEditor({
       borderRadius: "var(--neuron-radius-m)",
       overflow: "hidden",
       marginBottom: "16px",
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
     }}>
       {/* Section Header */}
       <div
@@ -483,9 +483,9 @@ export function ContractRateMatrixEditor({
                 padding: "4px 10px",
                 fontSize: "11px",
                 fontWeight: 500,
-                color: "#6B7280",
-                backgroundColor: "#F3F4F6",
-                border: "1px solid #D1D5DB",
+                color: "var(--theme-text-muted)",
+                backgroundColor: "var(--theme-bg-surface-subtle)",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "4px",
                 cursor: "pointer",
                 display: "flex",
@@ -559,7 +559,7 @@ export function ContractRateMatrixEditor({
                           borderRadius: "3px",
                           outline: "none",
                           textAlign: "right",
-                          backgroundColor: "white",
+                          backgroundColor: "var(--theme-bg-surface)",
                         }}
                       />
                     ) : (
@@ -825,7 +825,7 @@ function RowGroup({
                 fontSize: "13px",
                 fontWeight: 500,
                 fontStyle: "italic",
-                color: "#6B7280",
+                color: "var(--theme-text-muted)",
                 textAlign: "right",
                 backgroundColor: viewMode ? "transparent" : "#F9FAFB",
                 borderRadius: "4px",
@@ -856,7 +856,7 @@ function RowGroup({
             <div style={{
               padding: "7px 10px",
               fontSize: "12px",
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               fontStyle: "italic",
             }}>
               —

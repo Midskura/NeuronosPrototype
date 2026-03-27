@@ -58,10 +58,10 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
         borderLeft: isSelected ? "2px solid #0F766E" : "2px solid transparent",
         backgroundColor: isSelected ? "#F0F7F5" : "transparent",
         padding: "12px 16px 12px 14px",
-        borderBottom: "1px solid #E5E9F0",
+        borderBottom: "1px solid var(--theme-border-default)",
         display: "block",
       }}
-      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "#F9FAFB"; }}
+      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
       onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
       aria-label={`Ticket: ${thread.subject}`}
       aria-selected={isSelected}
@@ -70,7 +70,7 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
         {/* Unread dot */}
         <div style={{ width: 8, flexShrink: 0, paddingTop: 5 }}>
           {thread.is_unread && (
-            <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#0F766E", marginLeft: 1 }} />
+            <div style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "var(--theme-action-primary-bg)", marginLeft: 1 }} />
           )}
         </div>
 
@@ -80,11 +80,11 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
           <div className="flex items-start justify-between gap-2 mb-1">
             <p
               className="truncate"
-              style={{ fontSize: 13, fontWeight: thread.is_unread ? 700 : 600, color: "#12332B", lineHeight: 1.4 }}
+              style={{ fontSize: 13, fontWeight: thread.is_unread ? 700 : 600, color: "var(--theme-text-primary)", lineHeight: 1.4 }}
             >
               {thread.subject}
             </p>
-            <span style={{ fontSize: 10, color: "#9CA3AF", whiteSpace: "nowrap", flexShrink: 0, marginTop: 2 }}>
+            <span style={{ fontSize: 10, color: "var(--theme-text-muted)", whiteSpace: "nowrap", flexShrink: 0, marginTop: 2 }}>
               {formatRelativeTime(thread.last_message_at)}
             </span>
           </div>
@@ -100,10 +100,10 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
           )}
 
           {/* Row 3: Sender + preview */}
-          <p className="truncate mb-1.5" style={{ fontSize: 11, color: "#667085" }}>
+          <p className="truncate mb-1.5" style={{ fontSize: 11, color: "var(--theme-text-muted)" }}>
             <span style={{ fontWeight: 500 }}>{senderName}</span>
             {thread.last_message_preview && (
-              <span style={{ color: "#9CA3AF" }}> · {thread.last_message_preview}</span>
+              <span style={{ color: "var(--theme-text-muted)" }}> · {thread.last_message_preview}</span>
             )}
           </p>
 
@@ -138,7 +138,7 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
             )}
 
             {(thread.attachment_count || 0) > 0 && (
-              <span className="flex items-center gap-0.5" style={{ fontSize: 11, color: "#9CA3AF" }}>
+              <span className="flex items-center gap-0.5" style={{ fontSize: 11, color: "var(--theme-text-muted)" }}>
                 <Paperclip size={10} />
                 {thread.attachment_count}
               </span>

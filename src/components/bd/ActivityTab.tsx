@@ -97,7 +97,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
 
         {/* Linked Bookings */}
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -123,7 +123,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
                   key={idx}
                   style={{
                     padding: "16px",
-                    backgroundColor: "#F9FAFB",
+                    backgroundColor: "var(--theme-bg-page)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     display: "flex",
@@ -153,7 +153,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
                     fontWeight: 500,
                     color: "var(--neuron-ink-secondary)",
                     padding: "6px 12px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "4px"
                   }}>
@@ -176,7 +176,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
               </p>
               <p style={{ 
                 fontSize: "13px",
-                color: "#9CA3AF",
+                color: "var(--theme-text-muted)",
                 margin: 0
               }}>
                 Operations will create service bookings and link them to this project
@@ -187,7 +187,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
 
         {/* Project Team */}
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px"
@@ -235,7 +235,7 @@ function TeamMember({
   return (
     <div style={{
       padding: "16px",
-      backgroundColor: "#F9FAFB",
+      backgroundColor: "var(--theme-bg-page)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "6px"
     }}>

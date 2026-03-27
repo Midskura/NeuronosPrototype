@@ -130,7 +130,7 @@ export function BillingsContentNew() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "var(--theme-bg-surface)"
       }}
     >
       {/* Header */}
@@ -148,14 +148,14 @@ export function BillingsContentNew() {
               style={{
                 fontSize: "32px",
                 fontWeight: 600,
-                color: "#12332B",
+                color: "var(--theme-text-primary)",
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}
             >
               Billings
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage customer invoices and billing transactions
             </p>
           </div>
@@ -179,10 +179,10 @@ export function BillingsContentNew() {
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={20} />
@@ -204,7 +204,7 @@ export function BillingsContentNew() {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
             />
@@ -233,9 +233,9 @@ export function BillingsContentNew() {
             }}
             options={[
               { value: "all", label: "All Time", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--neuron-ink-muted)" }} /> },
-              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#0F766E" }} /> },
+              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-action-primary-bg)" }} /> },
               { value: "this-week", label: "This Week", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
           />
         </div>

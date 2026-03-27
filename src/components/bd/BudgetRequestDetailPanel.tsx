@@ -35,7 +35,7 @@ export function BudgetRequestDetailPanel({
   const isAccountingStaff = 
     currentUser?.department === "Accounting" || 
     currentUser?.department === "Executive" ||
-    (currentUser?.department === "Accounting" && (currentUser?.role === "manager" || currentUser?.role === "director"));
+    (currentUser?.department === "Accounting" && currentUser?.role === "manager");
     
   const canApprove = showAccountingControls && isAccountingStaff && (
     request.status === "Submitted" || 
@@ -123,10 +123,10 @@ export function BudgetRequestDetailPanel({
             transition: "all 0.2s",
           }}
           onMouseEnter={(e) => {
-            if (!isApproving) e.currentTarget.style.backgroundColor = "#0D6560";
+            if (!isApproving) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
           }}
           onMouseLeave={(e) => {
-            if (!isApproving) e.currentTarget.style.backgroundColor = "#0F766E";
+            if (!isApproving) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
           }}
         >
           <CheckCircle2 size={16} />
@@ -153,10 +153,10 @@ export function BudgetRequestDetailPanel({
             transition: "all 0.2s",
           }}
           onMouseEnter={(e) => {
-            if (!isPosting) e.currentTarget.style.backgroundColor = "#0D6560";
+            if (!isPosting) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
           }}
           onMouseLeave={(e) => {
-            if (!isPosting) e.currentTarget.style.backgroundColor = "#0F766E";
+            if (!isPosting) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
           }}
         >
           <CheckCircle2 size={16} />
@@ -186,14 +186,14 @@ export function BudgetRequestDetailPanel({
       {/* Billing Prompt Modal */}
       {showBillingPrompt && (
         <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4" style={{ backdropFilter: "blur(2px)" }}>
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden animate-scale-in">
+          <div className="bg-[var(--theme-bg-surface)] rounded-xl shadow-xl max-w-md w-full overflow-hidden animate-scale-in">
             <div className="p-6">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
                 <FileText size={24} />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Create Invoice?</h3>
-              <p className="text-sm text-gray-600 mb-6">
-                This expense is linked to Project <span className="font-semibold text-[#0F766E]">{request.project_number}</span>. 
+              <h3 className="text-lg font-bold text-[var(--theme-text-primary)] mb-2">Create Invoice?</h3>
+              <p className="text-sm text-[var(--theme-text-secondary)] mb-6">
+                This expense is linked to Project <span className="font-semibold text-[var(--theme-action-primary-bg)]">{request.project_number}</span>. 
                 Would you like to create a Client Invoice for this amount now?
               </p>
               
@@ -204,7 +204,7 @@ export function BudgetRequestDetailPanel({
                     onStatusChange?.();
                     onClose();
                   }}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm font-medium text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                 >
                   No, Skip
                 </button>
@@ -213,7 +213,7 @@ export function BudgetRequestDetailPanel({
                     setShowBillingPrompt(false);
                     setShowBillingCreation(true);
                   }}
-                  className="flex-1 px-4 py-2 bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-lg text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-lg text-sm font-medium transition-colors"
                 >
                   Yes, Create Invoice
                 </button>

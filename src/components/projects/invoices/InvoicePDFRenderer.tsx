@@ -61,7 +61,7 @@ const s = StyleSheet.create({
     paddingTop: 36,
     paddingBottom: 48,
     paddingHorizontal: 44,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "var(--theme-bg-surface)",
   },
 
   // Header
@@ -76,34 +76,34 @@ const s = StyleSheet.create({
     borderBottomStyle: "solid",
   },
   companyBlock: { flexDirection: "column", gap: 2 },
-  companyName: { fontSize: 16, fontFamily: "Helvetica-Bold", color: "#12332B", letterSpacing: 1 },
-  companyTagline: { fontSize: 7.5, color: "#667085", marginTop: 2 },
+  companyName: { fontSize: 16, fontFamily: "Helvetica-Bold", color: "var(--theme-text-primary)", letterSpacing: 1 },
+  companyTagline: { fontSize: 7.5, color: "var(--theme-text-muted)", marginTop: 2 },
   companyAddress: { fontSize: 7.5, color: "#475467", marginTop: 4, lineHeight: 1.4 },
 
   invoiceMetaBlock: { flexDirection: "column", alignItems: "flex-end", gap: 3 },
-  invoiceTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: "#0F766E", letterSpacing: 0.5 },
+  invoiceTitle: { fontSize: 18, fontFamily: "Helvetica-Bold", color: "var(--theme-action-primary-bg)", letterSpacing: 0.5 },
   metaRow: { flexDirection: "row", gap: 6, marginTop: 2 },
-  metaLabel: { fontSize: 8, color: "#667085", width: 72, textAlign: "right" },
-  metaValue: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#12332B" },
+  metaLabel: { fontSize: 8, color: "var(--theme-text-muted)", width: 72, textAlign: "right" },
+  metaValue: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "var(--theme-text-primary)" },
 
   // Bill-to section
   billToSection: { flexDirection: "row", justifyContent: "space-between", marginBottom: 16 },
   billToBlock: { flex: 1 },
-  sectionLabel: { fontSize: 7, color: "#667085", fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 4 },
-  billToName: { fontSize: 10, fontFamily: "Helvetica-Bold", color: "#12332B" },
+  sectionLabel: { fontSize: 7, color: "var(--theme-text-muted)", fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.8, marginBottom: 4 },
+  billToName: { fontSize: 10, fontFamily: "Helvetica-Bold", color: "var(--theme-text-primary)" },
   billToLine: { fontSize: 8, color: "#475467", marginTop: 2, lineHeight: 1.4 },
 
   // Shipping info
   shipInfoGrid: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 16 },
   shipInfoItem: { flexDirection: "column", minWidth: 120 },
-  shipInfoLabel: { fontSize: 7, color: "#667085", fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.6 },
-  shipInfoValue: { fontSize: 8, color: "#12332B", marginTop: 1 },
+  shipInfoLabel: { fontSize: 7, color: "var(--theme-text-muted)", fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.6 },
+  shipInfoValue: { fontSize: 8, color: "var(--theme-text-primary)", marginTop: 1 },
 
   // Line items table
   table: { marginBottom: 12 },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: "var(--theme-bg-surface-subtle)",
     paddingVertical: 5,
     paddingHorizontal: 6,
     borderTopLeftRadius: 3,
@@ -125,18 +125,18 @@ const s = StyleSheet.create({
   colRate: { width: 72, textAlign: "right" },
   colAmt: { width: 72, textAlign: "right" },
 
-  thText: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#374151", textTransform: "uppercase", letterSpacing: 0.5 },
+  thText: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "var(--theme-text-secondary)", textTransform: "uppercase", letterSpacing: 0.5 },
   tdText: { fontSize: 8, color: "#111827" },
-  tdRemark: { fontSize: 7, color: "#6B7280", marginTop: 2 },
+  tdRemark: { fontSize: 7, color: "var(--theme-text-muted)", marginTop: 2 },
 
   // VAT section label
-  vatLabel: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#0F766E", paddingVertical: 3, paddingHorizontal: 6, backgroundColor: "#F0FDF4" },
+  vatLabel: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "var(--theme-action-primary-bg)", paddingVertical: 3, paddingHorizontal: 6, backgroundColor: "#F0FDF4" },
 
   // Totals
   totalsSection: { flexDirection: "row", justifyContent: "flex-end", marginBottom: 16 },
   totalsTable: { width: 200 },
   totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 2.5 },
-  totalLabel: { fontSize: 8, color: "#667085" },
+  totalLabel: { fontSize: 8, color: "var(--theme-text-muted)" },
   totalValue: { fontSize: 8, color: "#111827", fontFamily: "Helvetica-Bold" },
   grandTotalRow: {
     flexDirection: "row",
@@ -153,37 +153,37 @@ const s = StyleSheet.create({
   // Tax summary
   taxBox: {
     borderWidth: 1,
-    borderColor: "#E5E9F0",
+    borderColor: "var(--theme-border-default)",
     borderStyle: "solid",
     borderRadius: 3,
     padding: 8,
     marginBottom: 12,
   },
-  taxTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#374151", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.6 },
+  taxTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "var(--theme-text-secondary)", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.6 },
   taxRow: { flexDirection: "row", gap: 24, marginBottom: 2 },
   taxCell: { flexDirection: "column", gap: 1 },
-  taxCellLabel: { fontSize: 7, color: "#667085" },
+  taxCellLabel: { fontSize: 7, color: "var(--theme-text-muted)" },
   taxCellValue: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#111827" },
 
   // Bank details
   bankBox: {
     borderWidth: 1,
-    borderColor: "#E5E9F0",
+    borderColor: "var(--theme-border-default)",
     borderStyle: "solid",
     borderRadius: 3,
     padding: 8,
     marginBottom: 12,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "var(--theme-bg-page)",
   },
-  bankTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#374151", marginBottom: 5, textTransform: "uppercase", letterSpacing: 0.6 },
+  bankTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "var(--theme-text-secondary)", marginBottom: 5, textTransform: "uppercase", letterSpacing: 0.6 },
   bankGrid: { flexDirection: "row", gap: 24 },
   bankItem: { flexDirection: "column", gap: 1 },
-  bankLabel: { fontSize: 7, color: "#667085" },
+  bankLabel: { fontSize: 7, color: "var(--theme-text-muted)" },
   bankValue: { fontSize: 8, color: "#111827" },
 
   // Notes
   notesBox: { marginBottom: 12 },
-  notesTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "#374151", marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.6 },
+  notesTitle: { fontSize: 7.5, fontFamily: "Helvetica-Bold", color: "var(--theme-text-secondary)", marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.6 },
   notesText: { fontSize: 8, color: "#475467", lineHeight: 1.5 },
 
   // Signatories
@@ -191,8 +191,8 @@ const s = StyleSheet.create({
   signItem: { flexDirection: "column", alignItems: "center", width: "45%" },
   signLine: { width: "100%", borderBottomWidth: 1, borderBottomColor: "#374151", borderBottomStyle: "solid", marginBottom: 4 },
   signName: { fontSize: 8, fontFamily: "Helvetica-Bold", color: "#111827" },
-  signTitle: { fontSize: 7, color: "#667085", marginTop: 1 },
-  signRole: { fontSize: 7, color: "#9CA3AF", marginTop: 1, textTransform: "uppercase", letterSpacing: 0.5 },
+  signTitle: { fontSize: 7, color: "var(--theme-text-muted)", marginTop: 1 },
+  signRole: { fontSize: 7, color: "var(--theme-text-muted)", marginTop: 1, textTransform: "uppercase", letterSpacing: 0.5 },
 
   // Footer
   footer: {
@@ -207,7 +207,7 @@ const s = StyleSheet.create({
     borderTopStyle: "solid",
     paddingTop: 6,
   },
-  footerText: { fontSize: 7, color: "#9CA3AF" },
+  footerText: { fontSize: 7, color: "var(--theme-text-muted)" },
 });
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -362,14 +362,14 @@ export function InvoicePDFDocument({ invoice, options }: InvoicePDFDocumentProps
               <View><Text style={s.vatLabel}>VATable Items</Text></View>
               {renderItems(vatItems, 0)}
               <View style={{ paddingVertical: 3, paddingHorizontal: 6, borderBottomWidth: 1, borderBottomColor: "#E5E9F0", borderBottomStyle: "solid" }}>
-                <Text style={{ fontSize: 7.5, color: "#667085", textAlign: "right" }}>
+                <Text style={{ fontSize: 7.5, color: "var(--theme-text-muted)", textAlign: "right" }}>
                   VAT Subtotal: {fmtMoney(vatSubtotal, currency)}
                 </Text>
               </View>
               <View><Text style={s.vatLabel}>Non-VAT Items</Text></View>
               {renderItems(nonVatItems, vatItems.length)}
               <View style={{ paddingVertical: 3, paddingHorizontal: 6, borderBottomWidth: 1, borderBottomColor: "#E5E9F0", borderBottomStyle: "solid" }}>
-                <Text style={{ fontSize: 7.5, color: "#667085", textAlign: "right" }}>
+                <Text style={{ fontSize: 7.5, color: "var(--theme-text-muted)", textAlign: "right" }}>
                   Non-VAT Subtotal: {fmtMoney(nonVatSubtotal, currency)}
                 </Text>
               </View>

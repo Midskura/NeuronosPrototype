@@ -59,7 +59,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
             fontSize: "12px",
             fontWeight: 500,
             color: "var(--neuron-brand-teal)",
-            backgroundColor: "#F0FDF9",
+            backgroundColor: "var(--theme-bg-surface-tint)",
             border: "1px solid var(--neuron-brand-teal)",
             borderRadius: "6px",
             cursor: "pointer",
@@ -78,7 +78,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
         {containers.length === 0 ? (
           <div style={{
             padding: "24px",
-            backgroundColor: "#F8FBFB",
+            backgroundColor: "var(--theme-bg-page)",
             border: "1px dashed var(--neuron-ui-border)",
             borderRadius: "6px",
             textAlign: "center",
@@ -96,7 +96,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
                 gridTemplateColumns: disabled ? "1fr 120px" : "1fr 120px 40px",
                 gap: "12px",
                 padding: "12px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 alignItems: "center"
@@ -158,7 +158,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid #FCA5A5",
                   borderRadius: "6px",
                   color: "#DC2626",

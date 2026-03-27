@@ -258,7 +258,7 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
                       />
                       <div style={{
                         position: "absolute", top: "100%", right: 0, marginTop: "4px",
-                        backgroundColor: "white", borderRadius: "8px",
+                        backgroundColor: "var(--theme-bg-surface)", borderRadius: "8px",
                         border: "1px solid var(--neuron-ui-border)",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.12)", zIndex: 20,
                         minWidth: "200px", overflow: "hidden",
@@ -273,14 +273,14 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
                             style={{
                               display: "flex", alignItems: "center", gap: "8px",
                               width: "100%", padding: "10px 16px", fontSize: "13px",
-                              color: "#12332B", backgroundColor: "white",
-                              border: "none", borderBottom: "1px solid #F3F4F6",
+                              color: "var(--theme-text-primary)", backgroundColor: "var(--theme-bg-surface)",
+                              border: "none", borderBottom: "1px solid var(--theme-border-subtle)",
                               cursor: "pointer", textAlign: "left",
                             }}
                             onMouseEnter={e => e.currentTarget.style.backgroundColor = "#F0FAFA"}
                             onMouseLeave={e => e.currentTarget.style.backgroundColor = "white"}
                           >
-                            {getServiceIcon(svc.service_type, { size: 15, color: "#0F766E" })}
+                            {getServiceIcon(svc.service_type, { size: 15, color: "var(--theme-action-primary-bg)" })}
                             {svc.service_type}
                           </button>
                         ))}
@@ -335,7 +335,7 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
                 <p style={{ fontSize: "14px", color: "var(--neuron-ink-muted)", marginBottom: "8px" }}>
                   No services available
                 </p>
-                <p style={{ fontSize: "13px", color: "#9CA3AF", margin: 0 }}>
+                <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", margin: 0 }}>
                   No service specifications found for this project
                 </p>
               </div>

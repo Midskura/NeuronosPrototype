@@ -254,7 +254,7 @@ export const QuotationDocument = React.forwardRef<HTMLDivElement, QuotationDocum
                 color: #12332B !important;
                 text-transform: uppercase !important;
                 letter-spacing: 0.05em !important;
-                border-bottom: 1px solid #E5E7EB !important;
+                border-bottom: 1px solid var(--theme-border-default) !important;
                 padding-bottom: 6px !important;
                 margin-bottom: 10px !important;
                 margin-top: 16px !important;

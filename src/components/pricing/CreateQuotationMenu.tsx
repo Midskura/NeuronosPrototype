@@ -93,7 +93,7 @@ export function CreateQuotationMenu({ onSelect, buttonText, entityWord = "Quotat
             top: "calc(100% + 6px)",
             right: 0,
             width: "340px",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "0.8px solid #E5ECE9",
             borderRadius: "10px",
             boxShadow:
@@ -116,7 +116,7 @@ export function CreateQuotationMenu({ onSelect, buttonText, entityWord = "Quotat
                 gap: "12px",
                 width: "100%",
                 padding: "14px 16px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "none",
                 borderBottom:
                   idx < MENU_OPTIONS.length - 1
@@ -144,7 +144,7 @@ export function CreateQuotationMenu({ onSelect, buttonText, entityWord = "Quotat
                   style={{
                     fontSize: "13px",
                     fontWeight: 600,
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                     lineHeight: "19.5px",
                     marginBottom: "2px",
                   }}

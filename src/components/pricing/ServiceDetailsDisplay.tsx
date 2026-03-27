@@ -21,7 +21,7 @@ function FieldDisplay({ label, value, fullWidth = false }: FieldDisplayProps) {
       </label>
       <div style={{
         padding: "10px 14px",
-        backgroundColor: "#F9FAFB",
+        backgroundColor: "var(--theme-bg-page)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "6px",
         fontSize: "14px",
@@ -41,7 +41,7 @@ function CheckboxDisplay({ label, checked }: { label: string; checked: boolean }
       alignItems: "center",
       gap: "8px",
       padding: "10px 14px",
-      backgroundColor: "#F9FAFB",
+      backgroundColor: "var(--theme-bg-page)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "6px"
     }}>
@@ -96,12 +96,12 @@ function ContainersDisplay({ containers }: { containers: any[] }) {
         {containers.filter((c: any) => c.type && c.qty > 0).map((c: any, idx: number) => (
           <div key={c.id || idx} style={{
             padding: "8px 14px",
-            backgroundColor: "#F0FDFA",
+            backgroundColor: "var(--theme-bg-surface-tint)",
             border: "1px solid #0F766E",
             borderRadius: "6px",
             fontSize: "14px",
             fontWeight: 500,
-            color: "#0F766E"
+            color: "var(--theme-action-primary-bg)"
           }}>
             {c.qty}x {c.type}
           </div>
@@ -109,11 +109,11 @@ function ContainersDisplay({ containers }: { containers: any[] }) {
         {summary === "" && (
           <div style={{
             padding: "10px 14px",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             fontSize: "14px",
-            color: "#9CA3AF"
+            color: "var(--theme-text-muted)"
           }}>
             {"\u2014"}
           </div>
@@ -133,7 +133,7 @@ export function BrokerageServiceDisplay({ details }: { details: any }) {
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -227,7 +227,7 @@ export function ForwardingServiceDisplay({ details }: { details: any }) {
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -310,7 +310,7 @@ export function ForwardingServiceDisplay({ details }: { details: any }) {
 export function TruckingServiceDisplay({ details }: { details: any }) {
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -349,7 +349,7 @@ export function MarineInsuranceServiceDisplay({ details }: { details: any }) {
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -381,7 +381,7 @@ export function MarineInsuranceServiceDisplay({ details }: { details: any }) {
 export function OthersServiceDisplay({ details }: { details: any }) {
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",

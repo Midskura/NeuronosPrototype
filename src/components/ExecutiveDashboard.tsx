@@ -60,24 +60,24 @@ const HeroMetric = memo(({
       
       <div className="relative">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[12px] text-[#6B7A76] font-medium uppercase tracking-wide">
+          <span className="text-[12px] text-[var(--theme-text-muted)] font-medium uppercase tracking-wide">
             {label}
           </span>
-          <Icon size={20} className={alert ? "text-[#C94F3D]" : "text-[#6B7A76]"} />
+          <Icon size={20} className={alert ? "text-[#C94F3D]" : "text-[var(--theme-text-muted)]"} />
         </div>
         
-        <div className="text-[32px] font-semibold text-[#12332B] leading-none mb-2" style={{ letterSpacing: '-0.8px' }}>
+        <div className="text-[32px] font-semibold text-[var(--theme-text-primary)] leading-none mb-2" style={{ letterSpacing: '-0.8px' }}>
           {value}
         </div>
         
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
             {!isNeutral && (isPositive ? (
-              <TrendingUp size={14} className="text-[#0F766E]" />
+              <TrendingUp size={14} className="text-[var(--theme-action-primary-bg)]" />
             ) : (
               <TrendingDown size={14} className="text-[#C94F3D]" />
             ))}
-            <span className={`text-[13px] font-medium ${isNeutral ? 'text-[#6B7A76]' : isPositive ? 'text-[#0F766E]' : 'text-[#C94F3D]'}`}>
+            <span className={`text-[13px] font-medium ${isNeutral ? 'text-[var(--theme-text-muted)]' : isPositive ? 'text-[var(--theme-action-primary-bg)]' : 'text-[#C94F3D]'}`}>
               {trendValue}
             </span>
           </div>
@@ -85,7 +85,7 @@ const HeroMetric = memo(({
           {subtext && (
             <>
               <span className="text-[#E5ECE9]">·</span>
-              <span className="text-[11px] text-[#6B7A76]">
+              <span className="text-[11px] text-[var(--theme-text-muted)]">
                 {subtext}
               </span>
             </>
@@ -216,23 +216,23 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
   ], []);
 
   return (
-    <div className="h-full flex flex-col" style={{ background: "#FFFFFF" }}>
+    <div className="h-full flex flex-col" style={{ background: "var(--theme-bg-surface)" }}>
       <div className="flex-1 overflow-y-auto">
         <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "32px 48px" }}>
           
           {/* Page Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-[32px] font-semibold text-[#12332B] mb-1" style={{ letterSpacing: '-1.2px' }}>
+              <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1" style={{ letterSpacing: '-1.2px' }}>
                 Executive Dashboard
               </h1>
-              <p className="text-[14px] text-[#6B7A76]">
+              <p className="text-[14px] text-[var(--theme-text-muted)]">
                 Cash flow, margins, and coordination performance for asset-light forwarding
               </p>
             </div>
             
             <Select value={timeframe} onValueChange={setTimeframe}>
-              <SelectTrigger className="w-[180px] bg-white border-[#E5E9F0]">
+              <SelectTrigger className="w-[180px] bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -248,11 +248,11 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
           <div className="mb-6 p-4 bg-[#FEF2F2] border border-[#FEE2E2] rounded-lg flex items-start gap-3">
             <AlertTriangle size={20} className="text-[#EF4444] mt-0.5 flex-shrink-0" />
             <div className="flex-1">
-              <div className="text-[14px] font-semibold text-[#12332B] mb-1">
+              <div className="text-[14px] font-semibold text-[var(--theme-text-primary)] mb-1">
                 Cash Flow Alert
               </div>
-              <div className="text-[13px] text-[#6B7A76]">
-                3 clients with invoices overdue 60+ days totaling <span className="font-semibold text-[#12332B]">₱54,200</span>. 
+              <div className="text-[13px] text-[var(--theme-text-muted)]">
+                3 clients with invoices overdue 60+ days totaling <span className="font-semibold text-[var(--theme-text-primary)]">₱54,200</span>. 
                 Review payment terms in Client Intelligence section.
               </div>
             </div>
@@ -300,10 +300,10 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
             <NeuronCard padding="lg" className="lg:col-span-2" style={{ contain: 'layout style paint', willChange: 'contents' }}>
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                  <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                     Cash Flow Position
                   </h3>
-                  <p className="text-[13px] text-[#6B7A76]">
+                  <p className="text-[13px] text-[var(--theme-text-muted)]">
                     Receivables vs payables - your working capital health
                   </p>
                 </div>
@@ -316,15 +316,15 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                   <div className="flex items-center gap-6 mb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0F766E' }} />
-                      <span className="text-[12px] text-[#6B7A76]">Receivables</span>
+                      <span className="text-[12px] text-[var(--theme-text-muted)]">Receivables</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#9CA3AF' }} />
-                      <span className="text-[12px] text-[#6B7A76]">Payables</span>
+                      <span className="text-[12px] text-[var(--theme-text-muted)]">Payables</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#14B8A6' }} />
-                      <span className="text-[12px] text-[#6B7A76]">Net Position</span>
+                      <span className="text-[12px] text-[var(--theme-text-muted)]">Net Position</span>
                     </div>
                   </div>
                   {/* Bars */}
@@ -350,8 +350,8 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                               title={`Net Position: ₱${(item.netPosition / 1000).toFixed(0)}K`}
                             />
                           </div>
-                          <div className="border-t border-[#E5E9F0] w-full pt-2">
-                            <span className="text-[12px] text-[#6B7A76] block text-center">{item.month}</span>
+                          <div className="border-t border-[var(--theme-border-default)] w-full pt-2">
+                            <span className="text-[12px] text-[var(--theme-text-muted)] block text-center">{item.month}</span>
                           </div>
                         </div>
                       );
@@ -363,10 +363,10 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
 
             <NeuronCard padding="lg">
               <div className="mb-6">
-                <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                   Payment Aging
                 </h3>
-                <p className="text-[13px] text-[#6B7A76]">
+                <p className="text-[13px] text-[var(--theme-text-muted)]">
                   Client receivables breakdown
                 </p>
               </div>
@@ -375,8 +375,8 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                 {paymentBehaviorData.map((item, idx) => (
                   <div key={idx}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[13px] font-medium text-[#12332B]">{item.name}</span>
-                      <span className="text-[13px] font-semibold text-[#0F766E]">{item.amount}</span>
+                      <span className="text-[13px] font-medium text-[var(--theme-text-primary)]">{item.name}</span>
+                      <span className="text-[13px] font-semibold text-[var(--theme-action-primary-bg)]">{item.amount}</span>
                     </div>
                     <div className="w-full h-2 bg-[#E5E9F0] rounded-full overflow-hidden">
                       <div 
@@ -387,15 +387,15 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                         }}
                       />
                     </div>
-                    <div className="text-[11px] text-[#6B7A76] mt-1">{item.value}% of total</div>
+                    <div className="text-[11px] text-[var(--theme-text-muted)] mt-1">{item.value}% of total</div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 pt-6 border-t border-[#E5E9F0]">
+              <div className="mt-6 pt-6 border-t border-[var(--theme-border-default)]">
                 <div className="flex items-center justify-between">
-                  <span className="text-[12px] text-[#6B7A76]">Total Outstanding</span>
-                  <span className="text-[16px] font-semibold text-[#12332B]">₱678,000</span>
+                  <span className="text-[12px] text-[var(--theme-text-muted)]">Total Outstanding</span>
+                  <span className="text-[16px] font-semibold text-[var(--theme-text-primary)]">₱678,000</span>
                 </div>
               </div>
             </NeuronCard>
@@ -405,27 +405,27 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <NeuronCard padding="lg">
               <div className="mb-6">
-                <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                   Margin by Service Type
                 </h3>
-                <p className="text-[13px] text-[#6B7A76]">
+                <p className="text-[13px] text-[var(--theme-text-muted)]">
                   Where you make the most profit
                 </p>
               </div>
               
               <div className="space-y-4">
                 {marginByServiceData.map((item, idx) => (
-                  <div key={idx} className="p-4 bg-[#F9FAFB] rounded-lg">
+                  <div key={idx} className="p-4 bg-[var(--theme-bg-page)] rounded-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[14px] font-medium text-[#12332B]">{item.service}</span>
-                      <span className="text-[14px] font-semibold text-[#0F766E]">{item.margin}%</span>
+                      <span className="text-[14px] font-medium text-[var(--theme-text-primary)]">{item.service}</span>
+                      <span className="text-[14px] font-semibold text-[var(--theme-action-primary-bg)]">{item.margin}%</span>
                     </div>
-                    <div className="flex items-center gap-4 text-[12px] text-[#6B7A76]">
+                    <div className="flex items-center gap-4 text-[12px] text-[var(--theme-text-muted)]">
                       <span>Revenue: ₱{(item.revenue / 1000).toFixed(0)}K</span>
                       <span>·</span>
                       <span>Cost: ₱{(item.cost / 1000).toFixed(0)}K</span>
                       <span>·</span>
-                      <span className="font-medium text-[#12332B]">
+                      <span className="font-medium text-[var(--theme-text-primary)]">
                         Profit: ₱{((item.revenue - item.cost) / 1000).toFixed(0)}K
                       </span>
                     </div>
@@ -436,10 +436,10 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
 
             <NeuronCard padding="lg" style={{ contain: 'layout style paint', willChange: 'contents' }}>
               <div className="mb-6">
-                <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                   Booking Volume & On-Time Rate
                 </h3>
-                <p className="text-[13px] text-[#6B7A76]">
+                <p className="text-[13px] text-[var(--theme-text-muted)]">
                   Weekly coordination performance
                 </p>
               </div>
@@ -451,11 +451,11 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                   <div className="flex items-center gap-6 mb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#9CA3AF' }} />
-                      <span className="text-[12px] text-[#6B7A76]">Total Bookings</span>
+                      <span className="text-[12px] text-[var(--theme-text-muted)]">Total Bookings</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0F766E' }} />
-                      <span className="text-[12px] text-[#6B7A76]">On-Time Deliveries</span>
+                      <span className="text-[12px] text-[var(--theme-text-muted)]">On-Time Deliveries</span>
                     </div>
                   </div>
                   {/* Bars */}
@@ -476,8 +476,8 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                               title={`On-Time: ${item.onTime}`}
                             />
                           </div>
-                          <div className="border-t border-[#E5E9F0] w-full pt-2">
-                            <span className="text-[12px] text-[#6B7A76] block text-center">{item.week}</span>
+                          <div className="border-t border-[var(--theme-border-default)] w-full pt-2">
+                            <span className="text-[12px] text-[var(--theme-text-muted)] block text-center">{item.week}</span>
                           </div>
                         </div>
                       );
@@ -493,38 +493,38 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
             <NeuronCard padding="lg">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                  <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                     Top Clients by Profitability
                   </h3>
-                  <p className="text-[13px] text-[#6B7A76]">
+                  <p className="text-[13px] text-[var(--theme-text-muted)]">
                     Not just revenue — who actually makes you money
                   </p>
                 </div>
-                <button className="px-4 py-2 text-[13px] font-medium text-[#0F766E] hover:bg-[#E8F2EE] rounded-lg transition-colors">
+                <button className="px-4 py-2 text-[13px] font-medium text-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-bg-surface-tint)] rounded-lg transition-colors">
                   View All Clients
                 </button>
               </div>
 
-              <div className="overflow-hidden rounded-lg border border-[#E5E9F0]">
+              <div className="overflow-hidden rounded-lg border border-[var(--theme-border-default)]">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-[#F9FAFB] border-b border-[#E5E9F0]">
-                      <th className="px-4 py-3 text-left text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                    <tr className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+                      <th className="px-4 py-3 text-left text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Client
                       </th>
-                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Revenue (MTD)
                       </th>
-                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Margin
                       </th>
-                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Bookings
                       </th>
-                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                      <th className="px-4 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Avg Payment Days
                       </th>
-                      <th className="px-4 py-3 text-center text-[11px] font-semibold text-[#6B7A76] uppercase tracking-wide">
+                      <th className="px-4 py-3 text-center text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">
                         Status
                       </th>
                     </tr>
@@ -533,32 +533,32 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                     {topClientsByProfit.map((client, idx) => (
                       <tr 
                         key={idx} 
-                        className="border-b border-[#E5E9F0] last:border-0 hover:bg-[#F9FAFB] transition-colors"
+                        className="border-b border-[var(--theme-border-default)] last:border-0 hover:bg-[var(--theme-bg-page)] transition-colors"
                       >
                         <td className="px-4 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-[#E8F2EE] flex items-center justify-center">
-                              <Users size={14} className="text-[#0F766E]" />
+                            <div className="w-8 h-8 rounded-full bg-[var(--theme-bg-surface-tint)] flex items-center justify-center">
+                              <Users size={14} className="text-[var(--theme-action-primary-bg)]" />
                             </div>
-                            <span className="text-[13px] font-medium text-[#12332B]">
+                            <span className="text-[13px] font-medium text-[var(--theme-text-primary)]">
                               {client.client}
                             </span>
                           </div>
                         </td>
-                        <td className="px-4 py-4 text-right text-[13px] font-semibold text-[#12332B]">
+                        <td className="px-4 py-4 text-right text-[13px] font-semibold text-[var(--theme-text-primary)]">
                           {client.revenue}
                         </td>
                         <td className="px-4 py-4 text-right">
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#E8F2EE] text-[12px] font-semibold text-[#0F766E]">
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-[var(--theme-bg-surface-tint)] text-[12px] font-semibold text-[var(--theme-action-primary-bg)]">
                             {client.margin}
                           </span>
                         </td>
-                        <td className="px-4 py-4 text-right text-[13px] text-[#6B7A76]">
+                        <td className="px-4 py-4 text-right text-[13px] text-[var(--theme-text-muted)]">
                           {client.bookings}
                         </td>
                         <td className="px-4 py-4 text-right">
                           <span className={`text-[13px] font-medium ${
-                            client.paymentDays <= 30 ? 'text-[#0F766E]' : 
+                            client.paymentDays <= 30 ? 'text-[var(--theme-action-primary-bg)]' : 
                             client.paymentDays <= 45 ? 'text-[#F97316]' : 
                             'text-[#EF4444]'
                           }`}>
@@ -568,7 +568,7 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                         <td className="px-4 py-4 text-center">
                           <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-medium ${
                             client.status === 'Excellent' 
-                              ? 'bg-[#E8F2EE] text-[#0F766E]' 
+                              ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' 
                               : 'bg-[#FEF3C7] text-[#D97706]'
                           }`}>
                             {client.status}
@@ -587,10 +587,10 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
             <NeuronCard padding="lg">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-[18px] font-semibold text-[#12332B] mb-1">
+                  <h3 className="text-[18px] font-semibold text-[var(--theme-text-primary)] mb-1">
                     Reliable Subcontractors
                   </h3>
-                  <p className="text-[13px] text-[#6B7A76]">
+                  <p className="text-[13px] text-[var(--theme-text-muted)]">
                     Your coordination network performance
                   </p>
                 </div>
@@ -600,25 +600,25 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                 {topSubcontractors.map((sub, idx) => (
                   <div 
                     key={idx}
-                    className="p-4 bg-[#F9FAFB] rounded-lg border border-[#E5E9F0] hover:border-[#0F766E] transition-colors"
+                    className="p-4 bg-[var(--theme-bg-page)] rounded-lg border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] transition-colors"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-[#E8F2EE] flex items-center justify-center">
-                          <Truck size={18} className="text-[#0F766E]" />
+                        <div className="w-10 h-10 rounded-lg bg-[var(--theme-bg-surface-tint)] flex items-center justify-center">
+                          <Truck size={18} className="text-[var(--theme-action-primary-bg)]" />
                         </div>
                         <div>
-                          <div className="text-[14px] font-medium text-[#12332B] mb-0.5">
+                          <div className="text-[14px] font-medium text-[var(--theme-text-primary)] mb-0.5">
                             {sub.name}
                           </div>
-                          <div className="text-[11px] text-[#6B7A76]">
+                          <div className="text-[11px] text-[var(--theme-text-muted)]">
                             {sub.bookings} bookings this month
                           </div>
                         </div>
                       </div>
                       <span className={`inline-flex px-2 py-1 rounded text-[10px] font-semibold ${
                         sub.rating === 'Excellent' 
-                          ? 'bg-[#E8F2EE] text-[#0F766E]' 
+                          ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' 
                           : 'bg-[#FEF3C7] text-[#D97706]'
                       }`}>
                         {sub.rating}
@@ -626,12 +626,12 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <div className="text-[11px] text-[#6B7A76] mb-1">On-Time Rate</div>
-                        <div className="text-[15px] font-semibold text-[#0F766E]">{sub.onTimeRate}</div>
+                        <div className="text-[11px] text-[var(--theme-text-muted)] mb-1">On-Time Rate</div>
+                        <div className="text-[15px] font-semibold text-[var(--theme-action-primary-bg)]">{sub.onTimeRate}</div>
                       </div>
                       <div>
-                        <div className="text-[11px] text-[#6B7A76] mb-1">Avg Cost</div>
-                        <div className="text-[15px] font-semibold text-[#12332B]">{sub.avgCost}</div>
+                        <div className="text-[11px] text-[var(--theme-text-muted)] mb-1">Avg Cost</div>
+                        <div className="text-[15px] font-semibold text-[var(--theme-text-primary)]">{sub.avgCost}</div>
                       </div>
                     </div>
                   </div>
@@ -648,11 +648,11 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                   <AlertCircle size={18} className="text-[#EF4444]" />
                 </div>
                 <div>
-                  <div className="text-[13px] text-[#6B7A76]">Overdue Payments</div>
-                  <div className="text-[20px] font-semibold text-[#12332B]">₱54,200</div>
+                  <div className="text-[13px] text-[var(--theme-text-muted)]">Overdue Payments</div>
+                  <div className="text-[20px] font-semibold text-[var(--theme-text-primary)]">₱54,200</div>
                 </div>
               </div>
-              <div className="text-[12px] text-[#6B7A76]">
+              <div className="text-[12px] text-[var(--theme-text-muted)]">
                 3 clients with 60+ day overdue invoices
               </div>
             </NeuronCard>
@@ -663,26 +663,26 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                   <Clock size={18} className="text-[#F97316]" />
                 </div>
                 <div>
-                  <div className="text-[13px] text-[#6B7A76]">Delayed Shipments</div>
-                  <div className="text-[20px] font-semibold text-[#12332B]">6 Active</div>
+                  <div className="text-[13px] text-[var(--theme-text-muted)]">Delayed Shipments</div>
+                  <div className="text-[20px] font-semibold text-[var(--theme-text-primary)]">6 Active</div>
                 </div>
               </div>
-              <div className="text-[12px] text-[#6B7A76]">
+              <div className="text-[12px] text-[var(--theme-text-muted)]">
                 2 critical delays requiring intervention
               </div>
             </NeuronCard>
 
             <NeuronCard padding="lg">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-[#E8F2EE] flex items-center justify-center">
-                  <FileCheck size={18} className="text-[#0F766E]" />
+                <div className="w-10 h-10 rounded-lg bg-[var(--theme-bg-surface-tint)] flex items-center justify-center">
+                  <FileCheck size={18} className="text-[var(--theme-action-primary-bg)]" />
                 </div>
                 <div>
-                  <div className="text-[13px] text-[#6B7A76]">Doc Compliance</div>
-                  <div className="text-[20px] font-semibold text-[#12332B]">94.3%</div>
+                  <div className="text-[13px] text-[var(--theme-text-muted)]">Doc Compliance</div>
+                  <div className="text-[20px] font-semibold text-[var(--theme-text-primary)]">94.3%</div>
                 </div>
               </div>
-              <div className="text-[12px] text-[#6B7A76]">
+              <div className="text-[12px] text-[var(--theme-text-muted)]">
                 4 shipments pending customs docs
               </div>
             </NeuronCard>

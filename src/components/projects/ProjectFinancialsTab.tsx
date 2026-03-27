@@ -69,16 +69,16 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
       }}
     >
       <div style={{ marginBottom: "32px" }}>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", margin: 0 }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", margin: 0 }}>
           Project Financials
         </h2>
-        <p style={{ color: "#6B7280", marginTop: "4px" }}>
+        <p style={{ color: "var(--theme-text-muted)", marginTop: "4px" }}>
           Profit & Loss analysis for Project {project.project_number}
         </p>
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: "center", padding: "64px", color: "#6B7280" }}>
+        <div style={{ textAlign: "center", padding: "64px", color: "var(--theme-text-muted)" }}>
           Loading financials...
         </div>
       ) : (
@@ -93,31 +93,31 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
           >
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 padding: "24px",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#F0FDF9", color: "#0F766E" }}>
+                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" }}>
                   <TrendingUp size={20} />
                 </div>
-                <span style={{ fontSize: "14px", fontWeight: 500, color: "#6B7280" }}>Total Revenue</span>
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Revenue</span>
               </div>
-              <div style={{ fontSize: "28px", fontWeight: 700, color: "#12332B" }}>{formatCurrency(totalRevenue)}</div>
-              <div style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--theme-text-primary)" }}>{formatCurrency(totalRevenue)}</div>
+              <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
                 From {billings.length} invoices
               </div>
             </div>
 
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 padding: "24px",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
               }}
             >
@@ -125,20 +125,20 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                 <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#FFF7ED", color: "#C05621" }}>
                   <TrendingDown size={20} />
                 </div>
-                <span style={{ fontSize: "14px", fontWeight: 500, color: "#6B7280" }}>Total Cost</span>
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Cost</span>
               </div>
               <div style={{ fontSize: "28px", fontWeight: 700, color: "#C05621" }}>{formatCurrency(totalCost)}</div>
-              <div style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>
+              <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
                 From {expenses.length} expenses
               </div>
             </div>
 
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 padding: "24px",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
               }}
             >
@@ -146,20 +146,20 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                 <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#F0FDF4", color: "#15803D" }}>
                   <DollarSign size={20} />
                 </div>
-                <span style={{ fontSize: "14px", fontWeight: 500, color: "#6B7280" }}>Gross Profit</span>
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Gross Profit</span>
               </div>
               <div style={{ fontSize: "28px", fontWeight: 700, color: grossProfit >= 0 ? "#15803D" : "#DC2626" }}>
                 {formatCurrency(grossProfit)}
               </div>
-              <div style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>Net Income</div>
+              <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>Net Income</div>
             </div>
 
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 padding: "24px",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
               }}
             >
@@ -167,44 +167,44 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                 <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#EFF6FF", color: "#1D4ED8" }}>
                   <Activity size={20} />
                 </div>
-                <span style={{ fontSize: "14px", fontWeight: 500, color: "#6B7280" }}>Profit Margin</span>
+                <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Profit Margin</span>
               </div>
               <div style={{ fontSize: "28px", fontWeight: 700, color: "#1D4ED8" }}>{profitMargin.toFixed(1)}%</div>
-              <div style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>Return on Sales</div>
+              <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>Return on Sales</div>
             </div>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 padding: "24px",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
               }}
             >
-              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                 Financial Breakdown
               </h3>
 
               <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead style={{ position: "sticky", top: 0, backgroundColor: "white", zIndex: 1 }}>
-                    <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
-                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "12px", color: "#6B7280" }}>DESCRIPTION</th>
-                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "12px", color: "#6B7280" }}>TYPE</th>
-                      <th style={{ textAlign: "right", padding: "12px 8px", fontSize: "12px", color: "#6B7280" }}>AMOUNT</th>
+                  <thead style={{ position: "sticky", top: 0, backgroundColor: "var(--theme-bg-surface)", zIndex: 1 }}>
+                    <tr style={{ borderBottom: "1px solid var(--theme-border-default)" }}>
+                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "12px", color: "var(--theme-text-muted)" }}>DESCRIPTION</th>
+                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "12px", color: "var(--theme-text-muted)" }}>TYPE</th>
+                      <th style={{ textAlign: "right", padding: "12px 8px", fontSize: "12px", color: "var(--theme-text-muted)" }}>AMOUNT</th>
                     </tr>
                   </thead>
                   <tbody>
                     {timelineItems.map((item, idx) => (
-                      <tr key={`${item.type}-${item.id || idx}`} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                      <tr key={`${item.type}-${item.id || idx}`} style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}>
                         <td style={{ padding: "16px 8px" }}>
-                          <div style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                          <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                             {item.purpose || item.description || item.invoice_number || "Financial Entry"}
                           </div>
-                          <div style={{ fontSize: "12px", color: "#9CA3AF" }}>
+                          <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                             {item.voucher_number || item.invoice_number || item.id} •{" "}
                             {new Date(item.request_date || item.invoice_date || item.created_at).toLocaleDateString()}
                           </div>
@@ -238,7 +238,7 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                     ))}
                     {timelineItems.length === 0 && (
                       <tr>
-                        <td colSpan={3} style={{ textAlign: "center", padding: "32px", color: "#9CA3AF" }}>
+                        <td colSpan={3} style={{ textAlign: "center", padding: "32px", color: "var(--theme-text-muted)" }}>
                           No financial data available
                         </td>
                       </tr>
@@ -250,16 +250,16 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
 
             <div
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 borderRadius: "12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 padding: "24px",
                 boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
-              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+              <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                 Summary Chart
               </h3>
               <div style={{ width: "100%", height: "300px" }}>

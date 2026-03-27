@@ -123,7 +123,7 @@ function buildQuantityInputs(
       label: "Containers",
       key: "containers",
       value: quantities.containers ?? 0,
-      icon: <Container size={14} className="text-[#0F766E]" />,
+      icon: <Container size={14} className="text-[var(--theme-action-primary-bg)]" />,
       ...(includeSource && {
         source: describeSource("containers", booking),
         sourceEntries: extractSourceEntries("containers", booking),
@@ -133,7 +133,7 @@ function buildQuantityInputs(
       label: "Bills of Lading",
       key: "bls",
       value: quantities.bls ?? 1,
-      icon: <FileText size={14} className="text-[#0F766E]" />,
+      icon: <FileText size={14} className="text-[var(--theme-action-primary-bg)]" />,
       ...(includeSource && {
         source: describeSource("bls", booking),
         sourceEntries: extractSourceEntries("bls", booking),
@@ -143,7 +143,7 @@ function buildQuantityInputs(
       label: "Document Sets",
       key: "sets",
       value: quantities.sets ?? 1,
-      icon: <Stamp size={14} className="text-[#0F766E]" />,
+      icon: <Stamp size={14} className="text-[var(--theme-action-primary-bg)]" />,
       ...(includeSource && { source: describeSource("sets", booking) }),
     });
   } else if (type === "trucking") {
@@ -151,7 +151,7 @@ function buildQuantityInputs(
       label: "Trucks / Containers",
       key: "containers",
       value: quantities.containers ?? 1,
-      icon: <Container size={14} className="text-[#0F766E]" />,
+      icon: <Container size={14} className="text-[var(--theme-action-primary-bg)]" />,
       ...(includeSource && {
         source: describeSource("containers", booking),
         sourceEntries: extractSourceEntries("containers", booking),
@@ -162,7 +162,7 @@ function buildQuantityInputs(
       label: "Shipments",
       key: "shipments",
       value: quantities.shipments ?? 1,
-      icon: <Ship size={14} className="text-[#0F766E]" />,
+      icon: <Ship size={14} className="text-[var(--theme-action-primary-bg)]" />,
       ...(includeSource && { source: describeSource("shipments", booking) }),
     });
   }
@@ -194,16 +194,16 @@ export function QuantityDisplaySection({
     : "These values were derived from the quotation form";
 
   return (
-    <div className="px-8 py-6 border-b border-[#E5E9F0]">
+    <div className="px-8 py-6 border-b border-[var(--theme-border-default)]">
       {/* Heading row */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[13px] font-semibold text-[#12332B] uppercase tracking-wide">
+        <h3 className="text-[13px] font-semibold text-[var(--theme-text-primary)] uppercase tracking-wide">
           {isEditable ? "Detected Quantities" : "Quantities Used"}
         </h3>
         {isEditable && onReset && (
           <button
             onClick={onReset}
-            className="flex items-center gap-1.5 text-[11px] text-[#667085] hover:text-[#0F766E] transition-colors"
+            className="flex items-center gap-1.5 text-[11px] text-[var(--theme-text-muted)] hover:text-[var(--theme-action-primary-bg)] transition-colors"
             title="Reset to auto-detected values"
           >
             <RefreshCw size={12} />
@@ -217,14 +217,14 @@ export function QuantityDisplaySection({
         {inputs.map((input) => (
           <div key={input.key}>
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-md bg-[#F0FDF9] flex items-center justify-center shrink-0">
+              <div className="w-8 h-8 rounded-md bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0">
                 {input.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-[13px] font-medium text-[#12332B]">{input.label}</div>
+                <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">{input.label}</div>
                 {isEditable && input.source && (
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] text-[#667085] truncate">{input.source}</span>
+                    <span className="text-[11px] text-[var(--theme-text-muted)] truncate">{input.source}</span>
                   </div>
                 )}
               </div>
@@ -238,10 +238,10 @@ export function QuantityDisplaySection({
                   onChange={(e) =>
                     onQuantityChange?.(input.key, parseInt(e.target.value) || 0)
                   }
-                  className="w-16 h-8 text-center text-[13px] font-medium text-[#12332B] border border-[#D1D5DB] rounded-[4px] bg-white focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] outline-none"
+                  className="w-16 h-8 text-center text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[var(--theme-bg-surface)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none"
                 />
               ) : (
-                <div className="w-16 h-8 flex items-center justify-center text-[13px] font-medium text-[#12332B] border border-[#E5E9F0] rounded-[4px] bg-[#F8FAFC]">
+                <div className="w-16 h-8 flex items-center justify-center text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[#F8FAFC]">
                   {input.value}
                 </div>
               )}
@@ -249,12 +249,12 @@ export function QuantityDisplaySection({
 
             {/* Source entry chips (editable mode only) */}
             {isEditable && input.sourceEntries && input.sourceEntries.length > 0 && (
-              <div className="ml-11 mt-1.5 px-3 py-2.5 rounded-[6px] bg-[#F8FAFC] border border-[#E5E9F0]">
+              <div className="ml-11 mt-1.5 px-3 py-2.5 rounded-[6px] bg-[#F8FAFC] border border-[var(--theme-border-default)]">
                 <div className="flex flex-wrap gap-1.5">
                   {input.sourceEntries.map((entry, idx) => (
                     <span
                       key={idx}
-                      className="inline-block px-2.5 py-1 rounded-[4px] bg-white border border-[#E5E9F0] text-[11px] text-[#12332B]"
+                      className="inline-block px-2.5 py-1 rounded-[4px] bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] text-[11px] text-[var(--theme-text-primary)]"
                       style={{ fontFamily: "'Inter', sans-serif" }}
                     >
                       {entry}
@@ -269,20 +269,20 @@ export function QuantityDisplaySection({
         {/* ✨ Multi-line trucking dispatch lines — replaces selectionContext when >1 line item */}
         {serviceType.toLowerCase() === "trucking" && truckingLineItems && truckingLineItems.length > 1 && (
           <div className="mt-1">
-            <div className="text-[11px] font-semibold text-[#667085] uppercase tracking-wide mb-2 ml-11">
+            <div className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2 ml-11">
               Destinations ({truckingLineItems.length})
             </div>
             {truckingLineItems.map((li) => (
               <div key={li.id} className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-8 rounded-md bg-[#F0FDF9] flex items-center justify-center shrink-0">
-                  <Truck size={14} className="text-[#0F766E]" />
+                <div className="w-8 h-8 rounded-md bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0">
+                  <Truck size={14} className="text-[var(--theme-action-primary-bg)]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-medium text-[#12332B]">
+                  <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">
                     {li.destination || "—"}
                   </div>
                 </div>
-                <div className="h-8 flex items-center justify-center px-3 text-[12px] font-medium text-[#12332B] border border-[#E5E9F0] rounded-[4px] bg-[#F8FAFC] whitespace-nowrap">
+                <div className="h-8 flex items-center justify-center px-3 text-[12px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[#F8FAFC] whitespace-nowrap">
                   {li.truckType || "—"} × {li.quantity}
                 </div>
               </div>
@@ -296,26 +296,26 @@ export function QuantityDisplaySection({
           <>
             {selectionContext.truckType && (
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#F0FDF9] flex items-center justify-center shrink-0">
-                  <Truck size={14} className="text-[#0F766E]" />
+                <div className="w-8 h-8 rounded-md bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0">
+                  <Truck size={14} className="text-[var(--theme-action-primary-bg)]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-medium text-[#12332B]">Truck Type</div>
+                  <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">Truck Type</div>
                 </div>
-                <div className="h-8 flex items-center justify-center px-3 text-[13px] font-medium text-[#12332B] border border-[#E5E9F0] rounded-[4px] bg-[#F8FAFC]">
+                <div className="h-8 flex items-center justify-center px-3 text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[#F8FAFC]">
                   {selectionContext.truckType}
                 </div>
               </div>
             )}
             {selectionContext.destination && (
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-md bg-[#F0FDF9] flex items-center justify-center shrink-0">
-                  <MapPin size={14} className="text-[#0F766E]" />
+                <div className="w-8 h-8 rounded-md bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0">
+                  <MapPin size={14} className="text-[var(--theme-action-primary-bg)]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-medium text-[#12332B]">Destination</div>
+                  <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">Destination</div>
                 </div>
-                <div className="h-8 flex items-center justify-center px-3 text-[13px] font-medium text-[#12332B] border border-[#E5E9F0] rounded-[4px] bg-[#F8FAFC]">
+                <div className="h-8 flex items-center justify-center px-3 text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[#F8FAFC]">
                   {selectionContext.destination}
                 </div>
               </div>

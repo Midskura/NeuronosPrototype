@@ -185,7 +185,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
     <div 
       className="h-full flex flex-col overflow-auto"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Back Button - Top Left */}
@@ -194,7 +194,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-[13px] transition-colors"
-            style={{ color: "#0F766E" }}
+            style={{ color: "var(--theme-action-primary-bg)" }}
             onMouseEnter={(e) => {
               e.currentTarget.style.color = "#0D6560";
             }}
@@ -212,14 +212,14 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
               onClick={handleMarkAsComplete}
               className="px-4 py-2 rounded-lg text-[13px] font-medium text-white transition-colors flex items-center gap-2"
               style={{ 
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 cursor: "pointer"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               <CheckCircle size={16} />
@@ -229,8 +229,8 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
             <span
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-[13px] font-medium"
               style={{
-                backgroundColor: "#E8F5F3",
-                color: "#0F766E",
+                backgroundColor: "var(--theme-bg-surface-tint)",
+                color: "var(--theme-action-primary-bg)",
                 border: "1px solid #0F766E30"
               }}
             >
@@ -247,7 +247,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
         <div className="mb-8">
           <h1 
             className="text-[28px] font-semibold mb-3"
-            style={{ color: "#12332B" }}
+            style={{ color: "var(--theme-text-primary)" }}
           >
             {task.title}
           </h1>
@@ -278,7 +278,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
         <div className="mb-8">
           <h3 
             className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Task Details
           </h3>
@@ -287,13 +287,13 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
             className="rounded-lg p-6"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             <div className="space-y-6">
               {/* Type */}
               <div>
-                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                   Type
                 </label>
                 <CustomDropdown
@@ -320,7 +320,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
 
               {/* Due Date */}
               <div>
-                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                   Due Date
                 </label>
                 <input
@@ -343,14 +343,14 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
 
               {/* Task Owner */}
               <div>
-                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                   Task Owner
                 </label>
                 <div 
                   className="px-3 py-2.5 rounded-lg text-[13px]" 
                   style={{ 
-                    backgroundColor: "#F9FAFB", 
-                    color: "#12332B",
+                    backgroundColor: "var(--theme-bg-page)", 
+                    color: "var(--theme-text-primary)",
                     border: "1px solid var(--neuron-ui-border)"
                   }}
                 >
@@ -360,7 +360,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
 
               {/* Remarks */}
               <div>
-                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                   Remarks
                 </label>
                 <textarea
@@ -383,17 +383,17 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
               {/* Metadata */}
               <div className="pt-4 border-t space-y-3" style={{ borderColor: "var(--neuron-ui-divider)" }}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-wide" style={{ color: "#667085" }}>Created</span>
-                  <span className="text-[13px]" style={{ color: "#12332B" }}>{formatDateTime(task.created_at)}</span>
+                  <span className="text-[11px] uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>Created</span>
+                  <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>{formatDateTime(task.created_at)}</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-wide" style={{ color: "#667085" }}>Last Updated</span>
-                  <span className="text-[13px]" style={{ color: "#12332B" }}>{formatDateTime(task.updated_at)}</span>
+                  <span className="text-[11px] uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>Last Updated</span>
+                  <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>{formatDateTime(task.updated_at)}</span>
                 </div>
                 {isCompleted && (
                   <div className="flex items-center gap-1.5 pt-2">
-                    <CircleCheckBig size={12} style={{ color: "#0F766E" }} />
-                    <span className="text-[11px]" style={{ color: "#0F766E" }}>
+                    <CircleCheckBig size={12} style={{ color: "var(--theme-action-primary-bg)" }} />
+                    <span className="text-[11px]" style={{ color: "var(--theme-action-primary-bg)" }}>
                       Converted to activity
                     </span>
                   </div>
@@ -408,7 +408,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
           <div className="mb-8">
             <h3 
               className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-              style={{ color: "#667085" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Related To
             </h3>
@@ -417,7 +417,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
               className="rounded-lg p-6"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF"
+                backgroundColor: "var(--theme-bg-surface)"
               }}
             >
               <div className="space-y-4">
@@ -426,17 +426,17 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                     <div 
                       className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#F3F4F6",
+                        backgroundColor: "var(--theme-bg-surface-subtle)",
                         border: "1px solid var(--neuron-ui-divider)"
                       }}
                     >
-                      <User size={16} style={{ color: "#9CA3AF" }} />
+                      <User size={16} style={{ color: "var(--theme-text-muted)" }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h5 className="text-[13px] font-medium mb-1" style={{ color: "#12332B" }}>
+                      <h5 className="text-[13px] font-medium mb-1" style={{ color: "var(--theme-text-primary)" }}>
                         {contact.name || `${contact.first_name || ''} ${contact.last_name || ''}`.trim() || 'Unknown Contact'}
                       </h5>
-                      <p className="text-[12px]" style={{ color: "#667085" }}>
+                      <p className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                         {contact.job_title || contact.title || '—'}
                       </p>
                     </div>
@@ -448,17 +448,17 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                     <div 
                       className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#E8F5F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         border: "1px solid #0F766E30"
                       }}
                     >
-                      <Building2 size={16} style={{ color: "#0F766E" }} />
+                      <Building2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h5 className="text-[13px] font-medium mb-1" style={{ color: "#12332B" }}>
+                      <h5 className="text-[13px] font-medium mb-1" style={{ color: "var(--theme-text-primary)" }}>
                         {customer.company_name || customer.name || 'Unknown Company'}
                       </h5>
-                      <p className="text-[12px]" style={{ color: "#667085" }}>
+                      <p className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                         {customer.industry || '—'}
                       </p>
                     </div>
@@ -473,7 +473,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
         <div className="mb-8">
           <h3 
             className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Attachments
           </h3>
@@ -482,7 +482,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
             className="rounded-lg p-6"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             <div className="flex items-center justify-between mb-4">
@@ -490,14 +490,14 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                 className="px-4 py-2 rounded-lg text-[13px] font-medium transition-colors flex items-center gap-2"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  color: "#0F766E",
-                  backgroundColor: "#FFFFFF"
+                  color: "var(--theme-action-primary-bg)",
+                  backgroundColor: "var(--theme-bg-surface)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
                 <Upload size={14} />
@@ -516,14 +516,14 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                       backgroundColor: "#FAFAFA"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F3F4F6";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "#FAFAFA";
                     }}
                   >
-                    <Paperclip size={16} style={{ color: "#667085" }} />
-                    <span className="text-[13px] flex-1" style={{ color: "#12332B" }}>
+                    <Paperclip size={16} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[13px] flex-1" style={{ color: "var(--theme-text-primary)" }}>
                       {file}
                     </span>
                   </div>
@@ -531,7 +531,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-[13px]" style={{ color: "#667085" }}>
+                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                   No attachments yet
                 </p>
               </div>
@@ -543,7 +543,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
         <div className="mb-8">
           <h3 
             className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Comments
           </h3>
@@ -552,7 +552,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
             className="rounded-lg p-6"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             {/* Comment List */}
@@ -563,18 +563,18 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                     <div 
                       className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#E8F5F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         border: "1px solid #0F766E30"
                       }}
                     >
-                      <User size={14} style={{ color: "#0F766E" }} />
+                      <User size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[12px] font-medium" style={{ color: "#12332B" }}>
+                        <span className="text-[12px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                           {comment.user}
                         </span>
-                        <span className="text-[11px]" style={{ color: "#667085" }}>
+                        <span className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
                           {formatDateTime(comment.timestamp)}
                         </span>
                       </div>
@@ -597,8 +597,8 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                 className="w-full px-3 py-2.5 rounded-lg text-[13px] focus:outline-none focus:ring-2 resize-none mb-3"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
               <button
@@ -611,12 +611,12 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
                 }}
                 onMouseEnter={(e) => {
                   if (newComment.trim()) {
-                    e.currentTarget.style.backgroundColor = "#0D6560";
+                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (newComment.trim()) {
-                    e.currentTarget.style.backgroundColor = "#0F766E";
+                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                   }
                 }}
               >
@@ -638,10 +638,10 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
           >
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <h4 className="text-[13px] font-semibold mb-1" style={{ color: "#12332B" }}>
+                <h4 className="text-[13px] font-semibold mb-1" style={{ color: "var(--theme-text-primary)" }}>
                   Delete this task
                 </h4>
-                <p className="text-[12px]" style={{ color: "#667085" }}>
+                <p className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                   Once you delete this task, there is no going back. Please be certain.
                 </p>
               </div>

@@ -60,7 +60,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
   const isRecipient = !isSender && thread.participants.some(
     (p) => p.participant_type === "user" && p.user_id === user?.id
   );
-  const isManagerOrDirector = effectiveRole === "manager" || effectiveRole === "director";
+  const isManagerOrDirector = effectiveRole === "manager" || effectiveRole === "team_leader";
   const deptParticipants = thread.participants.filter((p) => p.participant_type === "department" && p.role === "to");
   const canAssign = isManagerOrDirector && deptParticipants.length > 0;
   const canAdvanceStatus = isRecipient && !["done", "returned", "archived", "draft"].includes(thread.status);
@@ -199,9 +199,9 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
     : null;
 
   return (
-    <div className="ticketing-ui flex flex-col h-full" style={{ backgroundColor: "#FFFFFF" }}>
+    <div className="ticketing-ui flex flex-col h-full" style={{ backgroundColor: "var(--theme-bg-surface)" }}>
       {/* Header */}
-      <div style={{ padding: "20px 28px 16px", borderBottom: "1px solid #E5E9F0", flexShrink: 0 }}>
+      <div style={{ padding: "20px 28px 16px", borderBottom: "1px solid var(--theme-border-default)", flexShrink: 0 }}>
 
         {/* Type + priority + actions row */}
         <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -319,7 +319,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
                     onMouseLeave={isClickable ? (e) => {
                       e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                       e.currentTarget.style.color = "var(--neuron-ink-secondary)";
-                      e.currentTarget.style.backgroundColor = "#F7FAF8";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     } : undefined}
                   >
                     {isCompleted && <Check size={9} />}
@@ -380,32 +380,32 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
         )}
 
         {/* Subject */}
-        <h1 style={{ fontSize: 18, fontWeight: 600, color: "#12332B", lineHeight: 1.3, marginBottom: 10 }}>
+        <h1 style={{ fontSize: 18, fontWeight: 600, color: "var(--theme-text-primary)", lineHeight: 1.3, marginBottom: 10 }}>
           {thread.subject}
         </h1>
 
         {/* Participants */}
         <div className="flex flex-wrap gap-x-4 gap-y-1">
           <div className="flex items-center gap-1.5">
-            <span style={{ fontSize: 11, color: "#9CA3AF", fontWeight: 500 }}>From</span>
-            <span style={{ fontSize: 12, color: "#374151", fontWeight: 500 }}>{thread.created_by_name || "Unknown"}</span>
+            <span style={{ fontSize: 11, color: "var(--theme-text-muted)", fontWeight: 500 }}>From</span>
+            <span style={{ fontSize: 12, color: "var(--theme-text-secondary)", fontWeight: 500 }}>{thread.created_by_name || "Unknown"}</span>
           </div>
           {toParticipants.length > 0 && (
             <div className="flex items-center gap-1.5">
-              <span style={{ fontSize: 11, color: "#9CA3AF", fontWeight: 500 }}>To</span>
-              <span style={{ fontSize: 12, color: "#374151", fontWeight: 500 }}>{toParticipants.map(renderParticipant).join(", ")}</span>
+              <span style={{ fontSize: 11, color: "var(--theme-text-muted)", fontWeight: 500 }}>To</span>
+              <span style={{ fontSize: 12, color: "var(--theme-text-secondary)", fontWeight: 500 }}>{toParticipants.map(renderParticipant).join(", ")}</span>
             </div>
           )}
           {ccParticipants.length > 0 && (
             <div className="flex items-center gap-1.5">
-              <span style={{ fontSize: 11, color: "#9CA3AF", fontWeight: 500 }}>CC</span>
-              <span style={{ fontSize: 12, color: "#374151" }}>{ccParticipants.map(renderParticipant).join(", ")}</span>
+              <span style={{ fontSize: 11, color: "var(--theme-text-muted)", fontWeight: 500 }}>CC</span>
+              <span style={{ fontSize: 12, color: "var(--theme-text-secondary)" }}>{ccParticipants.map(renderParticipant).join(", ")}</span>
             </div>
           )}
           {thread.assignment && (
             <div className="flex items-center gap-1.5">
-              <span style={{ fontSize: 11, color: "#9CA3AF", fontWeight: 500 }}>Assigned</span>
-              <span style={{ fontSize: 12, color: "#0F766E", fontWeight: 500 }}>{thread.assignment.assigned_to_name}</span>
+              <span style={{ fontSize: 11, color: "var(--theme-text-muted)", fontWeight: 500 }}>Assigned</span>
+              <span style={{ fontSize: 12, color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>{thread.assignment.assigned_to_name}</span>
             </div>
           )}
         </div>
@@ -413,7 +413,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
 
       {/* Return reason panel (inline) */}
       {showReturnPanel && (
-        <div style={{ padding: "12px 28px", borderBottom: "1px solid #E5E9F0", backgroundColor: "#FFFBEB", flexShrink: 0 }}>
+        <div style={{ padding: "12px 28px", borderBottom: "1px solid var(--theme-border-default)", backgroundColor: "#FFFBEB", flexShrink: 0 }}>
           <p style={{ fontSize: 12, fontWeight: 600, color: "#92400E", marginBottom: 8 }}>
             {thread.type === "approval" ? "Reason for declining" : "Reason for returning"} (required)
           </p>
@@ -424,8 +424,8 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
             rows={2}
             style={{
               width: "100%", padding: "8px 10px", borderRadius: 6,
-              border: "1px solid #FDE68A", fontSize: 12, color: "#12332B",
-              resize: "none", outline: "none", backgroundColor: "#FFFFFF",
+              border: "1px solid #FDE68A", fontSize: 12, color: "var(--theme-text-primary)",
+              resize: "none", outline: "none", backgroundColor: "var(--theme-bg-surface)",
             }}
             autoFocus
           />
@@ -444,7 +444,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
             </button>
             <button
               onClick={() => { setShowReturnPanel(false); setReturnReason(""); }}
-              style={{ padding: "5px 14px", borderRadius: 6, fontSize: 12, fontWeight: 500, backgroundColor: "transparent", border: "1px solid #E5E9F0", color: "#667085", cursor: "pointer" }}
+              style={{ padding: "5px 14px", borderRadius: 6, fontSize: 12, fontWeight: 500, backgroundColor: "transparent", border: "1px solid var(--theme-border-default)", color: "var(--theme-text-muted)", cursor: "pointer" }}
             >
               Cancel
             </button>
@@ -455,7 +455,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
       {/* Messages */}
       <div className="flex-1 overflow-y-auto" style={{ padding: "8px 12px" }}>
         {thread.messages.length === 0 ? (
-          <div style={{ textAlign: "center", padding: 40, color: "#9CA3AF", fontSize: 13 }}>No messages yet</div>
+          <div style={{ textAlign: "center", padding: 40, color: "var(--theme-text-muted)", fontSize: 13 }}>No messages yet</div>
         ) : (
           thread.messages.map((msg) =>
             msg.is_system ? (
@@ -478,12 +478,12 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
 
       {/* Done / returned footer */}
       {(isDone || isReturned) && (
-        <div style={{ padding: "10px 20px", borderTop: "1px solid #E5E9F0", backgroundColor: "#F9FAFB", textAlign: "center" }}>
-          <p style={{ fontSize: 12, color: "#9CA3AF" }}>
+        <div style={{ padding: "10px 20px", borderTop: "1px solid var(--theme-border-default)", backgroundColor: "var(--theme-bg-page)", textAlign: "center" }}>
+          <p style={{ fontSize: 12, color: "var(--theme-text-muted)" }}>
             {isDone ? "This ticket is done." : "This ticket was returned."}
             {" "}
             {isSender && (
-              <button onClick={handleReopen} style={{ color: "#0F766E", fontWeight: 500, background: "none", border: "none", cursor: "pointer", fontSize: 12 }}>
+              <button onClick={handleReopen} style={{ color: "var(--theme-action-primary-bg)", fontWeight: 500, background: "none", border: "none", cursor: "pointer", fontSize: 12 }}>
                 Reopen
               </button>
             )}
@@ -505,9 +505,9 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
 
 function EmptyState({ message }: { message?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full" style={{ color: "#9CA3AF" }}>
+    <div className="flex flex-col items-center justify-center h-full" style={{ color: "var(--theme-text-muted)" }}>
       <MessageSquare size={40} style={{ marginBottom: 12, color: "#E5E9F0" }} />
-      <p style={{ fontSize: 14, color: "#9CA3AF" }}>{message || "Select a ticket to read it"}</p>
+      <p style={{ fontSize: 14, color: "var(--theme-text-muted)" }}>{message || "Select a ticket to read it"}</p>
     </div>
   );
 }
@@ -515,9 +515,9 @@ function EmptyState({ message }: { message?: string }) {
 function ThreadDetailSkeleton() {
   return (
     <div style={{ padding: "20px 28px" }}>
-      <div style={{ height: 16, width: 120, borderRadius: 4, backgroundColor: "#E5E9F0", marginBottom: 12, animation: "pulse 1.5s infinite" }} />
-      <div style={{ height: 24, width: "60%", borderRadius: 4, backgroundColor: "#E5E9F0", marginBottom: 12, animation: "pulse 1.5s infinite" }} />
-      <div style={{ height: 12, width: "40%", borderRadius: 4, backgroundColor: "#F3F4F6", animation: "pulse 1.5s infinite" }} />
+      <div style={{ height: 16, width: 120, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", marginBottom: 12, animation: "pulse 1.5s infinite" }} />
+      <div style={{ height: 24, width: "60%", borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", marginBottom: 12, animation: "pulse 1.5s infinite" }} />
+      <div style={{ height: 12, width: "40%", borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", animation: "pulse 1.5s infinite" }} />
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }`}</style>
     </div>
   );

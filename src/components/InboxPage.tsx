@@ -117,7 +117,7 @@ export function InboxPage() {
   return (
     <div
       className="flex h-full"
-      style={{ backgroundColor: "#F9FAFB", overflow: "hidden" }}
+      style={{ backgroundColor: "var(--theme-bg-page)", overflow: "hidden" }}
     >
       {/* Left panel — thread list */}
       <ThreadListPanel

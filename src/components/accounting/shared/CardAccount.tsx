@@ -40,9 +40,9 @@ export function CardAccount({
   if (loading) {
     return (
       <Card className="p-4 animate-pulse" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-        <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
-        <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+        <div className="h-4 bg-[var(--theme-bg-surface-tint)] rounded w-3/4 mb-2"></div>
+        <div className="h-3 bg-[var(--theme-bg-surface-tint)] rounded w-1/2 mb-4"></div>
+        <div className="h-6 bg-[var(--theme-bg-surface-tint)] rounded w-1/3"></div>
       </Card>
     );
   }
@@ -53,15 +53,15 @@ export function CardAccount({
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             {account.code && (
-              <span className="text-[12px] text-[#6B7280] font-mono tabular-nums">
+              <span className="text-[12px] text-[var(--theme-text-muted)] font-mono tabular-nums">
                 {account.code}
               </span>
             )}
-            <h3 className="text-[14px] text-[#0A1D4D] font-medium">
+            <h3 className="text-[14px] text-[var(--theme-text-primary)] font-medium">
               {account.name}
             </h3>
           </div>
-          <p className="text-[12px] text-[#6B7280]">{account.type}</p>
+          <p className="text-[12px] text-[var(--theme-text-muted)]">{account.type}</p>
         </div>
 
         {/* Kebab Menu */}
@@ -72,7 +72,7 @@ export function CardAccount({
               size="sm"
               className="h-8 w-8 p-0"
             >
-              <MoreVertical className="w-4 h-4 text-[#6B7280]" />
+              <MoreVertical className="w-4 h-4 text-[var(--theme-text-muted)]" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -102,8 +102,8 @@ export function CardAccount({
       </div>
 
       {/* Balance - Approved only */}
-      <div className="pt-3 border-t border-[#E5E7EB]">
-        <p className="text-[12px] text-[#6B7280] mb-1">Balance (Approved)</p>
+      <div className="pt-3 border-t border-[var(--theme-border-default)]">
+        <p className="text-[12px] text-[var(--theme-text-muted)] mb-1">Balance (Approved)</p>
         <p
           className="text-[20px] font-medium tabular-nums"
           style={{ color: getBalanceColor(account.type) }}

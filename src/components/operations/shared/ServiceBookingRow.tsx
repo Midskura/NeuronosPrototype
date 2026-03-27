@@ -27,7 +27,7 @@ export function ServiceBookingRow({
 }: ServiceBookingRowProps) {
   return (
     <tr
-      className="border-b border-[#12332B]/5 hover:bg-[#0F766E]/5 transition-colors cursor-pointer"
+      className="border-b border-[var(--theme-text-primary)]/5 hover:bg-[var(--theme-action-primary-bg)]/5 transition-colors cursor-pointer"
       onClick={onClick}
     >
       <td className="py-4">
@@ -37,7 +37,7 @@ export function ServiceBookingRow({
             <div style={{ 
               fontSize: "14px", 
               fontWeight: 600, 
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               marginBottom: "2px"
             }}>
               {bookingId}
@@ -45,7 +45,7 @@ export function ServiceBookingRow({
             {projectNumber && (
               <div style={{ 
                 fontSize: "13px", 
-                color: "#667085"
+                color: "var(--theme-text-muted)"
               }}>
                 Project: {projectNumber}
               </div>
@@ -54,7 +54,7 @@ export function ServiceBookingRow({
         </div>
       </td>
       <td className="py-4">
-        <div style={{ fontSize: "14px", color: "#12332B" }}>
+        <div style={{ fontSize: "14px", color: "var(--theme-text-primary)" }}>
           {customerName}
         </div>
       </td>
@@ -67,7 +67,7 @@ export function ServiceBookingRow({
         <NeuronStatusPill status={status} />
       </td>
       <td className="py-4">
-        <div style={{ fontSize: "13px", color: "#667085" }}>
+        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
           {new Date(createdAt).toLocaleDateString()}
         </div>
       </td>
@@ -84,11 +84,11 @@ export function ServiceBookingTable({ children, headers }: ServiceBookingTablePr
   return (
     <table className="w-full">
       <thead>
-        <tr className="border-b border-[#12332B]/10">
+        <tr className="border-b border-[var(--theme-text-primary)]/10">
           {headers.map((header, index) => (
             <th 
               key={index}
-              className="text-left pb-3 text-[#667085] font-semibold text-xs uppercase tracking-wide"
+              className="text-left pb-3 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide"
             >
               {header}
             </th>

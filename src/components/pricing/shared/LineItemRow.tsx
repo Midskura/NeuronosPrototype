@@ -85,13 +85,13 @@ export function LineItemRow({
 
   const inputFocusStyle = readOnly ? {} : {
     border: "1px solid var(--neuron-brand-green)",
-    backgroundColor: "#F8FBFB"
+    backgroundColor: "var(--theme-bg-page)"
   };
 
   return (
     <tr style={{ 
-      borderBottom: "1px solid #F3F4F6",
-      backgroundColor: "white"
+      borderBottom: "1px solid var(--theme-border-subtle)",
+      backgroundColor: "var(--theme-bg-surface)"
     }}>
       {/* Description */}
       <td style={{ padding: "4px", overflow: "visible" }}>

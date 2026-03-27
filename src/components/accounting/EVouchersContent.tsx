@@ -42,15 +42,15 @@ export function EVouchersContent() {
   }, [refreshTrigger, refresh]);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-[var(--theme-bg-surface)]">
       {/* Header Container */}
       <div className="px-12 pt-8 pb-0">
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+            <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
               E-Vouchers
             </h1>
-            <p className="text-[14px] text-[#667085]">
+            <p className="text-[14px] text-[var(--theme-text-muted)]">
               {hasApprovalAccess
                 ? "Universal transaction approval system for all financial activities"
                 : "Create and track your expense vouchers"}
@@ -65,7 +65,7 @@ export function EVouchersContent() {
              />
              <button
                onClick={() => setShowCreateModal(true)}
-               className="flex items-center gap-2 px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
+               className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
              >
                <Plus size={16} />
                New E-Voucher
@@ -74,46 +74,46 @@ export function EVouchersContent() {
         </div>
 
         {/* View Tabs */}
-        <div className="flex items-center gap-8 border-b border-[#E5E9F0]">
+        <div className="flex items-center gap-8 border-b border-[var(--theme-border-default)]">
           {hasApprovalAccess && (
             <button
               onClick={() => setActiveView("pending")}
-              className={`flex items-center gap-2 py-4 relative group ${activeView === "pending" ? "text-[#0F766E]" : "text-[#6B7280]"}`}
+              className={`flex items-center gap-2 py-4 relative group ${activeView === "pending" ? "text-[var(--theme-action-primary-bg)]" : "text-[var(--theme-text-muted)]"}`}
             >
               <Clock size={18} strokeWidth={activeView === "pending" ? 2.5 : 2} />
               <span className={`text-[14px] ${activeView === "pending" ? "font-semibold" : "font-medium"}`}>
                 Pending Approvals
               </span>
               {activeView === "pending" && (
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0F766E] rounded-t-[2px]" />
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--theme-action-primary-bg)] rounded-t-[2px]" />
               )}
             </button>
           )}
           
           <button
             onClick={() => setActiveView("my-evouchers")}
-            className={`flex items-center gap-2 py-4 relative group ${activeView === "my-evouchers" ? "text-[#0F766E]" : "text-[#6B7280]"}`}
+            className={`flex items-center gap-2 py-4 relative group ${activeView === "my-evouchers" ? "text-[var(--theme-action-primary-bg)]" : "text-[var(--theme-text-muted)]"}`}
           >
             <FileText size={18} strokeWidth={activeView === "my-evouchers" ? 2.5 : 2} />
             <span className={`text-[14px] ${activeView === "my-evouchers" ? "font-semibold" : "font-medium"}`}>
               My E-Vouchers
             </span>
             {activeView === "my-evouchers" && (
-              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0F766E] rounded-t-[2px]" />
+              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--theme-action-primary-bg)] rounded-t-[2px]" />
             )}
           </button>
 
           {hasApprovalAccess && (
             <button
               onClick={() => setActiveView("all")}
-              className={`flex items-center gap-2 py-4 relative group ${activeView === "all" ? "text-[#0F766E]" : "text-[#6B7280]"}`}
+              className={`flex items-center gap-2 py-4 relative group ${activeView === "all" ? "text-[var(--theme-action-primary-bg)]" : "text-[var(--theme-text-muted)]"}`}
             >
               <Building2 size={18} strokeWidth={activeView === "all" ? 2.5 : 2} />
               <span className={`text-[14px] ${activeView === "all" ? "font-semibold" : "font-medium"}`}>
                 All E-Vouchers
               </span>
               {activeView === "all" && (
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0F766E] rounded-t-[2px]" />
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--theme-action-primary-bg)] rounded-t-[2px]" />
               )}
             </button>
           )}
@@ -121,11 +121,11 @@ export function EVouchersContent() {
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 p-12 overflow-auto bg-white">
+      <div className="flex-1 p-12 overflow-auto bg-[var(--theme-bg-surface)]">
         {!currentUser ? (
-          <div className="py-12 text-center text-[#6B7280]">
+          <div className="py-12 text-center text-[var(--theme-text-muted)]">
             <Users size={48} className="mx-auto mb-4 text-[#D1D5DB]" />
-            <h3 className="text-[16px] font-semibold text-[#374151] mb-2">Please Log In</h3>
+            <h3 className="text-[16px] font-semibold text-[var(--theme-text-secondary)] mb-2">Please Log In</h3>
             <p className="text-[14px]">You need to be logged in to view E-Vouchers</p>
           </div>
         ) : (

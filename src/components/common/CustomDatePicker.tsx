@@ -187,7 +187,7 @@ export function CustomDatePicker({
         }}
         onMouseEnter={(e) => {
           if (!disabled) {
-            e.currentTarget.style.borderColor = "#0F766E";
+            e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
           }
         }}
         onMouseLeave={(e) => {
@@ -210,7 +210,7 @@ export function CustomDatePicker({
             top: "100%",
             left: 0,
             marginTop: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             padding: "16px",
@@ -238,7 +238,7 @@ export function CustomDatePicker({
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: "8px 12px",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   cursor: "pointer",
@@ -247,7 +247,7 @@ export function CustomDatePicker({
                   color: "var(--neuron-ink-primary)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -269,7 +269,7 @@ export function CustomDatePicker({
                   left: 0,
                   right: 0,
                   marginTop: "4px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   maxHeight: "200px",
@@ -297,7 +297,7 @@ export function CustomDatePicker({
                       }}
                       onMouseEnter={(e) => {
                         if (index !== viewDate.getMonth()) {
-                          e.currentTarget.style.backgroundColor = "#F9FAFB";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -324,7 +324,7 @@ export function CustomDatePicker({
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: "8px 12px",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   cursor: "pointer",
@@ -333,7 +333,7 @@ export function CustomDatePicker({
                   color: "var(--neuron-ink-primary)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -355,7 +355,7 @@ export function CustomDatePicker({
                   left: 0,
                   right: 0,
                   marginTop: "4px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   maxHeight: "200px",
@@ -380,7 +380,7 @@ export function CustomDatePicker({
                       }}
                       onMouseEnter={(e) => {
                         if (year !== viewDate.getFullYear()) {
-                          e.currentTarget.style.backgroundColor = "#F9FAFB";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -450,7 +450,7 @@ export function CustomDatePicker({
                   }}
                   onMouseEnter={(e) => {
                     if (!selected) {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -485,7 +485,7 @@ export function CustomDatePicker({
                 borderRadius: "4px"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 e.currentTarget.style.color = "var(--neuron-ink-primary)";
               }}
               onMouseLeave={(e) => {
@@ -503,7 +503,7 @@ export function CustomDatePicker({
                 fontSize: "12px",
                 fontWeight: 500,
                 color: "white",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 border: "none",
                 cursor: "pointer",
                 borderRadius: "4px"
@@ -512,7 +512,7 @@ export function CustomDatePicker({
                 e.currentTarget.style.backgroundColor = "#0d6660";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               Today

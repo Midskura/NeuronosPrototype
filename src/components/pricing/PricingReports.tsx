@@ -154,9 +154,9 @@ export function PricingReports({
           <button
             className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-[14px] transition-all"
             style={{
-              background: "#E8F5F3",
+              background: "var(--theme-bg-surface-tint)",
               border: "1px solid #0F766E",
-              color: "#0F766E",
+              color: "var(--theme-action-primary-bg)",
               fontWeight: 500,
             }}
             onMouseEnter={(e) => {
@@ -175,7 +175,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -202,7 +202,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -219,7 +219,7 @@ export function PricingReports({
               style={{
                 fontSize: "32px",
                 fontWeight: 600,
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
               }}
             >
               {totalQuotations > 0 ? ((approvedQuotations / totalQuotations) * 100).toFixed(0) : 0}%
@@ -229,7 +229,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -256,7 +256,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -285,7 +285,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -327,7 +327,7 @@ export function PricingReports({
                   <div
                     className="h-2 rounded-full"
                     style={{
-                      background: "#F3F4F6",
+                      background: "var(--theme-bg-surface-subtle)",
                       overflow: "hidden",
                     }}
                   >
@@ -347,7 +347,7 @@ export function PricingReports({
           <div
             className="rounded-lg p-6"
             style={{
-              background: "#FFFFFF",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -383,8 +383,8 @@ export function PricingReports({
                         style={{
                           width: "32px",
                           height: "32px",
-                          background: "#E8F5F3",
-                          color: "#0F766E",
+                          background: "var(--theme-bg-surface-tint)",
+                          color: "var(--theme-action-primary-bg)",
                           fontSize: "14px",
                           fontWeight: 600,
                         }}
@@ -407,7 +407,7 @@ export function PricingReports({
                       style={{
                         fontSize: "14px",
                         fontWeight: 600,
-                        color: "#0F766E",
+                        color: "var(--theme-action-primary-bg)",
                       }}
                     >
                       PHP {(customer.total / 1000).toFixed(0)}K
@@ -433,7 +433,7 @@ export function PricingReports({
         <div
           className="rounded-lg p-6"
           style={{
-            background: "#FFFFFF",
+            background: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
           }}
         >
@@ -457,7 +457,7 @@ export function PricingReports({
                   style={{
                     fontSize: "32px",
                     fontWeight: 600,
-                    color: "#0F766E",
+                    color: "var(--theme-action-primary-bg)",
                     marginBottom: "8px",
                   }}
                 >

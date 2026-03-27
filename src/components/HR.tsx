@@ -112,7 +112,7 @@ const MOCK_EMPLOYEES: Employee[] = [
 ];
 
 interface HRProps {
-  userRole: 'rep' | 'manager' | 'director';
+  userRole: 'staff' | 'team_leader' | 'manager';
 }
 
 export function HR({ userRole }: HRProps) {
@@ -141,7 +141,7 @@ export function HR({ userRole }: HRProps) {
       "Juan Logistica Courier Services": "bg-[#FED7AA] text-[#9A3412]",
       "ZN International Cargo Forwarding": "bg-[#E0E7FF] text-[#3730A3]",
     };
-    return colors[company] || "bg-gray-200 text-gray-800";
+    return colors[company] || "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-text-primary)]";
   };
 
   const handleOpenPayrollDetails = (company: string) => {
@@ -159,7 +159,7 @@ export function HR({ userRole }: HRProps) {
     <div
       style={{
         minHeight: "100vh",
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Main Content */}
@@ -180,10 +180,10 @@ export function HR({ userRole }: HRProps) {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               HR
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage your Human Resources.
             </p>
           </div>
@@ -191,7 +191,7 @@ export function HR({ userRole }: HRProps) {
 
         {/* Filter Bar */}
         <div
-          className="bg-white border border-[#E5E7EB] rounded-[16px]"
+          className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[16px]"
           style={{
             padding: "16px 20px",
             marginBottom: "16px",
@@ -201,7 +201,7 @@ export function HR({ userRole }: HRProps) {
             <div className="flex-shrink-0">
               <Select value={filterCompany} onValueChange={setFilterCompany}>
                 <SelectTrigger
-                  className="h-11 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                  className="h-11 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                   style={{ width: "160px" }}
                 >
                   <SelectValue />
@@ -220,7 +220,7 @@ export function HR({ userRole }: HRProps) {
             <div className="flex-shrink-0">
               <Select value="Oct 1–15, 2025" onValueChange={() => {}}>
                 <SelectTrigger
-                  className="h-11 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                  className="h-11 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                   style={{ width: "180px" }}
                 >
                   <SelectValue />
@@ -236,7 +236,7 @@ export function HR({ userRole }: HRProps) {
             <div className="flex-shrink-0">
               <Select value={filterStatus} onValueChange={setFilterStatus}>
                 <SelectTrigger
-                  className="h-11 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                  className="h-11 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                   style={{ width: "120px" }}
                 >
                   <SelectValue />
@@ -253,7 +253,7 @@ export function HR({ userRole }: HRProps) {
         {/* Pill-style Tabs - Similar to Accounting */}
         <div style={{ marginBottom: "16px" }}>
           <div
-            className="flex items-center gap-2 bg-white border border-[#E6E9F0] rounded-2xl"
+            className="flex items-center gap-2 bg-[var(--theme-bg-surface)] border border-[#E6E9F0] rounded-2xl"
             style={{
               height: "56px",
               padding: "8px 12px",
@@ -304,15 +304,15 @@ export function HR({ userRole }: HRProps) {
 
             {activeSection === "Timekeeping" && (
               <div
-                className="bg-white border border-[#E5E7EB] rounded-[20px] overflow-visible flex flex-col"
+                className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[20px] overflow-visible flex flex-col"
               >
                 {/* Timekeeping Header */}
                 <div
-                  className="flex items-center justify-between border-b border-[#E5E7EB] flex-shrink-0"
+                  className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
                   style={{ padding: "20px 24px" }}
                 >
                   <h2
-                    className="text-[#0A1D4D]"
+                    className="text-[var(--theme-text-primary)]"
                     style={{ fontSize: "18px", fontWeight: 600 }}
                   >
                     Weekly Timekeeping Board
@@ -321,13 +321,13 @@ export function HR({ userRole }: HRProps) {
 
                 {/* Toolbar */}
                 <div
-                  className="flex items-center justify-between border-b border-[#E5E7EB] flex-shrink-0"
+                  className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
                   style={{ padding: "16px 24px" }}
                 >
                   <div className="flex-shrink-0">
                     <Select value={filterCompany} onValueChange={setFilterCompany}>
                       <SelectTrigger
-                        className="h-9 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                        className="h-9 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                         style={{ width: "140px" }}
                       >
                         <SelectValue />
@@ -346,21 +346,21 @@ export function HR({ userRole }: HRProps) {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={() => toast.info("Previous week")}
-                      className="p-1 hover:bg-[#F9FAFB] rounded transition-colors"
+                      className="p-1 hover:bg-[var(--theme-bg-page)] rounded transition-colors"
                     >
-                      <ChevronLeft className="w-5 h-5 text-[#6B7280]" />
+                      <ChevronLeft className="w-5 h-5 text-[var(--theme-text-muted)]" />
                     </button>
                     <span
-                      className="text-[#0A1D4D] px-4"
+                      className="text-[var(--theme-text-primary)] px-4"
                       style={{ fontSize: "14px", fontWeight: 600 }}
                     >
                       {currentWeek}
                     </span>
                     <button
                       onClick={() => toast.info("Next week")}
-                      className="p-1 hover:bg-[#F9FAFB] rounded transition-colors"
+                      className="p-1 hover:bg-[var(--theme-bg-page)] rounded transition-colors"
                     >
-                      <ChevronRight className="w-5 h-5 text-[#6B7280]" />
+                      <ChevronRight className="w-5 h-5 text-[var(--theme-text-muted)]" />
                     </button>
                   </div>
 
@@ -368,7 +368,7 @@ export function HR({ userRole }: HRProps) {
                     <Button
                       onClick={() => toast.success("Exporting...")}
                       variant="outline"
-                      className="h-9 px-4 rounded-full border-[#E5E7EB] text-[13px]"
+                      className="h-9 px-4 rounded-full border-[var(--theme-border-default)] text-[13px]"
                       style={{ fontWeight: 600 }}
                     >
                       <Download className="w-4 h-4 mr-2" />
@@ -379,12 +379,12 @@ export function HR({ userRole }: HRProps) {
 
                 {/* Timesheet Grid - No internal scroll */}
                 <div className="flex-1 p-6">
-                  <div className="border border-[#D1D5DB] rounded-lg overflow-hidden">
+                  <div className="border border-[var(--theme-border-default)] rounded-lg overflow-hidden">
                     <table className="min-w-full divide-y divide-[#D1D5DB]">
-                      <thead className="bg-[#F9FAFB]">
+                      <thead className="bg-[var(--theme-bg-page)]">
                         <tr>
                           <th
-                            className="px-4 py-3 text-left text-[11px] text-[#000000] uppercase border-r border-[#D1D5DB]"
+                            className="px-4 py-3 text-left text-[11px] text-[var(--theme-text-primary)] uppercase border-r border-[var(--theme-border-default)]"
                             style={{ fontWeight: 600, width: "180px" }}
                           >
                             Employee
@@ -393,7 +393,7 @@ export function HR({ userRole }: HRProps) {
                             <th
                               key={day}
                               colSpan={2}
-                              className="px-2 py-3 text-center text-[11px] text-[#000000] uppercase border-r border-[#D1D5DB]"
+                              className="px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)] uppercase border-r border-[var(--theme-border-default)]"
                               style={{ fontWeight: 600 }}
                             >
                               {day} – Oct – 25
@@ -401,17 +401,17 @@ export function HR({ userRole }: HRProps) {
                           ))}
                         </tr>
                         <tr>
-                          <th className="border-r border-[#D1D5DB]"></th>
+                          <th className="border-r border-[var(--theme-border-default)]"></th>
                           {[1, 2, 3, 4, 5, 6, 7].map((day) => (
                             <React.Fragment key={day}>
                               <th
-                                className="px-2 py-2 text-center text-[10px] text-[#6B7280] uppercase border-r border-[#D1D5DB]"
+                                className="px-2 py-2 text-center text-[10px] text-[var(--theme-text-muted)] uppercase border-r border-[var(--theme-border-default)]"
                                 style={{ fontWeight: 600, width: "80px" }}
                               >
                                 In
                               </th>
                               <th
-                                className="px-2 py-2 text-center text-[10px] text-[#6B7280] uppercase border-r border-[#D1D5DB]"
+                                className="px-2 py-2 text-center text-[10px] text-[var(--theme-text-muted)] uppercase border-r border-[var(--theme-border-default)]"
                                 style={{ fontWeight: 600, width: "80px" }}
                               >
                                 Out
@@ -420,11 +420,11 @@ export function HR({ userRole }: HRProps) {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="bg-white divide-y divide-[#D1D5DB]">
+                      <tbody className="bg-[var(--theme-bg-surface)] divide-y divide-[#D1D5DB]">
                         {filteredEmployees.slice(0, 10).map((emp, empIdx) => (
                           <tr key={emp.id}>
                             <td
-                              className="px-4 py-3 text-[12px] text-[#0A1D4D] border-r border-[#D1D5DB]"
+                              className="px-4 py-3 text-[12px] text-[var(--theme-text-primary)] border-r border-[var(--theme-border-default)]"
                               style={{ fontWeight: 500 }}
                             >
                               <div className="flex items-center gap-2">
@@ -475,21 +475,21 @@ export function HR({ userRole }: HRProps) {
                   <div className="mt-4 flex items-center gap-6">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-[#F25C05]" />
-                      <span className="text-[11px] text-[#6B7280]">CCE</span>
+                      <span className="text-[11px] text-[var(--theme-text-muted)]">CCE</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-[#FCD34D]" />
-                      <span className="text-[11px] text-[#6B7280]">ZEUJ</span>
+                      <span className="text-[11px] text-[var(--theme-text-muted)]">ZEUJ</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-[#3B82F6]" />
-                      <span className="text-[11px] text-[#6B7280]">JUAN</span>
+                      <span className="text-[11px] text-[var(--theme-text-muted)]">JUAN</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full bg-[#6366F1]" />
-                      <span className="text-[11px] text-[#6B7280]">ZN INT.</span>
+                      <span className="text-[11px] text-[var(--theme-text-muted)]">ZN INT.</span>
                     </div>
-                    <div className="ml-auto text-[11px] text-[#6B7280]">
+                    <div className="ml-auto text-[11px] text-[var(--theme-text-muted)]">
                       {currentWeek}
                     </div>
                   </div>
@@ -499,22 +499,22 @@ export function HR({ userRole }: HRProps) {
 
             {activeSection === "Payroll" && (
               <div
-                className="bg-white border border-[#E5E7EB] rounded-[20px] overflow-visible flex flex-col"
+                className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[20px] overflow-visible flex flex-col"
               >
                 {/* Payroll Header */}
                 <div
-                  className="flex items-center justify-between border-b border-[#E5E7EB] flex-shrink-0"
+                  className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
                   style={{ padding: "20px 24px" }}
                 >
                   <h2
-                    className="text-[#0A1D4D]"
+                    className="text-[var(--theme-text-primary)]"
                     style={{ fontSize: "18px", fontWeight: 600 }}
                   >
                     Payroll Runs
                   </h2>
                   <Button
                     onClick={() => setCreatePayrollOpen(true)}
-                    className="bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-full h-9 px-4"
+                    className="bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-full h-9 px-4"
                     style={{ fontWeight: 600, fontSize: "13px" }}
                   >
                     <Plus className="w-4 h-4 mr-2" />
@@ -524,14 +524,14 @@ export function HR({ userRole }: HRProps) {
 
                 {/* Payroll Filters */}
                 <div
-                  className="border-b border-[#E5E7EB] flex-shrink-0"
+                  className="border-b border-[var(--theme-border-default)] flex-shrink-0"
                   style={{ padding: "16px 24px" }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex-shrink-0">
                       <Select value="Oct 1–15, 2025" onValueChange={() => {}}>
                         <SelectTrigger
-                          className="h-9 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                          className="h-9 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                           style={{ width: "160px" }}
                         >
                           <SelectValue />
@@ -550,7 +550,7 @@ export function HR({ userRole }: HRProps) {
                     <div className="flex-shrink-0">
                       <Select value="All" onValueChange={() => {}}>
                         <SelectTrigger
-                          className="h-9 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                          className="h-9 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                           style={{ width: "140px" }}
                         >
                           <SelectValue />
@@ -569,7 +569,7 @@ export function HR({ userRole }: HRProps) {
                     <div className="flex-shrink-0">
                       <Select value="All" onValueChange={() => {}}>
                         <SelectTrigger
-                          className="h-9 rounded-full border-[#E5E7EB] hover:bg-[#F9FAFB] transition-colors duration-150 text-[13px] px-4"
+                          className="h-9 rounded-full border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors duration-150 text-[13px] px-4"
                           style={{ width: "120px" }}
                         >
                           <SelectValue />
@@ -591,18 +591,18 @@ export function HR({ userRole }: HRProps) {
                     {COMPANIES.map((company, idx) => (
                       <div
                         key={company}
-                        className="border border-[#E5E7EB] rounded-lg p-6 hover:border-[#0A1D4D] transition-colors cursor-pointer"
+                        className="border border-[var(--theme-border-default)] rounded-lg p-6 hover:border-[#0A1D4D] transition-colors cursor-pointer"
                         onClick={() => handleOpenPayrollDetails(company)}
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div>
                             <h3
-                              className="text-[#0A1D4D] mb-1"
+                              className="text-[var(--theme-text-primary)] mb-1"
                               style={{ fontSize: "16px", fontWeight: 600 }}
                             >
                               {company}
                             </h3>
-                            <p className="text-[12px] text-[#6B7280]">
+                            <p className="text-[12px] text-[var(--theme-text-muted)]">
                               Oct 1–15, 2025
                             </p>
                           </div>
@@ -620,7 +620,7 @@ export function HR({ userRole }: HRProps) {
                         </div>
                         <Button
                           variant="outline"
-                          className="w-full h-9 rounded-lg border-[#E5E7EB] text-[13px]"
+                          className="w-full h-9 rounded-lg border-[var(--theme-border-default)] text-[13px]"
                           style={{ fontWeight: 600 }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -641,7 +641,7 @@ export function HR({ userRole }: HRProps) {
 
         {/* Developer Notes - Inside scroll area */}
         <div
-          className="p-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg"
+          className="p-3 bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] rounded-lg"
           style={{
             maxWidth: "1180px",
             width: "100%",
@@ -650,7 +650,7 @@ export function HR({ userRole }: HRProps) {
             paddingRight: "24px",
           }}
         >
-          <p className="text-[11px] text-[#6B7280]">
+          <p className="text-[11px] text-[var(--theme-text-muted)]">
             <strong>HR Notes:</strong> Frame constrained to 1440×900. Content wrapper: 1180px max-width with 24px padding. 
             Left nav: 220px fixed. Role-based access: HR + Admin roles.
             <br />

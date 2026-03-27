@@ -16,17 +16,17 @@ export function ExpenseBreakdownReport({ entries, period, generatedAt, companyNa
   const totalExpenses = entries.reduce((sum, e) => sum + e.totalAmount, 0);
 
   return (
-    <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
-      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "#FFFFFF" }}>
+    <div className="bg-[var(--theme-bg-surface)] rounded-lg border border-[var(--theme-border-default)] overflow-hidden">
+      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "var(--theme-bg-surface)" }}>
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="uppercase mb-3" style={{ fontSize: "11px", fontWeight: "bold", color: "#0A1D4D", letterSpacing: "0.5px" }}>
+          <div className="uppercase mb-3" style={{ fontSize: "11px", fontWeight: "bold", color: "var(--theme-text-primary)", letterSpacing: "0.5px" }}>
             {companyName || "JJB CRATING PACKING AND FREIGHT FORWARDING"}
           </div>
-          <div className="uppercase mb-2" style={{ fontSize: "14px", fontWeight: "bold", color: "#0A1D4D", letterSpacing: "1px" }}>
+          <div className="uppercase mb-2" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--theme-text-primary)", letterSpacing: "1px" }}>
             EXPENSE CATEGORY SUMMARY
           </div>
-          <div className="uppercase" style={{ fontSize: "10px", fontWeight: "normal", color: "#6B7280", letterSpacing: "0.5px" }}>
+          <div className="uppercase" style={{ fontSize: "10px", fontWeight: "normal", color: "var(--theme-text-muted)", letterSpacing: "0.5px" }}>
             {period.toUpperCase()}
           </div>
         </div>
@@ -78,7 +78,7 @@ export function ExpenseBreakdownReport({ entries, period, generatedAt, companyNa
               })}
               
               {/* TOTAL ROW */}
-              <tr style={{ height: "32px", backgroundColor: "#F3F4F6" }}>
+              <tr style={{ height: "32px", backgroundColor: "var(--theme-bg-surface-subtle)" }}>
                 <td colSpan={2} style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "11px", fontWeight: "bold", textAlign: "right" }}>
                   TOTAL
                 </td>
@@ -105,7 +105,7 @@ export function ExpenseBreakdownReport({ entries, period, generatedAt, companyNa
                 <span>Medium Cost (10-20%)</span>
               </div>
               <div className="flex items-center gap-2">
-                <div style={{ width: "20px", height: "12px", backgroundColor: "#FFFFFF", border: "1px solid #999" }}></div>
+                <div style={{ width: "20px", height: "12px", backgroundColor: "var(--theme-bg-surface)", border: "1px solid #999" }}></div>
                 <span>Low Cost (&lt; 10%)</span>
               </div>
             </div>
@@ -113,7 +113,7 @@ export function ExpenseBreakdownReport({ entries, period, generatedAt, companyNa
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "#9CA3AF" }}>
+        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "var(--theme-text-muted)" }}>
           Generated on {generatedAt}
         </div>
       </div>

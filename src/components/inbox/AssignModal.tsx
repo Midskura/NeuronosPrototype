@@ -95,24 +95,24 @@ export function AssignModal({ ticketId, department, onAssigned, onClose }: Assig
       <div
         style={{
           width: 400,
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #E5E9F0",
+          backgroundColor: "var(--theme-bg-surface)",
+          border: "1px solid var(--theme-border-default)",
           borderRadius: 12,
           overflow: "hidden",
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between" style={{ padding: "16px 20px", borderBottom: "1px solid #E5E9F0" }}>
-          <h3 style={{ fontSize: 14, fontWeight: 600, color: "#12332B" }}>
+        <div className="flex items-center justify-between" style={{ padding: "16px 20px", borderBottom: "1px solid var(--theme-border-default)" }}>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--theme-text-primary)" }}>
             Assign to {department} member
           </h3>
-          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#667085", display: "flex" }}>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex" }}>
             <X size={18} />
           </button>
         </div>
 
         {/* Optional note */}
-        <div style={{ padding: "12px 20px", borderBottom: "1px solid #E5E9F0" }}>
+        <div style={{ padding: "12px 20px", borderBottom: "1px solid var(--theme-border-default)" }}>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -121,25 +121,25 @@ export function AssignModal({ ticketId, department, onAssigned, onClose }: Assig
             style={{
               width: "100%",
               resize: "none",
-              border: "1px solid #E5E9F0",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: 6,
               padding: "8px 10px",
               fontSize: 12,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               fontFamily: "inherit",
               outline: "none",
             }}
             onFocus={(e) => (e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)")}
-            onBlur={(e) => (e.currentTarget.style.borderColor = "#E5E9F0")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "var(--theme-border-default)")}
           />
         </div>
 
         {/* Member list */}
         <div style={{ maxHeight: 280, overflowY: "auto" }}>
           {isLoading ? (
-            <div style={{ padding: 24, textAlign: "center", color: "#9CA3AF", fontSize: 13 }}>Loading…</div>
+            <div style={{ padding: 24, textAlign: "center", color: "var(--theme-text-muted)", fontSize: 13 }}>Loading…</div>
           ) : members.length === 0 ? (
-            <div style={{ padding: 24, textAlign: "center", color: "#9CA3AF", fontSize: 13 }}>No members found</div>
+            <div style={{ padding: 24, textAlign: "center", color: "var(--theme-text-muted)", fontSize: 13 }}>No members found</div>
           ) : (
             members.map((m) => (
               <button
@@ -151,10 +151,10 @@ export function AssignModal({ ticketId, department, onAssigned, onClose }: Assig
                   padding: "12px 20px",
                   background: "none",
                   border: "none",
-                  borderBottom: "1px solid #F3F4F6",
+                  borderBottom: "1px solid var(--theme-border-subtle)",
                   cursor: isAssigning ? "wait" : "pointer",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#F9FAFB")}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "var(--theme-bg-page)")}
                 onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
               >
                 <div style={{
@@ -166,8 +166,8 @@ export function AssignModal({ ticketId, department, onAssigned, onClose }: Assig
                   {m.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
                 </div>
                 <div>
-                  <p style={{ fontSize: 13, fontWeight: 500, color: "#12332B" }}>{m.name}</p>
-                  <p style={{ fontSize: 11, color: "#9CA3AF", textTransform: "capitalize" }}>{m.role}</p>
+                  <p style={{ fontSize: 13, fontWeight: 500, color: "var(--theme-text-primary)" }}>{m.name}</p>
+                  <p style={{ fontSize: 11, color: "var(--theme-text-muted)", textTransform: "capitalize" }}>{m.role}</p>
                 </div>
                 <UserCheck size={14} style={{ color: "#2E5147", marginLeft: "auto" }} />
               </button>

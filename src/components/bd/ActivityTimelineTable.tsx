@@ -98,10 +98,10 @@ export function ActivityTimelineTable({
   const getActivityTypeColor = (type: ActivityType) => {
     // System activities get different styling
     if (type === "System Update" || type === "Note") {
-      return "bg-[#F1F6F4] text-[#6B7A76]";
+      return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
     }
     // All logged activities get completed/success styling
-    return "bg-[#E8F2EE] text-[#2B8A6E]";
+    return "bg-[var(--theme-bg-surface-tint)] text-[#2B8A6E]";
   };
 
   const formatDate = (dateString: string) => {
@@ -124,8 +124,8 @@ export function ActivityTimelineTable({
       minute: '2-digit'
     });
     
-    if (isToday) return <span className="text-[#0F766E]">{formatted} (Today)</span>;
-    if (isYesterday) return <span className="text-[#6B7A76]">{formatted} (Yesterday)</span>;
+    if (isToday) return <span className="text-[var(--theme-action-primary-bg)]">{formatted} (Today)</span>;
+    if (isYesterday) return <span className="text-[var(--theme-text-muted)]">{formatted} (Yesterday)</span>;
     
     return formatted;
   };
@@ -160,7 +160,7 @@ export function ActivityTimelineTable({
             className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "var(--neuron-ink-primary)"
             }}
           />
@@ -192,9 +192,9 @@ export function ActivityTimelineTable({
           onChange={(value) => setDateRangeFilter(value as "Today" | "This Week" | "This Month" | "All Time")}
           options={[
             { value: "All Time", label: "All Time", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--neuron-ink-muted)" }} /> },
-            { value: "Today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#0F766E" }} /> },
+            { value: "Today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-action-primary-bg)" }} /> },
             { value: "This Week", label: "This Week", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-            { value: "This Month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+            { value: "This Month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
           ]}
         />
       </div>
@@ -203,7 +203,7 @@ export function ActivityTimelineTable({
       <div>
         {sortedActivities.length === 0 ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             <div className="px-6 py-12 text-center">
@@ -217,12 +217,12 @@ export function ActivityTimelineTable({
             {Object.entries(groupedActivities).map(([date, activities]) => (
               <div key={date}>
                 <div className="mb-3">
-                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "#0F766E", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-action-primary-bg)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     {date}
                   </h3>
                 </div>
                 <div className="rounded-[10px] overflow-hidden" style={{ 
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)"
                 }}>
                   {/* Table Header */}
@@ -273,8 +273,8 @@ export function ActivityTimelineTable({
                           </div>
                           {activity.attachments && activity.attachments.length > 0 && (
                             <div className="flex items-center gap-1 mt-1">
-                              <Paperclip size={12} style={{ color: "#667085" }} />
-                              <span className="text-[11px] text-[#667085]">
+                              <Paperclip size={12} style={{ color: "var(--theme-text-muted)" }} />
+                              <span className="text-[11px] text-[var(--theme-text-muted)]">
                                 {activity.attachments.length} {activity.attachments.length === 1 ? 'Attachment' : 'Attachments'}
                               </span>
                             </div>

@@ -66,10 +66,10 @@ export function PricingTableHeader({
       gridTemplateColumns: getGridTemplate(),
       gap: "8px",
       padding: "10px 16px",
-      backgroundColor: "#F8FBFB",
+      backgroundColor: "var(--theme-bg-page)",
       fontSize: "11px",
       fontWeight: 600,
-      color: "#6B7A76",
+      color: "var(--theme-text-muted)",
       letterSpacing: "0.02em",
       borderBottom: "1px solid #EDF2F1"
     }}>

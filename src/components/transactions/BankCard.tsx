@@ -61,10 +61,10 @@ export function BankCard({
       onClick={() => !isEditing && onSelect(account.id)}
       className={`
         w-[180px] h-[60px] px-4 py-0 rounded-[7.5px] border cursor-pointer transition-all duration-200 shrink-0
-        flex flex-col justify-center relative bg-white group
+        flex flex-col justify-center relative bg-[var(--theme-bg-surface)] group
         ${isSelected 
-          ? "border-[#0F766E] shadow-[0px_0px_0px_0px_rgba(15,118,110,0.1),0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)]" 
-          : "border-[#E5E7EB] hover:border-gray-300"
+          ? "border-[var(--theme-action-primary-bg)] shadow-[0px_0px_0px_0px_rgba(15,118,110,0.1),0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.1)]" 
+          : "border-[var(--theme-border-default)] hover:border-[var(--theme-border-default)]"
         }
       `}
     >
@@ -79,23 +79,23 @@ export function BankCard({
                 onChange={(e) => setEditedName(e.target.value)}
                 onKeyDown={handleKeyDown}
                 onBlur={handleSave}
-                className="font-medium text-[11px] tracking-[0.02em] text-[#12332B] w-full border-b border-[#0F766E] outline-none bg-transparent p-0 m-0 leading-tight"
+                className="font-medium text-[11px] tracking-[0.02em] text-[var(--theme-text-primary)] w-full border-b border-[var(--theme-action-primary-bg)] outline-none bg-transparent p-0 m-0 leading-tight"
             />
           </div>
         ) : (
-          <span className={`font-medium text-[11px] tracking-[0.02em] truncate ${isSelected ? "text-[#0F766E]" : "text-[#667085]"}`}>
+          <span className={`font-medium text-[11px] tracking-[0.02em] truncate ${isSelected ? "text-[var(--theme-action-primary-bg)]" : "text-[var(--theme-text-muted)]"}`}>
             {account.name}
           </span>
         )}
         
-        <span className="text-[17px] font-bold text-[#12332B] font-sans leading-none tracking-tight">
+        <span className="text-[17px] font-bold text-[var(--theme-text-primary)] font-sans leading-none tracking-tight">
             {formatCurrency(account.bankBalance, account.currency)}
         </span>
       </div>
       
       {/* Active Indicator Bottom Strip */}
       {isSelected && (
-        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0F766E] rounded-bl-[7px] rounded-br-[7px]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--theme-action-primary-bg)] rounded-bl-[7px] rounded-br-[7px]" />
       )}
 
       {/* Action Icon: Pencil (Edit) or Trash (Delete) */}
@@ -116,7 +116,7 @@ export function BankCard({
                     e.stopPropagation();
                     setIsEditing(true);
                 }}
-                className="p-1 hover:bg-gray-100 rounded text-gray-300 hover:text-[#0F766E] outline-none transition-colors"
+                className="p-1 hover:bg-[var(--theme-bg-surface-subtle)] rounded text-[var(--theme-text-muted)] hover:text-[var(--theme-action-primary-bg)] outline-none transition-colors"
                 title="Rename Account"
              >
                 <Edit2 size={12} />

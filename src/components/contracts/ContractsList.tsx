@@ -128,7 +128,7 @@ export function ContractsList({
   const expiringCount = contracts.filter(c => getContractStatus(c) === "Expiring").length;
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "white" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--theme-bg-surface)" }}>
       <div style={{ padding: "32px 48px" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "start", justifyContent: "space-between", marginBottom: "32px" }}>
@@ -136,7 +136,7 @@ export function ContractsList({
             <h1 style={{ 
               fontSize: "32px", 
               fontWeight: 600, 
-              color: "#12332B", 
+              color: "var(--theme-text-primary)", 
               marginBottom: "4px",
               letterSpacing: "-1.2px"
             }}>
@@ -144,7 +144,7 @@ export function ContractsList({
             </h1>
             <p style={{ 
               fontSize: "14px", 
-              color: "#667085"
+              color: "var(--theme-text-muted)"
             }}>
               {department === "Accounting" 
                 ? "Monitor contract revenue and billing across all active agreements"
@@ -170,7 +170,7 @@ export function ContractsList({
               left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
             }}
           />
           <input
@@ -181,12 +181,12 @@ export function ContractsList({
             style={{
               width: "100%",
               padding: "10px 12px 10px 40px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
               outline: "none",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           />
         </div>
@@ -203,7 +203,7 @@ export function ContractsList({
           <div style={{ minWidth: "140px" }}>
             <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2" />
           </div>
-          <span className="text-[13px] text-[#6B7280] font-medium px-2">to</span>
+          <span className="text-[13px] text-[var(--theme-text-muted)] font-medium px-2">to</span>
           <div style={{ minWidth: "140px" }}>
             <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2" />
           </div>
@@ -218,7 +218,7 @@ export function ContractsList({
                 ...uniqueCustomers.map(customer => ({ 
                   value: customer!, 
                   label: customer!, 
-                  icon: <Building2 size={16} style={{ color: "#0F766E" }} /> 
+                  icon: <Building2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> 
                 }))
               ]}
               placeholder="Select customer"
@@ -232,11 +232,11 @@ export function ContractsList({
               onChange={setStatusFilter}
               options={[
                 { value: "all", label: "All Statuses", icon: <CircleDot size={16} /> },
-                { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "#0F766E" }} /> },
+                { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> },
                 { value: "Expiring", label: "Expiring", icon: <AlertCircle size={16} style={{ color: "#D97706" }} /> },
-                { value: "Expired", label: "Expired", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> },
+                { value: "Expired", label: "Expired", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
                 { value: "Renewed", label: "Renewed", icon: <CheckCircle size={16} style={{ color: "#7C3AED" }} /> },
-                { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> }
+                { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }
               ]}
               placeholder="Select status"
             />
@@ -252,7 +252,7 @@ export function ContractsList({
                 ...uniqueOwners.map(owner => ({ 
                   value: owner!, 
                   label: owner!, 
-                  icon: <User size={16} style={{ color: "#0F766E" }} /> 
+                  icon: <User size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> 
                 }))
               ]}
               placeholder="Select owner"
@@ -264,7 +264,7 @@ export function ContractsList({
         <div style={{ 
           display: "flex", 
           gap: "8px", 
-          borderBottom: "1px solid #E5E7EB",
+          borderBottom: "1px solid var(--theme-border-default)",
           marginBottom: "24px"
         }}>
           <button
@@ -389,16 +389,16 @@ export function ContractsList({
             margin: "0 auto"
           }}>
             <div className="text-center py-12">
-              <Handshake size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-              <p className="text-[14px]" style={{ color: "#667085" }}>
+              <Handshake size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+              <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>
                 {contracts.length === 0 ? "No Contracts Yet" : "No contracts match your filters"}
               </p>
             </div>
           </div>
         ) : (
           <div style={{ 
-            background: "#FFFFFF",
-            border: "1px solid #E5E7EB",
+            background: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "12px",
             overflow: "hidden"
           }}>
@@ -407,26 +407,26 @@ export function ContractsList({
               className="grid gap-4 px-6 py-4"
               style={{ 
                 gridTemplateColumns: GRID_COLS,
-                borderBottom: "1px solid #E5E7EB",
-                background: "#F9FAFB"
+                borderBottom: "1px solid var(--theme-border-default)",
+                background: "var(--theme-bg-page)"
               }}
             >
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 CONTRACT
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 CUSTOMER
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 SERVICES
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px", textAlign: "right" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", textAlign: "right" }}>
                 VALIDITY
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                 VALID UNTIL
               </div>
-              <div style={{ fontSize: "11px", fontWeight: 600, color: "#6B7280", textTransform: "uppercase", letterSpacing: "0.5px", textAlign: "center" }}>
+              <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", textAlign: "center" }}>
                 STATUS
               </div>
             </div>
@@ -442,11 +442,11 @@ export function ContractsList({
                   className="grid gap-4 px-6 py-4 transition-colors cursor-pointer"
                   style={{ 
                     gridTemplateColumns: GRID_COLS,
-                    borderBottom: index < filteredContracts.length - 1 ? "1px solid #E5E7EB" : "none",
+                    borderBottom: index < filteredContracts.length - 1 ? "1px solid var(--theme-border-default)" : "none",
                   }}
                   onClick={() => onSelectContract(contract)}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
@@ -458,21 +458,21 @@ export function ContractsList({
                         width: "32px",
                         height: "32px",
                         borderRadius: "6px",
-                        backgroundColor: "#F0FDF9",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
                         border: "1px solid #CCFBF1"
                     }}>
-                        <Handshake size={16} color="#0F766E" />
+                        <Handshake size={16} color="var(--theme-action-primary-bg)" />
                     </div>
                     
                     <div style={{ overflow: "hidden", width: "100%" }}>
                       <div style={{ 
                         fontSize: "13px", 
                         fontWeight: 600, 
-                        color: "#12332B",
+                        color: "var(--theme-text-primary)",
                         marginBottom: "2px",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -482,7 +482,7 @@ export function ContractsList({
                       </div>
                       <div style={{
                         fontSize: "12px",
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis"
@@ -496,7 +496,7 @@ export function ContractsList({
                   <div style={{ display: "flex", alignItems: "center", overflow: "hidden" }}>
                     <div style={{ 
                       fontSize: "13px", 
-                      color: "#12332B",
+                      color: "var(--theme-text-primary)",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis"
@@ -509,11 +509,11 @@ export function ContractsList({
                   <div style={{ display: "flex", alignItems: "center", gap: "4px", flexWrap: "wrap" }}>
                     {(contract.services || []).map(service => {
                       const getIcon = () => {
-                        if (service === "Brokerage") return <Briefcase size={11} color="#0F766E" />;
-                        if (service === "Forwarding") return <Ship size={11} color="#0F766E" />;
-                        if (service === "Trucking") return <Truck size={11} color="#0F766E" />;
-                        if (service === "Marine Insurance") return <Shield size={11} color="#0F766E" />;
-                        return <Package size={11} color="#0F766E" />;
+                        if (service === "Brokerage") return <Briefcase size={11} color="var(--theme-action-primary-bg)" />;
+                        if (service === "Forwarding") return <Ship size={11} color="var(--theme-action-primary-bg)" />;
+                        if (service === "Trucking") return <Truck size={11} color="var(--theme-action-primary-bg)" />;
+                        if (service === "Marine Insurance") return <Shield size={11} color="var(--theme-action-primary-bg)" />;
+                        return <Package size={11} color="var(--theme-action-primary-bg)" />;
                       };
                       return (
                         <span key={service} style={{
@@ -522,8 +522,8 @@ export function ContractsList({
                           gap: "3px",
                           fontSize: "11px",
                           fontWeight: 500,
-                          color: "#0F766E",
-                          backgroundColor: "#E8F5F3",
+                          color: "var(--theme-action-primary-bg)",
+                          backgroundColor: "var(--theme-bg-surface-tint)",
                           padding: "2px 6px",
                           borderRadius: "4px",
                         }}>
@@ -550,14 +550,14 @@ export function ContractsList({
                         {daysRemaining <= 0 ? "Expired" : `${daysRemaining}d`}
                       </div>
                     ) : (
-                      <span style={{ fontSize: "12px", color: "#6B7280" }}>—</span>
+                      <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>—</span>
                     )}
                   </div>
 
                   {/* VALID UNTIL */}
                   <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                    <Calendar size={12} color="#6B7280" />
-                    <span style={{ fontSize: "12px", color: "#6B7280" }}>
+                    <Calendar size={12} color="var(--theme-text-muted)" />
+                    <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                       {formatDate(contract.contract_validity_end)}
                     </span>
                   </div>

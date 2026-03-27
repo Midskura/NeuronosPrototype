@@ -18,6 +18,7 @@ import type { NetworkPartner } from "../data/networkPartners";
 import { ContactsModuleWithBackend } from "./crm/ContactsModuleWithBackend";
 // projectId/publicAnonKey removed — using supabase.from() (Phase 3)
 import { useNetworkPartners } from "../hooks/useNetworkPartners";
+import { useDataScope } from "../hooks/useDataScope";
 
 export type PricingView = "contacts" | "customers" | "quotations" | "vendors" | "reports";
 type SubView = "list" | "detail" | "create";
@@ -42,6 +43,8 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   const [isLoading, setIsLoading] = useState(false);
   const [pendingQuotationType, setPendingQuotationType] = useState<QuotationType>("project");
 
+  const { scope, isLoaded } = useDataScope();
+
   // Hook for Network Partners (Lifting State Up)
   const { partners, isLoading: isPartnersLoading, savePartner } = useNetworkPartners();
 
@@ -50,12 +53,13 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
 
   // Fetch quotations from backend
   const fetchQuotations = async () => {
+    if (!isLoaded) return;
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('quotations')
-        .select('*')
-        .order('created_at', { ascending: false });
+      let query = supabase.from('quotations').select('*');
+      if (scope.type === 'userIds') query = query.in('prepared_by', scope.ids);
+      else if (scope.type === 'own') query = query.eq('prepared_by', scope.userId);
+      const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) throw error;
       // Merge details JSONB so financial fields (charge_categories, buying_price, etc.) are accessible
@@ -76,12 +80,12 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
     }
   };
 
-  // Fetch quotations when view changes to quotations
+  // Fetch quotations when view changes or scope resolves
   useEffect(() => {
     if (view === "quotations" || view === "reports") {
       fetchQuotations();
     }
-  }, [view]);
+  }, [view, scope, isLoaded]);
 
   // Reset to list view when switching between main views
   useEffect(() => {

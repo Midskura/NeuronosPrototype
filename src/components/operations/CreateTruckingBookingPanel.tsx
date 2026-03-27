@@ -161,8 +161,8 @@ export function CreateTruckingBookingPanel({
             {/* General Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   General Information
                 </h3>
               </div>
@@ -170,7 +170,7 @@ export function CreateTruckingBookingPanel({
               <div className="space-y-4">
                 {/* Movement Toggle */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Movement <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
                   <MovementToggle
@@ -202,7 +202,7 @@ export function CreateTruckingBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Owner
                     </label>
                     <input
@@ -214,14 +214,14 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Handler
                     </label>
                     <input
@@ -233,7 +233,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -242,7 +242,7 @@ export function CreateTruckingBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Service
                     </label>
                     <input
@@ -254,14 +254,14 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Mode
                     </label>
                     <input
@@ -273,7 +273,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -282,7 +282,7 @@ export function CreateTruckingBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Quotation Reference
                     </label>
                     <input
@@ -294,7 +294,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -338,8 +338,8 @@ export function CreateTruckingBookingPanel({
             {/* Delivery Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <MapPin size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <MapPin size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Delivery Details
                 </h3>
               </div>
@@ -347,7 +347,7 @@ export function CreateTruckingBookingPanel({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Consignee
                     </label>
                     <ConsigneePicker
@@ -358,14 +358,14 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Driver
                     </label>
                     <input
@@ -377,7 +377,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -386,7 +386,7 @@ export function CreateTruckingBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Helper
                     </label>
                     <input
@@ -398,7 +398,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -412,14 +412,14 @@ export function CreateTruckingBookingPanel({
                     addButtonText="Add Vehicle Ref."
                     inputStyle={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Pull Out Location
                   </label>
                   <input
@@ -431,7 +431,7 @@ export function CreateTruckingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -439,16 +439,16 @@ export function CreateTruckingBookingPanel({
 
                 {/* ✨ Multi-line trucking: Destinations repeater */}
                 <div>
-                  <label className="block mb-3" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-3" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Destinations <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
 
                   {/* Column headers — only when 2+ rows */}
                   {truckingLineItems.length > 1 && (
                     <div className="grid gap-2 mb-1.5" style={{ gridTemplateColumns: "5fr 3fr 2fr 28px" }}>
-                      <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-wide pl-1">Destination</span>
-                      <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-wide">Truck Type</span>
-                      <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-wide">Qty</span>
+                      <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide pl-1">Destination</span>
+                      <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">Truck Type</span>
+                      <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide">Qty</span>
                       <span />
                     </div>
                   )}
@@ -480,7 +480,7 @@ export function CreateTruckingBookingPanel({
                             )}
                             placeholder="Delivery address"
                             className="w-full px-3 py-2 rounded-lg text-[13px]"
-                            style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "#FFFFFF", color: "var(--neuron-ink-primary)" }}
+                            style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)", color: "var(--neuron-ink-primary)" }}
                           />
                         )}
                         <input
@@ -491,7 +491,7 @@ export function CreateTruckingBookingPanel({
                           )}
                           placeholder="e.g., 40ft"
                           className="w-full px-3 py-2 rounded-lg text-[13px]"
-                          style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "#FFFFFF", color: "var(--neuron-ink-primary)" }}
+                          style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)", color: "var(--neuron-ink-primary)" }}
                         />
                         <input
                           type="number"
@@ -502,13 +502,13 @@ export function CreateTruckingBookingPanel({
                           placeholder="1"
                           min="0"
                           className="w-full px-2 py-2 rounded-lg text-[13px] text-center"
-                          style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "#FFFFFF", color: "var(--neuron-ink-primary)" }}
+                          style={{ border: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)", color: "var(--neuron-ink-primary)" }}
                         />
                         {truckingLineItems.length > 1 && (
                           <button
                             type="button"
                             onClick={() => setTruckingLineItems(prev => prev.filter(item => item.id !== li.id))}
-                            className="flex items-center justify-center w-7 h-7 rounded-md border border-[#E5E9F0] bg-white opacity-0 group-hover/row:opacity-100 hover:border-[#FCA5A5] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-all text-[#9CA3AF]"
+                            className="flex items-center justify-center w-7 h-7 rounded-md border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] opacity-0 group-hover/row:opacity-100 hover:border-[#FCA5A5] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-all text-[var(--theme-text-muted)]"
                           >
                             <X size={13} />
                           </button>
@@ -524,7 +524,7 @@ export function CreateTruckingBookingPanel({
                       ...prev,
                       { id: `li-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, destination: "", truckType: "", quantity: 1 },
                     ])}
-                    className="flex items-center justify-center gap-1.5 w-full py-2.5 mt-1.5 rounded-md text-[13px] font-medium text-[#9CA3AF] bg-transparent border-[1.5px] border-dashed border-[#D1D5DB] cursor-pointer transition-all hover:border-[#0F766E] hover:text-[#0F766E] hover:bg-[#F0FDF9]"
+                    className="flex items-center justify-center gap-1.5 w-full py-2.5 mt-1.5 rounded-md text-[13px] font-medium text-[var(--theme-text-muted)] bg-transparent border-[1.5px] border-dashed border-[var(--theme-border-default)] cursor-pointer transition-all hover:border-[var(--theme-action-primary-bg)] hover:text-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-bg-surface-tint)]"
                   >
                     <Plus size={14} />
                     Add destination
@@ -532,8 +532,8 @@ export function CreateTruckingBookingPanel({
 
                   {/* Total summary */}
                   {truckingLineItems.length > 1 && (
-                    <div className="text-right mt-1.5 pr-10 text-[12px] text-[#667085]">
-                      Total: <strong className="text-[#12332B]">{truckingLineItems.reduce((sum, li) => sum + (li.quantity || 0), 0)}</strong> truck(s)
+                    <div className="text-right mt-1.5 pr-10 text-[12px] text-[var(--theme-text-muted)]">
+                      Total: <strong className="text-[var(--theme-text-primary)]">{truckingLineItems.reduce((sum, li) => sum + (li.quantity || 0), 0)}</strong> truck(s)
                     </div>
                   )}
                 </div>
@@ -541,7 +541,7 @@ export function CreateTruckingBookingPanel({
                 {formData.movement === "EXPORT" && (
                   <>
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         Warehouse Address
                       </label>
                       <textarea
@@ -553,7 +553,7 @@ export function CreateTruckingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -566,9 +566,9 @@ export function CreateTruckingBookingPanel({
                         name="withGps"
                         checked={formData.withGps}
                         onChange={(e) => setFormData(prev => ({ ...prev, withGps: e.target.checked }))}
-                        className="w-4 h-4 text-[#0F766E] border-gray-300 rounded focus:ring-[#0F766E]"
+                        className="w-4 h-4 text-[var(--theme-action-primary-bg)] border-[var(--theme-border-default)] rounded focus:ring-[#0F766E]"
                       />
-                      <label htmlFor="withGps" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label htmlFor="withGps" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         With GPS
                       </label>
                     </div>
@@ -576,7 +576,7 @@ export function CreateTruckingBookingPanel({
                 )}
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Delivery Instructions
                   </label>
                   <textarea
@@ -588,14 +588,14 @@ export function CreateTruckingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Date Delivered
                   </label>
                   <input
@@ -606,7 +606,7 @@ export function CreateTruckingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -617,8 +617,8 @@ export function CreateTruckingBookingPanel({
             {/* FCL Additional Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Truck size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Truck size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Additional Details
                 </h3>
               </div>
@@ -626,7 +626,7 @@ export function CreateTruckingBookingPanel({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       TABS Booking
                     </label>
                     <input
@@ -638,14 +638,14 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Empty Return
                     </label>
                     <input
@@ -657,7 +657,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -692,7 +692,7 @@ export function CreateTruckingBookingPanel({
 
                 {formData.movement === "EXPORT" && (
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Gate In
                     </label>
                     <input
@@ -703,7 +703,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -711,7 +711,7 @@ export function CreateTruckingBookingPanel({
                 )}
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     EIR Availability
                   </label>
                   <input
@@ -722,7 +722,7 @@ export function CreateTruckingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -730,7 +730,7 @@ export function CreateTruckingBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Det/Dem Validity
                     </label>
                     <input
@@ -741,14 +741,14 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Storage Validity
                     </label>
                     <input
@@ -759,7 +759,7 @@ export function CreateTruckingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -767,7 +767,7 @@ export function CreateTruckingBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Shipping Line
                   </label>
                   <input
@@ -779,7 +779,7 @@ export function CreateTruckingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />

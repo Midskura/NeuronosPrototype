@@ -72,7 +72,7 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
           backgroundColor: "#F0F7F5",
           fontSize: 13,
           fontWeight: 500,
-          color: "#0F766E",
+          color: "var(--theme-action-primary-bg)",
         }}
       >
         <Receipt size={14} />
@@ -91,7 +91,7 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
         gap: 6,
         padding: "8px 14px",
         borderRadius: 8,
-        border: "1px solid #E5E9F0",
+        border: "1px solid var(--theme-border-default)",
         backgroundColor: isLoading ? "#F9FAFB" : "#FFFFFF",
         fontSize: 13,
         fontWeight: 500,
@@ -108,8 +108,8 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
       }}
       onMouseLeave={(e) => {
         if (!isLoading) {
-          e.currentTarget.style.backgroundColor = "#FFFFFF";
-          e.currentTarget.style.borderColor = "#E5E9F0";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
+          e.currentTarget.style.borderColor = "var(--theme-border-default)";
           e.currentTarget.style.color = "#374151";
         }
       }}

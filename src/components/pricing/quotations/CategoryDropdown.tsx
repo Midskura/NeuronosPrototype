@@ -73,7 +73,7 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
         top: "calc(100% + 4px)",
         right: 0,
         width: "380px",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -85,14 +85,14 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
       <div style={{
         padding: "12px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "#F8FBFB"
+        backgroundColor: "var(--theme-bg-page)"
       }}>
         <div style={{
           display: "flex",
           alignItems: "center",
           gap: "8px",
           padding: "8px 12px",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "6px"
         }}>
@@ -144,7 +144,7 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "var(--neuron-ink-primary)",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid transparent",
                   borderRadius: "6px",
                   cursor: "pointer",
@@ -154,7 +154,7 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = "#F0FDF4";
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "white";
@@ -193,8 +193,8 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
                 padding: "10px 12px",
                 fontSize: "13px",
                 fontWeight: 500,
-                color: "#0F766E",
-                backgroundColor: "#E8F5F3",
+                color: "var(--theme-action-primary-bg)",
+                backgroundColor: "var(--theme-bg-surface-tint)",
                 border: "1px solid #0F766E",
                 borderRadius: "6px",
                 cursor: "pointer",
@@ -205,11 +205,11 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
                 transition: "all 0.1s"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                 e.currentTarget.style.color = "white";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#E8F5F3";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 e.currentTarget.style.color = "#0F766E";
               }}
             >

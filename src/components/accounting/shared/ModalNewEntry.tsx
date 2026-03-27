@@ -150,12 +150,12 @@ export function ModalNewEntry({
 
         <div className="space-y-6 py-4">
           {/* Type Segmented Control */}
-          <div className="flex gap-2 p-1 bg-[#F9FAFB] w-fit" style={{ borderRadius: 'var(--radius-sm)' }}>
+          <div className="flex gap-2 p-1 bg-[var(--theme-bg-page)] w-fit" style={{ borderRadius: 'var(--radius-sm)' }}>
             <button
               className={`px-4 py-2 text-[14px] transition-colors ${
                 formData.type === "revenue"
-                  ? "bg-white shadow-sm"
-                  : "text-[#6B7280] hover:text-[#374151]"
+                  ? "bg-[var(--theme-bg-surface)] shadow-sm"
+                  : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
               }`}
               style={{ borderRadius: 'var(--radius-xs)' }}
               onClick={() => setFormData({ ...formData, type: "revenue" })}
@@ -165,8 +165,8 @@ export function ModalNewEntry({
             <button
               className={`px-4 py-2 text-[14px] transition-colors ${
                 formData.type === "expense"
-                  ? "bg-white shadow-sm"
-                  : "text-[#6B7280] hover:text-[#374151]"
+                  ? "bg-[var(--theme-bg-surface)] shadow-sm"
+                  : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
               }`}
               style={{ borderRadius: 'var(--radius-xs)' }}
               onClick={() => setFormData({ ...formData, type: "expense" })}
@@ -176,8 +176,8 @@ export function ModalNewEntry({
             <button
               className={`px-4 py-2 text-[14px] transition-colors ${
                 formData.type === "transfer"
-                  ? "bg-white shadow-sm"
-                  : "text-[#6B7280] hover:text-[#374151]"
+                  ? "bg-[var(--theme-bg-surface)] shadow-sm"
+                  : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
               }`}
               style={{ borderRadius: 'var(--radius-xs)' }}
               onClick={() => setFormData({ ...formData, type: "transfer" })}
@@ -416,7 +416,7 @@ export function ModalNewEntry({
           </div>
 
           {/* Footer Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-[#E5E7EB]">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[var(--theme-border-default)]">
             <Button
               variant="ghost"
               onClick={handleCancel}

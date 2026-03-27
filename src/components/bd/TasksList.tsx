@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Search, Plus, Calendar, Flag, Phone, Mail, Send, Users, MessageSquare, MessageCircle, Linkedin, ListTodo, CheckCircle2 } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
+import { useDataScope } from '../../hooks/useDataScope';
 import type { Task, TaskPriority, TaskStatus, TaskType } from "../../types/bd";
 import { CustomDropdown } from "./CustomDropdown";
 import { AddTaskPanel } from "./AddTaskPanel";
@@ -21,13 +22,17 @@ export function TasksList({ onViewTask }: TasksListProps) {
   const [contacts, setContacts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const currentUserId = "user-1"; // Mock current user
+  const { scope, isLoaded } = useDataScope();
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
+    if (!isLoaded) return;
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.from('tasks').select('*').order('created_at', { ascending: false });
+      let query = supabase.from('tasks').select('*');
+      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
+      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
+      const { data, error } = await query.order('created_at', { ascending: false });
       if (error) throw error;
       setTasks(data || []);
       console.log(`Fetched ${data?.length || 0} tasks`);
@@ -60,12 +65,12 @@ export function TasksList({ onViewTask }: TasksListProps) {
     }
   };
 
-  // Load data on mount
+  // Load data on mount and when scope resolves
   useEffect(() => {
     fetchTasks();
     fetchCustomers();
     fetchContacts();
-  }, []);
+  }, [scope, isLoaded]);
 
   const handleSaveTask = async (taskData: Partial<Task>) => {
     try {
@@ -140,18 +145,18 @@ export function TasksList({ onViewTask }: TasksListProps) {
     switch (priority) {
       case "High": return "text-[#C94F3D]";
       case "Medium": return "text-[#C88A2B]";
-      case "Low": return "text-[#6B7A76]";
-      default: return "text-[#6B7A76]";
+      case "Low": return "text-[var(--theme-text-muted)]";
+      default: return "text-[var(--theme-text-muted)]";
     }
   };
 
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case "Completed": return "bg-[#E8F2EE] text-[#2B8A6E]";
-      case "Ongoing": return "bg-[#E8F2EE] text-[#237F66]";
+      case "Completed": return "bg-[var(--theme-bg-surface-tint)] text-[#2B8A6E]";
+      case "Ongoing": return "bg-[var(--theme-bg-surface-tint)] text-[#237F66]";
       case "Pending": return "bg-[#FEF3E0] text-[#C88A2B]";
       case "Cancelled": return "bg-[#FCE8E6] text-[#C94F3D]";
-      default: return "bg-[#F1F6F4] text-[#6B7A76]";
+      default: return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
     }
   };
 
@@ -207,7 +212,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
     <div 
       className="h-full flex flex-col"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Page Header */}
@@ -221,10 +226,10 @@ export function TasksList({ onViewTask }: TasksListProps) {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Tasks
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage follow-ups and business development activities
             </p>
           </div>
@@ -244,10 +249,10 @@ export function TasksList({ onViewTask }: TasksListProps) {
               cursor: "pointer",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#0D6560";
+              e.currentTarget.style.background = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#0F766E";
+              e.currentTarget.style.background = "var(--theme-action-primary-bg)";
             }}
             onClick={() => setIsAddTaskOpen(true)}
           >
@@ -268,7 +273,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
             />
@@ -313,7 +318,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
               { value: "All", label: "All Priorities" },
               { value: "High", label: "High", icon: <Flag className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} /> },
               { value: "Medium", label: "Medium", icon: <Flag className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "Low", label: "Low", icon: <Flag className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+              { value: "Low", label: "Low", icon: <Flag className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
           />
         </div>
@@ -323,7 +328,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
       <div className="flex-1 overflow-auto px-12 pb-6">
         {sortedTasks.length === 0 ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             <div className="px-6 py-12 text-center">
@@ -350,7 +355,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
                   </span>
                 </div>
                 <div className="rounded-[10px] overflow-hidden" style={{ 
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)"
                 }}>
                   {/* Table Header */}
@@ -432,7 +437,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
                   </span>
                 </div>
                 <div className="rounded-[10px] overflow-hidden" style={{ 
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)"
                 }}>
                   {/* Table Header */}
@@ -502,19 +507,19 @@ export function TasksList({ onViewTask }: TasksListProps) {
             {tasksByPriority.Low.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Flag className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} />
-                  <h3 style={{ fontSize: "12px", fontWeight: 600, color: "#6B7A76", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Flag className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} />
+                  <h3 style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Low Priority
                   </h3>
                   <span 
                     className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px]" 
-                    style={{ backgroundColor: "#F1F6F4", color: "#6B7A76", fontWeight: 600 }}
+                    style={{ backgroundColor: "#F1F6F4", color: "var(--theme-text-muted)", fontWeight: 600 }}
                   >
                     {tasksByPriority.Low.length}
                   </span>
                 </div>
                 <div className="rounded-[10px] overflow-hidden" style={{ 
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)"
                 }}>
                   {/* Table Header */}

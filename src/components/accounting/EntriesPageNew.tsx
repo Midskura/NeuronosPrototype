@@ -272,7 +272,7 @@ export function EntriesPageNew() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-hidden">
+    <div className="h-full flex flex-col bg-[var(--theme-bg-surface)] overflow-hidden">
       {/* Command Bar - Persistent */}
       <CommandBarAccounting
         company={company}
@@ -344,11 +344,11 @@ export function EntriesPageNew() {
           {filteredEntries.length === 0 ? (
             // Empty State
             <div className="flex flex-col items-center justify-center py-24">
-              <div className="w-16 h-16 bg-[#F9FAFB] rounded-full flex items-center justify-center mb-4">
-                <Inbox className="w-8 h-8 text-[#9CA3AF]" />
+              <div className="w-16 h-16 bg-[var(--theme-bg-page)] rounded-full flex items-center justify-center mb-4">
+                <Inbox className="w-8 h-8 text-[var(--theme-text-muted)]" />
               </div>
-              <h3 className="text-[#0A1D4D] mb-2">No entries found</h3>
-              <p className="text-[14px] text-[#6B7280] mb-6">
+              <h3 className="text-[var(--theme-text-primary)] mb-2">No entries found</h3>
+              <p className="text-[14px] text-[var(--theme-text-muted)] mb-6">
                 {entries.length === 0
                   ? "Add your first entry to get started"
                   : "No entries match your filters. Try adjusting them."}
@@ -370,37 +370,37 @@ export function EntriesPageNew() {
             </div>
           ) : (
             // Entries Table
-            <div className="border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Date</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Booking No</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Client</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Type</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10 text-right">Amount</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Account</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Category</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Note</TableHead>
-                    <TableHead className="text-[12px] text-[#6B7280] h-10">Status</TableHead>
+                  <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Date</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Booking No</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Client</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Type</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10 text-right">Amount</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Account</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Category</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Note</TableHead>
+                    <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-10">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredEntries.map((entry, index) => (
                     <TableRow
                       key={entry.id}
-                      className={`border-b border-[#E5E7EB] hover:bg-[#F9FAFB] cursor-pointer transition-colors ${
+                      className={`border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] cursor-pointer transition-colors ${
                         selectedRowIndex === index ? "bg-orange-50 hover:bg-orange-50" : ""
                       }`}
                       onClick={() => handleRowClick(entry, index)}
                     >
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {new Date(entry.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                      <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                         {entry.bookingNo}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#374151]">{entry.client}</TableCell>
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">{entry.client}</TableCell>
                       <TableCell>
                         <BadgeType type={entry.type} />
                       </TableCell>
@@ -418,9 +418,9 @@ export function EntriesPageNew() {
                         {entry.type === "revenue" && "+"}
                         {entry.type === "expense" && "-"}₱{entry.amount.toLocaleString()}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#374151]">{entry.account}</TableCell>
-                      <TableCell className="text-[14px] text-[#6B7280]">{entry.category || "—"}</TableCell>
-                      <TableCell className="text-[14px] text-[#6B7280] max-w-[200px] truncate">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">{entry.account}</TableCell>
+                      <TableCell className="text-[14px] text-[var(--theme-text-muted)]">{entry.category || "—"}</TableCell>
+                      <TableCell className="text-[14px] text-[var(--theme-text-muted)] max-w-[200px] truncate">
                         {entry.note || "—"}
                       </TableCell>
                       <TableCell>
@@ -430,8 +430,8 @@ export function EntriesPageNew() {
                   ))}
                 </TableBody>
                 <TableFooter>
-                  <TableRow className="bg-[#F9FAFB] border-t-2 border-[#E5E7EB]">
-                    <TableCell colSpan={4} className="text-[14px] text-[#374151]">
+                  <TableRow className="bg-[var(--theme-bg-page)] border-t-2 border-[var(--theme-border-default)]">
+                    <TableCell colSpan={4} className="text-[14px] text-[var(--theme-text-secondary)]">
                       Total ({filteredEntries.length} entries)
                     </TableCell>
                     <TableCell className="text-right">
@@ -447,7 +447,7 @@ export function EntriesPageNew() {
                           </div>
                         )}
                         {totals.transfer > 0 && (
-                          <div className="text-[14px] text-[#374151] tabular-nums">
+                          <div className="text-[14px] text-[var(--theme-text-secondary)] tabular-nums">
                             ₱{totals.transfer.toLocaleString()}
                           </div>
                         )}
@@ -461,7 +461,7 @@ export function EntriesPageNew() {
           )}
 
           {/* Keyboard Shortcuts Hint */}
-          <div className="mt-4 text-[12px] text-[#9CA3AF] flex gap-4">
+          <div className="mt-4 text-[12px] text-[var(--theme-text-muted)] flex gap-4">
             <span>↑↓ Navigate</span>
             <span>Enter View</span>
             <span>E Edit</span>

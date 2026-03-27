@@ -80,7 +80,7 @@ export function QuotationTypeSubLabel({
     <span
       style={{
         fontSize: "12px",
-        color: "#9CA3AF",
+        color: "var(--theme-text-muted)",
         overflow: "hidden",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
@@ -91,7 +91,7 @@ export function QuotationTypeSubLabel({
       }}
     >
       <span>{quoteNumber}</span>
-      <span style={{ color: "#D1D5DB" }}>·</span>
+      <span style={{ color: "var(--theme-border-default)" }}>·</span>
       <span>{label}</span>
     </span>
   );

@@ -24,7 +24,7 @@ export function PricingBreakdownTab({ project }: PricingBreakdownTabProps) {
         
         {/* Header Section */}
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -66,7 +66,7 @@ export function PricingBreakdownTab({ project }: PricingBreakdownTabProps) {
 
             {/* Financial Summary */}
             <div style={{
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "8px",
               padding: "24px"
@@ -85,7 +85,7 @@ export function PricingBreakdownTab({ project }: PricingBreakdownTabProps) {
               </h3>
               <div style={{
                 padding: "16px 20px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 display: "flex",
@@ -111,7 +111,7 @@ export function PricingBreakdownTab({ project }: PricingBreakdownTabProps) {
           </>
         ) : (
           <div style={{
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             padding: "48px 24px",
@@ -126,7 +126,7 @@ export function PricingBreakdownTab({ project }: PricingBreakdownTabProps) {
             </p>
             <p style={{ 
               fontSize: "13px",
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               margin: 0
             }}>
               Pricing details are inherited from the quotation
@@ -147,7 +147,7 @@ function ChargeCategoryCard({
 }) {
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px"
@@ -172,7 +172,7 @@ function ChargeCategoryCard({
           borderCollapse: "collapse"
         }}>
           <thead>
-            <tr style={{ backgroundColor: "#F9FAFB" }}>
+            <tr style={{ backgroundColor: "var(--theme-bg-page)" }}>
               <th style={{
                 padding: "12px 16px",
                 textAlign: "left",
@@ -222,7 +222,7 @@ function ChargeCategoryCard({
                   padding: "12px 16px",
                   fontSize: "14px",
                   color: "var(--neuron-ink-primary)",
-                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid #F3F4F6" : "none"
+                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid var(--theme-border-subtle)" : "none"
                 }}>
                   {item.description}
                 </td>
@@ -231,7 +231,7 @@ function ChargeCategoryCard({
                   textAlign: "right",
                   fontSize: "14px",
                   color: "var(--neuron-ink-primary)",
-                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid #F3F4F6" : "none"
+                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid var(--theme-border-subtle)" : "none"
                 }}>
                   {item.quantity} {item.unit}
                 </td>
@@ -240,7 +240,7 @@ function ChargeCategoryCard({
                   textAlign: "right",
                   fontSize: "14px",
                   color: "var(--neuron-ink-primary)",
-                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid #F3F4F6" : "none"
+                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid var(--theme-border-subtle)" : "none"
                 }}>
                   {item.currency} {(item.price || 0).toLocaleString()}
                 </td>
@@ -249,7 +249,7 @@ function ChargeCategoryCard({
                   textAlign: "right",
                   fontSize: "14px",
                   color: "var(--neuron-ink-primary)",
-                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid #F3F4F6" : "none"
+                  borderBottom: idx < (category.line_items?.length || 0) - 1 ? "1px solid var(--theme-border-subtle)" : "none"
                 }}>
                   {currency} {(item.amount || 0).toLocaleString()}
                 </td>
@@ -257,7 +257,7 @@ function ChargeCategoryCard({
             ))}
           </tbody>
           <tfoot>
-            <tr style={{ backgroundColor: "#F9FAFB" }}>
+            <tr style={{ backgroundColor: "var(--theme-bg-page)" }}>
               <td colSpan={3} style={{
                 padding: "12px 16px",
                 textAlign: "right",

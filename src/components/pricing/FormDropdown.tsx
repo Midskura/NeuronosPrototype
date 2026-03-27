@@ -42,11 +42,11 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
         style={{
           width: "100%",
           padding: "12px 14px",
-          border: "1px solid #D1D5DB",
+          border: "1px solid var(--theme-border-default)",
           borderRadius: "8px",
           fontSize: "15px",
           color: value ? "#12332B" : "#9CA3AF",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           cursor: "pointer",
           transition: "border-color 0.2s ease",
           outline: "none",
@@ -56,12 +56,12 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
           textAlign: "left"
         }}
         onFocus={(e) => {
-          e.currentTarget.style.borderColor = "#0F766E";
+          e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
           e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.1)";
         }}
         onBlur={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#D1D5DB";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
             e.currentTarget.style.boxShadow = "none";
           }
         }}
@@ -72,7 +72,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
         }}
         onMouseLeave={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#D1D5DB";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
           }
         }}
       >
@@ -80,7 +80,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
         <ChevronDown 
           size={18} 
           style={{ 
-            color: "#9CA3AF",
+            color: "var(--theme-text-muted)",
             transition: "transform 0.2s",
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
             flexShrink: 0
@@ -96,8 +96,8 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "white",
-            border: "1px solid #D1D5DB",
+            backgroundColor: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "8px",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
             zIndex: 100,
@@ -118,7 +118,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
                 padding: "12px 14px",
                 backgroundColor: value === option.value ? "#E8F5F3" : "white",
                 border: "none",
-                borderBottom: index < options.length - 1 ? "1px solid #F3F4F6" : "none",
+                borderBottom: index < options.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                 cursor: "pointer",
                 fontSize: "15px",
                 color: value === option.value ? "#0F766E" : "#12332B",
@@ -128,7 +128,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
               }}
               onMouseEnter={(e) => {
                 if (value !== option.value) {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }
               }}
               onMouseLeave={(e) => {

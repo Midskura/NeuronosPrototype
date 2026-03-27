@@ -81,12 +81,12 @@ export function ProjectAutofillSection({
   };
 
   return (
-    <div className="bg-[#0F766E]/5 border border-[#0F766E]/20 rounded-lg p-4 mb-6">
+    <div className="bg-[var(--theme-action-primary-bg)]/5 border border-[var(--theme-action-primary-bg)]/20 rounded-lg p-4 mb-6">
       <div className="flex items-start gap-3">
         <div className="flex-1">
-          <label className="block text-[#12332B] mb-2 text-sm">
+          <label className="block text-[var(--theme-text-primary)] mb-2 text-sm">
             Project Number{" "}
-            <span className="text-[#12332B]/40">(Optional - for autofill)</span>
+            <span className="text-[var(--theme-text-primary)]/40">(Optional - for autofill)</span>
           </label>
           <div className="flex gap-2">
             <input
@@ -99,14 +99,14 @@ export function ProjectAutofillSection({
               }}
               onKeyPress={handleKeyPress}
               placeholder="e.g., PROJ-2025-001"
-              className="flex-1 px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] bg-white"
+              className="flex-1 px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)]"
               disabled={loading}
             />
             <button
               type="button"
               onClick={handleAutofill}
               disabled={loading || !projectNumber.trim()}
-              className="px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0F766E]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[var(--theme-action-primary-bg)]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {loading ? (
                 <>
@@ -157,7 +157,7 @@ export function ProjectAutofillSection({
 
           {/* Info Message */}
           {!projectNumber && !error && !success && (
-            <p className="mt-2 text-xs text-[#12332B]/60">
+            <p className="mt-2 text-xs text-[var(--theme-text-primary)]/60">
               Enter a project number to automatically populate customer details and service information from the quotation.
             </p>
           )}

@@ -656,7 +656,7 @@ export function InvoiceBuilder({
     const isSelected = selectedIds.has(item.id);
     const override = itemOverrides[item.id] || { remarks: "", tax_type: "NON-VAT" };
     return (
-      <div key={item.id} className={`group border-b border-[#F3F4F6] last:border-0 transition-all ${isSelected ? 'bg-[#F0FDF9]' : 'hover:bg-[#F9FAFB]'}`}>
+      <div key={item.id} className={`group border-b border-[#F3F4F6] last:border-0 transition-all ${isSelected ? 'bg-[var(--theme-bg-surface-tint)]' : 'hover:bg-[var(--theme-bg-page)]'}`}>
         <div className="flex items-start px-4 py-3 cursor-pointer" onClick={() => toggleSelection(item.id)}>
             <div className="w-8 shrink-0 pt-1 flex items-center justify-center">
                 <div className="relative flex items-center justify-center">
@@ -664,42 +664,42 @@ export function InvoiceBuilder({
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => toggleSelection(item.id)}
-                        className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                        className="peer appearance-none w-4 h-4 rounded border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] checked:bg-[var(--theme-action-primary-bg)] checked:border-[var(--theme-action-primary-bg)] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
                         onClick={(e) => e.stopPropagation()}
                     />
                     <Check className="w-3 h-3 text-white absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={3} />
                 </div>
             </div>
             <div className="flex-1 px-3 min-w-0">
-                <div className={`text-sm font-medium mb-1 ${isSelected ? 'text-[#12332B]' : 'text-[#374151]'}`}>
+                <div className={`text-sm font-medium mb-1 ${isSelected ? 'text-[var(--theme-text-primary)]' : 'text-[var(--theme-text-secondary)]'}`}>
                     {item.description}
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-[#6B7280]">
+                <div className="flex items-center gap-2 text-[11px] text-[var(--theme-text-muted)]">
                     <span>{formatDate(item.created_at)}</span>
                 </div>
             </div>
             <div className="shrink-0 text-right pl-2 pt-1">
-                <div className={`text-sm font-bold whitespace-nowrap ${isSelected ? 'text-[#12332B]' : 'text-[#374151]'}`}>
+                <div className={`text-sm font-bold whitespace-nowrap ${isSelected ? 'text-[var(--theme-text-primary)]' : 'text-[var(--theme-text-secondary)]'}`}>
                     {formatCurrency(item.amount, item.currency)}
                 </div>
             </div>
         </div>
         {isSelected && (
             <div className="px-4 pb-4 pt-0 pl-14 cursor-default">
-                <div className="p-3 bg-white border border-gray-200 rounded-lg grid grid-cols-3 gap-3">
+                <div className="p-3 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg grid grid-cols-3 gap-3">
                     <div className="col-span-2">
-                        <label className="block text-[10px] font-bold text-[#6B7280] mb-2 uppercase tracking-wide">Remarks</label>
+                        <label className="block text-[10px] font-bold text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Remarks</label>
                         <input 
                             type="text" 
                             value={override.remarks}
                             onChange={(e) => updateItemOverride(item.id, 'remarks', e.target.value)}
-                            className="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                            className="w-full px-2.5 py-1.5 text-xs border border-[var(--theme-border-default)] rounded focus:ring-1 focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                             placeholder="e.g. SERVICE CHARGE"
                             onClick={(e) => e.stopPropagation()}
                         />
                     </div>
                     <div className="col-span-1" onClick={(e) => e.stopPropagation()}>
-                        <label className="block text-[10px] font-bold text-[#6B7280] mb-2 uppercase tracking-wide">Tax</label>
+                        <label className="block text-[10px] font-bold text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Tax</label>
                         <div className="flex items-center h-[34px]">
                             <label className="flex items-center gap-2 cursor-pointer group/tax select-none">
                                 <div className="relative flex items-center justify-center">
@@ -707,11 +707,11 @@ export function InvoiceBuilder({
                                         type="checkbox"
                                         checked={override.tax_type === "VAT"}
                                         onChange={(e) => updateItemOverride(item.id, 'tax_type', e.target.checked ? "VAT" : "NON-VAT")}
-                                        className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                                        className="peer appearance-none w-4 h-4 rounded border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] checked:bg-[var(--theme-action-primary-bg)] checked:border-[var(--theme-action-primary-bg)] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
                                     />
                                     <Check className="w-3 h-3 text-white absolute pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" strokeWidth={3} />
                                 </div>
-                                <span className="text-xs font-medium text-[#374151] group-hover/tax:text-[#12332B] transition-colors">VAT (12%)</span>
+                                <span className="text-xs font-medium text-[var(--theme-text-secondary)] group-hover/tax:text-[var(--theme-text-primary)] transition-colors">VAT (12%)</span>
                             </label>
                         </div>
                     </div>
@@ -723,25 +723,25 @@ export function InvoiceBuilder({
   };
 
   return (
-    <div className="flex w-full h-full overflow-hidden bg-white">
+    <div className="flex w-full h-full overflow-hidden bg-[var(--theme-bg-surface)]">
       {/* LEFT PANEL: Live Preview Stage */}
-      <div className="flex-1 bg-gray-50 flex flex-col relative overflow-hidden border-r border-[#E5E9F0]">
+      <div className="flex-1 bg-[var(--theme-bg-surface-subtle)] flex flex-col relative overflow-hidden border-r border-[var(--theme-border-default)]">
           
           {/* Header (View Mode Only) */}
           {mode === 'view' && (
-              <div className="h-14 bg-white border-b border-[#E5E9F0] flex items-center justify-between px-4 shrink-0 z-20">
+              <div className="h-14 bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)] flex items-center justify-between px-4 shrink-0 z-20">
                     <div className="flex items-center gap-3">
                         {onBack && (
                             <button 
                                 onClick={onBack}
-                                className="p-2 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
+                                className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg text-[var(--theme-text-muted)] transition-colors"
                             >
                                 <ArrowLeft size={18} />
                             </button>
                         )}
                         <div>
                             <h2 className="text-sm font-bold text-[#111827]">{viewInvoice?.invoice_number || "Loading..."}</h2>
-                            <span className="text-xs text-gray-500">{project.project_number}</span>
+                            <span className="text-xs text-[var(--theme-text-muted)]">{project.project_number}</span>
                         </div>
                     </div>
               </div>
@@ -763,7 +763,7 @@ export function InvoiceBuilder({
                    >
                        {/* The Paper */}
                        <div 
-                           className="bg-white origin-top-left"
+                           className="bg-[var(--theme-bg-surface)] origin-top-left"
                            style={{
                               width: '210mm',
                               minHeight: '297mm',
@@ -786,18 +786,18 @@ export function InvoiceBuilder({
               </div>
 
               {/* Floating Zoom Controls */}
-              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-full px-4 py-2 flex items-center gap-4 z-30 transition-all hover:bg-white hover:shadow-xl">
-                   <button onClick={zoomOut} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom Out">
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-[var(--theme-bg-surface)]/90 backdrop-blur-sm border border-[var(--theme-border-default)] shadow-lg rounded-full px-4 py-2 flex items-center gap-4 z-30 transition-all hover:bg-[var(--theme-bg-surface)] hover:shadow-xl">
+                   <button onClick={zoomOut} className="p-1.5 hover:bg-[var(--theme-bg-surface-subtle)] rounded-full text-[var(--theme-text-secondary)] transition-all" title="Zoom Out">
                       <ZoomOut size={18} />
                    </button>
-                   <span className="text-sm font-medium text-gray-700 w-12 text-center select-none tabular-nums">{Math.round(scale * 100)}%</span>
-                   <button onClick={zoomIn} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom In">
+                   <span className="text-sm font-medium text-[var(--theme-text-secondary)] w-12 text-center select-none tabular-nums">{Math.round(scale * 100)}%</span>
+                   <button onClick={zoomIn} className="p-1.5 hover:bg-[var(--theme-bg-surface-subtle)] rounded-full text-[var(--theme-text-secondary)] transition-all" title="Zoom In">
                       <ZoomIn size={18} />
                    </button>
-                   <div className="w-px h-4 bg-gray-300" />
+                   <div className="w-px h-4 bg-[var(--theme-bg-surface-tint)]" />
                    <button 
                       onClick={toggleFit} 
-                      className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[#0F766E] bg-[#F0FDFA]' : 'text-gray-600 hover:bg-gray-100'}`}
+                      className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[var(--theme-action-primary-bg)] bg-[#F0FDFA]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
                       title="Fit to Screen"
                    >
                       <Maximize size={16} />
@@ -808,33 +808,33 @@ export function InvoiceBuilder({
       </div>
 
       {/* RIGHT PANEL: Controls Sidebar */}
-      <div className="w-[500px] flex flex-col bg-white z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
+      <div className="w-[500px] flex flex-col bg-[var(--theme-bg-surface)] z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
           <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
               
               {/* SECTION: Currency & Exchange Rate (CREATE MODE ONLY) */}
               {mode === 'create' && (
                   <CollapsibleSection title="Currency Settings" icon={<Coins size={18} />} defaultOpen={true}>
-                      <div className="p-4 flex flex-col gap-4 border border-[#E5E9F0] rounded-lg bg-white mt-1 mb-4">
+                      <div className="p-4 flex flex-col gap-4 border border-[var(--theme-border-default)] rounded-lg bg-[var(--theme-bg-surface)] mt-1 mb-4">
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                               <div>
-                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                  <label className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.05em] mb-1.5 block">
                                       Invoice Currency
                                   </label>
                                   <div className="relative">
                                       <select
                                           value={targetCurrency}
                                           onChange={(e) => setTargetCurrency(e.target.value)}
-                                          className="w-full h-9 pl-3 pr-8 text-sm border border-gray-300 rounded-md focus:ring-[#0F766E] focus:border-[#0F766E] appearance-none bg-white"
+                                          className="w-full h-9 pl-3 pr-8 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] appearance-none bg-[var(--theme-bg-surface)]"
                                       >
                                           <option value="PHP">PHP (Philippine Peso)</option>
                                           <option value="USD">USD (US Dollar)</option>
                                       </select>
-                                      <ChevronDown className="absolute right-2.5 top-2.5 w-4 h-4 text-gray-400 pointer-events-none" />
+                                      <ChevronDown className="absolute right-2.5 top-2.5 w-4 h-4 text-[var(--theme-text-muted)] pointer-events-none" />
                                   </div>
                               </div>
                               
                               <div>
-                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                  <label className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.05em] mb-1.5 block">
                                       Exchange Rate
                                   </label>
                                   <div className="relative">
@@ -843,13 +843,13 @@ export function InvoiceBuilder({
                                           step="0.01"
                                           value={exchangeRate}
                                           onChange={(e) => setExchangeRate(parseFloat(e.target.value) || 0)}
-                                          className="w-full h-9 pl-3 pr-3 text-sm border border-gray-300 rounded-md focus:ring-[#0F766E] focus:border-[#0F766E]"
+                                          className="w-full h-9 pl-3 pr-3 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)]"
                                       />
                                   </div>
                               </div>
 
                               <div>
-                                  <label className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em] mb-1.5 block">
+                                  <label className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.05em] mb-1.5 block">
                                       Revenue Account
                                   </label>
                                   <CustomDropdown
@@ -885,14 +885,14 @@ export function InvoiceBuilder({
               {/* SECTION: Billing Items (CREATE MODE ONLY) */}
               {mode === 'create' && (
                   <CollapsibleSection title={`Billing Items (${unbilledItems.length})`} icon={<FileText size={18} />} defaultOpen={true}>
-                      <div className="flex flex-col border border-[#E5E9F0] rounded-lg overflow-hidden bg-white mt-1">
+                      <div className="flex flex-col border border-[var(--theme-border-default)] rounded-lg overflow-hidden bg-[var(--theme-bg-surface)] mt-1">
                           {/* Table Header */}
-                          <div className="flex items-center bg-[#F9FAFB] border-b border-[#E5E9F0] px-4 py-2">
+                          <div className="flex items-center bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)] px-4 py-2">
                               <div className="w-8 shrink-0 flex items-center justify-center">
                                   <div className="relative flex items-center justify-center">
                                       <input 
                                           type="checkbox" 
-                                          className="peer appearance-none w-4 h-4 rounded border border-gray-300 bg-white checked:bg-[#0F766E] checked:border-[#0F766E] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
+                                          className="peer appearance-none w-4 h-4 rounded border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] checked:bg-[var(--theme-action-primary-bg)] checked:border-[var(--theme-action-primary-bg)] focus:ring-0 focus:ring-offset-0 cursor-pointer transition-colors"
                                           checked={unbilledItems.length > 0 && selectedIds.size === unbilledItems.length}
                                           onChange={toggleAll}
                                       />
@@ -904,27 +904,27 @@ export function InvoiceBuilder({
                                       <button
                                         onClick={handleToggleAllBookings}
                                         className="flex items-center gap-2"
-                                        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "#9CA3AF", fontSize: "11px", fontWeight: 600, letterSpacing: "0.02em" }}
+                                        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, color: "var(--theme-text-muted)", fontSize: "11px", fontWeight: 600, letterSpacing: "0.02em" }}
                                       >
                                         <div style={{ transition: "transform 0.15s ease", transform: allBookingsExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
                                           <ChevronDown size={12} />
                                         </div>
-                                        <span style={{ color: "#667085" }}>Particulars</span>
+                                        <span style={{ color: "var(--theme-text-muted)" }}>Particulars</span>
                                       </button>
                                   ) : (
-                                      <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em]">Particulars</span>
+                                      <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.05em]">Particulars</span>
                                   )}
                               </div>
                               <div className="text-right">
-                                  <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.05em]">Amount</span>
+                                  <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.05em]">Amount</span>
                               </div>
                           </div>
 
                           {/* Table Body */}
-                          <div className="max-h-[500px] overflow-y-auto bg-white custom-scrollbar">
+                          <div className="max-h-[500px] overflow-y-auto bg-[var(--theme-bg-surface)] custom-scrollbar">
                                {unbilledItems.length === 0 ? (
                                    <div className="p-8 text-center">
-                                       <span className="text-sm text-gray-400">No unbilled charges found.</span>
+                                       <span className="text-sm text-[var(--theme-text-muted)]">No unbilled charges found.</span>
                                    </div>
                                ) : hasBookings ? (
                                    /* -- BOOKING-GROUPED VIEW -- */
@@ -952,19 +952,19 @@ export function InvoiceBuilder({
                                            }}
                                          >
                                            <div className="flex items-center gap-2.5">
-                                             <div style={{ color: "#9CA3AF", transition: "transform 0.15s ease", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
+                                             <div style={{ color: "var(--theme-text-muted)", transition: "transform 0.15s ease", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
                                                <ChevronDown size={13} />
                                              </div>
-                                             {bid !== "unassigned" && getServiceIcon(serviceType, { size: 13, color: "#0F766E" })}
+                                             {bid !== "unassigned" && getServiceIcon(serviceType, { size: 13, color: "var(--theme-action-primary-bg)" })}
                                              <span style={{ fontSize: "11px", fontWeight: 600, color: bid === "unassigned" ? "#6B7280" : "#0F766E", fontFamily: "monospace" }}>
                                                {bid === "unassigned" ? "Unassigned Items" : bid}
                                              </span>
                                              {bid !== "unassigned" && (
-                                               <span style={{ fontSize: "9px", fontWeight: 600, color: "#6B7280", padding: "1px 5px", backgroundColor: "#F3F4F6", borderRadius: "3px", border: "1px solid #E5E7EB" }}>
+                                               <span style={{ fontSize: "9px", fontWeight: 600, color: "var(--theme-text-muted)", padding: "1px 5px", backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: "3px", border: "1px solid var(--theme-border-default)" }}>
                                                  {serviceType}
                                                </span>
                                              )}
-                                             <span style={{ fontSize: "9px", fontWeight: 600, color: "#6B7280", padding: "1px 5px", backgroundColor: "#F3F4F6", borderRadius: "3px", border: "1px solid #E5E7EB" }}>
+                                             <span style={{ fontSize: "9px", fontWeight: 600, color: "var(--theme-text-muted)", padding: "1px 5px", backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: "3px", border: "1px solid var(--theme-border-default)" }}>
                                                {itemCount} item{itemCount !== 1 ? "s" : ""}
                                              </span>
                                            </div>
@@ -1004,10 +1004,10 @@ export function InvoiceBuilder({
                                    })
                                    .map(([category, items]) => (
                                        <div key={category}>
-                                           <div className="px-4 py-2 bg-gray-50 border-b border-[#F3F4F6] text-[10px] font-bold text-[#6B7280] uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10">
+                                           <div className="px-4 py-2 bg-[var(--theme-bg-surface-subtle)] border-b border-[#F3F4F6] text-[10px] font-bold text-[var(--theme-text-muted)] uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10">
                                                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
                                                {category}
-                                               <span className="text-[9px] ml-auto bg-white border border-gray-200 px-1.5 rounded-full text-gray-500">{items.length}</span>
+                                               <span className="text-[9px] ml-auto bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] px-1.5 rounded-full text-[var(--theme-text-muted)]">{items.length}</span>
                                            </div>
                                            {items.map((item: any) => renderBillingItemRow(item))}
                                        </div>
@@ -1024,48 +1024,48 @@ export function InvoiceBuilder({
                       <div className="space-y-4">
                           <div className="grid grid-cols-2 gap-4">
                               <div>
-                                  <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Invoice Date</label>
+                                  <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Invoice Date</label>
                                   <input 
                                       type="date"
                                       value={invoiceDate}
                                       onChange={(e) => setInvoiceDate(e.target.value)}
-                                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
                                   />
                               </div>
                               <div>
-                                  <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Due Date</label>
+                                  <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Due Date</label>
                                   <input 
                                       type="date"
                                       value={dueDate}
                                       onChange={(e) => setDueDate(e.target.value)}
-                                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
                                   />
                               </div>
                           </div>
                           
                           {/* Credit Terms Input */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Credit Terms</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Credit Terms</label>
                               <div className="relative">
-                                <CreditCard className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                                <CreditCard className="absolute left-3 top-2.5 text-[var(--theme-text-muted)]" size={14} />
                                 <input 
                                     type="text"
                                     value={creditTerms}
                                     onChange={(e) => setCreditTerms(e.target.value)}
                                     placeholder="e.g. NET 15, NET 30, COD"
-                                    className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                                 />
                               </div>
                           </div>
 
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Notes / Memo</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Notes / Memo</label>
                               <textarea
                                   value={notes}
                                   onChange={(e) => setNotes(e.target.value)}
                                   rows={3}
                                   placeholder="Add payment instructions or notes..."
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none resize-none transition-all"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all"
                               />
                           </div>
                       </div>
@@ -1078,7 +1078,7 @@ export function InvoiceBuilder({
                       <div className="space-y-4">
                           {/* Bill To Toggle */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Bill To</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Bill To</label>
                               <div className="flex items-center gap-2 mb-3">
                                   <button
                                       type="button"
@@ -1087,7 +1087,7 @@ export function InvoiceBuilder({
                                       style={{
                                           backgroundColor: billedToType === "customer" ? "#0F766E" : "#F9FAFB",
                                           color: billedToType === "customer" ? "#FFFFFF" : "#667085",
-                                          border: billedToType === "customer" ? "1px solid #0F766E" : "1px solid #E5E9F0",
+                                          border: billedToType === "customer" ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
                                       }}
                                   >
                                       Customer
@@ -1100,13 +1100,13 @@ export function InvoiceBuilder({
                                       style={{
                                           backgroundColor: billedToType === "consignee" ? "#0F766E" : "#F9FAFB",
                                           color: billedToType === "consignee" ? "#FFFFFF" : "#667085",
-                                          border: billedToType === "consignee" ? "1px solid #0F766E" : "1px solid #E5E9F0",
+                                          border: billedToType === "consignee" ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
                                       }}
                                   >
                                       Consignee
                                   </button>
                                   {customerConsignees.length === 0 && (
-                                      <span className="text-[11px] italic" style={{ color: "#98A2B3" }}>
+                                      <span className="text-[11px] italic" style={{ color: "var(--theme-text-muted)" }}>
                                           No consignees saved for this customer
                                       </span>
                                   )}
@@ -1115,11 +1115,11 @@ export function InvoiceBuilder({
                               {/* Consignee Selector (when "Consignee" is selected) */}
                               {billedToType === "consignee" && customerConsignees.length > 0 && (
                                   <div className="mb-3">
-                                      <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Select Consignee</label>
+                                      <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Select Consignee</label>
                                       <select
                                           value={billedToConsigneeId || ""}
                                           onChange={(e) => handleBillToConsigneeSelect(e.target.value)}
-                                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all"
+                                          className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
                                           style={{ color: billedToConsigneeId ? "#12332B" : "#9CA3AF" }}
                                       >
                                           <option value="" disabled>Choose a consignee...</option>
@@ -1130,9 +1130,9 @@ export function InvoiceBuilder({
                                           ))}
                                       </select>
                                       {selectedConsignee && (
-                                          <div className="mt-2 px-3 py-2 rounded-md text-[12px]" style={{ backgroundColor: "#E8F5F3", color: "#12332B" }}>
+                                          <div className="mt-2 px-3 py-2 rounded-md text-[12px]" style={{ backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-text-primary)" }}>
                                               <span className="font-medium">Billing as:</span> {selectedConsignee.name}
-                                              {selectedConsignee.address && <span className="text-[11px] ml-2" style={{ color: "#667085" }}>• {selectedConsignee.address}</span>}
+                                              {selectedConsignee.address && <span className="text-[11px] ml-2" style={{ color: "var(--theme-text-muted)" }}>• {selectedConsignee.address}</span>}
                                           </div>
                                       )}
                                   </div>
@@ -1141,63 +1141,63 @@ export function InvoiceBuilder({
 
                           {/* Customer Address */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Bill To Address</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Bill To Address</label>
                               <textarea 
                                   value={customerAddress}
                                   onChange={(e) => setCustomerAddress(e.target.value)}
                                   rows={3}
                                   placeholder={isFetchingAddress ? "Fetching address..." : "Enter customer address"}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none resize-none transition-all placeholder:text-gray-400"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
                           {/* Customer TIN */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Customer TIN</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Customer TIN</label>
                               <input 
                                   type="text"
                                   value={customerTin}
                                   onChange={(e) => setCustomerTin(e.target.value)}
                                   placeholder="000-000-000-000"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
                           
                           {/* BL Number */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">BL No.</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">BL No.</label>
                               <input 
                                   type="text"
                                   value={blNumber}
                                   onChange={(e) => setBlNumber(e.target.value)}
                                   placeholder="e.g. KULA2503335"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
                           {/* Consignee */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Consignee</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Consignee</label>
                               <input 
                                   type="text"
                                   value={consignee}
                                   onChange={(e) => setConsignee(e.target.value)}
                                   placeholder="Consignee Name"
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
                           {/* Commodity Description */}
                           <div>
-                              <label className="block text-[11px] font-bold text-gray-500 mb-1.5 uppercase tracking-wider">Commodity Desc.</label>
+                              <label className="block text-[11px] font-bold text-[var(--theme-text-muted)] mb-1.5 uppercase tracking-wider">Commodity Desc.</label>
                               <div className="relative">
-                                 <Box className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                                 <Box className="absolute left-3 top-2.5 text-[var(--theme-text-muted)]" size={14} />
                                  <input 
                                     type="text"
                                     value={commodityDescription}
                                     onChange={(e) => setCommodityDescription(e.target.value)}
                                     placeholder="e.g. AIR / STC: LEAD FRAME"
-                                    className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] outline-none transition-all placeholder:text-gray-400"
+                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                                 />
                               </div>
                           </div>
@@ -1213,7 +1213,7 @@ export function InvoiceBuilder({
                       onUpdate={updateSignatory}
                   />
                   {mode === 'view' && (
-                      <p className="text-[10px] text-gray-400 mt-3 italic">
+                      <p className="text-[10px] text-[var(--theme-text-muted)] mt-3 italic">
                           Note: Changes here only affect the printed document and are not saved to the record.
                       </p>
                   )}
@@ -1231,11 +1231,11 @@ export function InvoiceBuilder({
               {mode === 'view' && (
                   <CollapsibleSection title="Custom Notes" icon={<FileText size={18} />} defaultOpen={true}>
                       <div className="space-y-2.5">
-                          <label className="text-xs font-semibold text-[#12332B] uppercase tracking-wider">Print Notes</label>
+                          <label className="text-xs font-semibold text-[var(--theme-text-primary)] uppercase tracking-wider">Print Notes</label>
                           <textarea
                               value={notes}
                               onChange={(e) => setNotes(e.target.value)}
-                              className="w-full px-3.5 py-3 text-sm border border-gray-200 rounded-lg focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-gray-400 min-h-[100px] resize-none"
+                              className="w-full px-3.5 py-3 text-sm border border-[var(--theme-border-default)] rounded-lg focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-[var(--theme-text-muted)] min-h-[100px] resize-none"
                               placeholder="Add custom notes for this printout..."
                           />
                       </div>
@@ -1245,29 +1245,29 @@ export function InvoiceBuilder({
           </div>
 
           {/* Sidebar Footer - Actions */}
-          <div className="p-6 border-t border-[#E5E9F0] bg-white shrink-0 flex flex-col gap-3 shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.02)] z-30">
+          <div className="p-6 border-t border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] shrink-0 flex flex-col gap-3 shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.02)] z-30">
               {mode === 'create' ? (
                   <>
                       {/* Create Mode: Total Summary & Create Button */}
                       <div className="flex flex-col gap-1 mb-2">
                           <div className="flex items-center justify-between">
-                              <span className="text-xs text-gray-500">Subtotal</span>
-                              <span className="text-sm font-medium text-gray-700">{formatCurrency(Number(draftInvoice.subtotal), currency)}</span>
+                              <span className="text-xs text-[var(--theme-text-muted)]">Subtotal</span>
+                              <span className="text-sm font-medium text-[var(--theme-text-secondary)]">{formatCurrency(Number(draftInvoice.subtotal), currency)}</span>
                           </div>
                           <div className="flex items-center justify-between">
-                              <span className="text-xs text-gray-500">Tax</span>
-                              <span className="text-sm font-medium text-gray-700">{formatCurrency(Number(draftInvoice.tax_amount) || 0, currency)}</span>
+                              <span className="text-xs text-[var(--theme-text-muted)]">Tax</span>
+                              <span className="text-sm font-medium text-[var(--theme-text-secondary)]">{formatCurrency(Number(draftInvoice.tax_amount) || 0, currency)}</span>
                           </div>
                           <div className="flex items-center justify-between pt-2 border-t mt-1">
-                              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Total</span>
-                              <span className="text-xl font-bold text-[#12332B]">{formatCurrency(Number(draftInvoice.total_amount), currency)}</span>
+                              <span className="text-xs font-bold text-[var(--theme-text-muted)] uppercase tracking-wider">Total</span>
+                              <span className="text-xl font-bold text-[var(--theme-text-primary)]">{formatCurrency(Number(draftInvoice.total_amount), currency)}</span>
                           </div>
                       </div>
                       
                       <button
                           onClick={handleSubmit}
                           disabled={isSubmitting || selectedIds.size === 0}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[var(--theme-action-primary-bg)] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                           {isSubmitting ? (
                               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -1283,7 +1283,7 @@ export function InvoiceBuilder({
                       <button
                           onClick={handleDownloadPDF}
                           disabled={isGeneratingPDF}
-                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm group disabled:opacity-60 disabled:cursor-not-allowed"
+                          className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[var(--theme-action-primary-bg)] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm group disabled:opacity-60 disabled:cursor-not-allowed"
                       >
                           {isGeneratingPDF ? (
                             <Loader2 size={18} className="animate-spin" />
@@ -1305,18 +1305,18 @@ function CollapsibleSection({ title, icon, children, defaultOpen = true }: { tit
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-[#E5E9F0] last:border-0">
+    <div className="border-b border-[var(--theme-border-default)] last:border-0">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors group outline-none"
+        className="w-full flex items-center justify-between p-6 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors group outline-none"
       >
         <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#E0F2F1] flex items-center justify-center shrink-0 group-hover:bg-[#B2DFDB] transition-colors text-[#0F766E]">
+            <div className="w-8 h-8 rounded-lg bg-[#E0F2F1] flex items-center justify-center shrink-0 group-hover:bg-[#B2DFDB] transition-colors text-[var(--theme-action-primary-bg)]">
                 {icon}
             </div>
-            <h4 className="font-bold text-[#12332B] text-sm select-none uppercase tracking-wide">{title}</h4>
+            <h4 className="font-bold text-[var(--theme-text-primary)] text-sm select-none uppercase tracking-wide">{title}</h4>
         </div>
-        <div className={`text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+        <div className={`text-[var(--theme-text-muted)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
             <ChevronDown size={20} />
         </div>
       </button>

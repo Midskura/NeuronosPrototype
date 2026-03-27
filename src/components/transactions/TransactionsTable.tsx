@@ -59,9 +59,9 @@ function TransactionRow({
       <tr 
         onClick={() => onToggleExpand(txn.id)}
         className={`
-          group cursor-pointer transition-colors hover:bg-gray-50
-          ${isExpanded ? "bg-gray-50 border-l-4 border-l-[#0F766E]" : "border-l-4 border-l-transparent"}
-          ${isSelected ? "bg-[#F0FDF9]" : ""}
+          group cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface-subtle)]
+          ${isExpanded ? "bg-[var(--theme-bg-surface-subtle)] border-l-4 border-l-[#0F766E]" : "border-l-4 border-l-transparent"}
+          ${isSelected ? "bg-[var(--theme-bg-surface-tint)]" : ""}
         `}
       >
         <td className="py-3 px-4" onClick={(e) => e.stopPropagation()}>
@@ -69,22 +69,22 @@ function TransactionRow({
             type="checkbox" 
             checked={isSelected}
             onChange={() => onToggleSelect(txn.id)}
-            className="rounded border-gray-300 text-[#0F766E] focus:ring-[#0F766E]"
+            className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
           />
         </td>
-        <td className="py-3 px-4 text-sm text-gray-600">
+        <td className="py-3 px-4 text-sm text-[var(--theme-text-secondary)]">
           {new Date(txn.date).toLocaleDateString()}
         </td>
-        <td className="py-3 px-4 text-sm font-medium text-[#12332B]">
+        <td className="py-3 px-4 text-sm font-medium text-[var(--theme-text-primary)]">
           <div className="flex flex-col">
               <span>{txn.description}</span>
               {txn.reference && (
-                  <span className="text-[10px] text-gray-400 font-mono">Ref: {txn.reference}</span>
+                  <span className="text-[10px] text-[var(--theme-text-muted)] font-mono">Ref: {txn.reference}</span>
               )}
           </div>
         </td>
-        <td className="py-3 px-4 text-sm text-gray-600">
-          {txn.payee || <span className="text-gray-400 italic">- Select -</span>}
+        <td className="py-3 px-4 text-sm text-[var(--theme-text-secondary)]">
+          {txn.payee || <span className="text-[var(--theme-text-muted)] italic">- Select -</span>}
         </td>
         <td className="py-3 px-4 text-sm">
           {txn.category_account_id ? (
@@ -92,15 +92,15 @@ function TransactionRow({
                     Match Found
                 </span>
           ) : (
-              <span className="px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs border border-gray-200">
+              <span className="px-2 py-1 rounded bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] text-xs border border-[var(--theme-border-default)]">
                   Uncategorized
               </span>
           )}
         </td>
-        <td className="py-3 px-4 text-sm text-right font-medium text-gray-900">
+        <td className="py-3 px-4 text-sm text-right font-medium text-[var(--theme-text-primary)]">
           {isMoneyOut ? formatCurrency(absAmount, txn.currency) : ""}
         </td>
-        <td className="py-3 px-4 text-sm text-right font-medium text-gray-900">
+        <td className="py-3 px-4 text-sm text-right font-medium text-[var(--theme-text-primary)]">
           {!isMoneyOut ? formatCurrency(absAmount, txn.currency) : ""}
         </td>
         <td className="py-3 px-4 text-right">
@@ -109,7 +109,7 @@ function TransactionRow({
                   e.stopPropagation();
                   handleAction('add');
               }}
-              className="px-3 py-1.5 bg-[#0F766E] text-white text-xs font-medium rounded hover:bg-[#0D6560] transition-colors shadow-sm"
+              className="px-3 py-1.5 bg-[var(--theme-action-primary-bg)] text-white text-xs font-medium rounded hover:bg-[var(--theme-action-primary-border)] transition-colors shadow-sm"
           >
               Add
           </button>
@@ -118,24 +118,24 @@ function TransactionRow({
 
       {/* Expanded Detail Row */}
       {isExpanded && (
-        <tr className="bg-gray-50 shadow-inner">
+        <tr className="bg-[var(--theme-bg-surface-subtle)] shadow-inner">
           <td colSpan={8} className="p-4 pl-14">
-              <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+              <div className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg p-6 shadow-sm">
                 <div className="flex gap-6 mb-6">
                     {/* Left: Input Form */}
                     <div className="flex-1 grid grid-cols-2 gap-4">
                       <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">From/To</label>
+                          <label className="block text-xs font-medium text-[var(--theme-text-muted)] mb-1">From/To</label>
                           <input 
                               type="text" 
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
                               placeholder="Enter Name"
                               value={payee}
                               onChange={(e) => setPayee(e.target.value)}
                           />
                       </div>
                       <div>
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Category</label>
+                          <label className="block text-xs font-medium text-[var(--theme-text-muted)] mb-1">Category</label>
                           <CustomDropdown 
                               value={category}
                               onChange={(val) => setCategory(val)}
@@ -145,10 +145,10 @@ function TransactionRow({
                           />
                       </div>
                       <div className="col-span-2">
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Memo</label>
+                          <label className="block text-xs font-medium text-[var(--theme-text-muted)] mb-1">Memo</label>
                           <input 
                               type="text" 
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
                               placeholder="Add a memo..."
                               value={description}
                               onChange={(e) => setDescription(e.target.value)}
@@ -157,42 +157,42 @@ function TransactionRow({
                     </div>
 
                     {/* Right: Radio selection (Add / Find Match / Transfer) */}
-                    <div className="w-64 border-l border-gray-100 pl-6 space-y-3">
+                    <div className="w-64 border-l border-[var(--theme-border-subtle)] pl-6 space-y-3">
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} defaultChecked className="text-[#0F766E] focus:ring-[#0F766E]" />
-                          <span className="text-sm font-medium text-gray-700">Add</span>
+                          <input type="radio" name={`action-${txn.id}`} defaultChecked className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Add</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} className="text-[#0F766E] focus:ring-[#0F766E]" />
-                          <span className="text-sm font-medium text-gray-700">Find match</span>
+                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Find match</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} className="text-[#0F766E] focus:ring-[#0F766E]" />
-                          <span className="text-sm font-medium text-gray-700">Transfer</span>
+                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Transfer</span>
                       </label>
                     </div>
                 </div>
 
                 {/* Footer Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-4 border-t border-[var(--theme-border-subtle)]">
                     <div className="flex gap-2">
-                      <button className="px-3 py-2 text-sm text-[#0F766E] bg-[#0F766E]/5 rounded hover:bg-[#0F766E]/10 transition-colors">
+                      <button className="px-3 py-2 text-sm text-[var(--theme-action-primary-bg)] bg-[var(--theme-action-primary-bg)]/5 rounded hover:bg-[var(--theme-action-primary-bg)]/10 transition-colors">
                           Split
                       </button>
-                      <button className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+                      <button className="px-3 py-2 text-sm text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] transition-colors">
                           Exclude
                       </button>
                     </div>
                     <div className="flex gap-3">
                       <button 
                           onClick={() => onToggleExpand(txn.id)}
-                          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded hover:bg-gray-50"
+                          className="px-4 py-2 text-sm text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded hover:bg-[var(--theme-bg-surface-subtle)]"
                       >
                           Cancel
                       </button>
                       <button 
                           onClick={() => handleAction('add')}
-                          className="px-4 py-2 text-sm text-white bg-[#0F766E] rounded hover:bg-[#0D6560] shadow-sm font-medium"
+                          className="px-4 py-2 text-sm text-white bg-[var(--theme-action-primary-bg)] rounded hover:bg-[var(--theme-action-primary-border)] shadow-sm font-medium"
                       >
                           Add
                       </button>
@@ -241,44 +241,44 @@ export function TransactionsTable({
   if (isLoading) {
     return (
       <div className="p-8 text-center">
-        <div className="animate-spin w-8 h-8 border-2 border-[#0F766E] border-t-transparent rounded-full mx-auto mb-2" />
-        <p className="text-sm text-gray-500">Loading transactions...</p>
+        <div className="animate-spin w-8 h-8 border-2 border-[var(--theme-action-primary-bg)] border-t-transparent rounded-full mx-auto mb-2" />
+        <p className="text-sm text-[var(--theme-text-muted)]">Loading transactions...</p>
       </div>
     );
   }
 
   if (transactions.length === 0) {
     return (
-      <div className="p-12 text-center border-t border-gray-200">
-        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="p-12 text-center border-t border-[var(--theme-border-default)]">
+        <div className="w-16 h-16 bg-[var(--theme-bg-surface-subtle)] rounded-full flex items-center justify-center mx-auto mb-4">
             <Check size={24} className="text-green-500" />
         </div>
-        <h3 className="text-lg font-medium text-[#12332B] mb-1">All caught up!</h3>
-        <p className="text-gray-500 text-sm">No transactions to review.</p>
+        <h3 className="text-lg font-medium text-[var(--theme-text-primary)] mb-1">All caught up!</h3>
+        <p className="text-[var(--theme-text-muted)] text-sm">No transactions to review.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white min-h-[500px]">
+    <div className="bg-[var(--theme-bg-surface)] min-h-[500px]">
       <table className="w-full border-collapse">
-        <thead className="bg-gray-50 border-y border-gray-200 sticky top-0 z-10">
+        <thead className="bg-[var(--theme-bg-surface-subtle)] border-y border-[var(--theme-border-default)] sticky top-0 z-10">
           <tr>
             <th className="w-10 py-3 px-4">
               <input 
                 type="checkbox" 
                 checked={selectedIds.size === transactions.length && transactions.length > 0}
                 onChange={toggleSelectAll}
-                className="rounded border-gray-300 text-[#0F766E] focus:ring-[#0F766E]"
+                className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
               />
             </th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-left w-24">Date</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-left">Description</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-left w-48">From/To</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-left w-48">Category</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-right w-32">Spent</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-right w-32">Received</th>
-            <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-right w-24">Action</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-left w-24">Date</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-left">Description</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-left w-48">From/To</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-left w-48">Category</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-right w-32">Spent</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-right w-32">Received</th>
+            <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-right w-24">Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">

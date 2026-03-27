@@ -279,7 +279,7 @@ export function BuyingPriceSectionV2({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid #E5E9E8",
         borderRadius: "12px",
         padding: "28px",
@@ -325,14 +325,14 @@ export function BuyingPriceSectionV2({
               fontSize: "13px",
               fontWeight: 600,
               color: "var(--neuron-brand-green)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #D9E1DE",
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#E8F5F3";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
               e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
@@ -367,7 +367,7 @@ export function BuyingPriceSectionV2({
         <div style={{
           padding: "48px 24px",
           textAlign: "center",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "10px"
         }}>
@@ -406,7 +406,7 @@ export function BuyingPriceSectionV2({
                 border: "1px solid #E0E6E4",
                 borderRadius: "10px",
                 overflow: "hidden",
-                backgroundColor: "white"
+                backgroundColor: "var(--theme-bg-surface)"
               }}>
                 {/* Vendor Header */}
                 <button
@@ -417,7 +417,7 @@ export function BuyingPriceSectionV2({
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: "12px 16px",
-                    backgroundColor: "#F8FBFB",
+                    backgroundColor: "var(--theme-bg-page)",
                     border: "none",
                     cursor: "pointer",
                     transition: "all 0.2s ease"
@@ -433,12 +433,12 @@ export function BuyingPriceSectionV2({
                     <ChevronRight
                       size={16}
                       style={{
-                        color: "#6B7A76",
+                        color: "var(--theme-text-muted)",
                         transform: isVendorExpanded ? "rotate(90deg)" : "rotate(0deg)",
                         transition: "transform 0.2s ease"
                       }}
                     />
-                    <Building2 size={16} style={{ color: "#6B7A76" }} />
+                    <Building2 size={16} style={{ color: "var(--theme-text-muted)" }} />
                     <span style={{
                       fontSize: "14px",
                       fontWeight: 600,
@@ -452,7 +452,7 @@ export function BuyingPriceSectionV2({
                         fontSize: "11px",
                         fontWeight: 500,
                         color: "var(--neuron-brand-teal)",
-                        backgroundColor: "#E8F5F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         padding: "3px 8px",
                         borderRadius: "4px"
                       }}>
@@ -462,8 +462,8 @@ export function BuyingPriceSectionV2({
                     <span style={{
                       fontSize: "11px",
                       fontWeight: 500,
-                      color: "#6B7A76",
-                      backgroundColor: "white",
+                      color: "var(--theme-text-muted)",
+                      backgroundColor: "var(--theme-bg-surface)",
                       padding: "2px 6px",
                       borderRadius: "4px"
                     }}>
@@ -491,7 +491,7 @@ export function BuyingPriceSectionV2({
                           border: "1px solid #E0E6E4",
                           borderRadius: "10px",
                           overflow: "hidden",
-                          backgroundColor: "white"
+                          backgroundColor: "var(--theme-bg-surface)"
                         }}>
                           {/* Category Header */}
                           <button
@@ -510,7 +510,7 @@ export function BuyingPriceSectionV2({
                               alignItems: "center",
                               justifyContent: "space-between",
                               padding: "12px 16px",
-                              backgroundColor: "#F8FBFB",
+                              backgroundColor: "var(--theme-bg-page)",
                               border: "none",
                               cursor: "pointer",
                               transition: "all 0.2s ease"
@@ -526,12 +526,12 @@ export function BuyingPriceSectionV2({
                               <ChevronRight
                                 size={16}
                                 style={{
-                                  color: "#6B7A76",
+                                  color: "var(--theme-text-muted)",
                                   transform: isCategoryExpanded ? "rotate(90deg)" : "rotate(0deg)",
                                   transition: "transform 0.2s ease"
                                 }}
                               />
-                              <Package size={16} style={{ color: "#6B7A76" }} />
+                              <Package size={16} style={{ color: "var(--theme-text-muted)" }} />
                               <span style={{
                                 fontSize: "14px",
                                 fontWeight: 600,
@@ -542,8 +542,8 @@ export function BuyingPriceSectionV2({
                               <span style={{
                                 fontSize: "11px",
                                 fontWeight: 500,
-                                color: "#6B7A76",
-                                backgroundColor: "white",
+                                color: "var(--theme-text-muted)",
+                                backgroundColor: "var(--theme-bg-surface)",
                                 padding: "2px 6px",
                                 borderRadius: "4px"
                               }}>
@@ -561,12 +561,12 @@ export function BuyingPriceSectionV2({
 
                           {/* Category's Line Items (Flat Table) */}
                           {isCategoryExpanded && (
-                            <div style={{ padding: "12px", backgroundColor: "white" }}>
+                            <div style={{ padding: "12px", backgroundColor: "var(--theme-bg-surface)" }}>
                               <div style={{
                                 border: "1px solid #E5E9E8",
                                 borderRadius: "10px",
                                 overflow: "hidden",
-                                backgroundColor: "white"
+                                backgroundColor: "var(--theme-bg-surface)"
                               }}>
                                 {/* Wrapper for horizontal scroll on mobile */}
                                 <div style={{ 
@@ -579,10 +579,10 @@ export function BuyingPriceSectionV2({
                                     gridTemplateColumns: "minmax(160px, 3fr) minmax(55px, 0.8fr) minmax(70px, 1fr) minmax(58px, 0.7fr) minmax(60px, 0.9fr) 40px minmax(100px, 1.3fr)",
                                     gap: "8px",
                                     padding: "10px 16px",
-                                    backgroundColor: "#F8FBFB",
+                                    backgroundColor: "var(--theme-bg-page)",
                                     fontSize: "11px",
                                     fontWeight: 600,
-                                    color: "#6B7A76",
+                                    color: "var(--theme-text-muted)",
                                     letterSpacing: "0.02em",
                                     borderBottom: "1px solid #EDF2F1"
                                   }}>
@@ -607,9 +607,9 @@ export function BuyingPriceSectionV2({
                                           padding: "12px 16px",
                                           fontSize: "13px",
                                           color: "#2C3E38",
-                                          backgroundColor: "white",
+                                          backgroundColor: "var(--theme-bg-surface)",
                                           alignItems: "center",
-                                          borderBottom: idx === categoryGroup.line_items.length - 1 ? "none" : "1px solid #F3F4F6"
+                                          borderBottom: idx === categoryGroup.line_items.length - 1 ? "none" : "1px solid var(--theme-border-subtle)"
                                         }}
                                       >
                                         {/* Item */}
@@ -781,7 +781,7 @@ export function BuyingPriceSectionV2({
                                           {(item.currency !== 'PHP' && item.forex_rate !== 1) && (
                                             <span style={{ 
                                               fontSize: "11px", 
-                                              color: "#6B7A76", 
+                                              color: "var(--theme-text-muted)", 
                                               fontWeight: 500,
                                               marginTop: "2px"
                                             }}>
@@ -797,18 +797,18 @@ export function BuyingPriceSectionV2({
                                         alignItems: "center",
                                         gap: "14px",
                                         padding: "10px 16px 12px 28px",
-                                        backgroundColor: "#F8FBFB",
+                                        backgroundColor: "var(--theme-bg-page)",
                                         borderTop: "1px solid #EDF2F1",
                                         fontSize: "12px",
-                                        color: "#6B7A76",
-                                        borderBottom: idx === categoryGroup.line_items.length - 1 ? "none" : "1px solid #F3F4F6"
+                                        color: "var(--theme-text-muted)",
+                                        borderBottom: idx === categoryGroup.line_items.length - 1 ? "none" : "1px solid var(--theme-border-subtle)"
                                       }}>
                                         {/* Remarks */}
                                         <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: "1 1 300px" }}>
                                           <label style={{ 
                                             fontWeight: 500, 
                                             whiteSpace: "nowrap",
-                                            color: "#6B7A76",
+                                            color: "var(--theme-text-muted)",
                                             fontSize: "12px"
                                           }}>
                                             Remarks:
@@ -833,7 +833,7 @@ export function BuyingPriceSectionV2({
                                             }}
                                             onFocus={(e) => {
                                               if (viewMode) return;
-                                              e.currentTarget.style.borderColor = "#0F766E";
+                                              e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                               e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.06)";
                                             }}
                                             onBlur={(e) => {
@@ -849,7 +849,7 @@ export function BuyingPriceSectionV2({
                                           <label style={{ 
                                             fontWeight: 500, 
                                             whiteSpace: "nowrap",
-                                            color: "#6B7A76",
+                                            color: "var(--theme-text-muted)",
                                             fontSize: "12px"
                                           }}>
                                             Service:
@@ -878,7 +878,7 @@ export function BuyingPriceSectionV2({
                                             fontSize: "12px",
                                             border: "1px solid #FCD4D1",
                                             borderRadius: "6px",
-                                            backgroundColor: "white",
+                                            backgroundColor: "var(--theme-bg-surface)",
                                             color: "#DC2626",
                                             cursor: "pointer",
                                             fontWeight: 500,

@@ -27,7 +27,7 @@ function DisplayField({ label, value }: { label: string; value: string }) {
         padding: "10px 12px",
         fontSize: "13px",
         color: "var(--neuron-ink-base)",
-        backgroundColor: "#F9FAFB",
+        backgroundColor: "var(--theme-bg-page)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "6px",
         minHeight: "38px",
@@ -164,7 +164,7 @@ export function GeneralDetailsSection({
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -195,7 +195,7 @@ export function GeneralDetailsSection({
                 padding: "6px 12px",
                 fontSize: "13px",
                 fontWeight: 500,
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 backgroundColor: "transparent",
                 border: "1px solid #E5E9E8",
                 borderRadius: "6px",
@@ -203,7 +203,7 @@ export function GeneralDetailsSection({
                 transition: "all 0.2s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F0FDFA"; // Very light hover only
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; // Very light hover only
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -237,7 +237,7 @@ export function GeneralDetailsSection({
               border: "1px solid var(--neuron-ui-border)", 
               borderRadius: "10px",
               padding: "4px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               width: "fit-content"
             }}>
               {(["IMPORT", "EXPORT"] as const).map((option) => (
@@ -266,7 +266,7 @@ export function GeneralDetailsSection({
                       style={{
                         position: "absolute",
                         inset: 0,
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         borderRadius: "6px",
                         zIndex: -1
                       }}
@@ -363,7 +363,7 @@ export function GeneralDetailsSection({
                 padding: "10px 12px",
                 fontSize: "13px",
                 color: "var(--neuron-ink-base)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 outline: "none",
@@ -406,7 +406,7 @@ export function GeneralDetailsSection({
                       fontSize: "13px",
                       fontWeight: 500,
                       color: "white",
-                      backgroundColor: "#0F766E",
+                      backgroundColor: "var(--theme-action-primary-bg)",
                       border: "1px solid #0F766E",
                       borderRadius: "6px"
                     }}
@@ -480,7 +480,7 @@ export function GeneralDetailsSection({
                     Date Created *
                   </label>
                   <input type="date" value={date} onChange={(e) => setDate(e.target.value)}
-                    style={{ width: "100%", padding: "10px 12px", fontSize: "13px", color: "var(--neuron-ink-base)", backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", outline: "none" }}
+                    style={{ width: "100%", padding: "10px 12px", fontSize: "13px", color: "var(--neuron-ink-base)", backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", outline: "none" }}
                     onFocus={(e) => { e.currentTarget.style.borderColor = "var(--neuron-brand-teal)"; }}
                     onBlur={(e) => { e.currentTarget.style.borderColor = "var(--neuron-ui-border)"; }}
                   />
@@ -533,7 +533,7 @@ export function GeneralDetailsSection({
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -596,7 +596,7 @@ export function GeneralDetailsSection({
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -634,7 +634,7 @@ export function GeneralDetailsSection({
             <div style={{
               padding: "10px 12px",
               fontSize: "13px",
-              color: "#6B7280",
+              color: "var(--theme-text-muted)",
               backgroundColor: "#FAFCFB",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
@@ -665,12 +665,12 @@ export function GeneralDetailsSection({
               alignItems: "center",
               gap: "8px",
             }}>
-              <Link2 size={14} style={{ color: "#0F766E", flexShrink: 0 }} />
-              <span style={{ fontWeight: 600, color: "#0F766E" }}>
+              <Link2 size={14} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0 }} />
+              <span style={{ fontWeight: 600, color: "var(--theme-action-primary-bg)" }}>
                 {contractDetection.contract.quote_number}
               </span>
               {contractDetection.contract.quotation_name && (
-                <span style={{ color: "#12332B" }}>
+                <span style={{ color: "var(--theme-text-primary)" }}>
                   — {contractDetection.contract.quotation_name}
                 </span>
               )}
@@ -678,7 +678,7 @@ export function GeneralDetailsSection({
                 <span style={{
                   marginLeft: "auto",
                   fontSize: "11px",
-                  color: "#6B7280",
+                  color: "var(--theme-text-muted)",
                   flexShrink: 0,
                 }}>
                   {(() => {
@@ -715,7 +715,7 @@ export function GeneralDetailsSection({
               padding: "10px 12px",
               fontSize: "13px",
               color: "var(--neuron-ink-muted)",
-              backgroundColor: "#F9FAFB",
+              backgroundColor: "var(--theme-bg-page)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
               minHeight: "38px",

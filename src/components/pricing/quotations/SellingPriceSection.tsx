@@ -182,7 +182,7 @@ export function SellingPriceSection({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid #E5E9E8",
         borderRadius: "12px",
         padding: "28px",
@@ -237,8 +237,8 @@ export function SellingPriceSection({
                 padding: "8px 12px",
                 fontSize: "12px",
                 fontWeight: 500,
-                color: "#6B7A76",
-                backgroundColor: "white",
+                color: "var(--theme-text-muted)",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid #E0E6E4",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -246,7 +246,7 @@ export function SellingPriceSection({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#F8FBFB";
-                e.currentTarget.style.borderColor = "#0F766E";
+                e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "white";
@@ -270,14 +270,14 @@ export function SellingPriceSection({
               fontSize: "13px",
               fontWeight: 600,
               color: "var(--neuron-brand-green)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #D9E1DE",
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#E8F5F3";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
               e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
@@ -299,7 +299,7 @@ export function SellingPriceSection({
         <div style={{
           padding: "48px 24px",
           textAlign: "center",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "10px"
         }}>
@@ -339,7 +339,7 @@ export function SellingPriceSection({
                 border: "1px solid #E0E6E4",
                 borderRadius: "10px",
                 overflow: "visible",
-                backgroundColor: "white"
+                backgroundColor: "var(--theme-bg-surface)"
               }}>
                 {/* Category Header */}
                 <CategoryHeader
@@ -355,12 +355,12 @@ export function SellingPriceSection({
 
                 {/* Line Items Table */}
                 {isCategoryExpanded && (
-                  <div style={{ padding: "12px", backgroundColor: "white" }}>
+                  <div style={{ padding: "12px", backgroundColor: "var(--theme-bg-surface)" }}>
                     <div style={{
                       border: "1px solid #E5E9E8",
                       borderRadius: "10px",
                       overflow: "hidden",
-                      backgroundColor: "white"
+                      backgroundColor: "var(--theme-bg-surface)"
                     }}>
                       {/* Wrapper for horizontal scroll on mobile */}
                       <div style={{ 
@@ -401,7 +401,7 @@ export function SellingPriceSection({
                           gridTemplateColumns: "minmax(140px, 3fr) minmax(50px, 0.8fr) minmax(80px, 1.2fr) minmax(70px, 1fr) minmax(65px, 1fr) minmax(45px, 0.6fr) minmax(55px, 0.8fr) 40px minmax(90px, 1.5fr)",
                           gap: "8px",
                           padding: "12px 16px",
-                          backgroundColor: "#E8F5F3",
+                          backgroundColor: "var(--theme-bg-surface-tint)",
                           borderTop: "2px solid var(--neuron-brand-teal)",
                           fontSize: "13px",
                           fontWeight: 700,

@@ -95,12 +95,12 @@ export function BookingRateCardButton({
   // ── Already applied: subtle single-line note ──
   if (alreadyGenerated) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#F0FDF9] border border-[#D1FAE5]">
+      <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--theme-bg-surface-tint)] border border-[#D1FAE5]">
         <Check size={14} className="text-[#059669] shrink-0" />
         <span className="text-[12px] text-[#059669] font-medium">
           Rates applied from {rateCard.contractNumber}
         </span>
-        <span className="text-[12px] text-[#667085]">
+        <span className="text-[12px] text-[var(--theme-text-muted)]">
           &middot; {rateCardItems.length} item{rateCardItems.length !== 1 ? "s" : ""}
           {rateCardTotal > 0 && ` · ${formatCurrency(rateCardTotal, rateCard.currency)}`}
         </span>
@@ -113,20 +113,20 @@ export function BookingRateCardButton({
     <>
       <div
         onClick={() => setIsSheetOpen(true)}
-        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-[#D1D5DB] bg-[#FAFBFC] hover:bg-[#F0FDF9] hover:border-[#99F6E4] transition-all cursor-pointer group"
+        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-[var(--theme-border-default)] bg-[#FAFBFC] hover:bg-[var(--theme-bg-surface-tint)] hover:border-[#99F6E4] transition-all cursor-pointer group"
       >
-        <div className="w-9 h-9 rounded-lg bg-[#F0FDF9] flex items-center justify-center shrink-0 group-hover:bg-[#CCFBF1] transition-colors">
-          <FileSpreadsheet size={18} className="text-[#0F766E]" />
+        <div className="w-9 h-9 rounded-lg bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0 group-hover:bg-[#CCFBF1] transition-colors">
+          <FileSpreadsheet size={18} className="text-[var(--theme-action-primary-bg)]" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[13px] font-medium text-[#12332B]">
+          <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">
             Contract Rate Card Available
           </div>
-          <div className="text-[12px] text-[#667085]">
+          <div className="text-[12px] text-[var(--theme-text-muted)]">
             Review and apply charges from {rateCard.contractNumber}
           </div>
         </div>
-        <ChevronRight size={16} className="text-[#667085] group-hover:text-[#0F766E] transition-colors shrink-0" />
+        <ChevronRight size={16} className="text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)] transition-colors shrink-0" />
       </div>
 
       <RateCalculationSheet

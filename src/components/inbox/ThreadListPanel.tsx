@@ -20,13 +20,13 @@ function ThreadListSkeleton() {
   return (
     <div className="flex flex-col">
       {[...Array(5)].map((_, i) => (
-        <div key={i} style={{ padding: "14px 16px", borderBottom: "1px solid #E5E9F0" }}>
+        <div key={i} style={{ padding: "14px 16px", borderBottom: "1px solid var(--theme-border-default)" }}>
           <div className="flex items-start gap-2.5">
             <div style={{ width: 8, flexShrink: 0 }} />
             <div className="flex-1 space-y-2">
-              <div style={{ height: 13, borderRadius: 4, backgroundColor: "#E5E9F0", width: `${70 + (i % 3) * 10}%`, animation: "pulse 1.5s ease-in-out infinite" }} />
-              <div style={{ height: 11, borderRadius: 4, backgroundColor: "#F3F4F6", width: "50%", animation: "pulse 1.5s ease-in-out infinite" }} />
-              <div style={{ height: 11, borderRadius: 4, backgroundColor: "#F3F4F6", width: "80%", animation: "pulse 1.5s ease-in-out infinite" }} />
+              <div style={{ height: 13, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", width: `${70 + (i % 3) * 10}%`, animation: "pulse 1.5s ease-in-out infinite" }} />
+              <div style={{ height: 11, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", width: "50%", animation: "pulse 1.5s ease-in-out infinite" }} />
+              <div style={{ height: 11, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", width: "80%", animation: "pulse 1.5s ease-in-out infinite" }} />
             </div>
           </div>
         </div>
@@ -45,12 +45,12 @@ function EmptyState({ tab, onCompose }: { tab: InboxTab; onCompose: () => void }
   };
   return (
     <div className="flex flex-col items-center justify-center h-full text-center" style={{ padding: 32, minHeight: 240 }}>
-      <Inbox size={32} style={{ color: "#D1D5DB", marginBottom: 12 }} />
-      <p style={{ fontSize: 13, color: "#9CA3AF", marginBottom: 8 }}>{messages[tab]}</p>
+      <Inbox size={32} style={{ color: "var(--theme-border-default)", marginBottom: 12 }} />
+      <p style={{ fontSize: 13, color: "var(--theme-text-muted)", marginBottom: 8 }}>{messages[tab]}</p>
       {tab === "inbox" && (
         <button
           onClick={onCompose}
-          style={{ fontSize: 12, color: "#0F766E", fontWeight: 500, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+          style={{ fontSize: 12, color: "var(--theme-action-primary-bg)", fontWeight: 500, background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
         >
           Send your first ticket
         </button>
@@ -82,27 +82,27 @@ export function ThreadListPanel({
   return (
     <div
       className="ticketing-ui flex flex-col h-full"
-      style={{ width: 320, flexShrink: 0, borderRight: "1px solid #E5E9F0", backgroundColor: "#FFFFFF" }}
+      style={{ width: 320, flexShrink: 0, borderRight: "1px solid var(--theme-border-default)", backgroundColor: "var(--theme-bg-surface)" }}
     >
       {/* Header */}
-      <div style={{ padding: "16px 16px 0", borderBottom: "1px solid #E5E9F0" }}>
+      <div style={{ padding: "16px 16px 0", borderBottom: "1px solid var(--theme-border-default)" }}>
         <div className="flex items-center justify-between mb-3">
-          <h2 style={{ fontSize: 14, fontWeight: 600, color: "#12332B" }}>Tickets</h2>
+          <h2 style={{ fontSize: 14, fontWeight: 600, color: "var(--theme-text-primary)" }}>Tickets</h2>
           <button
             onClick={onCompose}
             className="flex items-center gap-1.5"
             style={{
               padding: "5px 10px",
               borderRadius: 6,
-              border: "1px solid #E5E9F0",
-              backgroundColor: "#FFFFFF",
+              border: "1px solid var(--theme-border-default)",
+              backgroundColor: "var(--theme-bg-surface)",
               fontSize: 12,
               fontWeight: 500,
               color: "var(--neuron-brand-green)",
               cursor: "pointer",
             }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#FFFFFF"; e.currentTarget.style.borderColor = "#E5E9F0"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)"; e.currentTarget.style.borderColor = "var(--theme-border-default)"; }}
             title="Compose new ticket (C)"
           >
             <Edit size={12} />

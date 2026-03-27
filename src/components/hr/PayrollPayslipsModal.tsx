@@ -202,7 +202,7 @@ const MOCK_PAYROLL_DATA: Record<string, PayslipData[]> = {
 function getCompanyHeaderStyle(company: string) {
   switch (company) {
     case "Conforme Cargo Express":
-      return { background: "#FFFFFF", color: "#000000" };
+      return { background: "var(--theme-bg-surface)", color: "#000000" };
     case "ZEUJ One Marketing International":
       return { background: "#FCD34D", color: "#000000" };
     case "Juan Logistica Courier Services":
@@ -210,7 +210,7 @@ function getCompanyHeaderStyle(company: string) {
     case "ZN International Cargo Forwarding":
       return { background: "#0A1D4D", color: "#FFFFFF" };
     default:
-      return { background: "#FFFFFF", color: "#000000" };
+      return { background: "var(--theme-bg-surface)", color: "#000000" };
   }
 }
 
@@ -243,7 +243,7 @@ function PayslipCard({
 
   return (
     <div
-      className="bg-white"
+      className="bg-[var(--theme-bg-surface)]"
       style={{
         width: "330px",
         border: "2px solid #B9B9B9",
@@ -294,7 +294,7 @@ function PayslipCard({
             top: "10px",
             right: "16px",
             fontSize: "9px",
-            color: "#6B7280",
+            color: "var(--theme-text-muted)",
             fontWeight: 500,
           }}
         >
@@ -310,7 +310,7 @@ function PayslipCard({
             fontWeight: 700,
             marginBottom: "6px",
             padding: "4px 8px",
-            background: "#F9FAFB",
+            background: "var(--theme-bg-page)",
             border: "1px solid #B9B9B9",
             letterSpacing: "0.3px",
           }}
@@ -365,7 +365,7 @@ function PayslipCard({
             fontWeight: 700,
             marginBottom: "6px",
             padding: "4px 8px",
-            background: "#F9FAFB",
+            background: "var(--theme-bg-page)",
             border: "1px solid #B9B9B9",
             letterSpacing: "0.3px",
           }}
@@ -433,7 +433,7 @@ function PayslipCard({
         <div style={{ fontSize: "10px", fontWeight: 600, marginBottom: "2px", letterSpacing: "0.3px" }}>
           NET PAY
         </div>
-        <div style={{ fontSize: "16px", fontWeight: 700, color: "#0A1D4D" }}>
+        <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--theme-text-primary)" }}>
           ₱{data.netPay.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </div>
       </div>
@@ -448,7 +448,7 @@ function PayslipCard({
             height: "20px",
           }}
         />
-        <div style={{ fontSize: "9px", color: "#6B7280" }}>Signature</div>
+        <div style={{ fontSize: "9px", color: "var(--theme-text-muted)" }}>Signature</div>
       </div>
     </div>
   );
@@ -483,7 +483,7 @@ export function PayrollPayslipsModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-[16px] overflow-hidden flex flex-col"
+        className="bg-[var(--theme-bg-surface)] rounded-[16px] overflow-hidden flex flex-col"
         style={{
           width: "1180px",
           height: "90vh",
@@ -498,12 +498,12 @@ export function PayrollPayslipsModal({
         >
           <div>
             <h2
-              className="text-[#0A1D4D]"
+              className="text-[var(--theme-text-primary)]"
               style={{ fontSize: "18px", fontWeight: 600 }}
             >
               Payroll Payslips – {company}
             </h2>
-            <p className="text-[12px] text-[#6B7280] mt-1">
+            <p className="text-[12px] text-[var(--theme-text-muted)] mt-1">
               {period}
             </p>
           </div>
@@ -542,12 +542,12 @@ export function PayrollPayslipsModal({
           style={{ padding: "16px 24px" }}
         >
           <div className="flex items-center gap-3">
-            <span className="text-[13px] text-[#6B7280]" style={{ fontWeight: 500 }}>
+            <span className="text-[13px] text-[var(--theme-text-muted)]" style={{ fontWeight: 500 }}>
               Employee:
             </span>
             <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
               <SelectTrigger
-                className="h-9 rounded-lg border-[#E5E7EB] text-[13px]"
+                className="h-9 rounded-lg border-[var(--theme-border-default)] text-[13px]"
                 style={{ width: "240px" }}
               >
                 <SelectValue />
@@ -568,7 +568,7 @@ export function PayrollPayslipsModal({
         <div
           className="flex-1 overflow-y-auto"
           style={{
-            background: "#F3F4F6",
+            background: "var(--theme-bg-surface-subtle)",
             padding: "24px",
           }}
         >

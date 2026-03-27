@@ -173,8 +173,8 @@ export function BillingsTable({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-[#6B7280]">
-        <div className="animate-spin mb-3 text-[#0F766E]">
+      <div className="flex flex-col items-center justify-center py-20 text-[var(--theme-text-muted)]">
+        <div className="animate-spin mb-3 text-[var(--theme-action-primary-bg)]">
           <LoaderCircle size={32} />
         </div>
         <p className="text-[13px] font-medium">Loading billings...</p>
@@ -219,7 +219,7 @@ export function BillingsTable({
               display: "flex", alignItems: "center", gap: "4px",
               padding: "5px 9px", fontSize: "12px", fontWeight: 500,
               border: "1px solid #FDE68A", borderRadius: "6px",
-              backgroundColor: "white", color: "#D97706", cursor: "pointer",
+              backgroundColor: "var(--theme-bg-surface)", color: "#D97706", cursor: "pointer",
             }}
             title="Void Item — sets status to voided, preserves the record for audit"
           >
@@ -233,7 +233,7 @@ export function BillingsTable({
             display: "flex", alignItems: "center", gap: "4px",
             padding: "5px 9px", fontSize: "12px", fontWeight: 500,
             border: "1px solid #FCD4D1", borderRadius: "6px",
-            backgroundColor: "white", color: "#DC2626", cursor: "pointer",
+            backgroundColor: "var(--theme-bg-surface)", color: "#DC2626", cursor: "pointer",
           }}
           title="Delete — permanently removes this record"
         >
@@ -248,7 +248,7 @@ export function BillingsTable({
      // Only show empty state if we can't add categories (view mode or no handler)
      return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)"
       }}>
         <div className="px-6 py-12 text-center">
@@ -264,7 +264,7 @@ export function BillingsTable({
   if (groupBy === "booking") {
     if (bookingIds.length === 0) {
       return (
-        <div className="rounded-[10px] overflow-hidden" style={{ backgroundColor: "#FFFFFF", border: "1px solid var(--neuron-ui-border)" }}>
+        <div className="rounded-[10px] overflow-hidden" style={{ backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)" }}>
           <div className="px-6 py-12 text-center">
             <Receipt className="w-12 h-12 mx-auto mb-3" style={{ color: "var(--neuron-ink-muted)" }} />
             <h3 style={{ color: "var(--neuron-ink-primary)" }} className="mb-1">No billings found</h3>
@@ -278,7 +278,7 @@ export function BillingsTable({
       <div className="flex flex-col gap-0">
         {/* Unified Table Container */}
         <div
-          className="bg-white border border-[#E5E9E8] rounded-xl overflow-hidden"
+          className="bg-[var(--theme-bg-surface)] border border-[#E5E9E8] rounded-xl overflow-hidden"
         >
           {/* Single shared column header with Collapse/Expand toggle */}
           <PricingTableHeader
@@ -295,7 +295,7 @@ export function BillingsTable({
                   border: "none",
                   cursor: "pointer",
                   padding: 0,
-                  color: "#9CA3AF",
+                  color: "var(--theme-text-muted)",
                   fontSize: "11px",
                   fontWeight: 600,
                   letterSpacing: "0.02em",
@@ -304,7 +304,7 @@ export function BillingsTable({
                 <div style={{ transition: "transform 0.15s ease", transform: allExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
                   <ChevronDown size={14} />
                 </div>
-                <span style={{ color: "#6B7A76" }}>Item</span>
+                <span style={{ color: "var(--theme-text-muted)" }}>Item</span>
               </button>
             }
           />
@@ -353,11 +353,11 @@ export function BillingsTable({
                 >
                   <div className="flex items-center gap-3">
                     {/* Expand chevron */}
-                    <div style={{ color: "#9CA3AF", transition: "transform 0.15s ease", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
+                    <div style={{ color: "var(--theme-text-muted)", transition: "transform 0.15s ease", transform: isExpanded ? "rotate(0deg)" : "rotate(-90deg)" }}>
                       <ChevronDown size={14} />
                     </div>
                     {/* Service icon */}
-                    {bid !== "unassigned" && getServiceIcon(serviceType, { size: 14, color: "#0F766E" })}
+                    {bid !== "unassigned" && getServiceIcon(serviceType, { size: 14, color: "var(--theme-action-primary-bg)" })}
                     {/* Booking ID */}
                     <span style={{
                       fontSize: "12px",
@@ -372,7 +372,7 @@ export function BillingsTable({
                       <span style={{
                         fontSize: "11px",
                         fontWeight: 500,
-                        color: "#374151",
+                        color: "var(--theme-text-secondary)",
                       }}>
                         · {meta.customerName}
                       </span>
@@ -382,11 +382,11 @@ export function BillingsTable({
                       <span style={{
                         fontSize: "10px",
                         fontWeight: 600,
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         padding: "1px 6px",
-                        backgroundColor: "#F3F4F6",
+                        backgroundColor: "var(--theme-bg-surface-subtle)",
                         borderRadius: "3px",
-                        border: "1px solid #E5E7EB",
+                        border: "1px solid var(--theme-border-default)",
                       }}>
                         {serviceType}
                       </span>
@@ -395,11 +395,11 @@ export function BillingsTable({
                     <span style={{
                       fontSize: "10px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       padding: "1px 6px",
-                      backgroundColor: "#F3F4F6",
+                      backgroundColor: "var(--theme-bg-surface-subtle)",
                       borderRadius: "3px",
-                      border: "1px solid #E5E7EB",
+                      border: "1px solid var(--theme-border-default)",
                     }}>
                       {itemCount} item{itemCount !== 1 ? "s" : ""}
                     </span>
@@ -445,24 +445,24 @@ export function BillingsTable({
                                 className="flex items-center justify-between"
                                 style={{
                                   padding: "6px 16px 6px 44px",
-                                  backgroundColor: "#F9FAFB",
+                                  backgroundColor: "var(--theme-bg-page)",
                                   borderBottom: "1px solid #F0F0F0",
                                 }}
                               >
                                 <span style={{
                                   fontSize: "10px",
                                   fontWeight: 700,
-                                  color: "#9CA3AF",
+                                  color: "var(--theme-text-muted)",
                                   textTransform: "uppercase",
                                   letterSpacing: "0.05em",
                                 }}>
                                   {catName}
                                 </span>
                                 <div className="flex items-center gap-3">
-                                  <span style={{ fontSize: "10px", color: "#9CA3AF" }}>
+                                  <span style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}>
                                     {catItems.length} item{catItems.length !== 1 ? "s" : ""}
                                   </span>
-                                  <span style={{ fontSize: "11px", fontWeight: 600, color: "#9CA3AF", fontFamily: "monospace" }}>
+                                  <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", fontFamily: "monospace" }}>
                                     {formatCurrency(catSubtotal)}
                                   </span>
                                 </div>
@@ -477,7 +477,7 @@ export function BillingsTable({
                                   <div
                                     key={item.id}
                                     ref={isHighlighted ? highlightRef : undefined}
-                                    className={isHighlighted ? "ring-2 ring-[#0F766E] bg-[#0F766E]/5 rounded-md transition-all duration-700" : ""}
+                                    className={isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md transition-all duration-700" : ""}
                                   >
                                   <UniversalPricingRow
                                     data={mapToPricingData(item)}
@@ -516,7 +516,7 @@ export function BillingsTable({
                           marginBottom: "8px",
                         }}
                       >
-                        <p style={{ fontSize: "12px", color: "#9CA3AF", fontStyle: "italic" }}>
+                        <p style={{ fontSize: "12px", color: "var(--theme-text-muted)", fontStyle: "italic" }}>
                           No billing items yet
                         </p>
                       </div>
@@ -530,23 +530,23 @@ export function BillingsTable({
 
         {/* Footer Summaries — same as category view */}
         {(footerSummary || grossSummary) && (
-          <div className="mt-4 bg-white border border-[#E5E9F0] rounded-lg px-6 py-4 flex items-center justify-end gap-8">
+          <div className="mt-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg px-6 py-4 flex items-center justify-end gap-8">
             {grossSummary && (
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-semibold text-[#667085] uppercase tracking-wider">
+                <span className="text-[12px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider">
                   {grossSummary.label}
                 </span>
-                <span className="text-[14px] font-bold text-[#374151]">
+                <span className="text-[14px] font-bold text-[var(--theme-text-secondary)]">
                   {formatCurrency(grossSummary.amount, grossSummary.currency)}
                 </span>
               </div>
             )}
             {footerSummary && (
               <div className="flex items-center gap-2">
-                <span className="text-[12px] font-bold text-[#667085] uppercase tracking-wider">
+                <span className="text-[12px] font-bold text-[var(--theme-text-muted)] uppercase tracking-wider">
                   {footerSummary.label}
                 </span>
-                <span className="text-[14px] font-bold text-[#0F766E]">
+                <span className="text-[14px] font-bold text-[var(--theme-action-primary-bg)]">
                   {formatCurrency(footerSummary.amount, footerSummary.currency)}
                 </span>
               </div>
@@ -579,7 +579,7 @@ export function BillingsTable({
             return (
             <div 
                 key={category}
-                className="bg-white border border-[#E5E9E8] rounded-xl overflow-hidden"
+                className="bg-[var(--theme-bg-surface)] border border-[#E5E9E8] rounded-xl overflow-hidden"
             >
                 {/* Reused Category Header */}
                 <CategoryHeader 
@@ -601,7 +601,7 @@ export function BillingsTable({
 
                 {/* Collapsible Content */}
                 {isExpanded && (
-                <div className="p-4 bg-white">
+                <div className="p-4 bg-[var(--theme-bg-surface)]">
                     <div className="border border-[#E5E9E8] rounded-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         {/* Table Header */}
@@ -645,7 +645,7 @@ export function BillingsTable({
                                 </div>
                             </>
                         ) : (
-                            <div className="py-8 text-center text-[#98A2B3] text-[13px] italic">
+                            <div className="py-8 text-center text-[var(--theme-text-muted)] text-[13px] italic">
                                 No items in this category. Click "Add Item" to start.
                             </div>
                         )}
@@ -660,23 +660,23 @@ export function BillingsTable({
 
       {/* Footer Summaries */}
       {(footerSummary || grossSummary) && (
-         <div className="mt-4 bg-white border border-[#E5E9F0] rounded-lg px-6 py-4 flex items-center justify-end gap-8">
+         <div className="mt-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg px-6 py-4 flex items-center justify-end gap-8">
            {grossSummary && (
              <div className="flex items-center gap-2">
-               <span className="text-[12px] font-semibold text-[#667085] uppercase tracking-wider">
+               <span className="text-[12px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider">
                  {grossSummary.label}
                </span>
-               <span className="text-[14px] font-bold text-[#374151]">
+               <span className="text-[14px] font-bold text-[var(--theme-text-secondary)]">
                  {formatCurrency(grossSummary.amount, grossSummary.currency)}
                </span>
              </div>
            )}
            {footerSummary && (
              <div className="flex items-center gap-2">
-               <span className="text-[12px] font-bold text-[#667085] uppercase tracking-wider">
+               <span className="text-[12px] font-bold text-[var(--theme-text-muted)] uppercase tracking-wider">
                  {footerSummary.label}
                </span>
-               <span className="text-[14px] font-bold text-[#0F766E]">
+               <span className="text-[14px] font-bold text-[var(--theme-action-primary-bg)]">
                  {formatCurrency(footerSummary.amount, footerSummary.currency)}
                </span>
              </div>

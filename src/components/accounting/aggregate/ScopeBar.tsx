@@ -87,10 +87,10 @@ export function ScopeBar({ scope, onScopeChange, standalone }: ScopeBarProps) {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-gray-50"
+          className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
           style={{
-            border: standalone ? "1px solid #E5E7EB" : "none",
-            color: "#12332B",
+            border: standalone ? "1px solid var(--theme-border-default)" : "none",
+            color: "var(--theme-text-primary)",
             backgroundColor: open ? "#F0FDFA" : standalone ? "#FFFFFF" : "transparent",
           }}
         >
@@ -98,7 +98,7 @@ export function ScopeBar({ scope, onScopeChange, standalone }: ScopeBarProps) {
           <span>{getPresetLabel(scope.preset)}</span>
           <ChevronDown
             size={12}
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
             className={`ml-0.5 transition-transform ${open ? "rotate-180" : ""}`}
           />
         </button>
@@ -109,7 +109,7 @@ export function ScopeBar({ scope, onScopeChange, standalone }: ScopeBarProps) {
             className="absolute top-full left-0 mt-1.5 z-50 rounded-lg shadow-lg py-1 min-w-[220px]"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           >
             {PRESETS.map((p) => {
@@ -118,14 +118,14 @@ export function ScopeBar({ scope, onScopeChange, standalone }: ScopeBarProps) {
                 <button
                   key={p.value}
                   onClick={() => handlePresetClick(p.value)}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[12px] transition-colors hover:bg-gray-50"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[12px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                   style={{
                     color: isActive ? "#0F766E" : "var(--neuron-ink-primary)",
                     fontWeight: isActive ? 600 : 400,
                   }}
                 >
                   {isActive ? (
-                    <Check size={12} style={{ color: "#0F766E" }} />
+                    <Check size={12} style={{ color: "var(--theme-action-primary-bg)" }} />
                   ) : (
                     <span className="w-3" />
                   )}
@@ -149,7 +149,7 @@ export function ScopeBar({ scope, onScopeChange, standalone }: ScopeBarProps) {
               className="w-full px-3 py-2 text-[13px]"
             />
           </div>
-          <span className="text-[12px] font-medium" style={{ color: "#6B7280" }}>
+          <span className="text-[12px] font-medium" style={{ color: "var(--theme-text-muted)" }}>
             to
           </span>
           <div style={{ minWidth: "130px" }}>

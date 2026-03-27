@@ -212,13 +212,13 @@ export function ExpensesPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Recorded":
-        return { bg: "#E8F5F3", color: "#0F766E" };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
       case "Audited":
         return { bg: "#D1FAE5", color: "#059669" };
       case "Disbursed":
         return { bg: "#DBEAFE", color: "#1D4ED8" };
       case "Draft":
-        return { bg: "#F3F4F6", color: "#6B7280" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
       default:
         return { bg: "#FEF3E7", color: "#C88A2B" };
     }
@@ -228,7 +228,7 @@ export function ExpensesPage() {
     <div 
       className="h-full flex flex-col"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Header Section */}
@@ -242,10 +242,10 @@ export function ExpensesPage() {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Expenses
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage and track all company expenses and disbursements
             </p>
           </div>
@@ -270,10 +270,10 @@ export function ExpensesPage() {
             padding: "16px 20px", 
             border: "1px solid var(--neuron-ui-border)", 
             borderRadius: "8px",
-            background: "#FFFFFF"
+            background: "var(--theme-bg-surface)"
           }}>
-            <p style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Total Expenses</p>
-            <p style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Total Expenses</p>
+            <p style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
               {formatCurrency(totals.total)}
             </p>
           </div>
@@ -281,10 +281,10 @@ export function ExpensesPage() {
             padding: "16px 20px", 
             border: "1px solid var(--neuron-ui-border)", 
             borderRadius: "8px",
-            background: "#FFFFFF"
+            background: "var(--theme-bg-surface)"
           }}>
-            <p style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>This Month</p>
-            <p style={{ fontSize: "24px", fontWeight: 600, color: "#0F766E" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>This Month</p>
+            <p style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-action-primary-bg)" }}>
               {formatCurrency(totals.thisMonth)}
             </p>
           </div>
@@ -292,10 +292,10 @@ export function ExpensesPage() {
             padding: "16px 20px", 
             border: "1px solid var(--neuron-ui-border)", 
             borderRadius: "8px",
-            background: "#FFFFFF"
+            background: "var(--theme-bg-surface)"
           }}>
-            <p style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Total Entries</p>
-            <p style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Total Entries</p>
+            <p style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
               {totals.count}
             </p>
           </div>
@@ -342,7 +342,7 @@ export function ExpensesPage() {
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -367,12 +367,12 @@ export function ExpensesPage() {
       <div className="flex-1 overflow-auto" style={{ padding: "24px 48px" }}>
         {loading ? (
           <div className="text-center py-12">
-            <p style={{ fontSize: "16px", color: "#667085" }}>Loading expenses...</p>
+            <p style={{ fontSize: "16px", color: "var(--theme-text-muted)" }}>Loading expenses...</p>
           </div>
         ) : error ? (
           <div className="text-center py-12">
             <p style={{ fontSize: "16px", color: "#EF4444", marginBottom: "8px" }}>Error loading expenses</p>
-            <p style={{ fontSize: "14px", color: "#667085" }}>{error}</p>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>{error}</p>
             <button
               onClick={fetchExpenses}
               style={{
@@ -390,11 +390,11 @@ export function ExpensesPage() {
           </div>
         ) : filteredAndSortedExpenses.length === 0 ? (
           <div className="text-center py-12">
-            <PhilippinePeso size={48} style={{ color: "#667085", margin: "0 auto 16px" }} />
-            <p style={{ fontSize: "16px", color: "#667085", marginBottom: "8px" }}>
+            <PhilippinePeso size={48} style={{ color: "var(--theme-text-muted)", margin: "0 auto 16px" }} />
+            <p style={{ fontSize: "16px", color: "var(--theme-text-muted)", marginBottom: "8px" }}>
               No expenses found
             </p>
-            <p style={{ fontSize: "14px", color: "#98A2B3" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               {searchQuery
                 ? "Try adjusting your search query" 
                 : "Log your first expense to get started"}
@@ -416,7 +416,7 @@ export function ExpensesPage() {
                       alignItems: "center",
                       justifyContent: "space-between",
                       padding: "12px 16px",
-                      background: "#F9FAFB",
+                      background: "var(--theme-bg-page)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "8px",
                       cursor: "pointer",
@@ -424,15 +424,15 @@ export function ExpensesPage() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      {isCollapsed ? <ChevronRight size={20} color="#667085" /> : <ChevronDown size={20} color="#667085" />}
-                      <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                      {isCollapsed ? <ChevronRight size={20} color="var(--theme-text-muted)" /> : <ChevronDown size={20} color="var(--theme-text-muted)" />}
+                      <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                         {category}
                       </h3>
-                      <span style={{ fontSize: "14px", color: "#667085" }}>
+                      <span style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
                         ({categoryExpenses.length})
                       </span>
                     </div>
-                    <p style={{ fontSize: "16px", fontWeight: 600, color: "#0F766E" }}>
+                    <p style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-action-primary-bg)" }}>
                       {formatCurrency(categoryTotal)}
                     </p>
                   </div>
@@ -453,12 +453,12 @@ export function ExpensesPage() {
                               padding: "16px 20px",
                               border: "1px solid var(--neuron-ui-border)",
                               borderRadius: "8px",
-                              background: "#FFFFFF",
+                              background: "var(--theme-bg-surface)",
                               cursor: "pointer",
                               transition: "all 0.2s",
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = "#0F766E";
+                              e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                               e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.1)";
                             }}
                             onMouseLeave={(e) => {
@@ -469,7 +469,7 @@ export function ExpensesPage() {
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                               <div style={{ flex: 1 }}>
                                 <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                                  <h4 style={{ fontSize: "15px", fontWeight: 600, color: "#12332B" }}>
+                                  <h4 style={{ fontSize: "15px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                                     {expense.description || expense.purpose}
                                   </h4>
                                   <span
@@ -485,7 +485,7 @@ export function ExpensesPage() {
                                     {expense.status}
                                   </span>
                                 </div>
-                                <div style={{ display: "flex", gap: "16px", fontSize: "13px", color: "#667085" }}>
+                                <div style={{ display: "flex", gap: "16px", fontSize: "13px", color: "var(--theme-text-muted)" }}>
                                   <span>{expense.voucher_number}</span>
                                   <span>•</span>
                                   <span>{formatDate(expense.request_date || expense.created_at)}</span>
@@ -495,7 +495,7 @@ export function ExpensesPage() {
                                     <>
                                       <span>•</span>
                                       <span style={{ 
-                                        color: "#0F766E", 
+                                        color: "var(--theme-action-primary-bg)", 
                                         fontWeight: 500,
                                         display: "flex",
                                         alignItems: "center",
@@ -508,17 +508,17 @@ export function ExpensesPage() {
                                   {expense.project_number && (
                                     <>
                                       <span>•</span>
-                                      <span style={{ color: "#0F766E", fontWeight: 500 }}>{expense.project_number}</span>
+                                      <span style={{ color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>{expense.project_number}</span>
                                     </>
                                   )}
                                 </div>
                               </div>
                               <div style={{ textAlign: "right" }}>
-                                <p style={{ fontSize: "18px", fontWeight: 600, color: "#12332B" }}>
+                                <p style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                                   {formatCurrency(expense.amount)}
                                 </p>
                                 {expense.sub_category && (
-                                  <p style={{ fontSize: "12px", color: "#667085", marginTop: "4px" }}>
+                                  <p style={{ fontSize: "12px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
                                     {expense.sub_category}
                                   </p>
                                 )}

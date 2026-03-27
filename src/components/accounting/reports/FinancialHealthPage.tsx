@@ -79,10 +79,10 @@ export function FinancialHealthPage() {
       width: "130px",
       cell: (row) => (
         <div>
-          <div className="text-[13px] font-medium text-[#101828]">
+          <div className="text-[13px] font-medium text-[var(--theme-text-primary)]">
             {row.projectNumber || "—"}
           </div>
-          <div className="text-[11px] text-[#667085]">
+          <div className="text-[11px] text-[var(--theme-text-muted)]">
             {formatDate(row.projectDate)}
           </div>
         </div>
@@ -93,7 +93,7 @@ export function FinancialHealthPage() {
       accessorKey: "customerName",
       width: "180px",
       cell: (row) => (
-        <span className="text-[13px] text-[#101828] font-medium">
+        <span className="text-[13px] text-[var(--theme-text-primary)] font-medium">
           {row.customerName}
         </span>
       ),
@@ -103,7 +103,7 @@ export function FinancialHealthPage() {
       accessorKey: "invoiceNumbers" as any,
       width: "130px",
       cell: (row) => (
-        <div className="text-[12px] text-[#667085]">
+        <div className="text-[12px] text-[var(--theme-text-muted)]">
           {row.invoiceNumbers.length > 0
             ? row.invoiceNumbers.join(", ")
             : "—"}
@@ -115,7 +115,7 @@ export function FinancialHealthPage() {
       accessorKey: "billingTotal",
       width: "130px",
       cell: (row) => (
-        <span className="text-[13px] font-medium text-[#101828] tabular-nums">
+        <span className="text-[13px] font-medium text-[var(--theme-text-primary)] tabular-nums">
           {formatCurrency(row.billingTotal)}
         </span>
       ),
@@ -125,7 +125,7 @@ export function FinancialHealthPage() {
       accessorKey: "expensesTotal",
       width: "120px",
       cell: (row) => (
-        <span className="text-[13px] text-[#667085] tabular-nums">
+        <span className="text-[13px] text-[var(--theme-text-muted)] tabular-nums">
           {formatCurrency(row.expensesTotal)}
         </span>
       ),
@@ -135,7 +135,7 @@ export function FinancialHealthPage() {
       accessorKey: "adminCost",
       width: "100px",
       cell: (row) => (
-        <span className="text-[13px] text-[#667085] tabular-nums">
+        <span className="text-[13px] text-[var(--theme-text-muted)] tabular-nums">
           {formatCurrency(row.adminCost)}
         </span>
       ),
@@ -145,7 +145,7 @@ export function FinancialHealthPage() {
       accessorKey: "totalExpenses",
       width: "130px",
       cell: (row) => (
-        <span className="text-[13px] font-medium text-[#101828] tabular-nums">
+        <span className="text-[13px] font-medium text-[var(--theme-text-primary)] tabular-nums">
           {formatCurrency(row.totalExpenses)}
         </span>
       ),
@@ -155,7 +155,7 @@ export function FinancialHealthPage() {
       accessorKey: "collectedAmount",
       width: "130px",
       cell: (row) => (
-        <span className="text-[13px] font-medium text-[#0F766E] tabular-nums">
+        <span className="text-[13px] font-medium text-[var(--theme-action-primary-bg)] tabular-nums">
           {formatCurrency(row.collectedAmount)}
         </span>
       ),
@@ -181,7 +181,7 @@ export function FinancialHealthPage() {
       label: "Total Billings",
       value: formatCurrency(summary.totalBillings),
       icon: DollarSign,
-      color: "#0F766E",
+      color: "var(--theme-action-primary-bg)",
       bgColor: "#F0FDF9",
     },
     {
@@ -265,35 +265,35 @@ export function FinancialHealthPage() {
     : undefined;
 
   return (
-    <div className="flex flex-col h-full bg-white p-12">
+    <div className="flex flex-col h-full bg-[var(--theme-bg-surface)] p-12">
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+          <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
             Financial Health
           </h1>
-          <p className="text-[14px] text-[#667085]">
+          <p className="text-[14px] text-[var(--theme-text-muted)]">
             Sales report — per-project billing, expenses, collections, and profitability.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {/* Month Picker */}
-          <div className="flex items-center gap-1 border border-[#E5E9F0] rounded-lg overflow-hidden">
+          <div className="flex items-center gap-1 border border-[var(--theme-border-default)] rounded-lg overflow-hidden">
             <button
               onClick={() => setMonthFilter(shiftMonth(monthFilter || getCurrentMonth(), -1))}
-              className="p-2 hover:bg-[#F3F4F6] transition-colors"
+              className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
-              <ChevronLeft size={16} className="text-[#667085]" />
+              <ChevronLeft size={16} className="text-[var(--theme-text-muted)]" />
             </button>
-            <span className="px-3 py-2 text-[13px] font-medium text-[#101828] min-w-[140px] text-center">
+            <span className="px-3 py-2 text-[13px] font-medium text-[var(--theme-text-primary)] min-w-[140px] text-center">
               {monthFilter ? getMonthLabel(monthFilter) : "All Time"}
             </span>
             <button
               onClick={() => setMonthFilter(shiftMonth(monthFilter || getCurrentMonth(), 1))}
-              className="p-2 hover:bg-[#F3F4F6] transition-colors"
+              className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
-              <ChevronRight size={16} className="text-[#667085]" />
+              <ChevronRight size={16} className="text-[var(--theme-text-muted)]" />
             </button>
           </div>
 
@@ -301,7 +301,7 @@ export function FinancialHealthPage() {
           {monthFilter && (
             <button
               onClick={() => setMonthFilter("")}
-              className="px-3 py-2 text-[12px] font-medium text-[#667085] border border-[#E5E9F0] rounded-lg hover:bg-[#F3F4F6] transition-colors"
+              className="px-3 py-2 text-[12px] font-medium text-[var(--theme-text-muted)] border border-[var(--theme-border-default)] rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
               All Time
             </button>
@@ -310,7 +310,7 @@ export function FinancialHealthPage() {
           {/* Export */}
           <button
             onClick={handleExport}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
+            className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
           >
             <Download size={16} />
             Export CSV
@@ -323,11 +323,11 @@ export function FinancialHealthPage() {
         {summaryCards.map((card) => (
           <div
             key={card.label}
-            className="rounded-xl border border-[#E5E9F0] p-5"
+            className="rounded-xl border border-[var(--theme-border-default)] p-5"
             style={{ backgroundColor: card.bgColor }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[12px] font-medium text-[#667085] uppercase tracking-wider">
+              <span className="text-[12px] font-medium text-[var(--theme-text-muted)] uppercase tracking-wider">
                 {card.label}
               </span>
               <div
@@ -340,7 +340,7 @@ export function FinancialHealthPage() {
             <div className="text-[22px] font-bold tabular-nums" style={{ color: card.color }}>
               {card.value}
             </div>
-            <div className="text-[11px] text-[#98A2B3] mt-1">
+            <div className="text-[11px] text-[var(--theme-text-muted)] mt-1">
               {monthFilter ? getMonthLabel(monthFilter) : "All Time"} &middot; {summary.projectCount} containers
             </div>
           </div>
@@ -350,13 +350,13 @@ export function FinancialHealthPage() {
       {/* Control Bar */}
       <div className="flex items-center gap-2 mb-6">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98A2B3]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
           <input
             type="text"
             placeholder="Search by file ref, company, or invoice #..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[#E5E9F0] bg-white text-[#101828] placeholder-[#98A2B3]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[#98A2B3]"
           />
         </div>
       </div>
@@ -370,11 +370,11 @@ export function FinancialHealthPage() {
           footerSummary={footerSummary}
           emptyMessage={
             <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-12 h-12 bg-[#F3F4F6] rounded-full flex items-center justify-center mb-3">
-                <DollarSign className="text-[#98A2B3]" size={20} />
+              <div className="w-12 h-12 bg-[var(--theme-bg-surface-subtle)] rounded-full flex items-center justify-center mb-3">
+                <DollarSign className="text-[var(--theme-text-muted)]" size={20} />
               </div>
-              <p className="text-[14px] font-medium text-[#101828]">No financial containers found</p>
-              <p className="text-[13px] text-[#667085] mt-1">
+              <p className="text-[14px] font-medium text-[var(--theme-text-primary)]">No financial containers found</p>
+              <p className="text-[13px] text-[var(--theme-text-muted)] mt-1">
                 {monthFilter
                   ? `No containers for ${getMonthLabel(monthFilter)}. Try another month or view All Time.`
                   : "Create project or contract work with billings to see financial data here."}

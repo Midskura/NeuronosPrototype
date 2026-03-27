@@ -107,8 +107,8 @@ export function CreateOthersBookingPanel({
             {/* General Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   General Information
                 </h3>
               </div>
@@ -116,7 +116,7 @@ export function CreateOthersBookingPanel({
               <div className="space-y-4">
                 {/* Movement Toggle */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Movement <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
                   <MovementToggle
@@ -147,7 +147,7 @@ export function CreateOthersBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Owner
                     </label>
                     <input
@@ -159,14 +159,14 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Handler
                     </label>
                     <input
@@ -178,7 +178,7 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -186,7 +186,7 @@ export function CreateOthersBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Service Type
                   </label>
                   <input
@@ -198,14 +198,14 @@ export function CreateOthersBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Service Description
                   </label>
                   <textarea
@@ -217,7 +217,7 @@ export function CreateOthersBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -225,7 +225,7 @@ export function CreateOthersBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Quotation Reference
                     </label>
                     <input
@@ -237,7 +237,7 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -266,15 +266,15 @@ export function CreateOthersBookingPanel({
             {/* Service Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Briefcase size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Briefcase size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Service Details
                 </h3>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Delivery/Service Location
                   </label>
                   <input
@@ -286,7 +286,7 @@ export function CreateOthersBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -294,7 +294,7 @@ export function CreateOthersBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Schedule Date
                     </label>
                     <input
@@ -305,14 +305,14 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Completion Date
                     </label>
                     <input
@@ -323,7 +323,7 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -332,7 +332,7 @@ export function CreateOthersBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Contact Person
                     </label>
                     <input
@@ -344,14 +344,14 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Contact Number
                     </label>
                     <input
@@ -363,7 +363,7 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -371,7 +371,7 @@ export function CreateOthersBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Special Instructions
                   </label>
                   <textarea
@@ -383,7 +383,7 @@ export function CreateOthersBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -394,8 +394,8 @@ export function CreateOthersBookingPanel({
             {/* Cost Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <FileText size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Cost Information
                 </h3>
               </div>
@@ -403,7 +403,7 @@ export function CreateOthersBookingPanel({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Estimated Cost
                     </label>
                     <input
@@ -415,14 +415,14 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Actual Cost
                     </label>
                     <input
@@ -434,7 +434,7 @@ export function CreateOthersBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -442,7 +442,7 @@ export function CreateOthersBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Remarks
                   </label>
                   <textarea
@@ -454,7 +454,7 @@ export function CreateOthersBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />

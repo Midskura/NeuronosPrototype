@@ -312,21 +312,21 @@ export function AccountingCustomers() {
 
   // List View
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-[var(--theme-bg-surface)]">
       {/* Header & Controls */}
       <div className="px-12 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+            <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
               Customers
             </h1>
-            <p className="text-sm text-[#667085]">
+            <p className="text-sm text-[var(--theme-text-muted)]">
               Manage customer companies and prospects
             </p>
           </div>
           <button
             onClick={() => setIsAddCustomerOpen(true)}
-            className="h-12 px-6 rounded-2xl bg-[#0F766E] border-none text-white text-sm font-semibold flex items-center gap-2 cursor-pointer hover:bg-[#0D6560] transition-colors"
+            className="h-12 px-6 rounded-2xl bg-[var(--theme-action-primary-bg)] border-none text-white text-sm font-semibold flex items-center gap-2 cursor-pointer hover:bg-[var(--theme-action-primary-border)] transition-colors"
           >
             <Plus size={20} />
             Add Customer
@@ -378,7 +378,7 @@ export function AccountingCustomers() {
               placeholder="Search customers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px] border-[1.5px] border-[var(--neuron-ui-border)] bg-white text-[var(--neuron-ink-primary)] focus:border-[#0F766E]"
+              className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px] border-[1.5px] border-[var(--neuron-ui-border)] bg-[var(--theme-bg-surface)] text-[var(--neuron-ink-primary)] focus:border-[var(--theme-action-primary-bg)]"
             />
           </div>
 
@@ -429,7 +429,7 @@ export function AccountingCustomers() {
         </div>
 
         {/* Table */}
-        <div className="border-[1.5px] border-[var(--neuron-ui-border)] rounded-2xl overflow-hidden bg-white">
+        <div className="border-[1.5px] border-[var(--neuron-ui-border)] rounded-2xl overflow-hidden bg-[var(--theme-bg-surface)]">
           {/* Table Header */}
           <div className="grid grid-cols-[40px_minmax(200px,1fr)_minmax(120px,140px)_100px_80px_120px_40px] gap-3 px-6 py-3 border-b border-[var(--neuron-ui-divider)] bg-[var(--neuron-bg-page)] sticky top-0 z-10">
             <div></div>
@@ -457,7 +457,7 @@ export function AccountingCustomers() {
                 return (
                   <div 
                     key={customer.id}
-                    className="grid grid-cols-[40px_minmax(200px,1fr)_minmax(120px,140px)_100px_80px_120px_40px] gap-3 px-6 py-4 items-center hover:bg-gray-50 transition-colors cursor-pointer group"
+                    className="grid grid-cols-[40px_minmax(200px,1fr)_minmax(120px,140px)_100px_80px_120px_40px] gap-3 px-6 py-4 items-center hover:bg-[var(--theme-bg-surface-subtle)] transition-colors cursor-pointer group"
                     onClick={() => {
                       setSelectedCustomer(customer);
                       setView("detail");
@@ -514,7 +514,7 @@ export function AccountingCustomers() {
                     {/* Actions */}
                     <div className="relative flex justify-end">
                       <button 
-                        className="p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="p-1 rounded-md text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)] opacity-0 group-hover:opacity-100 transition-opacity"
                         onClick={(e) => {
                           e.stopPropagation();
                           setOpenDropdownId(openDropdownId === customer.id ? null : customer.id);
@@ -526,7 +526,7 @@ export function AccountingCustomers() {
                       {openDropdownId === customer.id && (
                         <div 
                           ref={dropdownRef}
-                          className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20"
+                          className="absolute right-0 top-full mt-1 w-48 bg-[var(--theme-bg-surface)] rounded-lg shadow-lg border border-[var(--theme-border-default)] py-1 z-20"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <button

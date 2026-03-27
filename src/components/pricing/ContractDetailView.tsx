@@ -76,7 +76,7 @@ const getStatusColor = (status: string) => {
 };
 
 /** Contract uses teal icons at size 15 */
-const getServiceIcon = (service: string) => getServiceIconShared(service, { size: 15, color: "#0F766E" });
+const getServiceIcon = (service: string) => getServiceIconShared(service, { size: 15, color: "var(--theme-action-primary-bg)" });
 
 const getDaysRemaining = (endDate?: string) => {
   if (!endDate) return null;
@@ -377,7 +377,7 @@ export function ContractDetailView({
               style={{
                 display: "flex", alignItems: "center", gap: "6px",
                 padding: "8px 16px", fontSize: "13px", fontWeight: 600,
-                color: "white", backgroundColor: "#0F766E",
+                color: "white", backgroundColor: "var(--theme-action-primary-bg)",
                 border: "none", borderRadius: "6px", cursor: "pointer",
               }}
             >
@@ -391,7 +391,7 @@ export function ContractDetailView({
                 style={{
                   display: "flex", alignItems: "center", gap: "6px",
                   padding: "8px 16px", fontSize: "13px", fontWeight: 600,
-                  color: "white", backgroundColor: "#0F766E",
+                  color: "white", backgroundColor: "var(--theme-action-primary-bg)",
                   border: "none", borderRadius: "6px", cursor: "pointer",
                 }}
               >
@@ -402,7 +402,7 @@ export function ContractDetailView({
               {showServiceDropdown && (
                 <div style={{
                   position: "absolute", top: "100%", right: 0, marginTop: "4px",
-                  backgroundColor: "white", borderRadius: "8px",
+                  backgroundColor: "var(--theme-bg-surface)", borderRadius: "8px",
                   border: "1px solid var(--neuron-ui-border)",
                   boxShadow: "0 8px 24px rgba(0,0,0,0.12)", zIndex: 10,
                   minWidth: "200px", overflow: "hidden",
@@ -414,8 +414,8 @@ export function ContractDetailView({
                       style={{
                         display: "flex", alignItems: "center", gap: "8px",
                         width: "100%", padding: "10px 16px", fontSize: "13px",
-                        color: "#12332B", backgroundColor: "white",
-                        border: "none", borderBottom: "1px solid #F3F4F6",
+                        color: "var(--theme-text-primary)", backgroundColor: "var(--theme-bg-surface)",
+                        border: "none", borderBottom: "1px solid var(--theme-border-subtle)",
                         cursor: "pointer", textAlign: "left",
                       }}
                       onMouseEnter={e => e.currentTarget.style.backgroundColor = "#F0FAFA"}
@@ -546,7 +546,7 @@ export function ContractDetailView({
             <div style={{
               position: "absolute", left: "-27px", top: "4px",
               width: "12px", height: "12px", borderRadius: "50%",
-              backgroundColor: "#0F766E", border: "2px solid white",
+              backgroundColor: "var(--theme-action-primary-bg)", border: "2px solid white",
             }} />
             <div>
               <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-primary)", margin: "0 0 2px" }}>
@@ -655,12 +655,12 @@ export function ContractDetailView({
   };
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "white" }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--theme-bg-surface)" }}>
       {/* Header Bar — matches ProjectDetail pattern */}
       <div style={{
         padding: "20px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center"
@@ -770,7 +770,7 @@ export function ContractDetailView({
                   alignItems: "center",
                   justifyContent: "center",
                   padding: "10px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1.5px solid #D1D5DB",
                   borderRadius: "8px",
                   cursor: "pointer",
@@ -780,7 +780,7 @@ export function ContractDetailView({
                   e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#D1D5DB";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
                 }}
               >
                 <MoreVertical size={18} color="var(--neuron-ink-secondary)" />
@@ -804,8 +804,8 @@ export function ContractDetailView({
                       position: "absolute",
                       top: "calc(100% + 4px)",
                       right: 0,
-                      backgroundColor: "white",
-                      border: "1px solid #E5E7EB",
+                      backgroundColor: "var(--theme-bg-surface)",
+                      border: "1px solid var(--theme-border-default)",
                       borderRadius: "8px",
                       boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                       minWidth: "180px",
@@ -830,7 +830,7 @@ export function ContractDetailView({
                         transition: "background-color 0.15s ease"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "transparent";
@@ -875,7 +875,7 @@ export function ContractDetailView({
       </div>
 
       {/* Tabs Tier 1: Categories */}
-      <div className="px-12 bg-white flex gap-8 border-b border-[#E5E9F0]">
+      <div className="px-12 bg-[var(--theme-bg-surface)] flex gap-8 border-b border-[var(--theme-border-default)]">
         {[
           { id: "dashboard", label: "Dashboard", icon: Layout },
           { id: "operations", label: "Operations", icon: Layers },
@@ -905,7 +905,7 @@ export function ContractDetailView({
                   left: 0,
                   right: 0,
                   height: "2px",
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   borderRadius: "2px 2px 0 0",
                 }} />
               )}
@@ -915,7 +915,7 @@ export function ContractDetailView({
       </div>
 
       {/* Tabs Tier 2: Sub-tabs */}
-      <div className="px-12 py-3 bg-white border-b border-[#E5E9F0] flex gap-2 overflow-x-auto min-h-[57px]">
+      <div className="px-12 py-3 bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)] flex gap-2 overflow-x-auto min-h-[57px]">
         {TAB_STRUCTURE[activeCategory].map((tab) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
@@ -939,7 +939,7 @@ export function ContractDetailView({
       </div>
 
       {/* Tab Content */}
-      <div style={{ flex: 1, overflow: "auto", backgroundColor: "white" }}>
+      <div style={{ flex: 1, overflow: "auto", backgroundColor: "var(--theme-bg-surface)" }}>
         {activeTab === "financial_overview" && (
           <div className="max-w-7xl mx-auto">
             <ProjectFinancialOverview financials={contractFinancials} />
@@ -999,13 +999,13 @@ export function ContractDetailView({
           zIndex: 1000,
         }}>
           <div style={{
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             borderRadius: "12px",
             padding: "32px",
             width: "440px",
             boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
           }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", margin: "0 0 4px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", margin: "0 0 4px" }}>
               Renew Contract
             </h2>
             <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: "0 0 24px" }}>
@@ -1014,7 +1014,7 @@ export function ContractDetailView({
 
             <div style={{ display: "flex", gap: "12px", marginBottom: "24px" }}>
               <div style={{ flex: 1 }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#12332B", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "var(--theme-text-primary)", marginBottom: "6px" }}>
                   New Start Date
                 </label>
                 <input
@@ -1027,12 +1027,12 @@ export function ContractDetailView({
                     borderRadius: "6px",
                     border: "1px solid var(--neuron-ui-border)",
                     fontSize: "13px",
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                   }}
                 />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "#12332B", marginBottom: "6px" }}>
+                <label style={{ display: "block", fontSize: "12px", fontWeight: 500, color: "var(--theme-text-primary)", marginBottom: "6px" }}>
                   New End Date
                 </label>
                 <input
@@ -1045,7 +1045,7 @@ export function ContractDetailView({
                     borderRadius: "6px",
                     border: "1px solid var(--neuron-ui-border)",
                     fontSize: "13px",
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                   }}
                 />
               </div>
@@ -1059,7 +1059,7 @@ export function ContractDetailView({
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "var(--neuron-ink-muted)",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   cursor: "pointer",

@@ -415,7 +415,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
     <div 
       className="h-full flex flex-col overflow-auto"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Back Button - Top Left */}
@@ -423,7 +423,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-[13px] transition-colors"
-          style={{ color: "#0F766E" }}
+          style={{ color: "var(--theme-action-primary-bg)" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "#0D6560";
           }}
@@ -445,7 +445,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
               className="rounded-lg p-6"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF"
+                backgroundColor: "var(--theme-bg-surface)"
               }}
             >
               {/* Profile Header */}
@@ -458,16 +458,16 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       style={{
                         width: "64px",
                         height: "64px",
-                        backgroundColor: "#F3F4F6",
+                        backgroundColor: "var(--theme-bg-surface-subtle)",
                         border: "2px solid var(--neuron-ui-divider)"
                       }}
                     >
-                      <User size={32} style={{ color: "#9CA3AF" }} />
+                      <User size={32} style={{ color: "var(--theme-text-muted)" }} />
                     </div>
 
                     {/* Name and Badges */}
                     <div>
-                      <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#12332B", marginBottom: "8px", letterSpacing: "-0.5px" }}>
+                      <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px", letterSpacing: "-0.5px" }}>
                         {contact.first_name} {contact.last_name}
                       </h1>
                       <div className="flex items-center gap-2 mb-2">
@@ -485,7 +485,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         </span>
                       </div>
                       {variant === "bd" && (
-                        <p style={{ fontSize: "14px", color: "#667085" }}>
+                        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
                           {contact.title || contact.job_title}
                         </p>
                       )}
@@ -503,14 +503,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
-                          color: "#12332B"
+                          backgroundColor: "var(--theme-bg-surface)",
+                          color: "var(--theme-text-primary)"
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#FFFFFF";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                         }}
                       >
                         <Edit size={14} />
@@ -523,14 +523,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         onClick={handleSave}
                         className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                         style={{
-                          backgroundColor: "#0F766E",
+                          backgroundColor: "var(--theme-action-primary-bg)",
                           color: "#FFFFFF"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0D6560";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0F766E";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                         }}
                       >
                         Save
@@ -540,14 +540,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
-                          color: "#12332B"
+                          backgroundColor: "var(--theme-bg-surface)",
+                          color: "var(--theme-text-primary)"
                         }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#FFFFFF";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                         }}
                       >
                         Cancel
@@ -561,7 +561,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
               {/* Contact Details Section */}
               {variant === "bd" && (
               <>
-              <h2 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "20px" }}>
+              <h2 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "20px" }}>
                 Contact Details
               </h2>
 
@@ -569,8 +569,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* First Name */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <User size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <User size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       First Name
                     </span>
                   </div>
@@ -582,18 +582,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#12332B",
+                        color: "var(--theme-text-primary)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                       }}
                     />
                   ) : (
-                    <div className="text-[14px]" style={{ color: "#12332B" }}>
+                    <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                       {(contact.name || '').split(' ')[0] || '—'}
                     </div>
                   )}
@@ -602,8 +602,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Last Name */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <User size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <User size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Last Name
                     </span>
                   </div>
@@ -615,18 +615,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#12332B",
+                        color: "var(--theme-text-primary)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                       }}
                     />
                   ) : (
-                    <div className="text-[14px]" style={{ color: "#12332B" }}>
+                    <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                       {(contact.name || '').split(' ').slice(1).join(' ') || '—'}
                     </div>
                   )}
@@ -635,8 +635,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Job Title */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <User size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <User size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Job Title
                     </span>
                   </div>
@@ -648,18 +648,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#12332B",
+                        color: "var(--theme-text-primary)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                       }}
                     />
                   ) : (
-                    <div className="text-[14px]" style={{ color: "#12332B" }}>
+                    <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                       {contact.title || contact.job_title}
                     </div>
                   )}
@@ -668,8 +668,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Email */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <Mail size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <Mail size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Email
                     </span>
                   </div>
@@ -681,11 +681,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#0F766E",
+                        color: "var(--theme-action-primary-bg)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -695,7 +695,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     <a 
                       href={`mailto:${contact.email}`}
                       className="text-[14px] transition-colors"
-                      style={{ color: "#0F766E" }}
+                      style={{ color: "var(--theme-action-primary-bg)" }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.color = "#0D6560";
                       }}
@@ -711,8 +711,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Mobile Number */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <Phone size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <Phone size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Mobile Number
                     </span>
                   </div>
@@ -724,11 +724,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#0F766E",
+                        color: "var(--theme-action-primary-bg)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -738,7 +738,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     <a 
                       href={`tel:${contact.phone || contact.mobile_number}`}
                       className="text-[14px] transition-colors"
-                      style={{ color: "#0F766E" }}
+                      style={{ color: "var(--theme-action-primary-bg)" }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.color = "#0D6560";
                       }}
@@ -758,15 +758,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Company */}
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <Building2 size={12} style={{ color: "#667085" }} />
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <Building2 size={12} style={{ color: "var(--theme-text-muted)" }} />
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Company
                     </span>
                   </div>
                   <div>
-                    <div className="text-[14px]" style={{ color: "#12332B" }}>{company?.name || "—"}</div>
+                    <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>{company?.name || "—"}</div>
                     {company?.industry && (
-                      <div className="text-[12px]" style={{ color: "#667085" }}>{company.industry}</div>
+                      <div className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>{company.industry}</div>
                     )}
                   </div>
                 </div>
@@ -774,7 +774,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Lifecycle Stage */}
                 <div>
                   <div className="mb-1.5">
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Lifecycle Stage
                     </span>
                   </div>
@@ -802,7 +802,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Lead Status */}
                 <div>
                   <div className="mb-1.5">
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Lead Status
                     </span>
                   </div>
@@ -833,7 +833,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {/* Notes */}
                 <div>
                   <div className="mb-1.5">
-                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                    <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                       Notes
                     </span>
                   </div>
@@ -846,11 +846,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors resize-none"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        color: "#12332B",
+                        color: "var(--theme-text-primary)",
                         outline: "none"
                       }}
                       onFocus={(e) => {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       }}
                       onBlur={(e) => {
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -878,14 +878,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                     style={{
                       border: "1px solid #FFE5E5",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "#C94F3D"
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = "#FFE5E5";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#FFFFFF";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                     }}
                   >
                     <Trash2 size={14} />
@@ -913,7 +913,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     {activeTab === "activities" && (
                       <div 
                         className="absolute bottom-0 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#0F766E" }}
+                        style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       />
                     )}
                   </button>
@@ -928,7 +928,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     {activeTab === "tasks" && (
                       <div 
                         className="absolute bottom-0 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#0F766E" }}
+                        style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       />
                     )}
                   </button>
@@ -945,7 +945,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {activeTab === "inquiries" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -960,7 +960,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {activeTab === "attachments" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -975,7 +975,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 {activeTab === "comments" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -999,7 +999,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             setActivityAttachments([]);
                           }}
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
-                          style={{ color: "#0F766E" }}
+                          style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.color = "#0D6560";
                           }}
@@ -1012,7 +1012,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         </button>
 
                         <div className="flex items-center justify-between mb-6">
-                          <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                          <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                             Log Activity
                           </h3>
                         </div>
@@ -1028,7 +1028,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Activity Name */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Activity Name *
                                 </span>
                               </div>
@@ -1040,8 +1040,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
@@ -1049,7 +1049,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Activity Description */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Activity Description *
                                 </span>
                               </div>
@@ -1060,8 +1060,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px] resize-none"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B",
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)",
                                   minHeight: "100px"
                                 }}
                               />
@@ -1070,7 +1070,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Type */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Type *
                                 </span>
                               </div>
@@ -1095,7 +1095,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Date/Time */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Activity Date & Time *
                                 </span>
                               </div>
@@ -1106,8 +1106,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
@@ -1115,15 +1115,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Contact/Customer */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Contact/Customer *
                                 </span>
                               </div>
-                              <div className="text-[14px]" style={{ color: "#12332B" }}>
+                              <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {contact.first_name} {contact.last_name}
                               </div>
                               {company && (
-                                <div className="text-[12px] mt-1" style={{ color: "#667085" }}>
+                                <div className="text-[12px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                                   {company.name}
                                 </div>
                               )}
@@ -1132,21 +1132,21 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Attachments Section */}
                             <div className="pt-6" style={{ borderTop: "1px solid var(--neuron-ui-divider)" }}>
                               <div className="flex items-center justify-between mb-3">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Attachments (Proof)
                                 </span>
                                 <button
                                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors"
                                   style={{
                                     border: "1px solid var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF",
-                                    color: "#0F766E"
+                                    backgroundColor: "var(--theme-bg-surface)",
+                                    color: "var(--theme-action-primary-bg)"
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   }}
                                 >
                                   <Upload size={14} />
@@ -1159,11 +1159,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   className="text-center py-8 rounded-lg"
                                   style={{ 
                                     border: "1px dashed var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF"
+                                    backgroundColor: "var(--theme-bg-surface)"
                                   }}
                                 >
-                                  <Paperclip size={24} style={{ color: "#D1D5DB", margin: "0 auto 8px" }} />
-                                  <p className="text-[13px]" style={{ color: "#667085" }}>
+                                  <Paperclip size={24} style={{ color: "var(--theme-border-default)", margin: "0 auto 8px" }} />
+                                  <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                                     No attachments yet - upload proof of this completed activity
                                   </p>
                                 </div>
@@ -1175,21 +1175,21 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       className="flex items-center justify-between p-3 rounded-lg"
                                       style={{
                                         border: "1px solid var(--neuron-ui-border)",
-                                        backgroundColor: "#FFFFFF"
+                                        backgroundColor: "var(--theme-bg-surface)"
                                       }}
                                     >
                                       <div className="flex items-center gap-3">
                                         <div className="flex-shrink-0">
-                                          {attachment.type === "pdf" && <FileText size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "image" && <ImageIcon size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "document" && <File size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "spreadsheet" && <File size={18} style={{ color: "#0F766E" }} />}
+                                          {attachment.type === "pdf" && <FileText size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "image" && <ImageIcon size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "document" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "spreadsheet" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
                                         </div>
                                         <div>
-                                          <div className="text-[13px] font-medium" style={{ color: "#12332B" }}>
+                                          <div className="text-[13px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                                             {attachment.name}
                                           </div>
-                                          <div className="text-[11px]" style={{ color: "#667085" }}>
+                                          <div className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
                                             {attachment.size}
                                           </div>
                                         </div>
@@ -1256,14 +1256,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 }}
                                 className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                 style={{
-                                  backgroundColor: "#0F766E",
+                                  backgroundColor: "var(--theme-action-primary-bg)",
                                   color: "#FFFFFF"
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0D6560";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0F766E";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                 }}
                               >
                                 Save Activity
@@ -1280,14 +1280,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                 }}
                               >
                                 Cancel
@@ -1300,7 +1300,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                   ) : !selectedActivity ? (
                     <>
                       <div className="flex items-center justify-between mb-6">
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Activity Timeline
                         </h3>
                         <button
@@ -1316,14 +1316,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           }}
                           className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                           style={{
-                            backgroundColor: "#0F766E",
+                            backgroundColor: "var(--theme-action-primary-bg)",
                             color: "#FFFFFF"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0D6560";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0F766E";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                           }}
                         >
                           Log Activity
@@ -1332,7 +1332,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
                       {isLoadingData ? (
                         <div className="text-center py-12">
-                          <p className="text-[14px]" style={{ color: "#667085" }}>Loading activities...</p>
+                          <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>Loading activities...</p>
                         </div>
                       ) : (
                         <ActivityTimelineTable 
@@ -1363,18 +1363,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="p-2 rounded-lg transition-colors"
                           style={{
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FFFFFF"
+                            backgroundColor: "var(--theme-bg-surface)"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#F9FAFB";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#FFFFFF";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                           }}
                         >
-                          <ArrowLeft size={16} style={{ color: "#12332B" }} />
+                          <ArrowLeft size={16} style={{ color: "var(--theme-text-primary)" }} />
                         </button>
-                        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Activity Details
                         </h3>
                       </div>
@@ -1384,20 +1384,20 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         className="rounded-lg p-6 mb-6"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF"
+                          backgroundColor: "var(--theme-bg-surface)"
                         }}
                       >
                         <div className="space-y-6">
                           {/* Type */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Type
                               </span>
                             </div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: "#E8F5F3" }}>
-                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#0F766E" }} />
-                              <span className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "#0F766E" }}>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}>
+                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--theme-action-primary-bg)" }} />
+                              <span className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-action-primary-bg)" }}>
                                 {selectedActivity.type}
                               </span>
                             </div>
@@ -1406,11 +1406,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Date */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Date
                               </span>
                             </div>
-                            <span className="text-[14px]" style={{ color: "#12332B" }}>
+                            <span className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                               {formatDateTime(selectedActivity.date)}
                             </span>
                           </div>
@@ -1418,11 +1418,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Description */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Description
                               </span>
                             </div>
-                            <p className="text-[14px]" style={{ color: "#12332B" }}>
+                            <p className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                               {selectedActivity.description}
                             </p>
                           </div>
@@ -1430,11 +1430,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Logged By */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Logged By
                               </span>
                             </div>
-                            <span className="text-[14px]" style={{ color: "#12332B" }}>
+                            <span className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                               {users.find(u => u.id === selectedActivity.user_id)?.name || "Unknown User"}
                             </span>
                           </div>
@@ -1443,11 +1443,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {selectedActivity.contact_id && (
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Related Contact
                                 </span>
                               </div>
-                              <span className="text-[14px]" style={{ color: "#12332B" }}>
+                              <span className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {contact.first_name} {contact.last_name}
                               </span>
                             </div>
@@ -1457,11 +1457,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {selectedActivity.customer_id && (
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Related Customer
                                 </span>
                               </div>
-                              <span className="text-[14px]" style={{ color: "#12332B" }}>
+                              <span className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {customer?.name || "Unknown Company"}
                               </span>
                             </div>
@@ -1478,7 +1478,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                   {!selectedTask && !isCreatingTask ? (
                     <>
                       <div className="flex items-center justify-between mb-6">
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Tasks
                         </h3>
                         <button
@@ -1495,14 +1495,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           }}
                           className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                           style={{
-                            backgroundColor: "#0F766E",
+                            backgroundColor: "var(--theme-action-primary-bg)",
                             color: "#FFFFFF"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0D6560";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0F766E";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                           }}
                         >
                           Create Task
@@ -1511,7 +1511,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
                       {tasks.length === 0 ? (
                         <div className="text-center py-12">
-                          <p className="text-[14px]" style={{ color: "#667085" }}>No tasks yet</p>
+                          <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No tasks yet</p>
                         </div>
                       ) : (
                         <div className="space-y-3">
@@ -1526,19 +1526,19 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               className="p-4 rounded-lg flex items-center justify-between cursor-pointer transition-colors"
                               style={{
                                 border: "1px solid var(--neuron-ui-border)",
-                                backgroundColor: "#FFFFFF"
+                                backgroundColor: "var(--theme-bg-surface)"
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = "#F9FAFB";
-                                e.currentTarget.style.borderColor = "#0F766E";
+                                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                                e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                 e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                               }}
                             >
                               <div>
-                                <div className="text-[14px] font-medium mb-1" style={{ color: "#12332B" }}>
+                                <div className="text-[14px] font-medium mb-1" style={{ color: "var(--theme-text-primary)" }}>
                                   {task.title}
                                 </div>
                                 <div className="flex items-center gap-3">
@@ -1551,7 +1551,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   >
                                     {task.status}
                                   </span>
-                                  <span className="text-[12px]" style={{ color: "#667085" }}>
+                                  <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                     Due: {formatDate(task.due_date)}
                                   </span>
                                 </div>
@@ -1577,7 +1577,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             setTaskAttachments([]);
                           }}
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
-                          style={{ color: "#0F766E" }}
+                          style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.color = "#0D6560";
                           }}
@@ -1590,7 +1590,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         </button>
 
                         <div className="flex items-center justify-between mb-6">
-                          <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                          <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                             Create New Task
                           </h3>
                         </div>
@@ -1606,7 +1606,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Task Name/Title */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Task Name *
                                 </span>
                               </div>
@@ -1618,8 +1618,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
@@ -1627,7 +1627,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Description */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Description *
                                 </span>
                               </div>
@@ -1638,8 +1638,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px] resize-none"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B",
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)",
                                   minHeight: "100px"
                                 }}
                               />
@@ -1648,7 +1648,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Type */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Type *
                                 </span>
                               </div>
@@ -1673,7 +1673,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Due Date */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Due Date *
                                 </span>
                               </div>
@@ -1684,8 +1684,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
@@ -1693,7 +1693,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Remarks */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Remarks
                                 </span>
                               </div>
@@ -1704,8 +1704,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px] resize-none"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B",
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)",
                                   minHeight: "80px"
                                 }}
                               />
@@ -1714,7 +1714,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Priority */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Priority *
                                 </span>
                               </div>
@@ -1732,15 +1732,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Contact/Customer */}
                             <div>
                               <div className="mb-2">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Contact/Customer *
                                 </span>
                               </div>
-                              <div className="text-[14px]" style={{ color: "#12332B" }}>
+                              <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {contact.first_name} {contact.last_name}
                               </div>
                               {company && (
-                                <div className="text-[12px] mt-1" style={{ color: "#667085" }}>
+                                <div className="text-[12px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                                   {company.name}
                                 </div>
                               )}
@@ -1749,21 +1749,21 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             {/* Attachments Section */}
                             <div className="pt-6" style={{ borderTop: "1px solid var(--neuron-ui-divider)" }}>
                               <div className="flex items-center justify-between mb-3">
-                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                                <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                   Attachments
                                 </span>
                                 <button
                                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors"
                                   style={{
                                     border: "1px solid var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF",
-                                    color: "#0F766E"
+                                    backgroundColor: "var(--theme-bg-surface)",
+                                    color: "var(--theme-action-primary-bg)"
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   }}
                                 >
                                   <Upload size={14} />
@@ -1776,11 +1776,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   className="text-center py-8 rounded-lg"
                                   style={{ 
                                     border: "1px dashed var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF"
+                                    backgroundColor: "var(--theme-bg-surface)"
                                   }}
                                 >
-                                  <Paperclip size={24} style={{ color: "#D1D5DB", margin: "0 auto 8px" }} />
-                                  <p className="text-[13px]" style={{ color: "#667085" }}>
+                                  <Paperclip size={24} style={{ color: "var(--theme-border-default)", margin: "0 auto 8px" }} />
+                                  <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                                     No attachments yet - upload files to attach to this task
                                   </p>
                                 </div>
@@ -1792,21 +1792,21 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                       className="flex items-center justify-between p-3 rounded-lg"
                                       style={{
                                         border: "1px solid var(--neuron-ui-border)",
-                                        backgroundColor: "#FFFFFF"
+                                        backgroundColor: "var(--theme-bg-surface)"
                                       }}
                                     >
                                       <div className="flex items-center gap-3">
                                         <div className="flex-shrink-0">
-                                          {attachment.type === "pdf" && <FileText size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "image" && <ImageIcon size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "document" && <File size={18} style={{ color: "#0F766E" }} />}
-                                          {attachment.type === "spreadsheet" && <File size={18} style={{ color: "#0F766E" }} />}
+                                          {attachment.type === "pdf" && <FileText size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "image" && <ImageIcon size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "document" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                          {attachment.type === "spreadsheet" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
                                         </div>
                                         <div>
-                                          <div className="text-[13px] font-medium" style={{ color: "#12332B" }}>
+                                          <div className="text-[13px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                                             {attachment.name}
                                           </div>
-                                          <div className="text-[11px]" style={{ color: "#667085" }}>
+                                          <div className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
                                             {attachment.size}
                                           </div>
                                         </div>
@@ -1873,14 +1873,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 }}
                                 className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                 style={{
-                                  backgroundColor: "#0F766E",
+                                  backgroundColor: "var(--theme-action-primary-bg)",
                                   color: "#FFFFFF"
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0D6560";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0F766E";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                 }}
                               >
                                 Create Task
@@ -1899,14 +1899,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                 }}
                               >
                                 Cancel
@@ -1931,18 +1931,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             className="p-2 rounded-lg transition-colors"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF"
+                              backgroundColor: "var(--theme-bg-surface)"
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = "#F9FAFB";
+                              e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = "#FFFFFF";
+                              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                             }}
                           >
-                            <ArrowLeft size={16} style={{ color: "#12332B" }} />
+                            <ArrowLeft size={16} style={{ color: "var(--theme-text-primary)" }} />
                           </button>
-                          <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B" }}>
+                          <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                             Task Details
                           </h3>
                         </div>
@@ -1952,14 +1952,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
-                              color: "#12332B"
+                              backgroundColor: "var(--theme-bg-surface)",
+                              color: "var(--theme-text-primary)"
                             }}
                             onMouseEnter={(e) => {
                               e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = "#FFFFFF";
+                              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                             }}
                           >
                             <Edit size={14} />
@@ -1972,14 +1972,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         className="rounded-lg p-6"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF"
+                          backgroundColor: "var(--theme-bg-surface)"
                         }}
                       >
                         <div className="space-y-6">
                           {/* Task Description */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Task Description
                               </span>
                             </div>
@@ -1992,11 +1992,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors resize-none"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  color: "#12332B",
+                                  color: "var(--theme-text-primary)",
                                   outline: "none"
                                 }}
                                 onFocus={(e) => {
-                                  e.currentTarget.style.borderColor = "#0F766E";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -2006,7 +2006,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               <div
                                 className="text-[14px]"
                                 style={{
-                                  color: "#12332B",
+                                  color: "var(--theme-text-primary)",
                                   whiteSpace: "pre-wrap",
                                   lineHeight: "1.6"
                                 }}
@@ -2019,7 +2019,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Type */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Type
                               </span>
                             </div>
@@ -2041,7 +2041,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 ]}
                               />
                             ) : (
-                              <div className="text-[14px]" style={{ color: "#12332B" }}>
+                              <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {selectedTask?.type}
                               </div>
                             )}
@@ -2050,7 +2050,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Date */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Date
                               </span>
                             </div>
@@ -2062,18 +2062,18 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  color: "#12332B",
+                                  color: "var(--theme-text-primary)",
                                   outline: "none"
                                 }}
                                 onFocus={(e) => {
-                                  e.currentTarget.style.borderColor = "#0F766E";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                                 }}
                               />
                             ) : (
-                              <div className="text-[14px]" style={{ color: "#12332B" }}>
+                              <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                                 {formatDate(selectedTask?.due_date ?? '')}
                               </div>
                             )}
@@ -2082,7 +2082,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Remarks */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Remarks
                               </span>
                             </div>
@@ -2095,11 +2095,11 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="w-full px-3 py-2 text-[14px] rounded-lg transition-colors resize-none"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  color: "#12332B",
+                                  color: "var(--theme-text-primary)",
                                   outline: "none"
                                 }}
                                 onFocus={(e) => {
-                                  e.currentTarget.style.borderColor = "#0F766E";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                 }}
                                 onBlur={(e) => {
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -2122,7 +2122,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Priority */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Priority
                               </span>
                             </div>
@@ -2152,15 +2152,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Contact/Customer */}
                           <div>
                             <div className="mb-2">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Contact/Customer
                               </span>
                             </div>
-                            <div className="text-[14px]" style={{ color: "#12332B" }}>
+                            <div className="text-[14px]" style={{ color: "var(--theme-text-primary)" }}>
                               {contact.first_name} {contact.last_name}
                             </div>
                             {company && (
-                              <div className="text-[12px] mt-1" style={{ color: "#667085" }}>
+                              <div className="text-[12px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                                 {company.name}
                               </div>
                             )}
@@ -2169,7 +2169,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           {/* Attachments Section */}
                           <div className="pt-6" style={{ borderTop: "1px solid var(--neuron-ui-divider)" }}>
                             <div className="flex items-center justify-between mb-3">
-                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "#667085" }}>
+                              <span className="text-[11px] uppercase tracking-wide font-medium" style={{ color: "var(--theme-text-muted)" }}>
                                 Attachments
                               </span>
                               {isEditingTask && (
@@ -2177,14 +2177,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-colors"
                                   style={{
                                     border: "1px solid var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF",
-                                    color: "#0F766E"
+                                    backgroundColor: "var(--theme-bg-surface)",
+                                    color: "var(--theme-action-primary-bg)"
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   }}
                                 >
                                   <Upload size={14} />
@@ -2201,8 +2201,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   backgroundColor: "#FAFAFA"
                                 }}
                               >
-                                <Paperclip size={24} style={{ color: "#D1D5DB", margin: "0 auto 8px" }} />
-                                <p className="text-[13px]" style={{ color: "#667085" }}>
+                                <Paperclip size={24} style={{ color: "var(--theme-border-default)", margin: "0 auto 8px" }} />
+                                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                                   {isEditingTask ? "No attachments yet - upload proof of completion" : "No attachments"}
                                 </p>
                               </div>
@@ -2219,16 +2219,16 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   >
                                     <div className="flex items-center gap-3">
                                       <div className="flex-shrink-0">
-                                        {attachment.type === "pdf" && <FileText size={18} style={{ color: "#0F766E" }} />}
-                                        {attachment.type === "image" && <ImageIcon size={18} style={{ color: "#0F766E" }} />}
-                                        {attachment.type === "document" && <File size={18} style={{ color: "#0F766E" }} />}
-                                        {attachment.type === "spreadsheet" && <File size={18} style={{ color: "#0F766E" }} />}
+                                        {attachment.type === "pdf" && <FileText size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                        {attachment.type === "image" && <ImageIcon size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                        {attachment.type === "document" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                        {attachment.type === "spreadsheet" && <File size={18} style={{ color: "var(--theme-action-primary-bg)" }} />}
                                       </div>
                                       <div>
-                                        <div className="text-[13px] font-medium" style={{ color: "#12332B" }}>
+                                        <div className="text-[13px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                                           {attachment.name}
                                         </div>
-                                        <div className="text-[11px]" style={{ color: "#667085" }}>
+                                        <div className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
                                           {attachment.size}
                                         </div>
                                       </div>
@@ -2236,14 +2236,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                     <button
                                       className="flex items-center gap-1.5 px-2 py-1 rounded text-[11px] font-medium transition-colors"
                                       style={{
-                                        backgroundColor: "#0F766E",
+                                        backgroundColor: "var(--theme-action-primary-bg)",
                                         color: "#FFFFFF"
                                       }}
                                       onMouseEnter={(e) => {
-                                        e.currentTarget.style.backgroundColor = "#0D6560";
+                                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                       }}
                                       onMouseLeave={(e) => {
-                                        e.currentTarget.style.backgroundColor = "#0F766E";
+                                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                       }}
                                     >
                                       <Download size={12} />
@@ -2269,14 +2269,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   }}
                                   className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                   style={{
-                                    backgroundColor: "#0F766E",
+                                    backgroundColor: "var(--theme-action-primary-bg)",
                                     color: "#FFFFFF"
                                   }}
                                   onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#0D6560";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#0F766E";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                   }}
                                 >
                                   Save and Continue
@@ -2289,14 +2289,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                   style={{
                                     border: "1px solid var(--neuron-ui-border)",
-                                    backgroundColor: "#FFFFFF",
-                                    color: "#12332B"
+                                    backgroundColor: "var(--theme-bg-surface)",
+                                    color: "var(--theme-text-primary)"
                                   }}
                                   onMouseEnter={(e) => {
                                     e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                   }}
                                   onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   }}
                                 >
                                   Cancel
@@ -2324,12 +2324,12 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                     }}
                                     onMouseEnter={(e) => {
                                       if (!(isProofRequired(selectedTask.type) && taskAttachments.length === 0)) {
-                                        e.currentTarget.style.backgroundColor = "#0D6560";
+                                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                       }
                                     }}
                                     onMouseLeave={(e) => {
                                       if (!(isProofRequired(selectedTask.type) && taskAttachments.length === 0)) {
-                                        e.currentTarget.style.backgroundColor = "#0F766E";
+                                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                       }
                                     }}
                                   >
@@ -2338,9 +2338,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   </button>
                                 )}
                                 {selectedTask && selectedTask.status === "Completed" && (
-                                  <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg" style={{ backgroundColor: "#E8F5F3" }}>
-                                    <CheckCircle2 size={16} style={{ color: "#0F766E" }} />
-                                    <span className="text-[13px] font-medium" style={{ color: "#0F766E" }}>
+                                  <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg" style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}>
+                                    <CheckCircle2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                                    <span className="text-[13px] font-medium" style={{ color: "var(--theme-action-primary-bg)" }}>
                                       Task Completed
                                     </span>
                                   </div>
@@ -2358,7 +2358,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
               {activeTab === "inquiries" && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       Inquiries
                     </h3>
                     {onCreateInquiry && company && (
@@ -2366,14 +2366,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         onClick={() => onCreateInquiry(company, contact)}
                         className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors flex items-center gap-2"
                         style={{
-                          backgroundColor: "#0F766E",
+                          backgroundColor: "var(--theme-action-primary-bg)",
                           color: "#FFFFFF"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0D6560";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0F766E";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                         }}
                       >
                         <Plus size={16} />
@@ -2384,9 +2384,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
                   {inquiries.length === 0 ? (
                     <div className="text-center py-12">
-                      <FileText size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-                      <p className="text-[14px]" style={{ color: "#667085" }}>No inquiries yet</p>
-                      <p className="text-[12px] mt-2" style={{ color: "#9CA3AF" }}>
+                      <FileText size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+                      <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No inquiries yet</p>
+                      <p className="text-[12px] mt-2" style={{ color: "var(--theme-text-muted)" }}>
                         Inquiries from E-Quotation system will appear here
                       </p>
                     </div>
@@ -2395,30 +2395,30 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="rounded-lg overflow-hidden"
                       style={{ 
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF"
+                        backgroundColor: "var(--theme-bg-surface)"
                       }}
                     >
                       {/* Table Header */}
                       <div 
                         className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr] gap-4 px-4 py-3"
                         style={{ 
-                          backgroundColor: "#F9FAFB",
+                          backgroundColor: "var(--theme-bg-page)",
                           borderBottom: "1px solid var(--neuron-ui-divider)"
                         }}
                       >
-                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
                           Inquiry #
                         </div>
-                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
                           Services
                         </div>
-                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
                           Movement
                         </div>
-                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
                           Route
                         </div>
-                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+                        <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
                           Created
                         </div>
                       </div>
@@ -2431,39 +2431,39 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr] gap-4 px-4 py-4 cursor-pointer transition-colors"
                             style={{ borderBottom: "1px solid var(--neuron-ui-divider)" }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = "#F9FAFB";
+                              e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = "#FFFFFF";
+                              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                             }}
                           >
                             {/* Inquiry Number */}
                             <div>
-                              <div className="text-[13px] font-medium mb-0.5" style={{ color: "#12332B" }}>
+                              <div className="text-[13px] font-medium mb-0.5" style={{ color: "var(--theme-text-primary)" }}>
                                 {inquiry.quotation_name || inquiry.quote_number}
                               </div>
-                              <div className="text-[12px]" style={{ color: "#667085" }}>
+                              <div className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                 {inquiry.quote_number}
                               </div>
                             </div>
 
                             {/* Services */}
-                            <div className="text-[12px]" style={{ color: "#344054" }}>
+                            <div className="text-[12px]" style={{ color: "var(--theme-text-secondary)" }}>
                               {inquiry.services.join(", ")}
                             </div>
 
                             {/* Movement */}
-                            <div className="text-[12px]" style={{ color: "#344054" }}>
+                            <div className="text-[12px]" style={{ color: "var(--theme-text-secondary)" }}>
                               {inquiry.movement}
                             </div>
 
                             {/* Route */}
-                            <div className="text-[12px]" style={{ color: "#344054" }}>
+                            <div className="text-[12px]" style={{ color: "var(--theme-text-secondary)" }}>
                               {inquiry.pol_aol} → {inquiry.pod_aod}
                             </div>
 
                             {/* Created Date */}
-                            <div className="text-[12px]" style={{ color: "#667085" }}>
+                            <div className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                               {formatDate(inquiry.created_at)}
                             </div>
                           </div>
@@ -2477,7 +2477,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
               {activeTab === "attachments" && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       Attachments
                     </h3>
                     <div>
@@ -2491,14 +2491,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         onClick={() => fileInputRef.current?.click()}
                         className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors"
                         style={{
-                          backgroundColor: "#0F766E",
+                          backgroundColor: "var(--theme-action-primary-bg)",
                           color: "#FFFFFF"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0D6560";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0F766E";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                         }}
                       >
                         <Upload size={14} />
@@ -2509,7 +2509,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
 
                   {attachments.length === 0 ? (
                     <div className="text-center py-12">
-                      <p className="text-[14px]" style={{ color: "#667085" }}>No attachments yet</p>
+                      <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No attachments yet</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -2519,26 +2519,26 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="p-4 rounded-lg"
                           style={{
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FFFFFF"
+                            backgroundColor: "var(--theme-bg-surface)"
                           }}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-4 flex-1">
                               <div className="flex-shrink-0 mt-1">
-                                {attachment.type === "pdf" && <FileText size={20} style={{ color: "#0F766E" }} />}
-                                {attachment.type === "image" && <ImageIcon size={20} style={{ color: "#0F766E" }} />}
-                                {attachment.type === "document" && <File size={20} style={{ color: "#0F766E" }} />}
-                                {attachment.type === "spreadsheet" && <File size={20} style={{ color: "#0F766E" }} />}
+                                {attachment.type === "pdf" && <FileText size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                {attachment.type === "image" && <ImageIcon size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                {attachment.type === "document" && <File size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                                {attachment.type === "spreadsheet" && <File size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
                               </div>
                               <div className="flex-1">
-                                <div className="text-[14px] font-medium mb-1" style={{ color: "#12332B" }}>
+                                <div className="text-[14px] font-medium mb-1" style={{ color: "var(--theme-text-primary)" }}>
                                   {attachment.name}
                                 </div>
                                 <div className="flex items-center gap-3 mb-2">
-                                  <span className="text-[12px]" style={{ color: "#667085" }}>
+                                  <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                     {attachment.size}
                                   </span>
-                                  <span className="text-[12px]" style={{ color: "#667085" }}>
+                                  <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                     • Uploaded: {formatDate(attachment.uploadedAt)}
                                   </span>
                                 </div>
@@ -2552,7 +2552,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   >
                                     {attachment.source}
                                   </span>
-                                  <span className="text-[12px]" style={{ color: "#667085" }}>
+                                  <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                     {attachment.sourceName}
                                   </span>
                                 </div>
@@ -2561,14 +2561,14 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                             <button
                               className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ml-4"
                               style={{
-                                backgroundColor: "#0F766E",
+                                backgroundColor: "var(--theme-action-primary-bg)",
                                 color: "#FFFFFF"
                               }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = "#0D6560";
+                                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = "#0F766E";
+                                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                               }}
                             >
                               <Download size={14} />

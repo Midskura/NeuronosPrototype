@@ -128,7 +128,7 @@ export function ProjectsModule({ currentUser, onCreateTicket, initialProject, de
   console.log("ProjectsModule - Department:", department, "- User:", currentUser?.department);
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-[var(--theme-bg-surface)]">
       {view === "list" && (
         <ProjectsList
           projects={projects}

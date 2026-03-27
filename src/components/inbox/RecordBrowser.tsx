@@ -130,12 +130,12 @@ const DEPT_DEFAULT: Record<string, string> = {
 const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
   active: { color: "#059669", bg: "#F0FDF4" },
   open: { color: "#0369A1", bg: "#EFF6FF" },
-  draft: { color: "#6B7280", bg: "#F3F4F6" },
+  draft: { color: "var(--theme-text-muted)", bg: "#F3F4F6" },
   sent: { color: "#D97706", bg: "#FEF9EE" },
   approved: { color: "#7C3AED", bg: "#F5F3FF" },
-  posted: { color: "#0F766E", bg: "#F0F7F5" },
+  posted: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
   paid: { color: "#059669", bg: "#F0FDF4" },
-  priced: { color: "#0F766E", bg: "#F0F7F5" },
+  priced: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
   completed: { color: "#059669", bg: "#F0FDF4" },
   confirmed: { color: "#1D4ED8", bg: "#EFF6FF" },
   cancelled: { color: "#DC2626", bg: "#FFF5F5" },
@@ -144,7 +144,7 @@ const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
 
 function StatusBadge({ status }: { status?: string }) {
   if (!status) return null;
-  const colors = STATUS_COLORS[status.toLowerCase()] ?? { color: "#667085", bg: "#F3F4F6" };
+  const colors = STATUS_COLORS[status.toLowerCase()] ?? { color: "var(--theme-text-muted)", bg: "#F3F4F6" };
   return <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 4, color: colors.color, backgroundColor: colors.bg, textTransform: "capitalize", flexShrink: 0 }}>{status}</span>;
 }
 
@@ -419,7 +419,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
               </p>
             </div>
             <div
-              style={{ display: "flex", alignItems: "center", gap: 8, backgroundColor: "#F9FAFB", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--neuron-ui-border)", transition: "border-color 150ms ease" }}
+              style={{ display: "flex", alignItems: "center", gap: 8, backgroundColor: "var(--theme-bg-page)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--neuron-ui-border)", transition: "border-color 150ms ease" }}
               onFocusCapture={(e) => { e.currentTarget.style.borderColor = "var(--neuron-brand-green)"; }}
               onBlurCapture={(e) => { e.currentTarget.style.borderColor = "var(--neuron-ui-border)"; }}
             >
@@ -442,7 +442,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
           <div style={{ flex: 1, overflowY: "auto" }}>
             {!canBrowse && !search && (
               <div style={{ padding: "40px 20px", textAlign: "center" }}>
-                <Search size={22} style={{ color: "#D1D5DB", margin: "0 auto 10px" }} />
+                <Search size={22} style={{ color: "var(--theme-border-default)", margin: "0 auto 10px" }} />
                 <p style={{ fontSize: 12, color: "var(--neuron-ink-muted)", lineHeight: 1.5 }}>
                   {getSearchFirstHint(activeEntity)}
                 </p>
@@ -453,9 +453,9 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
               <div style={{ padding: "12px 16px" }}>
                 {[1, 2, 3, 4].map((item) => (
                   <div key={item} style={{ padding: "10px 0", display: "flex", gap: 10, alignItems: "center", borderBottom: "1px solid #F6F8F7" }}>
-                    <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: "#F3F4F6", flexShrink: 0 }} />
+                    <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
-                      <div style={{ height: 12, backgroundColor: "#F3F4F6", borderRadius: 4, marginBottom: 6, width: `${55 + item * 9}%` }} />
+                      <div style={{ height: 12, backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: 4, marginBottom: 6, width: `${55 + item * 9}%` }} />
                       <div style={{ height: 10, backgroundColor: "#F8FAF9", borderRadius: 4, width: "42%" }} />
                     </div>
                   </div>

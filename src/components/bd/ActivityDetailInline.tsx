@@ -111,18 +111,18 @@ export function ActivityDetailInline({
           className="p-2 rounded-lg transition-colors"
           style={{
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#F9FAFB";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "#FFFFFF";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
           }}
         >
-          <ArrowLeft size={16} style={{ color: "#12332B" }} />
+          <ArrowLeft size={16} style={{ color: "var(--theme-text-primary)" }} />
         </button>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
           Activity Details
         </h3>
       </div>
@@ -134,16 +134,16 @@ export function ActivityDetailInline({
           className="rounded-lg p-4"
           style={{
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           <div className="mb-3">
             <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--neuron-ink-muted)" }}>
               Type
             </label>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: "#E8F5F3" }}>
-              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#0F766E" }} />
-              <span className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "#0F766E" }}>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}>
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--theme-action-primary-bg)" }} />
+              <span className="text-[12px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-action-primary-bg)" }}>
                 {activity.type}
               </span>
             </div>
@@ -154,7 +154,7 @@ export function ActivityDetailInline({
               <Calendar size={11} className="inline mr-1" />
               Date
             </label>
-            <span className="text-[13px]" style={{ color: "#12332B" }}>
+            <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>
               {formatDateTime(activity.date)}
             </span>
           </div>
@@ -162,13 +162,13 @@ export function ActivityDetailInline({
           {/* Metadata */}
           <div className="pt-4 border-t space-y-3" style={{ borderColor: "var(--neuron-ui-divider)" }}>
             <div className="flex items-center justify-between">
-              <span className="text-[11px] uppercase tracking-wide" style={{ color: "#667085" }}>Created</span>
-              <span className="text-[13px]" style={{ color: "#12332B" }}>{formatDateTime(activity.created_at)}</span>
+              <span className="text-[11px] uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>Created</span>
+              <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>{formatDateTime(activity.created_at)}</span>
             </div>
             {activity.updated_at && (
               <div className="flex items-center justify-between">
-                <span className="text-[11px] uppercase tracking-wide" style={{ color: "#667085" }}>Last Updated</span>
-                <span className="text-[13px]" style={{ color: "#12332B" }}>{formatDateTime(activity.updated_at)}</span>
+                <span className="text-[11px] uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>Last Updated</span>
+                <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>{formatDateTime(activity.updated_at)}</span>
               </div>
             )}
           </div>
@@ -179,14 +179,14 @@ export function ActivityDetailInline({
           className="rounded-lg p-4"
           style={{
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--neuron-ink-muted)" }}>
             <MessageSquare size={11} className="inline mr-1" />
             Description
           </label>
-          <p className="text-[13px]" style={{ color: "#12332B" }}>
+          <p className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>
             {activity.description}
           </p>
         </div>
@@ -196,13 +196,13 @@ export function ActivityDetailInline({
           className="rounded-lg p-4"
           style={{
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--neuron-ink-muted)" }}>
             Logged By
           </label>
-          <span className="text-[13px]" style={{ color: "#12332B" }}>
+          <span className="text-[13px]" style={{ color: "var(--theme-text-primary)" }}>
             {userName}
           </span>
         </div>
@@ -213,7 +213,7 @@ export function ActivityDetailInline({
             className="rounded-lg p-4"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             <h4 className="text-[12px] font-semibold uppercase tracking-wide mb-3" style={{ color: "var(--neuron-ink-muted)" }}>
@@ -230,11 +230,11 @@ export function ActivityDetailInline({
                     <div 
                       className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#F3F4F6",
+                        backgroundColor: "var(--theme-bg-surface-subtle)",
                         border: "1px solid var(--neuron-ui-divider)"
                       }}
                     >
-                      <User size={14} style={{ color: "#9CA3AF" }} />
+                      <User size={14} style={{ color: "var(--theme-text-muted)" }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h5 className="text-[12px] font-medium" style={{ color: "var(--neuron-ink-primary)" }}>
@@ -257,11 +257,11 @@ export function ActivityDetailInline({
                     <div 
                       className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#E8F5F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         border: "1px solid #0F766E30"
                       }}
                     >
-                      <Building2 size={14} style={{ color: "#0F766E" }} />
+                      <Building2 size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h5 className="text-[12px] font-medium" style={{ color: "var(--neuron-ink-primary)" }}>
@@ -282,7 +282,7 @@ export function ActivityDetailInline({
         <div>
           <h3 
             className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Attachments
           </h3>
@@ -291,7 +291,7 @@ export function ActivityDetailInline({
             className="rounded-lg p-6"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             <div className="flex items-center justify-between mb-4">
@@ -300,14 +300,14 @@ export function ActivityDetailInline({
                 className="px-4 py-2 rounded-lg text-[13px] font-medium transition-colors flex items-center gap-2"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  color: "#0F766E",
-                  backgroundColor: "#FFFFFF"
+                  color: "var(--theme-action-primary-bg)",
+                  backgroundColor: "var(--theme-bg-surface)"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
                 <Upload size={14} />
@@ -326,27 +326,27 @@ export function ActivityDetailInline({
                       backgroundColor: "#FAFAFA"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F3F4F6";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "#FAFAFA";
                     }}
                   >
-                    <div className="flex items-center justify-center w-8 h-8 rounded bg-gray-100 flex-shrink-0">
-                      <FileText size={16} style={{ color: "#667085" }} />
+                    <div className="flex items-center justify-center w-8 h-8 rounded bg-[var(--theme-bg-surface-subtle)] flex-shrink-0">
+                      <FileText size={16} style={{ color: "var(--theme-text-muted)" }} />
                     </div>
                     
                     <div className="flex-1 min-w-0">
-                      <div className="text-[13px] font-medium truncate" style={{ color: "#12332B" }}>
+                      <div className="text-[13px] font-medium truncate" style={{ color: "var(--theme-text-primary)" }}>
                         {file.name}
                       </div>
-                      <div className="text-[11px] text-gray-500">
+                      <div className="text-[11px] text-[var(--theme-text-muted)]">
                         {(file.size / 1024).toFixed(0)} KB • {file.type.split('/').pop()?.toUpperCase() || 'FILE'}
                       </div>
                     </div>
 
                     <button
-                      className="p-2 text-gray-400 hover:text-[#0F766E] transition-colors"
+                      className="p-2 text-[var(--theme-text-muted)] hover:text-[var(--theme-action-primary-bg)] transition-colors"
                       title="Download"
                     >
                       <Download size={16} />
@@ -356,7 +356,7 @@ export function ActivityDetailInline({
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-[13px]" style={{ color: "#667085" }}>
+                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                   No attachments yet
                 </p>
               </div>
@@ -368,7 +368,7 @@ export function ActivityDetailInline({
         <div>
           <h3 
             className="text-[11px] font-semibold uppercase tracking-wide mb-4"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Comments
           </h3>
@@ -377,7 +377,7 @@ export function ActivityDetailInline({
             className="rounded-lg p-6"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           >
             {/* Comment List */}
@@ -388,18 +388,18 @@ export function ActivityDetailInline({
                     <div 
                       className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                       style={{
-                        backgroundColor: "#E8F5F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         border: "1px solid #0F766E30"
                       }}
                     >
-                      <User size={14} style={{ color: "#0F766E" }} />
+                      <User size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[12px] font-medium" style={{ color: "#12332B" }}>
+                        <span className="text-[12px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                           {comment.user}
                         </span>
-                        <span className="text-[11px]" style={{ color: "#667085" }}>
+                        <span className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
                           {formatDateTime(comment.timestamp)}
                         </span>
                       </div>
@@ -422,8 +422,8 @@ export function ActivityDetailInline({
                 className="w-full px-3 py-2.5 rounded-lg text-[13px] focus:outline-none focus:ring-2 resize-none mb-3"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
               <button
@@ -436,12 +436,12 @@ export function ActivityDetailInline({
                 }}
                 onMouseEnter={(e) => {
                   if (newComment.trim()) {
-                    e.currentTarget.style.backgroundColor = "#0D6560";
+                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (newComment.trim()) {
-                    e.currentTarget.style.backgroundColor = "#0F766E";
+                    e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                   }
                 }}
               >
@@ -463,10 +463,10 @@ export function ActivityDetailInline({
           >
             <div className="flex items-start gap-4">
               <div className="flex-1">
-                <h4 className="text-[13px] font-semibold mb-1" style={{ color: "#12332B" }}>
+                <h4 className="text-[13px] font-semibold mb-1" style={{ color: "var(--theme-text-primary)" }}>
                   Delete this activity
                 </h4>
-                <p className="text-[12px]" style={{ color: "#667085" }}>
+                <p className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                   Once you delete this activity, there is no going back. Please be certain.
                 </p>
               </div>

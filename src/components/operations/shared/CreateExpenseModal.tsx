@@ -82,13 +82,13 @@ export function CreateExpenseModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-[var(--theme-bg-surface)] rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#12332B]/10">
-          <h2 className="text-[#12332B]">Add Expense</h2>
+        <div className="flex items-center justify-between p-6 border-b border-[var(--theme-text-primary)]/10">
+          <h2 className="text-[var(--theme-text-primary)]">Add Expense</h2>
           <button
             onClick={onClose}
-            className="text-[#12332B]/40 hover:text-[#12332B] transition-colors"
+            className="text-[var(--theme-text-primary)]/40 hover:text-[var(--theme-text-primary)] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -98,7 +98,7 @@ export function CreateExpenseModal({
         <form onSubmit={handleSubmit} className="flex-1 overflow-auto p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-[#12332B]/80 mb-2">
+              <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                 Description <span className="text-red-500">*</span>
               </label>
               <input
@@ -107,13 +107,13 @@ export function CreateExpenseModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="e.g., Container trucking, Storage charges"
-                className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
               />
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2">
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Amount <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -124,18 +124,18 @@ export function CreateExpenseModal({
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
               <div>
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Currency
                 </label>
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="PHP">PHP</option>
                   <option value="USD">USD</option>
@@ -147,7 +147,7 @@ export function CreateExpenseModal({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Vendor
                 </label>
                 <input
@@ -155,18 +155,18 @@ export function CreateExpenseModal({
                   value={vendor}
                   onChange={(e) => setVendor(e.target.value)}
                   placeholder="Vendor or supplier name"
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
               <div>
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Category
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="">Select category...</option>
                   {EXPENSE_CATEGORIES.map(cat => (
@@ -178,25 +178,25 @@ export function CreateExpenseModal({
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Expense Date
                 </label>
                 <input
                   type="date"
                   value={expenseDate}
                   onChange={(e) => setExpenseDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
               <div>
-                <label className="block text-[#12332B]/80 mb-2">
+                <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                   Status
                 </label>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as "Pending" | "Approved" | "Paid")}
-                  className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Approved">Approved</option>
@@ -206,7 +206,7 @@ export function CreateExpenseModal({
             </div>
 
             <div>
-              <label className="block text-[#12332B]/80 mb-2">
+              <label className="block text-[var(--theme-text-primary)]/80 mb-2">
                 Notes
               </label>
               <textarea
@@ -214,26 +214,26 @@ export function CreateExpenseModal({
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="Additional notes or comments..."
-                className="w-full px-3 py-2 border border-[#12332B]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
               />
             </div>
           </div>
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 p-6 border-t border-[#12332B]/10">
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-[var(--theme-text-primary)]/10">
           <button
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="px-4 py-2 text-[#12332B] hover:bg-[#12332B]/5 rounded-lg transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-[var(--theme-text-primary)] hover:bg-[#12332B]/5 rounded-lg transition-colors disabled:opacity-50"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0F766E]/90 transition-colors disabled:opacity-50"
+            className="px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[var(--theme-action-primary-bg)]/90 transition-colors disabled:opacity-50"
           >
             {isSubmitting ? "Creating..." : "Create Expense"}
           </button>

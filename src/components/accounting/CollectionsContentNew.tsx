@@ -152,13 +152,13 @@ export function CollectionsContentNew() {
       case "Cash":
         return "bg-[#FEF3E7] text-[#C88A2B]";
       case "Bank Transfer":
-        return "bg-[#E8F5F3] text-[#0F766E]";
+        return "bg-[#E8F5F3] text-[var(--theme-action-primary-bg)]";
       case "Check":
         return "bg-[#DBEAFE] text-[#1D4ED8]";
       case "Credit Card":
         return "bg-[#F3E8FF] text-[#7C3AED]";
       default:
-        return "bg-[#F3F4F6] text-[#6B7280]";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)]";
     }
   };
 
@@ -185,7 +185,7 @@ export function CollectionsContentNew() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "var(--theme-bg-surface)"
       }}
     >
       {/* Header */}
@@ -203,14 +203,14 @@ export function CollectionsContentNew() {
               style={{
                 fontSize: "32px",
                 fontWeight: 600,
-                color: "#12332B",
+                color: "var(--theme-text-primary)",
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}
             >
               Collections
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Track customer payments and receipt transactions
             </p>
           </div>
@@ -234,10 +234,10 @@ export function CollectionsContentNew() {
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={20} />
@@ -259,7 +259,7 @@ export function CollectionsContentNew() {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
             />
@@ -285,9 +285,9 @@ export function CollectionsContentNew() {
             }}
             options={[
               { value: "all", label: "All Time", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--neuron-ink-muted)" }} /> },
-              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#0F766E" }} /> },
+              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-action-primary-bg)" }} /> },
               { value: "this-week", label: "This Week", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
           />
         </div>
@@ -297,16 +297,16 @@ export function CollectionsContentNew() {
       <div className="flex-1 overflow-auto px-12 pt-6 pb-6">
         {loading ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
-            <div className="px-6 py-12 text-center" style={{ color: "#667085" }}>
+            <div className="px-6 py-12 text-center" style={{ color: "var(--theme-text-muted)" }}>
               Loading collections...
             </div>
           </div>
         ) : error ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             <div style={{ textAlign: "center", padding: "80px 20px" }}>
@@ -326,7 +326,7 @@ export function CollectionsContentNew() {
               <p style={{ fontSize: "16px", color: "#EF4444", marginBottom: "8px", fontWeight: 500 }}>
                 Error loading collections
               </p>
-              <p style={{ fontSize: "14px", color: "#667085", marginBottom: "16px" }}>{error}</p>
+              <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>{error}</p>
               <button
                 onClick={fetchCollections}
                 style={{
@@ -346,7 +346,7 @@ export function CollectionsContentNew() {
           </div>
         ) : filteredCollections.length === 0 ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             <div className="px-6 py-12 text-center">
@@ -363,7 +363,7 @@ export function CollectionsContentNew() {
           </div>
         ) : (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             {/* Table Header */}
@@ -434,7 +434,7 @@ export function CollectionsContentNew() {
                   </div>
 
                   {/* Reference */}
-                  <div className="text-[11px] pl-8" style={{ color: "#0F766E", fontWeight: 500 }}>
+                  <div className="text-[11px] pl-8" style={{ color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                     {collection.reference_number || collection.evoucher_number || "—"}
                   </div>
                 </div>

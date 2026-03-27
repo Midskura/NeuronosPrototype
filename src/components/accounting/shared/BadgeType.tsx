@@ -18,7 +18,7 @@ export function BadgeType({ type, className = "" }: BadgeTypeProps) {
       label: "Expense",
     },
     transfer: {
-      className: "bg-gray-100 text-gray-800 border-gray-200",
+      className: "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-primary)] border-[var(--theme-border-default)]",
       label: "Transfer",
     },
   };

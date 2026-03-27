@@ -27,7 +27,7 @@ export function CollectionsContent() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "var(--theme-bg-surface)"
       }}
     >
       {/* Header */}
@@ -45,14 +45,14 @@ export function CollectionsContent() {
               style={{
                 fontSize: "32px",
                 fontWeight: 600,
-                color: "#12332B",
+                color: "var(--theme-text-primary)",
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}
             >
               Collections
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Track customer payments and receipt transactions
             </p>
           </div>
@@ -66,7 +66,7 @@ export function CollectionsContent() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "10px 20px",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 color: "#FFFFFF",
                 border: "none",
                 borderRadius: "8px",
@@ -75,10 +75,10 @@ export function CollectionsContent() {
                 fontWeight: 500
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={18} />
@@ -90,7 +90,7 @@ export function CollectionsContent() {
         {/* Info Card */}
         <div style={{
           padding: "20px 24px",
-          backgroundColor: "#E8F5F3",
+          backgroundColor: "var(--theme-bg-surface-tint)",
           border: "1px solid #99F6E4",
           borderRadius: "12px",
           marginBottom: "24px"
@@ -100,7 +100,7 @@ export function CollectionsContent() {
               width: "40px",
               height: "40px",
               borderRadius: "10px",
-              backgroundColor: "#0F766E",
+              backgroundColor: "var(--theme-action-primary-bg)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -111,14 +111,14 @@ export function CollectionsContent() {
               📋
             </div>
             <div style={{ flex: 1 }}>
-              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "#12332B", marginBottom: "6px" }}>
+              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "6px" }}>
                 E-Voucher Integration Active
               </h3>
-              <p style={{ fontSize: "13px", color: "#667085", lineHeight: "1.5" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", lineHeight: "1.5" }}>
                 All collection transactions create E-Vouchers with 
                 <code style={{ 
                   padding: "2px 6px", 
-                  backgroundColor: "#FFFFFF", 
+                  backgroundColor: "var(--theme-bg-surface)", 
                   borderRadius: "4px",
                   fontSize: "12px",
                   margin: "0 4px",
@@ -140,7 +140,7 @@ export function CollectionsContent() {
                 left: "14px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -164,11 +164,11 @@ export function CollectionsContent() {
               padding: "10px 16px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "8px",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               cursor: "pointer",
               fontSize: "14px",
               fontWeight: 500,
-              color: "#374151"
+              color: "var(--theme-text-secondary)"
             }}
           >
             <Filter size={16} />
@@ -193,7 +193,7 @@ export function CollectionsContent() {
             width: "80px", 
             height: "80px", 
             borderRadius: "50%", 
-            backgroundColor: "#E8F5F3", 
+            backgroundColor: "var(--theme-bg-surface-tint)", 
             display: "flex", 
             alignItems: "center", 
             justifyContent: "center",
@@ -202,10 +202,10 @@ export function CollectionsContent() {
           }}>
             💰
           </div>
-          <h3 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B", marginBottom: "12px" }}>
+          <h3 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "12px" }}>
             No collections recorded yet
           </h3>
-          <p style={{ fontSize: "14px", color: "#667085", marginBottom: "24px", lineHeight: "1.6" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "24px", lineHeight: "1.6" }}>
             Start recording customer payments and receipts. Each collection will create an E-Voucher 
             that flows through the accounting approval workflow before posting to the ledger.
           </p>
@@ -217,7 +217,7 @@ export function CollectionsContent() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "12px 24px",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 color: "#FFFFFF",
                 border: "none",
                 borderRadius: "8px",
@@ -226,10 +226,10 @@ export function CollectionsContent() {
                 fontWeight: 500
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={18} />

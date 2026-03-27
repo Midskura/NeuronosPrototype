@@ -66,15 +66,15 @@ export function ClientsLedgerPage({ bookings, expenses, payments }: ClientsLedge
     <>
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-[#0A1D4D] mb-2">Clients Ledger</h1>
-        <p className="text-[14px] text-[#6B7280] leading-[20px]">
+        <h1 className="text-[var(--theme-text-primary)] mb-2">Clients Ledger</h1>
+        <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
           Per-booking revenue, expenses, and profit margins
         </p>
       </div>
 
       {/* Client Filter */}
       <div className="flex items-center gap-3 mb-6">
-        <span className="text-[14px] text-[#6B7280]">Filter by client:</span>
+        <span className="text-[14px] text-[var(--theme-text-muted)]">Filter by client:</span>
         <Select value={selectedClient} onValueChange={setSelectedClient}>
           <SelectTrigger className="w-[280px] h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
             <SelectValue placeholder="All Clients" />
@@ -91,22 +91,22 @@ export function ClientsLedgerPage({ bookings, expenses, payments }: ClientsLedge
       </div>
 
       {/* Ledger Table */}
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Booking</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Client</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Revenue</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Expenses</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Profit</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Margin %</TableHead>
+            <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Client</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Revenue</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Expenses</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Profit</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Margin %</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {bookingFinancials.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-[14px] text-[#6B7280] h-24">
+                <TableCell colSpan={6} className="text-center text-[14px] text-[var(--theme-text-muted)] h-24">
                   No financial data available
                 </TableCell>
               </TableRow>
@@ -114,13 +114,13 @@ export function ClientsLedgerPage({ bookings, expenses, payments }: ClientsLedge
               bookingFinancials.map((booking, index) => (
                 <TableRow 
                   key={index} 
-                  className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB]"
+                  className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)]"
                   style={{ minHeight: '48px' }}
                 >
-                  <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                  <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                     {booking.bookingNo}
                   </TableCell>
-                  <TableCell className="text-[14px] text-[#374151]">
+                  <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                     {booking.client}
                   </TableCell>
                   <TableCell 

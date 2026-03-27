@@ -42,7 +42,7 @@ export function DiagnosticsPage() {
       padding: "32px 48px",
       maxWidth: "1400px",
       margin: "0 auto",
-      backgroundColor: "#F8FBFB",
+      backgroundColor: "var(--theme-bg-page)",
       minHeight: "100vh"
     }}>
       {/* Header */}
@@ -98,7 +98,7 @@ export function DiagnosticsPage() {
 
       {/* Projects List */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
@@ -137,7 +137,7 @@ export function DiagnosticsPage() {
                   onClick={() => inspectProject(project)}
                   onMouseEnter={(e) => {
                     if (selectedProject?.id !== project.id) {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -197,7 +197,7 @@ export function DiagnosticsPage() {
       {/* Selected Project Details */}
       {selectedProject && (
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "2px solid var(--neuron-brand-green)",
           borderRadius: "12px",
           padding: "24px",
@@ -232,7 +232,7 @@ export function DiagnosticsPage() {
             {!selectedProject.linkedBookings || selectedProject.linkedBookings.length === 0 ? (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 borderRadius: "6px",
                 fontSize: "14px",
                 color: "var(--neuron-ink-muted)"
@@ -249,10 +249,10 @@ export function DiagnosticsPage() {
                 {selectedProject.linkedBookings.map((booking: any, index: number) => (
                   <div key={index} style={{
                     padding: "12px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     borderRadius: "6px",
                     marginBottom: index < selectedProject.linkedBookings.length - 1 ? "8px" : "0",
-                    border: "1px solid #E5E7EB"
+                    border: "1px solid var(--theme-border-default)"
                   }}>
                     <div style={{ marginBottom: "8px" }}>
                       <strong>Booking ID:</strong> {booking.bookingId || booking.bookingNumber}

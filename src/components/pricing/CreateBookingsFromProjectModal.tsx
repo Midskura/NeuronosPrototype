@@ -270,22 +270,22 @@ export function CreateBookingsFromProjectModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
-      <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="bg-[var(--theme-bg-surface)] rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="px-12 py-6 border-b border-gray-200 flex items-center justify-between">
+        <div className="px-12 py-6 border-b border-[var(--theme-border-default)] flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-['Inter:SemiBold',sans-serif] font-semibold text-[#12332B]">
+            <h2 className="text-2xl font-['Inter:SemiBold',sans-serif] font-semibold text-[var(--theme-text-primary)]">
               Create Bookings for Project
             </h2>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-[var(--theme-text-secondary)] mt-1">
               Project: {project.project_number} • Customer: {project.customer_name}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-[var(--theme-text-muted)]" />
           </button>
         </div>
 
@@ -294,19 +294,19 @@ export function CreateBookingsFromProjectModal({
           {Object.entries(serviceStates).map(([key, state]) => (
             <div
               key={key}
-              className="border border-gray-200 rounded-xl p-6 bg-gray-50"
+              className="border border-[var(--theme-border-default)] rounded-xl p-6 bg-[var(--theme-bg-surface-subtle)]"
             >
               {/* Service Header */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-[#0F766E]/10 flex items-center justify-center">
-                    <Package className="w-5 h-5 text-[#0F766E]" />
+                  <div className="w-10 h-10 rounded-lg bg-[var(--theme-action-primary-bg)]/10 flex items-center justify-center">
+                    <Package className="w-5 h-5 text-[var(--theme-action-primary-bg)]" />
                   </div>
                   <div>
-                    <h3 className="font-['Inter:SemiBold',sans-serif] font-semibold text-[#12332B]">
+                    <h3 className="font-['Inter:SemiBold',sans-serif] font-semibold text-[var(--theme-text-primary)]">
                       {state.serviceType}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-[var(--theme-text-secondary)]">
                       {state.serviceData.mode || state.serviceData.service || "Service booking"}
                     </p>
                   </div>
@@ -342,7 +342,7 @@ export function CreateBookingsFromProjectModal({
                   <button
                     onClick={() => handleCreateBooking(key)}
                     disabled={!state.assignment || state.isCreating}
-                    className="mt-6 w-full px-6 py-3 bg-[#0F766E] text-white rounded-lg font-['Inter:Medium',sans-serif] font-medium hover:bg-[#0d6860] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    className="mt-6 w-full px-6 py-3 bg-[var(--theme-action-primary-bg)] text-white rounded-lg font-['Inter:Medium',sans-serif] font-medium hover:bg-[#0d6860] transition-colors disabled:bg-[var(--theme-bg-surface-tint)] disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {state.isCreating ? (
                       <>
@@ -372,8 +372,8 @@ export function CreateBookingsFromProjectModal({
         </div>
 
         {/* Footer */}
-        <div className="px-12 py-6 border-t border-gray-200 flex items-center justify-between">
-          <div className="text-sm text-gray-600">
+        <div className="px-12 py-6 border-t border-[var(--theme-border-default)] flex items-center justify-between">
+          <div className="text-sm text-[var(--theme-text-secondary)]">
             {allServicesBooked 
               ? "All bookings created successfully" 
               : someServicesBooked 

@@ -32,17 +32,17 @@ export function ReceivablesReport({ entries, period, generatedAt, companyName = 
   const totalAmount = totalUnpaid + totalPaid;
 
   return (
-    <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
-      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "#FFFFFF" }}>
+    <div className="bg-[var(--theme-bg-surface)] rounded-lg border border-[var(--theme-border-default)] overflow-hidden">
+      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "var(--theme-bg-surface)" }}>
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="uppercase mb-3" style={{ fontSize: "11px", fontWeight: "bold", color: "#0A1D4D", letterSpacing: "0.5px" }}>
+          <div className="uppercase mb-3" style={{ fontSize: "11px", fontWeight: "bold", color: "var(--theme-text-primary)", letterSpacing: "0.5px" }}>
             {companyName || "JJB CRATING PACKING AND FREIGHT FORWARDING"}
           </div>
-          <div className="uppercase mb-2" style={{ fontSize: "14px", fontWeight: "bold", color: "#0A1D4D", letterSpacing: "1px" }}>
+          <div className="uppercase mb-2" style={{ fontSize: "14px", fontWeight: "bold", color: "var(--theme-text-primary)", letterSpacing: "1px" }}>
             RECEIVABLES REPORT
           </div>
-          <div className="uppercase" style={{ fontSize: "10px", fontWeight: "normal", color: "#6B7280", letterSpacing: "0.5px" }}>
+          <div className="uppercase" style={{ fontSize: "10px", fontWeight: "normal", color: "var(--theme-text-muted)", letterSpacing: "0.5px" }}>
             FOR THE MONTH / PERIOD OF {period.toUpperCase()}
           </div>
         </div>
@@ -50,7 +50,7 @@ export function ReceivablesReport({ entries, period, generatedAt, companyName = 
         {/* Table */}
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "10px", border: "1px solid #000" }}>
           <thead>
-            <tr style={{ backgroundColor: "#0F766E", color: "#FFFFFF", height: "32px" }}>
+            <tr style={{ backgroundColor: "var(--theme-action-primary-bg)", color: "#FFFFFF", height: "32px" }}>
               <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: "bold", fontSize: "9px", textAlign: "left" }}>
                 COMPANY NAME
               </th>
@@ -139,7 +139,7 @@ export function ReceivablesReport({ entries, period, generatedAt, companyName = 
               </td>
             </tr>
 
-            <tr style={{ height: "32px", backgroundColor: "#F3F4F6" }}>
+            <tr style={{ height: "32px", backgroundColor: "var(--theme-bg-surface-subtle)" }}>
               <td colSpan={3} style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "11px", fontWeight: "bold", textAlign: "right" }}>
                 GRAND TOTAL
               </td>
@@ -154,7 +154,7 @@ export function ReceivablesReport({ entries, period, generatedAt, companyName = 
         </table>
 
         {/* Footer */}
-        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "#9CA3AF" }}>
+        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "var(--theme-text-muted)" }}>
           Generated on {generatedAt}
         </div>
       </div>

@@ -12,20 +12,20 @@ export function CollapsibleSection({ title, icon, children, defaultOpen = true }
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="border-b border-[#E5E9F0] last:border-0">
+    <div className="border-b border-[var(--theme-border-default)] last:border-0">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors group"
+        className="w-full flex items-center justify-between p-6 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors group"
       >
         <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-[#E0F2F1] flex items-center justify-center shrink-0 group-hover:bg-[#B2DFDB] transition-colors">
-                <div className="text-[#0F766E]">
+                <div className="text-[var(--theme-action-primary-bg)]">
                     {icon}
                 </div>
             </div>
-            <h4 className="font-bold text-[#12332B] text-sm select-none">{title}</h4>
+            <h4 className="font-bold text-[var(--theme-text-primary)] text-sm select-none">{title}</h4>
         </div>
-        <div className={`text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
+        <div className={`text-[var(--theme-text-muted)] transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
             <ChevronDown size={20} />
         </div>
       </button>

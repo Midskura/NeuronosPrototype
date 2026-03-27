@@ -65,19 +65,19 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div 
-        className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+        className="bg-[var(--theme-bg-surface)] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white border-b p-6" style={{ borderColor: "var(--neuron-border)" }}>
+        <div className="sticky top-0 bg-[var(--theme-bg-surface)] border-b p-6" style={{ borderColor: "var(--neuron-border)" }}>
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl text-[var(--neuron-deep-green)] mb-1">Create Project</h2>
-              <p className="text-sm text-gray-600">From Quotation: {quotation.quote_number}</p>
+              <p className="text-sm text-[var(--theme-text-secondary)]">From Quotation: {quotation.quote_number}</p>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] transition-colors"
             >
               <X size={24} />
             </button>
@@ -87,28 +87,28 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
         {/* Content */}
         <div className="p-6 space-y-6">
           {/* Quotation Summary */}
-          <div className="bg-gray-50 border rounded-lg p-4" style={{ borderColor: "var(--neuron-border)" }}>
-            <div className="text-sm text-gray-500 mb-2">Quotation Summary</div>
+          <div className="bg-[var(--theme-bg-surface-subtle)] border rounded-lg p-4" style={{ borderColor: "var(--neuron-border)" }}>
+            <div className="text-sm text-[var(--theme-text-muted)] mb-2">Quotation Summary</div>
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Customer:</span>
-                <span className="ml-2 text-gray-900">{quotation.customer_name}</span>
+                <span className="text-[var(--theme-text-secondary)]">Customer:</span>
+                <span className="ml-2 text-[var(--theme-text-primary)]">{quotation.customer_name}</span>
               </div>
               <div>
-                <span className="text-gray-600">Total:</span>
-                <span className="ml-2 text-gray-900">
+                <span className="text-[var(--theme-text-secondary)]">Total:</span>
+                <span className="ml-2 text-[var(--theme-text-primary)]">
                   {quotation.currency} {quotation.financial_summary?.grand_total.toLocaleString()}
                 </span>
               </div>
               <div>
-                <span className="text-gray-600">Route:</span>
-                <span className="ml-2 text-gray-900">
+                <span className="text-[var(--theme-text-secondary)]">Route:</span>
+                <span className="ml-2 text-[var(--theme-text-primary)]">
                   {quotation.pol_aol} → {quotation.pod_aod}
                 </span>
               </div>
               <div>
-                <span className="text-gray-600">Services:</span>
-                <span className="ml-2 text-gray-900">{quotation.services?.join(", ")}</span>
+                <span className="text-[var(--theme-text-secondary)]">Services:</span>
+                <span className="ml-2 text-[var(--theme-text-primary)]">{quotation.services?.join(", ")}</span>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
           {/* Project Details Form */}
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-700 mb-2">
+              <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
                 Client PO Number <span className="text-red-500">*</span>
               </label>
               <input
@@ -131,7 +131,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-gray-700 mb-2">
+                <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
                   Shipment Ready Date <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -144,7 +144,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
               </div>
 
               <div>
-                <label className="block text-sm text-gray-700 mb-2">
+                <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
                   Requested ETD <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -158,7 +158,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
             </div>
 
             <div>
-              <label className="block text-sm text-gray-700 mb-2">
+              <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
                 Assign to Operations (Optional)
               </label>
               <input
@@ -169,13 +169,13 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
                 style={{ borderColor: "var(--neuron-border)" }}
                 placeholder="Enter operations team member name"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-[var(--theme-text-muted)] mt-1">
                 You can assign this later if not decided yet
               </p>
             </div>
 
             <div>
-              <label className="block text-sm text-gray-700 mb-2">
+              <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
                 Special Instructions (Optional)
               </label>
               <textarea
@@ -198,11 +198,11 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white border-t p-6 flex justify-end gap-3" style={{ borderColor: "var(--neuron-border)" }}>
+        <div className="sticky bottom-0 bg-[var(--theme-bg-surface)] border-t p-6 flex justify-end gap-3" style={{ borderColor: "var(--neuron-border)" }}>
           <button
             onClick={onClose}
             disabled={isCreating}
-            className="px-6 py-2 border rounded-lg hover:border-gray-400 transition-colors"
+            className="px-6 py-2 border rounded-lg hover:border-[var(--theme-border-default)] transition-colors"
             style={{ borderColor: "var(--neuron-border)" }}
           >
             Cancel

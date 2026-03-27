@@ -88,7 +88,7 @@ export function FormSelect({ value, options, onChange, placeholder = "Select..."
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
@@ -112,14 +112,14 @@ export function FormSelect({ value, options, onChange, placeholder = "Select..."
                 color: value === option.value ? "var(--neuron-brand-teal)" : "var(--neuron-ink-base)",
                 backgroundColor: value === option.value ? "#E8F5F3" : "white",
                 border: "none",
-                borderBottom: "1px solid #F3F4F6",
+                borderBottom: "1px solid var(--theme-border-subtle)",
                 textAlign: "left",
                 cursor: "pointer",
                 transition: "background-color 0.15s ease"
               }}
               onMouseEnter={(e) => {
                 if (value !== option.value) {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }
               }}
               onMouseLeave={(e) => {

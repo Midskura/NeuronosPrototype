@@ -162,7 +162,7 @@ export function BillingCategorySection({
       border: "1px solid var(--neuron-ui-border)", // #E5E9F0
       borderLeft: "3px solid var(--neuron-brand-green)", // #12332B
       borderRadius: "8px",
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       overflow: "hidden",
       marginBottom: "16px"
     }}>
@@ -172,7 +172,7 @@ export function BillingCategorySection({
         style={{
           padding: "12px 16px",
           borderBottom: isExpanded ? "1px solid var(--neuron-ui-border)" : "none",
-          backgroundColor: "#F8FBFB",
+          backgroundColor: "var(--theme-bg-page)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -280,7 +280,7 @@ export function BillingCategorySection({
                   fontSize: "11px",
                   fontWeight: 600,
                   color: "var(--neuron-brand-green, #0F766E)",
-                  backgroundColor: "#F0FDF9",
+                  backgroundColor: "var(--theme-bg-surface-tint)",
                   border: "1px solid #CCFBF1",
                   borderRadius: "4px",
                   cursor: "pointer"
@@ -303,7 +303,7 @@ export function BillingCategorySection({
                   alignItems: "center",
                   justifyContent: "center",
                   padding: "6px",
-                  color: "#9CA3AF", // Muted by default
+                  color: "var(--theme-text-muted)", // Muted by default
                   border: "1px solid transparent",
                   borderRadius: "4px",
                   cursor: "pointer",
@@ -316,7 +316,7 @@ export function BillingCategorySection({
                   e.currentTarget.style.borderColor = "#FECACA";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#9CA3AF";
+                  e.currentTarget.style.color = "var(--theme-text-muted)";
                   e.currentTarget.style.backgroundColor = "transparent";
                   e.currentTarget.style.borderColor = "transparent";
                 }}
@@ -336,7 +336,7 @@ export function BillingCategorySection({
             border: "1px solid #E5E9E8",
             borderRadius: "10px",
             overflow: "hidden",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             marginBottom: isAddingItem ? "12px" : "0"
           }}>
             <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>

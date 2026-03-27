@@ -157,15 +157,15 @@ function StatusBadge({ status }: { status?: string }) {
   const colorMap: Record<string, { color: string; bg: string }> = {
     active:    { color: "#059669", bg: "#F0FDF4" },
     open:      { color: "#0369A1", bg: "#EFF6FF" },
-    draft:     { color: "#6B7280", bg: "#F3F4F6" },
+    draft:     { color: "var(--theme-text-muted)", bg: "#F3F4F6" },
     sent:      { color: "#D97706", bg: "#FEF9EE" },
     approved:  { color: "#7C3AED", bg: "#F5F3FF" },
-    posted:    { color: "#0F766E", bg: "#F0F7F5" },
+    posted:    { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
     paid:      { color: "#059669", bg: "#F0FDF4" },
     cancelled: { color: "#DC2626", bg: "#FFF5F5" },
   };
   const s = status.toLowerCase();
-  const c = colorMap[s] ?? { color: "#667085", bg: "#F3F4F6" };
+  const c = colorMap[s] ?? { color: "var(--theme-text-muted)", bg: "#F3F4F6" };
   return (
     <span style={{ fontSize: 10, fontWeight: 600, color: c.color, backgroundColor: c.bg, padding: "1px 6px", borderRadius: 4, textTransform: "capitalize", flexShrink: 0 }}>
       {status}
@@ -192,7 +192,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
 
   // Is the user an owner of this drawer (can browse, not just search)?
   const isOwned =
-    effectiveRole === "director" ||
+    effectiveDepartment === "Executive" ||
     activeDrawer.ownerDepts.length === 0 ||
     activeDrawer.ownerDepts.includes(effectiveDepartment ?? "");
 
@@ -265,14 +265,14 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
 
   const title = (
     <div className="flex items-center gap-2">
-      <Link2 size={15} style={{ color: "#0F766E" }} />
-      <span style={{ fontSize: 15, fontWeight: 600, color: "#12332B" }}>Link Record</span>
+      <Link2 size={15} style={{ color: "var(--theme-action-primary-bg)" }} />
+      <span style={{ fontSize: 15, fontWeight: 600, color: "var(--theme-text-primary)" }}>Link Record</span>
     </div>
   );
 
   const footer = (
-    <div style={{ padding: "12px 16px", borderTop: "1px solid #E5E9F0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <span style={{ fontSize: 12, color: "#9CA3AF" }}>
+    <div style={{ padding: "12px 16px", borderTop: "1px solid var(--theme-border-default)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <span style={{ fontSize: 12, color: "var(--theme-text-muted)" }}>
         {selected.length > 0 ? `${selected.length} selected` : "Select records to link"}
       </span>
       <button
@@ -299,7 +299,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
       {/* Body — drawer nav + content */}
       <div className="flex h-full overflow-hidden">
         {/* ── Drawer nav (left) ── */}
-        <div style={{ width: 120, borderRight: "1px solid #E5E9F0", flexShrink: 0, overflowY: "auto", paddingTop: 8, paddingBottom: 8 }}>
+        <div style={{ width: 120, borderRight: "1px solid var(--theme-border-default)", flexShrink: 0, overflowY: "auto", paddingTop: 8, paddingBottom: 8 }}>
           {DRAWERS.map((drawer) => {
             const isActive = drawer.id === activeDrawerId;
             return (
@@ -319,7 +319,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                   borderRight: isActive ? "2px solid #0F766E" : "2px solid transparent",
                   textAlign: "left",
                 }}
-                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "#F9FAFB"; }}
+                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
                 onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "transparent"; }}
               >
                 <drawer.Icon size={14} style={{ flexShrink: 0 }} />
@@ -332,7 +332,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
         {/* ── Content (right) ── */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Entity sub-tabs */}
-          <div style={{ padding: "8px 12px", borderBottom: "1px solid #F3F4F6", display: "flex", gap: 4, flexShrink: 0 }}>
+          <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--theme-border-subtle)", display: "flex", gap: 4, flexShrink: 0 }}>
             {activeDrawer.entities.map((ent) => {
               const isActive = ent.entityType === activeEntityType;
               return (
@@ -350,7 +350,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                     cursor: "pointer",
                     transition: "all 120ms ease",
                   }}
-                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "#F3F4F6"; }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)"; }}
                   onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "transparent"; }}
                 >
                   {ent.label}
@@ -360,18 +360,18 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
           </div>
 
           {/* Search */}
-          <div style={{ padding: "8px 12px", borderBottom: "1px solid #F3F4F6", flexShrink: 0 }}>
-            <div className="flex items-center gap-2" style={{ backgroundColor: "#F9FAFB", borderRadius: 7, padding: "6px 10px", border: "1px solid #E5E9F0" }}>
-              <Search size={13} style={{ color: "#9CA3AF", flexShrink: 0 }} />
+          <div style={{ padding: "8px 12px", borderBottom: "1px solid var(--theme-border-subtle)", flexShrink: 0 }}>
+            <div className="flex items-center gap-2" style={{ backgroundColor: "var(--theme-bg-page)", borderRadius: 7, padding: "6px 10px", border: "1px solid var(--theme-border-default)" }}>
+              <Search size={13} style={{ color: "var(--theme-text-muted)", flexShrink: 0 }} />
               <input
                 ref={searchRef}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder={isOwned ? `Search ${activeEntity.label.toLowerCase()}…` : `Search by reference number…`}
-                style={{ border: "none", outline: "none", fontSize: 12, color: "#12332B", backgroundColor: "transparent", flex: 1 }}
+                style={{ border: "none", outline: "none", fontSize: 12, color: "var(--theme-text-primary)", backgroundColor: "transparent", flex: 1 }}
               />
               {search && (
-                <button onClick={() => setSearch("")} style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", padding: 0 }}>
+                <button onClick={() => setSearch("")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: 0 }}>
                   <X size={12} />
                 </button>
               )}
@@ -383,8 +383,8 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
             {/* Search-only hint for non-owners */}
             {!isOwned && !search && (
               <div style={{ padding: "32px 16px", textAlign: "center" }}>
-                <Search size={24} style={{ color: "#D1D5DB", margin: "0 auto 8px" }} />
-                <p style={{ fontSize: 12, color: "#9CA3AF", lineHeight: 1.5 }}>
+                <Search size={24} style={{ color: "var(--theme-border-default)", margin: "0 auto 8px" }} />
+                <p style={{ fontSize: 12, color: "var(--theme-text-muted)", lineHeight: 1.5 }}>
                   Enter a reference number or name to search {activeEntity.label.toLowerCase()}.
                 </p>
               </div>
@@ -395,8 +395,8 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
               <div style={{ padding: "20px 12px" }}>
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} style={{ padding: "8px 0", borderBottom: "1px solid #F9FAFB" }}>
-                    <div style={{ height: 12, backgroundColor: "#F3F4F6", borderRadius: 4, marginBottom: 5, width: `${60 + i * 8}%` }} />
-                    <div style={{ height: 10, backgroundColor: "#F9FAFB", borderRadius: 4, width: "40%" }} />
+                    <div style={{ height: 12, backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: 4, marginBottom: 5, width: `${60 + i * 8}%` }} />
+                    <div style={{ height: 10, backgroundColor: "var(--theme-bg-page)", borderRadius: 4, width: "40%" }} />
                   </div>
                 ))}
               </div>
@@ -405,7 +405,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
             {/* Empty */}
             {!isLoading && (isOwned || search) && records.length === 0 && (
               <div style={{ padding: "32px 16px", textAlign: "center" }}>
-                <p style={{ fontSize: 12, color: "#9CA3AF" }}>No {activeEntity.label.toLowerCase()} found.</p>
+                <p style={{ fontSize: 12, color: "var(--theme-text-muted)" }}>No {activeEntity.label.toLowerCase()} found.</p>
               </div>
             )}
 
@@ -431,7 +431,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                     cursor: linked ? "default" : "pointer",
                     transition: "background-color 80ms ease",
                   }}
-                  onMouseEnter={(e) => { if (!linked && !sel) e.currentTarget.style.backgroundColor = "#F9FAFB"; }}
+                  onMouseEnter={(e) => { if (!linked && !sel) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
                   onMouseLeave={(e) => { if (!sel) e.currentTarget.style.backgroundColor = "transparent"; else e.currentTarget.style.backgroundColor = "#F0F7F5"; }}
                 >
                   {/* Checkbox */}
@@ -451,7 +451,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                       {label}
                     </p>
                     {sublabel && (
-                      <p style={{ fontSize: 11, color: "#9CA3AF", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      <p style={{ fontSize: 11, color: "var(--theme-text-muted)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {sublabel}
                       </p>
                     )}
@@ -459,7 +459,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
 
                   {/* Status or linked indicator */}
                   {linked
-                    ? <span style={{ fontSize: 10, color: "#9CA3AF", flexShrink: 0 }}>Linked</span>
+                    ? <span style={{ fontSize: 10, color: "var(--theme-text-muted)", flexShrink: 0 }}>Linked</span>
                     : row.status && <StatusBadge status={row.status} />
                   }
                 </button>

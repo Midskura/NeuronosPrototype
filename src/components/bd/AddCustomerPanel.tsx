@@ -115,7 +115,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
 
       {/* Slide-out Panel */}
       <div
-        className="fixed right-0 top-0 h-full w-[680px] bg-white shadow-2xl z-50 flex flex-col animate-slide-in"
+        className="fixed right-0 top-0 h-full w-[680px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col animate-slide-in"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -125,18 +125,18 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
           className="px-12 py-8 border-b"
           style={{
             borderColor: "var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: "#E8F2EE" }}
+                style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}
               >
-                <Building2 size={20} style={{ color: "#0F766E" }} />
+                <Building2 size={20} style={{ color: "var(--theme-action-primary-bg)" }} />
               </div>
-              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 Add New Customer
               </h2>
             </div>
@@ -157,7 +157,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
               <X size={20} />
             </button>
           </div>
-          <p style={{ fontSize: "14px", color: "#667085" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
             Create a new customer company record for your business development pipeline
           </p>
         </div>
@@ -168,8 +168,8 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
             {/* Company Information Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Building2 size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Building2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Company Information
                 </h3>
               </div>
@@ -180,7 +180,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="company_name"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Company Name <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -193,7 +193,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                     required
@@ -205,7 +205,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="client_type"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Client Type
                   </label>
@@ -225,7 +225,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="industry"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Industry <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -247,7 +247,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="registered_address"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Registered Address <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -260,7 +260,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                     required
@@ -272,8 +272,8 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
             {/* Lead Details Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Target size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Target size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Lead Details
                 </h3>
               </div>
@@ -284,7 +284,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="status"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Status
                   </label>
@@ -305,7 +305,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="lead_source"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Lead Source
                   </label>
@@ -318,7 +318,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -329,7 +329,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="owner_id"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Account Owner <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -351,7 +351,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                   <label
                     htmlFor="notes"
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Notes
                   </label>
@@ -364,7 +364,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -379,7 +379,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
           className="px-12 py-6 border-t flex items-center justify-end gap-3"
           style={{
             borderColor: "var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <button
@@ -388,7 +388,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
             className="px-6 py-2.5 rounded-lg transition-colors"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "var(--neuron-ink-secondary)",
               fontSize: "14px",
               fontWeight: 500,
@@ -397,7 +397,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
               e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             Cancel
@@ -418,12 +418,12 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
             }}
             onMouseEnter={(e) => {
               if (isFormValid) {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }
             }}
             onMouseLeave={(e) => {
               if (isFormValid) {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }
             }}
           >

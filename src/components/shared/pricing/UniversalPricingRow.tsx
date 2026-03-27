@@ -114,7 +114,7 @@ export function UniversalPricingRow({
           padding: "12px 16px",
           fontSize: "13px",
           color: "#2C3E38",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           alignItems: "center"
         }}
       >
@@ -129,7 +129,7 @@ export function UniversalPricingRow({
                 fontSize: "13px",
                 border: "1px solid #E0E6E4",
                 borderRadius: "6px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 fontWeight: 500,
                 color: "#2C3E38",
                 overflow: "hidden",
@@ -162,7 +162,7 @@ export function UniversalPricingRow({
           )}
           {/* Date Subtitle for Billing Mode */}
           {simpleMode && data.created_at && (
-             <span style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "4px", paddingLeft: "4px" }}>
+             <span style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "4px", paddingLeft: "4px" }}>
                {new Date(data.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
              </span>
           )}
@@ -173,7 +173,7 @@ export function UniversalPricingRow({
           <div style={{ 
             textAlign: "right", 
             fontSize: "13px", 
-            color: "#6B7A76",
+            color: "var(--theme-text-muted)",
             fontWeight: 500
           }}>
             {data.quantity.toFixed(2)}
@@ -196,7 +196,7 @@ export function UniversalPricingRow({
               textAlign: "right",
               border: "1px solid #E0E6E4",
               borderRadius: "6px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "#2C3E38",
               fontWeight: 500,
               outline: "none",
@@ -221,7 +221,7 @@ export function UniversalPricingRow({
             <div style={{ 
               textAlign: "right", 
               fontSize: "13px", 
-              color: "#6B7A76",
+              color: "var(--theme-text-muted)",
               fontWeight: 500
             }}>
               {data.currency} {data.base_cost.toFixed(2)}
@@ -244,7 +244,7 @@ export function UniversalPricingRow({
                 textAlign: "right",
                 border: "1px solid #E0E6E4",
                 borderRadius: "6px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "#2C3E38",
                 fontWeight: 500,
                 outline: "none",
@@ -348,7 +348,7 @@ export function UniversalPricingRow({
         <div style={{ fontSize: "12px", textAlign: "center" }}>
           {isViewMode && simpleMode ? (
              // Simple text for Billing View Mode
-             <span style={{ fontWeight: 600, color: "#6B7A76" }}>{data.currency}</span>
+             <span style={{ fontWeight: 600, color: "var(--theme-text-muted)" }}>{data.currency}</span>
           ) : (
             <CustomDropdown
               value={data.currency || "USD"}
@@ -443,7 +443,7 @@ export function UniversalPricingRow({
               {(data.currency !== 'PHP' && data.forex_rate !== 1) && (
                 <span style={{ 
                   fontSize: "11px", 
-                  color: "#6B7A76", 
+                  color: "var(--theme-text-muted)", 
                   fontWeight: 500,
                   marginTop: "2px"
                 }}>
@@ -464,10 +464,10 @@ export function UniversalPricingRow({
         alignItems: "center",
         gap: "14px",
         padding: "10px 16px 12px 28px",
-        backgroundColor: "#F8FBFB",
+        backgroundColor: "var(--theme-bg-page)",
         borderTop: "1px solid #EDF2F1",
         fontSize: "12px",
-        color: "#6B7A76",
+        color: "var(--theme-text-muted)",
         borderBottom: "1px solid #EDF2F1" // Always border bottom for safety
       }}>
         {/* Remarks */}
@@ -475,7 +475,7 @@ export function UniversalPricingRow({
           <label style={{ 
             fontWeight: 500, 
             whiteSpace: "nowrap",
-            color: "#6B7A76",
+            color: "var(--theme-text-muted)",
             fontSize: "12px"
           }}>
             Remarks:
@@ -500,7 +500,7 @@ export function UniversalPricingRow({
             }}
             onFocus={(e) => {
               if (isViewMode) return;
-              e.currentTarget.style.borderColor = "#0F766E";
+              e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
               e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.06)";
             }}
             onBlur={(e) => {
@@ -516,7 +516,7 @@ export function UniversalPricingRow({
           <label style={{ 
             fontWeight: 500, 
             whiteSpace: "nowrap",
-            color: "#6B7A76",
+            color: "var(--theme-text-muted)",
             fontSize: "12px"
           }}>
             Service:
@@ -553,7 +553,7 @@ export function UniversalPricingRow({
              <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium border
                ${data.status === 'paid' ? "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]" : 
                  (data.status === 'billed' || data.status === 'invoiced') ? "bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]" : 
-                 "bg-[#F3F4F6] text-[#6B7280] border-[#E5E7EB]"}`}>
+                 "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] border-[var(--theme-border-default)]"}`}>
                {data.status === 'paid' ? "Paid" : (data.status === 'billed' || data.status === 'invoiced') ? "Invoiced" : "Unbilled"}
              </span>
           )}
@@ -573,7 +573,7 @@ export function UniversalPricingRow({
               fontSize: "12px",
               border: "1px solid #FCD4D1",
               borderRadius: "6px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "#DC2626",
               cursor: "pointer",
               fontWeight: 500,

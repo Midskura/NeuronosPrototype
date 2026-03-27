@@ -458,7 +458,7 @@ export function FinancialsModule() {
 
   const BILLINGS_STATUS_OPTIONS: StatusOption[] = [
     { value: "unbilled", label: "Unbilled", color: "#D97706" },
-    { value: "billed", label: "Billed", color: "#0F766E" },
+    { value: "billed", label: "Billed", color: "var(--theme-action-primary-bg)" },
     { value: "paid", label: "Paid", color: "#16A34A" },
     { value: "voided", label: "Voided", color: "#DC2626" },
   ];
@@ -718,8 +718,8 @@ export function FinancialsModule() {
   ];
 
   const INVOICES_STATUS_OPTIONS: StatusOption[] = [
-    { value: "draft", label: "Draft", color: "#6B7A76" },
-    { value: "posted", label: "Posted", color: "#0F766E" },
+    { value: "draft", label: "Draft", color: "var(--theme-text-muted)" },
+    { value: "posted", label: "Posted", color: "var(--theme-action-primary-bg)" },
     { value: "open", label: "Open", color: "#2563EB" },
     { value: "partial", label: "Partial", color: "#D97706" },
     { value: "paid", label: "Paid", color: "#16A34A" },
@@ -1176,9 +1176,9 @@ export function FinancialsModule() {
   ];
 
   const EXPENSES_STATUS_OPTIONS: StatusOption[] = [
-    { value: "draft", label: "Draft", color: "#6B7A76" },
+    { value: "draft", label: "Draft", color: "var(--theme-text-muted)" },
     { value: "pending", label: "Pending", color: "#D97706" },
-    { value: "approved", label: "Approved", color: "#0F766E" },
+    { value: "approved", label: "Approved", color: "var(--theme-action-primary-bg)" },
     { value: "posted", label: "Posted", color: "#16A34A" },
     { value: "rejected", label: "Rejected", color: "#EF4444" },
   ];
@@ -1320,15 +1320,15 @@ export function FinancialsModule() {
   // ── Render ──
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-[var(--theme-bg-surface)]">
       {/* Header */}
       <div className="px-12 pt-8 pb-0">
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Financials
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               System-wide view of billings, invoices, collections, and expenses.
             </p>
           </div>
@@ -1339,7 +1339,7 @@ export function FinancialsModule() {
         </div>
 
         {/* Tab Bar */}
-        <div className="flex items-center gap-0 border-b border-[#E5E9F0]">
+        <div className="flex items-center gap-0 border-b border-[var(--theme-border-default)]">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -1356,7 +1356,7 @@ export function FinancialsModule() {
                 <Icon size={14} />
                 {tab.label}
                 {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0F766E] rounded-t" />
+                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--theme-action-primary-bg)] rounded-t" />
                 )}
               </button>
             );

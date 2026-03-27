@@ -169,11 +169,11 @@ export function FormComboBox({
                   width: "18px",
                   height: "18px",
                   borderRadius: "50%",
-                  backgroundColor: "#E8F5F3",
+                  backgroundColor: "var(--theme-bg-surface-tint)",
                 }}
                 title="Matched contract destination"
               >
-                <Check size={11} style={{ color: "#0F766E" }} />
+                <Check size={11} style={{ color: "var(--theme-action-primary-bg)" }} />
               </div>
             ) : (
               <div
@@ -197,7 +197,7 @@ export function FormComboBox({
           <ChevronDown
             size={14}
             style={{
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               transition: "transform 0.2s",
               transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
               flexShrink: 0,
@@ -214,7 +214,7 @@ export function FormComboBox({
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             boxShadow:
@@ -231,10 +231,10 @@ export function FormComboBox({
                 padding: "6px 10px 4px",
                 fontSize: "10px",
                 fontWeight: 600,
-                color: "#9CA3AF",
+                color: "var(--theme-text-muted)",
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
-                borderBottom: "1px solid #F3F4F6",
+                borderBottom: "1px solid var(--theme-border-subtle)",
               }}
             >
               Contract destinations
@@ -259,7 +259,7 @@ export function FormComboBox({
                       : "var(--neuron-ink-base)",
                     backgroundColor: isSelected ? "#E8F5F3" : "white",
                     border: "none",
-                    borderBottom: "1px solid #F3F4F6",
+                    borderBottom: "1px solid var(--theme-border-subtle)",
                     textAlign: "left",
                     cursor: "pointer",
                     transition: "background-color 0.15s ease",
@@ -269,7 +269,7 @@ export function FormComboBox({
                   }}
                   onMouseEnter={(e) => {
                     if (!isSelected) {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -280,7 +280,7 @@ export function FormComboBox({
                 >
                   <span>{option.label}</span>
                   {isSelected && (
-                    <Check size={13} style={{ color: "#0F766E", flexShrink: 0 }} />
+                    <Check size={13} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0 }} />
                   )}
                 </button>
               );
@@ -290,7 +290,7 @@ export function FormComboBox({
               style={{
                 padding: "10px",
                 fontSize: "12px",
-                color: "#9CA3AF",
+                color: "var(--theme-text-muted)",
                 textAlign: "center",
               }}
             >

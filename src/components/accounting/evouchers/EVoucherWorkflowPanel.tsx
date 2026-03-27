@@ -260,7 +260,7 @@ export function EVoucherWorkflowPanel({
               padding: "12px",
               borderRadius: "8px",
               border: "none",
-              backgroundColor: "#0F766E",
+              backgroundColor: "var(--theme-action-primary-bg)",
               color: "#FFFFFF",
               fontSize: "14px",
               fontWeight: 500,
@@ -272,10 +272,10 @@ export function EVoucherWorkflowPanel({
               opacity: isSubmitting ? 0.6 : 1
             }}
             onMouseEnter={(e) => {
-              if (!isSubmitting) e.currentTarget.style.backgroundColor = "#0D6560";
+              if (!isSubmitting) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              if (!isSubmitting) e.currentTarget.style.backgroundColor = "#0F766E";
+              if (!isSubmitting) e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
             }}
           >
             {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
@@ -356,7 +356,7 @@ export function EVoucherWorkflowPanel({
               padding: "12px",
               borderRadius: "8px",
               border: "1px solid #EF4444",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "#EF4444",
               fontSize: "14px",
               fontWeight: 500,
@@ -371,7 +371,7 @@ export function EVoucherWorkflowPanel({
               if (!isSubmitting) e.currentTarget.style.backgroundColor = "#FEE2E2";
             }}
             onMouseLeave={(e) => {
-              if (!isSubmitting) e.currentTarget.style.backgroundColor = "#FFFFFF";
+              if (!isSubmitting) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             <XCircle size={16} />
@@ -388,8 +388,8 @@ export function EVoucherWorkflowPanel({
               padding: "12px",
               borderRadius: "8px",
               border: "1px solid #9CA3AF",
-              backgroundColor: "#FFFFFF",
-              color: "#6B7280",
+              backgroundColor: "var(--theme-bg-surface)",
+              color: "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 500,
               cursor: isSubmitting ? "not-allowed" : "pointer",
@@ -400,10 +400,10 @@ export function EVoucherWorkflowPanel({
               opacity: isSubmitting ? 0.6 : 1
             }}
             onMouseEnter={(e) => {
-              if (!isSubmitting) e.currentTarget.style.backgroundColor = "#F3F4F6";
+              if (!isSubmitting) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
             }}
             onMouseLeave={(e) => {
-              if (!isSubmitting) e.currentTarget.style.backgroundColor = "#FFFFFF";
+              if (!isSubmitting) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             <Ban size={16} />
@@ -429,7 +429,7 @@ export function EVoucherWorkflowPanel({
         >
           <div
             style={{
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               borderRadius: "16px",
               width: "100%",
               maxWidth: "480px",
@@ -438,10 +438,10 @@ export function EVoucherWorkflowPanel({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+            <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
               Reject E-Voucher
             </h3>
-            <p style={{ fontSize: "14px", color: "#667085", marginBottom: "16px" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>
               Please provide a reason for rejecting this E-Voucher. The requestor will be able to see this reason.
             </p>
             <textarea
@@ -453,7 +453,7 @@ export function EVoucherWorkflowPanel({
                 minHeight: "100px",
                 padding: "12px",
                 borderRadius: "8px",
-                border: "1px solid #D1D5DB",
+                border: "1px solid var(--theme-border-default)",
                 fontSize: "14px",
                 fontFamily: "inherit",
                 resize: "vertical",
@@ -468,9 +468,9 @@ export function EVoucherWorkflowPanel({
                   flex: 1,
                   padding: "12px",
                   borderRadius: "8px",
-                  border: "1px solid #D1D5DB",
-                  backgroundColor: "#FFFFFF",
-                  color: "#374151",
+                  border: "1px solid var(--theme-border-default)",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-secondary)",
                   fontSize: "14px",
                   fontWeight: 500,
                   cursor: isSubmitting ? "not-allowed" : "pointer"

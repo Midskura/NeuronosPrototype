@@ -366,7 +366,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
 
   return (
     <div style={{ 
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       display: "flex",
       flexDirection: "column",
       height: "100vh"
@@ -375,7 +375,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
       <div style={{
         padding: "20px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center"
@@ -497,8 +497,8 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
                 transition: "all 0.2s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
-                e.currentTarget.style.borderColor = "#E5E7EB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                e.currentTarget.style.borderColor = "var(--theme-border-default)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -667,7 +667,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
              </div>
 
              {viewMode === "pdf" ? (
-                <div className="h-[800px] border border-gray-200 rounded-xl overflow-hidden bg-white">
+                <div className="h-[800px] border border-[var(--theme-border-default)] rounded-xl overflow-hidden bg-[var(--theme-bg-surface)]">
                     <QuotationPDFScreen 
                         project={adaptedProject}
                         onClose={() => setViewMode("form")}

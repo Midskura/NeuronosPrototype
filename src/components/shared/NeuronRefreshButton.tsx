@@ -36,7 +36,7 @@ export function NeuronRefreshButton({
       onClick={handleClick}
       disabled={isRefreshing}
       title={label}
-      className="flex items-center justify-center w-[36px] h-[36px] bg-white border border-[#E5E7EB] rounded-[7.5px] text-[#667085] hover:text-[#0F766E] hover:border-[#0F766E] hover:bg-[#F0FDF9] transition-colors disabled:opacity-50"
+      className="flex items-center justify-center w-[36px] h-[36px] bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[7.5px] text-[var(--theme-text-muted)] hover:text-[var(--theme-action-primary-bg)] hover:border-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-bg-surface-tint)] transition-colors disabled:opacity-50"
     >
       <RefreshCw 
         size={size} 

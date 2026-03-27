@@ -379,7 +379,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
             <div
               key={attachment.id}
               style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 padding: "12px",
@@ -449,7 +449,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   color: "var(--neuron-ink-muted)",
                   marginBottom: "10px",
                   paddingTop: "10px",
-                  borderTop: "1px solid #F3F4F6",
+                  borderTop: "1px solid var(--theme-border-subtle)",
                 }}
               >
                 {attachment.uploaded_by}
@@ -462,7 +462,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   style={{
                     flex: 1,
                     padding: "6px 10px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-brand-green)",
                     borderRadius: "4px",
                     color: "var(--neuron-brand-green)",
@@ -495,8 +495,8 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   disabled={attachment.isUploading}
                   style={{
                     padding: "6px 10px",
-                    backgroundColor: "white",
-                    border: "1px solid #E5E7EB",
+                    backgroundColor: "var(--theme-bg-surface)",
+                    border: "1px solid var(--theme-border-default)",
                     borderRadius: "4px",
                     color: "var(--neuron-ink-muted)",
                     fontSize: "11px",
@@ -512,7 +512,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   }}
                   onMouseLeave={(e) => {
                     if (!attachment.isUploading) {
-                      e.currentTarget.style.borderColor = "#E5E7EB";
+                      e.currentTarget.style.borderColor = "var(--theme-border-default)";
                       e.currentTarget.style.color = "var(--neuron-ink-muted)";
                     }
                   }}

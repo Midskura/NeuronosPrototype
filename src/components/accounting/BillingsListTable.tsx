@@ -57,9 +57,9 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
       case "invoiced":
         return "bg-blue-50 text-blue-700";
       case "pending":
-        return "bg-gray-100 text-gray-700";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]";
       default:
-        return "bg-[#F3F4F6] text-[#6B7280]";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)]";
     }
   };
 
@@ -99,10 +99,10 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
   if (isLoading) {
     return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)"
       }}>
-        <div className="px-6 py-12 text-center" style={{ color: "#667085" }}>
+        <div className="px-6 py-12 text-center" style={{ color: "var(--theme-text-muted)" }}>
           Loading invoices...
         </div>
       </div>
@@ -112,7 +112,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
   if (billings.length === 0) {
     return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)"
       }}>
         <div className="px-6 py-12 text-center">
@@ -130,7 +130,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
 
   return (
     <div className="rounded-[10px] overflow-hidden" style={{ 
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)"
     }}>
       {/* Table Header */}
@@ -207,7 +207,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
                   </div>
 
                   {/* Invoice # */}
-                  <div className="text-[11px] pl-8" style={{ color: "#0F766E", fontWeight: 500 }}>
+                  <div className="text-[11px] pl-8" style={{ color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                     {billing.invoice_number || (billing as any).invoiceNumber || "—"}
                   </div>
                 </div>

@@ -151,13 +151,13 @@ export function BookingsTable({
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = idx % 2 === 0 ? "white" : "#FAFCFB"; }}
           >
             {/* Booking ID — teal link style */}
-            <div style={{ fontWeight: 500, color: "#0F766E" }}>
+            <div style={{ fontWeight: 500, color: "var(--theme-action-primary-bg)" }}>
               {bookingId || "—"}
             </div>
 
             {/* Service type with icon */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--neuron-ink-muted)" }}>
-              {getServiceIcon(serviceType, { size: 15, color: "#0F766E" })}
+              {getServiceIcon(serviceType, { size: 15, color: "var(--theme-action-primary-bg)" })}
               {serviceType}
             </div>
 

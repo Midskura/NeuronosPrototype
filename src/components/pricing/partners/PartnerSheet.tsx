@@ -216,7 +216,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
           stiffness: 300,
           duration: 0.3,
         }}
-        className="fixed right-0 top-0 h-full w-[600px] bg-white shadow-2xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-[600px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -227,17 +227,17 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
             style={{
               padding: "24px 32px",
               borderBottom: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
             }}
           >
             <div>
-              <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+              <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 {initialData ? "Edit Partner" : "Add New Partner"}
               </h2>
-              <p style={{ fontSize: "13px", color: "#667085", marginTop: "4px" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
                 {initialData ? "Update partner details and status" : "Enter partner information to add to network"}
               </p>
             </div>
@@ -250,7 +250,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 borderRadius: "8px",
                 border: "none",
                 backgroundColor: "transparent",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -258,7 +258,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 transition: "all 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -274,19 +274,19 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
               
               {/* SECTION 1: Company Info */}
               <div>
-                <div className="flex items-center gap-2 mb-4 text-[#0F766E]">
+                <div className="flex items-center gap-2 mb-4 text-[var(--theme-action-primary-bg)]">
                   <Building2 size={18} />
                   <h3 className="text-sm font-bold uppercase tracking-wide">Company Information</h3>
                 </div>
                 
                 <div className="grid gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Company Name <span className="text-red-500">*</span>
                     </label>
                     <input
                       {...register("company_name", { required: "Company name is required" })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                       placeholder="e.g. Acme Logistics Ltd."
                     />
                     {errors.company_name && (
@@ -296,7 +296,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                         Partner Type <span className="text-red-500">*</span>
                       </label>
                       <Controller
@@ -317,12 +317,12 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                         WCA ID
                       </label>
                       <input
                         {...register("wca_id")}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                         placeholder="Optional"
                       />
                     </div>
@@ -333,20 +333,20 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       type="checkbox"
                       id="is_wca"
                       {...register("is_wca_conference")}
-                      className="rounded border-gray-300 text-[#0F766E] focus:ring-[#0F766E]"
+                      className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
                     />
-                    <label htmlFor="is_wca" className="text-sm text-gray-700 cursor-pointer select-none">
+                    <label htmlFor="is_wca" className="text-sm text-[var(--theme-text-secondary)] cursor-pointer select-none">
                       Is WCA Conference Member?
                     </label>
                   </div>
                 </div>
               </div>
 
-              <div className="h-px bg-gray-200" />
+              <div className="h-px bg-[var(--theme-bg-surface-tint)]" />
 
               {/* SECTION 2: Location */}
               <div>
-                <div className="flex items-center gap-2 mb-4 text-[#0F766E]">
+                <div className="flex items-center gap-2 mb-4 text-[var(--theme-action-primary-bg)]">
                   <MapPin size={18} />
                   <h3 className="text-sm font-bold uppercase tracking-wide">Location</h3>
                 </div>
@@ -354,7 +354,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                         Country <span className="text-red-500">*</span>
                       </label>
                       <Controller
@@ -374,48 +374,48 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                         Territory / City
                       </label>
                       <input
                         {...register("territory")}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                         placeholder="e.g. Shanghai"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Full Address
                     </label>
                     <textarea
                       {...register("address")}
                       rows={2}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
                       placeholder="Street address, building, etc."
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="h-px bg-gray-200" />
+              <div className="h-px bg-[var(--theme-bg-surface-tint)]" />
 
               {/* SECTION 3: Contact Details */}
               <div>
-                <div className="flex items-center gap-2 mb-4 text-[#0F766E]">
+                <div className="flex items-center gap-2 mb-4 text-[var(--theme-action-primary-bg)]">
                   <User size={18} />
                   <h3 className="text-sm font-bold uppercase tracking-wide">Contact Details</h3>
                 </div>
 
                 <div className="grid gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Primary Contact Person <span className="text-red-500">*</span>
                     </label>
                     <input
                       {...register("contact_person", { required: "Contact person is required" })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                       placeholder="Full Name"
                     />
                     {errors.contact_person && (
@@ -425,7 +425,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
 
                   {/* Emails */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-2">
                       Emails
                     </label>
                     <div className="space-y-2">
@@ -433,14 +433,14 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                         <div key={field.id} className="flex gap-2">
                           <input
                             {...register(`emails.${index}.value` as const)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                             placeholder="email@example.com"
                           />
                           {emailFields.length > 1 && (
                             <button
                               type="button"
                               onClick={() => removeEmail(index)}
-                              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                             >
                               <Trash2 size={16} />
                             </button>
@@ -450,7 +450,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       <button
                         type="button"
                         onClick={() => appendEmail({ value: "" })}
-                        className="text-xs font-semibold text-[#0F766E] hover:text-[#0D6660] flex items-center gap-1"
+                        className="text-xs font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6660] flex items-center gap-1"
                       >
                         <Plus size={14} /> Add Email
                       </button>
@@ -460,7 +460,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                   <div className="grid grid-cols-2 gap-4">
                     {/* Phones */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-2">
                         Phone
                       </label>
                       <div className="space-y-2">
@@ -468,14 +468,14 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                           <div key={field.id} className="flex gap-2">
                             <input
                               {...register(`phones.${index}.value` as const)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                               placeholder="+1 234..."
                             />
                             {phoneFields.length > 1 && (
                               <button
                                 type="button"
                                 onClick={() => removePhone(index)}
-                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -485,7 +485,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                         <button
                           type="button"
                           onClick={() => appendPhone({ value: "" })}
-                          className="text-xs font-semibold text-[#0F766E] hover:text-[#0D6660] flex items-center gap-1"
+                          className="text-xs font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6660] flex items-center gap-1"
                         >
                           <Plus size={14} /> Add Phone
                         </button>
@@ -494,7 +494,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
 
                     {/* Mobiles */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-2">
                         Mobile
                       </label>
                       <div className="space-y-2">
@@ -502,14 +502,14 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                           <div key={field.id} className="flex gap-2">
                             <input
                               {...register(`mobiles.${index}.value` as const)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                               placeholder="+1 234..."
                             />
                             {mobileFields.length > 1 && (
                               <button
                                 type="button"
                                 onClick={() => removeMobile(index)}
-                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -519,7 +519,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                         <button
                           type="button"
                           onClick={() => appendMobile({ value: "" })}
-                          className="text-xs font-semibold text-[#0F766E] hover:text-[#0D6660] flex items-center gap-1"
+                          className="text-xs font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6660] flex items-center gap-1"
                         >
                           <Plus size={14} /> Add Mobile
                         </button>
@@ -528,16 +528,16 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Website
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Globe size={14} className="text-gray-400" />
+                        <Globe size={14} className="text-[var(--theme-text-muted)]" />
                       </div>
                       <input
                         {...register("website")}
-                        className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                         placeholder="www.example.com"
                       />
                     </div>
@@ -545,18 +545,18 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 </div>
               </div>
 
-              <div className="h-px bg-gray-200" />
+              <div className="h-px bg-[var(--theme-bg-surface-tint)]" />
 
               {/* SECTION 4: Status & Services */}
               <div>
-                <div className="flex items-center gap-2 mb-4 text-[#0F766E]">
+                <div className="flex items-center gap-2 mb-4 text-[var(--theme-action-primary-bg)]">
                   <CheckSquare size={18} />
                   <h3 className="text-sm font-bold uppercase tracking-wide">Status & Services</h3>
                 </div>
 
                 <div className="grid gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Partnership Expiry Date
                     </label>
                     <Controller
@@ -574,7 +574,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-2">
                       Services Offered
                     </label>
                     <div className="grid grid-cols-2 gap-2">
@@ -585,17 +585,17 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                           className={`
                             flex items-center gap-2 px-3 py-2 rounded-lg border text-sm cursor-pointer transition-all
                             ${selectedServices.includes(service) 
-                              ? "bg-[#F0FDF9] border-[#0F766E] text-[#0F766E]" 
-                              : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"}
+                              ? "bg-[var(--theme-bg-surface-tint)] border-[var(--theme-action-primary-bg)] text-[var(--theme-action-primary-bg)]" 
+                              : "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]"}
                           `}
                         >
                           <div className={`
                             w-4 h-4 rounded border flex items-center justify-center
                             ${selectedServices.includes(service)
-                              ? "bg-[#0F766E] border-[#0F766E]"
-                              : "border-gray-300"}
+                              ? "bg-[var(--theme-action-primary-bg)] border-[var(--theme-action-primary-bg)]"
+                              : "border-[var(--theme-border-default)]"}
                           `}>
-                            {selectedServices.includes(service) && <div className="w-2 h-2 bg-white rounded-sm" />}
+                            {selectedServices.includes(service) && <div className="w-2 h-2 bg-[var(--theme-bg-surface)] rounded-sm" />}
                           </div>
                           {service}
                         </div>
@@ -604,13 +604,13 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
                       Internal Notes
                     </label>
                     <textarea
                       {...register("notes")}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
                       placeholder="Any specific handling instructions or notes..."
                     />
                   </div>
@@ -625,7 +625,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
             style={{
               padding: "24px 32px",
               borderTop: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#F9FAFB",
+              backgroundColor: "var(--theme-bg-page)",
               display: "flex",
               justifyContent: "flex-end",
               gap: "12px",
@@ -636,12 +636,12 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
               onClick={onClose}
               style={{
                 padding: "10px 16px",
-                backgroundColor: "white",
-                border: "1px solid #D1D5DB",
+                backgroundColor: "var(--theme-bg-surface)",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
                 fontWeight: 500,
-                color: "#374151",
+                color: "var(--theme-text-secondary)",
                 cursor: "pointer",
               }}
             >
@@ -651,7 +651,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
               type="submit"
               style={{
                 padding: "10px 16px",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 border: "none",
                 borderRadius: "8px",
                 fontSize: "14px",

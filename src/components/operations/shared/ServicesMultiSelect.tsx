@@ -49,7 +49,7 @@ export function ServicesMultiSelect({
     <div className="relative" ref={dropdownRef}>
       <label
         className="block mb-1.5"
-        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
       >
         {label}
         {required && <span style={{ color: "#C94F3D" }}> *</span>}
@@ -60,12 +60,12 @@ export function ServicesMultiSelect({
         className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px] cursor-pointer min-h-[42px] flex items-center flex-wrap gap-2"
         style={{
           border: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           color: "var(--neuron-ink-primary)",
         }}
       >
         {selectedServices.length === 0 ? (
-          <span className="text-[#667085]">{placeholder}</span>
+          <span className="text-[var(--theme-text-muted)]">{placeholder}</span>
         ) : (
           selectedServices.map((service) => (
             <span
@@ -73,7 +73,7 @@ export function ServicesMultiSelect({
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs"
               style={{
                 backgroundColor: "#0F766E20",
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 border: "1px solid #0F766E40",
               }}
             >
@@ -81,7 +81,7 @@ export function ServicesMultiSelect({
               <button
                 type="button"
                 onClick={(e) => removeService(service, e)}
-                className="hover:bg-[#0F766E]/20 rounded-full p-0.5 transition-colors"
+                className="hover:bg-[var(--theme-action-primary-bg)]/20 rounded-full p-0.5 transition-colors"
               >
                 <X size={12} />
               </button>
@@ -94,7 +94,7 @@ export function ServicesMultiSelect({
           style={{
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
             transition: "transform 0.2s",
-            color: "#667085",
+            color: "var(--theme-text-muted)",
           }}
         />
       </div>
@@ -104,13 +104,13 @@ export function ServicesMultiSelect({
           className="absolute z-50 w-full mt-1 rounded-lg shadow-lg overflow-hidden"
           style={{
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             maxHeight: "240px",
             overflowY: "auto",
           }}
         >
           {availableServices.length === 0 ? (
-            <div className="px-3.5 py-2.5 text-[13px] text-[#667085]">
+            <div className="px-3.5 py-2.5 text-[13px] text-[var(--theme-text-muted)]">
               No services available
             </div>
           ) : (
@@ -120,7 +120,7 @@ export function ServicesMultiSelect({
                 <div
                   key={service}
                   onClick={() => toggleService(service)}
-                  className="px-3.5 py-2.5 text-[13px] cursor-pointer flex items-center justify-between hover:bg-[#0F766E]/5 transition-colors"
+                  className="px-3.5 py-2.5 text-[13px] cursor-pointer flex items-center justify-between hover:bg-[var(--theme-action-primary-bg)]/5 transition-colors"
                   style={{
                     backgroundColor: isSelected ? "#0F766E10" : "transparent",
                     color: isSelected ? "#0F766E" : "#12332B",
@@ -128,7 +128,7 @@ export function ServicesMultiSelect({
                 >
                   <span>{service}</span>
                   {isSelected && (
-                    <Check size={16} style={{ color: "#0F766E" }} />
+                    <Check size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
                   )}
                 </div>
               );

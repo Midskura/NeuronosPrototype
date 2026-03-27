@@ -28,7 +28,7 @@ import {
   Handshake,
   ClipboardCheck
 } from "lucide-react";
-import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
+import { NeuronLogo } from "./NeuronLogo";
 import { useUser } from "../hooks/useUser";
 import { useAppMode } from "../config/appMode";
 import { supabase } from "../utils/supabase/client";
@@ -397,14 +397,10 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
       >
         {/* Logo - Only show when expanded */}
         {!isCollapsed && (
-          <img
-            src={logoImage}
-            alt="Neuron"
-            style={{
-              height: "24px",
-              width: "auto",
-              cursor: "pointer",
-            }}
+          <NeuronLogo
+            height={24}
+            wordmarkClassName="fill-[#12332B] dark:fill-white"
+            className="cursor-pointer"
             onClick={() => onNavigate("dashboard")}
           />
         )}

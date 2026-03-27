@@ -45,8 +45,8 @@ const viewValueStyle = (isEmpty: boolean, required: boolean, isTextarea: boolean
 const inputBaseStyle: React.CSSProperties = {
   width: "100%",
   padding: "8px 12px",
-  backgroundColor: "white",
-  border: "1px solid #D1D5DB",
+  backgroundColor: "var(--theme-bg-surface)",
+  border: "1px solid var(--theme-border-default)",
   borderRadius: "6px",
   fontSize: "13px",
   color: "var(--neuron-ink-primary, #12332B)",
@@ -55,13 +55,13 @@ const inputBaseStyle: React.CSSProperties = {
 };
 
 const handleFocus = (e: React.FocusEvent<HTMLElement>) => {
-  (e.currentTarget as HTMLElement).style.borderColor = "#0F766E";
+  (e.currentTarget as HTMLElement).style.borderColor = "var(--theme-action-primary-bg)";
   (e.currentTarget as HTMLElement).style.boxShadow =
     "0 0 0 2px rgba(15, 118, 110, 0.15)";
 };
 
 const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
-  (e.currentTarget as HTMLElement).style.borderColor = "#D1D5DB";
+  (e.currentTarget as HTMLElement).style.borderColor = "var(--theme-border-default)";
   (e.currentTarget as HTMLElement).style.boxShadow = "none";
 };
 

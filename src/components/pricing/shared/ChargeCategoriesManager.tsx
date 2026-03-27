@@ -191,13 +191,13 @@ export function ChargeCategoriesManager({
         border: "1px solid var(--neuron-ui-border)",
         borderLeft: "3px solid var(--neuron-brand-green)",
         borderRadius: "8px",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         overflow: "visible"
       }}>
         <div style={{
           padding: "12px 16px",
           borderBottom: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#F8FBFB",
+          backgroundColor: "var(--theme-bg-page)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center"
@@ -228,7 +228,7 @@ export function ChargeCategoriesManager({
                   color: "var(--neuron-ink-primary)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   cursor: readOnly ? "not-allowed" : "pointer",
                   opacity: readOnly ? 0.6 : 1
                 }}

@@ -252,9 +252,9 @@ export function CreateBrokerageBookingPanel({
   // Helper function to get input style
   const getInputStyle = (_fieldName: keyof BrokerageBookingFormData) => {
     return {
-      border: "1px solid #D1D5DB",
+      border: "1px solid var(--theme-border-default)",
       color: "var(--neuron-ink-primary)",
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "var(--theme-bg-surface)",
     };
   };
 
@@ -277,8 +277,8 @@ export function CreateBrokerageBookingPanel({
             {/* General Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   General Information
                 </h3>
               </div>
@@ -286,7 +286,7 @@ export function CreateBrokerageBookingPanel({
               <div className="space-y-4">
                 {/* Movement Toggle */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Movement <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
                   <MovementToggle
@@ -319,7 +319,7 @@ export function CreateBrokerageBookingPanel({
 
                 {formData.projectNumber && (
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Project Number
                     </label>
                     <input
@@ -336,7 +336,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Owner
                     </label>
                     <input
@@ -351,7 +351,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Handler
                     </label>
                     <input
@@ -368,7 +368,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Customs Entry Type
                     </label>
                     <input
@@ -383,7 +383,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Assessment Type
                     </label>
                     <input
@@ -400,7 +400,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Release Type
                     </label>
                     <input
@@ -415,7 +415,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Declaration Type
                     </label>
                     <input
@@ -432,7 +432,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Quotation Reference
                     </label>
                     <input
@@ -479,8 +479,8 @@ export function CreateBrokerageBookingPanel({
             {/* Brokerage Type Selection */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Brokerage Type
                 </h3>
               </div>
@@ -534,8 +534,8 @@ export function CreateBrokerageBookingPanel({
             {formData.brokerageType && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Package size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Shipment Details
                   </h3>
                 </div>
@@ -591,7 +591,7 @@ export function CreateBrokerageBookingPanel({
                     <>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                          <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                             Country of Origin
                           </label>
                           <input
@@ -629,8 +629,8 @@ export function CreateBrokerageBookingPanel({
             {/* Entry Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <FileCheck size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <FileCheck size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Entry Details
                 </h3>
               </div>
@@ -638,7 +638,7 @@ export function CreateBrokerageBookingPanel({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Consignee
                     </label>
                     <ConsigneePicker
@@ -653,7 +653,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Number
                     </label>
                     <input
@@ -679,7 +679,7 @@ export function CreateBrokerageBookingPanel({
                   />
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Entry Number
                     </label>
                     <input
@@ -708,7 +708,7 @@ export function CreateBrokerageBookingPanel({
                   />
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       HBL/HAWB
                     </label>
                     <input
@@ -725,7 +725,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Invoice Number
                     </label>
                     <input
@@ -740,7 +740,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Invoice Value
                     </label>
                     <input
@@ -757,7 +757,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Shipment Origin
                     </label>
                     <input
@@ -773,7 +773,7 @@ export function CreateBrokerageBookingPanel({
 
                   {formData.movement === "EXPORT" ? (
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         LCT (Last Cargo Time)
                       </label>
                       <input
@@ -787,7 +787,7 @@ export function CreateBrokerageBookingPanel({
                     </div>
                   ) : (
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         Release Date
                       </label>
                       <input
@@ -804,7 +804,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Broker
                     </label>
                     <input
@@ -820,7 +820,7 @@ export function CreateBrokerageBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Delivery Address
                   </label>
                   <textarea
@@ -840,8 +840,8 @@ export function CreateBrokerageBookingPanel({
             {formData.movement === "EXPORT" && formData.mode === "FCL" && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Package size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     FCL Details
                   </h3>
                 </div>
@@ -849,7 +849,7 @@ export function CreateBrokerageBookingPanel({
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         Tare Weight
                       </label>
                       <input
@@ -864,7 +864,7 @@ export function CreateBrokerageBookingPanel({
                     </div>
 
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         VGM (Verified Gross Mass)
                       </label>
                       <input
@@ -881,7 +881,7 @@ export function CreateBrokerageBookingPanel({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         Trucking Name
                       </label>
                       <input
@@ -896,7 +896,7 @@ export function CreateBrokerageBookingPanel({
                     </div>
 
                     <div>
-                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                      <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         Plate Number
                       </label>
                       <input
@@ -912,7 +912,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Collection Address (For Empties/Cargo)
                     </label>
                     <textarea
@@ -932,15 +932,15 @@ export function CreateBrokerageBookingPanel({
             {/* Commodity & Charges */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <FileText size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Commodity & Charges
                 </h3>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Commodity Description
                   </label>
                   <textarea
@@ -956,7 +956,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       HS Code
                     </label>
                     <input
@@ -971,7 +971,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Duty Rate
                     </label>
                     <input
@@ -988,7 +988,7 @@ export function CreateBrokerageBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       VAT Rate
                     </label>
                     <input
@@ -1003,7 +1003,7 @@ export function CreateBrokerageBookingPanel({
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Other Charges
                     </label>
                     <input
@@ -1019,7 +1019,7 @@ export function CreateBrokerageBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Remarks
                   </label>
                   <textarea
@@ -1039,15 +1039,15 @@ export function CreateBrokerageBookingPanel({
             {source === "pricing" && customerId && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Users size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Users size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Team Assignment
                   </h3>
                 </div>
                 
                 <div style={{
                   padding: "20px",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "8px"
                 }}>

@@ -20,7 +20,7 @@ export function BookingFullView({ booking, onBack }: BookingFullViewProps) {
         <h3 className="text-lg font-medium">Booking Not Found</h3>
         <button 
           onClick={onBack}
-          className="mt-4 px-4 py-2 bg-white border border-[var(--neuron-ui-border)] rounded-lg hover:bg-gray-50 transition-colors"
+          className="mt-4 px-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--neuron-ui-border)] rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
         >
           Go Back
         </button>
@@ -63,11 +63,11 @@ export function BookingFullView({ booking, onBack }: BookingFullViewProps) {
   return (
     <div className="h-full flex flex-col bg-[var(--neuron-bg-page)]">
       {/* Header */}
-      <div className="px-8 py-4 border-b border-[var(--neuron-ui-border)] bg-white flex items-center justify-between">
+      <div className="px-8 py-4 border-b border-[var(--neuron-ui-border)] bg-[var(--theme-bg-surface)] flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}
-            className="p-2 hover:bg-gray-100 rounded-lg text-[var(--neuron-ink-muted)] transition-colors"
+            className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg text-[var(--neuron-ink-muted)] transition-colors"
           >
             <ArrowLeft size={20} />
           </button>
@@ -96,7 +96,7 @@ export function BookingFullView({ booking, onBack }: BookingFullViewProps) {
         
         <div className="flex items-center gap-3">
           {/* Action buttons can go here */}
-          <button className="px-4 py-2 text-sm font-medium text-[var(--neuron-ink-primary)] border border-[var(--neuron-ui-border)] rounded-lg hover:bg-gray-50 bg-white shadow-sm transition-all">
+          <button className="px-4 py-2 text-sm font-medium text-[var(--neuron-ink-primary)] border border-[var(--neuron-ui-border)] rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] bg-[var(--theme-bg-surface)] shadow-sm transition-all">
             Edit Booking
           </button>
           <button className="px-4 py-2 text-sm font-medium text-white bg-[var(--neuron-brand-green)] rounded-lg hover:bg-[var(--neuron-brand-green-hover)] shadow-sm transition-all">

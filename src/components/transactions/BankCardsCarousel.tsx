@@ -29,7 +29,7 @@ export function BankCardsCarousel({
     return (
       <div className="flex gap-3 overflow-hidden px-1">
         {[1, 2].map((i) => (
-          <div key={i} className="w-[180px] h-[60px] bg-gray-50 rounded-[7.5px] animate-pulse border border-gray-200" />
+          <div key={i} className="w-[180px] h-[60px] bg-[var(--theme-bg-surface-subtle)] rounded-[7.5px] animate-pulse border border-[var(--theme-border-default)]" />
         ))}
       </div>
     );
@@ -56,7 +56,7 @@ export function BankCardsCarousel({
         <div className="flex items-center justify-center shrink-0">
             <button 
                 onClick={onAddAccount}
-                className="w-9 h-9 rounded-full border border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:text-[#0F766E] hover:border-[#0F766E] transition-colors bg-white hover:bg-gray-50"
+                className="w-9 h-9 rounded-full border border-dashed border-[var(--theme-border-default)] flex items-center justify-center text-[var(--theme-text-muted)] hover:text-[var(--theme-action-primary-bg)] hover:border-[var(--theme-action-primary-bg)] transition-colors bg-[var(--theme-bg-surface)] hover:bg-[var(--theme-bg-surface-subtle)]"
             >
                 <Plus size={16} />
             </button>

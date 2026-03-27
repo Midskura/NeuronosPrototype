@@ -136,14 +136,14 @@ export function ComponentsDemo() {
     <>
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-[#0A1D4D] mb-2">Components Demo</h1>
-        <p className="text-[14px] text-[#6B7280] leading-[20px]">
+        <h1 className="text-[var(--theme-text-primary)] mb-2">Components Demo</h1>
+        <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
           Showcase of reusable accounting components
         </p>
       </div>
 
       <Tabs defaultValue="filter" className="w-full">
-        <TabsList className="bg-[#F9FAFB] p-1 mb-6 h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <TabsList className="bg-[var(--theme-bg-page)] p-1 mb-6 h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
           <TabsTrigger value="commandbar" className="text-[14px]" style={{ borderRadius: 'var(--radius-xs)' }}>
             CommandBar
           </TabsTrigger>
@@ -179,13 +179,13 @@ export function ComponentsDemo() {
         <TabsContent value="commandbar">
           <div className="space-y-6">
             <div>
-              <h2 className="text-[#0A1D4D] mb-2">CommandBar.Accounting</h2>
-              <p className="text-[14px] text-[#6B7280] mb-4">
+              <h2 className="text-[var(--theme-text-primary)] mb-2">CommandBar.Accounting</h2>
+              <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
                 Persistent command bar with company switcher, date range, search, and New Entry button. Height: 56px, Gap: 12px.
               </p>
             </div>
 
-            <div className="border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
               <CommandBarAccounting
                 company={company}
                 onCompanyChange={setCompany}
@@ -207,9 +207,9 @@ export function ComponentsDemo() {
               </Button>
             </div>
 
-            <div className="p-4 bg-[#F9FAFB]" style={{ borderRadius: 'var(--radius-sm)' }}>
-              <p className="text-[12px] text-[#6B7280] mb-2">Current State:</p>
-              <pre className="text-[12px] text-[#374151]">
+            <div className="p-4 bg-[var(--theme-bg-page)]" style={{ borderRadius: 'var(--radius-sm)' }}>
+              <p className="text-[12px] text-[var(--theme-text-muted)] mb-2">Current State:</p>
+              <pre className="text-[12px] text-[var(--theme-text-secondary)]">
                 {JSON.stringify({ company, dateRange, searchQuery, isLoading }, null, 2)}
               </pre>
             </div>
@@ -219,13 +219,13 @@ export function ComponentsDemo() {
         <TabsContent value="tabs">
           <div className="space-y-6">
             <div>
-              <h2 className="text-[#0A1D4D] mb-2">Tabs.Accounting</h2>
-              <p className="text-[14px] text-[#6B7280] mb-4">
+              <h2 className="text-[var(--theme-text-primary)] mb-2">Tabs.Accounting</h2>
+              <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
                 Tab navigation for accounting module with icons and underline indicator. Height: 44px.
               </p>
             </div>
 
-            <div className="border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
               <TabsAccounting
                 active={activeTab}
                 onTabChange={setActiveTab}
@@ -234,8 +234,8 @@ export function ComponentsDemo() {
             </div>
 
             <div>
-              <h3 className="text-[#0A1D4D] mb-2">With Disabled Tabs</h3>
-              <div className="border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+              <h3 className="text-[var(--theme-text-primary)] mb-2">With Disabled Tabs</h3>
+              <div className="border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
                 <TabsAccounting
                   active={activeTab}
                   onTabChange={setActiveTab}
@@ -246,8 +246,8 @@ export function ComponentsDemo() {
             </div>
 
             <div>
-              <h3 className="text-[#0A1D4D] mb-2">Without Icons</h3>
-              <div className="border border-[#E5E7EB]" style={{ borderRadius: 'var(--radius-sm)' }}>
+              <h3 className="text-[var(--theme-text-primary)] mb-2">Without Icons</h3>
+              <div className="border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
                 <TabsAccounting
                   active={activeTab}
                   onTabChange={setActiveTab}
@@ -256,9 +256,9 @@ export function ComponentsDemo() {
               </div>
             </div>
 
-            <div className="p-4 bg-[#F9FAFB]" style={{ borderRadius: 'var(--radius-sm)' }}>
-              <p className="text-[12px] text-[#6B7280] mb-2">Active Tab:</p>
-              <pre className="text-[12px] text-[#374151]">{activeTab}</pre>
+            <div className="p-4 bg-[var(--theme-bg-page)]" style={{ borderRadius: 'var(--radius-sm)' }}>
+              <p className="text-[12px] text-[var(--theme-text-muted)] mb-2">Active Tab:</p>
+              <pre className="text-[12px] text-[var(--theme-text-secondary)]">{activeTab}</pre>
             </div>
           </div>
         </TabsContent>
@@ -266,14 +266,14 @@ export function ComponentsDemo() {
         <TabsContent value="filter">
           <div className="space-y-6">
             <div>
-              <h2 className="text-[#0A1D4D] mb-2">FilterBar.Sticky (Enhanced)</h2>
-              <p className="text-[14px] text-[#6B7280] mb-4">
+              <h2 className="text-[var(--theme-text-primary)] mb-2">FilterBar.Sticky (Enhanced)</h2>
+              <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
                 Sticky filter bar with autocomplete, multi-select, and variants. Height: 56px, Gap: 12px.
               </p>
             </div>
 
             <div>
-              <h3 className="text-[#0A1D4D] mb-2">Default Variant</h3>
+              <h3 className="text-[var(--theme-text-primary)] mb-2">Default Variant</h3>
               <FilterBarSticky
                 variant="default"
                 bookingNoOptions={["ND-2025-001", "ND-2025-002", "ND-2025-003"]}
@@ -298,7 +298,7 @@ export function ComponentsDemo() {
             </div>
 
             <div>
-              <h3 className="text-[#0A1D4D] mb-2">Compact Variant</h3>
+              <h3 className="text-[var(--theme-text-primary)] mb-2">Compact Variant</h3>
               <FilterBarSticky
                 variant="compact"
                 bookingNoOptions={["ND-2025-001", "ND-2025-002"]}
@@ -312,14 +312,14 @@ export function ComponentsDemo() {
             </div>
 
             <div>
-              <h3 className="text-[#0A1D4D] mb-2">Locked Status Variant (for Approvals)</h3>
+              <h3 className="text-[var(--theme-text-primary)] mb-2">Locked Status Variant (for Approvals)</h3>
               <FilterBarSticky
                 variant="locked-status"
                 status="Pending"
                 bookingNoOptions={["ND-2025-001", "ND-2025-002"]}
                 clientOptions={["ABC Corp", "XYZ Inc"]}
               />
-              <p className="text-[12px] text-[#6B7280] mt-2">
+              <p className="text-[12px] text-[var(--theme-text-muted)] mt-2">
                 ⓘ Status field is locked to "Pending" and cannot be changed
               </p>
             </div>
@@ -328,8 +328,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="table">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">Table.AccountingEntries</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">Table.AccountingEntries</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Specialized table for accounting entries with truncated notes and action buttons.
             </p>
             <TableAccountingEntries
@@ -342,8 +342,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="badges">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">Badge.Type</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">Badge.Type</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Type badges with semantic colors for revenue, expense, and transfer.
             </p>
             <div className="flex gap-3">
@@ -356,8 +356,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="modal">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">Modal.NewEntry</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">Modal.NewEntry</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               800px wide modal with segmented control, two-column form, and validation.
             </p>
             <Button
@@ -398,11 +398,11 @@ export function ComponentsDemo() {
 
         <TabsContent value="approvals">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">Row.ApprovalActions</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">Row.ApprovalActions</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Approval action buttons with optional comment modals.
             </p>
-            <div className="border border-[#E5E7EB] p-4" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="border border-[var(--theme-border-default)] p-4" style={{ borderRadius: 'var(--radius-sm)' }}>
               <RowApprovalActions
                 onApprove={(comment) => console.log("Approved:", comment)}
                 onReject={(comment) => console.log("Rejected:", comment)}
@@ -413,8 +413,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="accounts">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">Card.Account</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">Card.Account</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Account cards with kebab menu and approved balance display.
             </p>
             <div className="grid grid-cols-4 gap-4">
@@ -433,8 +433,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="categories">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">List.Categories</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">List.Categories</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Side-by-side category lists for revenue and expense with parent relationships.
             </p>
             <ListCategories
@@ -450,8 +450,8 @@ export function ComponentsDemo() {
 
         <TabsContent value="import">
           <div className="space-y-4">
-            <h2 className="text-[#0A1D4D]">ImportPreviewTable</h2>
-            <p className="text-[14px] text-[#6B7280] mb-4">
+            <h2 className="text-[var(--theme-text-primary)]">ImportPreviewTable</h2>
+            <p className="text-[14px] text-[var(--theme-text-muted)] mb-4">
               Import preview with validation status and blocking errors.
             </p>
             <ImportPreviewTable

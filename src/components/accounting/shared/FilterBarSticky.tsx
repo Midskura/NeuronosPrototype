@@ -149,11 +149,11 @@ export function FilterBarSticky({
 
   return (
     <div 
-      className={`sticky top-0 z-10 bg-white border-b border-[#E5E7EB] mb-6 ${className}`}
+      className={`sticky top-0 z-10 bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)] mb-6 ${className}`}
       style={{ height: '56px' }}
     >
       <div className={`flex items-center ${isCompact ? 'gap-2 px-3' : 'gap-3 px-3'} h-full overflow-x-auto`}>
-        <Filter className="w-4 h-4 text-[#6B7280] flex-shrink-0" />
+        <Filter className="w-4 h-4 text-[var(--theme-text-muted)] flex-shrink-0" />
         
         {/* Booking No Input with Autocomplete */}
         <div className="relative" ref={bookingInputRef}>
@@ -169,11 +169,11 @@ export function FilterBarSticky({
             style={{ borderRadius: 'var(--radius-sm)' }}
           />
           {showBookingSuggestions && bookingSuggestions.length > 0 && bookingNo && (
-            <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#E5E7EB] shadow-lg z-20" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="absolute top-full left-0 mt-1 w-full bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] shadow-lg z-20" style={{ borderRadius: 'var(--radius-sm)' }}>
               {bookingSuggestions.map((suggestion, index) => (
                 <div
                   key={index}
-                  className="px-3 py-2 text-[14px] hover:bg-[#F9FAFB] cursor-pointer"
+                  className="px-3 py-2 text-[14px] hover:bg-[var(--theme-bg-page)] cursor-pointer"
                   onClick={() => {
                     onBookingNoChange?.(suggestion);
                     setShowBookingSuggestions(false);
@@ -200,11 +200,11 @@ export function FilterBarSticky({
             style={{ borderRadius: 'var(--radius-sm)' }}
           />
           {showClientSuggestions && clientSuggestions.length > 0 && client && (
-            <div className="absolute top-full left-0 mt-1 w-full bg-white border border-[#E5E7EB] shadow-lg z-20" style={{ borderRadius: 'var(--radius-sm)' }}>
+            <div className="absolute top-full left-0 mt-1 w-full bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] shadow-lg z-20" style={{ borderRadius: 'var(--radius-sm)' }}>
               {clientSuggestions.map((suggestion, index) => (
                 <div
                   key={index}
-                  className="px-3 py-2 text-[14px] hover:bg-[#F9FAFB] cursor-pointer"
+                  className="px-3 py-2 text-[14px] hover:bg-[var(--theme-bg-page)] cursor-pointer"
                   onClick={() => {
                     onClientChange?.(suggestion);
                     setShowClientSuggestions(false);
@@ -234,17 +234,17 @@ export function FilterBarSticky({
                 {companyOptions.map((option) => (
                   <div
                     key={option.value}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[#F9FAFB] cursor-pointer"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-[var(--theme-bg-page)] cursor-pointer"
                     onClick={() => toggleCompany(option.value)}
                   >
-                    <div className={`w-4 h-4 border rounded ${company.includes(option.value) ? 'bg-[#F25C05] border-[#F25C05]' : 'border-[#E5E7EB]'}`}>
+                    <div className={`w-4 h-4 border rounded ${company.includes(option.value) ? 'bg-[#F25C05] border-[#F25C05]' : 'border-[var(--theme-border-default)]'}`}>
                       {company.includes(option.value) && (
                         <svg className="w-full h-full text-white" viewBox="0 0 16 16" fill="none">
                           <path d="M13 4L6 11L3 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       )}
                     </div>
-                    <span className="text-[14px] text-[#374151]">{option.label}</span>
+                    <span className="text-[14px] text-[var(--theme-text-secondary)]">{option.label}</span>
                   </div>
                 ))}
               </div>
@@ -340,7 +340,7 @@ export function FilterBarSticky({
           disabled={isLockedStatus}
         >
           <SelectTrigger 
-            className={`${fieldWidth} h-9 text-[14px] ${isLockedStatus ? 'bg-[#F9FAFB] cursor-not-allowed' : ''}`} 
+            className={`${fieldWidth} h-9 text-[14px] ${isLockedStatus ? 'bg-[var(--theme-bg-page)] cursor-not-allowed' : ''}`} 
             style={{ borderRadius: 'var(--radius-sm)' }}
           >
             <SelectValue placeholder="Status" />
@@ -373,7 +373,7 @@ export function FilterBarSticky({
         {/* Clear Filters Button */}
         <Button
           variant="ghost"
-          className="h-9 px-3 text-[14px] text-[#6B7280] hover:text-[#374151] flex-shrink-0"
+          className="h-9 px-3 text-[14px] text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] flex-shrink-0"
           style={{ borderRadius: 'var(--radius-sm)' }}
           onClick={handleClearFilters}
         >

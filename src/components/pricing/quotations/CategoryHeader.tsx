@@ -109,7 +109,7 @@ export function CategoryHeader({
   return (
     <div
       style={{
-        backgroundColor: "#F8FBFB",
+        backgroundColor: "var(--theme-bg-page)",
         border: "none",
         borderRadius: "10px 10px 0 0",
         padding: "12px 16px",
@@ -133,7 +133,7 @@ export function CategoryHeader({
         <ChevronRight
           size={16}
           style={{
-            color: "#6B7A76",
+            color: "var(--theme-text-muted)",
             transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
             transition: "transform 0.2s ease",
             flexShrink: 0
@@ -141,7 +141,7 @@ export function CategoryHeader({
         />
 
         {/* Package Icon */}
-        <Package size={16} style={{ color: "#6B7A76", flexShrink: 0 }} />
+        <Package size={16} style={{ color: "var(--theme-text-muted)", flexShrink: 0 }} />
 
         {/* Category Name or Edit Input */}
         {isEditing ? (
@@ -160,7 +160,7 @@ export function CategoryHeader({
                 color: "#2C3E38",
                 border: "1px solid #0F766E",
                 borderRadius: "6px",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 boxShadow: "0 0 0 3px rgba(15, 118, 110, 0.1)"
               }}
@@ -171,8 +171,8 @@ export function CategoryHeader({
                 padding: "6px",
                 border: "1px solid #0F766E",
                 borderRadius: "6px",
-                backgroundColor: "#E8F5F3",
-                color: "#0F766E",
+                backgroundColor: "var(--theme-bg-surface-tint)",
+                color: "var(--theme-action-primary-bg)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -182,7 +182,7 @@ export function CategoryHeader({
                 e.currentTarget.style.backgroundColor = "#D1EDE8";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#E8F5F3";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
               }}
             >
               <Check size={16} />
@@ -193,18 +193,18 @@ export function CategoryHeader({
                 padding: "6px",
                 border: "1px solid #E5E9E8",
                 borderRadius: "6px",
-                backgroundColor: "#FFFFFF",
-                color: "#6B7A76",
+                backgroundColor: "var(--theme-bg-surface)",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 transition: "all 0.2s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }}
             >
               <X size={16} />
@@ -230,8 +230,8 @@ export function CategoryHeader({
                 style={{
                   fontSize: "11px",
                   fontWeight: 500,
-                  color: "#6B7A76",
-                  backgroundColor: "white",
+                  color: "var(--theme-text-muted)",
+                  backgroundColor: "var(--theme-bg-surface)",
                   padding: "2px 6px",
                   borderRadius: "4px"
                 }}
@@ -253,7 +253,7 @@ export function CategoryHeader({
                   padding: "4px 8px",
                   fontSize: "12px",
                   fontWeight: 500,
-                  color: "#0F766E",
+                  color: "var(--theme-action-primary-bg)",
                   backgroundColor: "transparent",
                   border: "1px solid #E5E9E8",
                   borderRadius: "6px",
@@ -261,7 +261,7 @@ export function CategoryHeader({
                   transition: "all 0.2s ease"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#E8F5F3";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
@@ -282,7 +282,7 @@ export function CategoryHeader({
                     alignItems: "center",
                     justifyContent: "center",
                     padding: "4px",
-                    color: "#6B7A76",
+                    color: "var(--theme-text-muted)",
                     backgroundColor: "transparent",
                     border: "1px solid #E5E9E8",
                     borderRadius: "6px",
@@ -308,7 +308,7 @@ export function CategoryHeader({
                       position: "absolute",
                       top: "calc(100% + 4px)",
                       right: 0,
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       border: "1px solid #E5E9E8",
                       borderRadius: "8px",
                       overflow: "hidden",
@@ -329,13 +329,13 @@ export function CategoryHeader({
                         color: "#2C3E38",
                         backgroundColor: "transparent",
                         border: "none",
-                        borderBottom: "1px solid #F3F4F6",
+                        borderBottom: "1px solid var(--theme-border-subtle)",
                         cursor: "pointer",
                         textAlign: "left",
                         transition: "background-color 0.15s ease"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "transparent";
@@ -357,13 +357,13 @@ export function CategoryHeader({
                         color: "#2C3E38",
                         backgroundColor: "transparent",
                         border: "none",
-                        borderBottom: "1px solid #F3F4F6",
+                        borderBottom: "1px solid var(--theme-border-subtle)",
                         cursor: "pointer",
                         textAlign: "left",
                         transition: "background-color 0.15s ease"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "transparent";

@@ -135,8 +135,8 @@ export function MultiInputField({
 
   const defaultInputStyle: React.CSSProperties = {
     border: "1px solid var(--neuron-ui-border)",
-    backgroundColor: "#FFFFFF",
-    color: "#12332B",
+    backgroundColor: "var(--theme-bg-surface)",
+    color: "var(--theme-text-primary)",
     ...inputStyle,
   };
 
@@ -148,7 +148,7 @@ export function MultiInputField({
       {label && (
         <label
           className="block mb-1.5"
-          style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+          style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
         >
           {label}
         </label>
@@ -165,14 +165,14 @@ export function MultiInputField({
               onKeyDown={(e) => handleKeyDown(e, index)}
               placeholder={placeholder}
               disabled={disabled}
-              className="flex-1 px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] text-[13px] transition-colors"
+              className="flex-1 px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] text-[13px] transition-colors"
               style={defaultInputStyle}
             />
             {!disabled && isLastRow(index) && (
               <button
                 type="button"
                 onClick={handleAdd}
-                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-[#0F766E]/10 text-[#0F766E] shrink-0"
+                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-[var(--theme-action-primary-bg)]/10 text-[var(--theme-action-primary-bg)] shrink-0"
                 title="Add row"
               >
                 <Plus size={14} />
@@ -183,7 +183,7 @@ export function MultiInputField({
                 type="button"
                 onClick={() => handleRemove(index)}
                 disabled={disabled}
-                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-red-50 text-[#9CA3AF] hover:text-red-500 shrink-0"
+                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-red-50 text-[var(--theme-text-muted)] hover:text-red-500 shrink-0"
                 title="Remove"
               >
                 <X size={14} />

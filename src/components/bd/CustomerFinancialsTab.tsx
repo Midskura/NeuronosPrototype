@@ -81,12 +81,12 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
   return (
     <div style={{ padding: "24px 0" }}>
       <div style={{ marginBottom: "24px" }}>
-        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", margin: 0 }}>Financial Overview</h3>
-        <p style={{ fontSize: "13px", color: "#6B7280", marginTop: "4px" }}>Billing and collection history for {customer.name || customer.company_name}</p>
+        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", margin: 0 }}>Financial Overview</h3>
+        <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>Billing and collection history for {customer.name || customer.company_name}</p>
       </div>
 
       {isLoading ? (
-        <div style={{ textAlign: "center", padding: "48px", color: "#6B7280" }}>
+        <div style={{ textAlign: "center", padding: "48px", color: "var(--theme-text-muted)" }}>
           Loading financial data...
         </div>
       ) : (
@@ -99,61 +99,61 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
             marginBottom: "32px" 
           }}>
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               padding: "20px", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#F0FDF9", color: "#0F766E" }}>
+                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" }}>
                   <FileText size={16} />
                 </div>
-                <span style={{ fontSize: "13px", fontWeight: 500, color: "#6B7280" }}>Total Billed</span>
+                <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Billed</span>
               </div>
-              <div style={{ fontSize: "24px", fontWeight: 700, color: "#12332B" }}>{formatCurrency(totalBilled)}</div>
+              <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--theme-text-primary)" }}>{formatCurrency(totalBilled)}</div>
             </div>
 
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               padding: "20px", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
                 <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#F0FDF4", color: "#15803D" }}>
                   <CreditCard size={16} />
                 </div>
-                <span style={{ fontSize: "13px", fontWeight: 500, color: "#6B7280" }}>Total Collected</span>
+                <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Collected</span>
               </div>
               <div style={{ fontSize: "24px", fontWeight: 700, color: "#15803D" }}>{formatCurrency(totalCollected)}</div>
             </div>
 
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               padding: "20px", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
                 <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#FFF7ED", color: "#C05621" }}>
                   <DollarSign size={16} />
                 </div>
-                <span style={{ fontSize: "13px", fontWeight: 500, color: "#6B7280" }}>Outstanding</span>
+                <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Outstanding</span>
               </div>
               <div style={{ fontSize: "24px", fontWeight: 700, color: "#C05621" }}>{formatCurrency(outstandingBalance)}</div>
             </div>
 
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               padding: "20px", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
                 <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#EFF6FF", color: "#1D4ED8" }}>
                   <Activity size={16} />
                 </div>
-                <span style={{ fontSize: "13px", fontWeight: 500, color: "#6B7280" }}>Collection Rate</span>
+                <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Collection Rate</span>
               </div>
               <div style={{ fontSize: "24px", fontWeight: 700, color: "#1D4ED8" }}>{collectionRate.toFixed(1)}%</div>
             </div>
@@ -162,21 +162,21 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
           <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px" }}>
             {/* Transaction Ledger */}
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               padding: "24px",
             }}>
-              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>Transaction History</h3>
+              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>Transaction History</h3>
               
               <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead style={{ position: "sticky", top: 0, backgroundColor: "white", zIndex: 1 }}>
-                    <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
-                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "#6B7280", textTransform: "uppercase" }}>Date</th>
-                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "#6B7280", textTransform: "uppercase" }}>Ref #</th>
-                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "#6B7280", textTransform: "uppercase" }}>Description</th>
-                      <th style={{ textAlign: "right", padding: "12px 8px", fontSize: "11px", color: "#6B7280", textTransform: "uppercase" }}>Amount</th>
+                  <thead style={{ position: "sticky", top: 0, backgroundColor: "var(--theme-bg-surface)", zIndex: 1 }}>
+                    <tr style={{ borderBottom: "1px solid var(--theme-border-default)" }}>
+                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase" }}>Date</th>
+                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase" }}>Ref #</th>
+                      <th style={{ textAlign: "left", padding: "12px 8px", fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase" }}>Description</th>
+                      <th style={{ textAlign: "right", padding: "12px 8px", fontSize: "11px", color: "var(--theme-text-muted)", textTransform: "uppercase" }}>Amount</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -198,8 +198,8 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                       }))
                     ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                      .map((item, idx) => (
-                      <tr key={idx} style={{ borderBottom: "1px solid #F3F4F6" }}>
-                        <td style={{ padding: "12px 8px", fontSize: "13px", color: "#374151" }}>
+                      <tr key={idx} style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}>
+                        <td style={{ padding: "12px 8px", fontSize: "13px", color: "var(--theme-text-secondary)" }}>
                           {formatDate(item.date)}
                         </td>
                         <td style={{ padding: "12px 8px" }}>
@@ -211,7 +211,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                             {item.ref}
                           </span>
                         </td>
-                        <td style={{ padding: "12px 8px", fontSize: "13px", color: "#6B7280" }}>
+                        <td style={{ padding: "12px 8px", fontSize: "13px", color: "var(--theme-text-muted)" }}>
                            {item.description || item.type}
                         </td>
                         <td style={{ padding: "12px 8px", textAlign: "right", fontWeight: 600 }}>
@@ -223,7 +223,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                     ))}
                     {[...billings, ...collections].length === 0 && (
                        <tr>
-                         <td colSpan={4} style={{ textAlign: "center", padding: "32px", color: "#9CA3AF" }}>No transactions found</td>
+                         <td colSpan={4} style={{ textAlign: "center", padding: "32px", color: "var(--theme-text-muted)" }}>No transactions found</td>
                        </tr>
                     )}
                   </tbody>
@@ -233,14 +233,14 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
 
             {/* Chart */}
             <div style={{ 
-              backgroundColor: "white", 
+              backgroundColor: "var(--theme-bg-surface)", 
               borderRadius: "12px", 
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               padding: "24px",
               display: "flex",
               flexDirection: "column"
             }}>
-              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>Balance Summary</h3>
+              <h3 style={{ fontSize: "15px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>Balance Summary</h3>
               <div style={{ flex: 1, minHeight: "250px" }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>

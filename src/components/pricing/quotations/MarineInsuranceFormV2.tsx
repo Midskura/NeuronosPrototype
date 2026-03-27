@@ -22,7 +22,7 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
         alignItems: "center",
         gap: "6px"
       }}>
-        <Shield size={14} style={{ color: "#0F766E" }} />
+        <Shield size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         SERVICE DETAILS
       </div>
 
@@ -33,7 +33,7 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
       }}>
         {/* Commodity Description */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Commodity Description *
           </label>
           <input
@@ -47,14 +47,14 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* HS Code */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             HS Code
           </label>
           <input
@@ -68,14 +68,14 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Invoice Value */}
         <div style={{ gridColumn: "2 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Invoice Value (₱) *
           </label>
           <input
@@ -91,7 +91,7 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               textAlign: "right"
             }}
           />
@@ -99,7 +99,7 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
 
         {/* AOL (Airport of Loading) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             AOL (Airport of Loading)
           </label>
           <input
@@ -113,14 +113,14 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* POL (Port of Loading) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             POL (Port of Loading) *
           </label>
           <input
@@ -134,14 +134,14 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* AOD (Airport of Discharge) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             AOD (Airport of Discharge)
           </label>
           <input
@@ -155,14 +155,14 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* POD (Port of Discharge) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             POD (Port of Discharge) *
           </label>
           <input
@@ -176,7 +176,7 @@ export function MarineInsuranceFormV2({ data, onChange }: MarineInsuranceFormV2P
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>

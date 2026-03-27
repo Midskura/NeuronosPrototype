@@ -42,7 +42,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
     >
       <div
         style={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           borderRadius: "16px",
           width: "100%",
           maxWidth: "600px",
@@ -56,23 +56,23 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
         <div
           style={{
             padding: "24px 32px",
-            borderBottom: "1px solid #E5E9F0",
+            borderBottom: "1px solid var(--theme-border-default)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
           <div>
-            <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
               Generate Invoice
             </h2>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Creating invoice for {selectedItems.length} items to {customerName}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors"
+            className="p-2 rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] transition-colors"
           >
             <X size={20} />
           </button>
@@ -83,21 +83,21 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
           <div style={{ padding: "32px", display: "flex", flexDirection: "column", gap: "24px" }}>
             
             {/* Selected Items Summary */}
-            <div className="bg-[#F9FAFB] p-4 rounded-lg border border-[#E5E9F0]">
-                <h3 className="text-xs font-semibold text-[#667085] uppercase tracking-wider mb-3">Selected Items</h3>
+            <div className="bg-[var(--theme-bg-page)] p-4 rounded-lg border border-[var(--theme-border-default)]">
+                <h3 className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider mb-3">Selected Items</h3>
                 <div className="space-y-2 max-h-[150px] overflow-y-auto pr-2">
                     {selectedItems.map((item, idx) => (
                         <div key={idx} className="flex justify-between items-start text-sm">
-                            <span className="text-[#374151] flex-1">{item.description}</span>
-                            <span className="text-[#12332B] font-medium">
+                            <span className="text-[var(--theme-text-secondary)] flex-1">{item.description}</span>
+                            <span className="text-[var(--theme-text-primary)] font-medium">
                                 {new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(item.amount)}
                             </span>
                         </div>
                     ))}
                 </div>
-                <div className="mt-4 pt-3 border-t border-[#E5E9F0] flex justify-between items-center">
-                    <span className="font-semibold text-[#12332B]">Total Invoice Amount</span>
-                    <span className="font-bold text-[#0F766E] text-lg">
+                <div className="mt-4 pt-3 border-t border-[var(--theme-border-default)] flex justify-between items-center">
+                    <span className="font-semibold text-[var(--theme-text-primary)]">Total Invoice Amount</span>
+                    <span className="font-bold text-[var(--theme-action-primary-bg)] text-lg">
                         {new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP" }).format(totalAmount)}
                     </span>
                 </div>
@@ -106,25 +106,25 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
             {/* Dates */}
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-1">Invoice Date</label>
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">Invoice Date</label>
                     <div className="relative">
                         <input
                             type="date"
                             required
                             value={formData.invoice_date}
                             onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
-                            className="w-full px-3 py-2 border border-[#D0D5DD] rounded-lg focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
                         />
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-[#374151] mb-1">Due Date (Optional)</label>
+                    <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">Due Date (Optional)</label>
                     <div className="relative">
                         <input
                             type="date"
                             value={formData.due_date}
                             onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                            className="w-full px-3 py-2 border border-[#D0D5DD] rounded-lg focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
                             placeholder="Defaults to Net 30"
                         />
                     </div>
@@ -133,12 +133,12 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
 
             {/* Notes */}
             <div>
-                <label className="block text-sm font-medium text-[#374151] mb-1">Notes / Terms</label>
+                <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">Notes / Terms</label>
                 <textarea
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-3 py-2 border border-[#D0D5DD] rounded-lg focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E]"
+                    className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
                     placeholder="Add payment instructions or notes..."
                 />
             </div>
@@ -149,7 +149,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
           <div
             style={{
               padding: "20px 32px",
-              borderTop: "1px solid #E5E9F0",
+              borderTop: "1px solid var(--theme-border-default)",
               display: "flex",
               justifyContent: "flex-end",
               gap: "12px",
@@ -161,13 +161,13 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-[#D0D5DD] rounded-lg text-[#374151] font-medium hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-[var(--theme-border-default)] rounded-lg text-[var(--theme-text-secondary)] font-medium hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#0F766E] border border-transparent rounded-lg text-white font-medium hover:bg-[#0D6560] transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-[var(--theme-action-primary-bg)] border border-transparent rounded-lg text-white font-medium hover:bg-[var(--theme-action-primary-border)] transition-colors flex items-center gap-2"
             >
               <FileText size={18} />
               Create Invoice

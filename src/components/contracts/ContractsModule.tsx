@@ -7,12 +7,13 @@
  * @see /docs/blueprints/CONTRACTS_MODULE_BLUEPRINT.md
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router";
 import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import { useCachedFetch, useInvalidateCache } from "../../hooks/useNeuronCache";
 import type { QuotationNew } from "../../types/pricing";
+import { useDataScope } from "../../hooks/useDataScope";
 import { ContractsList } from "./ContractsList";
 import { ContractDetailView } from "../pricing/ContractDetailView";
 
@@ -74,11 +75,21 @@ export function ContractsModule({ currentUser, onCreateTicket, initialContract, 
     return allContracts;
   };
 
+  const { scope, isLoaded: scopeLoaded } = useDataScope();
+
   const {
     data: contracts,
     isLoading,
     refresh: refreshContracts,
   } = useCachedFetch<QuotationNew[]>("contracts", contractsFetcher, []);
+
+  // Apply scope filter client-side (cache doesn't support per-user keys)
+  const scopedContracts = useMemo(() => {
+    if (!contracts || !scopeLoaded) return [];
+    if (scope.type === 'all') return contracts;
+    if (scope.type === 'userIds') return contracts.filter(c => scope.ids.includes(c.prepared_by || ''));
+    return contracts.filter(c => c.prepared_by === scope.userId);
+  }, [contracts, scope, scopeLoaded]);
 
   // Deep-link: auto-select contract from ?contract= query param
   useEffect(() => {
@@ -168,10 +179,10 @@ export function ContractsModule({ currentUser, onCreateTicket, initialContract, 
   console.log("ContractsModule - Department:", department, "- User:", currentUser?.department);
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full bg-[var(--theme-bg-surface)]">
       {view === "list" && (
         <ContractsList
-          contracts={contracts}
+          contracts={scopedContracts}
           onSelectContract={handleSelectContract}
           isLoading={isLoading}
           currentUser={currentUser}

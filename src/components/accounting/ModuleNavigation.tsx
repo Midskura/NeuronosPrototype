@@ -23,7 +23,7 @@ const tabs = [
 
 export function ModuleNavigation({ activeTab, onTabChange }: ModuleNavigationProps) {
   return (
-    <div className="w-full border-b border-[#E5E7EB] bg-white">
+    <div className="w-full border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]">
       <div className="max-w-[1200px] mx-auto px-6">
         <nav className="flex items-center h-12">
           {tabs.map((tab) => {
@@ -40,7 +40,7 @@ export function ModuleNavigation({ activeTab, onTabChange }: ModuleNavigationPro
                   ${
                     isActive
                       ? "text-[#F25C05] border-[#F25C05]"
-                      : "text-[#6B7280] border-transparent hover:text-[#374151]"
+                      : "text-[var(--theme-text-muted)] border-transparent hover:text-[var(--theme-text-secondary)]"
                   }
                 `}
               >

@@ -49,7 +49,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
       padding: "20px"
     }}>
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         borderRadius: "8px",
         width: "100%",
         maxWidth: "500px",
@@ -64,7 +64,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "#F8FBFB"
+          backgroundColor: "var(--theme-bg-page)"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <FolderPlus size={18} style={{ color: "var(--neuron-brand-green)" }} />
@@ -117,7 +117,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
                   fontSize: "14px",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
-                  backgroundColor: "white"
+                  backgroundColor: "var(--theme-bg-surface)"
                 }}
               />
               <button
@@ -151,7 +151,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               padding: "0 12px",
               fontSize: "11px",
               color: "var(--neuron-ink-muted)",
@@ -183,7 +183,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
                     fontSize: "13px",
                     fontWeight: 500,
                     color: "var(--neuron-ink-primary)",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -191,7 +191,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
                     transition: "all 0.15s"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#0F766E";
+                    e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                     e.currentTarget.style.backgroundColor = "#F8FBFB";
                   }}
                   onMouseLeave={(e) => {

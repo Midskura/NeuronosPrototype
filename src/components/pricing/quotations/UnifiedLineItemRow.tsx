@@ -53,8 +53,8 @@ export function UnifiedLineItemRow({
 
   return (
     <tr style={{ 
-      borderBottom: "1px solid #F3F4F6",
-      backgroundColor: "white"
+      borderBottom: "1px solid var(--theme-border-subtle)",
+      backgroundColor: "var(--theme-bg-surface)"
     }}>
       {/* Description */}
       <td style={{ padding: "4px", overflow: "visible" }}>
@@ -81,9 +81,9 @@ export function UnifiedLineItemRow({
             width: "100%",
             padding: "8px 10px",
             fontSize: "13px",
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             textAlign: "right",
             outline: "none",
             fontFamily: "inherit",
@@ -103,9 +103,9 @@ export function UnifiedLineItemRow({
             width: "100%",
             padding: "8px 10px",
             fontSize: "13px",
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             cursor: "pointer",
             outline: "none",
             fontFamily: "inherit",
@@ -133,9 +133,9 @@ export function UnifiedLineItemRow({
             width: "100%",
             padding: "8px 10px",
             fontSize: "13px",
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             textAlign: "right",
             outline: "none",
             fontFamily: "inherit",
@@ -159,9 +159,9 @@ export function UnifiedLineItemRow({
             width: "100%",
             padding: "8px 10px",
             fontSize: "13px",
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             textAlign: "right",
             outline: "none",
             fontFamily: "inherit",
@@ -183,7 +183,7 @@ export function UnifiedLineItemRow({
             height: "16px",
             cursor: "pointer",
             accentColor: "var(--neuron-brand-green)",
-            backgroundColor: "white"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         />
       </td>
@@ -201,9 +201,9 @@ export function UnifiedLineItemRow({
             width: "100%",
             padding: "8px 10px",
             fontSize: "13px",
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "4px",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             outline: "none",
             fontFamily: "inherit",
             color: "var(--neuron-ink-primary)"

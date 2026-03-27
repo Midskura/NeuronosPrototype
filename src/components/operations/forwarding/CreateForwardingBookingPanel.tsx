@@ -383,7 +383,7 @@ export function CreateForwardingBookingPanel({
             <div className="mb-8">
               <label
                 className="block mb-1.5"
-                style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
               >
                 Booking Number (Auto-generated)
               </label>
@@ -395,11 +395,11 @@ export function CreateForwardingBookingPanel({
                 className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   color: "var(--neuron-ink-primary)",
                 }}
               />
-              <p className="text-xs mt-1" style={{ color: "#667085" }}>
+              <p className="text-xs mt-1" style={{ color: "var(--theme-text-muted)" }}>
                 Leave blank to auto-generate (e.g., FWD-2025-001) or enter a custom booking number
               </p>
             </div>
@@ -407,8 +407,8 @@ export function CreateForwardingBookingPanel({
             {/* General Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   General Information
                 </h3>
               </div>
@@ -416,7 +416,7 @@ export function CreateForwardingBookingPanel({
               <div className="space-y-4">
                 {/* Movement Toggle */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Movement <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
                   <MovementToggle
@@ -448,7 +448,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Account Owner
                     </label>
@@ -460,7 +460,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -469,7 +469,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Account Handler
                     </label>
@@ -481,7 +481,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -536,7 +536,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Type of Entry
                     </label>
@@ -548,7 +548,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -581,7 +581,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Cargo Nature
                       </label>
@@ -593,7 +593,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -604,7 +604,7 @@ export function CreateForwardingBookingPanel({
                 <div>
                   <label
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Cargo Type
                   </label>
@@ -616,7 +616,7 @@ export function CreateForwardingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -625,7 +625,7 @@ export function CreateForwardingBookingPanel({
                 <div>
                   <label
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Stackability
                   </label>
@@ -637,7 +637,7 @@ export function CreateForwardingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -646,7 +646,7 @@ export function CreateForwardingBookingPanel({
                 <div>
                   <label
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Delivery Address
                   </label>
@@ -658,7 +658,7 @@ export function CreateForwardingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -668,7 +668,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Quotation Reference
                     </label>
@@ -680,7 +680,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -711,7 +711,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Pending Reason <span style={{ color: "#C94F3D" }}>*</span>
                     </label>
@@ -724,7 +724,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -735,7 +735,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Completion Date <span style={{ color: "#C94F3D" }}>*</span>
                     </label>
@@ -747,7 +747,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -759,7 +759,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Cancellation Reason <span style={{ color: "#C94F3D" }}>*</span>
                       </label>
@@ -772,7 +772,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -780,7 +780,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Cancelled Date <span style={{ color: "#C94F3D" }}>*</span>
                       </label>
@@ -792,7 +792,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -805,8 +805,8 @@ export function CreateForwardingBookingPanel({
             {/* Expected Volume */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Box size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Box size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Expected Volume
                 </h3>
               </div>
@@ -817,7 +817,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         20ft Quantity
                       </label>
@@ -829,7 +829,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -838,7 +838,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         40ft Quantity
                       </label>
@@ -850,7 +850,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -859,7 +859,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         45ft Quantity
                       </label>
@@ -871,7 +871,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -884,7 +884,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Gross Weight (kg)
                       </label>
@@ -896,7 +896,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -905,7 +905,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         {mode === "LCL" ? "Dimensions (CBM)" : "Chargeable Weight (kg)"}
                       </label>
@@ -917,7 +917,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -930,8 +930,8 @@ export function CreateForwardingBookingPanel({
             {/* Shipment Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Ship size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Ship size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Shipment Information
                 </h3>
               </div>
@@ -941,7 +941,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Consignee
                     </label>
@@ -954,7 +954,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -963,7 +963,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Shipper
                     </label>
@@ -975,7 +975,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -991,7 +991,7 @@ export function CreateForwardingBookingPanel({
                     addButtonText={movement === "EXPORT" ? "Add Reference No." : "Add MBL/MAWB"}
                     inputStyle={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -999,7 +999,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       HBL/HAWB
                     </label>
@@ -1011,7 +1011,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1022,7 +1022,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Registry Number
                     </label>
@@ -1034,7 +1034,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1043,7 +1043,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Carrier
                     </label>
@@ -1055,7 +1055,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1066,7 +1066,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       AOL/POL
                     </label>
@@ -1078,7 +1078,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1087,7 +1087,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       AOD/POD
                     </label>
@@ -1099,7 +1099,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1110,7 +1110,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Forwarder
                     </label>
@@ -1122,7 +1122,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1131,7 +1131,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Country of Origin
                     </label>
@@ -1143,7 +1143,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1153,7 +1153,7 @@ export function CreateForwardingBookingPanel({
                 <div>
                   <label
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Commodity Description
                   </label>
@@ -1165,7 +1165,7 @@ export function CreateForwardingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -1175,7 +1175,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Preferential Treatment
                     </label>
@@ -1187,7 +1187,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1196,7 +1196,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Gross Weight
                     </label>
@@ -1208,7 +1208,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1217,7 +1217,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Dimensions
                     </label>
@@ -1229,7 +1229,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1240,7 +1240,7 @@ export function CreateForwardingBookingPanel({
                   <div>
                     <label
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       ETA (Estimated Time of Arrival)
                     </label>
@@ -1251,7 +1251,7 @@ export function CreateForwardingBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -1261,7 +1261,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         LCT (Last Cargo Time)
                       </label>
@@ -1272,7 +1272,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1285,7 +1285,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Transit Time
                       </label>
@@ -1297,7 +1297,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1306,7 +1306,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Route
                       </label>
@@ -1318,7 +1318,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1332,8 +1332,8 @@ export function CreateForwardingBookingPanel({
             {mode === "FCL" && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Box size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Box size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Container Details (FCL)
                   </h3>
                 </div>
@@ -1345,7 +1345,7 @@ export function CreateForwardingBookingPanel({
                         <div>
                           <label
                             className="block mb-1.5"
-                            style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                            style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                           >
                             Tare Weight
                           </label>
@@ -1357,7 +1357,7 @@ export function CreateForwardingBookingPanel({
                             className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
+                              backgroundColor: "var(--theme-bg-surface)",
                               color: "var(--neuron-ink-primary)",
                             }}
                           />
@@ -1366,7 +1366,7 @@ export function CreateForwardingBookingPanel({
                         <div>
                           <label
                             className="block mb-1.5"
-                            style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                            style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                           >
                             VGM
                           </label>
@@ -1378,7 +1378,7 @@ export function CreateForwardingBookingPanel({
                             className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
+                              backgroundColor: "var(--theme-bg-surface)",
                               color: "var(--neuron-ink-primary)",
                             }}
                           />
@@ -1389,7 +1389,7 @@ export function CreateForwardingBookingPanel({
                         <div>
                           <label
                             className="block mb-1.5"
-                            style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                            style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                           >
                             Trucking Name
                           </label>
@@ -1401,7 +1401,7 @@ export function CreateForwardingBookingPanel({
                             className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
+                              backgroundColor: "var(--theme-bg-surface)",
                               color: "var(--neuron-ink-primary)",
                             }}
                           />
@@ -1410,7 +1410,7 @@ export function CreateForwardingBookingPanel({
                         <div>
                           <label
                             className="block mb-1.5"
-                            style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                            style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                           >
                             Plate Number
                           </label>
@@ -1422,7 +1422,7 @@ export function CreateForwardingBookingPanel({
                             className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
+                              backgroundColor: "var(--theme-bg-surface)",
                               color: "var(--neuron-ink-primary)",
                             }}
                           />
@@ -1432,7 +1432,7 @@ export function CreateForwardingBookingPanel({
                       <div>
                         <label
                           className="block mb-1.5"
-                          style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                          style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                         >
                           Warehouse Address
                         </label>
@@ -1444,7 +1444,7 @@ export function CreateForwardingBookingPanel({
                           className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                           style={{
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FFFFFF",
+                            backgroundColor: "var(--theme-bg-surface)",
                             color: "var(--neuron-ink-primary)",
                           }}
                         />
@@ -1454,7 +1454,7 @@ export function CreateForwardingBookingPanel({
                         <div>
                           <label
                             className="block mb-1.5"
-                            style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                            style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                           >
                             Collection Address (EXW)
                           </label>
@@ -1466,7 +1466,7 @@ export function CreateForwardingBookingPanel({
                             className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                             style={{
                               border: "1px solid var(--neuron-ui-border)",
-                              backgroundColor: "#FFFFFF",
+                              backgroundColor: "var(--theme-bg-surface)",
                               color: "var(--neuron-ink-primary)",
                             }}
                           />
@@ -1483,7 +1483,7 @@ export function CreateForwardingBookingPanel({
                     addButtonText="Add Container"
                     inputStyle={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -1498,7 +1498,7 @@ export function CreateForwardingBookingPanel({
                     />
                     <label
                       htmlFor="containerDeposit"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B", cursor: "pointer" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)", cursor: "pointer" }}
                     >
                       Container Deposit Required
                     </label>
@@ -1508,7 +1508,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Empty Return
                       </label>
@@ -1520,7 +1520,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1529,7 +1529,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Det/Dem Validity
                       </label>
@@ -1540,7 +1540,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1551,7 +1551,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Storage Validity
                       </label>
@@ -1562,7 +1562,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1571,7 +1571,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         CRO Availability
                       </label>
@@ -1582,7 +1582,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1593,7 +1593,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         20ft Quantity
                       </label>
@@ -1605,7 +1605,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1614,7 +1614,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         40ft Quantity
                       </label>
@@ -1626,7 +1626,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1635,7 +1635,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         45ft Quantity
                       </label>
@@ -1647,7 +1647,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1658,7 +1658,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Volume Gross Weight
                       </label>
@@ -1670,7 +1670,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1679,7 +1679,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Volume Dimensions
                       </label>
@@ -1691,7 +1691,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1700,7 +1700,7 @@ export function CreateForwardingBookingPanel({
                     <div>
                       <label
                         className="block mb-1.5"
-                        style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                        style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
                         Volume Chargeable Weight
                       </label>
@@ -1712,7 +1712,7 @@ export function CreateForwardingBookingPanel({
                         className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "var(--neuron-ink-primary)",
                         }}
                       />
@@ -1726,8 +1726,8 @@ export function CreateForwardingBookingPanel({
             {(mode === "LCL" || mode === "AIR") && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Warehouse size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Warehouse size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Warehouse Details ({mode})
                   </h3>
                 </div>
@@ -1735,7 +1735,7 @@ export function CreateForwardingBookingPanel({
                 <div>
                   <label
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Warehouse Location
                   </label>
@@ -1747,7 +1747,7 @@ export function CreateForwardingBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -1759,15 +1759,15 @@ export function CreateForwardingBookingPanel({
             {source === "pricing" && customerId && (
               <div className="mb-8">
                 <div className="flex items-center gap-2 mb-4">
-                  <Users size={16} style={{ color: "#0F766E" }} />
-                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Users size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                  <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     Team Assignment
                   </h3>
                 </div>
                 
                 <div style={{
                   padding: "20px",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "8px"
                 }}>

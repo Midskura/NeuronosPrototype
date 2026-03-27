@@ -71,7 +71,7 @@ export function AddLineItemModal({
       padding: "20px"
     }}>
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         borderRadius: "8px",
         width: "100%",
         maxWidth: "600px",
@@ -86,7 +86,7 @@ export function AddLineItemModal({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "#F8FBFB"
+          backgroundColor: "var(--theme-bg-page)"
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             {mode === "add" ? (
@@ -145,7 +145,7 @@ export function AddLineItemModal({
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "white"
+                    backgroundColor: "var(--theme-bg-surface)"
                   }}
                 />
               </div>
@@ -175,7 +175,7 @@ export function AddLineItemModal({
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white"
+                      backgroundColor: "var(--theme-bg-surface)"
                     }}
                   />
                 </div>
@@ -199,7 +199,7 @@ export function AddLineItemModal({
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white"
+                      backgroundColor: "var(--theme-bg-surface)"
                     }}
                   >
                     <option value="USD">USD</option>
@@ -232,7 +232,7 @@ export function AddLineItemModal({
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white"
+                      backgroundColor: "var(--theme-bg-surface)"
                     }}
                   />
                 </div>
@@ -262,7 +262,7 @@ export function AddLineItemModal({
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "white"
+                    backgroundColor: "var(--theme-bg-surface)"
                   }}
                 />
                 <span style={{
@@ -322,7 +322,7 @@ export function AddLineItemModal({
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "white"
+                    backgroundColor: "var(--theme-bg-surface)"
                   }}
                 />
               </div>
@@ -358,7 +358,7 @@ export function AddLineItemModal({
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "#F9FAFB"
+                    backgroundColor: "var(--theme-bg-page)"
                   }}
                 />
                 {buyingPrice > 0 && (
@@ -377,7 +377,7 @@ export function AddLineItemModal({
               {/* Calculated Amount Display */}
               <div style={{
                 padding: "12px 16px",
-                backgroundColor: "#E8F5F3",
+                backgroundColor: "var(--theme-bg-surface-tint)",
                 border: "1px solid #0F766E",
                 borderRadius: "6px"
               }}>
@@ -413,7 +413,7 @@ export function AddLineItemModal({
           <div style={{
             padding: "16px 20px",
             borderTop: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             display: "flex",
             justifyContent: "flex-end",
             gap: "12px"
@@ -426,7 +426,7 @@ export function AddLineItemModal({
                 fontSize: "13px",
                 fontWeight: 500,
                 color: "var(--neuron-ink-muted)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 cursor: "pointer"

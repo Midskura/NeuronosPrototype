@@ -59,22 +59,22 @@ export function QuotationActionMenu({
           width: "36px",
           height: "36px",
           padding: 0,
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
-          color: "#667085",
+          color: "var(--theme-text-muted)",
           cursor: "pointer",
           transition: "all 0.2s ease"
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.borderColor = "#0F766E";
+          e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
           e.currentTarget.style.backgroundColor = "#F8FBFB";
           e.currentTarget.style.color = "#0F766E";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
           e.currentTarget.style.backgroundColor = "white";
-          e.currentTarget.style.color = "#667085";
+          e.currentTarget.style.color = "var(--theme-text-muted)";
         }}
         title="Actions"
       >
@@ -88,7 +88,7 @@ export function QuotationActionMenu({
           top: "calc(100% + 8px)",
           right: 0,
           width: "240px",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
@@ -111,18 +111,18 @@ export function QuotationActionMenu({
               border: "none",
               cursor: "pointer",
               fontSize: "14px",
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               textAlign: "left",
               transition: "background-color 0.15s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#F9FAFB";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
             }}
           >
-            <Copy size={16} style={{ color: "#667085" }} />
+            <Copy size={16} style={{ color: "var(--theme-text-muted)" }} />
             <span>Duplicate</span>
           </button>
 
@@ -141,10 +141,10 @@ export function QuotationActionMenu({
                 padding: "12px 16px",
                 backgroundColor: "transparent",
                 border: "none",
-                borderTop: "1px solid #F3F4F6",
+                borderTop: "1px solid var(--theme-border-subtle)",
                 cursor: "pointer",
                 fontSize: "14px",
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 textAlign: "left",
                 transition: "background-color 0.15s ease",
                 fontWeight: 500
@@ -156,7 +156,7 @@ export function QuotationActionMenu({
                 e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
-              <FolderOpen size={16} style={{ color: "#0F766E" }} />
+              <FolderOpen size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
               <span>Convert to Project</span>
             </button>
           )}
@@ -176,10 +176,10 @@ export function QuotationActionMenu({
                 padding: "12px 16px",
                 backgroundColor: "transparent",
                 border: "none",
-                borderTop: "1px solid #F3F4F6",
+                borderTop: "1px solid var(--theme-border-subtle)",
                 cursor: "pointer",
                 fontSize: "14px",
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 textAlign: "left",
                 transition: "background-color 0.15s ease",
                 fontWeight: 500
@@ -191,7 +191,7 @@ export function QuotationActionMenu({
                 e.currentTarget.style.backgroundColor = "transparent";
               }}
             >
-              <Ticket size={16} style={{ color: "#0F766E" }} />
+              <Ticket size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
               <span>Create Ticket</span>
             </button>
           )}
@@ -211,7 +211,7 @@ export function QuotationActionMenu({
               padding: "12px 16px",
               backgroundColor: "transparent",
               border: "none",
-              borderTop: "1px solid #F3F4F6",
+              borderTop: "1px solid var(--theme-border-subtle)",
               cursor: "pointer",
               fontSize: "14px",
               color: "#DC2626",

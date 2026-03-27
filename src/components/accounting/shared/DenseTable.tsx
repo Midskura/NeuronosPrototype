@@ -68,7 +68,7 @@ export function DenseTable<T>({
             margin: "0 auto 16px",
           }}
         />
-        <p style={{ fontSize: "16px", color: "#667085" }}>Loading...</p>
+        <p style={{ fontSize: "16px", color: "var(--theme-text-muted)" }}>Loading...</p>
       </div>
     );
   }
@@ -81,7 +81,7 @@ export function DenseTable<T>({
         style={{
           borderRadius: "10px",
           overflow: "hidden",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
         }}
       >
@@ -123,14 +123,14 @@ export function DenseTable<T>({
       border: "1px solid var(--neuron-ui-border)", 
       borderRadius: "8px",
       overflow: "hidden",
-      backgroundColor: "#FFFFFF"
+      backgroundColor: "var(--theme-bg-surface)"
     }}>
       {/* Table Header */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: columns.map(col => col.width || "1fr").join(" "),
-          backgroundColor: "#F9FAFB",
+          backgroundColor: "var(--theme-bg-page)",
           borderBottom: "1px solid var(--neuron-ui-border)",
           position: "sticky",
           top: 0,
@@ -145,7 +145,7 @@ export function DenseTable<T>({
               padding: "12px 16px",
               fontSize: "12px",
               fontWeight: 600,
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
               textAlign: column.align || "left",
@@ -207,7 +207,7 @@ export function DenseTable<T>({
                   style={{
                     padding: "12px 16px",
                     fontSize: "14px",
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                     textAlign: column.align || "left",
                     display: "flex",
                     alignItems: "center",

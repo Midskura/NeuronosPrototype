@@ -9,7 +9,7 @@ import { RouteGuard } from "./components/RouteGuard";
 import { AppModeProvider, useAppMode } from "./config/appMode";
 import { toast, Toaster } from "sonner@2.0.3";
 import type { Customer } from "./types/bd";
-import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
+import { NeuronLogo } from "./components/NeuronLogo";
 import { projectId } from "./utils/supabase/info";
 import { useWorkspaceTheme } from "./theme/useWorkspaceTheme";
 
@@ -121,9 +121,7 @@ function LoginPage() {
       <div className="min-h-screen w-full bg-[rgb(255,255,255)] flex items-center justify-center p-6">
         <div className="w-full max-w-[420px] bg-white rounded-2xl px-12 py-10">
           <div className="flex flex-col items-center mb-8">
-            <div className="w-[180px] h-auto">
-              <img alt="Neuron Logo" className="w-full h-full object-contain" src={logoImage} />
-            </div>
+            <NeuronLogo height={36} />
           </div>
           <div className="text-center space-y-4">
             <div className="w-14 h-14 mx-auto rounded-full bg-[#E8F5E9] flex items-center justify-center">
@@ -155,13 +153,7 @@ function LoginPage() {
       <div className="w-full max-w-[420px] bg-white rounded-2xl px-12 py-10">
         {/* Logo and Header */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-[180px] h-auto">
-            <img 
-              alt="Neuron Logo" 
-              className="w-full h-full object-contain" 
-              src={logoImage} 
-            />
-          </div>
+          <NeuronLogo height={36} />
         </div>
 
         {/* Tabs */}

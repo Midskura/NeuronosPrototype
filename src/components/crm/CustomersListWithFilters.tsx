@@ -4,6 +4,7 @@ import { NeuronKPICard } from "../ui/NeuronKPICard";
 import { supabase } from "../../utils/supabase/client";
 import { useUsers } from "../../hooks/useUsers";
 import type { Customer, Industry, CustomerStatus } from "../../types/bd";
+import { useDataScope } from "../../hooks/useDataScope";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { AddCustomerPanel } from "../bd/AddCustomerPanel";
 
@@ -24,6 +25,8 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   const [activities, setActivities] = useState<any[]>([]);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { scope, isLoaded } = useDataScope();
 
   // Permissions based on department
   const permissions = {
@@ -53,9 +56,12 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
 
   // Fetch customers from backend
   const fetchCustomers = async () => {
+    if (!isLoaded) return;
     setIsLoading(true);
     try {
       let query = supabase.from('customers').select('*');
+      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
+      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
       if (searchQuery) {
         query = query.or(`name.ilike.%${searchQuery}%,company_name.ilike.%${searchQuery}%`);
       }
@@ -88,12 +94,12 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
     }
   };
 
-  // Fetch on mount
+  // Fetch on mount and when scope resolves
   useEffect(() => {
     fetchCustomers();
     fetchContacts();
     fetchActivities();
-  }, []);
+  }, [scope, isLoaded]);
 
   // Debounced search and filter updates
   useEffect(() => {
@@ -284,7 +290,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
     <div 
       className="h-full overflow-auto"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       <div style={{ padding: "32px 48px" }}>
@@ -297,10 +303,10 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Customers
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               {userDepartment === "Business Development" 
                 ? "Manage customer companies and prospects" 
                 : "View customer companies and check inquiries"}
@@ -323,10 +329,10 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }}
               onClick={() => setIsAddCustomerOpen(true)}
             >
@@ -386,7 +392,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
               className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1.5px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
               onFocus={(e) => {
@@ -456,7 +462,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
           border: "1.5px solid var(--neuron-ui-border)", 
           borderRadius: "16px", 
           overflow: "hidden",
-          backgroundColor: "#FFFFFF"
+          backgroundColor: "var(--theme-bg-surface)"
         }}>
         {/* Table Header - Sticky */}
         <div 
@@ -501,12 +507,12 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                   key={customer.id}
                   onClick={() => onViewCustomer(customer)}
                   className="grid grid-cols-[40px_minmax(200px,1fr)_minmax(120px,140px)_100px_80px_120px_40px] gap-3 px-6 py-4 cursor-pointer transition-colors items-center"
-                  style={{ backgroundColor: "#FFFFFF" }}
+                  style={{ backgroundColor: "var(--theme-bg-surface)" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                   }}
                 >
                   {/* Company Logo */}
@@ -575,7 +581,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                       }}
                       onMouseEnter={(e) => {
                         if (openDropdownId !== customer.id) {
-                          e.currentTarget.style.backgroundColor = "#F3F4F6";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -592,7 +598,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                       <div
                         className="absolute right-0 top-full mt-1 rounded-lg overflow-hidden z-50 shadow-lg"
                         style={{
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           border: "1px solid var(--neuron-ui-border)",
                           minWidth: "160px",
                           boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)"
@@ -606,7 +612,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                           }}
                           className="w-full px-4 py-2.5 text-left text-[13px] transition-colors flex items-center gap-2"
                           style={{
-                            backgroundColor: "#FFFFFF",
+                            backgroundColor: "var(--theme-bg-surface)",
                             color: "#C94F3D",
                             border: "none"
                           }}
@@ -614,7 +620,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                             e.currentTarget.style.backgroundColor = "#FFF5F5";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#FFFFFF";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                           }}
                         >
                           <Trash2 size={14} />

@@ -17,8 +17,8 @@ export function CategoriesPage() {
       {/* Page Title */}
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-[#0A1D4D] mb-2">Categories</h1>
-          <p className="text-[14px] text-[#6B7280] leading-[20px]">
+          <h1 className="text-[var(--theme-text-primary)] mb-2">Categories</h1>
+          <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
             Manage expense and revenue categories
           </p>
         </div>
@@ -28,30 +28,30 @@ export function CategoriesPage() {
         </Button>
       </div>
 
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Category</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Type</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Entries</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Total Amount</TableHead>
+            <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Category</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Type</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Entries</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Total Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.map((category) => (
               <TableRow 
                 key={category.id} 
-                className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] cursor-pointer"
+                className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] cursor-pointer"
                 style={{ minHeight: '48px' }}
               >
-                <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                   {category.name}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {category.type}
                 </TableCell>
-                <TableCell className="text-[14px] text-right text-[#6B7280] tabular-nums">
+                <TableCell className="text-[14px] text-right text-[var(--theme-text-muted)] tabular-nums">
                   {category.count}
                 </TableCell>
                 <TableCell 

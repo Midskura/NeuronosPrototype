@@ -151,7 +151,7 @@ export function ProjectBookingReadOnlyView({
           right: 0,
           bottom: 0,
           width: "70%",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
@@ -197,7 +197,7 @@ export function ProjectBookingReadOnlyView({
             <div style={{
               padding: "20px 32px",
               borderBottom: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "flex-start",
@@ -244,7 +244,7 @@ export function ProjectBookingReadOnlyView({
                     transition: "all 0.2s ease"
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#F3F4F6";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                     e.currentTarget.style.color = "var(--neuron-ink-primary)";
                   }}
                   onMouseLeave={(e) => {
@@ -261,7 +261,7 @@ export function ProjectBookingReadOnlyView({
             <div style={{
               padding: "0 32px",
               borderBottom: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               display: "flex",
               gap: "24px",
               flexShrink: 0
@@ -346,7 +346,7 @@ export function ProjectBookingReadOnlyView({
                 <BookingInformationReadOnly booking={booking} bookingType={bookingType} />
               )}
               {activeTab === "billings" && (
-                <div className="flex flex-col bg-white p-12 min-h-[600px]">
+                <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]">
                   <UnifiedBillingsTab
                     items={bookingBillingItems}
                     projectId={booking.projectNumber || ""}
@@ -406,7 +406,7 @@ function BookingInformationReadOnly({ booking, bookingType }: { booking: any; bo
     }}>
       {/* General Information Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -513,7 +513,7 @@ function BookingInformationReadOnly({ booking, bookingType }: { booking: any; bo
       {/* Additional Notes */}
       {booking.notes && (
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -551,11 +551,11 @@ function ReadOnlyField({ label, value, multiline = false }: { label: string; val
       </label>
       <div style={{
         padding: "9px 12px",
-        backgroundColor: "#F9FAFB",
-        border: "1px solid #E5E7EB",
+        backgroundColor: "var(--theme-bg-page)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "6px",
         fontSize: "13px",
-        color: "#374151",
+        color: "var(--theme-text-secondary)",
         minHeight: multiline ? "70px" : "38px",
         whiteSpace: multiline ? "pre-wrap" : "normal"
       }}>
@@ -570,7 +570,7 @@ function ForwardingDetails({ booking }: { booking: any }) {
   return (
     <>
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -631,7 +631,7 @@ function ForwardingDetails({ booking }: { booking: any }) {
       {/* Container Details (FCL only) */}
       {booking.mode === "FCL" && booking.containerNumbers && booking.containerNumbers.length > 0 && (
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -662,7 +662,7 @@ function BrokerageDetails({ booking }: { booking: any }) {
     <>
       {/* Shipment Information Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -728,7 +728,7 @@ function TruckingDetails({ booking }: { booking: any }) {
     <>
       {/* Shipment Information Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -788,7 +788,7 @@ function TruckingDetails({ booking }: { booking: any }) {
       {(booking.tabsBooking || booking.emptyReturn || booking.cyFee || booking.eirAvailability || 
         booking.earlyGateIn || booking.detDemValidity || booking.storageValidity || booking.shippingLine) && (
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -848,7 +848,7 @@ function MarineInsuranceDetails({ booking }: { booking: any }) {
     <>
       {/* Policy Information Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -894,7 +894,7 @@ function MarineInsuranceDetails({ booking }: { booking: any }) {
 
       {/* Shipment Information Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -959,7 +959,7 @@ function MarineInsuranceDetails({ booking }: { booking: any }) {
 function OthersDetails({ booking }: { booking: any }) {
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",

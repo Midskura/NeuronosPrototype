@@ -63,11 +63,11 @@ export function BookingCreationPanel({
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: "#E8F2EE" }}
+            style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}
           >
-            <span style={{ color: "#0F766E" }}>{icon}</span>
+            <span style={{ color: "var(--theme-action-primary-bg)" }}>{icon}</span>
           </div>
-          <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+          <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
             {title}
           </h2>
         </div>
@@ -88,7 +88,7 @@ export function BookingCreationPanel({
           <X size={20} />
         </button>
       </div>
-      <p style={{ fontSize: "14px", color: "#667085" }}>{subtitle}</p>
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>{subtitle}</p>
     </div>
   );
 
@@ -98,7 +98,7 @@ export function BookingCreationPanel({
       className="px-12 py-6 border-t flex items-center justify-end gap-3"
       style={{
         borderColor: "var(--neuron-ui-border)",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
       }}
     >
       <button
@@ -107,7 +107,7 @@ export function BookingCreationPanel({
         className="px-6 py-2.5 rounded-lg transition-colors"
         style={{
           border: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           color: "var(--neuron-ink-secondary)",
           fontSize: "14px",
           fontWeight: 500,
@@ -116,7 +116,7 @@ export function BookingCreationPanel({
           e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#FFFFFF";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
         }}
       >
         Cancel
@@ -137,12 +137,12 @@ export function BookingCreationPanel({
         }}
         onMouseEnter={(e) => {
           if (isFormValid && !isSubmitting) {
-            e.currentTarget.style.backgroundColor = "#0D6560";
+            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
           }
         }}
         onMouseLeave={(e) => {
           if (isFormValid && !isSubmitting) {
-            e.currentTarget.style.backgroundColor = "#0F766E";
+            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
           }
         }}
       >

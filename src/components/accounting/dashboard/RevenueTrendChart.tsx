@@ -114,20 +114,20 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
   return (
     <div
       className="rounded-xl p-5 flex flex-col"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <h3
             className="text-[12px] font-semibold uppercase tracking-wider"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Revenue & Expenses
           </h3>
 
           {/* Period toggle */}
-          <div className="flex items-center rounded-md p-0.5" style={{ background: "#F3F4F6" }}>
+          <div className="flex items-center rounded-md p-0.5" style={{ background: "var(--theme-bg-surface-subtle)" }}>
             {PERIODS.map((p) => (
               <button
                 key={p}
@@ -147,12 +147,12 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
 
         <div className="flex items-center gap-4">
           {[
-            { label: "Revenue", color: "#0F766E", shape: "rounded-sm" },
+            { label: "Revenue", color: "var(--theme-action-primary-bg)", shape: "rounded-sm" },
             { label: "Expenses", color: "#DC2626", shape: "rounded-sm" },
           ].map((l) => (
             <div key={l.label} className="flex items-center gap-1.5">
               <div className={`w-2.5 h-2.5 ${l.shape}`} style={{ backgroundColor: l.color }} />
-              <span className="text-[10px]" style={{ color: "#9CA3AF" }}>{l.label}</span>
+              <span className="text-[10px]" style={{ color: "var(--theme-text-muted)" }}>{l.label}</span>
             </div>
           ))}
         </div>
@@ -163,7 +163,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
         {/* Y-axis labels */}
         <div className="flex flex-col justify-between pr-2" style={{ width: "60px" }}>
           {[...ticks].reverse().map((tick, i) => (
-            <span key={`tick-${i}`} className="text-[10px] text-right tabular-nums" style={{ color: "#9CA3AF" }}>
+            <span key={`tick-${i}`} className="text-[10px] text-right tabular-nums" style={{ color: "var(--theme-text-muted)" }}>
               {formatCurrencyCompact(tick)}
             </span>
           ))}
@@ -219,7 +219,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                         className="flex-1 rounded-t-sm transition-all duration-500"
                         style={{
                           height: `${Math.max(revHeightPct, item.revenue > 0 ? 2 : 0)}%`,
-                          backgroundColor: "#0F766E",
+                          backgroundColor: "var(--theme-action-primary-bg)",
                           opacity: isHovered ? 1 : 0.8,
                         }}
                       />
@@ -239,8 +239,8 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                       <div
                         className="absolute z-10 rounded-lg px-3 py-2.5 shadow-lg text-[11px] pointer-events-none"
                         style={{
-                          background: "white",
-                          border: "1px solid #E5E9F0",
+                          background: "var(--theme-bg-surface)",
+                          border: "1px solid var(--theme-border-default)",
                           bottom: `${Math.min(revHeightPct + 8, 88)}%`,
                           left: "50%",
                           transform: "translateX(-50%)",
@@ -248,22 +248,22 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                           minWidth: "140px",
                         }}
                       >
-                        <div className="font-semibold mb-1.5" style={{ color: "#12332B" }}>
+                        <div className="font-semibold mb-1.5" style={{ color: "var(--theme-text-primary)" }}>
                           {item.month}
                         </div>
                         <div className="flex items-center justify-between gap-3 mb-0.5">
                           <div className="flex items-center gap-1.5">
                             <div className="w-2 h-2 rounded-sm" style={{ background: "#0F766E" }} />
-                            <span style={{ color: "#667085" }}>Revenue</span>
+                            <span style={{ color: "var(--theme-text-muted)" }}>Revenue</span>
                           </div>
-                          <span className="font-bold tabular-nums" style={{ color: "#0F766E" }}>
+                          <span className="font-bold tabular-nums" style={{ color: "var(--theme-action-primary-bg)" }}>
                             {fmt(item.revenue)}
                           </span>
                         </div>
                         <div className="flex items-center justify-between gap-3 mb-0.5">
                           <div className="flex items-center gap-1.5">
                             <div className="w-2 h-2 rounded-sm" style={{ background: "#DC2626" }} />
-                            <span style={{ color: "#667085" }}>Expenses</span>
+                            <span style={{ color: "var(--theme-text-muted)" }}>Expenses</span>
                           </div>
                           <span className="font-bold tabular-nums" style={{ color: "#DC2626" }}>
                             {fmt(item.expenses)}
@@ -271,9 +271,9 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                         </div>
                         <div
                           className="flex items-center justify-between gap-3 pt-1 mt-1"
-                          style={{ borderTop: "1px solid #F3F4F6" }}
+                          style={{ borderTop: "1px solid var(--theme-border-subtle)" }}
                         >
-                          <span style={{ color: "#667085" }}>Margin</span>
+                          <span style={{ color: "var(--theme-text-muted)" }}>Margin</span>
                           <span
                             className="font-bold tabular-nums"
                             style={{ color: item.marginAmt >= 0 ? "#16A34A" : "#EF4444" }}
@@ -292,7 +292,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
           {/* X-axis labels */}
           <div className="flex items-center gap-1 px-1 pt-2">
             {data.map((item) => (
-              <div key={item.monthKey} className="flex-1 text-center text-[10px]" style={{ color: "#9CA3AF" }}>
+              <div key={item.monthKey} className="flex-1 text-center text-[10px]" style={{ color: "var(--theme-text-muted)" }}>
                 {item.month}
               </div>
             ))}

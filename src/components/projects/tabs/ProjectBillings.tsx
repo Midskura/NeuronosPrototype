@@ -12,7 +12,7 @@ export function ProjectBillings({ financials, project, highlightId }: ProjectBil
   const { billingItems, refresh, isLoading } = financials;
 
   return (
-    <div className="flex flex-col bg-white p-12 min-h-[600px]">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]">
       <UnifiedBillingsTab
           items={billingItems}
           quotation={project.quotation} // Pass the quotation for reflective billing

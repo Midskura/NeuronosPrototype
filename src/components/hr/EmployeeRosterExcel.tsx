@@ -264,16 +264,16 @@ const COMPANY_DATA: CompanySection[] = [
 export function EmployeeRosterExcel() {
   return (
     <div
-      className="bg-white border border-[#E5E7EB] rounded-[20px] overflow-hidden flex flex-col"
+      className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[20px] overflow-hidden flex flex-col"
       style={{ maxHeight: "640px" }}
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between border-b border-[#E5E7EB] flex-shrink-0"
+        className="flex items-center justify-between border-b border-[var(--theme-border-default)] flex-shrink-0"
         style={{ padding: "20px 24px" }}
       >
         <h2
-          className="text-[#0A1D4D]"
+          className="text-[var(--theme-text-primary)]"
           style={{ fontSize: "18px", fontWeight: 600 }}
         >
           Employee Roster (Excel View)
@@ -306,119 +306,119 @@ export function EmployeeRosterExcel() {
               </div>
 
               {/* Column Headers */}
-              <div className="border-b border-[#D9D9D9]">
+              <div className="border-b border-[var(--theme-border-default)]">
                 <table className="w-full" style={{ tableLayout: "fixed" }}>
                   <thead>
                     {/* Main Header Row */}
-                    <tr className="bg-[#F3F4F6]">
+                    <tr className="bg-[var(--theme-bg-surface-subtle)]">
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "40px", fontWeight: 600 }}
                       >
                         #
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "100px", fontWeight: 600 }}
                       >
                         REGULARIZATION
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-left text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-left text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "160px", fontWeight: 600 }}
                       >
                         EMPLOYEE'S NAME
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-left text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-left text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "120px", fontWeight: 600 }}
                       >
                         MIDDLE NAME
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "100px", fontWeight: 600 }}
                       >
                         BIRTHDATE
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "130px", fontWeight: 600 }}
                       >
                         ID NUMBER
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-left text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-left text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "160px", fontWeight: 600 }}
                       >
                         DESIGNATION
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-left text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-left text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "220px", fontWeight: 600 }}
                       >
                         EMAIL ADDRESS
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600 }}
                       >
                         CONTACT NUMBER
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "420px", fontWeight: 600 }}
                         colSpan={3}
                       >
                         IN CASE OF EMERGENCY
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600, backgroundColor: "#DBEAFE" }}
                       >
                         SSS NUMBER
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600, backgroundColor: "#D1FAE5" }}
                       >
                         PHILHEALTH NUMBER
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600, backgroundColor: "#FEE2E2" }}
                       >
                         PAG-IBIG NUMBER
                       </th>
                       <th
-                        className="px-2 py-2 text-center text-[10px] text-[#000000] uppercase"
+                        className="px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600 }}
                       >
                         TIN NUMBER
                       </th>
                     </tr>
                     {/* Subheader Row for Emergency Contact */}
-                    <tr className="bg-[#F3F4F6] border-t border-[#D9D9D9]">
-                      <th className="border-r border-[#D9D9D9]" colSpan={9}></th>
+                    <tr className="bg-[var(--theme-bg-surface-subtle)] border-t border-[var(--theme-border-default)]">
+                      <th className="border-r border-[var(--theme-border-default)]" colSpan={9}></th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-1 text-center text-[9px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-1 text-center text-[9px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600 }}
                       >
                         NAME
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-1 text-center text-[9px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-1 text-center text-[9px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600 }}
                       >
                         RELATIONSHIP
                       </th>
                       <th
-                        className="border-r border-[#D9D9D9] px-2 py-1 text-center text-[9px] text-[#000000] uppercase"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-1 text-center text-[9px] text-[var(--theme-text-primary)] uppercase"
                         style={{ width: "140px", fontWeight: 600 }}
                       >
                         CONTACT NUMBER
                       </th>
-                      <th className="border-r border-[#D9D9D9]" colSpan={4}></th>
+                      <th className="border-r border-[var(--theme-border-default)]" colSpan={4}></th>
                     </tr>
                   </thead>
                 </table>
@@ -430,60 +430,60 @@ export function EmployeeRosterExcel() {
                   {company.employees.map((emp, rowIdx) => (
                     <tr
                       key={rowIdx}
-                      className="border-b border-[#D9D9D9] hover:bg-[#F9FAFB] transition-colors"
+                      className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] transition-colors"
                     >
                       {/* Row Number */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#6B7280] bg-[#F9FAFB]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-muted)] bg-[var(--theme-bg-page)]"
                         style={{ width: "40px" }}
                       >
                         {rowIdx + 1}
                       </td>
                       {/* Regularization */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "100px" }}
                       >
                         {emp.regularization}
                       </td>
                       {/* Employee Name */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-left text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-left text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "160px", fontWeight: 600 }}
                       >
                         {emp.employeeName}
                       </td>
                       {/* Middle Name */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-left text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-left text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "120px" }}
                       >
                         {emp.middleName}
                       </td>
                       {/* Birthdate */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "100px" }}
                       >
                         {emp.birthdate}
                       </td>
                       {/* ID Number */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "130px" }}
                       >
                         {emp.idNumber}
                       </td>
                       {/* Designation */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-left text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-left text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "160px" }}
                       >
                         {emp.designation}
                       </td>
                       {/* Email */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-left text-[11px]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-left text-[11px]"
                         style={{ width: "220px" }}
                       >
                         <a
@@ -495,42 +495,42 @@ export function EmployeeRosterExcel() {
                       </td>
                       {/* Contact Number */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px" }}
                       >
                         {emp.contactNumber}
                       </td>
                       {/* Emergency Name */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-left text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-left text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px" }}
                       >
                         {emp.emergencyName}
                       </td>
                       {/* Emergency Relationship */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px" }}
                       >
                         {emp.emergencyRelationship}
                       </td>
                       {/* Emergency Contact */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px" }}
                       >
                         {emp.emergencyContact}
                       </td>
                       {/* SSS Number */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px", backgroundColor: "#DBEAFE" }}
                       >
                         {emp.sssNumber}
                       </td>
                       {/* Philhealth Number */}
                       <td
-                        className="border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px", backgroundColor: "#D1FAE5" }}
                       >
                         {emp.philhealthNumber}
@@ -538,10 +538,10 @@ export function EmployeeRosterExcel() {
                       {/* Pag-IBIG Number */}
                       <td
                         className={cn(
-                          "border-r border-[#D9D9D9] px-2 py-3 text-center text-[11px]",
+                          "border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px]",
                           emp.pagibigNumber === "MISSING"
                             ? "bg-[#FCA5A5] text-white"
-                            : "bg-[#FEE2E2] text-[#000000]"
+                            : "bg-[#FEE2E2] text-[var(--theme-text-primary)]"
                         )}
                         style={{ width: "140px" }}
                       >
@@ -549,7 +549,7 @@ export function EmployeeRosterExcel() {
                       </td>
                       {/* TIN Number */}
                       <td
-                        className="px-2 py-3 text-center text-[11px] text-[#000000]"
+                        className="px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
                         style={{ width: "140px" }}
                       >
                         {emp.tinNumber}

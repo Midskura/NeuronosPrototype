@@ -188,7 +188,7 @@ export function RateCardGeneratorPopover({
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 bg-white border border-[#D0D5DD] text-[#0F766E] rounded-lg hover:bg-[#F0FDF9] transition-colors font-medium text-[14px]"
+        className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] rounded-lg hover:bg-[var(--theme-bg-surface-tint)] transition-colors font-medium text-[14px]"
       >
         <Zap size={16} />
         Generate from Rate Card
@@ -203,8 +203,8 @@ export function RateCardGeneratorPopover({
             top: "calc(100% + 8px)",
             right: 0,
             width: "440px",
-            backgroundColor: "white",
-            border: "1px solid #E5E7EB",
+            backgroundColor: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "10px",
             boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 4px 10px -5px rgba(0,0,0,0.04)",
             zIndex: 50,
@@ -215,23 +215,23 @@ export function RateCardGeneratorPopover({
           <div
             style={{
               padding: "14px 16px 12px",
-              borderBottom: "1px solid #F3F4F6",
+              borderBottom: "1px solid var(--theme-border-subtle)",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
             }}
           >
             <div>
-              <div style={{ fontSize: "14px", fontWeight: 600, color: "#12332B" }}>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 Smart Pre-Fill from Rate Card
               </div>
-              <div style={{ fontSize: "12px", color: "#667085", marginTop: "2px" }}>
+              <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", marginTop: "2px" }}>
                 {contractNumber} — {unbilledRows.length} unbilled booking{unbilledRows.length !== 1 ? "s" : ""}
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              style={{ color: "#9CA3AF", background: "none", border: "none", cursor: "pointer", padding: "4px" }}
+              style={{ color: "var(--theme-text-muted)", background: "none", border: "none", cursor: "pointer", padding: "4px" }}
             >
               <X size={16} />
             </button>
@@ -242,8 +242,8 @@ export function RateCardGeneratorPopover({
             <div
               style={{
                 padding: "10px 16px",
-                borderBottom: "1px solid #F3F4F6",
-                backgroundColor: "#F9FAFB",
+                borderBottom: "1px solid var(--theme-border-subtle)",
+                backgroundColor: "var(--theme-bg-page)",
               }}
             >
               <button
@@ -256,7 +256,7 @@ export function RateCardGeneratorPopover({
                   justifyContent: "center",
                   gap: "8px",
                   padding: "8px 16px",
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   color: "white",
                   border: "none",
                   borderRadius: "6px",
@@ -279,7 +279,7 @@ export function RateCardGeneratorPopover({
           {/* Booking list */}
           <div style={{ maxHeight: "320px", overflow: "auto" }}>
             {bookingRows.length === 0 ? (
-              <div style={{ padding: "24px 16px", textAlign: "center", color: "#9CA3AF", fontSize: "13px" }}>
+              <div style={{ padding: "24px 16px", textAlign: "center", color: "var(--theme-text-muted)", fontSize: "13px" }}>
                 No bookings linked to this contract yet.
               </div>
             ) : (
@@ -298,7 +298,7 @@ export function RateCardGeneratorPopover({
                   {/* Left: Booking info */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "3px" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>
+                      <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                         {row.bookingId}
                       </span>
                       <span
@@ -314,7 +314,7 @@ export function RateCardGeneratorPopover({
                         {row.serviceType}
                       </span>
                     </div>
-                    <div style={{ fontSize: "12px", color: "#667085" }}>
+                    <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                       {row.mode} — {formatQuantities(row.quantities)}
                     </div>
                   </div>
@@ -360,8 +360,8 @@ export function RateCardGeneratorPopover({
                         padding: "5px 12px",
                         fontSize: "12px",
                         fontWeight: 500,
-                        color: "#0F766E",
-                        backgroundColor: "#F0FDF9",
+                        color: "var(--theme-action-primary-bg)",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         border: "1px solid #D1FAE5",
                         borderRadius: "5px",
                         cursor: generating ? "not-allowed" : "pointer",

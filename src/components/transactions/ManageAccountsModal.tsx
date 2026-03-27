@@ -113,7 +113,7 @@ export function ManageAccountsModal({
         <div key={node.id} className="select-none">
           <div 
             className={`
-               flex items-center py-2 px-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors
+               flex items-center py-2 px-3 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg cursor-pointer transition-colors
                ${isSelected ? 'bg-green-50/50' : ''}
             `}
             style={{ paddingLeft: `${level * 20 + 12}px` }}
@@ -121,7 +121,7 @@ export function ManageAccountsModal({
           >
             {/* Expand/Collapse Icon */}
             <div 
-                className="mr-2 text-gray-400 p-1 hover:text-gray-600"
+                className="mr-2 text-[var(--theme-text-muted)] p-1 hover:text-[var(--theme-text-secondary)]"
                 onClick={(e) => {
                     e.stopPropagation();
                     toggleFolder(node.id);
@@ -137,10 +137,10 @@ export function ManageAccountsModal({
                 className={`
                    mr-3 w-5 h-5 rounded border flex items-center justify-center transition-all
                    ${isSelected 
-                     ? 'bg-[#0F766E] border-[#0F766E] text-white' 
-                     : 'border-gray-300 bg-white text-transparent hover:border-gray-400'
+                     ? 'bg-[var(--theme-action-primary-bg)] border-[var(--theme-action-primary-bg)] text-white' 
+                     : 'border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-transparent hover:border-[var(--theme-border-default)]'
                    }
-                   ${node.is_folder ? 'opacity-30 cursor-not-allowed bg-gray-100' : ''}
+                   ${node.is_folder ? 'opacity-30 cursor-not-allowed bg-[var(--theme-bg-surface-subtle)]' : ''}
                 `}
                 onClick={(e) => {
                     e.stopPropagation();
@@ -157,18 +157,18 @@ export function ManageAccountsModal({
                ) : node.type === 'Liability' ? (
                    <CreditCard size={16} className="text-purple-400" />
                ) : (
-                   <Wallet size={16} className="text-gray-400" />
+                   <Wallet size={16} className="text-[var(--theme-text-muted)]" />
                )}
-               <span className={`text-sm truncate ${node.is_folder ? 'font-semibold text-gray-700' : 'text-gray-600'}`}>
+               <span className={`text-sm truncate ${node.is_folder ? 'font-semibold text-[var(--theme-text-secondary)]' : 'text-[var(--theme-text-secondary)]'}`}>
                    {node.name}
                </span>
                {node.currency && (
-                   <span className="text-[10px] font-mono bg-gray-100 text-gray-500 px-1.5 rounded">
+                   <span className="text-[10px] font-mono bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] px-1.5 rounded">
                        {node.currency}
                    </span>
                )}
                {node.code && (
-                   <span className="text-[10px] text-gray-400 font-mono">
+                   <span className="text-[10px] text-[var(--theme-text-muted)] font-mono">
                        #{node.code}
                    </span>
                )}
@@ -188,27 +188,27 @@ export function ManageAccountsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="bg-[var(--theme-bg-surface)] rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
         
         {/* Header */}
-        <div className="px-6 py-5 border-b border-gray-100 flex justify-between items-center bg-white">
+        <div className="px-6 py-5 border-b border-[var(--theme-border-subtle)] flex justify-between items-center bg-[var(--theme-bg-surface)]">
            <div>
-              <h2 className="text-xl font-semibold text-[#12332B]">Manage Transaction Accounts</h2>
-              <p className="text-sm text-gray-500 mt-1">Select which Chart of Accounts items to show in Transactions.</p>
+              <h2 className="text-xl font-semibold text-[var(--theme-text-primary)]">Manage Transaction Accounts</h2>
+              <p className="text-sm text-[var(--theme-text-muted)] mt-1">Select which Chart of Accounts items to show in Transactions.</p>
            </div>
-           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-gray-600 transition-colors">
+           <button onClick={onClose} className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-full text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] transition-colors">
               <X size={20} />
            </button>
         </div>
 
         {/* Search */}
-        <div className="p-4 border-b border-gray-100 bg-gray-50/50">
+        <div className="p-4 border-b border-[var(--theme-border-subtle)] bg-[var(--theme-bg-surface-subtle)]/50">
            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-muted)]" size={16} />
               <input 
                 type="text" 
                 placeholder="Search accounts..." 
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E]"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -220,27 +220,27 @@ export function ManageAccountsModal({
            {accountTree.rootNodes.length > 0 ? (
                renderTree(accountTree.rootNodes)
            ) : (
-               <div className="text-center py-12 text-gray-500">
+               <div className="text-center py-12 text-[var(--theme-text-muted)]">
                    No accounts found.
                </div>
            )}
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
-           <div className="text-sm text-gray-500">
+        <div className="p-6 border-t border-[var(--theme-border-subtle)] bg-[var(--theme-bg-surface-subtle)] flex justify-between items-center">
+           <div className="text-sm text-[var(--theme-text-muted)]">
                {selectedIds.size} accounts selected
            </div>
            <div className="flex gap-3">
                <button 
                   onClick={onClose}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                  className="px-4 py-2 text-sm font-medium text-[var(--theme-text-secondary)] bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] transition-colors shadow-sm"
                >
                   Cancel
                </button>
                <button 
                   onClick={handleSave}
-                  className="px-4 py-2 text-sm font-medium text-white bg-[#0F766E] rounded-lg hover:bg-[#0D6560] transition-colors shadow-sm"
+                  className="px-4 py-2 text-sm font-medium text-white bg-[var(--theme-action-primary-bg)] rounded-lg hover:bg-[var(--theme-action-primary-border)] transition-colors shadow-sm"
                >
                   Save Changes
                </button>

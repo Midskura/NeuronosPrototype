@@ -112,7 +112,7 @@ export function BillingsSection({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid #E5E9E8",
         borderRadius: "12px",
         padding: "28px",
@@ -162,8 +162,8 @@ export function BillingsSection({
                 padding: "8px 12px",
                 fontSize: "12px",
                 fontWeight: 500,
-                color: "#6B7A76",
-                backgroundColor: "white",
+                color: "var(--theme-text-muted)",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid #E0E6E4",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -171,7 +171,7 @@ export function BillingsSection({
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#F8FBFB";
-                e.currentTarget.style.borderColor = "#0F766E";
+                e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "white";
@@ -195,14 +195,14 @@ export function BillingsSection({
               fontSize: "13px",
               fontWeight: 600,
               color: "var(--neuron-brand-green)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #D9E1DE",
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#E8F5F3";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
               e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
@@ -224,7 +224,7 @@ export function BillingsSection({
         <div style={{
           padding: "48px 24px",
           textAlign: "center",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "10px"
         }}>

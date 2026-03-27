@@ -133,7 +133,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
 
       {/* Side Panel */}
       <div 
-        className="fixed right-0 top-0 h-full w-[680px] bg-white z-50 shadow-2xl overflow-hidden flex flex-col"
+        className="fixed right-0 top-0 h-full w-[680px] bg-[var(--theme-bg-surface)] z-50 shadow-2xl overflow-hidden flex flex-col"
         style={{
           animation: "slideIn 0.3s ease-out",
           border: "1px solid var(--neuron-ui-border)",
@@ -144,18 +144,18 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
           className="px-12 py-8 border-b"
           style={{ 
             borderColor: "var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-3">
               <div 
                 className="w-10 h-10 rounded-lg flex items-center justify-center"
-                style={{ backgroundColor: "#E8F2EE" }}
+                style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}
               >
-                <UserPlus size={20} style={{ color: "#0F766E" }} />
+                <UserPlus size={20} style={{ color: "var(--theme-action-primary-bg)" }} />
               </div>
-              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 Add New Contact
               </h2>
             </div>
@@ -176,7 +176,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
               <X size={20} />
             </button>
           </div>
-          <p style={{ fontSize: "14px", color: "#667085" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
             Create a new contact record for your business development pipeline
           </p>
         </div>
@@ -187,8 +187,8 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             {/* Contact Information Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <User size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <User size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Contact Information
                 </h3>
               </div>
@@ -199,7 +199,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="first_name" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     First Name <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -212,7 +212,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                     required
@@ -224,7 +224,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="last_name" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Last Name <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -237,7 +237,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                     required
@@ -249,7 +249,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="title" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Title
                   </label>
@@ -262,7 +262,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                   />
@@ -273,7 +273,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="email" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Email Address <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -286,7 +286,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                     required
@@ -298,7 +298,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="phone" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Mobile Number <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -311,7 +311,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                     required
@@ -323,8 +323,8 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             {/* Company Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Building2 size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Building2 size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Company
                 </h3>
               </div>
@@ -333,7 +333,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                 <label 
                   htmlFor="customer_id" 
                   className="block mb-1.5"
-                  style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                  style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                 >
                   Company <span style={{ color: "#C94F3D" }}>*</span>
                 </label>
@@ -344,13 +344,13 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{ 
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#F9FAFB",
+                        backgroundColor: "var(--theme-bg-page)",
                         color: "var(--neuron-ink-primary)"
                       }}
                     >
                       {prefilledCustomerName}
                     </div>
-                    <p className="mt-1.5 text-[12px]" style={{ color: "#667085" }}>
+                    <p className="mt-1.5 text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                       Adding contact to {prefilledCustomerName}
                     </p>
                   </>
@@ -374,8 +374,8 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             {/* Lead Details Section */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Target size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Target size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Lead Details
                 </h3>
               </div>
@@ -386,7 +386,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <div>
                     <label 
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Lifecycle Stage
                     </label>
@@ -406,7 +406,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <div>
                     <label 
                       className="block mb-1.5"
-                      style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
                       Lead Status
                     </label>
@@ -433,7 +433,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="owner_id" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Contact Owner <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
@@ -455,7 +455,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   <label 
                     htmlFor="notes" 
                     className="block mb-1.5"
-                    style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+                    style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
                     Notes
                   </label>
@@ -468,7 +468,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)"
                     }}
                   />
@@ -483,7 +483,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
           className="px-12 py-6 border-t flex items-center justify-end gap-3"
           style={{ 
             borderColor: "var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           <button
@@ -492,7 +492,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             className="px-6 py-2.5 rounded-lg transition-colors"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "var(--neuron-ink-secondary)",
               fontSize: "14px",
               fontWeight: 500
@@ -501,7 +501,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
               e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             Cancel
@@ -522,12 +522,12 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             }}
             onMouseEnter={(e) => {
               if (isFormValid) {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }
             }}
             onMouseLeave={(e) => {
               if (isFormValid) {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }
             }}
           >

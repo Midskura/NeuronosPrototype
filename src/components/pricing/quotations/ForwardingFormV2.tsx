@@ -23,7 +23,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
         alignItems: "center",
         gap: "6px"
       }}>
-        <Ship size={14} style={{ color: "#0F766E" }} />
+        <Ship size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         SERVICE DETAILS
       </div>
 
@@ -34,7 +34,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
       }}>
         {/* Incoterms */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Incoterms *
           </label>
           <CustomDropdown
@@ -57,7 +57,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
 
         {/* Cargo Type */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Cargo Type *
           </label>
           <CustomDropdown
@@ -76,7 +76,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
 
         {/* Mode */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Mode *
           </label>
           <CustomDropdown
@@ -93,7 +93,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
 
         {/* Commodity */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Commodity *
           </label>
           <input
@@ -107,14 +107,14 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* AOL (Airport of Loading) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             AOL (Airport of Loading)
           </label>
           <input
@@ -128,14 +128,14 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* POL (Port of Loading) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             POL (Port of Loading) *
           </label>
           <input
@@ -149,14 +149,14 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* AOD (Airport of Discharge) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             AOD (Airport of Discharge)
           </label>
           <input
@@ -170,14 +170,14 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* POD (Port of Discharge) */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             POD (Port of Discharge) *
           </label>
           <input
@@ -191,14 +191,14 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Delivery Address */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Delivery Address
           </label>
           <input
@@ -212,7 +212,7 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>

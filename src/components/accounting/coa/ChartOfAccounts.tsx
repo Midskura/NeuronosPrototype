@@ -185,7 +185,7 @@ export function ChartOfAccounts() {
                 e.stopPropagation();
                 toggleFolder(item.id);
               }}
-              className="p-1 hover:bg-gray-200 rounded text-gray-500 transition-colors"
+              className="p-1 hover:bg-[var(--theme-bg-surface-tint)] rounded text-[var(--theme-text-muted)] transition-colors"
             >
               {expandedFolders[item.id] ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
@@ -193,15 +193,15 @@ export function ChartOfAccounts() {
             <div className="w-6" /> // Spacer
           )}
           
-          <span className="font-mono text-gray-400 text-xs w-12">{item.code}</span>
+          <span className="font-mono text-[var(--theme-text-muted)] text-xs w-12">{item.code}</span>
 
           {item.is_folder ? (
-             <Folder size={16} className="text-[#0F766E] fill-[#0F766E]/10" />
+             <Folder size={16} className="text-[var(--theme-action-primary-bg)] fill-[#0F766E]/10" />
           ) : (
-             <FileText size={16} className="text-gray-400" />
+             <FileText size={16} className="text-[var(--theme-text-muted)]" />
           )}
           
-          <span className={item.is_folder ? "font-semibold text-[#12332B]" : "text-[#344054]"}>
+          <span className={item.is_folder ? "font-semibold text-[var(--theme-text-primary)]" : "text-[var(--theme-text-secondary)]"}>
             {item.name}
           </span>
         </div>
@@ -227,7 +227,7 @@ export function ChartOfAccounts() {
       header: "Detail Type",
       width: "20%",
       cell: (item) => (
-        <span className="text-gray-500 text-[12px]">{item.subtype || "-"}</span>
+        <span className="text-[var(--theme-text-muted)] text-[12px]">{item.subtype || "-"}</span>
       )
     },
     {
@@ -238,7 +238,7 @@ export function ChartOfAccounts() {
         // Display native currency balance (or PHP default)
         const currency = item.currency || "PHP";
         return (
-          <span className="font-mono font-medium text-[#12332B] text-[12px]">
+          <span className="font-mono font-medium text-[var(--theme-text-primary)] text-[12px]">
             {formatCurrency(item.balance || 0, currency)}
           </span>
         );
@@ -252,7 +252,7 @@ export function ChartOfAccounts() {
         <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <span 
             onClick={(e) => handleViewRegister(item, e)}
-            className="text-[11px] font-medium text-[#0F766E] hover:underline cursor-pointer"
+            className="text-[11px] font-medium text-[var(--theme-action-primary-bg)] hover:underline cursor-pointer"
           >
             View register
           </span>
@@ -279,11 +279,11 @@ export function ChartOfAccounts() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-[var(--theme-bg-surface)]">
       {/* Header Section */}
       <div style={{ 
         padding: "32px 48px 24px 48px",
-        borderBottom: "1px solid #E5E9F0"
+        borderBottom: "1px solid var(--theme-border-default)"
       }}>
         {/* Title and Buttons */}
         <div style={{ 
@@ -296,7 +296,7 @@ export function ChartOfAccounts() {
             <h1 style={{ 
               fontSize: "32px",
               fontWeight: 600,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               marginBottom: "4px",
               letterSpacing: "-1.2px"
             }}>
@@ -304,7 +304,7 @@ export function ChartOfAccounts() {
             </h1>
             <p style={{ 
               fontSize: "14px",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               margin: 0
             }}>
               Manage your financial structure and ledger balances
@@ -314,13 +314,13 @@ export function ChartOfAccounts() {
           <div className="flex gap-3">
              <button 
                 onClick={handleResetCOA}
-                className="h-10 px-4 bg-white border border-red-200 text-red-600 rounded-lg font-medium text-sm hover:bg-red-50 transition-colors flex items-center gap-2"
+                className="h-10 px-4 bg-[var(--theme-bg-surface)] border border-red-200 text-red-600 rounded-lg font-medium text-sm hover:bg-red-50 transition-colors flex items-center gap-2"
                 title="Reset to Standard COA"
              >
                 <RefreshCw size={16} />
                 <span className="hidden sm:inline">Reset</span>
              </button>
-             <button className="h-10 px-4 bg-white border border-[#E5E9F0] text-[#344054] rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors flex items-center gap-2">
+             <button className="h-10 px-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] text-[var(--theme-text-secondary)] rounded-lg font-medium text-sm hover:bg-[var(--theme-bg-surface-subtle)] transition-colors flex items-center gap-2">
                 <Download size={16} />
                 Export
              </button>
@@ -331,7 +331,7 @@ export function ChartOfAccounts() {
                   alignItems: "center",
                   gap: "8px",
                   padding: "10px 20px",
-                  backgroundColor: "#0F766E", // var(--neuron-brand-green)
+                  backgroundColor: "var(--theme-action-primary-bg)", // var(--neuron-brand-green)
                   border: "none",
                   borderRadius: "8px",
                   fontSize: "14px",
@@ -344,7 +344,7 @@ export function ChartOfAccounts() {
                  e.currentTarget.style.backgroundColor = "#0F544A";
                }}
                onMouseLeave={(e) => {
-                 e.currentTarget.style.backgroundColor = "#0F766E";
+                 e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                }}
              >
                <Plus size={18} />
@@ -362,7 +362,7 @@ export function ChartOfAccounts() {
               left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
             }}
           />
           <input
@@ -373,12 +373,12 @@ export function ChartOfAccounts() {
             style={{
               width: "100%",
               padding: "10px 12px 10px 40px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
               outline: "none",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           />
         </div>
@@ -411,12 +411,12 @@ export function ChartOfAccounts() {
                  }}
                  onMouseEnter={(e) => {
                    if (activeTab !== tab) {
-                     e.currentTarget.style.color = "#12332B";
+                     e.currentTarget.style.color = "var(--theme-text-primary)";
                    }
                  }}
                  onMouseLeave={(e) => {
                    if (activeTab !== tab) {
-                     e.currentTarget.style.color = "#667085";
+                     e.currentTarget.style.color = "var(--theme-text-muted)";
                    }
                  }}
                >
@@ -446,19 +446,19 @@ export function ChartOfAccounts() {
       </div>
 
       {/* DataTable */}
-      <div className="flex-1 overflow-auto bg-white p-6">
+      <div className="flex-1 overflow-auto bg-[var(--theme-bg-surface)] p-6">
         <DataTable
           data={flatAccounts}
           columns={columns}
           isLoading={loading}
           emptyMessage="No accounts found matching your filters."
           onRowClick={handleEditAccount}
-          rowClassName={() => "group cursor-pointer hover:bg-gray-50"}
+          rowClassName={() => "group cursor-pointer hover:bg-[var(--theme-bg-surface-subtle)]"}
           enableSelection={false}
           footerSummary={[
              {
                 label: "Total Accounts",
-                value: <span className="text-[#374151]">{flatAccounts.length}</span>
+                value: <span className="text-[var(--theme-text-secondary)]">{flatAccounts.length}</span>
              }
           ]}
         />

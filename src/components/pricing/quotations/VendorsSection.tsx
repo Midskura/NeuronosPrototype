@@ -348,7 +348,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -373,7 +373,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
             fontSize: "13px",
             fontWeight: 600,
             color: "var(--neuron-brand-green)",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid #D9E1DE",
             borderRadius: "8px",
             cursor: "pointer",
@@ -383,7 +383,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
             transition: "all 0.2s ease"
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#E8F5F3";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
             e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
             e.currentTarget.style.transform = "translateY(-1px)";
             setIsAddVendorHovered(true);
@@ -405,7 +405,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
       {showAddVendor && (
         <div style={{
           padding: "16px",
-          backgroundColor: "#F8FBFB",
+          backgroundColor: "var(--theme-bg-page)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "6px",
           marginBottom: "12px"
@@ -545,7 +545,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
               <div
                 style={{
                   padding: "12px 16px",
-                  backgroundColor: "#F8FBFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   display: "flex",
@@ -621,7 +621,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                       fontSize: "11px",
                       fontWeight: 500,
                       color: "var(--neuron-brand-teal)",
-                      backgroundColor: "#E8F5F3",
+                      backgroundColor: "var(--theme-bg-surface-tint)",
                       padding: "2px 8px",
                       borderRadius: "4px",
                       flexShrink: 0
@@ -666,7 +666,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                           fontSize: "12px",
                           fontWeight: 500,
                           color: "var(--neuron-ink-base)",
-                          backgroundColor: "white",
+                          backgroundColor: "var(--theme-bg-surface)",
                           border: "1px solid #D9E1DE",
                           borderRadius: "4px",
                           cursor: "pointer",
@@ -736,7 +736,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                           }}
                           onMouseLeave={(e) => {
                             if (savingVendorId !== vendor.id) {
-                              e.currentTarget.style.backgroundColor = "#0F766E";
+                              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                             }
                           }}
                         >
@@ -769,7 +769,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                           style={{
                             padding: "6px 12px",
                             color: "var(--neuron-brand-teal)",
-                            backgroundColor: "white",
+                            backgroundColor: "var(--theme-bg-surface)",
                             border: "1px solid #D9E1DE",
                             borderRadius: "4px",
                             cursor: "pointer",
@@ -782,7 +782,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                             whiteSpace: "nowrap"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#E8F5F3";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                             e.currentTarget.style.borderColor = "var(--neuron-brand-teal)";
                           }}
                           onMouseLeave={(e) => {
@@ -811,7 +811,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
                           style={{
                             padding: "6px 12px",
                             color: "var(--neuron-ink-muted)",
-                            backgroundColor: "white",
+                            backgroundColor: "var(--theme-bg-surface)",
                             border: "1px solid #D9E1DE",
                             borderRadius: "4px",
                             cursor: "pointer",
@@ -876,7 +876,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
               {isExpanded && (
                 <div style={{
                   marginTop: "8px",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   animation: "expandIn 0.2s ease-out",
@@ -977,7 +977,7 @@ export function VendorsSection({ vendors, setVendors, onImportCharges, viewMode 
           textAlign: "center",
           color: "var(--neuron-ink-muted)",
           fontSize: "13px",
-          backgroundColor: "#F8FBFB",
+          backgroundColor: "var(--theme-bg-page)",
           border: "1px dashed var(--neuron-ui-border)",
           borderRadius: "6px"
         }}>

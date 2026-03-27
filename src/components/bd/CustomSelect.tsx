@@ -51,7 +51,7 @@ export function CustomSelect({
         className="w-full px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px] flex items-center justify-between transition-colors"
         style={{
           border: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           color: value ? "var(--neuron-ink-primary)" : "#9CA3AF",
         }}
         onFocus={(e) => {
@@ -79,7 +79,7 @@ export function CustomSelect({
         <div
           className="absolute z-50 w-full mt-1 rounded-lg shadow-lg overflow-hidden"
           style={{
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             maxHeight: "240px",
             overflowY: "auto",
@@ -106,7 +106,7 @@ export function CustomSelect({
               }}
               onMouseLeave={(e) => {
                 if (value !== option.value) {
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 } else {
                   e.currentTarget.style.backgroundColor = "#E0F2FE";
                 }

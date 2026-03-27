@@ -459,7 +459,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
     <div 
       className="h-full flex flex-col overflow-auto"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Back Button - Top Left */}
@@ -467,7 +467,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
         <button
           onClick={onBack}
           className="flex items-center gap-2 text-[13px] transition-colors"
-          style={{ color: "#0F766E" }}
+          style={{ color: "var(--theme-action-primary-bg)" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "#0D6560";
           }}
@@ -489,7 +489,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
               className="rounded-lg p-6"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF"
+                backgroundColor: "var(--theme-bg-surface)"
               }}
             >
               {/* Profile Header */}
@@ -687,7 +687,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       className="w-full px-3 py-2 rounded-lg text-[13px] focus:outline-none focus:ring-2"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)"
                       }}
                     />
@@ -745,7 +745,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       className="w-full px-3 py-2 rounded-lg text-[13px] focus:outline-none focus:ring-2 resize-none"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)"
                       }}
                     />
@@ -780,7 +780,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       className="w-full px-3 py-2 rounded-lg text-[13px] focus:outline-none focus:ring-2"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)"
                       }}
                     />
@@ -799,7 +799,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       className="w-full px-3 py-2 rounded-lg text-[13px] focus:outline-none focus:ring-2 resize-none"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)"
                       }}
                     />
@@ -816,12 +816,12 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       onClick={handleSave}
                       disabled={isSavingCustomer}
                       className="flex-1 px-4 py-2 rounded-lg text-[13px] font-medium text-white transition-colors disabled:opacity-60"
-                      style={{ backgroundColor: "#0F766E" }}
+                      style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                     >
                       {isSavingCustomer ? "Saving..." : "Save Changes"}
@@ -833,13 +833,13 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
                         color: "var(--neuron-ink-secondary)",
-                        backgroundColor: "#FFFFFF"
+                        backgroundColor: "var(--theme-bg-surface)"
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#FFFFFF";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                       }}
                     >
                       Cancel
@@ -866,7 +866,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                   {activeTab === "contacts" && (
                     <div 
                       className="absolute bottom-0 left-0 right-0 h-0.5"
-                      style={{ backgroundColor: "#0F766E" }}
+                      style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                     />
                   )}
                 </button>
@@ -884,7 +884,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     {activeTab === "activities" && (
                       <div 
                         className="absolute bottom-0 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#0F766E" }}
+                        style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       />
                     )}
                   </button>
@@ -899,7 +899,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     {activeTab === "tasks" && (
                       <div 
                         className="absolute bottom-0 left-0 right-0 h-0.5"
-                        style={{ backgroundColor: "#0F766E" }}
+                        style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       />
                     )}
                   </button>
@@ -916,7 +916,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 {activeTab === "inquiries" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -931,7 +931,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 {activeTab === "projects" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -947,7 +947,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 {activeTab === "contracts" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -963,7 +963,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 {activeTab === "comments" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -978,7 +978,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 {activeTab === "attachments" && (
                   <div 
                     className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: "#0F766E" }}
+                    style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                   />
                 )}
               </button>
@@ -990,21 +990,21 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
               {activeTab === "contacts" && variant === "bd" && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                    <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       Contact List
                     </h3>
                     <button
                       onClick={() => setIsAddContactPanelOpen(true)}
                       className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                       style={{
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         color: "#FFFFFF"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                     >
                       Add Contact
@@ -1013,11 +1013,11 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                   {isLoadingContacts ? (
                     <div className="text-center py-12">
-                      <p className="text-[14px]" style={{ color: "#667085" }}>Loading contacts...</p>
+                      <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>Loading contacts...</p>
                     </div>
                   ) : customerContacts.length === 0 ? (
                     <div className="text-center py-12">
-                      <p className="text-[14px]" style={{ color: "#667085" }}>No contacts yet</p>
+                      <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No contacts yet</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -1035,7 +1035,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           className="p-4 rounded-lg cursor-pointer transition-all"
                           style={{
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FFFFFF"
+                            backgroundColor: "var(--theme-bg-surface)"
                           }}
                           onClick={() => {
                             if (variant === "bd") {
@@ -1045,11 +1045,11 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             }
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#F9FAFB";
-                            e.currentTarget.style.borderColor = "#0F766E";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                            e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#FFFFFF";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                             e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                           }}
                         >
@@ -1060,11 +1060,11 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             <div 
                               className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                               style={{
-                                backgroundColor: "#F3F4F6",
+                                backgroundColor: "var(--theme-bg-surface-subtle)",
                                 border: "1px solid var(--neuron-ui-divider)"
                               }}
                             >
-                              <User size={18} style={{ color: "#9CA3AF" }} />
+                              <User size={18} style={{ color: "var(--theme-text-muted)" }} />
                             </div>
 
                             {/* Contact Info */}
@@ -1130,7 +1130,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             setActivityAttachments([]);
                           }}
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
-                          style={{ color: "#0F766E" }}
+                          style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.color = "#0D6560";
                           }}
@@ -1142,7 +1142,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           Back to Activities
                         </button>
 
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "24px" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "24px" }}>
                           Log Activity
                         </h3>
 
@@ -1156,7 +1156,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           <div className="space-y-6">
                             {/* Activity Name */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Activity Name *
                               </label>
                               <input
@@ -1167,15 +1167,15 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
 
                             {/* Activity Description */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Activity Description *
                               </label>
                               <textarea
@@ -1186,15 +1186,15 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 rows={4}
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
 
                             {/* Type */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Type *
                               </label>
                               <CustomDropdown
@@ -1217,7 +1217,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                             {/* Date/Time */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Activity Date & Time *
                               </label>
                               <input
@@ -1227,15 +1227,15 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
 
                             {/* Contact Selection */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Related Contact (Optional)
                               </label>
                               <select
@@ -1244,8 +1244,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               >
                                 <option value="">Select a contact...</option>
@@ -1259,23 +1259,23 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                             {/* Attachments */}
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Attachments (Optional)
                               </label>
                               <div 
                                 className="border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors"
-                                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "#FFFFFF" }}
+                                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.borderColor = "#0F766E";
-                                  e.currentTarget.style.backgroundColor = "#E8F5F3";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                 }}
                               >
-                                <Upload size={24} className="mx-auto mb-2" style={{ color: "#667085" }} />
-                                <p className="text-[13px]" style={{ color: "#667085" }}>
+                                <Upload size={24} className="mx-auto mb-2" style={{ color: "var(--theme-text-muted)" }} />
+                                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                                   Click to upload or drag and drop files
                                 </p>
                               </div>
@@ -1285,12 +1285,12 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             <div className="flex gap-3 pt-4">
                               <button
                                 className="flex-1 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white transition-colors"
-                                style={{ backgroundColor: "#0F766E" }}
+                                style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0D6560";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#0F766E";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                                 }}
                               >
                                 Log Activity
@@ -1307,13 +1307,13 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
                                   color: "var(--neuron-ink-secondary)",
-                                  backgroundColor: "#FFFFFF"
+                                  backgroundColor: "var(--theme-bg-surface)"
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                 }}
                               >
                                 Cancel
@@ -1326,7 +1326,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                   ) : !selectedActivity ? (
                     <>
                       <div className="flex items-center justify-between mb-6">
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Activity Timeline
                         </h3>
                         <button
@@ -1336,14 +1336,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           }}
                           className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                           style={{
-                            backgroundColor: "#0F766E",
+                            backgroundColor: "var(--theme-action-primary-bg)",
                             color: "#FFFFFF"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0D6560";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0F766E";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                           }}
                         >
                           Log Activity
@@ -1352,7 +1352,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                       {activities.length === 0 ? (
                         <div className="text-center py-12">
-                          <p className="text-[14px]" style={{ color: "#667085" }}>No activities yet</p>
+                          <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No activities yet</p>
                         </div>
                       ) : (
                         <div className="space-y-4">
@@ -1369,23 +1369,23 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="p-4 rounded-lg cursor-pointer transition-all"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF"
+                                  backgroundColor: "var(--theme-bg-surface)"
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#F9FAFB";
-                                  e.currentTarget.style.borderColor = "#0F766E";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                                 }}
                               >
                               <div className="flex items-start gap-3">
                                 <div 
                                   className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                                  style={{ backgroundColor: "#E8F5F3" }}
+                                  style={{ backgroundColor: "var(--theme-bg-surface-tint)" }}
                                 >
-                                  <CheckCircle size={14} style={{ color: "#0F766E" }} />
+                                  <CheckCircle size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center justify-between mb-1">
@@ -1442,7 +1442,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     /* Task List */
                     <>
                       <div className="flex items-center justify-between mb-6">
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Tasks
                         </h3>
                         <button
@@ -1452,14 +1452,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           }}
                           className="px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                           style={{
-                            backgroundColor: "#0F766E",
+                            backgroundColor: "var(--theme-action-primary-bg)",
                             color: "#FFFFFF"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0D6560";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "#0F766E";
+                            e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                           }}
                         >
                           Create Task
@@ -1468,7 +1468,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                       {tasks.length === 0 ? (
                         <div className="text-center py-12">
-                          <p className="text-[14px]" style={{ color: "#667085" }}>No tasks yet</p>
+                          <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No tasks yet</p>
                         </div>
                       ) : (
                         <div className="space-y-4">
@@ -1486,14 +1486,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="p-4 rounded-lg cursor-pointer transition-all"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF"
+                                  backgroundColor: "var(--theme-bg-surface)"
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#F9FAFB";
-                                  e.currentTarget.style.borderColor = "#0F766E";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                                 }}
                               >
@@ -1506,7 +1506,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                     }}
                                   >
                                     {task.status === "Completed" ? (
-                                      <CheckCircle size={14} style={{ color: "#0F766E" }} />
+                                      <CheckCircle size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
                                     ) : task.status === "Cancelled" ? (
                                       <AlertCircle size={14} style={{ color: "#C94F3D" }} />
                                     ) : (
@@ -1553,7 +1553,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         <button
                           onClick={() => setIsCreatingTask(false)}
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
-                          style={{ color: "#0F766E" }}
+                          style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.color = "#0D6560";
                           }}
@@ -1564,7 +1564,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           <ArrowLeft size={16} />
                           Back to Tasks
                         </button>
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           Create New Task
                         </h3>
                       </div>
@@ -1579,7 +1579,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         <div className="space-y-6">
                           {/* Task Title */}
                           <div>
-                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                               Task Title *
                             </label>
                             <input
@@ -1590,8 +1590,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                               className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                               style={{
                                 border: "1px solid var(--neuron-ui-border)",
-                                backgroundColor: "#FFFFFF",
-                                color: "#12332B"
+                                backgroundColor: "var(--theme-bg-surface)",
+                                color: "var(--theme-text-primary)"
                               }}
                             />
                           </div>
@@ -1599,7 +1599,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           {/* Due Date & Priority */}
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Due Date *
                               </label>
                               <input
@@ -1609,13 +1609,13 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               />
                             </div>
                             <div>
-                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                                 Priority *
                               </label>
                               <select
@@ -1624,8 +1624,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                                 style={{
                                   border: "1px solid var(--neuron-ui-border)",
-                                  backgroundColor: "#FFFFFF",
-                                  color: "#12332B"
+                                  backgroundColor: "var(--theme-bg-surface)",
+                                  color: "var(--theme-text-primary)"
                                 }}
                               >
                                 <option value="Low">Low</option>
@@ -1637,7 +1637,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                           {/* Related Contact */}
                           <div>
-                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                               Related Contact (Optional)
                             </label>
                             <select
@@ -1646,8 +1646,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                               className="w-full px-3 py-2.5 rounded-lg text-[13px]"
                               style={{
                                 border: "1px solid var(--neuron-ui-border)",
-                                backgroundColor: "#FFFFFF",
-                                color: "#12332B"
+                                backgroundColor: "var(--theme-bg-surface)",
+                                color: "var(--theme-text-primary)"
                               }}
                             >
                               <option value="">Select a contact...</option>
@@ -1661,7 +1661,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                           {/* Description */}
                           <div>
-                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+                            <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                               Description
                             </label>
                             <textarea
@@ -1672,8 +1672,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                               rows={4}
                               style={{
                                 border: "1px solid var(--neuron-ui-border)",
-                                backgroundColor: "#FFFFFF",
-                                color: "#12332B"
+                                backgroundColor: "var(--theme-bg-surface)",
+                                color: "var(--theme-text-primary)"
                               }}
                             />
                           </div>
@@ -1683,12 +1683,12 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             <button
                               onClick={handleCreateTask}
                               className="flex-1 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white transition-colors"
-                              style={{ backgroundColor: "#0F766E" }}
+                              style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                               onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = "#0D6560";
+                                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = "#0F766E";
+                                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                               }}
                             >
                               Create Task
@@ -1699,13 +1699,13 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                               style={{
                                 border: "1px solid var(--neuron-ui-border)",
                                 color: "var(--neuron-ink-secondary)",
-                                backgroundColor: "#FFFFFF"
+                                backgroundColor: "var(--theme-bg-surface)"
                               }}
                               onMouseEnter={(e) => {
                                 e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
                               }}
                               onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                               }}
                             >
                               Cancel
@@ -1757,14 +1757,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
             {activeTab === "contracts" && (
               <div style={{ paddingBottom: "32px" }}>
                 {isLoadingContracts ? (
-                  <div style={{ padding: "48px", textAlign: "center", color: "#667085", fontSize: "13px" }}>
+                  <div style={{ padding: "48px", textAlign: "center", color: "var(--theme-text-muted)", fontSize: "13px" }}>
                     Loading contracts...
                   </div>
                 ) : customerContracts.length === 0 ? (
                   <div style={{
                     padding: "48px 24px",
                     textAlign: "center",
-                    color: "#667085",
+                    color: "var(--theme-text-muted)",
                   }}>
                     <FileText size={40} style={{ marginBottom: "12px", opacity: 0.3, margin: "0 auto 12px" }} />
                     <p style={{ fontSize: "14px", fontWeight: 500, margin: "0 0 4px" }}>No contracts found</p>
@@ -1797,7 +1797,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             padding: "16px 20px",
                             borderRadius: "8px",
                             border: "1px solid var(--neuron-ui-border, #E5E7EB)",
-                            backgroundColor: "white",
+                            backgroundColor: "var(--theme-bg-surface)",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
@@ -1808,23 +1808,23 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                               width: "36px",
                               height: "36px",
                               borderRadius: "8px",
-                              backgroundColor: "#E8F2EE",
+                              backgroundColor: "var(--theme-bg-surface-tint)",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                             }}>
-                              <FileText size={18} style={{ color: "#12332B" }} />
+                              <FileText size={18} style={{ color: "var(--theme-text-primary)" }} />
                             </div>
                             <div>
                               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                                <span style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>
+                                <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                                   {contract.quotation_name || contract.quote_number}
                                 </span>
                                 <span style={{
                                   fontSize: "10px",
                                   fontWeight: 700,
-                                  color: "#12332B",
-                                  backgroundColor: "#E8F2EE",
+                                  color: "var(--theme-text-primary)",
+                                  backgroundColor: "var(--theme-bg-surface-tint)",
                                   border: "1px solid #12332B",
                                   padding: "2px 6px",
                                   borderRadius: "3px",
@@ -1844,7 +1844,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                   {contract.contract_status}
                                 </span>
                               </div>
-                              <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: "#667085" }}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "12px", fontSize: "12px", color: "var(--theme-text-muted)" }}>
                                 <span style={{ fontFamily: "monospace" }}>{contract.quote_number}</span>
                                 <span>•</span>
                                 <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -1867,8 +1867,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 fontWeight: 500,
                                 padding: "3px 8px",
                                 borderRadius: "4px",
-                                backgroundColor: "#E8F5F3",
-                                color: "#0F766E",
+                                backgroundColor: "var(--theme-bg-surface-tint)",
+                                color: "var(--theme-action-primary-bg)",
                               }}>
                                 {s}
                               </span>
@@ -1979,7 +1979,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
             {activeTab === "attachments" && (
               <div>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                     Attachments
                   </h3>
                   <div>
@@ -1993,14 +1993,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       onClick={() => fileInputRef.current?.click()}
                       className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors"
                       style={{
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         color: "#FFFFFF"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                     >
                       <Upload size={14} />
@@ -2011,7 +2011,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
                 {attachments.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-[14px]" style={{ color: "#667085" }}>No attachments yet</p>
+                    <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No attachments yet</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -2021,26 +2021,26 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         className="p-4 rounded-lg"
                         style={{
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FFFFFF"
+                          backgroundColor: "var(--theme-bg-surface)"
                         }}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-4 flex-1">
                             <div className="flex-shrink-0 mt-1">
-                              {attachment.type === "pdf" && <FileText size={20} style={{ color: "#0F766E" }} />}
-                              {attachment.type === "image" && <ImageIcon size={20} style={{ color: "#0F766E" }} />}
-                              {attachment.type === "document" && <File size={20} style={{ color: "#0F766E" }} />}
-                              {attachment.type === "spreadsheet" && <File size={20} style={{ color: "#0F766E" }} />}
+                              {attachment.type === "pdf" && <FileText size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                              {attachment.type === "image" && <ImageIcon size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                              {attachment.type === "document" && <File size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
+                              {attachment.type === "spreadsheet" && <File size={20} style={{ color: "var(--theme-action-primary-bg)" }} />}
                             </div>
                             <div className="flex-1">
-                              <div className="text-[14px] font-medium mb-1" style={{ color: "#12332B" }}>
+                              <div className="text-[14px] font-medium mb-1" style={{ color: "var(--theme-text-primary)" }}>
                                 {attachment.name}
                               </div>
                               <div className="flex items-center gap-3 mb-2">
-                                <span className="text-[12px]" style={{ color: "#667085" }}>
+                                <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                   {attachment.size}
                                 </span>
-                                <span className="text-[12px]" style={{ color: "#667085" }}>
+                                <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                   • Uploaded: {formatDate(attachment.uploadedAt)}
                                 </span>
                               </div>
@@ -2054,7 +2054,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 >
                                   {attachment.source}
                                 </span>
-                                <span className="text-[12px]" style={{ color: "#667085" }}>
+                                <span className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                                   {attachment.sourceName}
                                 </span>
                               </div>
@@ -2063,14 +2063,14 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           <button
                             className="flex items-center gap-2 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors ml-4"
                             style={{
-                              backgroundColor: "#0F766E",
+                              backgroundColor: "var(--theme-action-primary-bg)",
                               color: "#FFFFFF"
                             }}
                             onMouseEnter={(e) => {
-                              e.currentTarget.style.backgroundColor = "#0D6560";
+                              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.backgroundColor = "#0F766E";
+                              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                             }}
                           >
                             <Download size={14} />

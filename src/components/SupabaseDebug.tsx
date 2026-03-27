@@ -138,7 +138,7 @@ export function SupabaseDebug() {
         </div>
 
         {/* Connection Info Card */}
-        <div className="rounded-xl border p-5 space-y-4" style={{ background: "white", borderColor: "var(--neuron-border, #e5e7eb)" }}>
+        <div className="rounded-xl border p-5 space-y-4" style={{ background: "var(--theme-bg-surface)", borderColor: "var(--neuron-border, #e5e7eb)" }}>
           <h2 className="text-sm" style={{ color: "var(--neuron-ink-muted, #667085)" }}>
             CONNECTION DETAILS
           </h2>
@@ -159,7 +159,7 @@ export function SupabaseDebug() {
         </div>
 
         {/* Auth State Card */}
-        <div className="rounded-xl border p-5 space-y-4" style={{ background: "white", borderColor: "var(--neuron-border, #e5e7eb)" }}>
+        <div className="rounded-xl border p-5 space-y-4" style={{ background: "var(--theme-bg-surface)", borderColor: "var(--neuron-border, #e5e7eb)" }}>
           <h2 className="text-sm" style={{ color: "var(--neuron-ink-muted, #667085)" }}>
             AUTH STATE
           </h2>
@@ -182,7 +182,7 @@ export function SupabaseDebug() {
         </div>
 
         {/* Table Check Card */}
-        <div className="rounded-xl border p-5 space-y-4" style={{ background: "white", borderColor: "var(--neuron-border, #e5e7eb)" }}>
+        <div className="rounded-xl border p-5 space-y-4" style={{ background: "var(--theme-bg-surface)", borderColor: "var(--neuron-border, #e5e7eb)" }}>
           <div className="flex items-center justify-between">
             <h2 className="text-sm" style={{ color: "var(--neuron-ink-muted, #667085)" }}>
               TABLE CONNECTIVITY ({tableCheck.length > 0 ? `${tableCheck.filter(t => t.error === null).length}/${tableCheck.length} accessible` : "not checked"})

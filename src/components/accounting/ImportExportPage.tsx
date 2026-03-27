@@ -6,22 +6,22 @@ export function ImportExportPage() {
     <>
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-[#0A1D4D] mb-2">Import / Export</h1>
-        <p className="text-[14px] text-[#6B7280] leading-[20px]">
+        <h1 className="text-[var(--theme-text-primary)] mb-2">Import / Export</h1>
+        <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
           Import and export accounting data
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-6">
         {/* Import Section */}
-        <div className="border border-[#E5E7EB] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <div className="border border-[var(--theme-border-default)] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
-              <Upload className="w-5 h-5 text-[#0A1D4D]" />
+            <div className="w-12 h-12 bg-[var(--theme-bg-page)] rounded-lg flex items-center justify-center">
+              <Upload className="w-5 h-5 text-[var(--theme-text-primary)]" />
             </div>
             <div>
-              <h2 className="text-[#0A1D4D] mb-1">Import Data</h2>
-              <p className="text-[14px] text-[#6B7280] leading-[20px]">
+              <h2 className="text-[var(--theme-text-primary)] mb-1">Import Data</h2>
+              <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
                 Upload CSV or Excel files
               </p>
             </div>
@@ -54,20 +54,20 @@ export function ImportExportPage() {
             </Button>
           </div>
 
-          <div className="mt-6 p-4 bg-[#F9FAFB] text-[14px] text-[#6B7280] leading-[20px]" style={{ borderRadius: 'var(--radius-xs)' }}>
+          <div className="mt-6 p-4 bg-[var(--theme-bg-page)] text-[14px] text-[var(--theme-text-muted)] leading-[20px]" style={{ borderRadius: 'var(--radius-xs)' }}>
             Supported formats: CSV, XLSX. Maximum file size: 5MB
           </div>
         </div>
 
         {/* Export Section */}
-        <div className="border border-[#E5E7EB] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <div className="border border-[var(--theme-border-default)] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-[#F9FAFB] rounded-lg flex items-center justify-center">
-              <Download className="w-5 h-5 text-[#0A1D4D]" />
+            <div className="w-12 h-12 bg-[var(--theme-bg-page)] rounded-lg flex items-center justify-center">
+              <Download className="w-5 h-5 text-[var(--theme-text-primary)]" />
             </div>
             <div>
-              <h2 className="text-[#0A1D4D] mb-1">Export Data</h2>
-              <p className="text-[14px] text-[#6B7280] leading-[20px]">
+              <h2 className="text-[var(--theme-text-primary)] mb-1">Export Data</h2>
+              <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
                 Download reports and data
               </p>
             </div>
@@ -100,36 +100,36 @@ export function ImportExportPage() {
             </Button>
           </div>
 
-          <div className="mt-6 p-4 bg-[#F9FAFB] text-[14px] text-[#6B7280] leading-[20px]" style={{ borderRadius: 'var(--radius-xs)' }}>
+          <div className="mt-6 p-4 bg-[var(--theme-bg-page)] text-[14px] text-[var(--theme-text-muted)] leading-[20px]" style={{ borderRadius: 'var(--radius-xs)' }}>
             Exports include all data within selected date range
           </div>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="mt-8 border border-[#E5E7EB] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <h2 className="text-[#0A1D4D] mb-4">Recent Activity</h2>
+      <div className="mt-8 border border-[var(--theme-border-default)] p-6" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <h2 className="text-[var(--theme-text-primary)] mb-4">Recent Activity</h2>
         <div className="space-y-3">
           <div className="flex items-center justify-between text-[14px] leading-[20px]">
             <div className="flex items-center gap-3">
-              <FileText className="w-4 h-4 text-[#6B7280]" />
-              <span className="text-[#374151]">Exported expenses (Jan 2025)</span>
+              <FileText className="w-4 h-4 text-[var(--theme-text-muted)]" />
+              <span className="text-[var(--theme-text-secondary)]">Exported expenses (Jan 2025)</span>
             </div>
-            <span className="text-[#6B7280]">2 hours ago</span>
+            <span className="text-[var(--theme-text-muted)]">2 hours ago</span>
           </div>
           <div className="flex items-center justify-between text-[14px] leading-[20px]">
             <div className="flex items-center gap-3">
-              <FileText className="w-4 h-4 text-[#6B7280]" />
-              <span className="text-[#374151]">Imported 45 expense entries</span>
+              <FileText className="w-4 h-4 text-[var(--theme-text-muted)]" />
+              <span className="text-[var(--theme-text-secondary)]">Imported 45 expense entries</span>
             </div>
-            <span className="text-[#6B7280]">1 day ago</span>
+            <span className="text-[var(--theme-text-muted)]">1 day ago</span>
           </div>
           <div className="flex items-center justify-between text-[14px] leading-[20px]">
             <div className="flex items-center gap-3">
-              <FileText className="w-4 h-4 text-[#6B7280]" />
-              <span className="text-[#374151]">Exported chart of accounts</span>
+              <FileText className="w-4 h-4 text-[var(--theme-text-muted)]" />
+              <span className="text-[var(--theme-text-secondary)]">Exported chart of accounts</span>
             </div>
-            <span className="text-[#6B7280]">3 days ago</span>
+            <span className="text-[var(--theme-text-muted)]">3 days ago</span>
           </div>
         </div>
       </div>

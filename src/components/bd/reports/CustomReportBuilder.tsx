@@ -154,7 +154,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                 }}
                 style={{
                   backgroundColor: dataSource === source.value ? '#F0FDFA' : 'white',
-                  border: dataSource === source.value ? '2px solid #0F766E' : '1px solid #E5E7EB',
+                  border: dataSource === source.value ? '2px solid #0F766E' : '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '16px',
                   cursor: 'pointer',
@@ -175,7 +175,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
             <div
               style={{
                 backgroundColor: 'white',
-                border: '1px solid #E5E7EB',
+                border: '1px solid var(--theme-border-default)',
                 borderRadius: '8px',
                 padding: '16px',
               }}
@@ -190,7 +190,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                       gap: '8px',
                       padding: '8px 12px',
                       backgroundColor: selectedColumns.includes(field.value) ? '#F0FDFA' : '#F9FAFB',
-                      border: selectedColumns.includes(field.value) ? '1px solid #0F766E' : '1px solid #E5E7EB',
+                      border: selectedColumns.includes(field.value) ? '1px solid #0F766E' : '1px solid var(--theme-border-default)',
                       borderRadius: '6px',
                       cursor: 'pointer',
                     }}
@@ -240,7 +240,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                     key={index}
                     style={{
                       backgroundColor: 'white',
-                      border: '1px solid #E5E7EB',
+                      border: '1px solid var(--theme-border-default)',
                       borderRadius: '8px',
                       padding: '16px',
                       display: 'flex',
@@ -254,7 +254,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                       style={{
                         flex: 1,
                         padding: '8px 12px',
-                        border: '1px solid #E5E7EB',
+                        border: '1px solid var(--theme-border-default)',
                         borderRadius: '6px',
                       }}
                     >
@@ -272,7 +272,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                       style={{
                         flex: 1,
                         padding: '8px 12px',
-                        border: '1px solid #E5E7EB',
+                        border: '1px solid var(--theme-border-default)',
                         borderRadius: '6px',
                       }}
                     >
@@ -291,7 +291,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                       style={{
                         flex: 1,
                         padding: '8px 12px',
-                        border: '1px solid #E5E7EB',
+                        border: '1px solid var(--theme-border-default)',
                         borderRadius: '6px',
                       }}
                     />
@@ -300,7 +300,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
                       onClick={() => removeFilter(index)}
                       style={{
                         backgroundColor: 'white',
-                        border: '1px solid #E5E7EB',
+                        border: '1px solid var(--theme-border-default)',
                         borderRadius: '6px',
                         padding: '8px',
                         cursor: 'pointer',
@@ -318,7 +318,7 @@ export function CustomReportBuilder({ onBack, onRunReport }: CustomReportBuilder
 
         {/* Run Button */}
         {isValid && (
-          <div style={{ paddingTop: '24px', borderTop: '1px solid #E5E7EB' }}>
+          <div style={{ paddingTop: '24px', borderTop: '1px solid var(--theme-border-default)' }}>
             <button
               onClick={handleRunReport}
               style={{

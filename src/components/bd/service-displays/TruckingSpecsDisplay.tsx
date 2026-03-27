@@ -8,7 +8,7 @@ interface TruckingSpecsDisplayProps {
 export function TruckingSpecsDisplay({ details }: TruckingSpecsDisplayProps) {
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px"
@@ -67,7 +67,7 @@ function SpecField({
       </label>
       <div style={{
         padding: "10px 14px",
-        backgroundColor: "#F9FAFB",
+        backgroundColor: "var(--theme-bg-page)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "6px",
         fontSize: "14px",

@@ -148,7 +148,7 @@ export function BDReports() {
 
   // Main list view
   return (
-    <div className="h-full flex flex-col overflow-auto" style={{ background: "#FFFFFF" }}>
+    <div className="h-full flex flex-col overflow-auto" style={{ background: "var(--theme-bg-surface)" }}>
       <div style={{ padding: "32px 48px" }}>
         {/* Header */}
         <div 
@@ -158,10 +158,10 @@ export function BDReports() {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Reports
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Generate insights and export data across all Business Development activities
             </p>
           </div>
@@ -192,7 +192,7 @@ export function BDReports() {
               left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
             }}
           />
           <input
@@ -208,7 +208,7 @@ export function BDReports() {
               fontSize: "14px",
               outline: "none",
               color: "var(--neuron-ink-primary)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           />
         </div>
@@ -299,7 +299,7 @@ export function BDReports() {
       <div className="flex-1 overflow-auto">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <p style={{ color: "#667085" }}>Loading reports...</p>
+            <p style={{ color: "var(--theme-text-muted)" }}>Loading reports...</p>
           </div>
         ) : filteredReports.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
@@ -331,7 +331,7 @@ export function BDReports() {
               style={{ 
                 gridTemplateColumns: "40px 1fr 200px 140px 140px",
                 borderBottom: "1px solid var(--neuron-ui-divider)",
-                background: "#FFFFFF"
+                background: "var(--theme-bg-surface)"
               }}
             >
               <div></div>
@@ -384,7 +384,7 @@ export function BDReports() {
                 }}
                 onClick={() => handleRunSaved(report)}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
@@ -396,7 +396,7 @@ export function BDReports() {
                   alignItems: "center", 
                   justifyContent: "center"
                 }}>
-                  <BarChart size={16} style={{ color: "#667085" }} />
+                  <BarChart size={16} style={{ color: "var(--theme-text-muted)" }} />
                 </div>
 
                 {/* Report Name */}

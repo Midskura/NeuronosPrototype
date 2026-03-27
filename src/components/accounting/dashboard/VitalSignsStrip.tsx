@@ -192,8 +192,8 @@ function CompactCard({ sign }: { sign: VitalSign }) {
     <div
       className="rounded-xl p-5 flex flex-col justify-between transition-all duration-200"
       style={{
-        border: "1px solid #E5E9F0",
-        background: "white",
+        border: "1px solid var(--theme-border-default)",
+        background: "var(--theme-bg-surface)",
         minHeight: "112px",
         cursor: isClickable ? "pointer" : "default",
         transform: isClickable && isHovered ? "translateY(-1px)" : "none",
@@ -210,7 +210,7 @@ function CompactCard({ sign }: { sign: VitalSign }) {
       <div className="flex items-center justify-between mb-1.5">
         <span
           className="text-[11px] font-semibold uppercase tracking-wider"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           {sign.label}
         </span>
@@ -218,14 +218,14 @@ function CompactCard({ sign }: { sign: VitalSign }) {
           className="w-7 h-7 rounded-lg flex items-center justify-center"
           style={{ backgroundColor: "#F0FDF4" }}
         >
-          <Icon size={14} style={{ color: "#0F766E" }} />
+          <Icon size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         </div>
       </div>
 
       {/* Value — medium */}
       <div
         className="text-[22px] font-bold leading-tight"
-        style={{ color: "#12332B", letterSpacing: "-0.5px" }}
+        style={{ color: "var(--theme-text-primary)", letterSpacing: "-0.5px" }}
       >
         {sign.value}
       </div>
@@ -241,7 +241,7 @@ function CompactCard({ sign }: { sign: VitalSign }) {
             {delta.label}
           </span>
         )}
-        <span className="text-[11px]" style={{ color: "#9CA3AF" }}>
+        <span className="text-[11px]" style={{ color: "var(--theme-text-muted)" }}>
           {sign.subtext}
         </span>
         {/* Click hint — appears on hover */}
@@ -249,7 +249,7 @@ function CompactCard({ sign }: { sign: VitalSign }) {
           <span
             className="text-[10px] font-medium ml-auto transition-opacity duration-200"
             style={{
-              color: "#0F766E",
+              color: "var(--theme-action-primary-bg)",
               opacity: isHovered ? 1 : 0,
             }}
           >
@@ -274,14 +274,14 @@ export function VitalSignsStrip({ signs, isLoading }: VitalSignsStripProps) {
               key={i}
               className="rounded-xl p-6 animate-pulse"
               style={{
-                border: "1px solid #E5E9F0",
-                background: i === 1 ? "#0F766E" : "white",
+                border: "1px solid var(--theme-border-default)",
+                background: i === 1 ? "var(--theme-action-primary-bg)" : "var(--theme-bg-surface)",
                 minHeight: "148px",
               }}
             >
-              <div className={`h-3 w-24 rounded mb-4 ${i === 1 ? "bg-white/20" : "bg-gray-200"}`} />
-              <div className={`h-9 w-36 rounded mb-3 ${i === 1 ? "bg-white/15" : "bg-gray-200"}`} />
-              <div className={`h-3 w-28 rounded ${i === 1 ? "bg-white/10" : "bg-gray-100"}`} />
+              <div className={`h-3 w-24 rounded mb-4 ${i === 1 ? "bg-white/20" : "bg-[var(--theme-bg-surface-tint)]"}`} />
+              <div className={`h-9 w-36 rounded mb-3 ${i === 1 ? "bg-white/15" : "bg-[var(--theme-bg-surface-tint)]"}`} />
+              <div className={`h-3 w-28 rounded ${i === 1 ? "bg-white/10" : "bg-[var(--theme-bg-surface-subtle)]"}`} />
             </div>
           ))}
         </div>
@@ -291,11 +291,11 @@ export function VitalSignsStrip({ signs, isLoading }: VitalSignsStripProps) {
             <div
               key={i}
               className="rounded-xl p-5 animate-pulse"
-              style={{ border: "1px solid #E5E9F0", background: "white", minHeight: "112px" }}
+              style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)", minHeight: "112px" }}
             >
-              <div className="h-3 w-20 bg-gray-200 rounded mb-3" />
-              <div className="h-6 w-28 bg-gray-200 rounded mb-2" />
-              <div className="h-3 w-24 bg-gray-100 rounded" />
+              <div className="h-3 w-20 bg-[var(--theme-bg-surface-tint)] rounded mb-3" />
+              <div className="h-6 w-28 bg-[var(--theme-bg-surface-tint)] rounded mb-2" />
+              <div className="h-3 w-24 bg-[var(--theme-bg-surface-subtle)] rounded" />
             </div>
           ))}
         </div>

@@ -14,15 +14,15 @@ import { useUser } from "../hooks/useUser";
  */
 
 const ROLE_LEVEL: Record<string, number> = {
-  rep: 0,
-  manager: 1,
-  director: 2,
+  staff: 0,
+  team_leader: 1,
+  manager: 2,
 };
 
 interface RouteGuardProps {
   children: ReactNode;
   allowedDepartments?: string[];
-  requireMinRole?: "rep" | "manager" | "director";
+  requireMinRole?: "staff" | "team_leader" | "manager";
 }
 
 export function RouteGuard({ children, allowedDepartments, requireMinRole }: RouteGuardProps) {
@@ -34,12 +34,10 @@ export function RouteGuard({ children, allowedDepartments, requireMinRole }: Rou
     if (isLoading || !isAuthenticated) return;
 
     const dept = effectiveDepartment || "";
-    const role = effectiveRole || "rep";
+    const role = effectiveRole || "staff";
 
     // Executive department always passes
     if (dept === "Executive") return;
-    // Directors always pass
-    if (role === "director") return;
 
     // Check department access
     if (allowedDepartments && allowedDepartments.length > 0) {

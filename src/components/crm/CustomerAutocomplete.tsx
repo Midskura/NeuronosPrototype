@@ -145,7 +145,7 @@ export function CustomerAutocomplete({
             fontSize: "14px",
             outline: "none",
             transition: "border-color 0.2s",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             cursor: "text",
           }}
         />
@@ -177,7 +177,7 @@ export function CustomerAutocomplete({
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
@@ -193,7 +193,7 @@ export function CustomerAutocomplete({
               borderBottom: "1px solid var(--neuron-ui-border)",
               position: "sticky",
               top: 0,
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               zIndex: 1,
             }}
           >
@@ -247,7 +247,7 @@ export function CustomerAutocomplete({
                 gap: "8px",
                 border: "none",
                 borderBottom: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 cursor: "pointer",
                 fontSize: "13px",
                 fontWeight: 500,
@@ -256,10 +256,10 @@ export function CustomerAutocomplete({
                 transition: "background-color 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }}
             >
               <Plus size={16} />
@@ -317,7 +317,7 @@ export function CustomerAutocomplete({
                     highlightedIndex === index ? "#F3F4F6" : "white",
                   borderBottom:
                     index < contacts.length - 1
-                      ? "1px solid #F3F4F6"
+                      ? "1px solid var(--theme-border-subtle)"
                       : "none",
                   transition: "background-color 0.1s",
                 }}

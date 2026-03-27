@@ -245,7 +245,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         right: 0,
         width: "700px",
         height: "100vh",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         borderLeft: "1px solid var(--neuron-ui-border)",
         zIndex: 1000,
         display: "flex",
@@ -258,7 +258,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         style={{
           padding: "24px 32px",
           borderBottom: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#F8FBFB",
+          backgroundColor: "var(--theme-bg-page)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -306,7 +306,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",
               borderLeft: "3px solid var(--neuron-brand-green)",
@@ -316,7 +316,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
               style={{
                 padding: "12px 16px",
                 borderBottom: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -355,7 +355,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                     color: "var(--neuron-ink-muted)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "#F9FAFB",
+                    backgroundColor: "var(--theme-bg-page)",
                   }}>
                     Loading customers...
                   </div>
@@ -419,7 +419,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 )}
@@ -455,7 +455,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -483,7 +483,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -496,7 +496,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",
               borderLeft: "3px solid var(--neuron-brand-green)",
@@ -506,7 +506,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
               style={{
                 padding: "12px 16px",
                 borderBottom: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -550,7 +550,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -578,7 +578,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -608,7 +608,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     resize: "vertical",
                   }}
                 />
@@ -639,7 +639,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -667,7 +667,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                       fontSize: "14px",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   />
                 </div>
@@ -727,7 +727,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                     fontSize: "14px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     resize: "vertical",
                   }}
                 />
@@ -740,7 +740,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         <section style={{ marginBottom: "32px" }}>
           <div
             style={{
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               borderRadius: "8px",
               border: "1px solid var(--neuron-ui-border)",
               borderLeft: "3px solid var(--neuron-brand-green)",
@@ -750,7 +750,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
               style={{
                 padding: "12px 16px",
                 borderBottom: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "8px", justifyContent: "space-between" }}>
@@ -774,7 +774,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
             </div>
 
             {/* Service Selection Pills */}
-            <div style={{ padding: "16px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "white" }}>
+            <div style={{ padding: "16px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {serviceOptions.map((service) => {
                   const Icon = service.icon;
@@ -850,13 +850,13 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                           }}
                         >
                           {isExpanded ? (
-                            <ChevronDown size={16} style={{ color: "#0F766E" }} />
+                            <ChevronDown size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
                           ) : (
                             <ChevronRight size={16} />
                           )}
                         </button>
 
-                        <Icon size={16} style={{ color: "#0F766E" }} />
+                        <Icon size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
                         
                         <span
                           style={{
@@ -955,7 +955,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
         style={{
           padding: "16px 32px",
           borderTop: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
@@ -968,14 +968,14 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
             fontSize: "13px",
             fontWeight: 500,
             color: "var(--neuron-ink-muted)",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             cursor: "pointer",
             transition: "all 0.15s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#F9FAFB";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = "white";
@@ -1000,7 +1000,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
           }}
           onMouseEnter={(e) => {
             if (isFormValid()) {
-              e.currentTarget.style.backgroundColor = "#0F766E";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
             }
           }}
           onMouseLeave={(e) => {

@@ -155,8 +155,8 @@ export function ConsigneePicker({
 
   const defaultStyle: React.CSSProperties = {
     border: "1px solid var(--neuron-ui-border, #E5E9F0)",
-    color: "#12332B",
-    backgroundColor: "white",
+    color: "var(--theme-text-primary)",
+    backgroundColor: "var(--theme-bg-surface)",
     ...style,
   };
 
@@ -182,21 +182,21 @@ export function ConsigneePicker({
             <button
               type="button"
               onClick={handleClear}
-              className="p-0.5 rounded hover:bg-gray-100 transition-colors"
+              className="p-0.5 rounded hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
-              <X className="w-3.5 h-3.5" style={{ color: "#98A2B3" }} />
+              <X className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} />
             </button>
           )}
           {hasConsignees && (
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="p-0.5 rounded hover:bg-gray-100 transition-colors"
+              className="p-0.5 rounded hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
             >
               <ChevronDown
                 className="w-4 h-4 transition-transform"
                 style={{
-                  color: "#667085",
+                  color: "var(--theme-text-muted)",
                   transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                 }}
               />
@@ -210,8 +210,8 @@ export function ConsigneePicker({
         <div
           className="absolute z-50 w-full mt-1 rounded-lg shadow-lg overflow-hidden"
           style={{
-            border: "1px solid #E5E9F0",
-            backgroundColor: "white",
+            border: "1px solid var(--theme-border-default)",
+            backgroundColor: "var(--theme-bg-surface)",
             maxHeight: "220px",
             overflowY: "auto",
           }}
@@ -222,19 +222,19 @@ export function ConsigneePicker({
                 key={csg.id}
                 type="button"
                 onClick={() => handleSelect(csg)}
-                className="w-full text-left px-3 py-2.5 hover:bg-gray-50 transition-colors flex items-start gap-2.5"
+                className="w-full text-left px-3 py-2.5 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors flex items-start gap-2.5"
                 style={{ borderBottom: "1px solid #F2F4F7" }}
               >
                 <Building2
                   className="w-4 h-4 mt-0.5 shrink-0"
-                  style={{ color: "#0F766E" }}
+                  style={{ color: "var(--theme-action-primary-bg)" }}
                 />
                 <div className="min-w-0">
-                  <div className="text-[13px] font-medium" style={{ color: "#12332B" }}>
+                  <div className="text-[13px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                     {csg.name}
                   </div>
                   {(csg.address || csg.tin) && (
-                    <div className="text-[11px] mt-0.5 truncate" style={{ color: "#98A2B3" }}>
+                    <div className="text-[11px] mt-0.5 truncate" style={{ color: "var(--theme-text-muted)" }}>
                       {[csg.address, csg.tin ? `TIN: ${csg.tin}` : null]
                         .filter(Boolean)
                         .join(" \u00B7 ")}
@@ -245,7 +245,7 @@ export function ConsigneePicker({
             ))
           ) : (
             <div className="px-3 py-3 text-center">
-              <p className="text-[12px]" style={{ color: "#98A2B3" }}>
+              <p className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                 No matching consignees
               </p>
             </div>

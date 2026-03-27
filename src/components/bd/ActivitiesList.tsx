@@ -162,10 +162,10 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
   const getActivityTypeColor = (type: ActivityType) => {
     // System activities get different styling
     if (type === "System Update" || type === "Note") {
-      return "bg-[#F1F6F4] text-[#6B7A76]";
+      return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
     }
     // All logged activities get completed/success styling
-    return "bg-[#E8F2EE] text-[#2B8A6E]";
+    return "bg-[var(--theme-bg-surface-tint)] text-[#2B8A6E]";
   };
 
   const formatDate = (dateString: string) => {
@@ -188,8 +188,8 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
       minute: '2-digit'
     });
     
-    if (isToday) return <span className="text-[#0F766E]">{formatted} (Today)</span>;
-    if (isYesterday) return <span className="text-[#6B7A76]">{formatted} (Yesterday)</span>;
+    if (isToday) return <span className="text-[var(--theme-action-primary-bg)]">{formatted} (Today)</span>;
+    if (isYesterday) return <span className="text-[var(--theme-text-muted)]">{formatted} (Yesterday)</span>;
     
     return formatted;
   };
@@ -214,7 +214,7 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
     <div 
       className="h-full flex flex-col"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Page Header */}
@@ -228,10 +228,10 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Activities
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Historical record of completed tasks and logged interactions
             </p>
           </div>
@@ -251,10 +251,10 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
               cursor: "pointer",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#0D6560";
+              e.currentTarget.style.background = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#0F766E";
+              e.currentTarget.style.background = "var(--theme-action-primary-bg)";
             }}
             onClick={() => setIsAddActivityOpen(true)}
           >
@@ -275,7 +275,7 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
             />
@@ -307,9 +307,9 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
             onChange={(value) => setDateRangeFilter(value as "Today" | "This Week" | "This Month" | "All Time")}
             options={[
               { value: "All Time", label: "All Time", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--neuron-ink-muted)" }} /> },
-              { value: "Today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#0F766E" }} /> },
+              { value: "Today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-action-primary-bg)" }} /> },
               { value: "This Week", label: "This Week", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "This Month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+              { value: "This Month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
           />
 
@@ -328,7 +328,7 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
       <div className="flex-1 overflow-auto px-12 pb-6">
         {sortedActivities.length === 0 ? (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             <div className="px-6 py-12 text-center">
@@ -342,12 +342,12 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
             {Object.entries(groupedActivities).map(([date, activities]) => (
               <div key={date}>
                 <div className="mb-3">
-                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "#0F766E", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <h3 style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-action-primary-bg)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     {date}
                   </h3>
                 </div>
                 <div className="rounded-[10px] overflow-hidden" style={{ 
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid var(--neuron-ui-border)"
                 }}>
                   {/* Table Header */}

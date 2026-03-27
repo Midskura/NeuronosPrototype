@@ -91,7 +91,7 @@ export function SearchableDropdown({
       {label && (
         <label
           className="block mb-1.5"
-          style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}
+          style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
         >
           {label} {required && <span style={{ color: "#C94F3D" }}>*</span>}
         </label>
@@ -109,10 +109,10 @@ export function SearchableDropdown({
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
-            className="w-full px-3.5 py-2.5 pr-9 rounded-lg text-[13px] transition-all border border-[#D1D5DB]"
+            className="w-full px-3.5 py-2.5 pr-9 rounded-lg text-[13px] transition-all border border-[var(--theme-border-default)]"
             style={{
               backgroundColor: disabled ? "#F9FAFB" : "#FFFFFF",
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               cursor: disabled ? "not-allowed" : "text",
             }}
           />
@@ -126,7 +126,7 @@ export function SearchableDropdown({
               }
             }}
             className="absolute right-0 top-0 h-full px-2.5 flex items-center"
-            style={{ color: "#9CA3AF" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             <ChevronDown
               size={16}
@@ -143,8 +143,8 @@ export function SearchableDropdown({
           <div
             className="absolute top-full left-0 mt-1 rounded-lg overflow-hidden z-50 w-full"
             style={{
-              backgroundColor: "#FFFFFF",
-              border: "1px solid #E5E7EB",
+              backgroundColor: "var(--theme-bg-surface)",
+              border: "1px solid var(--theme-border-default)",
               boxShadow:
                 "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
               maxHeight: "240px",
@@ -154,7 +154,7 @@ export function SearchableDropdown({
             {filtered.length === 0 ? (
               <div
                 className="px-3.5 py-3 text-[13px] flex items-center gap-2"
-                style={{ color: "#9CA3AF" }}
+                style={{ color: "var(--theme-text-muted)" }}
               >
                 <Search size={14} />
                 No matching customers
@@ -173,12 +173,12 @@ export function SearchableDropdown({
                       color: isSelected ? "#0F766E" : "#12332B",
                       borderBottom:
                         index < filtered.length - 1
-                          ? "1px solid #F3F4F6"
+                          ? "1px solid var(--theme-border-subtle)"
                           : "none",
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }
                     }}
                     onMouseLeave={(e) => {

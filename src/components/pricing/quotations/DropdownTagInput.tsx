@@ -123,7 +123,7 @@ export function DropdownTagInput({
           gap: "6px",
           padding: "10px 12px",
           minHeight: "42px",
-          backgroundColor: "#F9FAFB",
+          backgroundColor: "var(--theme-bg-page)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "6px",
           alignItems: "center",
@@ -139,7 +139,7 @@ export function DropdownTagInput({
                   fontSize: "12px",
                   fontWeight: 500,
                   color: "var(--neuron-brand-green)",
-                  backgroundColor: "#F0FDFA",
+                  backgroundColor: "var(--theme-bg-surface-tint)",
                   border: "1px solid #CCFBF1",
                   borderRadius: "14px",
                 }}
@@ -195,7 +195,7 @@ export function DropdownTagInput({
               fontSize: "12px",
               fontWeight: 500,
               color: "var(--neuron-brand-green)",
-              backgroundColor: "#F0FDFA",
+              backgroundColor: "var(--theme-bg-surface-tint)",
               border: "1px solid #CCFBF1",
               borderRadius: "14px",
               whiteSpace: "nowrap",
@@ -280,7 +280,7 @@ export function DropdownTagInput({
             pointerEvents: "none",
           }}
         >
-          <ChevronDown size={16} color="#667085" />
+          <ChevronDown size={16} color="var(--theme-text-muted)" />
         </span>
       </div>
 
@@ -293,7 +293,7 @@ export function DropdownTagInput({
             left: 0,
             right: 0,
             marginTop: "4px",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "6px",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
@@ -331,12 +331,12 @@ export function DropdownTagInput({
                     backgroundColor: isSelected ? "#E8F5F3" : "#FFFFFF",
                     color: isSelected ? "#0F766E" : "var(--neuron-ink-base)",
                     border: "none",
-                    borderBottom: (index < filteredOptions.length - 1 || isCustomValue) ? "1px solid #F3F4F6" : "none",
+                    borderBottom: (index < filteredOptions.length - 1 || isCustomValue) ? "1px solid var(--theme-border-subtle)" : "none",
                     cursor: "pointer",
                     transition: "background-color 0.1s ease",
                   }}
                   onMouseEnter={(e) => {
-                    if (!isSelected) e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    if (!isSelected) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = isSelected ? "#E8F5F3" : "#FFFFFF";
@@ -374,8 +374,8 @@ export function DropdownTagInput({
                   padding: "9px 12px",
                   fontSize: "13px",
                   textAlign: "left",
-                  backgroundColor: "#FFFFFF",
-                  color: "#0F766E",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-action-primary-bg)",
                   border: "none",
                   cursor: "pointer",
                   transition: "background-color 0.1s ease",
@@ -385,7 +385,7 @@ export function DropdownTagInput({
                   e.currentTarget.style.backgroundColor = "#F0FAF8";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
                 <Plus size={14} style={{ flexShrink: 0 }} />

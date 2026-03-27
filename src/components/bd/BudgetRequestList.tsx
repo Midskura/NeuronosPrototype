@@ -173,7 +173,7 @@ export function BudgetRequestList() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
-        return "bg-[#E8F5F3] text-[#0F766E]";
+        return "bg-[#E8F5F3] text-[var(--theme-action-primary-bg)]";
       case "Rejected":
         return "bg-[#FFE5E5] text-[#C94F3D]";
       case "Under Review":
@@ -181,9 +181,9 @@ export function BudgetRequestList() {
       case "Submitted":
         return "bg-[#E0E7FF] text-[#4F46E5]";
       case "Draft":
-        return "bg-[#F3F4F6] text-[#6B7280]";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)]";
       default:
-        return "bg-[#F3F4F6] text-[#6B7A76]";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)]";
     }
   };
 
@@ -316,7 +316,7 @@ export function BudgetRequestList() {
     <div 
       className="h-full flex flex-col"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Header Section */}
@@ -330,10 +330,10 @@ export function BudgetRequestList() {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Budget Requests
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage and track budget requests for business development activities
             </p>
           </div>
@@ -380,12 +380,12 @@ export function BudgetRequestList() {
               }}
               onMouseEnter={(e) => {
                 if (quickFilterTab !== tab.id) {
-                  e.currentTarget.style.color = "#12332B";
+                  e.currentTarget.style.color = "var(--theme-text-primary)";
                 }
               }}
               onMouseLeave={(e) => {
                 if (quickFilterTab !== tab.id) {
-                  e.currentTarget.style.color = "#667085";
+                  e.currentTarget.style.color = "var(--theme-text-muted)";
                 }
               }}
             >
@@ -405,7 +405,7 @@ export function BudgetRequestList() {
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -421,7 +421,7 @@ export function BudgetRequestList() {
                 fontSize: "14px",
                 outline: "none",
                 color: "var(--neuron-ink-primary)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             />
           </div>
@@ -499,12 +499,12 @@ export function BudgetRequestList() {
             }}
             onMouseEnter={(e) => {
               if (!showAdvancedFilters) {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }
             }}
             onMouseLeave={(e) => {
               if (!showAdvancedFilters) {
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }
             }}
           >
@@ -548,7 +548,7 @@ export function BudgetRequestList() {
           <div style={{ 
             marginTop: "16px", 
             padding: "16px", 
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             display: "grid",
@@ -587,7 +587,7 @@ export function BudgetRequestList() {
             style={{
               borderRadius: "10px",
               overflow: "hidden",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
             }}
           >
@@ -629,7 +629,7 @@ export function BudgetRequestList() {
           </div>
         ) : (
           <div className="rounded-[10px] overflow-hidden" style={{ 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)"
           }}>
             {/* Table Header */}
@@ -677,7 +677,7 @@ export function BudgetRequestList() {
                       {request.voucher_number} • {request.purpose}
                     </div>
                     {request.customer_name && (
-                      <div className="text-[10px] mt-0.5" style={{ color: "#0F766E", fontWeight: 500 }}>
+                      <div className="text-[10px] mt-0.5" style={{ color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                         → {request.customer_name}
                       </div>
                     )}

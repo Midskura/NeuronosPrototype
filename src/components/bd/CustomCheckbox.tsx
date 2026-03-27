@@ -36,7 +36,7 @@ export function CustomCheckbox({ checked, onChange, disabled = false }: CustomCh
       }}
       onMouseLeave={(e) => {
         if (!disabled && !checked) {
-          e.currentTarget.style.borderColor = "#D1D5DB";
+          e.currentTarget.style.borderColor = "var(--theme-border-default)";
           e.currentTarget.style.backgroundColor = "white";
         }
       }}

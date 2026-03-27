@@ -121,9 +121,9 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
       case "invoiced":
         return { bg: "#EFF6FF", color: "#1D4ED8" };
       case "pending":
-        return { bg: "#F3F4F6", color: "#6B7A76" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
       default:
-        return { bg: "#F3F4F6", color: "#6B7A76" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -179,7 +179,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "4px" }}>
-            <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 Invoice Details
             </h2>
             {billing && (
@@ -197,7 +197,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                 </span>
             )}
             </div>
-            <p style={{ fontSize: "13px", color: "#667085" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
             {billing?.invoice_number || "View invoice details"}
             </p>
         </div>
@@ -209,7 +209,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
             borderRadius: "8px",
             border: "none",
             backgroundColor: "transparent",
-            color: "#667085",
+            color: "var(--theme-text-muted)",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
@@ -217,7 +217,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
             transition: "all 0.2s",
             }}
             onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#F3F4F6";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
             }}
             onMouseLeave={(e) => {
             e.currentTarget.style.backgroundColor = "transparent";
@@ -239,7 +239,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
         {/* Content - Scrollable */}
         <div style={{ height: "100%", overflowY: "auto", padding: "32px 48px" }}>
           {loading ? (
-            <div className="flex items-center justify-center h-full text-gray-400">Loading details...</div>
+            <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center h-full text-red-500">
                <AlertCircle size={32} className="mb-2" />
@@ -254,7 +254,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                 justifyContent: "space-between",
                 marginBottom: "32px",
                 paddingBottom: "24px",
-                borderBottom: "1px solid #E5E7EB"
+                borderBottom: "1px solid var(--theme-border-default)"
               }}>
                 <div>
                   <img 
@@ -268,7 +268,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                   <h1 style={{ 
                     fontSize: "20px", 
                     fontWeight: 700, 
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                     letterSpacing: "0.5px",
                     marginBottom: "16px"
                   }}>
@@ -279,7 +279,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -287,7 +287,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       }}>
                         Invoice Date
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {formatDate(billing.invoice_date)}
                       </span>
                     </div>
@@ -295,7 +295,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -303,7 +303,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       }}>
                         Invoice No.
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {billing.invoice_number}
                       </span>
                     </div>
@@ -314,35 +314,35 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
               {/* Main Info Grid */}
               <div className="grid grid-cols-2 gap-8 mb-8">
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Bill To
                    </label>
                    <div className="space-y-4">
                      <div>
-                       <div className="text-sm font-medium text-gray-900">{billing.customer_name}</div>
-                       <div className="text-xs text-gray-500 mt-1">{billing.customer_address || "No address provided"}</div>
-                       {billing.customer_contact && <div className="text-xs text-gray-500">{billing.customer_contact}</div>}
+                       <div className="text-sm font-medium text-[var(--theme-text-primary)]">{billing.customer_name}</div>
+                       <div className="text-xs text-[var(--theme-text-muted)] mt-1">{billing.customer_address || "No address provided"}</div>
+                       {billing.customer_contact && <div className="text-xs text-[var(--theme-text-muted)]">{billing.customer_contact}</div>}
                      </div>
                    </div>
                 </div>
                 
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Payment Details
                    </label>
                    <div className="space-y-4">
                      <div>
-                       <div className="text-sm font-medium text-gray-900">{billing.description}</div>
-                       <div className="text-xs text-gray-500 mt-1">Description</div>
+                       <div className="text-sm font-medium text-[var(--theme-text-primary)]">{billing.description}</div>
+                       <div className="text-xs text-[var(--theme-text-muted)] mt-1">Description</div>
                      </div>
                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{billing.payment_terms || "None"}</div>
-                          <div className="text-xs text-gray-500 mt-1">Terms</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{billing.payment_terms || "None"}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Terms</div>
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{billing.due_date ? formatDate(billing.due_date) : "—"}</div>
-                          <div className="text-xs text-gray-500 mt-1">Due Date</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{billing.due_date ? formatDate(billing.due_date) : "—"}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Due Date</div>
                         </div>
                      </div>
                    </div>
@@ -351,62 +351,62 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
 
               {/* Line Items Table */}
               <div className="mb-8">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-3">
                   Line Items
                 </label>
-                <div className="rounded-lg border border-gray-200 overflow-hidden">
+                <div className="rounded-lg border border-[var(--theme-border-default)] overflow-hidden">
                   <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 border-b border-gray-200">
+                    <thead className="bg-[var(--theme-bg-surface-subtle)] border-b border-[var(--theme-border-default)]">
                       <tr>
-                        <th className="px-4 py-3 font-medium text-gray-500">Description</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right w-20">Qty</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right w-32">Unit Price</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right w-32">Total</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)]">Description</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)] text-right w-20">Qty</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)] text-right w-32">Unit Price</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)] text-right w-32">Total</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {billing.line_items?.map((item: any, index: number) => (
                         <tr key={index}>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-gray-900">{item.description}</div>
+                            <div className="font-medium text-[var(--theme-text-primary)]">{item.description}</div>
                           </td>
-                          <td className="px-4 py-3 text-right text-gray-600">{item.quantity}</td>
-                          <td className="px-4 py-3 text-right text-gray-600">
+                          <td className="px-4 py-3 text-right text-[var(--theme-text-secondary)]">{item.quantity}</td>
+                          <td className="px-4 py-3 text-right text-[var(--theme-text-secondary)]">
                             {formatCurrency(item.unit_price)}
                           </td>
-                          <td className="px-4 py-3 text-right font-medium text-gray-900">
+                          <td className="px-4 py-3 text-right font-medium text-[var(--theme-text-primary)]">
                             {formatCurrency(item.amount)}
                           </td>
                         </tr>
                       ))}
                       
                       {/* Subtotal Section */}
-                      <tr className="bg-gray-50/50">
-                        <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Subtotal</td>
-                        <td className="px-4 py-2 text-right font-medium text-gray-900">
+                      <tr className="bg-[var(--theme-bg-surface-subtle)]/50">
+                        <td colSpan={3} className="px-4 py-2 text-right text-xs text-[var(--theme-text-muted)] uppercase tracking-wide">Subtotal</td>
+                        <td className="px-4 py-2 text-right font-medium text-[var(--theme-text-primary)]">
                           {formatCurrency(billing.subtotal ?? 0)}
                         </td>
                       </tr>
                       {(billing.tax_amount ?? 0) > 0 && (
-                        <tr className="bg-gray-50/50">
-                           <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Tax</td>
-                           <td className="px-4 py-2 text-right font-medium text-gray-900">
+                        <tr className="bg-[var(--theme-bg-surface-subtle)]/50">
+                           <td colSpan={3} className="px-4 py-2 text-right text-xs text-[var(--theme-text-muted)] uppercase tracking-wide">Tax</td>
+                           <td className="px-4 py-2 text-right font-medium text-[var(--theme-text-primary)]">
                              {formatCurrency(billing.tax_amount ?? 0)}
                            </td>
                         </tr>
                       )}
                       {(billing.discount_amount ?? 0) > 0 && (
-                        <tr className="bg-gray-50/50">
-                           <td colSpan={3} className="px-4 py-2 text-right text-xs text-gray-500 uppercase tracking-wide">Discount</td>
+                        <tr className="bg-[var(--theme-bg-surface-subtle)]/50">
+                           <td colSpan={3} className="px-4 py-2 text-right text-xs text-[var(--theme-text-muted)] uppercase tracking-wide">Discount</td>
                            <td className="px-4 py-2 text-right font-medium text-red-600">
                              -{formatCurrency(billing.discount_amount ?? 0)}
                            </td>
                         </tr>
                       )}
                       {/* Grand Total */}
-                      <tr className="bg-gray-100 font-bold border-t border-gray-200">
-                        <td colSpan={3} className="px-4 py-3 text-right text-gray-900">Total Amount</td>
-                        <td className="px-4 py-3 text-right text-[#12332B] text-lg">
+                      <tr className="bg-[var(--theme-bg-surface-subtle)] font-bold border-t border-[var(--theme-border-default)]">
+                        <td colSpan={3} className="px-4 py-3 text-right text-[var(--theme-text-primary)]">Total Amount</td>
+                        <td className="px-4 py-3 text-right text-[var(--theme-text-primary)] text-lg">
                           {formatCurrency(billing.total_amount)}
                         </td>
                       </tr>
@@ -416,14 +416,14 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
               </div>
 
               {/* Payment Status Summary */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-8 flex justify-between items-center border border-gray-200">
+              <div className="bg-[var(--theme-bg-surface-subtle)] rounded-lg p-4 mb-8 flex justify-between items-center border border-[var(--theme-border-default)]">
                  <div className="flex gap-8">
                     <div>
-                       <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Amount Paid</div>
+                       <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-1">Amount Paid</div>
                        <div className="text-lg font-bold text-emerald-600">{formatCurrency(billing.amount_paid ?? 0)}</div>
                     </div>
                     <div>
-                       <div className="text-xs font-semibold text-gray-500 uppercase mb-1">Balance Due</div>
+                       <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-1">Balance Due</div>
                        <div className="text-lg font-bold text-red-600">{formatCurrency(billing.amount_due ?? 0)}</div>
                     </div>
                  </div>
@@ -432,7 +432,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
               {billing.invoice_number && (
                 <div
                   style={{
-                    border: "1px solid #E5E7EB",
+                    border: "1px solid var(--theme-border-default)",
                     borderRadius: "12px",
                     padding: "16px 18px",
                     marginBottom: "24px",
@@ -441,7 +441,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", alignItems: "center" }}>
                     <div>
-                      <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#667085", marginBottom: "6px" }}>
+                      <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--theme-text-muted)", marginBottom: "6px" }}>
                         Reversal Control
                       </div>
                       {linkedCollectionCount > 0 ? (
@@ -459,7 +459,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                             : <>Reversal posted: <strong>{reversalDocument.invoice_number || reversalDocument.id}</strong>. The original invoice is preserved for audit history and excluded from active AR.</>}
                         </div>
                       ) : (
-                        <div style={{ fontSize: "13px", color: "#344054", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-secondary)", lineHeight: 1.5 }}>
                           This invoice can be mirrored into a reversal draft without mutating the original document or reusing its billing-line ownership.
                         </div>
                       )}
@@ -523,21 +523,21 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
               )}
 
               {/* Footer Meta */}
-              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200 text-sm">
+              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-[var(--theme-border-default)] text-sm">
                 <div>
-                   <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Prepared By</div>
+                   <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Prepared By</div>
                    <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">
                         {billing.created_by_name?.charAt(0) || "U"}
                       </div>
-                      <span className="font-medium text-gray-900">{billing.created_by_name}</span>
+                      <span className="font-medium text-[var(--theme-text-primary)]">{billing.created_by_name}</span>
                    </div>
                 </div>
                 
                 {billing.project_number && (
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Project Context</div>
-                    <div className="flex items-center gap-2 text-[#0F766E] font-medium">
+                    <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Project Context</div>
+                    <div className="flex items-center gap-2 text-[var(--theme-action-primary-bg)] font-medium">
                        <CreditCard size={16} />
                        {billing.project_number}
                     </div>

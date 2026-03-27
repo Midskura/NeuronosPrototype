@@ -286,12 +286,12 @@ export function ChargeExpenseMatrix() {
           gap: "6px",
           padding: "0 8px",
         }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>Period:</span>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)", fontWeight: 500 }}>Period:</span>
           <button onClick={() => setPeriod(p => shiftPeriod(p, -1))} style={navBtnStyle} title="Previous month">
             <ChevronLeft size={14} />
           </button>
           <span style={{
-            fontSize: "14px", fontWeight: 600, color: "#12332B",
+            fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)",
             minWidth: "140px", textAlign: "center",
           }}>
             {formatPeriodLabel(period)}
@@ -308,7 +308,7 @@ export function ChargeExpenseMatrix() {
           gap: "6px",
           padding: "0 8px",
         }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>Service:</span>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)", fontWeight: 500 }}>Service:</span>
           <select
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
@@ -316,9 +316,9 @@ export function ChargeExpenseMatrix() {
               fontSize: "13px",
               padding: "8px 12px",
               borderRadius: "8px",
-              border: "1px solid #E5E7EB",
-              background: "#FFFFFF",
-              color: "#12332B",
+              border: "1px solid var(--theme-border-default)",
+              background: "var(--theme-bg-surface)",
+              color: "var(--theme-text-primary)",
               cursor: "pointer",
               outline: "none",
               fontWeight: 500,
@@ -337,7 +337,7 @@ export function ChargeExpenseMatrix() {
         }}>
           <div style={{
             display: "flex",
-            background: "#F3F4F6",
+            background: "var(--theme-bg-surface-subtle)",
             borderRadius: "10px",
             padding: "3px",
             gap: "2px",
@@ -384,8 +384,8 @@ export function ChargeExpenseMatrix() {
               style={{
                 display: "flex", alignItems: "center", gap: "6px",
                 padding: "8px 16px", fontSize: "13px", fontWeight: 500,
-                background: "#FFFFFF", color: "#0F766E",
-                border: "1px solid #E5E7EB", borderRadius: "8px",
+                background: "var(--theme-bg-surface)", color: "var(--theme-action-primary-bg)",
+                border: "1px solid var(--theme-border-default)", borderRadius: "8px",
                 cursor: "pointer",
               }}
               title="Export current matrix as CSV"
@@ -423,8 +423,8 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
       style={{
         overflow: "auto",
         height: "100%",
-        background: "#FFFFFF",
-        border: "1px solid #E5E7EB",
+        background: "var(--theme-bg-surface)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "12px",
       }}
     >
@@ -448,12 +448,12 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
               padding: "12px 16px",
               fontSize: "11px",
               fontWeight: 600,
-              color: "#6B7280",
+              color: "var(--theme-text-muted)",
               textTransform: "uppercase",
               letterSpacing: "0.5px",
               textAlign: "left",
-              background: "#F9FAFB",
-              borderBottom: "1px solid #E5E7EB",
+              background: "var(--theme-bg-page)",
+              borderBottom: "1px solid var(--theme-border-default)",
               borderRight: "2px solid #E5E7EB",
               whiteSpace: "nowrap",
             }}>
@@ -493,7 +493,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
             <th style={{
               ...headerCellBase,
               fontWeight: 700,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               minWidth: 110,
             }}>
               Row Total
@@ -520,10 +520,10 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                   padding: "8px 16px",
                   fontSize: "13px",
                   fontWeight: 600,
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   background: rowBg,
                   borderRight: "2px solid #E5E7EB",
-                  borderBottom: "1px solid #E5E7EB",
+                  borderBottom: "1px solid var(--theme-border-default)",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -535,10 +535,10 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                   padding: "8px 12px",
                   fontSize: "11px",
                   textAlign: "center",
-                  color: "#6B7280",
+                  color: "var(--theme-text-muted)",
                   background: rowBg,
-                  borderBottom: "1px solid #E5E7EB",
-                  borderRight: "1px solid #F3F4F6",
+                  borderBottom: "1px solid var(--theme-border-default)",
+                  borderRight: "1px solid var(--theme-border-subtle)",
                   whiteSpace: "nowrap",
                   minWidth: 70,
                   maxWidth: 70,
@@ -548,8 +548,8 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                     alignItems: "center",
                     fontSize: "10px",
                     fontWeight: 500,
-                    color: "#0F766E",
-                    backgroundColor: "#E8F5F3",
+                    color: "var(--theme-action-primary-bg)",
+                    backgroundColor: "var(--theme-bg-surface-tint)",
                     padding: "2px 6px",
                     borderRadius: "4px",
                   }}>
@@ -577,8 +577,8 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                         background: isUnlinked && !isEmpty
                           ? (isEven ? "#FFFDE7" : "#FFFBCB")
                           : rowBg,
-                        borderBottom: "1px solid #E5E7EB",
-                        borderRight: "1px solid #F3F4F6",
+                        borderBottom: "1px solid var(--theme-border-default)",
+                        borderRight: "1px solid var(--theme-border-subtle)",
                       }}
                     >
                       {text}
@@ -597,7 +597,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                   minWidth: 110,
                   color: rowTotal < 0 ? "#DC2626" : rowTotal === 0 ? "#D1D5DB" : "#12332B",
                   background: rowBg,
-                  borderBottom: "1px solid #E5E7EB",
+                  borderBottom: "1px solid var(--theme-border-default)",
                   borderLeft: "2px solid #E5E7EB",
                 }}>
                   {fmtAmount(rowTotal).text}
@@ -620,7 +620,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
               padding: "12px 16px",
               fontWeight: 700,
               fontSize: "13px",
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               background: theme.footerBg,
               borderTop: `2px solid ${theme.footerBorder}`,
               borderRight: "2px solid #E5E7EB",
@@ -634,7 +634,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
               zIndex: 1,
               background: theme.footerBg,
               borderTop: `2px solid ${theme.footerBorder}`,
-              borderRight: "1px solid #F3F4F6",
+              borderRight: "1px solid var(--theme-border-subtle)",
               minWidth: 70,
               maxWidth: 70,
             }} />
@@ -661,7 +661,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                     color: isNegative ? "#DC2626" : isEmpty ? "#D1D5DB" : "#12332B",
                     background: isUnlinked ? "#FEF9C3" : theme.footerBg,
                     borderTop: `2px solid ${theme.footerBorder}`,
-                    borderRight: "1px solid #F3F4F6",
+                    borderRight: "1px solid var(--theme-border-subtle)",
                   }}
                 >
                   {text}
@@ -703,8 +703,8 @@ function MetaChip({ label, value, color }: { label: string; value: string | numb
       fontSize: "12px",
       padding: "4px 10px",
       borderRadius: "8px",
-      background: "#F9FAFB",
-      border: "1px solid #E5E7EB",
+      background: "var(--theme-bg-page)",
+      border: "1px solid var(--theme-border-default)",
       color: color || "#6B7280",
       fontWeight: 500,
       whiteSpace: "nowrap",
@@ -721,8 +721,8 @@ function LoadingOverlay() {
       alignItems: "center", justifyContent: "center",
       background: "rgba(255,255,255,0.85)", zIndex: 10,
     }}>
-      <Loader2 size={24} style={{ animation: "spin 1s linear infinite", color: "#0F766E" }} />
-      <p style={{ fontSize: "14px", color: "#667085", marginTop: "8px" }}>Loading matrix data...</p>
+      <Loader2 size={24} style={{ animation: "spin 1s linear infinite", color: "var(--theme-action-primary-bg)" }} />
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginTop: "8px" }}>Loading matrix data...</p>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
@@ -734,8 +734,8 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
       height: "100%", padding: "64px", color: "#DC2626",
     }}>
-      <AlertCircle size={48} style={{ marginBottom: "16px", color: "#D1D5DB" }} />
-      <p style={{ fontSize: "14px", marginBottom: "12px", color: "#667085" }}>{message}</p>
+      <AlertCircle size={48} style={{ marginBottom: "16px", color: "var(--theme-border-default)" }} />
+      <p style={{ fontSize: "14px", marginBottom: "12px", color: "var(--theme-text-muted)" }}>{message}</p>
       <button onClick={onRetry} style={{
         padding: "8px 20px", fontSize: "13px", fontWeight: 500,
         background: "#0F766E", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
@@ -750,11 +750,11 @@ function NoCatalogState() {
   return (
     <div style={{ padding: "64px", textAlign: "center", maxWidth: "600px", margin: "0 auto" }}>
       <div style={{ textAlign: "center", padding: "48px 0" }}>
-        <Grid3X3 size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-        <p style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <Grid3X3 size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+        <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           No catalog items configured
         </p>
-        <p style={{ fontSize: "13px", color: "#9CA3AF" }}>
+        <p style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
           Go to <strong>Accounting → Admin → Item Catalog</strong> to add charge types.
           The matrix columns are built from your active catalog items.
         </p>
@@ -772,11 +772,11 @@ function EmptyState({ period }: { period: string }) {
       margin: "0 auto",
     }}>
       <div style={{ textAlign: "center", padding: "48px 0" }}>
-        <Grid3X3 size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-        <p style={{ fontSize: "14px", color: "#667085" }}>
+        <Grid3X3 size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
           No data for {formatPeriodLabel(period)}
         </p>
-        <p style={{ fontSize: "13px", color: "#9CA3AF", marginTop: "4px" }}>
+        <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
           Try a different period, service type, or view.
         </p>
       </div>
@@ -805,19 +805,19 @@ const headerCellBase: React.CSSProperties = {
   padding: "12px 12px",
   fontSize: "11px",
   fontWeight: 600,
-  color: "#6B7280",
+  color: "var(--theme-text-muted)",
   textTransform: "uppercase",
   letterSpacing: "0.5px",
   textAlign: "center",
-  background: "#F9FAFB",
-  borderBottom: "1px solid #E5E7EB",
-  borderRight: "1px solid #E5E7EB",
+  background: "var(--theme-bg-page)",
+  borderBottom: "1px solid var(--theme-border-default)",
+  borderRight: "1px solid var(--theme-border-default)",
   whiteSpace: "nowrap",
   minWidth: CELL_MIN_WIDTH,
 };
 
 const navBtnStyle: React.CSSProperties = {
   display: "flex", alignItems: "center", justifyContent: "center",
-  width: 28, height: 28, border: "1px solid #E5E7EB", borderRadius: "8px",
-  background: "#FFFFFF", cursor: "pointer", color: "#6B7280",
+  width: 28, height: 28, border: "1px solid var(--theme-border-default)", borderRadius: "8px",
+  background: "var(--theme-bg-surface)", cursor: "pointer", color: "var(--theme-text-muted)",
 };

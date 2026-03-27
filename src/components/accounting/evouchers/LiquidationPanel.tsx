@@ -141,42 +141,42 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
-        className="fixed right-0 top-0 h-full w-[600px] bg-white shadow-xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-[600px] bg-[var(--theme-bg-surface)] shadow-xl z-50 flex flex-col"
       >
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 flex justify-between items-start bg-white">
+        <div className="p-6 border-b border-[var(--theme-border-subtle)] flex justify-between items-start bg-[var(--theme-bg-surface)]">
           <div>
-            <h2 className="text-xl font-bold text-[#12332B] flex items-center gap-2">
+            <h2 className="text-xl font-bold text-[var(--theme-text-primary)] flex items-center gap-2">
               <Receipt className="w-5 h-5" />
               Liquidate Budget
             </h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-[var(--theme-text-muted)] mt-1">
               Ref: {originalVoucher.voucher_number} • {originalVoucher.purpose}
             </p>
           </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <X className="w-5 h-5 text-gray-400" />
+          <button onClick={onClose} className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg transition-colors">
+            <X className="w-5 h-5 text-[var(--theme-text-muted)]" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <div className="flex-1 overflow-y-auto p-6 bg-[var(--theme-bg-surface-subtle)]">
           
           {/* Summary Card */}
-          <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-6">
-            <div className="text-sm font-medium text-gray-500 mb-1">Total Budget</div>
-            <div className="text-2xl font-bold text-[#12332B]">
+          <div className="bg-[var(--theme-bg-surface)] p-4 rounded-xl border border-[var(--theme-border-default)] shadow-sm mb-6">
+            <div className="text-sm font-medium text-[var(--theme-text-muted)] mb-1">Total Budget</div>
+            <div className="text-2xl font-bold text-[var(--theme-text-primary)]">
               ₱{originalAmount.toLocaleString()}
             </div>
           </div>
 
           {/* Expenses List */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden mb-6">
-            <div className="p-4 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-800 text-sm">Actual Expenses</h3>
+          <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] shadow-sm overflow-hidden mb-6">
+            <div className="p-4 border-b border-[var(--theme-border-subtle)] bg-[var(--theme-bg-surface-subtle)]/50 flex justify-between items-center">
+              <h3 className="font-semibold text-[var(--theme-text-primary)] text-sm">Actual Expenses</h3>
               <button 
                 onClick={handleAddItem}
-                className="text-xs font-medium text-[#0F766E] hover:text-[#0D6560] flex items-center gap-1"
+                className="text-xs font-medium text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] flex items-center gap-1"
               >
                 <Plus className="w-3 h-3" />
                 Add Item
@@ -192,17 +192,17 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
                       placeholder="Description"
                       value={item.description}
                       onChange={(e) => updateItem(item.id, "description", e.target.value)}
-                      className="w-full text-sm font-medium placeholder:text-gray-300 border-none p-0 focus:ring-0"
+                      className="w-full text-sm font-medium placeholder:text-[var(--theme-text-muted)] border-none p-0 focus:ring-0"
                     />
                     <input
                       type="date"
                       value={item.date}
                       onChange={(e) => updateItem(item.id, "date", e.target.value)}
-                      className="text-xs text-gray-400 border-none p-0 focus:ring-0"
+                      className="text-xs text-[var(--theme-text-muted)] border-none p-0 focus:ring-0"
                     />
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-gray-400">₱</span>
+                    <span className="text-xs text-[var(--theme-text-muted)]">₱</span>
                     <input
                       type="number"
                       placeholder="0.00"
@@ -213,7 +213,7 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
                   </div>
                   <button 
                     onClick={() => handleRemoveItem(item.id)}
-                    className="p-1 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="p-1 text-[var(--theme-text-muted)] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -221,9 +221,9 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
               ))}
             </div>
             
-            <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-sm font-medium text-gray-600">Total Spent</span>
-              <span className="text-lg font-bold text-[#12332B]">₱{totalExpenses.toLocaleString()}</span>
+            <div className="p-4 bg-[var(--theme-bg-surface-subtle)] border-t border-[var(--theme-border-subtle)] flex justify-between items-center">
+              <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Total Spent</span>
+              <span className="text-lg font-bold text-[var(--theme-text-primary)]">₱{totalExpenses.toLocaleString()}</span>
             </div>
           </div>
 
@@ -231,13 +231,13 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
           <div className={`p-4 rounded-xl border ${
             isRefund ? "bg-emerald-50 border-emerald-200" :
             isReimbursement ? "bg-amber-50 border-amber-200" :
-            "bg-gray-100 border-gray-200"
+            "bg-[var(--theme-bg-surface-subtle)] border-[var(--theme-border-default)]"
           }`}>
             <div className="flex gap-3">
               <div className={`p-2 rounded-full ${
                 isRefund ? "bg-emerald-100 text-emerald-600" :
                 isReimbursement ? "bg-amber-100 text-amber-600" :
-                "bg-gray-200 text-gray-500"
+                "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-text-muted)]"
               }`}>
                 <AlertCircle className="w-5 h-5" />
               </div>
@@ -245,14 +245,14 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
                 <h4 className={`font-semibold ${
                   isRefund ? "text-emerald-800" :
                   isReimbursement ? "text-amber-800" :
-                  "text-gray-700"
+                  "text-[var(--theme-text-secondary)]"
                 }`}>
                   {isRefund ? "Funds to Return" : isReimbursement ? "Reimbursement Needed" : "Budget Balanced"}
                 </h4>
                 <p className={`text-sm mt-1 ${
                   isRefund ? "text-emerald-700" :
                   isReimbursement ? "text-amber-700" :
-                  "text-gray-600"
+                  "text-[var(--theme-text-secondary)]"
                 }`}>
                   {isRefund 
                     ? `You have ₱${balance.toLocaleString()} remaining from the original budget.`
@@ -268,11 +268,11 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 bg-white">
+        <div className="p-6 border-t border-[var(--theme-border-subtle)] bg-[var(--theme-bg-surface)]">
           <button
             onClick={handleSubmit}
             disabled={isSaving}
-            className="w-full py-3 px-4 bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
+            className="w-full py-3 px-4 bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
           >
             {isSaving ? "Processing..." : (
               <>

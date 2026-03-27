@@ -91,7 +91,7 @@ export function ReportTemplates({ onBack, onRunReport }: ReportTemplatesProps) {
             key={template.id}
             style={{
               backgroundColor: 'white',
-              border: '1px solid #E5E7EB',
+              border: '1px solid var(--theme-border-default)',
               borderRadius: '8px',
               padding: '24px',
               display: 'flex',

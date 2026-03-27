@@ -239,10 +239,10 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                   /* Display row — individual bordered entry */
                   <div
                     key={c.id}
-                    className="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                     }}
                   >
                     <User
@@ -259,7 +259,7 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                     {/* Hover actions */}
                     <button
                       onClick={() => startEditing(c.id, c.name)}
-                      className="p-0.5 rounded opacity-0 group-hover:opacity-100 hover:bg-gray-100 transition-all"
+                      className="p-0.5 rounded opacity-0 group-hover:opacity-100 hover:bg-[var(--theme-bg-surface-subtle)] transition-all"
                       title="Edit"
                     >
                       <Pencil size={12} style={{ color: "var(--neuron-ink-muted)" }} />
@@ -314,7 +314,7 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
               /* Ghost row — subtle "Add consignee..." trigger */
               <div
                 onClick={startAdding}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                 style={{
                   border: "1px dashed var(--neuron-ui-border)",
                   backgroundColor: "transparent",

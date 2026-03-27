@@ -37,7 +37,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
       
       {/* General Details Section */}
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         padding: "24px",
@@ -68,7 +68,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -91,7 +91,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -124,7 +124,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                     key={idx}
                     style={{
                       padding: "8px 16px",
-                      backgroundColor: "#0F766E",
+                      backgroundColor: "var(--theme-action-primary-bg)",
                       border: "1px solid #0F766E",
                       borderRadius: "6px",
                       fontSize: "14px",
@@ -139,11 +139,11 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               ) : (
                 <div style={{
                   padding: "10px 14px",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "6px",
                   fontSize: "14px",
-                  color: "#9CA3AF",
+                  color: "var(--theme-text-muted)",
                   width: "100%"
                 }}>
                   No services selected
@@ -166,7 +166,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -188,7 +188,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -213,7 +213,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -235,7 +235,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -260,7 +260,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -282,7 +282,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -304,7 +304,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -329,7 +329,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -355,7 +355,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -384,7 +384,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -406,7 +406,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -428,7 +428,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
@@ -453,7 +453,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
               </label>
               <div style={{
                 padding: "10px 14px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",

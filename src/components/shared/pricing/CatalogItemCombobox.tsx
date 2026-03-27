@@ -311,7 +311,7 @@ export function CatalogItemCombobox({
             maxWidth: "360px",
             maxHeight: "280px",
             overflowY: "auto",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid #E0E6E4",
             borderRadius: "8px",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
@@ -321,13 +321,13 @@ export function CatalogItemCombobox({
         >
             {/* ==================== DROPDOWN LIST ==================== */}
               {isLoading && (
-                <div style={{ padding: "8px 12px", color: "#9CA3AF", fontSize: "12px" }}>
+                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
                   Loading...
                 </div>
               )}
 
               {!isLoading && !hasResults && searchText.trim() && (
-                <div style={{ padding: "8px 12px", color: "#9CA3AF", fontSize: "12px" }}>
+                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
                   No matching items
                 </div>
               )}
@@ -340,7 +340,7 @@ export function CatalogItemCombobox({
                       padding: "6px 12px 2px",
                       fontSize: "10px",
                       fontWeight: 600,
-                      color: "#9CA3AF",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}>
@@ -369,7 +369,7 @@ export function CatalogItemCombobox({
                       padding: "6px 12px 2px",
                       fontSize: "10px",
                       fontWeight: 600,
-                      color: "#9CA3AF",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}>
@@ -404,7 +404,7 @@ export function CatalogItemCombobox({
                       cursor: isCreating ? "not-allowed" : "pointer",
                       textAlign: "left",
                     }}
-                    onMouseEnter={(e) => { if (!isCreating) e.currentTarget.style.backgroundColor = "#F0FDFA"; }}
+                    onMouseEnter={(e) => { if (!isCreating) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
                   >
                     <Plus size={14} />
@@ -418,7 +418,7 @@ export function CatalogItemCombobox({
 
               {/* Empty state: no search, show all */}
               {!isLoading && !searchText.trim() && !hasResults && (
-                <div style={{ padding: "8px 12px", color: "#9CA3AF", fontSize: "12px" }}>
+                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
                   No catalog items yet
                 </div>
               )}
@@ -457,7 +457,7 @@ function ItemOption({
         overflow: "hidden",
         textOverflow: "ellipsis",
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#F9FAFB"; }}
+      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
       onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
     >
       {item.name}

@@ -31,15 +31,15 @@ interface ForwardingBookingDetailsProps {
 type DetailTab = "booking-info" | "billings" | "expenses" | "comments";
 
 const STATUS_COLORS: Record<ExecutionStatus, string> = {
-  "Draft": "bg-gray-100 text-gray-700 border-gray-300",
+  "Draft": "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)] border-[var(--theme-border-default)]",
   "Confirmed": "bg-blue-50 text-blue-700 border-blue-300",
-  "In Progress": "bg-[#0F766E]/10 text-[#0F766E] border-[#0F766E]/30",
+  "In Progress": "bg-[var(--theme-action-primary-bg)]/10 text-[var(--theme-action-primary-bg)] border-[var(--theme-action-primary-bg)]/30",
   "Pending": "bg-amber-50 text-amber-700 border-amber-300",
   "On Hold": "bg-orange-50 text-orange-700 border-orange-300",
   "Delivered": "bg-indigo-50 text-indigo-700 border-indigo-300",
   "Completed": "bg-emerald-50 text-emerald-700 border-emerald-300",
   "Cancelled": "bg-red-50 text-red-700 border-red-300",
-  "Closed": "bg-gray-50 text-gray-500 border-gray-200",
+  "Closed": "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] border-[var(--theme-border-default)]",
 };
 
 // Activity Timeline Data Structure
@@ -211,7 +211,7 @@ export function ForwardingBookingDetails({
 
   return (
     <div style={{ 
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       display: "flex",
       flexDirection: "column",
       height: "100vh"
@@ -220,7 +220,7 @@ export function ForwardingBookingDetails({
       <div style={{
         padding: "20px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center"
@@ -288,7 +288,7 @@ export function ForwardingBookingDetails({
       <div style={{
         padding: "0 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -395,7 +395,7 @@ export function ForwardingBookingDetails({
             }}
             onMouseEnter={(e) => {
               if (!showTimeline) {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }
             }}
             onMouseLeave={(e) => {
@@ -425,21 +425,21 @@ export function ForwardingBookingDetails({
           <div style={{ position: "relative" }} ref={moreMenuRef}>
             <button
               onClick={() => setShowMoreMenu(v => !v)}
-              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "white", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)", borderRadius: "6px", cursor: "pointer" }}
             >
               <MoreVertical size={18} />
             </button>
             {showMoreMenu && (
-              <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", width: "180px", backgroundColor: "white", border: "1px solid #E5E9F0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", zIndex: 100, overflow: "hidden" }}>
+              <div style={{ position: "absolute", right: 0, top: "calc(100% + 4px)", width: "180px", backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--theme-border-default)", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", zIndex: 100, overflow: "hidden" }}>
                 <button
                   onClick={() => { setShowMoreMenu(false); handleStatusUpdate("Cancelled"); }}
-                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#344054", textAlign: "left" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F9FAFB")}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-text-secondary)", textAlign: "left" }}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-bg-page)")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
                   Cancel Booking
                 </button>
-                <div style={{ height: "1px", backgroundColor: "#F3F4F6" }} />
+                <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)" }} />
                 <button
                   onClick={handleDeleteFromDetail}
                   style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#DC2626", textAlign: "left" }}
@@ -475,7 +475,7 @@ export function ForwardingBookingDetails({
             />
           )}
           {activeTab === "billings" && (
-            <div className="flex flex-col bg-white p-12 min-h-[600px]">
+            <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]">
               <UnifiedBillingsTab
                 items={bookingBillingItems}
                 projectId={booking.projectNumber || ""}
@@ -567,7 +567,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
 
               {/* Activity Content */}
               <div style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
                 padding: "12px 16px"
@@ -657,9 +657,9 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                     }}>
                       <span style={{
                         padding: "4px 10px",
-                        backgroundColor: "#F3F4F6",
+                        backgroundColor: "var(--theme-bg-surface-subtle)",
                         borderRadius: "4px",
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         fontSize: "11px",
                         fontWeight: 500
                       }}>
@@ -668,9 +668,9 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                       <ChevronRight size={12} />
                       <span style={{
                         padding: "4px 10px",
-                        backgroundColor: "#E8F2EE",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         borderRadius: "4px",
-                        color: "#0F766E",
+                        color: "var(--theme-action-primary-bg)",
                         fontSize: "11px",
                         fontWeight: 500
                       }}>
@@ -730,15 +730,15 @@ function LockedField({ label, value, tooltip = "This field is locked because it'
         marginBottom: "8px"
       }}>
         {label}
-        <Lock size={12} color="#9CA3AF" style={{ cursor: "help" }} />
+        <Lock size={12} color="var(--theme-text-muted)" style={{ cursor: "help" }} />
       </label>
       <div style={{
         padding: "10px 14px",
-        backgroundColor: "#F9FAFB",
-        border: "1px solid #E5E7EB",
+        backgroundColor: "var(--theme-bg-page)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "6px",
         fontSize: "14px",
-        color: "#6B7280",
+        color: "var(--theme-text-muted)",
         cursor: "not-allowed"
       }}>
         {value || "—"}

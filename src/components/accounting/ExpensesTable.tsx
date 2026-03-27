@@ -82,7 +82,7 @@ export function ExpensesTable({
   const getStatusBadge = (status: string = "pending") => {
     const s = status.toLowerCase();
     
-    let styles = "bg-gray-100 text-gray-700"; // Default
+    let styles = "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]"; // Default
     
     // Exact colors from design system
     if (s === "posted" || s === "paid") styles = "bg-[#ECFDF5] text-[#059669]"; // Green
@@ -100,7 +100,7 @@ export function ExpensesTable({
   // Matches ActivitiesList "System Update" / "Note" style for neutral categories
   const getCategoryColor = (category: string) => {
     // We use the "Sage" style from ActivitiesList for general categories to look clean
-    return "bg-[#F1F6F4] text-[#6B7A76]";
+    return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
   };
 
   const hasConvertCol = !!(convertibleIds && onConvertItem);
@@ -112,8 +112,8 @@ export function ExpensesTable({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-[#6B7280]">
-        <div className="animate-spin mb-3 text-[#0F766E]">
+      <div className="flex flex-col items-center justify-center py-20 text-[var(--theme-text-muted)]">
+        <div className="animate-spin mb-3 text-[var(--theme-action-primary-bg)]">
           <LoaderCircle size={32} />
         </div>
         <p className="text-[13px] font-medium">Loading expenses...</p>
@@ -124,7 +124,7 @@ export function ExpensesTable({
   if (data.length === 0) {
     return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)" // #E5E9F0
       }}>
         <div className="px-6 py-12 text-center">
@@ -137,19 +137,19 @@ export function ExpensesTable({
   }
 
   return (
-    <div className="rounded-[10px] overflow-hidden bg-white border border-[#E5E9F0]">
+    <div className="rounded-[10px] overflow-hidden bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)]">
       {/* Header - Matches var(--neuron-bg-page) which is #F7FAF8 */}
-      <div className={`${gridClass} gap-3 px-4 py-2 border-b border-[#E5E9F0] bg-[#F7FAF8]`}>
+      <div className={`${gridClass} gap-3 px-4 py-2 border-b border-[var(--theme-border-default)] bg-[#F7FAF8]`}>
         <div></div> {/* Icon Placeholder */}
-        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Category / Date</div>
-        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Reference</div>
-        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Description</div>
-        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Payee</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Category / Date</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Reference</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Description</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Payee</div>
         {showBookingColumn && (
-           <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Booking</div>
+           <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Booking</div>
         )}
-        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Status</div>
-        <div className="text-right text-[11px] font-semibold uppercase tracking-[0.002em] text-[#667085]">Amount</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Status</div>
+        <div className="text-right text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Amount</div>
         {hasConvertCol && <div></div>}
       </div>
 
@@ -160,13 +160,13 @@ export function ExpensesTable({
           return (
           <div
             key={item.id || index}
-            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[#F1F6F4]" : ""} ${isHighlighted ? "ring-2 ring-[#0F766E] bg-[#0F766E]/5 rounded-md" : ""}`}
+            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[#F1F6F4]" : ""} ${isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md" : ""}`}
             onClick={() => onRowClick && onRowClick(item.originalData || item)}
             ref={isHighlighted ? highlightRef : undefined}
           >
             {/* Icon - Muted gray to match phone icon */}
             <div className="flex items-center justify-center">
-              <Receipt className="w-4 h-4 text-[#98A2B3]" /> 
+              <Receipt className="w-4 h-4 text-[var(--theme-text-muted)]" /> 
             </div>
 
             {/* Category & Date (Stacked) */}
@@ -174,14 +174,14 @@ export function ExpensesTable({
               <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getCategoryColor(item.category)}`}>
                 {item.category || "General"}
               </span>
-              <div className="text-[10px] mt-1 text-[#667085]">
+              <div className="text-[10px] mt-1 text-[var(--theme-text-muted)]">
                 {formatDate(item.date)}
               </div>
             </div>
 
             {/* Reference - Teal link color */}
             <div className="flex items-center">
-              <span className="text-[12px] font-medium text-[#0F766E]">
+              <span className="text-[12px] font-medium text-[var(--theme-action-primary-bg)]">
                 {item.reference}
               </span>
             </div>
@@ -203,7 +203,7 @@ export function ExpensesTable({
             {/* Booking (Optional) */}
             {showBookingColumn && (
                <div className="flex items-center">
-                 <span className="text-[12px] text-[#6B7280]">
+                 <span className="text-[12px] text-[var(--theme-text-muted)]">
                     {item.originalData?.bookingId || "—"}
                  </span>
                </div>
@@ -231,7 +231,7 @@ export function ExpensesTable({
                       display: "flex", alignItems: "center", gap: "4px",
                       padding: "4px 8px", fontSize: "11px", fontWeight: 600,
                       border: "1px solid #99F6E4", borderRadius: "6px",
-                      backgroundColor: "#F0FDF9", color: "#0F766E", cursor: "pointer",
+                      backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)", cursor: "pointer",
                       whiteSpace: "nowrap",
                     }}
                     title="Convert this billable expense to an unbilled billing item"
@@ -243,7 +243,7 @@ export function ExpensesTable({
                   <span
                     style={{
                       display: "flex", alignItems: "center", gap: "4px",
-                      fontSize: "11px", fontWeight: 500, color: "#9CA3AF",
+                      fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)",
                     }}
                     title="Already converted to billing item"
                   >
@@ -260,20 +260,20 @@ export function ExpensesTable({
 
       {/* Footer Summary Row */}
       {(footerSummary || grossSummary) && (
-        <div className="bg-white border-t border-[#E5E9F0] px-4 py-3 flex items-center justify-end gap-8">
+        <div className="bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)] px-4 py-3 flex items-center justify-end gap-8">
           {grossSummary && (
              <div className="flex items-center gap-2">
-               <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.002em]">
+               <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.002em]">
                  {grossSummary.label}
                </span>
-               <span className="text-[13px] font-bold text-[#374151]">
+               <span className="text-[13px] font-bold text-[var(--theme-text-secondary)]">
                  {formatCurrency(grossSummary.amount, grossSummary.currency)}
                </span>
              </div>
           )}
           {footerSummary && (
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.002em]">
+              <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.002em]">
                 {footerSummary.label}
               </span>
               <span className="text-[13px] font-bold text-[#991B1B]">

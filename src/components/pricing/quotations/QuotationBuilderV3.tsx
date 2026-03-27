@@ -2060,7 +2060,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
 
   return (
     <div style={{ 
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       display: "flex",
       flexDirection: "column",
       height: hideHeader ? "auto" : "100vh"
@@ -2070,7 +2070,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
       <div style={{
         padding: "20px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "#F8FBFB",
+        backgroundColor: "var(--theme-bg-page)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -2100,7 +2100,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
               fontSize: "13px",
               fontWeight: 500,
               color: "var(--neuron-ink-muted)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
               cursor: "pointer",
@@ -2122,7 +2122,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
                 fontSize: "13px",
                 fontWeight: 500,
                 color: isLocked ? "#9CA3AF" : "var(--neuron-brand-green)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 cursor: isLocked ? "not-allowed" : "pointer",
@@ -2373,7 +2373,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
             <>
               {/* Scope of Services — free-text textarea */}
               <div style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
                 padding: "24px",
@@ -2429,7 +2429,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#0F766E";
+                      e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       e.currentTarget.style.backgroundColor = "white";
                     }}
                     onBlur={(e) => {
@@ -2442,7 +2442,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
 
               {/* Terms & Conditions — free-text textarea */}
               <div style={{
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
                 padding: "24px",
@@ -2498,7 +2498,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.borderColor = "#0F766E";
+                      e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                       e.currentTarget.style.backgroundColor = "white";
                     }}
                     onBlur={(e) => {

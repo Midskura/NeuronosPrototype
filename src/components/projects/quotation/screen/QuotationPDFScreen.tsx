@@ -100,21 +100,21 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
   };
 
   return (
-    <div className={`flex flex-col h-full w-full bg-[#F3F4F6] overflow-hidden ${isEmbedded ? 'rounded-lg border border-gray-200' : ''}`}>
+    <div className={`flex flex-col h-full w-full bg-[var(--theme-bg-surface-subtle)] overflow-hidden ${isEmbedded ? 'rounded-lg border border-[var(--theme-border-default)]' : ''}`}>
       {/* Header - Styled like a Module Header - Only show if not embedded */}
       {!isEmbedded && (
-        <div className="h-16 bg-white border-b border-[#E5E9F0] px-6 flex items-center justify-between shrink-0 z-20">
+        <div className="h-16 bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)] px-6 flex items-center justify-between shrink-0 z-20">
             <div className="flex items-center gap-4">
             <button 
                 onClick={onClose}
-                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 hover:text-[#12332B] transition-all"
+                className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] hover:text-[var(--theme-text-primary)] transition-all"
                 title="Close Studio"
             >
                 <ArrowLeft size={20} />
             </button>
             
             <div>
-                <h2 className="text-xl font-bold text-[#12332B] tracking-tight">Quotation PDF Studio</h2>
+                <h2 className="text-xl font-bold text-[var(--theme-text-primary)] tracking-tight">Quotation PDF Studio</h2>
             </div>
             </div>
         </div>
@@ -126,7 +126,7 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
         {/* LEFT: Live Preview Stage */}
         <div 
             ref={containerRef}
-            className="flex-1 bg-gray-50 overflow-hidden flex items-center justify-center relative p-8"
+            className="flex-1 bg-[var(--theme-bg-surface-subtle)] overflow-hidden flex items-center justify-center relative p-8"
         >
             {/* Scrollable Area */}
             <div className="absolute inset-0 overflow-auto flex items-center justify-center p-8 pb-32">
@@ -143,7 +143,7 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
                     >
                         {/* The "Paper" Container */}
                         <div 
-                            className="bg-white origin-top-left" 
+                            className="bg-[var(--theme-bg-surface)] origin-top-left" 
                             style={{ 
                                 width: '210mm', 
                                 minHeight: '297mm',
@@ -167,18 +167,18 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
             </div>
 
             {/* Floating Zoom Controls */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg rounded-full px-4 py-2 flex items-center gap-4 z-30 transition-all hover:bg-white hover:shadow-xl">
-                 <button onClick={zoomOut} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom Out">
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-[var(--theme-bg-surface)]/90 backdrop-blur-sm border border-[var(--theme-border-default)] shadow-lg rounded-full px-4 py-2 flex items-center gap-4 z-30 transition-all hover:bg-[var(--theme-bg-surface)] hover:shadow-xl">
+                 <button onClick={zoomOut} className="p-1.5 hover:bg-[var(--theme-bg-surface-subtle)] rounded-full text-[var(--theme-text-secondary)] transition-all" title="Zoom Out">
                     <ZoomOut size={18} />
                  </button>
-                 <span className="text-sm font-medium text-gray-700 w-12 text-center select-none tabular-nums">{Math.round(scale * 100)}%</span>
-                 <button onClick={zoomIn} className="p-1.5 hover:bg-gray-100 rounded-full text-gray-600 transition-all" title="Zoom In">
+                 <span className="text-sm font-medium text-[var(--theme-text-secondary)] w-12 text-center select-none tabular-nums">{Math.round(scale * 100)}%</span>
+                 <button onClick={zoomIn} className="p-1.5 hover:bg-[var(--theme-bg-surface-subtle)] rounded-full text-[var(--theme-text-secondary)] transition-all" title="Zoom In">
                     <ZoomIn size={18} />
                  </button>
-                 <div className="w-px h-4 bg-gray-300" />
+                 <div className="w-px h-4 bg-[var(--theme-bg-surface-tint)]" />
                  <button 
                     onClick={toggleFit} 
-                    className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[#0F766E] bg-[#F0FDFA]' : 'text-gray-600 hover:bg-gray-100'}`}
+                    className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[var(--theme-action-primary-bg)] bg-[#F0FDFA]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
                     title="Fit to Screen"
                  >
                     <Maximize size={16} />
@@ -188,7 +188,7 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
         </div>
 
         {/* RIGHT: Document Controls Sidebar */}
-        <div className="w-[360px] bg-white border-l border-[#E5E9F0] flex flex-col overflow-hidden shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
+        <div className="w-[360px] bg-[var(--theme-bg-surface)] border-l border-[var(--theme-border-default)] flex flex-col overflow-hidden shrink-0 z-20 shadow-[-4px_0_15px_-3px_rgba(0,0,0,0.02)]">
             
             {/* Scrollable Content (No padding on container to allow full-width headers) */}
             <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
@@ -216,11 +216,11 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
             </div>
 
             {/* Sidebar Footer - Actions */}
-            <div className="p-6 border-t border-[#E5E9F0] bg-white shrink-0 flex flex-col gap-3 shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.02)] z-30">
+            <div className="p-6 border-t border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] shrink-0 flex flex-col gap-3 shadow-[0_-4px_15px_-3px_rgba(0,0,0,0.02)] z-30">
                  <button 
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-[#12332B] bg-white border border-[#E5E7EB] rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 shadow-sm"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-[var(--theme-text-primary)] bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg hover:bg-[var(--theme-bg-surface-subtle)] hover:border-[var(--theme-border-default)] transition-all disabled:opacity-50 shadow-sm"
                   >
                     {isSaving ? (
                         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -232,7 +232,7 @@ export function QuotationPDFScreen({ project, onClose, onSave, currentUser, isEm
                   
                   <button 
                     onClick={handlePrint}
-                    className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[#0F766E] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-[var(--theme-action-primary-bg)] rounded-lg hover:bg-[#0D625D] hover:shadow-md transition-all shadow-sm"
                   >
                     <Printer size={18} />
                     Print PDF

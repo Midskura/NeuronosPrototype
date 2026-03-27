@@ -90,7 +90,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
         return { bg: "#F3F4F6", color: "#475467" };
       case "posted":
       case "cleared":
-        return { bg: "#E8F5F3", color: "#0F766E" };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
       case "deposited":
         return { bg: "#D1FAE5", color: "#059669" };
       case "pending":
@@ -100,11 +100,11 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
       case "cancelled":
         return { bg: "#FFE5E5", color: "#C94F3D" };
       default:
-        return { bg: "#F3F4F6", color: "#6B7A76" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
     }
   };
 
-  const statusStyle = collection ? getStatusColor(collection.status || "pending") : { bg: "#F3F4F6", color: "#6B7A76" };
+  const statusStyle = collection ? getStatusColor(collection.status || "pending") : { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
   const canResolve = Boolean(
     collection &&
     collectionSource &&
@@ -168,7 +168,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
           stiffness: 300,
           duration: 0.3
         }}
-        className="fixed right-0 top-0 h-full w-[920px] bg-white shadow-2xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-[920px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -178,13 +178,13 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
           style={{
             padding: "24px 48px",
             borderBottom: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "4px" }}>
-                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                   Collection Details
                 </h2>
                 {collection && (
@@ -202,7 +202,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: "13px", color: "#667085" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                 {collection?.evoucher_number || "View collection details"}
               </p>
             </div>
@@ -214,7 +214,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                 borderRadius: "8px",
                 border: "none",
                 backgroundColor: "transparent",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -222,7 +222,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                 transition: "all 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -236,7 +236,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
         {/* Content - Scrollable */}
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 48px" }}>
           {loading ? (
-            <div className="flex items-center justify-center h-full text-gray-400">Loading details...</div>
+            <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center h-full text-red-500">
                <AlertCircle size={32} className="mb-2" />
@@ -251,7 +251,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                 justifyContent: "space-between",
                 marginBottom: "32px",
                 paddingBottom: "24px",
-                borderBottom: "1px solid #E5E7EB"
+                borderBottom: "1px solid var(--theme-border-default)"
               }}>
                 <div>
                   <img 
@@ -265,7 +265,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                   <h1 style={{ 
                     fontSize: "20px", 
                     fontWeight: 700, 
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                     letterSpacing: "0.5px",
                     marginBottom: "16px"
                   }}>
@@ -276,7 +276,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -284,7 +284,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                       }}>
                         Date
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {formatDate(collection.collection_date)}
                       </span>
                     </div>
@@ -292,7 +292,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -300,7 +300,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                       }}>
                         Receipt No.
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {collection.evoucher_number}
                       </span>
                     </div>
@@ -318,31 +318,31 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
               {/* Main Info Grid */}
               <div className="grid grid-cols-2 gap-8 mb-8">
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Received From
                    </label>
                    <div className="space-y-4">
                      <div>
-                       <div className="text-sm font-medium text-gray-900">{collection.customer_name}</div>
-                       <div className="text-xs text-gray-500 mt-1">Customer / Payer</div>
+                       <div className="text-sm font-medium text-[var(--theme-text-primary)]">{collection.customer_name}</div>
+                       <div className="text-xs text-[var(--theme-text-muted)] mt-1">Customer / Payer</div>
                      </div>
                    </div>
                 </div>
                 
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Payment Details
                    </label>
                    <div className="space-y-4">
                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{collection.payment_method}</div>
-                          <div className="text-xs text-gray-500 mt-1">Method</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{collection.payment_method}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Method</div>
                         </div>
                         {collection.reference_number && (
                           <div>
-                            <div className="text-sm font-medium text-gray-900">{collection.reference_number}</div>
-                            <div className="text-xs text-gray-500 mt-1">Reference No.</div>
+                            <div className="text-sm font-medium text-[var(--theme-text-primary)]">{collection.reference_number}</div>
+                            <div className="text-xs text-[var(--theme-text-muted)] mt-1">Reference No.</div>
                           </div>
                         )}
                      </div>
@@ -353,7 +353,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
               {(canResolve || isCollectionResolvedByCreditOrRefund(collection)) && (
                 <div
                   style={{
-                    border: "1px solid #E5E7EB",
+                    border: "1px solid var(--theme-border-default)",
                     borderRadius: "12px",
                     padding: "16px 18px",
                     marginBottom: "24px",
@@ -362,7 +362,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", alignItems: "center" }}>
                     <div>
-                      <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "#667085", marginBottom: "6px" }}>
+                      <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--theme-text-muted)", marginBottom: "6px" }}>
                         Credit / Refund Control
                       </div>
                       {isCollectionResolvedByCreditOrRefund(collection) ? (
@@ -370,7 +370,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                           Resolution recorded: <strong>{getCollectionResolutionLabel(collection)}</strong>. This payment stays in history but no longer applies to invoice settlement.
                         </div>
                       ) : (
-                        <div style={{ fontSize: "13px", color: "#344054", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-secondary)", lineHeight: 1.5 }}>
                           Use this when collected cash for the linked invoice needs to be preserved as customer credit or marked as refunded before invoice reversal and booking cancellation.
                         </div>
                       )}
@@ -419,20 +419,20 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
               {/* Description & Notes */}
               <div className="mb-8 space-y-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                     Description
                   </label>
-                  <div className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  <div className="text-sm text-[var(--theme-text-primary)] bg-[var(--theme-bg-surface-subtle)] p-3 rounded-lg border border-[var(--theme-border-subtle)]">
                     {collection.description}
                   </div>
                 </div>
 
                 {collection.notes && (
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                    <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                       Notes
                     </label>
-                    <div className="text-sm text-gray-600 italic">
+                    <div className="text-sm text-[var(--theme-text-secondary)] italic">
                       {collection.notes}
                     </div>
                   </div>
@@ -440,21 +440,21 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
               </div>
 
               {/* Footer Meta */}
-              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200 text-sm">
+              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-[var(--theme-border-default)] text-sm">
                 <div>
-                   <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Received By</div>
+                   <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Received By</div>
                    <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">
                         {collection.received_by_name?.charAt(0) || "U"}
                       </div>
-                      <span className="font-medium text-gray-900">{collection.received_by_name}</span>
+                      <span className="font-medium text-[var(--theme-text-primary)]">{collection.received_by_name}</span>
                    </div>
                 </div>
                 
                 {collection.project_number && (
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Project Context</div>
-                    <div className="flex items-center gap-2 text-[#0F766E] font-medium">
+                    <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Project Context</div>
+                    <div className="flex items-center gap-2 text-[var(--theme-action-primary-bg)] font-medium">
                        <CreditCard size={16} />
                        {collection.project_number}
                     </div>

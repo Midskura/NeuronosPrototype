@@ -109,14 +109,14 @@ export function GroupedDataTable<T extends { id?: string | number }>({
         {[0, 1, 2].map((i) => (
           <div key={i} className="animate-pulse">
             <div className="px-4 py-3 flex items-center gap-3" style={{ backgroundColor: "var(--neuron-state-hover)" }}>
-              <div className="h-3 w-3 bg-gray-200 rounded" />
-              <div className="h-3.5 w-40 bg-gray-200 rounded" />
-              <div className="ml-auto h-3 w-24 bg-gray-200 rounded" />
+              <div className="h-3 w-3 bg-[var(--theme-bg-surface-tint)] rounded" />
+              <div className="h-3.5 w-40 bg-[var(--theme-bg-surface-tint)] rounded" />
+              <div className="ml-auto h-3 w-24 bg-[var(--theme-bg-surface-tint)] rounded" />
             </div>
             {i === 0 && [0, 1, 2].map((j) => (
               <div key={j} className="px-4 py-2.5 flex items-center gap-4 border-t" style={{ borderColor: "var(--neuron-ui-divider)" }}>
                 {columns.map((_, k) => (
-                  <div key={k} className="h-3 bg-gray-100 rounded" style={{ width: `${60 + Math.random() * 60}px` }} />
+                  <div key={k} className="h-3 bg-[var(--theme-bg-surface-subtle)] rounded" style={{ width: `${60 + Math.random() * 60}px` }} />
                 ))}
               </div>
             ))}

@@ -22,14 +22,14 @@ export function OthersFormV2({ data, onChange }: OthersFormV2Props) {
         alignItems: "center",
         gap: "6px"
       }}>
-        <MoreHorizontal size={14} style={{ color: "#0F766E" }} />
+        <MoreHorizontal size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         SERVICE DETAILS
       </div>
 
       <div>
         {/* Service Description */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Service Description *
           </label>
           <textarea
@@ -43,7 +43,7 @@ export function OthersFormV2({ data, onChange }: OthersFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               resize: "vertical",
               fontFamily: "inherit"
             }}

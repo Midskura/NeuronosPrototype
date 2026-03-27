@@ -29,7 +29,7 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
       title: "Forwarding",
       description: "International freight forwarding (Sea/Air)",
       icon: Ship,
-      color: "#0F766E",
+      color: "var(--theme-action-primary-bg)",
       bgColor: "#E8F5F3"
     },
     {
@@ -69,10 +69,10 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
   return (
     <div className="h-full flex flex-col bg-[var(--neuron-bg-page)]">
       {/* Header */}
-      <div className="px-8 py-6 border-b border-[var(--neuron-ui-border)] bg-white flex items-center gap-4">
+      <div className="px-8 py-6 border-b border-[var(--neuron-ui-border)] bg-[var(--theme-bg-surface)] flex items-center gap-4">
         <button 
           onClick={onBack}
-          className="p-2 hover:bg-gray-100 rounded-lg text-[var(--neuron-ink-muted)] transition-colors"
+          className="p-2 hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg text-[var(--neuron-ink-muted)] transition-colors"
         >
           <ArrowLeft size={20} />
         </button>
@@ -89,7 +89,7 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
             <button
               key={service.id}
               onClick={() => setActiveService(service.id)}
-              className="flex flex-col items-start p-6 bg-white rounded-xl border border-[var(--neuron-ui-border)] hover:border-[var(--neuron-brand-green)] hover:shadow-md transition-all text-left group"
+              className="flex flex-col items-start p-6 bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--neuron-ui-border)] hover:border-[var(--neuron-brand-green)] hover:shadow-md transition-all text-left group"
             >
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 transition-transform group-hover:scale-110"

@@ -172,12 +172,12 @@ export function AuditingSummary() {
       }}>
         {/* Period navigator */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 8px" }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>Period:</span>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)", fontWeight: 500 }}>Period:</span>
           <button onClick={() => setPeriod(p => shiftPeriod(p, -1))} style={navBtnStyle} title="Previous month">
             <ChevronLeft size={14} />
           </button>
           <span style={{
-            fontSize: "14px", fontWeight: 600, color: "#12332B",
+            fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)",
             minWidth: "140px", textAlign: "center",
           }}>
             {formatPeriodLabel(period)}
@@ -189,7 +189,7 @@ export function AuditingSummary() {
 
         {/* Service type dropdown */}
         <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 8px" }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>Service:</span>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)", fontWeight: 500 }}>Service:</span>
           <select
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
@@ -197,9 +197,9 @@ export function AuditingSummary() {
               fontSize: "13px",
               padding: "8px 12px",
               borderRadius: "8px",
-              border: "1px solid #E5E7EB",
-              background: "#FFFFFF",
-              color: "#12332B",
+              border: "1px solid var(--theme-border-default)",
+              background: "var(--theme-bg-surface)",
+              color: "var(--theme-text-primary)",
               cursor: "pointer",
               outline: "none",
               fontWeight: 500,
@@ -211,7 +211,7 @@ export function AuditingSummary() {
 
         {/* View radio */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "0 8px" }}>
-          <span style={{ fontSize: "13px", color: "#6B7280", fontWeight: 500 }}>View:</span>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)", fontWeight: 500 }}>View:</span>
           {(["charges", "expenses", "both"] as ViewMode[]).map(v => (
             <label key={v} style={{
               display: "flex", alignItems: "center", gap: "4px",
@@ -252,8 +252,8 @@ function SummaryContent({ data }: { data: SummaryData }) {
     <div style={{ maxWidth: "900px" }}>
       {/* Table — ContractsList table container style */}
       <div style={{
-        background: "#FFFFFF",
-        border: "1px solid #E5E7EB",
+        background: "var(--theme-bg-surface)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "12px",
         overflow: "hidden",
       }}>
@@ -262,8 +262,8 @@ function SummaryContent({ data }: { data: SummaryData }) {
           className="grid gap-4 px-6 py-4"
           style={{
             gridTemplateColumns: GRID_COLS,
-            borderBottom: "1px solid #E5E7EB",
-            background: "#F9FAFB",
+            borderBottom: "1px solid var(--theme-border-default)",
+            background: "var(--theme-bg-page)",
           }}
         >
           <div style={thStyle}>ITEM NAME</div>
@@ -285,7 +285,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
               className="grid gap-4 px-6 py-4"
               style={{
                 gridTemplateColumns: GRID_COLS,
-                borderBottom: i < items.length - 1 ? "1px solid #E5E7EB" : "none",
+                borderBottom: i < items.length - 1 ? "1px solid var(--theme-border-default)" : "none",
                 background: isUnlinked ? "#FFFDE7" : "transparent",
                 borderTop: isUnlinked ? "2px solid #E5E7EB" : undefined,
                 alignItems: "center",
@@ -306,7 +306,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
               {/* Type Badge */}
               <div style={{ textAlign: "center" }}>
                 {isUnlinked ? (
-                  <span style={{ color: "#D1D5DB", fontSize: "13px" }}>{"\u2014"}</span>
+                  <span style={{ color: "var(--theme-border-default)", fontSize: "13px" }}>{"\u2014"}</span>
                 ) : (
                   <TypeBadge type={item.type} />
                 )}
@@ -317,7 +317,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
                 fontSize: "13px",
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#6B7280",
+                color: "var(--theme-text-muted)",
               }}>
                 {item.booking_count}
               </div>
@@ -352,8 +352,8 @@ function SummaryContent({ data }: { data: SummaryData }) {
       {/* Data Quality Section — card style matching ContractsList table container */}
       <div style={{
         marginTop: "20px",
-        background: "#FFFFFF",
-        border: "1px solid #E5E7EB",
+        background: "var(--theme-bg-surface)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "12px",
         padding: "20px 24px",
       }}>
@@ -363,10 +363,10 @@ function SummaryContent({ data }: { data: SummaryData }) {
           alignItems: "center",
           marginBottom: "12px",
         }}>
-          <span style={{ fontSize: "14px", fontWeight: 600, color: "#12332B" }}>
+          <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
             Data Quality
           </span>
-          <span style={{ fontSize: "13px", color: "#6B7280" }}>
+          <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
             {meta.linked_count} / {meta.total_line_items} line items linked to catalog
           </span>
         </div>
@@ -374,7 +374,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
         {/* Progress bar */}
         <div style={{
           height: "10px",
-          background: "#F3F4F6",
+          background: "var(--theme-bg-surface-subtle)",
           borderRadius: "5px",
           overflow: "hidden",
         }}>
@@ -468,12 +468,12 @@ function InfoChip({ label, value }: { label: string; value: string | number }) {
       fontSize: "12px",
       padding: "4px 10px",
       borderRadius: "8px",
-      background: "#F9FAFB",
-      border: "1px solid #E5E7EB",
-      color: "#6B7280",
+      background: "var(--theme-bg-page)",
+      border: "1px solid var(--theme-border-default)",
+      color: "var(--theme-text-muted)",
       fontWeight: 500,
     }}>
-      {label}: <strong style={{ color: "#12332B" }}>{value}</strong>
+      {label}: <strong style={{ color: "var(--theme-text-primary)" }}>{value}</strong>
     </span>
   );
 }
@@ -485,8 +485,8 @@ function LoadingOverlay() {
       alignItems: "center", justifyContent: "center",
       background: "rgba(255,255,255,0.85)", zIndex: 10,
     }}>
-      <Loader2 size={24} style={{ animation: "spin 1s linear infinite", color: "#0F766E" }} />
-      <p style={{ fontSize: "14px", color: "#667085", marginTop: "8px" }}>Loading summary...</p>
+      <Loader2 size={24} style={{ animation: "spin 1s linear infinite", color: "var(--theme-action-primary-bg)" }} />
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginTop: "8px" }}>Loading summary...</p>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
@@ -500,8 +500,8 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
       maxWidth: "600px",
       margin: "0 auto",
     }}>
-      <AlertCircle size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-      <p style={{ fontSize: "14px", color: "#667085", marginBottom: "12px" }}>{message}</p>
+      <AlertCircle size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "12px" }}>{message}</p>
       <button onClick={onRetry} style={{
         padding: "8px 20px", fontSize: "13px", fontWeight: 500,
         background: "#0F766E", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
@@ -520,11 +520,11 @@ function EmptyState({ period }: { period: string }) {
       maxWidth: "600px",
       margin: "0 auto",
     }}>
-      <BarChart3 size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-      <p style={{ fontSize: "14px", color: "#667085" }}>
+      <BarChart3 size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
         No data for {formatPeriodLabel(period)}
       </p>
-      <p style={{ fontSize: "13px", color: "#9CA3AF", marginTop: "4px" }}>
+      <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
         Try a different period, service type, or view.
       </p>
     </div>
@@ -536,13 +536,13 @@ function EmptyState({ period }: { period: string }) {
 const thStyle: React.CSSProperties = {
   fontSize: "11px",
   fontWeight: 600,
-  color: "#6B7280",
+  color: "var(--theme-text-muted)",
   textTransform: "uppercase",
   letterSpacing: "0.5px",
 };
 
 const navBtnStyle: React.CSSProperties = {
   display: "flex", alignItems: "center", justifyContent: "center",
-  width: 28, height: 28, border: "1px solid #E5E7EB", borderRadius: "8px",
-  background: "#FFFFFF", cursor: "pointer", color: "#6B7280",
+  width: 28, height: 28, border: "1px solid var(--theme-border-default)", borderRadius: "8px",
+  background: "var(--theme-bg-surface)", cursor: "pointer", color: "var(--theme-text-muted)",
 };

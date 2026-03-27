@@ -21,13 +21,13 @@ export function AddInquiryDemo() {
   };
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#F9FAFB" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", backgroundColor: "var(--theme-bg-page)" }}>
       {/* Header */}
-      <div style={{ padding: "24px 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "white" }}>
-        <h1 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+      <div style={{ padding: "24px 48px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}>
+        <h1 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
           Add Inquiry Panel - Demo
         </h1>
-        <p style={{ fontSize: "13px", color: "#667085", margin: 0 }}>
+        <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", margin: 0 }}>
           Test the new BD inquiry creation workflow with detailed service specifications
         </p>
       </div>
@@ -40,14 +40,14 @@ export function AddInquiryDemo() {
           <div style={{ 
             marginBottom: "24px",
             padding: "20px 24px",
-            backgroundColor: "#F0FDF9",
+            backgroundColor: "var(--theme-bg-surface-tint)",
             border: "1px solid #0F766E",
             borderRadius: "8px",
           }}>
-            <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#0F766E", marginBottom: "12px" }}>
+            <h2 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-action-primary-bg)", marginBottom: "12px" }}>
               📋 How It Works
             </h2>
-            <ol style={{ fontSize: "13px", color: "#667085", margin: 0, paddingLeft: "20px", lineHeight: "1.8" }}>
+            <ol style={{ fontSize: "13px", color: "var(--theme-text-muted)", margin: 0, paddingLeft: "20px", lineHeight: "1.8" }}>
               <li>Click the <strong>"Create New Inquiry"</strong> button below</li>
               <li>Fill in customer and shipment details</li>
               <li>Select services (Brokerage, Forwarding, Trucking, etc.)</li>
@@ -59,10 +59,10 @@ export function AddInquiryDemo() {
 
           {/* Demo Section */}
           <section style={{ marginBottom: "32px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
               Create Inquiry with Service Details
             </h2>
-            <p style={{ fontSize: "13px", color: "#667085", marginBottom: "16px" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>
               This simulates the BD workflow where complete service specifications are captured upfront,
               enabling automatic charge template population when Pricing creates the quotation.
             </p>
@@ -84,7 +84,7 @@ export function AddInquiryDemo() {
                 transition: "all 0.15s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                 e.currentTarget.style.transform = "translateY(-1px)";
               }}
               onMouseLeave={(e) => {
@@ -100,7 +100,7 @@ export function AddInquiryDemo() {
           {/* Created Inquiries */}
           {createdInquiries.length > 0 && (
             <section style={{ marginBottom: "32px" }}>
-              <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+              <h2 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                 Recently Created Inquiries ({createdInquiries.length})
               </h2>
 
@@ -110,7 +110,7 @@ export function AddInquiryDemo() {
                     key={inquiry.id || index}
                     style={{
                       padding: "20px 24px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "8px",
                       transition: "all 0.15s",
@@ -119,7 +119,7 @@ export function AddInquiryDemo() {
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                       <div>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                          <FileText size={16} style={{ color: "#0F766E" }} />
+                          <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
                           <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--neuron-ink-primary)" }}>
                             {inquiry.inquiry_number}
                           </span>
@@ -163,7 +163,7 @@ export function AddInquiryDemo() {
                                 gap: "4px",
                                 padding: "4px 10px",
                                 backgroundColor: hasDetails ? "#E8F5F3" : "#F3F4F6",
-                                border: hasDetails ? "1px solid #0F766E" : "1px solid #D1D5DB",
+                                border: hasDetails ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
                                 borderRadius: "4px",
                                 fontSize: "12px",
                                 fontWeight: 500,
@@ -171,7 +171,7 @@ export function AddInquiryDemo() {
                               }}
                             >
                               {serviceType}
-                              {hasDetails && <CheckCircle size={12} style={{ color: "#0F766E" }} />}
+                              {hasDetails && <CheckCircle size={12} style={{ color: "var(--theme-action-primary-bg)" }} />}
                             </div>
                           );
                         })}
@@ -182,12 +182,12 @@ export function AddInquiryDemo() {
                     {inquiry.services.some((s: any) => typeof s === 'object' && s.service_details) && (
                       <div style={{
                         padding: "12px",
-                        backgroundColor: "#F8FBFB",
+                        backgroundColor: "var(--theme-bg-page)",
                         borderRadius: "6px",
                         fontSize: "12px",
                         color: "var(--neuron-ink-muted)",
                       }}>
-                        <div style={{ fontWeight: 600, color: "#0F766E", marginBottom: "6px" }}>
+                        <div style={{ fontWeight: 600, color: "var(--theme-action-primary-bg)", marginBottom: "6px" }}>
                           ✅ Service Details Captured:
                         </div>
                         {inquiry.services.map((service: any, idx: number) => {
@@ -209,7 +209,7 @@ export function AddInquiryDemo() {
                             </div>
                           );
                         })}
-                        <div style={{ marginTop: "8px", fontStyle: "italic", color: "#0F766E" }}>
+                        <div style={{ marginTop: "8px", fontStyle: "italic", color: "var(--theme-action-primary-bg)" }}>
                           → When converted to quotation, charges will auto-populate based on these details!
                         </div>
                       </div>
@@ -227,7 +227,7 @@ export function AddInquiryDemo() {
 
           {/* Template Info */}
           <section style={{ marginBottom: "32px" }}>
-            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+            <h2 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
               Auto-Population Templates
             </h2>
             
@@ -235,7 +235,7 @@ export function AddInquiryDemo() {
               {/* Brokerage */}
               <div style={{
                 padding: "16px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
               }}>
@@ -248,14 +248,14 @@ export function AddInquiryDemo() {
                     <li>Subtype: Import Ocean</li>
                     <li>Shipment Type: FCL</li>
                   </ul>
-                  <strong style={{ color: "#0F766E" }}>→ 15 charges auto-generated!</strong>
+                  <strong style={{ color: "var(--theme-action-primary-bg)" }}>→ 15 charges auto-generated!</strong>
                 </div>
               </div>
 
               {/* Forwarding */}
               <div style={{
                 padding: "16px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
               }}>
@@ -267,14 +267,14 @@ export function AddInquiryDemo() {
                   <ul style={{ margin: "4px 0", paddingLeft: "20px" }}>
                     <li>Mode: Ocean</li>
                   </ul>
-                  <strong style={{ color: "#0F766E" }}>→ 14 charges auto-generated!</strong>
+                  <strong style={{ color: "var(--theme-action-primary-bg)" }}>→ 14 charges auto-generated!</strong>
                 </div>
               </div>
 
               {/* Trucking */}
               <div style={{
                 padding: "16px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
               }}>
@@ -286,14 +286,14 @@ export function AddInquiryDemo() {
                   <ul style={{ margin: "4px 0", paddingLeft: "20px" }}>
                     <li>No conditions needed</li>
                   </ul>
-                  <strong style={{ color: "#0F766E" }}>→ 5 charges auto-generated!</strong>
+                  <strong style={{ color: "var(--theme-action-primary-bg)" }}>→ 5 charges auto-generated!</strong>
                 </div>
               </div>
 
               {/* Marine Insurance */}
               <div style={{
                 padding: "16px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "8px",
               }}>
@@ -305,7 +305,7 @@ export function AddInquiryDemo() {
                   <ul style={{ margin: "4px 0", paddingLeft: "20px" }}>
                     <li>No conditions needed</li>
                   </ul>
-                  <strong style={{ color: "#0F766E" }}>→ 1 charge auto-generated!</strong>
+                  <strong style={{ color: "var(--theme-action-primary-bg)" }}>→ 1 charge auto-generated!</strong>
                 </div>
               </div>
             </div>

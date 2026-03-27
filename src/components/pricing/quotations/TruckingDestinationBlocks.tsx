@@ -200,7 +200,7 @@ export function TruckingDestinationBlocks({
               display: "block",
             }}
           />
-          <p style={{ margin: "0 0 4px 0", fontWeight: 500, color: "#6B7A76", fontSize: "14px" }}>
+          <p style={{ margin: "0 0 4px 0", fontWeight: 500, color: "var(--theme-text-muted)", fontSize: "14px" }}>
             No destinations yet
           </p>
           <p style={{ margin: 0, fontSize: "13px" }}>
@@ -334,7 +334,7 @@ function DestinationBlockCard({
         borderStyle: "solid",
         borderColor: isHovered && !viewMode ? "#C8D8D4" : "#E5E9E8",
         borderRadius: "10px",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         overflow: "hidden",
         transition: "border-color 0.15s ease",
       }}
@@ -370,7 +370,7 @@ function DestinationBlockCard({
         </button>
 
         {/* Location pin */}
-        <MapPin size={14} style={{ color: "#0F766E", flexShrink: 0 }} />
+        <MapPin size={14} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0 }} />
 
         {/* Destination name */}
         {isEditingName && !viewMode ? (
@@ -393,8 +393,8 @@ function DestinationBlockCard({
               padding: "3px 8px",
               fontSize: "13px",
               fontWeight: 600,
-              color: "#12332B",
-              backgroundColor: "white",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #0F766E",
               borderRadius: "4px",
               outline: "none",
@@ -413,7 +413,7 @@ function DestinationBlockCard({
               flex: 1,
               fontSize: "13px",
               fontWeight: 600,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               cursor: viewMode ? "default" : "pointer",
               letterSpacing: "-0.01em",
             }}
@@ -455,7 +455,7 @@ function DestinationBlockCard({
                 padding: "4px 8px",
                 fontSize: "11px",
                 fontWeight: 500,
-                color: "#6B7A76",
+                color: "var(--theme-text-muted)",
                 backgroundColor: "transparent",
                 border: "1px solid #D9E1DE",
                 borderRadius: "4px",
@@ -467,7 +467,7 @@ function DestinationBlockCard({
                 whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#0F766E";
+                e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                 e.currentTarget.style.color = "#0F766E";
               }}
               onMouseLeave={(e) => {
@@ -667,7 +667,7 @@ function ConfigRow({
               fontSize: "13px",
               fontWeight: 500,
               color: "#2C3E38",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               border: "1px solid #E0E6E4",
               borderRadius: "6px",
               outline: "none",

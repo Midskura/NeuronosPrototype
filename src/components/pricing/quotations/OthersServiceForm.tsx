@@ -19,7 +19,7 @@ export function OthersServiceForm({ data, onChange, viewMode = false, contractMo
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",

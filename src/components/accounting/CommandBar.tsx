@@ -29,7 +29,7 @@ export function CommandBar({
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   return (
-    <div className="w-full border-b border-[#E5E7EB] bg-white">
+    <div className="w-full border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]">
       <div className="max-w-[1200px] mx-auto px-6">
         <div className="flex items-center gap-3 h-16">
           {/* Company Switcher - Required */}
@@ -40,10 +40,10 @@ export function CommandBar({
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-[240px] h-10 justify-start text-[14px] border-[#E5E7EB]"
+                className="w-[240px] h-10 justify-start text-[14px] border-[var(--theme-border-default)]"
                 style={{ borderRadius: 'var(--radius-sm)' }}
               >
-                <CalendarIcon className="w-4 h-4 mr-2 text-[#6B7280]" />
+                <CalendarIcon className="w-4 h-4 mr-2 text-[var(--theme-text-muted)]" />
                 {dateRange?.from ? (
                   dateRange.to ? (
                     `${format(dateRange.from, "MMM d, yyyy")} - ${format(dateRange.to, "MMM d, yyyy")}`
@@ -72,12 +72,12 @@ export function CommandBar({
 
           {/* Search */}
           <div className="relative flex-1 max-w-[400px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6B7280]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
             <Input
               placeholder="Search entries..."
               value={searchQuery}
               onChange={(e) => onSearchChange?.(e.target.value)}
-              className="pl-9 h-10 text-[14px] border-[#E5E7EB]"
+              className="pl-9 h-10 text-[14px] border-[var(--theme-border-default)]"
               style={{ borderRadius: 'var(--radius-sm)' }}
             />
           </div>

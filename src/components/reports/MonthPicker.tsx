@@ -43,7 +43,7 @@ export function MonthPicker({ value, onChange }: MonthPickerProps) {
         <Button
           variant="outline"
           className={cn(
-            "border-[#E5E7EB] hover:bg-[#F9FAFB] justify-start",
+            "border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] justify-start",
             "transition-colors duration-150"
           )}
           style={{ 
@@ -96,7 +96,7 @@ export function MonthPicker({ value, onChange }: MonthPickerProps) {
                   "h-9 text-[12px]",
                   isSelected 
                     ? "bg-[#F25C05] hover:bg-[#F25C05]/90 text-white" 
-                    : "hover:bg-[#F9FAFB]"
+                    : "hover:bg-[var(--theme-bg-page)]"
                 )}
                 style={{ fontWeight: isSelected ? 600 : 500 }}
               >

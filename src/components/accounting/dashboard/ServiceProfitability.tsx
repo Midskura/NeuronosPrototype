@@ -85,16 +85,16 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
   return (
     <div
       className="rounded-xl overflow-hidden flex flex-col"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       {/* Header */}
       <div
         className="px-5 py-3 flex items-center justify-between"
-        style={{ borderBottom: "1px solid #E5E9F0", background: "#F8F9FB" }}
+        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#F8F9FB" }}
       >
         <h3
           className="text-[12px] font-semibold uppercase tracking-wider"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           Profitability by Service
         </h3>
@@ -104,20 +104,20 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
       <div className="flex-1 overflow-auto">
         <table className="w-full">
           <thead>
-            <tr style={{ borderBottom: "1px solid #E5E9F0", background: "#FAFBFC" }}>
-              <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
+            <tr style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#FAFBFC" }}>
+              <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 Service
               </th>
-              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
+              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 Revenue
               </th>
-              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
+              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 Costs
               </th>
-              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
+              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 Margin
               </th>
-              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "#9CA3AF" }}>
+              <th className="px-4 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 %
               </th>
             </tr>
@@ -125,7 +125,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={5} className="px-4 py-6 text-center text-[13px]" style={{ color: "#9CA3AF" }}>
+                <td colSpan={5} className="px-4 py-6 text-center text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                   No data available
                 </td>
               </tr>
@@ -136,13 +136,13 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
                 return (
                   <tr
                     key={row.service}
-                    style={{ borderBottom: "1px solid #F3F4F6" }}
-                    className="hover:bg-gray-50/50"
+                    style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}
+                    className="hover:bg-[var(--theme-bg-surface-subtle)]/50"
                   >
-                    <td className="px-4 py-2.5 text-[13px] font-medium" style={{ color: "#12332B" }}>
+                    <td className="px-4 py-2.5 text-[13px] font-medium" style={{ color: "var(--theme-text-primary)" }}>
                       {row.service}
                     </td>
-                    <td className="px-4 py-2.5 text-[13px] text-right tabular-nums" style={{ color: "#0F766E" }}>
+                    <td className="px-4 py-2.5 text-[13px] text-right tabular-nums" style={{ color: "var(--theme-action-primary-bg)" }}>
                       {formatCurrencyCompact(row.revenue)}
                     </td>
                     <td className="px-4 py-2.5 text-[13px] text-right tabular-nums" style={{ color: "#C05621" }}>
@@ -181,10 +181,10 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
           {rows.length > 0 && (
             <tfoot>
               <tr style={{ borderTop: "2px solid #E5E9F0", background: "#FAFBFC" }}>
-                <td className="px-4 py-2.5 text-[12px] font-bold" style={{ color: "#12332B" }}>
+                <td className="px-4 py-2.5 text-[12px] font-bold" style={{ color: "var(--theme-text-primary)" }}>
                   Total
                 </td>
-                <td className="px-4 py-2.5 text-[12px] text-right font-bold tabular-nums" style={{ color: "#0F766E" }}>
+                <td className="px-4 py-2.5 text-[12px] text-right font-bold tabular-nums" style={{ color: "var(--theme-action-primary-bg)" }}>
                   {formatCurrencyCompact(totalRevenue)}
                 </td>
                 <td className="px-4 py-2.5 text-[12px] text-right font-bold tabular-nums" style={{ color: "#C05621" }}>

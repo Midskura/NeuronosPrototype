@@ -95,8 +95,8 @@ export function QuotationRateBreakdownSheet({
 
   const panelTitle = (
     <div className="flex flex-col gap-0.5">
-      <h2 className="text-[18px] font-semibold text-[#12332B]">Rate Breakdown</h2>
-      <p className="text-[12px] text-[#667085] font-normal">
+      <h2 className="text-[18px] font-semibold text-[var(--theme-text-primary)]">Rate Breakdown</h2>
+      <p className="text-[12px] text-[var(--theme-text-muted)] font-normal">
         {contractNumber} &middot; {serviceType}
         {resolvedMode ? ` \u00b7 ${resolvedMode}` : ""}
         {isMultiLine ? ` \u00b7 ${truckingLineItems!.length} destinations` : ""}
@@ -105,14 +105,14 @@ export function QuotationRateBreakdownSheet({
   );
 
   const panelFooter = (
-    <div className="px-8 py-4 border-t border-[#E5E9F0] bg-[#FAFBFC] flex items-center justify-between">
-      <div className="text-[13px] text-[#667085]">
+    <div className="px-8 py-4 border-t border-[var(--theme-border-default)] bg-[#FAFBFC] flex items-center justify-between">
+      <div className="text-[13px] text-[var(--theme-text-muted)]">
         {totalItems} item{totalItems !== 1 ? "s" : ""} &middot;{" "}
-        <span className="font-semibold text-[#12332B]">{formatCurrency(grandTotal, currency)}</span>
+        <span className="font-semibold text-[var(--theme-text-primary)]">{formatCurrency(grandTotal, currency)}</span>
       </div>
       <button
         onClick={onClose}
-        className="px-5 py-2 rounded-lg text-[13px] font-medium text-[#667085] hover:text-[#12332B] border border-[#D1D5DB] hover:border-[#9CA3AF] transition-colors"
+        className="px-5 py-2 rounded-lg text-[13px] font-medium text-[var(--theme-text-muted)] hover:text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] hover:border-[#9CA3AF] transition-colors"
       >
         Close
       </button>
@@ -155,13 +155,13 @@ export function QuotationRateBreakdownSheet({
           // ✨ Multi-line: one section per dispatch line
           <div className="px-8 py-6">
             {multiLineResults.lineResults.map((lr: any, idx: number) => (
-              <div key={lr.lineItem.id} className={idx > 0 ? "mt-6 pt-6 border-t border-[#E5E9F0]" : ""}>
+              <div key={lr.lineItem.id} className={idx > 0 ? "mt-6 pt-6 border-t border-[var(--theme-border-default)]" : ""}>
                 {/* Line item header */}
                 <div className="flex items-center justify-between mb-3">
-                  <div className="text-[13px] font-semibold text-[#12332B]">
+                  <div className="text-[13px] font-semibold text-[var(--theme-text-primary)]">
                     {lr.lineItem.destination || "All Destinations"} — {lr.lineItem.truckType || "—"} × {lr.lineItem.quantity}
                   </div>
-                  <div className="text-[12px] font-medium text-[#0F766E]">
+                  <div className="text-[12px] font-medium text-[var(--theme-action-primary-bg)]">
                     {formatCurrency(lr.subtotal, currency)}
                   </div>
                 </div>
@@ -175,9 +175,9 @@ export function QuotationRateBreakdownSheet({
             ))}
 
             {/* Grand total row */}
-            <div className="mt-6 pt-4 border-t-2 border-[#12332B] flex items-center justify-between">
-              <span className="text-[14px] font-semibold text-[#12332B]">Grand Total</span>
-              <span className="text-[14px] font-bold text-[#12332B]">
+            <div className="mt-6 pt-4 border-t-2 border-[var(--theme-text-primary)] flex items-center justify-between">
+              <span className="text-[14px] font-semibold text-[var(--theme-text-primary)]">Grand Total</span>
+              <span className="text-[14px] font-bold text-[var(--theme-text-primary)]">
                 {formatCurrency(multiLineResults.grandTotal, currency)}
               </span>
             </div>

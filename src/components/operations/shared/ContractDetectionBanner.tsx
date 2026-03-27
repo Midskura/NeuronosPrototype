@@ -129,7 +129,7 @@ export function ContractDetectionBanner({
           borderRadius: "50%",
           animation: "spin 0.8s linear infinite",
         }} />
-        <span style={{ fontSize: "12px", color: "#9CA3AF" }}>
+        <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
           Checking contracts...
         </span>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -150,19 +150,19 @@ export function ContractDetectionBanner({
           alignItems: "center",
           gap: "5px",
         }}>
-          <Link2 size={12} style={{ color: "#0F766E", flexShrink: 0 }} />
-          <span style={{ fontSize: "12px", color: "#667085" }}>
+          <Link2 size={12} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0 }} />
+          <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
             Linked to{" "}
-            <span style={{ fontWeight: 600, color: "#12332B" }}>
+            <span style={{ fontWeight: 600, color: "var(--theme-text-primary)" }}>
               {selected.quote_number}
             </span>
             {selected.quotation_name && (
-              <span style={{ color: "#9CA3AF" }}> — {selected.quotation_name}</span>
+              <span style={{ color: "var(--theme-text-muted)" }}> — {selected.quotation_name}</span>
             )}
           </span>
           <span style={{
             fontSize: "10px",
-            color: "#9CA3AF",
+            color: "var(--theme-text-muted)",
             marginLeft: "4px",
             cursor: "default",
           }}>
@@ -205,7 +205,7 @@ export function ContractDetectionBanner({
                 }} />
                 {contract.quote_number}
                 {contract.quotation_name && (
-                  <span style={{ fontWeight: 400, color: "#9CA3AF" }}>
+                  <span style={{ fontWeight: 400, color: "var(--theme-text-muted)" }}>
                     — {contract.quotation_name}
                   </span>
                 )}
@@ -226,14 +226,14 @@ export function ContractDetectionBanner({
       marginTop: "6px",
       paddingLeft: "2px",
     }}>
-      <Link2 size={12} style={{ color: "#0F766E", flexShrink: 0 }} />
-      <span style={{ fontSize: "12px", color: "#667085" }}>
+      <Link2 size={12} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0 }} />
+      <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
         Linked to{" "}
-        <span style={{ fontWeight: 600, color: "#12332B" }}>
+        <span style={{ fontWeight: 600, color: "var(--theme-text-primary)" }}>
           {selected.quote_number}
         </span>
         {selected.quotation_name && (
-          <span style={{ color: "#9CA3AF" }}> — {selected.quotation_name}</span>
+          <span style={{ color: "var(--theme-text-muted)" }}> — {selected.quotation_name}</span>
         )}
       </span>
     </div>

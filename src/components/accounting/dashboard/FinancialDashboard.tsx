@@ -424,7 +424,7 @@ export function FinancialDashboard({
         <ScopeBar scope={scope} onScopeChange={onScopeChange} standalone />
         <p
           className="text-[13px] shrink-0"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           {summaryLine}
         </p>

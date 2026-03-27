@@ -44,7 +44,7 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
   if (isLoading) {
     return (
       <div className="text-center py-12">
-        <p className="text-[14px]" style={{ color: "#667085" }}>Loading projects...</p>
+        <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>Loading projects...</p>
       </div>
     );
   }
@@ -76,10 +76,10 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[#0F766E] focus:ring-1 focus:ring-[#0F766E] text-[13px] w-[240px] transition-colors"
+            className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] text-[13px] w-[240px] transition-colors"
             style={{
               border: "1px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               color: "var(--neuron-ink-primary)"
             }}
           />
@@ -94,26 +94,26 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
             { value: "all", label: "All Statuses" },
             { value: "Active", label: "Active", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#237F66" }} /> },
             { value: "Completed", label: "Completed", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#2B8A6E" }} /> },
-            { value: "On Hold", label: "On Hold", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> },
+            { value: "On Hold", label: "On Hold", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> },
             { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} /> }
           ]}
         />
       </div>
 
       {filteredProjects.length === 0 ? (
-        <div className="text-center py-12 rounded-lg border" style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "#FFFFFF" }}>
+        <div className="text-center py-12 rounded-lg border" style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}>
           {projects.length === 0 ? (
             <>
-              <Package size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
-              <p className="text-[14px]" style={{ color: "#667085" }}>No Projects Yet</p>
-              <p className="text-[12px] mt-2" style={{ color: "#9CA3AF" }}>
+              <Package size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
+              <p className="text-[14px]" style={{ color: "var(--theme-text-muted)" }}>No Projects Yet</p>
+              <p className="text-[12px] mt-2" style={{ color: "var(--theme-text-muted)" }}>
                 Approved quotations will appear here as projects
               </p>
             </>
           ) : (
             <>
-              <p className="text-[14px] font-medium" style={{ color: "#12332B" }}>No matching projects found</p>
-              <p className="text-[12px] mt-1" style={{ color: "#667085" }}>Try adjusting your search or filters</p>
+              <p className="text-[14px] font-medium" style={{ color: "var(--theme-text-primary)" }}>No matching projects found</p>
+              <p className="text-[12px] mt-1" style={{ color: "var(--theme-text-muted)" }}>Try adjusting your search or filters</p>
             </>
           )}
         </div>
@@ -122,33 +122,33 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
           className="rounded-lg overflow-hidden"
           style={{ 
             border: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}
         >
           {/* Table Header */}
           <div 
             className="grid grid-cols-[2fr_1.5fr_1fr_1.5fr_0.8fr_0.8fr] gap-4 px-4 py-3"
             style={{ 
-              backgroundColor: "#F9FAFB",
+              backgroundColor: "var(--theme-bg-page)",
               borderBottom: "1px solid var(--neuron-ui-divider)"
             }}
           >
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Project #
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Services
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Booking Status
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Route
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Status
             </div>
-            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "#6B7A76" }}>
+            <div className="text-[11px] font-medium uppercase tracking-wide" style={{ color: "var(--theme-text-muted)" }}>
               Created
             </div>
           </div>
@@ -171,24 +171,24 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
                   style={{ borderBottom: "1px solid var(--neuron-ui-divider)" }}
                   onClick={() => onViewProject && onViewProject(project)}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                   }}
                 >
                   {/* Project Number */}
                   <div>
-                    <div className="text-[13px] font-medium mb-0.5" style={{ color: "#12332B" }}>
+                    <div className="text-[13px] font-medium mb-0.5" style={{ color: "var(--theme-text-primary)" }}>
                       {project.quotation_name || project.project_number}
                     </div>
-                    <div className="text-[12px]" style={{ color: "#667085" }}>
+                    <div className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                       {project.project_number}
                     </div>
                   </div>
 
                   {/* Services */}
-                  <div className="text-[12px]" style={{ color: "#344054" }}>
+                  <div className="text-[12px]" style={{ color: "var(--theme-text-secondary)" }}>
                     {project.services?.join(", ") || "—"}
                   </div>
 
@@ -198,7 +198,7 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
                   </div>
 
                   {/* Route */}
-                  <div className="text-[12px]" style={{ color: "#344054" }}>
+                  <div className="text-[12px]" style={{ color: "var(--theme-text-secondary)" }}>
                     {route}
                   </div>
 
@@ -216,7 +216,7 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
                   </div>
 
                   {/* Created Date */}
-                  <div className="text-[12px]" style={{ color: "#667085" }}>
+                  <div className="text-[12px]" style={{ color: "var(--theme-text-muted)" }}>
                     {formatDate(project.created_at)}
                   </div>
                 </div>

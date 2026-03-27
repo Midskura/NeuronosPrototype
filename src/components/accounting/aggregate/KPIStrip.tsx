@@ -22,17 +22,17 @@ export function KPIStrip({ cards, isLoading }: KPIStripProps) {
             className="rounded-xl p-5 animate-pulse"
             style={{
               border: "1.5px solid var(--neuron-ui-border)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           >
             <div className="flex items-start justify-between mb-3">
-              <div className="h-9 w-9 bg-gray-200 rounded-lg" />
-              <div className="h-4 w-10 bg-gray-100 rounded" />
+              <div className="h-9 w-9 bg-[var(--theme-bg-surface-tint)] rounded-lg" />
+              <div className="h-4 w-10 bg-[var(--theme-bg-surface-subtle)] rounded" />
             </div>
             <div className="space-y-2">
-              <div className="h-3 w-20 bg-gray-200 rounded" />
-              <div className="h-7 w-28 bg-gray-200 rounded" />
-              <div className="h-1.5 w-full bg-gray-100 rounded-full" />
+              <div className="h-3 w-20 bg-[var(--theme-bg-surface-tint)] rounded" />
+              <div className="h-7 w-28 bg-[var(--theme-bg-surface-tint)] rounded" />
+              <div className="h-1.5 w-full bg-[var(--theme-bg-surface-subtle)] rounded-full" />
             </div>
           </div>
         ))}

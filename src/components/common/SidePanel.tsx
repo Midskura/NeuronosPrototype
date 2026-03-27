@@ -94,23 +94,23 @@ export function SidePanel({
               stiffness: 300,
               duration: 0.3
             }}
-            className="fixed right-0 top-0 h-full bg-white shadow-2xl z-[70] flex flex-col border-l border-[#E5E9F0]"
+            className="fixed right-0 top-0 h-full bg-[var(--theme-bg-surface)] shadow-2xl z-[70] flex flex-col border-l border-[var(--theme-border-default)]"
             style={{ width: panelWidth, maxWidth: "100vw" }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Standard Header (Optional) */}
             {title && (
-              <div className="px-12 py-6 border-b border-[#E5E9F0] bg-white flex items-center justify-between shrink-0">
+              <div className="px-12 py-6 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] flex items-center justify-between shrink-0">
                 <div className="flex-1">
                    {typeof title === 'string' ? (
-                       <h2 className="text-[20px] font-semibold text-[#12332B]">{title}</h2>
+                       <h2 className="text-[20px] font-semibold text-[var(--theme-text-primary)]">{title}</h2>
                    ) : title}
                 </div>
                 
                 {showCloseButton && (
                   <button
                     onClick={onClose}
-                    className="w-10 h-10 rounded-lg flex items-center justify-center text-[#667085] hover:bg-[#F3F4F6] transition-colors"
+                    className="w-10 h-10 rounded-lg flex items-center justify-center text-[var(--theme-text-muted)] hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                   >
                     <X size={20} />
                   </button>

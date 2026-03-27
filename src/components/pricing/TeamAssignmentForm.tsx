@@ -159,13 +159,13 @@ export function TeamAssignmentForm({
       {/* Manager (auto-filled, disabled) */}
       <div>
         <label className="block text-sm font-['Inter:Medium',sans-serif] font-medium text-[#0a1d4d] mb-1.5">
-          Manager <span className="text-[#0F766E]">(Auto-assigned)</span>
+          Manager <span className="text-[var(--theme-action-primary-bg)]">(Auto-assigned)</span>
         </label>
         <input
           type="text"
           value={isLoadingManager ? "Loading..." : manager?.name || "No manager available"}
           disabled
-          className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] cursor-not-allowed"
+          className="w-full px-3.5 py-2.5 rounded-lg border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface-subtle)] font-['Inter:Regular',sans-serif] text-[#0a1d4d] cursor-not-allowed"
         />
       </div>
 
@@ -180,7 +180,7 @@ export function TeamAssignmentForm({
         required
         helperText={
           hasSavedPreference ? (
-            <span className="text-xs text-[#0F766E]">(Saved preference)</span>
+            <span className="text-xs text-[var(--theme-action-primary-bg)]">(Saved preference)</span>
           ) : undefined
         }
         fullWidth
@@ -197,7 +197,7 @@ export function TeamAssignmentForm({
         required
         helperText={
           hasSavedPreference ? (
-            <span className="text-xs text-[#0F766E]">(Saved preference)</span>
+            <span className="text-xs text-[var(--theme-action-primary-bg)]">(Saved preference)</span>
           ) : undefined
         }
         fullWidth
@@ -233,7 +233,7 @@ export function TeamAssignmentForm({
 
       {/* Loading indicator */}
       {isLoading && (
-        <div className="text-sm text-gray-500 italic">
+        <div className="text-sm text-[var(--theme-text-muted)] italic">
           Loading team members...
         </div>
       )}

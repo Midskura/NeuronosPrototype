@@ -21,7 +21,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
-        return { bg: "#E8F5F3", color: "#0F766E", icon: CheckCircle };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)", icon: CheckCircle };
       case "Disbursed":
         return { bg: "#D1FAE5", color: "#059669", icon: CheckCircle };
       case "Recorded":
@@ -34,9 +34,9 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
       case "Processing":
         return { bg: "#FEF3E7", color: "#C88A2B", icon: Clock };
       case "Submitted":
-        return { bg: "#F3F4F6", color: "#6B7A76", icon: Clock };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)", icon: Clock };
       default: // Draft
-        return { bg: "#F9FAFB", color: "#9CA3AF", icon: FileText };
+        return { bg: "#F9FAFB", color: "var(--theme-text-muted)", icon: FileText };
     }
   };
 
@@ -212,7 +212,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
     >
       <div
         style={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           borderRadius: "16px",
           width: "100%",
           maxWidth: "960px",
@@ -235,7 +235,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
         >
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                 {evoucher.voucher_number}
               </h2>
               <span
@@ -255,7 +255,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                 {evoucher.status}
               </span>
             </div>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               E-Voucher Details & Approval Workflow
             </p>
           </div>
@@ -267,14 +267,14 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
               borderRadius: "8px",
               border: "none",
               backgroundColor: "transparent",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#F3F4F6";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
@@ -298,39 +298,39 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   backgroundColor: "#FAFAFA",
                 }}
               >
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Expense Information
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: "14px", color: "#667085" }}>Amount:</span>
-                    <span style={{ fontSize: "18px", fontWeight: 600, color: "#12332B" }}>
+                    <span style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>Amount:</span>
+                    <span style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       <PhilippinePeso size={16} style={{ marginRight: "4px" }} />
                       {evoucher.amount.toLocaleString()} {evoucher.currency}
                     </span>
                   </div>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ fontSize: "14px", color: "#667085" }}>Category:</span>
-                    <span style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                    <span style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>Category:</span>
+                    <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                       {evoucher.expense_category}
                     </span>
                   </div>
                   {evoucher.gl_sub_category && (
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <span style={{ fontSize: "14px", color: "#667085" }}>Sub-Category:</span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                      <span style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>Sub-Category:</span>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                         {evoucher.gl_sub_category}
                       </span>
                     </div>
                   )}
                   <div style={{ marginTop: "8px", paddingTop: "12px", borderTop: "1px solid var(--neuron-ui-border)" }}>
-                    <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Purpose:</div>
-                    <div style={{ fontSize: "14px", color: "#374151" }}>{evoucher.purpose}</div>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Purpose:</div>
+                    <div style={{ fontSize: "14px", color: "var(--theme-text-secondary)" }}>{evoucher.purpose}</div>
                   </div>
                   {evoucher.description && (
                     <div>
-                      <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Description:</div>
-                      <div style={{ fontSize: "14px", color: "#374151" }}>{evoucher.description}</div>
+                      <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Description:</div>
+                      <div style={{ fontSize: "14px", color: "var(--theme-text-secondary)" }}>{evoucher.description}</div>
                     </div>
                   )}
                 </div>
@@ -344,28 +344,28 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   borderRadius: "12px",
                 }}
               >
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Vendor/Payee
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <Building2 size={16} style={{ color: "#667085" }} />
-                    <span style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                    <Building2 size={16} style={{ color: "var(--theme-text-muted)" }} />
+                    <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                       {evoucher.vendor_name}
                     </span>
                   </div>
                   {evoucher.vendor_contact && (
-                    <div style={{ fontSize: "13px", color: "#667085" }}>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                       Contact: {evoucher.vendor_contact}
                     </div>
                   )}
                   {evoucher.credit_terms && (
-                    <div style={{ fontSize: "13px", color: "#667085" }}>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                       Terms: {evoucher.credit_terms}
                     </div>
                   )}
                   {evoucher.due_date && (
-                    <div style={{ fontSize: "13px", color: "#667085" }}>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                       Due: {new Date(evoucher.due_date).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </div>
                   )}
@@ -381,30 +381,30 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                     borderRadius: "12px",
                   }}
                 >
-                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                     Linked Records
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {evoucher.project_number && (
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileText size={16} style={{ color: "#667085" }} />
-                        <span style={{ fontSize: "14px", color: "#0F766E", fontWeight: 500 }}>
+                        <FileText size={16} style={{ color: "var(--theme-text-muted)" }} />
+                        <span style={{ fontSize: "14px", color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                           Project: {evoucher.project_number}
                         </span>
                       </div>
                     )}
                     {evoucher.customer_name && (
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <Building2 size={16} style={{ color: "#667085" }} />
-                        <span style={{ fontSize: "14px", color: "#0F766E", fontWeight: 500 }}>
+                        <Building2 size={16} style={{ color: "var(--theme-text-muted)" }} />
+                        <span style={{ fontSize: "14px", color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                           Customer: {evoucher.customer_name}
                         </span>
                       </div>
                     )}
                     {evoucher.budget_request_number && (
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <FileText size={16} style={{ color: "#667085" }} />
-                        <span style={{ fontSize: "14px", color: "#0F766E", fontWeight: 500 }}>
+                        <FileText size={16} style={{ color: "var(--theme-text-muted)" }} />
+                        <span style={{ fontSize: "14px", color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                           Budget Request: {evoucher.budget_request_number}
                         </span>
                       </div>
@@ -421,12 +421,12 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   borderRadius: "12px",
                 }}
               >
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Workflow History
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                   {(evoucher.workflow_history || []).length === 0 ? (
-                    <div style={{ fontSize: "14px", color: "#667085", textAlign: "center", padding: "20px" }}>
+                    <div style={{ fontSize: "14px", color: "var(--theme-text-muted)", textAlign: "center", padding: "20px" }}>
                       No workflow history yet
                     </div>
                   ) : (
@@ -448,13 +448,13 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                             )}
                           </div>
                           <div style={{ flex: 1, paddingBottom: isLast ? "0" : "8px" }}>
-                            <div style={{ fontSize: "14px", fontWeight: 500, color: "#374151", marginBottom: "2px" }}>
+                            <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "2px" }}>
                               {item.action}
                             </div>
-                            <div style={{ fontSize: "13px", color: "#667085" }}>
+                            <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                               {item.user_name} ({item.user_role})
                             </div>
-                            <div style={{ fontSize: "12px", color: "#98A2B3" }}>
+                            <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                               {new Date(item.timestamp).toLocaleString('en-PH', { 
                                 month: 'short', 
                                 day: 'numeric', 
@@ -464,7 +464,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                               })}
                             </div>
                             {item.remarks && (
-                              <div style={{ fontSize: "13px", color: "#667085", marginTop: "4px", fontStyle: "italic" }}>
+                              <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px", fontStyle: "italic" }}>
                                 "{item.remarks}"
                               </div>
                             )}
@@ -488,24 +488,24 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   backgroundColor: "#FAFAFA",
                 }}
               >
-                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                   Request Details
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                   <div>
-                    <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Requestor:</div>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Requestor:</div>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <User size={14} style={{ color: "#667085" }} />
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                      <User size={14} style={{ color: "var(--theme-text-muted)" }} />
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                         {evoucher.requestor_name}
                       </span>
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Request Date:</div>
+                    <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Request Date:</div>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <Calendar size={14} style={{ color: "#667085" }} />
-                      <span style={{ fontSize: "14px", color: "#374151" }}>
+                      <Calendar size={14} style={{ color: "var(--theme-text-muted)" }} />
+                      <span style={{ fontSize: "14px", color: "var(--theme-text-secondary)" }}>
                         {new Date(evoucher.request_date).toLocaleDateString('en-PH', { 
                           month: 'long', 
                           day: 'numeric', 
@@ -526,7 +526,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                     borderRadius: "12px",
                   }}
                 >
-                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                     Approvers
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -534,10 +534,10 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                       <div key={approver.id} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                         <CheckCircle size={16} style={{ color: "#059669" }} />
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                          <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                             {approver.name}
                           </div>
-                          <div style={{ fontSize: "12px", color: "#667085" }}>
+                          <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                             {approver.role} • {approver.approved_at && new Date(approver.approved_at).toLocaleDateString('en-PH')}
                           </div>
                         </div>
@@ -556,28 +556,28 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                     borderRadius: "12px",
                   }}
                 >
-                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
                     Disbursement
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div>
-                      <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Officer:</div>
-                      <div style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>
+                      <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Officer:</div>
+                      <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>
                         {evoucher.disbursement_officer_name}
                       </div>
                     </div>
                     {evoucher.disbursement_date && (
                       <div>
-                        <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Date:</div>
-                        <div style={{ fontSize: "14px", color: "#374151" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Date:</div>
+                        <div style={{ fontSize: "14px", color: "var(--theme-text-secondary)" }}>
                           {new Date(evoucher.disbursement_date).toLocaleDateString('en-PH')}
                         </div>
                       </div>
                     )}
                     {evoucher.payment_method && (
                       <div>
-                        <div style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>Method:</div>
-                        <div style={{ fontSize: "14px", color: "#374151" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>Method:</div>
+                        <div style={{ fontSize: "14px", color: "var(--theme-text-secondary)" }}>
                           {evoucher.payment_method}
                         </div>
                       </div>
@@ -597,7 +597,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                           padding: "12px",
                           borderRadius: "8px",
                           border: "none",
-                          backgroundColor: "#0F766E",
+                          backgroundColor: "var(--theme-action-primary-bg)",
                           color: "#FFFFFF",
                           fontSize: "14px",
                           fontWeight: 500,
@@ -608,10 +608,10 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                           gap: "8px",
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0D6560";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#0F766E";
+                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                         }}
                         onClick={handleApprove}
                         disabled={isSubmitting}
@@ -625,7 +625,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                           padding: "12px",
                           borderRadius: "8px",
                           border: "1px solid #EF4444",
-                          backgroundColor: "#FFFFFF",
+                          backgroundColor: "var(--theme-bg-surface)",
                           color: "#EF4444",
                           fontSize: "14px",
                           fontWeight: 500,
@@ -639,7 +639,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                           e.currentTarget.style.backgroundColor = "#FEE2E2";
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "#FFFFFF";
+                          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                         }}
                         onClick={handleDisapprove}
                         disabled={isSubmitting}
@@ -656,7 +656,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         padding: "12px",
                         borderRadius: "8px",
                         border: "none",
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         color: "#FFFFFF",
                         fontSize: "14px",
                         fontWeight: 500,
@@ -667,10 +667,10 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         gap: "8px",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                       onClick={handleDisburse}
                       disabled={isSubmitting}
@@ -686,7 +686,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         padding: "12px",
                         borderRadius: "8px",
                         border: "none",
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         color: "#FFFFFF",
                         fontSize: "14px",
                         fontWeight: 500,
@@ -697,10 +697,10 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         gap: "8px",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                       onClick={handleRecord}
                       disabled={isSubmitting}
@@ -716,7 +716,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         padding: "12px",
                         borderRadius: "8px",
                         border: "none",
-                        backgroundColor: "#0F766E",
+                        backgroundColor: "var(--theme-action-primary-bg)",
                         color: "#FFFFFF",
                         fontSize: "14px",
                         fontWeight: 500,
@@ -727,10 +727,10 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                         gap: "8px",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0D6560";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#0F766E";
+                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
                       }}
                       onClick={handleAudit}
                       disabled={isSubmitting}

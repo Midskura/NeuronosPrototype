@@ -142,21 +142,21 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 w-[500px] bg-white shadow-2xl z-50 flex flex-col border-l border-gray-100"
+            className="fixed inset-y-0 right-0 w-[500px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col border-l border-[var(--theme-border-subtle)]"
           >
             {/* Header */}
-            <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <div className="px-8 py-6 border-b border-[var(--theme-border-subtle)] flex items-center justify-between bg-[var(--theme-bg-surface-subtle)]/50">
               <div>
-                <h2 className="text-xl font-semibold text-[#12332B]">
+                <h2 className="text-xl font-semibold text-[var(--theme-text-primary)]">
                   {account ? "Edit Account" : "New Account"}
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-[var(--theme-text-muted)] mt-1">
                   {account ? "Modify account details" : "Add a new account to your chart of accounts"}
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500"
+                className="p-2 hover:bg-[var(--theme-bg-surface-tint)] rounded-full transition-colors text-[var(--theme-text-muted)]"
               >
                 <X size={20} />
               </button>
@@ -167,7 +167,7 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
               
               {/* Type Selection */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#12332B]">Account Type</label>
+                <label className="text-sm font-medium text-[var(--theme-text-primary)]">Account Type</label>
                 <div className="grid grid-cols-3 gap-2">
                   {ACCOUNT_TYPES.map(type => (
                     <button
@@ -176,8 +176,8 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
                       onClick={() => setFormData(prev => ({ ...prev, type }))}
                       className={`px-3 py-2 rounded-lg text-sm font-medium border transition-all capitalize ${
                         formData.type === type
-                          ? "bg-[#0F766E]/10 border-[#0F766E] text-[#0F766E]"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                          ? "bg-[var(--theme-action-primary-bg)]/10 border-[var(--theme-action-primary-bg)] text-[var(--theme-action-primary-bg)]"
+                          : "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-secondary)] hover:border-[var(--theme-border-default)]"
                       }`}
                     >
                       {type}
@@ -189,23 +189,23 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
               {/* Code & Name Row */}
               <div className="flex gap-4">
                  <div className="space-y-1.5 w-32">
-                    <label className="text-sm font-medium text-[#12332B]">Code</label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Code</label>
                     <input
                       type="text"
                       value={formData.code || ""}
                       onChange={e => setFormData(prev => ({ ...prev, code: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm font-mono"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm font-mono"
                       placeholder="e.g. 1000"
                     />
                  </div>
                  <div className="space-y-1.5 flex-1">
-                    <label className="text-sm font-medium text-[#12332B]">Account Name <span className="text-red-500">*</span></label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Account Name <span className="text-red-500">*</span></label>
                     <input
                       required
                       type="text"
                       value={formData.name || ""}
                       onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm"
                       placeholder="e.g. HSBC Account"
                     />
                  </div>
@@ -213,19 +213,19 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
 
               {/* Detail Type / Subtype */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#12332B]">Detail Type (Subtype)</label>
+                <label className="text-sm font-medium text-[var(--theme-text-primary)]">Detail Type (Subtype)</label>
                 <input
                   type="text"
                   value={formData.subtype || ""}
                   onChange={e => setFormData(prev => ({ ...prev, subtype: e.target.value }))}
-                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm"
+                  className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm"
                   placeholder="e.g. Bank, Accounts Receivable, etc."
                 />
               </div>
 
               {/* Currency */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#12332B]">Currency</label>
+                <label className="text-sm font-medium text-[var(--theme-text-primary)]">Currency</label>
                 <div className="flex gap-4">
                   {CURRENCIES.map(curr => (
                     <label key={curr} className="flex items-center gap-2 cursor-pointer">
@@ -235,39 +235,39 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
                         value={curr}
                         checked={formData.currency === curr}
                         onChange={() => setFormData(prev => ({ ...prev, currency: curr }))}
-                        className="text-[#0F766E] focus:ring-[#0F766E]"
+                        className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
                       />
-                      <span className="text-sm text-gray-700 font-medium">{curr}</span>
+                      <span className="text-sm text-[var(--theme-text-secondary)] font-medium">{curr}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Is Folder */}
-              <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-100">
+              <div className="flex items-center gap-3 p-4 bg-[var(--theme-bg-surface-subtle)] rounded-lg border border-[var(--theme-border-subtle)]">
                 <input
                   type="checkbox"
                   id="isFolder"
                   checked={formData.is_folder || false}
                   onChange={e => setFormData(prev => ({ ...prev, is_folder: e.target.checked }))}
-                  className="w-4 h-4 text-[#0F766E] rounded border-gray-300 focus:ring-[#0F766E]"
+                  className="w-4 h-4 text-[var(--theme-action-primary-bg)] rounded border-[var(--theme-border-default)] focus:ring-[#0F766E]"
                 />
                 <div className="flex-1">
-                  <label htmlFor="isFolder" className="text-sm font-medium text-gray-700 cursor-pointer flex items-center gap-2">
-                    <Folder size={16} className="text-gray-500" />
+                  <label htmlFor="isFolder" className="text-sm font-medium text-[var(--theme-text-secondary)] cursor-pointer flex items-center gap-2">
+                    <Folder size={16} className="text-[var(--theme-text-muted)]" />
                     This is a Folder (Parent Account)
                   </label>
-                  <p className="text-xs text-gray-500 mt-1">Folders can contain other accounts but cannot store transactions directly.</p>
+                  <p className="text-xs text-[var(--theme-text-muted)] mt-1">Folders can contain other accounts but cannot store transactions directly.</p>
                 </div>
               </div>
 
               {/* Parent Account */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#12332B]">Parent Account (Optional)</label>
+                <label className="text-sm font-medium text-[var(--theme-text-primary)]">Parent Account (Optional)</label>
                 <select
                   value={formData.parent_id || ""}
                   onChange={e => setFormData(prev => ({ ...prev, parent_id: e.target.value || undefined }))}
-                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                  className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                 >
                   <option value="">None (Top Level)</option>
                   {availableParents.map(parent => (
@@ -281,7 +281,7 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
             </form>
 
             {/* Footer */}
-            <div className="px-8 py-6 border-t border-gray-100 flex items-center justify-between bg-white">
+            <div className="px-8 py-6 border-t border-[var(--theme-border-subtle)] flex items-center justify-between bg-[var(--theme-bg-surface)]">
               {account ? (
                 <button
                   type="button"
@@ -300,14 +300,14 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-2.5 text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                  className="px-5 py-2.5 text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] font-medium text-sm transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="px-6 py-2.5 bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-6 py-2.5 bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {loading ? (
                     <>

@@ -170,7 +170,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 right: 0,
                 marginTop: '8px',
                 backgroundColor: 'white',
-                border: '1px solid #E5E7EB',
+                border: '1px solid var(--theme-border-default)',
                 borderRadius: '6px',
                 boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
                 zIndex: 10,
@@ -238,7 +238,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 key={key}
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -270,7 +270,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
               <div
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -302,7 +302,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
               <div
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -325,7 +325,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
               <div
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -348,7 +348,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
               <div
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -372,7 +372,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
               <div
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '8px',
                   padding: '20px',
                 }}
@@ -403,14 +403,14 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
           <div
             style={{
               backgroundColor: 'white',
-              border: '1px solid #E5E7EB',
+              border: '1px solid var(--theme-border-default)',
               borderRadius: '8px',
               overflowX: 'auto',
             }}
           >
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
+                <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid var(--theme-border-default)' }}>
                   {Object.keys(tableData[0]).map((header) => (
                     <th
                       key={header}
@@ -431,7 +431,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                   <tr
                     key={index}
                     style={{
-                      borderBottom: '1px solid #E5E7EB',
+                      borderBottom: '1px solid var(--theme-border-default)',
                     }}
                   >
                     {Object.values(row).map((value: any, cellIndex) => (
@@ -499,7 +499,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 style={{
                   width: '100%',
                   padding: '10px 12px',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '6px',
                 }}
               />
@@ -517,7 +517,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 style={{
                   width: '100%',
                   padding: '10px 12px',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   borderRadius: '6px',
                   resize: 'vertical',
                 }}
@@ -529,7 +529,7 @@ export function ReportResults({ config, savedReport, onBack }: ReportResultsProp
                 onClick={() => setShowSaveDialog(false)}
                 style={{
                   backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
+                  border: '1px solid var(--theme-border-default)',
                   color: '#666',
                   borderRadius: '6px',
                   padding: '10px 20px',

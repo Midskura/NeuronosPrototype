@@ -86,7 +86,7 @@ export function CashFlowWaterfall({
       <div className="flex flex-col gap-2.5">
         <span
           className="text-[10px] font-semibold uppercase tracking-wider"
-          style={{ color: "#9CA3AF" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           {title}
         </span>
@@ -130,7 +130,7 @@ export function CashFlowWaterfall({
                 {/* Progress bar */}
                 <div
                   className="w-full rounded-full overflow-hidden"
-                  style={{ height: "4px", backgroundColor: "#F3F4F6" }}
+                  style={{ height: "4px", backgroundColor: "var(--theme-bg-surface-subtle)" }}
                 >
                   <div
                     className="h-full rounded-full transition-all duration-500"
@@ -152,19 +152,19 @@ export function CashFlowWaterfall({
   return (
     <div
       className="rounded-xl p-5 flex flex-col"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       <div className="flex items-center justify-between mb-5">
         <h3
           className="text-[12px] font-semibold uppercase tracking-wider"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           Cash Flow Summary
         </h3>
         {onNavigate && (
           <button
             className="text-[12px] font-medium cursor-pointer hover:underline"
-            style={{ color: "#0F766E" }}
+            style={{ color: "var(--theme-action-primary-bg)" }}
             onClick={onNavigate}
           >
             View →

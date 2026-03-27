@@ -250,17 +250,17 @@ export function BookingCommentsTab({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-[var(--theme-bg-surface)]">
       {/* Comments List */}
       <div className="flex-1 overflow-y-auto px-8 py-6">
         {isLoading ? (
-          <div className="text-center py-12 text-sm text-gray-400">
+          <div className="text-center py-12 text-sm text-[var(--theme-text-muted)]">
             Loading comments...
           </div>
         ) : comments.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-sm text-gray-400">No comments yet</p>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-sm text-[var(--theme-text-muted)]">No comments yet</p>
+            <p className="text-xs text-[var(--theme-text-muted)] mt-2">
               BD and PD can add instructions or updates for Operations here
             </p>
           </div>
@@ -270,7 +270,7 @@ export function BookingCommentsTab({
               <div key={comment.id} className="flex gap-3">
                 {/* User Avatar */}
                 <div className="flex-shrink-0">
-                  <div className="w-9 h-9 rounded-full bg-[#0F766E] text-white flex items-center justify-center text-sm font-semibold">
+                  <div className="w-9 h-9 rounded-full bg-[var(--theme-action-primary-bg)] text-white flex items-center justify-center text-sm font-semibold">
                     {comment.user_name.charAt(0).toUpperCase()}
                   </div>
                 </div>
@@ -278,18 +278,18 @@ export function BookingCommentsTab({
                 {/* Comment Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold text-sm text-[#12332B]">
+                    <span className="font-semibold text-sm text-[var(--theme-text-primary)]">
                       {comment.user_name}
                     </span>
-                    <span className="text-[10px] text-[#6B7280] uppercase font-bold tracking-wide">
+                    <span className="text-[10px] text-[var(--theme-text-muted)] uppercase font-bold tracking-wide">
                       {comment.department}
                     </span>
-                    <span className="text-xs text-[#9CA3AF]">
+                    <span className="text-xs text-[var(--theme-text-muted)]">
                       {formatDateTime(comment.created_at)}
                     </span>
                   </div>
                   {comment.message && (
-                    <p className="text-sm text-[#374151] leading-relaxed whitespace-pre-wrap break-words">
+                    <p className="text-sm text-[var(--theme-text-secondary)] leading-relaxed whitespace-pre-wrap break-words">
                       {comment.message}
                     </p>
                   )}
@@ -305,22 +305,22 @@ export function BookingCommentsTab({
                             href={file.file_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block w-fit max-w-md rounded-lg overflow-hidden border border-[#E5E7EB] hover:border-[#0F766E] transition-colors group"
+                            className="block w-fit max-w-md rounded-lg overflow-hidden border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] transition-colors group"
                           >
                             <img
                               src={file.file_url}
                               alt={file.file_name}
-                              className="max-w-full h-auto max-h-80 object-contain bg-[#F9FAFB]"
+                              className="max-w-full h-auto max-h-80 object-contain bg-[var(--theme-bg-page)]"
                             />
-                            <div className="px-3 py-2 bg-white border-t border-[#E5E7EB] flex items-center gap-2">
-                              <FileText className="w-4 h-4 text-[#6B7280] group-hover:text-[#0F766E]" />
-                              <span className="flex-1 text-xs font-medium text-[#374151] group-hover:text-[#0F766E] truncate">
+                            <div className="px-3 py-2 bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)] flex items-center gap-2">
+                              <FileText className="w-4 h-4 text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)]" />
+                              <span className="flex-1 text-xs font-medium text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-action-primary-bg)] truncate">
                                 {file.file_name}
                               </span>
-                              <span className="text-xs text-[#9CA3AF]">
+                              <span className="text-xs text-[var(--theme-text-muted)]">
                                 ({formatFileSize(file.file_size)})
                               </span>
-                              <Download className="w-3.5 h-3.5 text-[#9CA3AF] group-hover:text-[#0F766E]" />
+                              <Download className="w-3.5 h-3.5 text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)]" />
                             </div>
                           </a>
                         ) : (
@@ -331,16 +331,16 @@ export function BookingCommentsTab({
                             download={file.file_name}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#F9FAFB] border border-[#E5E7EB] hover:border-[#0F766E] hover:bg-[#F0FDF4] transition-colors group text-sm"
+                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] hover:bg-[#F0FDF4] transition-colors group text-sm"
                           >
-                            <FileText className="w-4 h-4 text-[#6B7280] group-hover:text-[#0F766E]" />
-                            <span className="font-medium text-[#374151] group-hover:text-[#0F766E]">
+                            <FileText className="w-4 h-4 text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)]" />
+                            <span className="font-medium text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-action-primary-bg)]">
                               {file.file_name}
                             </span>
-                            <span className="text-xs text-[#9CA3AF]">
+                            <span className="text-xs text-[var(--theme-text-muted)]">
                               ({formatFileSize(file.file_size)})
                             </span>
-                            <Download className="w-3.5 h-3.5 text-[#9CA3AF] group-hover:text-[#0F766E]" />
+                            <Download className="w-3.5 h-3.5 text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)]" />
                           </a>
                         )
                       ))}
@@ -354,7 +354,7 @@ export function BookingCommentsTab({
       </div>
 
       {/* Comment Input Form - Fixed at bottom */}
-      <div className="border-t border-[#E5E7EB] bg-white px-6 py-4">
+      <div className="border-t border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] px-6 py-4">
         {/* Attached Files Preview */}
         {attachedFiles.length > 0 && (
           <div className="mb-3 space-y-2">
@@ -363,27 +363,27 @@ export function BookingCommentsTab({
                 // Image Preview
                 <div
                   key={idx}
-                  className="relative w-fit max-w-md rounded-lg overflow-hidden border border-[#E5E7EB] bg-white"
+                  className="relative w-fit max-w-md rounded-lg overflow-hidden border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]"
                 >
                   <img
                     src={getFilePreviewUrl(file)}
                     alt={file.name}
-                    className="max-w-full h-auto max-h-60 object-contain bg-[#F9FAFB]"
+                    className="max-w-full h-auto max-h-60 object-contain bg-[var(--theme-bg-page)]"
                   />
-                  <div className="px-3 py-2 bg-white border-t border-[#E5E7EB] flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#6B7280]" />
-                    <span className="flex-1 text-xs font-medium text-[#374151] truncate">
+                  <div className="px-3 py-2 bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)] flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[var(--theme-text-muted)]" />
+                    <span className="flex-1 text-xs font-medium text-[var(--theme-text-secondary)] truncate">
                       {file.name}
                     </span>
-                    <span className="text-xs text-[#9CA3AF]">
+                    <span className="text-xs text-[var(--theme-text-muted)]">
                       ({formatFileSize(file.size)})
                     </span>
                     <button
                       type="button"
                       onClick={() => handleRemoveFile(idx)}
-                      className="p-1 rounded hover:bg-[#F3F4F6] transition-colors"
+                      className="p-1 rounded hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                     >
-                      <X className="w-4 h-4 text-[#9CA3AF]" />
+                      <X className="w-4 h-4 text-[var(--theme-text-muted)]" />
                     </button>
                   </div>
                 </div>
@@ -391,13 +391,13 @@ export function BookingCommentsTab({
                 // Non-image File
                 <div
                   key={idx}
-                  className="flex items-center gap-2 px-3 py-2 rounded-md bg-[#F9FAFB] border border-[#E5E7EB] text-sm"
+                  className="flex items-center gap-2 px-3 py-2 rounded-md bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] text-sm"
                 >
-                  <FileText className="w-4 h-4 text-[#6B7280]" />
-                  <span className="flex-1 font-medium text-[#374151] truncate">
+                  <FileText className="w-4 h-4 text-[var(--theme-text-muted)]" />
+                  <span className="flex-1 font-medium text-[var(--theme-text-secondary)] truncate">
                     {file.name}
                   </span>
-                  <span className="text-xs text-[#9CA3AF]">
+                  <span className="text-xs text-[var(--theme-text-muted)]">
                     {formatFileSize(file.size)}
                   </span>
                   <button
@@ -405,7 +405,7 @@ export function BookingCommentsTab({
                     onClick={() => handleRemoveFile(idx)}
                     className="p-0.5 rounded hover:bg-[#E5E7EB] transition-colors"
                   >
-                    <X className="w-4 h-4 text-[#9CA3AF]" />
+                    <X className="w-4 h-4 text-[var(--theme-text-muted)]" />
                   </button>
                 </div>
               )
@@ -423,7 +423,7 @@ export function BookingCommentsTab({
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
             rows={1}
-            className="w-full pl-4 pr-24 py-3 rounded-lg border border-[#E5E7EB] bg-white text-sm text-[#374151] placeholder-[#9CA3AF] resize-none overflow-hidden focus:outline-none disabled:bg-gray-50 disabled:cursor-not-allowed transition-colors min-h-[44px] max-h-[200px]"
+            className="w-full pl-4 pr-24 py-3 rounded-lg border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-sm text-[var(--theme-text-secondary)] placeholder-[#9CA3AF] resize-none overflow-hidden focus:outline-none disabled:bg-[var(--theme-bg-surface-subtle)] disabled:cursor-not-allowed transition-colors min-h-[44px] max-h-[200px]"
           />
           
           {/* Action Buttons - Positioned at bottom-right, locked in place */}
@@ -440,7 +440,7 @@ export function BookingCommentsTab({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={isSubmitting || isUploadingFiles}
-              className="p-2 rounded-md text-[#6B7280] hover:bg-[#F3F4F6] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-md text-[var(--theme-text-muted)] hover:bg-[var(--theme-bg-surface-subtle)] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="Attach files"
             >
               <Paperclip className="w-4 h-4" />
@@ -450,7 +450,7 @@ export function BookingCommentsTab({
             <button
               type="submit"
               disabled={(!newComment.trim() && attachedFiles.length === 0) || isSubmitting || isUploadingFiles}
-              className="w-8 h-8 rounded-full bg-[#0F766E] text-white flex items-center justify-center hover:bg-[#0D6558] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="w-8 h-8 rounded-full bg-[var(--theme-action-primary-bg)] text-white flex items-center justify-center hover:bg-[#0D6558] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               title="Send"
             >
               {isUploadingFiles ? (

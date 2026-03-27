@@ -41,20 +41,20 @@ export function CreatePayrollModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg shadow-2xl flex flex-col"
+        className="bg-[var(--theme-bg-surface)] rounded-lg shadow-2xl flex flex-col"
         style={{ width: "480px" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="border-b border-[#E5E7EB] px-6 py-4 flex items-center justify-between">
-          <h3 className="text-[16px] text-[#0A1D4D]" style={{ fontWeight: 600 }}>
+        <div className="border-b border-[var(--theme-border-default)] px-6 py-4 flex items-center justify-between">
+          <h3 className="text-[16px] text-[var(--theme-text-primary)]" style={{ fontWeight: 600 }}>
             Create Payroll Run
           </h3>
           <Button
             onClick={onClose}
             variant="ghost"
             size="icon"
-            className="h-8 w-8 rounded-lg hover:bg-[#F9FAFB]"
+            className="h-8 w-8 rounded-lg hover:bg-[var(--theme-bg-page)]"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -64,11 +64,11 @@ export function CreatePayrollModal({
         <div className="p-6">
           <div className="space-y-4">
             <div>
-              <Label className="text-[11px] text-[#6B7280] mb-2 block uppercase">
+              <Label className="text-[11px] text-[var(--theme-text-muted)] mb-2 block uppercase">
                 Company
               </Label>
               <Select value={company} onValueChange={setCompany}>
-                <SelectTrigger className="border-[#E5E7EB] text-[13px] h-10 rounded">
+                <SelectTrigger className="border-[var(--theme-border-default)] text-[13px] h-10 rounded">
                   <SelectValue placeholder="Select company" />
                 </SelectTrigger>
                 <SelectContent>
@@ -82,11 +82,11 @@ export function CreatePayrollModal({
             </div>
 
             <div>
-              <Label className="text-[11px] text-[#6B7280] mb-2 block uppercase">
+              <Label className="text-[11px] text-[var(--theme-text-muted)] mb-2 block uppercase">
                 Period
               </Label>
               <Select value={period} onValueChange={setPeriod}>
-                <SelectTrigger className="border-[#E5E7EB] text-[13px] h-10 rounded">
+                <SelectTrigger className="border-[var(--theme-border-default)] text-[13px] h-10 rounded">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -102,7 +102,7 @@ export function CreatePayrollModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="border-t border-[#E5E7EB] px-6 py-4 flex items-center justify-end gap-2 bg-white">
+        <div className="border-t border-[var(--theme-border-default)] px-6 py-4 flex items-center justify-end gap-2 bg-[var(--theme-bg-surface)]">
           <Button
             onClick={onClose}
             variant="ghost"
@@ -113,7 +113,7 @@ export function CreatePayrollModal({
           <Button
             onClick={handleContinue}
             disabled={!company}
-            className="h-10 px-5 rounded-lg bg-[#0F766E] hover:bg-[#0D6560] text-white disabled:opacity-50"
+            className="h-10 px-5 rounded-lg bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white disabled:opacity-50"
           >
             Continue
           </Button>

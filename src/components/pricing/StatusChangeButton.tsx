@@ -104,7 +104,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Mark as Priced",
         sublabel: "Pricing complete, ready for BD",
         value: "Priced",
-        icon: <CheckCircle size={16} style={{ color: "#0F766E" }} />,
+        icon: <CheckCircle size={16} style={{ color: "var(--theme-action-primary-bg)" }} />,
         action: () => {
           onStatusChange("Priced");
           setShowMenu(false);
@@ -146,7 +146,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Recall for Edits",
         sublabel: "Pull back to Draft for corrections",
         value: "Draft",
-        icon: <RotateCcw size={16} style={{ color: "#667085" }} />,
+        icon: <RotateCcw size={16} style={{ color: "var(--theme-text-muted)" }} />,
         action: () => {
           onStatusChange("Draft");
           setShowMenu(false);
@@ -174,7 +174,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Mark as Approved",
         sublabel: "Client accepted quotation",
         value: "Accepted by Client",
-        icon: <CheckCircle size={16} style={{ color: "#0F766E" }} />,
+        icon: <CheckCircle size={16} style={{ color: "var(--theme-action-primary-bg)" }} />,
         action: () => {
           onStatusChange("Accepted by Client");
           setShowMenu(false);
@@ -202,7 +202,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
           alignItems: "center",
           gap: "8px",
           padding: "8px 14px",
-          backgroundColor: "white", // White background by default
+          backgroundColor: "var(--theme-bg-surface)", // White background by default
           border: `1px solid ${statusStyle.borderColor}`,
           borderRadius: "8px",
           fontSize: "13px",
@@ -233,7 +233,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
           top: "calc(100% + 8px)",
           right: 0,
           width: "240px",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
@@ -252,13 +252,13 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 padding: "12px 16px",
                 backgroundColor: "transparent",
                 border: "none",
-                borderBottom: index < availableActions.length - 1 ? "1px solid #F3F4F6" : "none",
+                borderBottom: index < availableActions.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                 cursor: "pointer",
                 textAlign: "left",
                 transition: "background-color 0.15s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -268,7 +268,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               <div style={{ flex: 1 }}>
                 <div style={{ 
                   fontSize: "14px", 
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   fontWeight: 500,
                   marginBottom: "2px"
                 }}>
@@ -276,7 +276,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 </div>
                 <div style={{ 
                   fontSize: "12px", 
-                  color: "#667085",
+                  color: "var(--theme-text-muted)",
                   lineHeight: "1.4"
                 }}>
                   {action.sublabel}
@@ -359,7 +359,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
           padding: "20px"
         }}>
           <div style={{
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             borderRadius: "12px",
             width: "540px",
             maxHeight: "90vh",
@@ -369,12 +369,12 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
             {/* Modal Header */}
             <div style={{
               padding: "32px 32px 24px 32px",
-              borderBottom: "1px solid #F3F4F6"
+              borderBottom: "1px solid var(--theme-border-subtle)"
             }}>
               <h2 style={{
                 fontSize: "24px",
                 fontWeight: 600,
-                color: "#12332B",
+                color: "var(--theme-text-primary)",
                 marginBottom: "12px",
                 lineHeight: "1.3"
               }}>
@@ -382,7 +382,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               </h2>
               <p style={{
                 fontSize: "15px",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 lineHeight: "1.6",
                 margin: 0
               }}>
@@ -397,7 +397,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 <label style={{
                   fontSize: "13px",
                   fontWeight: 600,
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   marginBottom: "10px",
                   display: "block",
                   textTransform: "uppercase",
@@ -422,7 +422,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 <label style={{
                   fontSize: "13px",
                   fontWeight: 600,
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   marginBottom: "10px",
                   display: "block",
                   textTransform: "uppercase",
@@ -478,22 +478,22 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 }}
                 style={{
                   padding: "12px 24px",
-                  backgroundColor: "white",
-                  border: "1px solid #D1D5DB",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "8px",
                   fontSize: "15px",
                   fontWeight: 600,
-                  color: "#374151",
+                  color: "var(--theme-text-secondary)",
                   cursor: "pointer",
                   transition: "all 0.2s ease"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   e.currentTarget.style.borderColor = "#9CA3AF";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "white";
-                  e.currentTarget.style.borderColor = "#D1D5DB";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
                 }}
               >
                 Cancel

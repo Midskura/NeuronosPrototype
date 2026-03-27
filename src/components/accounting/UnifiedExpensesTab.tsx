@@ -249,15 +249,15 @@ export function UnifiedExpensesTab({
   };
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)]">
       {/* Header Section (Conditional) */}
       {showHeader && (
         <div className="flex items-start justify-between mb-8">
           <div>
-            <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+            <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
               {title || (context === 'booking' ? 'Booking Expenses' : 'Project Expenses')}
             </h1>
-            <p className="text-[14px] text-[#667085]">
+            <p className="text-[14px] text-[var(--theme-text-muted)]">
               {subtitle || (context === 'booking' 
                 ? 'Manage, track, and approve expenses for this booking.' 
                 : 'Manage, track, and approve expenses across all linked bookings.')}
@@ -268,7 +268,7 @@ export function UnifiedExpensesTab({
             {!readOnly && (
               <button
                 onClick={handleOpenAddExpense}
-                className="flex items-center gap-2 px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0D6559] transition-colors shadow-sm font-medium text-[14px]"
+                className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[#0D6559] transition-colors shadow-sm font-medium text-[14px]"
               >
                 <Plus size={16} />
                 Add Expense
@@ -288,7 +288,7 @@ export function UnifiedExpensesTab({
             placeholder="Search by Ref #, Vendor, or Description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px] border-[1.5px] border-[var(--neuron-ui-border)] bg-white text-[var(--neuron-ink-primary)] focus:border-[#0F766E]"
+            className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px] border-[1.5px] border-[var(--neuron-ui-border)] bg-[var(--theme-bg-surface)] text-[var(--neuron-ink-primary)] focus:border-[var(--theme-action-primary-bg)]"
           />
         </div>
 
@@ -296,7 +296,7 @@ export function UnifiedExpensesTab({
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2" />
         </div>
-        <span className="text-[13px] text-[#6B7280] font-medium">to</span>
+        <span className="text-[13px] text-[var(--theme-text-muted)] font-medium">to</span>
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2" />
         </div>

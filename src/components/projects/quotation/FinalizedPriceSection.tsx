@@ -36,7 +36,7 @@ export function FinalizedPriceSection({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid #E5E9E8",
         borderRadius: "12px",
         padding: "28px",
@@ -74,7 +74,7 @@ export function FinalizedPriceSection({
         <div style={{
           padding: "48px 24px",
           textAlign: "center",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "10px"
         }}>
@@ -109,12 +109,12 @@ export function FinalizedPriceSection({
                 border: "1px solid #E0E6E4",
                 borderRadius: "10px",
                 overflow: "hidden",
-                backgroundColor: "white"
+                backgroundColor: "var(--theme-bg-surface)"
               }}>
                 {/* Category Header (Inline Implementation matching CategoryHeader.tsx look) */}
                 <div
                   style={{
-                    backgroundColor: "#F8FBFB",
+                    backgroundColor: "var(--theme-bg-page)",
                     border: "none",
                     padding: "12px 16px",
                     cursor: "pointer",
@@ -133,7 +133,7 @@ export function FinalizedPriceSection({
                     <ChevronRight
                       size={16}
                       style={{
-                        color: "#6B7A76",
+                        color: "var(--theme-text-muted)",
                         transform: isCategoryExpanded ? "rotate(90deg)" : "rotate(0deg)",
                         transition: "transform 0.2s ease",
                         flexShrink: 0
@@ -141,7 +141,7 @@ export function FinalizedPriceSection({
                     />
 
                     {/* Package Icon */}
-                    <Package size={16} style={{ color: "#6B7A76", flexShrink: 0 }} />
+                    <Package size={16} style={{ color: "var(--theme-text-muted)", flexShrink: 0 }} />
 
                     {/* Category Name */}
                     <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "8px" }}>
@@ -161,8 +161,8 @@ export function FinalizedPriceSection({
                         style={{
                           fontSize: "11px",
                           fontWeight: 500,
-                          color: "#6B7A76",
-                          backgroundColor: "white",
+                          color: "var(--theme-text-muted)",
+                          backgroundColor: "var(--theme-bg-surface)",
                           padding: "2px 6px",
                           borderRadius: "4px"
                         }}
@@ -185,12 +185,12 @@ export function FinalizedPriceSection({
 
                 {/* Line Items Table */}
                 {isCategoryExpanded && (
-                  <div style={{ padding: "12px", backgroundColor: "white" }}>
+                  <div style={{ padding: "12px", backgroundColor: "var(--theme-bg-surface)" }}>
                     <div style={{
                       border: "1px solid #E5E9E8",
                       borderRadius: "10px",
                       overflow: "hidden",
-                      backgroundColor: "white"
+                      backgroundColor: "var(--theme-bg-surface)"
                     }}>
                       {/* Wrapper for horizontal scroll on mobile */}
                       <div style={{ 
@@ -204,10 +204,10 @@ export function FinalizedPriceSection({
                           gridTemplateColumns: "minmax(250px, 4fr) minmax(60px, 0.8fr) minmax(70px, 0.8fr) minmax(70px, 0.8fr) 40px minmax(120px, 1.5fr)",
                           gap: "8px",
                           padding: "10px 16px",
-                          backgroundColor: "#F8FBFB",
+                          backgroundColor: "var(--theme-bg-page)",
                           fontSize: "11px",
                           fontWeight: 600,
-                          color: "#6B7A76",
+                          color: "var(--theme-text-muted)",
                           letterSpacing: "0.02em",
                           borderBottom: "1px solid #EDF2F1"
                         }}>
@@ -235,7 +235,7 @@ export function FinalizedPriceSection({
                                 padding: "12px 16px",
                                 fontSize: "13px",
                                 color: "#2C3E38",
-                                backgroundColor: "white",
+                                backgroundColor: "var(--theme-bg-surface)",
                                 alignItems: "center"
                               }}
                             >
@@ -250,7 +250,7 @@ export function FinalizedPriceSection({
                                   fontSize: "13px",
                                   border: "1px solid #E0E6E4",
                                   borderRadius: "6px",
-                                  backgroundColor: "#F9FAFB", // Slightly gray for disabled
+                                  backgroundColor: "var(--theme-bg-page)", // Slightly gray for disabled
                                   fontWeight: 500,
                                    color: "#2C3E38",
                                    overflow: "hidden",
@@ -263,7 +263,7 @@ export function FinalizedPriceSection({
                               <div style={{ 
                                 textAlign: "right", 
                                 fontSize: "13px", 
-                                color: "#6B7A76", 
+                                color: "var(--theme-text-muted)", 
                                 fontWeight: 500 
                               }}>
                                 {item.quantity?.toFixed(2)}
@@ -279,8 +279,8 @@ export function FinalizedPriceSection({
                                   padding: "6px 8px",
                                   border: "1px solid #E0E6E4",
                                   borderRadius: "6px",
-                                  backgroundColor: "#F9FAFB",
-                                  color: "#6B7A76",
+                                  backgroundColor: "var(--theme-bg-page)",
+                                  color: "var(--theme-text-muted)",
                                   textAlign: "center"
                                 }}>
                                   {item.currency || currency}
@@ -299,7 +299,7 @@ export function FinalizedPriceSection({
                                   textAlign: "right",
                                   border: "1px solid #E0E6E4",
                                   borderRadius: "6px",
-                                  backgroundColor: "#F9FAFB",
+                                  backgroundColor: "var(--theme-bg-page)",
                                   outline: "none"
                                 }}
                               />
@@ -331,10 +331,10 @@ export function FinalizedPriceSection({
                               alignItems: "center",
                               gap: "14px",
                               padding: "10px 16px 12px 28px",
-                              backgroundColor: "#F8FBFB",
+                              backgroundColor: "var(--theme-bg-page)",
                               borderTop: "1px solid #EDF2F1",
                               fontSize: "12px",
-                              color: "#6B7A76",
+                              color: "var(--theme-text-muted)",
                               borderBottom: idx < category.line_items.length - 1 ? "1px solid #EDF2F1" : "none"
                             }}>
                               {/* Remarks */}
@@ -342,7 +342,7 @@ export function FinalizedPriceSection({
                                 <label style={{ 
                                   fontWeight: 500, 
                                   whiteSpace: "nowrap",
-                                  color: "#6B7A76",
+                                  color: "var(--theme-text-muted)",
                                   fontSize: "12px"
                                 }}>
                                   Remarks:
@@ -358,7 +358,7 @@ export function FinalizedPriceSection({
                                     fontSize: "12px",
                                     border: "1px solid #E0E6E4",
                                     borderRadius: "6px",
-                                    backgroundColor: "#FFFFFF", // Keep white or slightly gray? Original input is white.
+                                    backgroundColor: "var(--theme-bg-surface)", // Keep white or slightly gray? Original input is white.
                                     color: "#2C3E38",
                                     outline: "none"
                                   }}
@@ -370,7 +370,7 @@ export function FinalizedPriceSection({
                                 <label style={{ 
                                   fontWeight: 500, 
                                   whiteSpace: "nowrap",
-                                  color: "#6B7A76",
+                                  color: "var(--theme-text-muted)",
                                   fontSize: "12px"
                                 }}>
                                   Service:
@@ -380,7 +380,7 @@ export function FinalizedPriceSection({
                                     padding: "5px 8px",
                                     border: "1px solid #E0E6E4",
                                     borderRadius: "6px",
-                                    backgroundColor: "#FFFFFF",
+                                    backgroundColor: "var(--theme-bg-surface)",
                                     color: "#2C3E38",
                                     whiteSpace: "nowrap",
                                     overflow: "hidden",
@@ -403,7 +403,7 @@ export function FinalizedPriceSection({
                           gridTemplateColumns: "minmax(250px, 4fr) minmax(60px, 0.8fr) minmax(70px, 0.8fr) minmax(70px, 0.8fr) 40px minmax(120px, 1.5fr)",
                           gap: "8px",
                           padding: "12px 16px",
-                          backgroundColor: "#E8F5F3",
+                          backgroundColor: "var(--theme-bg-surface-tint)",
                           borderTop: "2px solid var(--neuron-brand-teal)",
                           fontSize: "13px",
                           fontWeight: 600
@@ -413,7 +413,7 @@ export function FinalizedPriceSection({
                           <div></div>
                           <div></div>
                           <div></div>
-                          <div style={{ textAlign: "right", color: "#6B7A76", fontSize: "12px" }}>
+                          <div style={{ textAlign: "right", color: "var(--theme-text-muted)", fontSize: "12px" }}>
                             Subtotal:
                           </div>
                           <div style={{ 
@@ -437,7 +437,7 @@ export function FinalizedPriceSection({
             display: "flex",
             justifyContent: "flex-end",
             padding: "20px 24px",
-            backgroundColor: "#E8F5F3",
+            backgroundColor: "var(--theme-bg-surface-tint)",
             borderRadius: "10px",
             border: "2px solid #B8E5DD"
           }}>

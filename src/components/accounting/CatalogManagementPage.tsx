@@ -151,15 +151,15 @@ export function CatalogManagementPage() {
   const { linkedPct } = stats;
 
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "#FFFFFF" }}>
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--theme-bg-surface)" }}>
       <div style={{ padding: "32px 48px", display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
 
         {/* ── Page Header ── */}
         <div style={{ marginBottom: "24px", flexShrink: 0 }}>
-          <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+          <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
             Catalog
           </h1>
-          <p style={{ fontSize: "14px", color: "#667085" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
             Define charges and expenses, then analyze how they appear across bookings.
           </p>
         </div>
@@ -173,15 +173,15 @@ export function CatalogManagementPage() {
           <div style={{ height: "13px", width: "72px", backgroundColor: "#F0F0F0", borderRadius: "4px" }} />
         </div>
       ) : (
-        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", fontSize: "13px", color: "#667085" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "20px", fontSize: "13px", color: "var(--theme-text-muted)" }}>
           <span><strong style={{ color: CHARGE_COLOR, fontWeight: 600 }}>{stats.chargeItems}</strong> charges</span>
-          <span style={{ color: "#D1D5DB" }}>·</span>
+          <span style={{ color: "var(--theme-border-default)" }}>·</span>
           <span><strong style={{ color: EXPENSE_COLOR, fontWeight: 600 }}>{stats.expenseItems}</strong> expenses</span>
-          <span style={{ color: "#D1D5DB" }}>·</span>
-          <span><strong style={{ color: "#12332B", fontWeight: 600 }}>{stats.categories}</strong> categories</span>
+          <span style={{ color: "var(--theme-border-default)" }}>·</span>
+          <span><strong style={{ color: "var(--theme-text-primary)", fontWeight: 600 }}>{stats.categories}</strong> categories</span>
           {linkedPct !== null && (
             <>
-              <span style={{ color: "#D1D5DB" }}>·</span>
+              <span style={{ color: "var(--theme-border-default)" }}>·</span>
               <span style={{ display: "flex", alignItems: "center", gap: "4px" }}>
                 <strong style={{
                   fontWeight: 600,
@@ -545,20 +545,20 @@ function ItemsTab({
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
           <div style={{
-            background: "#FFFFFF", borderRadius: "12px",
+            background: "var(--theme-bg-surface)", borderRadius: "12px",
             width: "480px", padding: "24px", boxShadow: "0 8px 32px rgba(0,0,0,0.16)",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
               <AlertTriangle size={20} style={{ color: "#D97706", flexShrink: 0 }} />
-              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "#12332B" }}>
+              <h2 style={{ fontSize: "16px", fontWeight: 700, color: "var(--theme-text-primary)" }}>
                 Deactivate "{impactItem.name}"?
               </h2>
             </div>
             {impactLoading ? (
-              <p style={{ fontSize: "13px", color: "#9CA3AF", marginBottom: "20px" }}>Checking references...</p>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "20px" }}>Checking references...</p>
             ) : impactCounts && (impactCounts.billing > 0 || impactCounts.expenses > 0) ? (
               <div style={{ marginBottom: "20px" }}>
-                <p style={{ fontSize: "13px", color: "#667085", marginBottom: "12px" }}>This item is referenced by:</p>
+                <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "12px" }}>This item is referenced by:</p>
                 <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
                   {impactCounts.billing > 0 && (
                     <span style={impactChipStyle}>{impactCounts.billing} billing line{impactCounts.billing !== 1 ? "s" : ""}</span>
@@ -567,7 +567,7 @@ function ItemsTab({
                     <span style={impactChipStyle}>{impactCounts.expenses} expense{impactCounts.expenses !== 1 ? "s" : ""}</span>
                   )}
                 </div>
-                <label style={{ fontSize: "12px", color: "#667085", display: "block", marginBottom: "6px" }}>
+                <label style={{ fontSize: "12px", color: "var(--theme-text-muted)", display: "block", marginBottom: "6px" }}>
                   Re-link existing records to another item (optional):
                 </label>
                 <select
@@ -580,7 +580,7 @@ function ItemsTab({
                 </select>
               </div>
             ) : (
-              <p style={{ fontSize: "13px", color: "#667085", marginBottom: "20px" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "20px" }}>
                 No billing lines or expenses reference this item. Safe to deactivate.
               </p>
             )}
@@ -601,7 +601,7 @@ function ItemsTab({
       {/* Filter Bar */}
       <div style={{ display: "flex", gap: "8px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center" }}>
         <div style={{ position: "relative", flex: "1 1 200px", maxWidth: "280px" }}>
-          <Search size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "#9CA3AF" }} />
+          <Search size={14} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--theme-text-muted)" }} />
           <input
             type="text"
             value={searchQuery}
@@ -655,7 +655,7 @@ function ItemsTab({
       {/* Add Form */}
       {showAddForm && (
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: `1px solid ${typeAccent}`,
           borderRadius: "8px",
           padding: "16px",
@@ -677,7 +677,7 @@ function ItemsTab({
                 style={inputStyle}
               />
               {addForm.charge_type_code && (
-                <span style={{ fontSize: "11px", color: "#9CA3AF", fontFamily: "monospace", marginTop: "3px", display: "block" }}>
+                <span style={{ fontSize: "11px", color: "var(--theme-text-muted)", fontFamily: "monospace", marginTop: "3px", display: "block" }}>
                   code: {addForm.charge_type_code}
                 </span>
               )}
@@ -777,8 +777,8 @@ function ItemsTab({
 
       {/* Table — single scrollable table with sticky thead */}
       <div style={{
-        backgroundColor: "white",
-        border: "1px solid #E5E9F0",
+        backgroundColor: "var(--theme-bg-surface)",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "10px",
         overflow: "hidden",
         flex: 1,
@@ -786,9 +786,9 @@ function ItemsTab({
         overflowY: "auto",
       }}>
         {isLoading ? (
-          <div style={{ padding: "48px 24px", textAlign: "center", color: "#667085", fontSize: "13px" }}>Loading...</div>
+          <div style={{ padding: "48px 24px", textAlign: "center", color: "var(--theme-text-muted)", fontSize: "13px" }}>Loading...</div>
         ) : filtered.length === 0 ? (
-          <div style={{ padding: "48px 24px", textAlign: "center", color: "#667085", fontSize: "13px" }}>
+          <div style={{ padding: "48px 24px", textAlign: "center", color: "var(--theme-text-muted)", fontSize: "13px" }}>
             {items.filter(i => {
               const t = i.type;
               return typeFilter === "charge"
@@ -832,7 +832,7 @@ function ItemsTab({
                       <button
                         onClick={allCollapsed ? expandAll : collapseAll}
                         title={allCollapsed ? "Expand all" : "Collapse all"}
-                        style={{ padding: 0, border: "none", background: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", lineHeight: 1 }}
+                        style={{ padding: 0, border: "none", background: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", lineHeight: 1 }}
                       >
                         <ChevronDown size={13} style={{ transform: allCollapsed ? "rotate(-90deg)" : "rotate(0deg)", transition: "transform 150ms" }} />
                       </button>
@@ -845,7 +845,7 @@ function ItemsTab({
                 <th style={{ ...thStyle, position: "sticky", top: 0, backgroundColor: "#F7FAF8", zIndex: 2, boxShadow: "0 1px 0 #E5E9F0", width: "56px", textAlign: "center" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "4px", justifyContent: "center" }}>
                     Usage
-                    <span title="Number of billing lines referencing this item" style={{ cursor: "help", color: "#9CA3AF", display: "flex" }}>
+                    <span title="Number of billing lines referencing this item" style={{ cursor: "help", color: "var(--theme-text-muted)", display: "flex" }}>
                       <Info size={11} />
                     </span>
                   </div>
@@ -868,13 +868,13 @@ function ItemsTab({
                             zIndex: 1,
                             backgroundColor: "#F0F4F2",
                             padding: "6px 16px",
-                            borderBottom: "1px solid #E5E9F0",
+                            borderBottom: "1px solid var(--theme-border-default)",
                           }}
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                             <button
                               onClick={() => toggleGroup(group.key)}
-                              style={{ padding: 0, border: "none", background: "none", cursor: "pointer", color: "#667085", display: "flex", lineHeight: 1 }}
+                              style={{ padding: 0, border: "none", background: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", lineHeight: 1 }}
                             >
                               <ChevronDown size={13} style={{ transform: collapsedGroups.has(group.key) ? "rotate(-90deg)" : "rotate(0deg)", transition: "transform 150ms" }} />
                             </button>
@@ -892,15 +892,15 @@ function ItemsTab({
                                   style={{ fontSize: "11px", fontWeight: 600, padding: "2px 6px", border: `1px solid ${CHARGE_COLOR}`, borderRadius: "4px", outline: "none", letterSpacing: "0.04em", textTransform: "uppercase" }}
                                 />
                                 <button onClick={() => handleCategoryRename(group.category!.id)} style={{ ...iconBtnStyle, color: CHARGE_COLOR }} title="Save"><Check size={12} /></button>
-                                <button onClick={() => setRenamingCatId(null)} style={{ ...iconBtnStyle, color: "#9CA3AF" }} title="Cancel"><X size={12} /></button>
+                                <button onClick={() => setRenamingCatId(null)} style={{ ...iconBtnStyle, color: "var(--theme-text-muted)" }} title="Cancel"><X size={12} /></button>
                               </>
                             ) : (
-                              <span style={{ fontSize: "11px", fontWeight: 700, color: "#667085", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                              <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                                 {group.category?.name ?? "Uncategorized"}
                               </span>
                             )}
 
-                            <span style={{ fontSize: "10px", color: "#9CA3AF", backgroundColor: "#E5E9F0", padding: "1px 7px", borderRadius: "8px", fontWeight: 500 }}>
+                            <span style={{ fontSize: "10px", color: "var(--theme-text-muted)", backgroundColor: "var(--theme-bg-surface-subtle)", padding: "1px 7px", borderRadius: "8px", fontWeight: 500 }}>
                               {group.items.length}
                             </span>
 
@@ -937,7 +937,7 @@ function ItemsTab({
                           <tr
                             key={item.id}
                             style={{
-                              borderBottom: "1px solid #E5E9F0",
+                              borderBottom: "1px solid var(--theme-border-default)",
                               opacity: item.is_active ? 1 : 0.5,
                               backgroundColor: hoveredRow === item.id ? "#F1F6F4" : "transparent",
                               transition: "background-color 150ms",
@@ -951,7 +951,7 @@ function ItemsTab({
                                 {item.name}
                               </div>
                             </td>
-                            <td style={{ ...tdStyle, fontFamily: "monospace", fontSize: "11px", color: "#667085", whiteSpace: "nowrap" }}>
+                            <td style={{ ...tdStyle, fontFamily: "monospace", fontSize: "11px", color: "var(--theme-text-muted)", whiteSpace: "nowrap" }}>
                               {[item.unit_type, item.tax_code, item.currency].filter(Boolean).join(" · ") || "—"}
                             </td>
                             <td style={{ ...tdStyle, textAlign: "center" }}>
@@ -962,7 +962,7 @@ function ItemsTab({
                             <td style={{ ...tdStyle, textAlign: "center" }}>
                               {(usageCounts[item.id] ?? 0) > 0
                                 ? <span style={{ fontSize: "12px", fontWeight: 600, color: typeAccent }}>{usageCounts[item.id]}</span>
-                                : <span style={{ fontSize: "12px", color: "#D1D5DB" }}>—</span>}
+                                : <span style={{ fontSize: "12px", color: "var(--theme-border-default)" }}>—</span>}
                             </td>
                             <td style={{ ...tdStyle, textAlign: "center", padding: "12px 8px" }}>
                               <RowActionsMenu
@@ -997,7 +997,7 @@ function ItemsTab({
                       <tr
                         key={item.id}
                         style={{
-                          borderBottom: "1px solid #E5E9F0",
+                          borderBottom: "1px solid var(--theme-border-default)",
                           opacity: item.is_active ? 1 : 0.5,
                           backgroundColor: hoveredRow === item.id ? "#F1F6F4" : "transparent",
                           transition: "background-color 150ms",
@@ -1011,10 +1011,10 @@ function ItemsTab({
                             {item.name}
                           </div>
                           {item.category_name && (
-                            <div style={{ fontSize: "11px", color: "#9CA3AF", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.category_name}</div>
+                            <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginTop: "2px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.category_name}</div>
                           )}
                         </td>
-                        <td style={{ ...tdStyle, fontFamily: "monospace", fontSize: "11px", color: "#667085", whiteSpace: "nowrap" }}>
+                        <td style={{ ...tdStyle, fontFamily: "monospace", fontSize: "11px", color: "var(--theme-text-muted)", whiteSpace: "nowrap" }}>
                           {[item.unit_type, item.tax_code, item.currency].filter(Boolean).join(" · ") || "—"}
                         </td>
                         <td style={{ ...tdStyle, textAlign: "center" }}>
@@ -1025,7 +1025,7 @@ function ItemsTab({
                         <td style={{ ...tdStyle, textAlign: "center" }}>
                           {(usageCounts[item.id] ?? 0) > 0
                             ? <span style={{ fontSize: "12px", fontWeight: 600, color: typeAccent }}>{usageCounts[item.id]}</span>
-                            : <span style={{ fontSize: "12px", color: "#D1D5DB" }}>—</span>}
+                            : <span style={{ fontSize: "12px", color: "var(--theme-border-default)" }}>—</span>}
                         </td>
                         <td style={{ ...tdStyle, textAlign: "center", padding: "12px 8px" }}>
                           <RowActionsMenu
@@ -1097,7 +1097,7 @@ function RowActionsMenu({
         background: "none", border: "none", cursor: "pointer",
         textAlign: "left",
       }}
-      onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F7FAF8")}
+      onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-bg-page)")}
       onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
     >
       {icon}
@@ -1112,11 +1112,11 @@ function RowActionsMenu({
         onClick={open ? () => setOpen(false) : openMenu}
         style={{
           padding: "4px 6px", border: "none", background: "none",
-          cursor: "pointer", color: "#9CA3AF", borderRadius: "6px",
+          cursor: "pointer", color: "var(--theme-text-muted)", borderRadius: "6px",
           display: "flex", alignItems: "center",
         }}
-        onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#F1F6F4"; e.currentTarget.style.color = "#667085"; }}
-        onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#9CA3AF"; }}
+        onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; e.currentTarget.style.color = "var(--theme-text-muted)"; }}
+        onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--theme-text-muted)"; }}
       >
         <MoreHorizontal size={15} />
       </button>
@@ -1127,8 +1127,8 @@ function RowActionsMenu({
           style={{
             position: "fixed", top: pos.top, left: pos.left,
             width: 148,
-            background: "#FFFFFF",
-            border: "1px solid #E5E9F0",
+            background: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "8px",
             boxShadow: "0 4px 16px rgba(18,51,43,0.10)",
             zIndex: 9999,
@@ -1137,7 +1137,7 @@ function RowActionsMenu({
           }}
         >
           {menuItem("Edit", <Pencil size={13} />, onEdit, "#12332B")}
-          <div style={{ height: "1px", backgroundColor: "#F3F4F6", margin: "2px 0" }} />
+          <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)", margin: "2px 0" }} />
           {onDeactivate && menuItem("Deactivate", <X size={13} />, onDeactivate, "#DC2626")}
           {onReactivate && menuItem("Reactivate", <RotateCcw size={13} />, onReactivate, CHARGE_COLOR)}
         </div>,
@@ -1188,9 +1188,9 @@ function CategoryGroupMenu({
       <button
         ref={triggerRef}
         onClick={open ? () => setOpen(false) : openMenu}
-        style={{ padding: "2px 4px", border: "none", background: "none", cursor: "pointer", color: "#9CA3AF", borderRadius: "4px", display: "flex", alignItems: "center" }}
-        onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#E5E9F0"; e.currentTarget.style.color = "#667085"; }}
-        onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#9CA3AF"; }}
+        style={{ padding: "2px 4px", border: "none", background: "none", cursor: "pointer", color: "var(--theme-text-muted)", borderRadius: "4px", display: "flex", alignItems: "center" }}
+        onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)"; e.currentTarget.style.color = "var(--theme-text-muted)"; }}
+        onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--theme-text-muted)"; }}
       >
         <MoreHorizontal size={13} />
       </button>
@@ -1201,8 +1201,8 @@ function CategoryGroupMenu({
           style={{
             position: "fixed", top: pos.top, left: pos.left,
             width: 140,
-            background: "#FFFFFF",
-            border: "1px solid #E5E9F0",
+            background: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "8px",
             boxShadow: "0 4px 16px rgba(18,51,43,0.10)",
             zIndex: 9999,
@@ -1212,13 +1212,13 @@ function CategoryGroupMenu({
         >
           <button
             onClick={() => { onRename(); setOpen(false); }}
-            style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", padding: "8px 12px", fontSize: "12px", color: "#12332B", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#F7FAF8")}
+            style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", padding: "8px 12px", fontSize: "12px", color: "var(--theme-text-primary)", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-bg-page)")}
             onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
           >
             <Pencil size={12} /> Rename
           </button>
-          <div style={{ height: "1px", backgroundColor: "#F3F4F6" }} />
+          <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)" }} />
           <button
             onClick={() => { onDelete(); setOpen(false); }}
             style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", padding: "8px 12px", fontSize: "12px", color: "#DC2626", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
@@ -1313,15 +1313,15 @@ function AddCategoryButton({
             top: pos.top,
             left: pos.left,
             width: 220,
-            background: "#FFFFFF",
-            border: "1px solid #E5E9F0",
+            background: "var(--theme-bg-surface)",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "10px",
             boxShadow: "0 8px 24px rgba(18,51,43,0.12)",
             zIndex: 9999,
             padding: "12px",
           }}
         >
-          <p style={{ fontSize: "11px", fontWeight: 600, color: "#667085", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
+          <p style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "8px" }}>
             New Category
           </p>
           <input
@@ -1466,12 +1466,12 @@ function CategoryFilterPopover({
         {isFiltered && (
           <span
             onMouseDown={e => { e.stopPropagation(); onFilterChange("all"); }}
-            style={{ display: "flex", alignItems: "center", color: "#9CA3AF", marginLeft: "1px", cursor: "pointer" }}
+            style={{ display: "flex", alignItems: "center", color: "var(--theme-text-muted)", marginLeft: "1px", cursor: "pointer" }}
           >
             <X size={11} />
           </span>
         )}
-        <ChevronDown size={11} style={{ color: "#9CA3AF", marginLeft: "2px", flexShrink: 0 }} />
+        <ChevronDown size={11} style={{ color: "var(--theme-text-muted)", marginLeft: "2px", flexShrink: 0 }} />
       </button>
 
       {/* Popover — portal to body so it's never clipped */}
@@ -1484,7 +1484,7 @@ function CategoryFilterPopover({
             left: pos.left,
             width: pos.width,
             minWidth: 230,
-            background: "#FFFFFF",
+            background: "var(--theme-bg-surface)",
             border: "1px solid #E0E6E4",
             borderRadius: "10px",
             boxShadow: "0 8px 24px rgba(18,51,43,0.12)",
@@ -1495,12 +1495,12 @@ function CategoryFilterPopover({
           {/* Header */}
           <div style={{
             padding: "8px 12px 7px",
-            borderBottom: "1px solid #F3F4F6",
+            borderBottom: "1px solid var(--theme-border-subtle)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
           }}>
-            <span style={{ fontSize: "10px", fontWeight: 600, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
               Categories
             </span>
             <span style={{ fontSize: "10px", color: "#C0C7CC" }}>{categories.length} total</span>
@@ -1525,12 +1525,12 @@ function CategoryFilterPopover({
             }}>
               All Categories
             </span>
-            <span style={{ fontSize: "11px", color: "#9CA3AF" }}>
+            <span style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
               {categories.reduce((s, c) => s + (c.item_count ?? 0), 0)}
             </span>
           </div>
 
-          <div style={{ borderTop: "1px solid #F3F4F6" }} />
+          <div style={{ borderTop: "1px solid var(--theme-border-subtle)" }} />
 
           {/* Category rows */}
           <div style={{ maxHeight: 220, overflowY: "auto" }}>
@@ -1562,7 +1562,7 @@ function CategoryFilterPopover({
                       }}
                     />
                     <button onClick={() => handleRename(cat.id)} style={{ ...iconBtnStyle, color: CHARGE_COLOR }} title="Save"><Check size={13} /></button>
-                    <button onClick={() => setRenamingId(null)} style={{ ...iconBtnStyle, color: "#9CA3AF" }} title="Cancel"><X size={13} /></button>
+                    <button onClick={() => setRenamingId(null)} style={{ ...iconBtnStyle, color: "var(--theme-text-muted)" }} title="Cancel"><X size={13} /></button>
                   </>
                 ) : (
                   <>
@@ -1600,7 +1600,7 @@ function CategoryFilterPopover({
           </div>
 
           {/* Add new category footer */}
-          <div style={{ borderTop: "1px solid #F3F4F6", padding: "8px 12px" }}>
+          <div style={{ borderTop: "1px solid var(--theme-border-subtle)", padding: "8px 12px" }}>
             {addingNew ? (
               <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
                 <input
@@ -1618,7 +1618,7 @@ function CategoryFilterPopover({
                   }}
                 />
                 <button onClick={handleAddNew} style={{ ...iconBtnStyle, color: CHARGE_COLOR }} title="Create"><Check size={13} /></button>
-                <button onClick={() => { setAddingNew(false); setNewName(""); }} style={{ ...iconBtnStyle, color: "#9CA3AF" }} title="Cancel"><X size={13} /></button>
+                <button onClick={() => { setAddingNew(false); setNewName(""); }} style={{ ...iconBtnStyle, color: "var(--theme-text-muted)" }} title="Cancel"><X size={13} /></button>
               </div>
             ) : (
               <button
@@ -1678,7 +1678,7 @@ function ItemEditRow({
   ];
 
   return (
-    <tr style={{ borderBottom: "1px solid #E5E9F0", backgroundColor: "#F7FAF8" }}>
+    <tr style={{ borderBottom: "1px solid var(--theme-border-default)", backgroundColor: "#F7FAF8" }}>
       {/* Name + Category (stacked) */}
       <td style={{ ...tdStyle, overflow: "hidden" }}>
         <input type="text" value={editForm.name || ""} onChange={e => setEditForm({ ...editForm, name: e.target.value })} style={{ ...inputStyle, fontWeight: 500, marginBottom: "6px" }} autoFocus />
@@ -1725,17 +1725,17 @@ function ItemEditRow({
       </td>
       {/* Status — read-only during edit */}
       <td style={{ ...tdStyle, textAlign: "center" }}>
-        <span style={{ fontSize: "10px", color: "#9CA3AF" }}>—</span>
+        <span style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}>—</span>
       </td>
       {/* Usage — read-only during edit */}
       <td style={{ ...tdStyle, textAlign: "center" }}>
-        <span style={{ fontSize: "12px", color: "#D1D5DB" }}>—</span>
+        <span style={{ fontSize: "12px", color: "var(--theme-border-default)" }}>—</span>
       </td>
       {/* Actions */}
       <td style={{ ...tdStyle, textAlign: "center", padding: "12px 8px" }}>
         <div style={{ display: "flex", gap: "4px", justifyContent: "center" }}>
           <button onClick={onSave} title="Save" style={{ ...iconBtnStyle, color: typeAccent }}><Check size={14} /></button>
-          <button onClick={onCancel} title="Cancel" style={{ ...iconBtnStyle, color: "#9CA3AF" }}><X size={14} /></button>
+          <button onClick={onCancel} title="Cancel" style={{ ...iconBtnStyle, color: "var(--theme-text-muted)" }}><X size={14} /></button>
         </div>
       </td>
     </tr>
@@ -1759,7 +1759,7 @@ function FilterSelect({ value, onChange, options }: {
         border: "1px solid #E0E6E4",
         borderRadius: "8px",
         color: "#2C3E38",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         cursor: "pointer",
         outline: "none",
       }}
@@ -1775,7 +1775,7 @@ const thStyle: React.CSSProperties = {
   padding: "12px 16px",
   fontSize: "11px",
   fontWeight: 600,
-  color: "#667085",
+  color: "var(--theme-text-muted)",
   textAlign: "left",
   textTransform: "uppercase",
   letterSpacing: "0.002em",
@@ -1790,7 +1790,7 @@ const tdStyle: React.CSSProperties = {
 
 const labelStyle: React.CSSProperties = {
   fontSize: "11px",
-  color: "#667085",
+  color: "var(--theme-text-muted)",
   display: "block",
   marginBottom: "3px",
 };
@@ -1803,7 +1803,7 @@ const inputStyle: React.CSSProperties = {
   borderRadius: "6px",
   color: "#2C3E38",
   outline: "none",
-  backgroundColor: "white",
+  backgroundColor: "var(--theme-bg-surface)",
 };
 
 const iconBtnStyle: React.CSSProperties = {
@@ -1811,7 +1811,7 @@ const iconBtnStyle: React.CSSProperties = {
   border: "none",
   backgroundColor: "transparent",
   cursor: "pointer",
-  color: "#667085",
+  color: "var(--theme-text-muted)",
   borderRadius: "4px",
   display: "flex",
   alignItems: "center",
@@ -1823,8 +1823,8 @@ const cancelBtnStyle: React.CSSProperties = {
   fontWeight: 500,
   borderRadius: "6px",
   border: "1px solid #E0E6E4",
-  backgroundColor: "white",
-  color: "#667085",
+  backgroundColor: "var(--theme-bg-surface)",
+  color: "var(--theme-text-muted)",
   cursor: "pointer",
 };
 
@@ -1844,7 +1844,7 @@ const serviceTagStyle: React.CSSProperties = {
   borderRadius: "4px",
   fontSize: "10px",
   fontWeight: 500,
-  backgroundColor: "#F0FDFA",
+  backgroundColor: "var(--theme-bg-surface-tint)",
   color: CHARGE_COLOR,
   border: "1px solid #CCFBF1",
 };

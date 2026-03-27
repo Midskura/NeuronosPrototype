@@ -53,12 +53,12 @@ export function ContractRateToolbar({
             }
           </span>
           {rateBridgeInfo.totalContainers > 0 && (
-            <span style={{ color: "#6B7280" }}>
-              · <strong style={{ color: "#12332B" }}>{rateBridgeInfo.totalContainers}</strong> unit{rateBridgeInfo.totalContainers !== 1 ? "s" : ""}
+            <span style={{ color: "var(--theme-text-muted)" }}>
+              · <strong style={{ color: "var(--theme-text-primary)" }}>{rateBridgeInfo.totalContainers}</strong> unit{rateBridgeInfo.totalContainers !== 1 ? "s" : ""}
             </span>
           )}
           {rateBridgeInfo.estimatedTotal > 0 && (
-            <span style={{ fontWeight: 600, color: "#0F766E", fontSize: "11px" }}>
+            <span style={{ fontWeight: 600, color: "var(--theme-action-primary-bg)", fontSize: "11px" }}>
               PHP {rateBridgeInfo.estimatedTotal.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
             </span>
           )}
@@ -69,7 +69,7 @@ export function ContractRateToolbar({
               borderRadius: "4px",
               border: "none",
               backgroundColor: "transparent",
-              color: "#0F766E",
+              color: "var(--theme-action-primary-bg)",
               fontSize: "10px",
               fontWeight: 500,
               cursor: "pointer",
@@ -99,7 +99,7 @@ export function ContractRateToolbar({
         gap: "8px",
         fontSize: "11px",
       }}>
-        <span style={{ color: "#6B7280" }}>
+        <span style={{ color: "var(--theme-text-muted)" }}>
           Contract rates available
         </span>
         <button
@@ -109,8 +109,8 @@ export function ContractRateToolbar({
             padding: "3px 10px",
             borderRadius: "4px",
             border: "1px solid #0F766E",
-            backgroundColor: "white",
-            color: "#0F766E",
+            backgroundColor: "var(--theme-bg-surface)",
+            color: "var(--theme-action-primary-bg)",
             fontSize: "10px",
             fontWeight: 600,
             cursor: loading ? "not-allowed" : "pointer",

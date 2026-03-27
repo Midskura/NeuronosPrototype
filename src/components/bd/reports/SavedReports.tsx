@@ -118,7 +118,7 @@ export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
               key={report.id}
               style={{
                 backgroundColor: 'white',
-                border: '1px solid #E5E7EB',
+                border: '1px solid var(--theme-border-default)',
                 borderRadius: '8px',
                 padding: '20px',
                 display: 'flex',
@@ -176,7 +176,7 @@ export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
                   style={{
                     backgroundColor: 'white',
                     color: '#EF4444',
-                    border: '1px solid #E5E7EB',
+                    border: '1px solid var(--theme-border-default)',
                     borderRadius: '6px',
                     padding: '10px 20px',
                     cursor: 'pointer',

@@ -101,7 +101,7 @@ export function ExpensesTab({
   };
 
   return (
-    <div className="flex flex-col bg-white p-12 min-h-[600px]">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)] p-12 min-h-[600px]">
       <UnifiedExpensesTab
         expenses={expenses as unknown as Record<string, unknown>[]}
         isLoading={isLoading}

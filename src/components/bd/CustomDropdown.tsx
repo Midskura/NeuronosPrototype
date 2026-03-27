@@ -149,7 +149,7 @@ export function CustomDropdown({
           style={{
             border: "1px solid var(--neuron-ui-border)",
             backgroundColor: disabled ? "#F3F4F6" : "#FFFFFF",
-            color: "#12332B",
+            color: "var(--theme-text-primary)",
             cursor: disabled ? "not-allowed" : "pointer",
             opacity: disabled ? 0.6 : 1,
             width: size === "sm" ? "100%" : undefined,
@@ -157,12 +157,12 @@ export function CustomDropdown({
           }}
           onMouseEnter={(e) => {
             if (!disabled) {
-              e.currentTarget.style.backgroundColor = "#F9FAFB";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
             }
           }}
           onMouseLeave={(e) => {
             if (!disabled) {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }
           }}
         >
@@ -202,7 +202,7 @@ export function CustomDropdown({
               className="rounded-lg overflow-hidden min-w-full"
               style={{
                 position: "fixed",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
                 maxHeight: "240px",
@@ -234,11 +234,11 @@ export function CustomDropdown({
                     style={{
                       backgroundColor: isSelected ? "#E8F5F3" : "#FFFFFF",
                       color: isSelected ? "#0F766E" : "#12332B",
-                      borderBottom: "1px solid #F3F4F6"
+                      borderBottom: "1px solid var(--theme-border-subtle)"
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -288,7 +288,7 @@ export function CustomDropdown({
           type="button"
           className={`${fullWidth ? 'w-full' : ''} px-3.5 py-2.5 rounded-lg transition-all flex items-center justify-between gap-2 ${buttonClassName || ""}`}
           style={{
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             backgroundColor: disabled ? "#F9FAFB" : "#FFFFFF",
             color: (multiSelect ? multiValue.length > 0 : value) ? "#0a1d4d" : "#9CA3AF",
             cursor: disabled ? "not-allowed" : "pointer",
@@ -296,12 +296,12 @@ export function CustomDropdown({
           }}
           onMouseEnter={(e) => {
             if (!disabled) {
-              e.currentTarget.style.borderColor = "#0F766E";
+              e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
             }
           }}
           onMouseLeave={(e) => {
             if (!disabled) {
-              e.currentTarget.style.borderColor = "#E5E7EB";
+              e.currentTarget.style.borderColor = "var(--theme-border-default)";
             }
           }}
         >
@@ -312,7 +312,7 @@ export function CustomDropdown({
           <ChevronDown 
             size={16} 
             style={{ 
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               transition: "transform 0.2s",
               transform: isOpen ? "rotate(180deg)" : "rotate(0deg)"
             }} 
@@ -327,8 +327,8 @@ export function CustomDropdown({
               className="rounded-lg overflow-hidden"
               style={{
                 position: "fixed",
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E5E7EB",
+                backgroundColor: "var(--theme-bg-surface)",
+                border: "1px solid var(--theme-border-default)",
                 boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
                 maxHeight: "240px",
                 overflowY: "auto",
@@ -359,11 +359,11 @@ export function CustomDropdown({
                     style={{
                       backgroundColor: isSelected ? "#E8F5F3" : "#FFFFFF",
                       color: isSelected ? "#0F766E" : "#0a1d4d",
-                      borderBottom: index < options.length - 1 ? "1px solid #F3F4F6" : "none"
+                      borderBottom: index < options.length - 1 ? "1px solid var(--theme-border-subtle)" : "none"
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }
                     }}
                     onMouseLeave={(e) => {

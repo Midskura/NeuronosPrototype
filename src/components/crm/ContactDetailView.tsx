@@ -81,7 +81,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
       display: "flex", 
       flexDirection: "column", 
       height: "100%",
-      backgroundColor: "white"
+      backgroundColor: "var(--theme-bg-surface)"
     }}>
       {/* Header */}
       <div style={{ 
@@ -221,7 +221,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                     fontSize: "14px",
                     fontWeight: 500,
                     color: "var(--neuron-ink-secondary)",
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     cursor: "pointer"
                   }}
                 >
@@ -262,12 +262,12 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                   fontSize: "14px",
                   fontWeight: 500,
                   color: "var(--neuron-ink-secondary)",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "white";
@@ -376,7 +376,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                         gridTemplateColumns: "1.5fr 1.5fr 1fr 1.5fr 1fr",
                         gap: "16px",
                         padding: "12px 16px",
-                        backgroundColor: "#F9FAFB",
+                        backgroundColor: "var(--theme-bg-page)",
                         borderBottom: "1px solid var(--neuron-ui-border)"
                       }}>
                         <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--neuron-ink-muted)", textTransform: "uppercase" }}>
@@ -411,7 +411,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                             transition: "all 0.2s"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#F9FAFB";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = "white";

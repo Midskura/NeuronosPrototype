@@ -143,7 +143,7 @@ export function CompanyAutocomplete({
             fontSize: "14px",
             outline: "none",
             transition: "border-color 0.2s",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             cursor: "text",
           }}
         />
@@ -175,7 +175,7 @@ export function CompanyAutocomplete({
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
@@ -191,7 +191,7 @@ export function CompanyAutocomplete({
               borderBottom: "1px solid var(--neuron-ui-border)",
               position: "sticky",
               top: 0,
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               zIndex: 1,
             }}
           >
@@ -280,7 +280,7 @@ export function CompanyAutocomplete({
                     highlightedIndex === index ? "#F3F4F6" : "white",
                   borderBottom:
                     index < customers.length - 1
-                      ? "1px solid #F3F4F6"
+                      ? "1px solid var(--theme-border-subtle)"
                       : "none",
                   transition: "background-color 0.1s",
                 }}

@@ -97,7 +97,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
     switch (status?.toLowerCase()) {
       case "approved":
       case "posted":
-        return { bg: "#E8F5F3", color: "#0F766E" };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
       case "disbursed":
       case "audited":
         return { bg: "#D1FAE5", color: "#059669" };
@@ -111,11 +111,11 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
       case "submitted":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "#9CA3AF" };
+        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
     }
   };
 
-  const statusStyle = expense ? getStatusColor(expense.status) : { bg: "#F3F4F6", color: "#6B7A76" };
+  const statusStyle = expense ? getStatusColor(expense.status) : { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
 
   if (!isOpen) return null;
 
@@ -146,7 +146,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
           stiffness: 300,
           duration: 0.3
         }}
-        className="fixed right-0 top-0 h-full w-[920px] bg-white shadow-2xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-[920px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -156,13 +156,13 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
           style={{
             padding: "24px 48px",
             borderBottom: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "4px" }}>
-                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                   Transaction Details
                 </h2>
                 {expense && (
@@ -180,7 +180,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: "13px", color: "#667085" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                 {expense?.evoucher_number || "View transaction details"}
               </p>
             </div>
@@ -192,7 +192,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                 borderRadius: "8px",
                 border: "none",
                 backgroundColor: "transparent",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -200,7 +200,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                 transition: "all 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -214,7 +214,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
         {/* Content - Scrollable */}
         <div style={{ flex: 1, overflowY: "auto", padding: "32px 48px" }}>
           {loading ? (
-            <div className="flex items-center justify-center h-full text-gray-400">Loading details...</div>
+            <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center h-full text-red-500">
                <AlertCircle size={32} className="mb-2" />
@@ -229,7 +229,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                 justifyContent: "space-between",
                 marginBottom: "32px",
                 paddingBottom: "24px",
-                borderBottom: "1px solid #E5E7EB"
+                borderBottom: "1px solid var(--theme-border-default)"
               }}>
                 <div>
                   <img 
@@ -243,7 +243,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                   <h1 style={{ 
                     fontSize: "20px", 
                     fontWeight: 700, 
-                    color: "#12332B",
+                    color: "var(--theme-text-primary)",
                     letterSpacing: "0.5px",
                     marginBottom: "16px"
                   }}>
@@ -254,7 +254,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -262,7 +262,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                       }}>
                         Date
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {formatDate(expense.date)}
                       </span>
                     </div>
@@ -270,7 +270,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                       <span style={{ 
                         fontSize: "11px", 
                         fontWeight: 500, 
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         textTransform: "uppercase",
                         letterSpacing: "0.5px",
                         display: "block",
@@ -278,7 +278,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
                       }}>
                         Voucher No.
                       </span>
-                      <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                      <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         {expense.evoucher_number}
                       </span>
                     </div>
@@ -289,44 +289,44 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
               {/* Main Info Grid */}
               <div className="grid grid-cols-2 gap-8 mb-8">
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Request Details
                    </label>
                    <div className="space-y-4">
                      <div>
-                       <div className="text-sm font-medium text-gray-900">{expense.description}</div>
-                       <div className="text-xs text-gray-500 mt-1">Purpose/Description</div>
+                       <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.description}</div>
+                       <div className="text-xs text-[var(--theme-text-muted)] mt-1">Purpose/Description</div>
                      </div>
                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{expense.category}</div>
-                          <div className="text-xs text-gray-500 mt-1">Category</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.category}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Category</div>
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{expense.sub_category || "—"}</div>
-                          <div className="text-xs text-gray-500 mt-1">Sub-Category</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.sub_category || "—"}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Sub-Category</div>
                         </div>
                      </div>
                    </div>
                 </div>
                 
                 <div>
-                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                   <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-2">
                      Payment Info
                    </label>
                    <div className="space-y-4">
                      <div>
-                       <div className="text-sm font-medium text-gray-900">{expense.vendor || "—"}</div>
-                       <div className="text-xs text-gray-500 mt-1">Vendor / Payee</div>
+                       <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.vendor || "—"}</div>
+                       <div className="text-xs text-[var(--theme-text-muted)] mt-1">Vendor / Payee</div>
                      </div>
                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{expense.payment_method || "—"}</div>
-                          <div className="text-xs text-gray-500 mt-1">Method</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.payment_method || "—"}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Method</div>
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{expense.due_date ? formatDate(expense.due_date) : "—"}</div>
-                          <div className="text-xs text-gray-500 mt-1">Due Date</div>
+                          <div className="text-sm font-medium text-[var(--theme-text-primary)]">{expense.due_date ? formatDate(expense.due_date) : "—"}</div>
+                          <div className="text-xs text-[var(--theme-text-muted)] mt-1">Due Date</div>
                         </div>
                      </div>
                    </div>
@@ -335,35 +335,35 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
 
               {/* Line Items Table */}
               <div className="mb-8">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+                <label className="block text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wide mb-3">
                   Line Items
                 </label>
-                <div className="rounded-lg border border-gray-200 overflow-hidden">
+                <div className="rounded-lg border border-[var(--theme-border-default)] overflow-hidden">
                   <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 border-b border-gray-200">
+                    <thead className="bg-[var(--theme-bg-surface-subtle)] border-b border-[var(--theme-border-default)]">
                       <tr>
-                        <th className="px-4 py-3 font-medium text-gray-500 w-16 text-center">#</th>
-                        <th className="px-4 py-3 font-medium text-gray-500">Particulars</th>
-                        <th className="px-4 py-3 font-medium text-gray-500 text-right w-40">Amount</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)] w-16 text-center">#</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)]">Particulars</th>
+                        <th className="px-4 py-3 font-medium text-[var(--theme-text-muted)] text-right w-40">Amount</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {expense.line_items?.map((item: any, index: number) => (
                         <tr key={index}>
-                          <td className="px-4 py-3 text-center text-gray-400">{index + 1}</td>
+                          <td className="px-4 py-3 text-center text-[var(--theme-text-muted)]">{index + 1}</td>
                           <td className="px-4 py-3">
-                            <div className="font-medium text-gray-900">{item.particular}</div>
-                            <div className="text-xs text-gray-500">{item.description}</div>
+                            <div className="font-medium text-[var(--theme-text-primary)]">{item.particular}</div>
+                            <div className="text-xs text-[var(--theme-text-muted)]">{item.description}</div>
                           </td>
-                          <td className="px-4 py-3 text-right font-medium text-gray-900">
+                          <td className="px-4 py-3 text-right font-medium text-[var(--theme-text-primary)]">
                             {formatCurrency(item.amount)}
                           </td>
                         </tr>
                       ))}
                       {/* Total Row */}
-                      <tr className="bg-gray-50 font-bold">
-                        <td colSpan={2} className="px-4 py-3 text-right text-gray-900">Total Amount</td>
-                        <td className="px-4 py-3 text-right text-[#12332B] text-lg">
+                      <tr className="bg-[var(--theme-bg-surface-subtle)] font-bold">
+                        <td colSpan={2} className="px-4 py-3 text-right text-[var(--theme-text-primary)]">Total Amount</td>
+                        <td className="px-4 py-3 text-right text-[var(--theme-text-primary)] text-lg">
                           {formatCurrency(expense.amount)}
                         </td>
                       </tr>
@@ -373,21 +373,21 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
               </div>
 
               {/* Footer Meta */}
-              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-gray-200 text-sm">
+              <div className="grid grid-cols-2 gap-8 pt-8 border-t border-[var(--theme-border-default)] text-sm">
                 <div>
-                   <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Requested By</div>
+                   <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Requested By</div>
                    <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-xs font-bold">
                         {expense.requestor_name?.charAt(0) || "U"}
                       </div>
-                      <span className="font-medium text-gray-900">{expense.requestor_name || "Unknown"}</span>
+                      <span className="font-medium text-[var(--theme-text-primary)]">{expense.requestor_name || "Unknown"}</span>
                    </div>
                 </div>
                 
                 {expense.project_number && (
                   <div>
-                    <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Project Context</div>
-                    <div className="flex items-center gap-2 text-[#0F766E] font-medium">
+                    <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-2">Project Context</div>
+                    <div className="flex items-center gap-2 text-[var(--theme-action-primary-bg)] font-medium">
                        <CreditCard size={16} />
                        {expense.project_number}
                     </div>

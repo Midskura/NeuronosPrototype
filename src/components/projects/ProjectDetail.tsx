@@ -194,7 +194,7 @@ export function ProjectDetail({
 
   return (
     <div style={{ 
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       display: "flex",
       flexDirection: "column",
       height: "100vh"
@@ -203,7 +203,7 @@ export function ProjectDetail({
       <div style={{
         padding: "20px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center"
@@ -267,7 +267,7 @@ export function ProjectDetail({
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "10px",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1.5px solid #D1D5DB",
                 borderRadius: "8px",
                 cursor: "pointer",
@@ -277,7 +277,7 @@ export function ProjectDetail({
                 e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "#D1D5DB";
+                e.currentTarget.style.borderColor = "var(--theme-border-default)";
               }}
             >
               <MoreVertical size={18} color="var(--neuron-ink-secondary)" />
@@ -301,8 +301,8 @@ export function ProjectDetail({
                     position: "absolute",
                     top: "calc(100% + 4px)",
                     right: 0,
-                    backgroundColor: "white",
-                    border: "1px solid #E5E7EB",
+                    backgroundColor: "var(--theme-bg-surface)",
+                    border: "1px solid var(--theme-border-default)",
                     borderRadius: "8px",
                     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
                     minWidth: "180px",
@@ -327,7 +327,7 @@ export function ProjectDetail({
                       transition: "background-color 0.15s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "transparent";
@@ -350,7 +350,7 @@ export function ProjectDetail({
                       transition: "background-color 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "transparent";
@@ -373,7 +373,7 @@ export function ProjectDetail({
                       transition: "background-color 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "transparent";
@@ -415,7 +415,7 @@ export function ProjectDetail({
       </div>
 
       {/* Tabs Tier 1: Categories */}
-      <div className="px-12 bg-white flex gap-8 border-b border-[#E5E9F0]">
+      <div className="px-12 bg-[var(--theme-bg-surface)] flex gap-8 border-b border-[var(--theme-border-default)]">
         {[
             { id: "dashboard", label: "Dashboard", icon: Layout },
             { id: "operations", label: "Operations", icon: Layers },
@@ -444,7 +444,7 @@ export function ProjectDetail({
                             left: 0, 
                             right: 0, 
                             height: "2px", 
-                            backgroundColor: "#0F766E",
+                            backgroundColor: "var(--theme-action-primary-bg)",
                             borderRadius: "2px 2px 0 0" 
                         }} />
                     )}
@@ -454,7 +454,7 @@ export function ProjectDetail({
       </div>
 
       {/* Tabs Tier 2: Sub-tabs (Conditional Render) */}
-      <div className="px-12 py-3 bg-white border-b border-[#E5E9F0] flex gap-2 overflow-x-auto min-h-[57px]">
+      <div className="px-12 py-3 bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)] flex gap-2 overflow-x-auto min-h-[57px]">
         {TAB_STRUCTURE[activeCategory].map((tab) => {
             const isActive = activeTab === tab.id;
             const Icon = tab.icon;
@@ -478,7 +478,7 @@ export function ProjectDetail({
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, overflow: "auto", backgroundColor: "white" }}>
+      <div style={{ flex: 1, overflow: "auto", backgroundColor: "var(--theme-bg-surface)" }}>
         {activeTab === "financial_overview" && (
           <div className="max-w-7xl mx-auto">
             <ProjectFinancialOverview financials={financials} />

@@ -98,17 +98,17 @@ export function IncomeVsCostBreakdown({
       {/* Margin comparison bar */}
       <div
         className="rounded-xl p-4"
-        style={{ border: "1px solid #E5E9F0", background: "white" }}
+        style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
       >
         <div className="flex items-center justify-between mb-3">
           <h3
             className="text-[12px] font-semibold uppercase tracking-wider"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Income vs Cost
           </h3>
           <div className="flex items-center gap-2">
-            <span className="text-[12px] font-medium" style={{ color: "#667085" }}>
+            <span className="text-[12px] font-medium" style={{ color: "var(--theme-text-muted)" }}>
               Margin:
             </span>
             <span
@@ -125,19 +125,19 @@ export function IncomeVsCostBreakdown({
           <div className="flex items-center gap-3">
             <span
               className="text-[11px] font-medium w-14"
-              style={{ color: "#667085" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Income
             </span>
             <div
               className="flex-1 h-5 rounded-md overflow-hidden"
-              style={{ backgroundColor: "#F3F4F6" }}
+              style={{ backgroundColor: "var(--theme-bg-surface-subtle)" }}
             >
               <div
                 className="h-full rounded-md flex items-center px-2 transition-all duration-500"
                 style={{
                   width: `${(totalIncome / maxVal) * 100}%`,
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   minWidth: totalIncome > 0 ? "40px" : "0",
                 }}
               >
@@ -152,13 +152,13 @@ export function IncomeVsCostBreakdown({
           <div className="flex items-center gap-3">
             <span
               className="text-[11px] font-medium w-14"
-              style={{ color: "#667085" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Cost
             </span>
             <div
               className="flex-1 h-5 rounded-md overflow-hidden"
-              style={{ backgroundColor: "#F3F4F6" }}
+              style={{ backgroundColor: "var(--theme-bg-surface-subtle)" }}
             >
               <div
                 className="h-full rounded-md flex items-center px-2 transition-all duration-500"
@@ -217,11 +217,11 @@ function BreakdownTable({
   return (
     <div
       className="rounded-xl overflow-hidden"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       <div
         className="px-5 py-3"
-        style={{ borderBottom: "1px solid #E5E9F0", background: bgHeader }}
+        style={{ borderBottom: "1px solid var(--theme-border-default)", background: bgHeader }}
       >
         <h3
           className="text-[12px] font-bold uppercase tracking-wide"
@@ -231,23 +231,23 @@ function BreakdownTable({
         </h3>
       </div>
       <table className="w-full">
-        <thead style={{ background: "#FAFBFC", borderBottom: "1px solid #E5E9F0" }}>
+        <thead style={{ background: "#FAFBFC", borderBottom: "1px solid var(--theme-border-default)" }}>
           <tr>
             <th
               className="px-5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: "#9CA3AF" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Category
             </th>
             <th
               className="px-5 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider"
-              style={{ color: "#9CA3AF" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Amount
             </th>
             <th
               className="px-5 py-2.5 text-right text-[10px] font-semibold uppercase tracking-wider w-16"
-              style={{ color: "#9CA3AF" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               %
             </th>
@@ -259,7 +259,7 @@ function BreakdownTable({
               <td
                 colSpan={3}
                 className="px-5 py-6 text-center text-[13px]"
-                style={{ color: "#9CA3AF" }}
+                style={{ color: "var(--theme-text-muted)" }}
               >
                 No data
               </td>
@@ -268,12 +268,12 @@ function BreakdownTable({
             rows.map((row) => (
               <tr
                 key={row.category}
-                className="hover:bg-gray-50/50"
-                style={{ borderBottom: "1px solid #F3F4F6" }}
+                className="hover:bg-[var(--theme-bg-surface-subtle)]/50"
+                style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}
               >
                 <td
                   className="px-5 py-2.5 text-[13px] font-medium"
-                  style={{ color: "#12332B" }}
+                  style={{ color: "var(--theme-text-primary)" }}
                 >
                   {row.category}
                 </td>
@@ -285,7 +285,7 @@ function BreakdownTable({
                 </td>
                 <td
                   className="px-5 py-2.5 text-[11px] text-right tabular-nums"
-                  style={{ color: "#9CA3AF" }}
+                  style={{ color: "var(--theme-text-muted)" }}
                 >
                   {row.pct.toFixed(0)}%
                 </td>
@@ -298,7 +298,7 @@ function BreakdownTable({
             <tr>
               <td
                 className="px-5 py-2.5 text-[12px] font-bold"
-                style={{ color: "#12332B" }}
+                style={{ color: "var(--theme-text-primary)" }}
               >
                 Total
               </td>
@@ -310,7 +310,7 @@ function BreakdownTable({
               </td>
               <td
                 className="px-5 py-2.5 text-[11px] text-right tabular-nums"
-                style={{ color: "#9CA3AF" }}
+                style={{ color: "var(--theme-text-muted)" }}
               >
                 100%
               </td>

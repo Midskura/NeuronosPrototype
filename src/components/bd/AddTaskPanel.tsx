@@ -135,7 +135,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
       {/* Slide-out Panel */}
       <div
-        className="fixed right-0 top-0 h-full w-[600px] bg-white shadow-2xl z-50 flex flex-col animate-slide-in"
+        className="fixed right-0 top-0 h-full w-[600px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col animate-slide-in"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -146,10 +146,10 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
           style={{ borderColor: "var(--neuron-ui-divider)" }}
         >
           <div>
-            <h2 className="text-[24px] font-semibold" style={{ color: "#12332B" }}>
+            <h2 className="text-[24px] font-semibold" style={{ color: "var(--theme-text-primary)" }}>
               Create New Task
             </h2>
-            <p className="text-[13px] mt-1" style={{ color: "#667085" }}>
+            <p className="text-[13px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
               Add a follow-up task for your business development activities
             </p>
           </div>
@@ -173,7 +173,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
           <div className="space-y-6">
             {/* Task Title */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Task Title *
               </label>
               <input
@@ -185,15 +185,15 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 className="w-full px-3 py-2.5 rounded-lg text-[13px] focus:outline-none focus:ring-2"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
             </div>
 
             {/* Type */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Type *
               </label>
               <CustomDropdown
@@ -216,7 +216,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
             {/* Due Date */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Due Date *
               </label>
               <input
@@ -227,15 +227,15 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 className="w-full px-3 py-2.5 rounded-lg text-[13px] focus:outline-none focus:ring-2"
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
             </div>
 
             {/* Priority */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Priority *
               </label>
               <CustomDropdown
@@ -251,7 +251,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
             {/* Customer Selection */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Related Customer (Optional)
               </label>
               <CustomDropdown
@@ -269,7 +269,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
             {/* Contact Selection - Only show contacts from selected customer */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Related Contact (Optional)
               </label>
               <div style={{ opacity: taskData.customer_id ? 1 : 0.6, pointerEvents: taskData.customer_id ? 'auto' : 'none' }}>
@@ -289,7 +289,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 />
               </div>
               {!taskData.customer_id && (
-                <p className="text-[11px] mt-1" style={{ color: "#667085" }}>
+                <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                   Select a customer first to choose a contact
                 </p>
               )}
@@ -297,7 +297,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
             {/* Assigned To */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Assign To (Optional)
               </label>
               <CustomDropdown
@@ -316,7 +316,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
 
             {/* Remarks */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Remarks (Optional)
               </label>
               <textarea
@@ -327,34 +327,34 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 rows={4}
                 style={{
                   border: "1px solid var(--neuron-ui-border)",
-                  backgroundColor: "#FFFFFF",
-                  color: "#12332B"
+                  backgroundColor: "var(--theme-bg-surface)",
+                  color: "var(--theme-text-primary)"
                 }}
               />
             </div>
 
             {/* Attachments */}
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "#667085" }}>
+              <label className="block text-[11px] font-medium uppercase tracking-wide mb-2" style={{ color: "var(--theme-text-muted)" }}>
                 Attachments (Optional)
               </label>
               <div 
                 className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors"
-                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "#FFFFFF" }}
+                style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
-                  e.currentTarget.style.backgroundColor = "#E8F5F3";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
-                  e.currentTarget.style.backgroundColor = "#FFFFFF";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
-                <Upload size={24} className="mx-auto mb-2" style={{ color: "#667085" }} />
-                <p className="text-[13px]" style={{ color: "#667085" }}>
+                <Upload size={24} className="mx-auto mb-2" style={{ color: "var(--theme-text-muted)" }} />
+                <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
                   Click to upload or drag and drop files
                 </p>
-                <p className="text-[11px] mt-1" style={{ color: "#9CA3AF" }}>
+                <p className="text-[11px] mt-1" style={{ color: "var(--theme-text-muted)" }}>
                   Supported: PDF, DOC, XLS, images
                 </p>
               </div>
@@ -374,13 +374,13 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
             style={{
               border: "1px solid var(--neuron-ui-border)",
               color: "var(--neuron-ink-secondary)",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#FFFFFF";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
             }}
           >
             Cancel
@@ -388,12 +388,12 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
           <button
             onClick={handleSubmit}
             className="flex-1 px-4 py-2.5 rounded-lg text-[13px] font-medium text-white transition-colors"
-            style={{ backgroundColor: "#0F766E" }}
+            style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0D6560";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#0F766E";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
             }}
           >
             Create Task

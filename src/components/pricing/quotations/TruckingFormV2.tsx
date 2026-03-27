@@ -23,7 +23,7 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
         alignItems: "center",
         gap: "6px"
       }}>
-        <Truck size={14} style={{ color: "#0F766E" }} />
+        <Truck size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         SERVICE DETAILS
       </div>
 
@@ -34,7 +34,7 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
       }}>
         {/* Pull Out Location */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Pull Out Location
           </label>
           <input
@@ -48,14 +48,14 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Truck Type */}
         <div>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Truck Type *
           </label>
           <CustomDropdown
@@ -80,7 +80,7 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
 
         {/* Delivery Address */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Delivery Address *
           </label>
           <input
@@ -94,14 +94,14 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white"
+              backgroundColor: "var(--theme-bg-surface)"
             }}
           />
         </div>
 
         {/* Delivery Instructions */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "#667085", marginBottom: "4px" }}>
+          <label style={{ display: "block", fontSize: "11px", fontWeight: 500, color: "var(--theme-text-muted)", marginBottom: "4px" }}>
             Delivery Instructions
           </label>
           <textarea
@@ -115,7 +115,7 @@ export function TruckingFormV2({ data, onChange }: TruckingFormV2Props) {
               fontSize: "13px",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "4px",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               resize: "vertical",
               fontFamily: "inherit"
             }}

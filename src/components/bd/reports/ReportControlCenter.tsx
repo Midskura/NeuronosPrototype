@@ -422,7 +422,7 @@ export function ReportControlCenter({ onBack }: ReportControlCenterProps) {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {isExpanded ? <ChevronDown size={16} color="#0F766E" /> : <ChevronRight size={16} color="#667085" />}
+                  {isExpanded ? <ChevronDown size={16} color="var(--theme-action-primary-bg)" /> : <ChevronRight size={16} color="var(--theme-text-muted)" />}
                   <span style={{ fontSize: '12px', fontWeight: 600, color: isExpanded ? '#0F766E' : '#12332B' }}>
                     {ENTITY_LABELS[entity]}
                   </span>

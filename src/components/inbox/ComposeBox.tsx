@@ -155,8 +155,8 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
     <>
       <div
         style={{
-          borderTop: "1px solid #E5E9F0",
-          backgroundColor: "#FFFFFF",
+          borderTop: "1px solid var(--theme-border-default)",
+          backgroundColor: "var(--theme-bg-surface)",
           padding: "12px 16px",
         }}
       >
@@ -170,31 +170,31 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
                 style={{
                   padding: "3px 8px",
                   borderRadius: 6,
-                  border: "1px solid #E5E9F0",
-                  backgroundColor: "#F9FAFB",
+                  border: "1px solid var(--theme-border-default)",
+                  backgroundColor: "var(--theme-bg-page)",
                   fontSize: 12,
-                  color: "#374151",
+                  color: "var(--theme-text-secondary)",
                 }}
               >
                 {att.type === "entity" ? (
                   <>
                     <Link2 size={11} style={{ color: "var(--neuron-brand-green)" }} />
-                    <span style={{ color: "#6B7280", fontSize: 10 }}>
+                    <span style={{ color: "var(--theme-text-muted)", fontSize: 10 }}>
                       {att.entity_type}
                     </span>
                     {att.entity_label}
                   </>
                 ) : (
                   <>
-                    <FileText size={11} style={{ color: "#667085" }} />
+                    <FileText size={11} style={{ color: "var(--theme-text-muted)" }} />
                     {att.file?.name}
                   </>
                 )}
                 <button
                   onClick={() => removeAttachment(idx)}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: 0, display: "flex" }}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", padding: 0, display: "flex" }}
                   onMouseEnter={(e) => e.currentTarget.style.color = "var(--neuron-accent-terracotta)"}
-                  onMouseLeave={(e) => e.currentTarget.style.color = "#9CA3AF"}
+                  onMouseLeave={(e) => e.currentTarget.style.color = "var(--theme-text-muted)"}
                 >
                   <X size={12} />
                 </button>
@@ -214,12 +214,12 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
           style={{
             width: "100%",
             resize: "none",
-            border: "1px solid #E5E9F0",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: 8,
             padding: "10px 12px",
             fontSize: 13,
-            color: "#12332B",
-            backgroundColor: "#FFFFFF",
+            color: "var(--theme-text-primary)",
+            backgroundColor: "var(--theme-bg-surface)",
             outline: "none",
             fontFamily: "inherit",
             lineHeight: 1.5,
@@ -229,7 +229,7 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
             transition: "border-color 150ms ease",
           }}
           onFocus={(e) => (e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "#E5E9F0")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "var(--theme-border-default)")}
         />
 
         {/* Toolbar */}
@@ -242,19 +242,19 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
               style={{
                 padding: "5px 8px",
                 borderRadius: 6,
-                border: "1px solid #E5E9F0",
+                border: "1px solid var(--theme-border-default)",
                 backgroundColor: "transparent",
                 fontSize: 12,
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
-                e.currentTarget.style.color = "#12332B";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                e.currentTarget.style.color = "var(--theme-text-primary)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#667085";
+                e.currentTarget.style.color = "var(--theme-text-muted)";
               }}
               title="Link a system record"
             >
@@ -269,19 +269,19 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
               style={{
                 padding: "5px 8px",
                 borderRadius: 6,
-                border: "1px solid #E5E9F0",
+                border: "1px solid var(--theme-border-default)",
                 backgroundColor: "transparent",
                 fontSize: 12,
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
-                e.currentTarget.style.color = "#12332B";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
+                e.currentTarget.style.color = "var(--theme-text-primary)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
-                e.currentTarget.style.color = "#667085";
+                e.currentTarget.style.color = "var(--theme-text-muted)";
               }}
               title="Attach a file"
             >

@@ -310,7 +310,7 @@ export function TransactionsModule() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-gray-50 overflow-hidden">
+    <div className="h-full flex flex-col bg-[var(--theme-bg-surface-subtle)] overflow-hidden">
       {isLoading && (
         <SkeletonTransactionsPage />
       )}
@@ -337,16 +337,16 @@ export function TransactionsModule() {
 
       {/* Top Section: Header & Bank Cards */}
       {!isLoading && (
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)]">
         
         {/* Page Header */}
         <div className="px-[45px] pt-[30px] pb-0">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+                    <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
                     Transactions
                     </h1>
-                    <p className="text-[13px] text-[#667085]">
+                    <p className="text-[13px] text-[var(--theme-text-muted)]">
                     Manage bank feeds and categorized transactions
                     </p>
                 </div>
@@ -364,7 +364,7 @@ export function TransactionsModule() {
                     {/* Manage Accounts Button */}
                     <button 
                         onClick={() => setIsManageAccountsOpen(true)}
-                        className="flex items-center justify-center w-[36px] h-[36px] bg-white border border-[#E5E7EB] rounded-[7.5px] text-[#667085] hover:text-[#12332B] hover:border-[#12332B] transition-colors"
+                        className="flex items-center justify-center w-[36px] h-[36px] bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-[7.5px] text-[var(--theme-text-muted)] hover:text-[var(--theme-text-primary)] hover:border-[var(--theme-text-primary)] transition-colors"
                         title="Manage Accounts"
                     >
                         <Settings size={18} />
@@ -372,8 +372,8 @@ export function TransactionsModule() {
 
                     {/* Currency Switcher Dropdown */}
                     <div className="relative group flex-shrink-0 z-20">
-                        <button className="flex items-center gap-2 text-[13px] font-semibold text-[#12332B] hover:text-[#0F766E] transition-colors rounded-[7.5px] h-[36px] px-3 border border-[#E5E7EB] hover:border-[#0F766E] hover:bg-[#F0FDF9] bg-white">
-                            <div className="w-[19px] h-[19px] rounded-full bg-[#0F766E]/10 flex items-center justify-center text-[#0F766E]">
+                        <button className="flex items-center gap-2 text-[13px] font-semibold text-[var(--theme-text-primary)] hover:text-[var(--theme-action-primary-bg)] transition-colors rounded-[7.5px] h-[36px] px-3 border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-bg-surface-tint)] bg-[var(--theme-bg-surface)]">
+                            <div className="w-[19px] h-[19px] rounded-full bg-[var(--theme-action-primary-bg)]/10 flex items-center justify-center text-[var(--theme-action-primary-bg)]">
                                 {currency === 'USD' ? <Globe size={10} /> : <Wallet size={10} />}
                             </div>
                             <span>{currency} Transactions</span>
@@ -381,18 +381,18 @@ export function TransactionsModule() {
                         </button>
                         
                         {/* Custom Dropdown Menu */}
-                        <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+                        <div className="absolute top-full right-0 mt-2 w-48 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
                             <div className="p-1">
                                 <button 
                                     onClick={() => setCurrency('USD')}
-                                    className={`w-full text-left px-3 py-2 rounded-md text-xs flex items-center gap-2 ${currency === 'USD' ? 'bg-[#F0FDF9] text-[#0F766E]' : 'text-gray-700 hover:bg-gray-50'}`}
+                                    className={`w-full text-left px-3 py-2 rounded-md text-xs flex items-center gap-2 ${currency === 'USD' ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
                                 >
                                     <Globe size={14} />
                                     <span>USD Transactions</span>
                                 </button>
                                 <button 
                                     onClick={() => setCurrency('PHP')}
-                                    className={`w-full text-left px-3 py-2 rounded-md text-xs flex items-center gap-2 ${currency === 'PHP' ? 'bg-[#F0FDF9] text-[#0F766E]' : 'text-gray-700 hover:bg-gray-50'}`}
+                                    className={`w-full text-left px-3 py-2 rounded-md text-xs flex items-center gap-2 ${currency === 'PHP' ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
                                 >
                                     <Wallet size={14} />
                                     <span>PHP Transactions</span>
@@ -421,13 +421,13 @@ export function TransactionsModule() {
             </div>
 
             {/* Right: Total Balance Card */}
-            <div className="w-[180px] h-[60px] px-4 py-0 rounded-[7.5px] border border-[#E5E7EB] flex flex-col justify-center relative bg-white shrink-0">
+            <div className="w-[180px] h-[60px] px-4 py-0 rounded-[7.5px] border border-[var(--theme-border-default)] flex flex-col justify-center relative bg-[var(--theme-bg-surface)] shrink-0">
                 <div className="flex flex-col gap-0.5">
-                    <span className="font-medium text-[11px] tracking-[0.02em] truncate text-[#667085]">
+                    <span className="font-medium text-[11px] tracking-[0.02em] truncate text-[var(--theme-text-muted)]">
                         Total {currency} Balance
                     </span>
                     
-                    <span className="text-[17px] font-bold text-[#12332B] font-sans leading-none tracking-tight">
+                    <span className="text-[17px] font-bold text-[var(--theme-text-primary)] font-sans leading-none tracking-tight">
                         {isLoading ? "—" : formatCurrency(totalBalance, currency)}
                     </span>
                 </div>
@@ -453,7 +453,7 @@ export function TransactionsModule() {
       {/* Main Table Area */}
       {!isLoading && (
       <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-[1400px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white">
+        <div className="max-w-[1400px] mx-auto border border-[var(--theme-border-default)] rounded-lg overflow-hidden shadow-sm bg-[var(--theme-bg-surface)]">
             <TransactionsTable 
                 transactions={filteredTransactions}
                 isLoading={isLoading}

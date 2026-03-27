@@ -84,7 +84,7 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
         }}
       >
         <div style={{ width: 28, flexShrink: 0 }} />
-        <p style={{ fontSize: 12, color: "#9CA3AF", fontStyle: "italic" }}>
+        <p style={{ fontSize: 12, color: "var(--theme-text-muted)", fontStyle: "italic" }}>
           {message.sender_name} retracted a message ·{" "}
           {formatTime(message.retracted_at || message.created_at)}
         </p>
@@ -113,7 +113,7 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
             justifyContent: "center",
             fontSize: 10,
             fontWeight: 700,
-            color: "#0F766E",
+            color: "var(--theme-action-primary-bg)",
             flexShrink: 0,
             marginTop: 1,
           }}
@@ -125,14 +125,14 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
         <div className="flex-1 min-w-0">
           {/* Header row */}
           <div className="flex items-center gap-2 mb-1.5">
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#12332B" }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--theme-text-primary)" }}>
               {message.sender_name || "Unknown"}
             </span>
             {message.sender_department && (
               <span
                 style={{
                   fontSize: 11,
-                  color: "#6B7A76",
+                  color: "var(--theme-text-muted)",
                   padding: "2px 6px",
                   borderRadius: 6,
                   border: "1px solid #E2E8E5",
@@ -142,7 +142,7 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                 {message.sender_department}
               </span>
             )}
-            <span style={{ fontSize: 11, color: "#9CA3AF" }}>
+            <span style={{ fontSize: 11, color: "var(--theme-text-muted)" }}>
               {formatTime(message.created_at)}
             </span>
             {/* Retract button — own messages only */}
@@ -153,12 +153,12 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                 style={{
                   marginLeft: "auto",
                   fontSize: 11,
-                  color: "#9CA3AF",
+                  color: "var(--theme-text-muted)",
                   background: "none",
                   cursor: "pointer",
                   padding: "2px 6px",
                   borderRadius: 4,
-                  border: "1px solid #E5E9F0",
+                  border: "1px solid var(--theme-border-default)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = "#DC2626";
@@ -166,8 +166,8 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                   e.currentTarget.style.backgroundColor = "#FFF5F5";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "#9CA3AF";
-                  e.currentTarget.style.borderColor = "#E5E9F0";
+                  e.currentTarget.style.color = "var(--theme-text-muted)";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
                   e.currentTarget.style.backgroundColor = "transparent";
                 }}
                 title="Retract this message"
@@ -183,7 +183,7 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
             <p
               style={{
                 fontSize: 13,
-                color: "#374151",
+                color: "var(--theme-text-secondary)",
                 lineHeight: 1.6,
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
@@ -223,30 +223,30 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                     style={{
                       padding: "4px 10px",
                       borderRadius: 6,
-                      border: "1px solid #E5E9F0",
-                      backgroundColor: "#F9FAFB",
+                      border: "1px solid var(--theme-border-default)",
+                      backgroundColor: "var(--theme-bg-page)",
                       fontSize: 12,
-                      color: "#374151",
+                      color: "var(--theme-text-secondary)",
                       fontWeight: 500,
                       cursor: "pointer",
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = "#9CA3AF";
-                      e.currentTarget.style.backgroundColor = "#F3F4F6";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = "#E5E9F0";
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.borderColor = "var(--theme-border-default)";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }}
                   >
-                    <FileText size={11} style={{ color: "#667085" }} />
+                    <FileText size={11} style={{ color: "var(--theme-text-muted)" }} />
                     {att.file_name || "File"}
                     {att.file_size && (
-                      <span style={{ color: "#9CA3AF", fontSize: 10 }}>
+                      <span style={{ color: "var(--theme-text-muted)", fontSize: 10 }}>
                         {(att.file_size / 1024 / 1024).toFixed(1)}MB
                       </span>
                     )}
-                    <Download size={10} style={{ color: "#9CA3AF" }} />
+                    <Download size={10} style={{ color: "var(--theme-text-muted)" }} />
                   </button>
                 );
               })}

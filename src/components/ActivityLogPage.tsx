@@ -29,13 +29,14 @@ export function ActivityLogPage() {
   const [hasNewActivities, setHasNewActivities] = useState(false);
   const [newActivityCount, setNewActivityCount] = useState(0);
   
-  // Executive Department exception: Everyone in Executive gets director access
-  const actualRole = effectiveDepartment === "Executive" ? "director" : effectiveRole;
-  
+  // Executive department sees everything; treat as elevated for this page
+  const isExecutive = effectiveDepartment === "Executive";
+  const actualRole = isExecutive ? "manager" : effectiveRole;
+
   // Filters
   const [entityTypeFilter, setEntityTypeFilter] = useState("all");
   const [actionTypeFilter, setActionTypeFilter] = useState("all");
-  const [departmentFilter, setDepartmentFilter] = useState(actualRole === "director" ? "all" : effectiveDepartment);
+  const [departmentFilter, setDepartmentFilter] = useState(isExecutive ? "all" : effectiveDepartment);
   const [userFilter, setUserFilter] = useState("");
   const [usersInDepartment, setUsersInDepartment] = useState<Array<{id: string, name: string}>>([]);
   const [dateFrom, setDateFrom] = useState(() => {
@@ -53,7 +54,7 @@ export function ActivityLogPage() {
   const latestTimestampRef = useRef<string | null>(null);
   
   // Check if user has access
-  const hasAccess = actualRole === "director" || actualRole === "manager";
+  const hasAccess = isExecutive || actualRole === "manager";
   
   // Fetch users when department filter changes
   useEffect(() => {
@@ -253,11 +254,11 @@ export function ActivityLogPage() {
       case "ticket":
         return { bg: "#FEF0E6", color: "#E87A3D", border: "#E87A3D" };
       case "quotation":
-        return { bg: "#E8F5F0", color: "#0F766E", border: "#0F766E" };
+        return { bg: "#E8F5F0", color: "var(--theme-action-primary-bg)", border: "#0F766E" };
       case "booking":
         return { bg: "#EEF2FF", color: "#6366F1", border: "#6366F1" };
       default:
-        return { bg: "#F3F4F6", color: "#6B7280", border: "#6B7280" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)", border: "#6B7280" };
     }
   };
   
@@ -293,10 +294,10 @@ export function ActivityLogPage() {
       <div className="h-full flex items-center justify-center" style={{ backgroundColor: "#FEFEFE" }}>
         <div className="text-center" style={{ maxWidth: "400px" }}>
           <Activity size={48} style={{ color: "#E87A3D", margin: "0 auto 16px" }} />
-          <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
             Access Denied
           </h2>
-          <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.5" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.5" }}>
             The Activity Log is only available for Managers and Executives. This module provides system-wide visibility and audit trails.
           </p>
         </div>
@@ -315,8 +316,8 @@ export function ActivityLogPage() {
       >
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <Activity size={24} style={{ color: "#0F766E" }} />
-            <h1 style={{ fontSize: "28px", fontWeight: 600, color: "#12332B" }}>
+            <Activity size={24} style={{ color: "var(--theme-action-primary-bg)" }} />
+            <h1 style={{ fontSize: "28px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
               Activity Log
             </h1>
             <span style={{
@@ -324,11 +325,11 @@ export function ActivityLogPage() {
               borderRadius: "6px",
               fontSize: "12px",
               fontWeight: 600,
-              background: actualRole === "director" ? "#FEEAEA" : "#E8F5F0",
-              color: actualRole === "director" ? "#E35858" : "#0F766E",
-              border: `1px solid ${actualRole === "director" ? "#E35858" : "#0F766E"}`
+              background: isExecutive ? "#FEEAEA" : "#E8F5F0",
+              color: isExecutive ? "#E35858" : "#0F766E",
+              border: `1px solid ${isExecutive ? "#E35858" : "#0F766E"}`
             }}>
-              {actualRole === "director" ? "EXECUTIVE" : "MANAGER"}
+              {isExecutive ? "EXECUTIVE" : "MANAGER"}
             </span>
           </div>
           
@@ -355,17 +356,17 @@ export function ActivityLogPage() {
               onClick={handleRefresh}
               className="px-4 py-2 rounded-lg transition-all flex items-center gap-2"
               style={{
-                backgroundColor: "#FFFFFF",
-                color: "#0F766E",
+                backgroundColor: "var(--theme-bg-surface)",
+                color: "var(--theme-action-primary-bg)",
                 fontSize: "14px",
                 fontWeight: 600,
                 border: "1px solid var(--neuron-ui-border)"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFFFFF";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }}
             >
               <RefreshCw size={16} />
@@ -376,17 +377,17 @@ export function ActivityLogPage() {
               onClick={handleExportCSV}
               className="px-4 py-2 rounded-lg transition-all flex items-center gap-2"
               style={{
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 color: "#FFFFFF",
                 fontSize: "14px",
                 fontWeight: 600,
                 border: "none"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#0D6560";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               <Download size={16} />
@@ -394,8 +395,8 @@ export function ActivityLogPage() {
             </button>
           </div>
         </div>
-        <p style={{ fontSize: "14px", color: "#667085" }}>
-          {actualRole === "director" 
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
+          {isExecutive
             ? "System-wide activity log with full visibility across all departments"
             : `Activity log for ${effectiveDepartment} department`
           }
@@ -405,14 +406,14 @@ export function ActivityLogPage() {
       {/* Filters */}
       <div 
         className="px-12 py-6 border-b"
-        style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "#FFFFFF" }}
+        style={{ borderColor: "var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-surface)" }}
       >
         <div className="flex flex-col gap-3">
           {/* First row - Dropdowns */}
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-2">
-              <Filter size={16} style={{ color: "#667085" }} />
-              <span style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>Filters:</span>
+              <Filter size={16} style={{ color: "var(--theme-text-muted)" }} />
+              <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>Filters:</span>
             </div>
             
             <div style={{ minWidth: "160px" }}>
@@ -445,7 +446,7 @@ export function ActivityLogPage() {
             </div>
             
             {/* Show Department filter only for Executives */}
-            {actualRole === "director" && (
+            {isExecutive && (
               <div style={{ minWidth: "160px" }}>
                 <CustomDropdown
                   label=""
@@ -492,8 +493,8 @@ export function ActivityLogPage() {
               className="w-full px-3.5 py-2 rounded-lg text-sm"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
-                color: "#12332B"
+                backgroundColor: "var(--theme-bg-surface)",
+                color: "var(--theme-text-primary)"
               }}
             />
           </div>
@@ -506,7 +507,7 @@ export function ActivityLogPage() {
           <div style={{ 
             textAlign: "center", 
             padding: "64px", 
-            color: "#667085" 
+            color: "var(--theme-text-muted)" 
           }}>
             Loading activities...
           </div>
@@ -514,9 +515,9 @@ export function ActivityLogPage() {
           <div style={{ 
             textAlign: "center", 
             padding: "64px", 
-            color: "#667085" 
+            color: "var(--theme-text-muted)" 
           }}>
-            <Activity size={48} style={{ color: "#D1D5DB", margin: "0 auto 16px" }} />
+            <Activity size={48} style={{ color: "var(--theme-border-default)", margin: "0 auto 16px" }} />
             <p style={{ fontSize: "16px", fontWeight: 500 }}>No activities found</p>
             <p style={{ fontSize: "14px", marginTop: "8px" }}>Try adjusting your filters</p>
           </div>
@@ -525,29 +526,29 @@ export function ActivityLogPage() {
             border: "1px solid var(--neuron-ui-border)", 
             borderRadius: "12px",
             overflow: "hidden",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "var(--theme-bg-surface)"
           }}>
             {/* Table Header */}
             <div 
               className="grid grid-cols-12 gap-4 px-6 py-3 border-b"
               style={{ 
                 borderColor: "var(--neuron-ui-border)",
-                backgroundColor: "#F9FAFB"
+                backgroundColor: "var(--theme-bg-page)"
               }}
             >
-              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "#667085", textTransform: "uppercase" }}>
+              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase" }}>
                 Time
               </div>
-              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "#667085", textTransform: "uppercase" }}>
+              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase" }}>
                 User
               </div>
-              <div className="col-span-1" style={{ fontSize: "12px", fontWeight: 600, color: "#667085", textTransform: "uppercase" }}>
+              <div className="col-span-1" style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase" }}>
                 Type
               </div>
-              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "#667085", textTransform: "uppercase" }}>
+              <div className="col-span-2" style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase" }}>
                 Entity
               </div>
-              <div className="col-span-4" style={{ fontSize: "12px", fontWeight: 600, color: "#667085", textTransform: "uppercase" }}>
+              <div className="col-span-4" style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase" }}>
                 Action
               </div>
               <div className="col-span-1"></div>
@@ -560,7 +561,7 @@ export function ActivityLogPage() {
               return (
                 <div
                   key={activity.id}
-                  className="grid grid-cols-12 gap-4 px-6 py-4 border-b hover:bg-gray-50 transition-colors cursor-pointer"
+                  className="grid grid-cols-12 gap-4 px-6 py-4 border-b hover:bg-[var(--theme-bg-surface-subtle)] transition-colors cursor-pointer"
                   style={{ 
                     borderColor: index === filteredActivities.length - 1 ? "transparent" : "var(--neuron-ui-border)"
                   }}
@@ -568,20 +569,20 @@ export function ActivityLogPage() {
                 >
                   {/* Time */}
                   <div className="col-span-2 flex flex-col">
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       {getRelativeTime(activity.timestamp)}
                     </span>
-                    <span style={{ fontSize: "11px", color: "#9CA3AF" }}>
+                    <span style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
                       {new Date(activity.timestamp).toLocaleString()}
                     </span>
                   </div>
                   
                   {/* User */}
                   <div className="col-span-2 flex flex-col">
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>
+                    <span style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                       {activity.user_name}
                     </span>
-                    <span style={{ fontSize: "11px", color: "#667085" }}>
+                    <span style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
                       {activity.user_department}
                     </span>
                   </div>
@@ -604,24 +605,24 @@ export function ActivityLogPage() {
                   
                   {/* Entity */}
                   <div className="col-span-2 flex flex-col">
-                    <span style={{ fontSize: "12px", fontWeight: 600, color: "#0F766E", fontFamily: "monospace" }}>
+                    <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-action-primary-bg)", fontFamily: "monospace" }}>
                       {activity.entity_id}
                     </span>
-                    <span style={{ fontSize: "12px", color: "#667085", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <span style={{ fontSize: "12px", color: "var(--theme-text-muted)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {activity.entity_name}
                     </span>
                   </div>
                   
                   {/* Action */}
                   <div className="col-span-4 flex items-center">
-                    <span style={{ fontSize: "13px", color: "#374151" }}>
+                    <span style={{ fontSize: "13px", color: "var(--theme-text-secondary)" }}>
                       {formatActivityAction(activity)}
                     </span>
                   </div>
                   
                   {/* Link Icon */}
                   <div className="col-span-1 flex items-center justify-end">
-                    <ExternalLink size={16} style={{ color: "#9CA3AF" }} />
+                    <ExternalLink size={16} style={{ color: "var(--theme-text-muted)" }} />
                   </div>
                 </div>
               );
@@ -635,7 +636,7 @@ export function ActivityLogPage() {
             marginTop: "24px", 
             textAlign: "center", 
             fontSize: "13px", 
-            color: "#667085" 
+            color: "var(--theme-text-muted)" 
           }}>
             Showing {filteredActivities.length} of {total} activities
           </div>

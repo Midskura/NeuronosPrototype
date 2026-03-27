@@ -220,21 +220,21 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
 
   return (
     <>
-      <div className="ticketing-ui flex flex-col h-full" style={{ backgroundColor: "#FFFFFF" }}>
+      <div className="ticketing-ui flex flex-col h-full" style={{ backgroundColor: "var(--theme-bg-surface)" }}>
         {/* Header */}
-        <div style={{ padding: "16px 28px", borderBottom: "1px solid #E5E9F0", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, color: "#12332B" }}>New Message</h2>
+        <div style={{ padding: "16px 28px", borderBottom: "1px solid var(--theme-border-default)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--theme-text-primary)" }}>New Message</h2>
           <div className="flex items-center gap-2">
             <button
               onClick={handleSaveDraft}
               disabled={!canDraft}
               className="flex items-center gap-1.5 transition-colors duration-150"
               style={{
-                padding: "6px 12px", borderRadius: 6, border: "1px solid #E5E9F0",
+                padding: "6px 12px", borderRadius: 6, border: "1px solid var(--theme-border-default)",
                 backgroundColor: "transparent", fontSize: 12, fontWeight: 500,
                 color: canDraft ? "#667085" : "#D1D5DB", cursor: canDraft ? "pointer" : "not-allowed",
               }}
-              onMouseEnter={(e) => { if (canDraft) e.currentTarget.style.backgroundColor = "#F9FAFB"; }}
+              onMouseEnter={(e) => { if (canDraft) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
             >
               <Save size={13} />
@@ -256,9 +256,9 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
             </button>
             <button
               onClick={onClose}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", display: "flex", padding: 4, marginLeft: 4 }}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: 4, marginLeft: 4 }}
               onMouseEnter={(e) => { e.currentTarget.style.color = "#374151"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
               title="Discard"
             >
               <X size={18} />
@@ -269,7 +269,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
         {/* Form */}
         <div className="flex-1 overflow-y-auto" style={{ padding: "0 28px" }}>
           {/* Subject */}
-          <div style={{ padding: "16px 0", borderBottom: "1px solid #F3F4F6" }}>
+          <div style={{ padding: "16px 0", borderBottom: "1px solid var(--theme-border-subtle)" }}>
             <input
               ref={subjectRef}
               value={subject}
@@ -277,7 +277,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               placeholder="Subject *"
               style={{
                 width: "100%", border: "none", outline: "none",
-                fontSize: 18, fontWeight: 600, color: "#12332B",
+                fontSize: 18, fontWeight: 600, color: "var(--theme-text-primary)",
                 backgroundColor: "transparent", letterSpacing: "-0.3px",
               }}
             />
@@ -295,9 +295,9 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               !showCc ? (
                 <button
                   onClick={() => setShowCc(true)}
-                  style={{ fontSize: 11, color: "#9CA3AF", background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" }}
+                  style={{ fontSize: 11, color: "var(--theme-text-muted)", background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = "#0F766E"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
                 >
                   + CC
                 </button>
@@ -318,9 +318,9 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
           )}
 
           {/* Type */}
-          <div style={{ padding: "14px 0", borderBottom: "1px solid #F3F4F6" }}>
+          <div style={{ padding: "14px 0", borderBottom: "1px solid var(--theme-border-subtle)" }}>
             <div className="flex items-center gap-3">
-              <span style={{ fontSize: 12, color: "#9CA3AF", fontWeight: 500, width: 32, flexShrink: 0 }}>Type</span>
+              <span style={{ fontSize: 12, color: "var(--theme-text-muted)", fontWeight: 500, width: 32, flexShrink: 0 }}>Type</span>
               <div className="flex gap-2">
                 {TYPE_OPTIONS.map((opt) => (
                   <button
@@ -336,9 +336,9 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
           </div>
 
           {/* Priority */}
-          <div style={{ padding: "14px 0", borderBottom: "1px solid #F3F4F6" }}>
+          <div style={{ padding: "14px 0", borderBottom: "1px solid var(--theme-border-subtle)" }}>
             <div className="flex items-center gap-3">
-              <span style={{ fontSize: 12, color: "#9CA3AF", fontWeight: 500, width: 32, flexShrink: 0 }}>Priority</span>
+              <span style={{ fontSize: 12, color: "var(--theme-text-muted)", fontWeight: 500, width: 32, flexShrink: 0 }}>Priority</span>
               <div className="flex gap-2">
                 <button
                   onClick={() => setPriority("normal")}
@@ -364,7 +364,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               placeholder="Write your message…"
               style={{
                 width: "100%", resize: "none", border: "none", outline: "none",
-                fontSize: 13, color: "#12332B", lineHeight: 1.7,
+                fontSize: 13, color: "var(--theme-text-primary)", lineHeight: 1.7,
                 fontFamily: "inherit", backgroundColor: "transparent", minHeight: 200,
               }}
               onKeyDown={(e) => {
@@ -384,12 +384,12 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
                   style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid var(--neuron-ui-border)", backgroundColor: "#F8FAF9", fontSize: 12, color: "var(--neuron-ink-secondary)" }}>
                   {att.type === "entity"
                     ? <><Link2 size={11} style={{ color: "var(--neuron-brand-green)" }} />{att.entity_label}</>
-                    : <><FileText size={11} style={{ color: "#667085" }} />{att.file?.name}</>}
+                    : <><FileText size={11} style={{ color: "var(--theme-text-muted)" }} />{att.file?.name}</>}
                   <button
                     onClick={() => setAttachments((prev) => prev.filter((_, i) => i !== idx))}
-                    style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: 0, display: "flex" }}
+                    style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", padding: 0, display: "flex" }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = "var(--neuron-accent-terracotta)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
                   >
                     <X size={12} />
                   </button>
@@ -400,7 +400,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
         </div>
 
         {/* Toolbar */}
-        <div style={{ padding: "10px 28px", borderTop: "1px solid #E5E9F0", flexShrink: 0, display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ padding: "10px 28px", borderTop: "1px solid var(--theme-border-default)", flexShrink: 0, display: "flex", alignItems: "center", gap: 8 }}>
           <button
             onClick={() => setShowCabinet((v) => !v)}
             className="flex items-center gap-1.5 transition-colors duration-150"
@@ -410,17 +410,17 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               backgroundColor: showCabinet ? "var(--neuron-state-selected)" : "transparent",
               color: showCabinet ? "var(--neuron-brand-green)" : "var(--neuron-ink-secondary)",
             }}
-            onMouseEnter={(e) => { if (!showCabinet) { e.currentTarget.style.backgroundColor = "#F9FAFB"; e.currentTarget.style.color = "#12332B"; } }}
-            onMouseLeave={(e) => { if (!showCabinet) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#667085"; } }}
+            onMouseEnter={(e) => { if (!showCabinet) { e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; e.currentTarget.style.color = "var(--theme-text-primary)"; } }}
+            onMouseLeave={(e) => { if (!showCabinet) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--theme-text-muted)"; } }}
           >
             <Link2 size={13} /> Link record
           </button>
           <button
             onClick={() => fileInputRef.current?.click()}
             className="flex items-center gap-1.5 transition-colors duration-150"
-            style={{ padding: "5px 10px", borderRadius: 6, border: "1px solid #E5E9F0", backgroundColor: "transparent", fontSize: 12, color: "#667085", cursor: "pointer" }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#F9FAFB"; e.currentTarget.style.color = "#12332B"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#667085"; }}
+            style={{ padding: "5px 10px", borderRadius: 6, border: "1px solid var(--theme-border-default)", backgroundColor: "transparent", fontSize: 12, color: "var(--theme-text-muted)", cursor: "pointer" }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; e.currentTarget.style.color = "var(--theme-text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--theme-text-muted)"; }}
           >
             <Paperclip size={13} /> Attach file
           </button>
@@ -515,7 +515,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
   return (
     <div style={{ padding: "10px 0", borderBottom: `1px solid ${isOpen ? "#D1E8E3" : "#F3F4F6"}`, position: "relative", transition: "border-color 150ms ease" }}>
       <div className="flex items-start gap-3 flex-wrap">
-        <span style={{ fontSize: 12, color: "#9CA3AF", fontWeight: 500, marginTop: 5, width: 32, flexShrink: 0 }}>{label}</span>
+        <span style={{ fontSize: 12, color: "var(--theme-text-muted)", fontWeight: 500, marginTop: 5, width: 32, flexShrink: 0 }}>{label}</span>
         <div className="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
           {chips.map((chip) => {
             const col = chip.type === "user" ? avatarColor(chip.label) : { bg: "#EEF4F1", text: "#2E5147", border: "#D7E5E0" };
@@ -523,7 +523,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
               <span key={chip.id} className="flex items-center gap-1.5"
                 style={{ padding: "3px 8px 3px 4px", borderRadius: 6, border: `1px solid ${col.border}`, backgroundColor: col.bg, fontSize: 12, color: col.text, fontWeight: 500 }}>
                 {chip.type === "user" ? (
-                  <span style={{ width: 18, height: 18, borderRadius: "50%", backgroundColor: "#FFFFFF", color: col.text, fontSize: 9, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${col.border}` }}>
+                  <span style={{ width: 18, height: 18, borderRadius: "50%", backgroundColor: "var(--theme-bg-surface)", color: col.text, fontSize: 9, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: `1px solid ${col.border}` }}>
                     {initials(chip.label)}
                   </span>
                 ) : (
@@ -531,9 +531,9 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
                 )}
                 {chip.type === "department" ? `${chip.department} dept` : chip.label}
                 <button onClick={() => onRemove(chip.id)}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: 0, display: "flex" }}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", padding: 0, display: "flex" }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = "var(--neuron-accent-terracotta)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
                 >
                   <X size={11} />
                 </button>
@@ -548,7 +548,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
             onBlur={() => setTimeout(() => setIsOpen(false), 150)}
             onKeyDown={handleKeyDown}
             placeholder={chips.length === 0 ? "Search people or departments…" : ""}
-            style={{ border: "none", outline: "none", fontSize: 13, color: "#12332B", minWidth: 160, flex: 1, backgroundColor: "transparent" }}
+            style={{ border: "none", outline: "none", fontSize: 13, color: "var(--theme-text-primary)", minWidth: 160, flex: 1, backgroundColor: "transparent" }}
           />
           {action}
         </div>
@@ -560,14 +560,14 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
           ref={dropdownRef}
           style={{
             position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 100,
-            backgroundColor: "#FFFFFF", border: "1px solid #E5E9F0", borderRadius: 10,
+            backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--theme-border-default)", borderRadius: 10,
             boxShadow: "0 8px 24px rgba(0,0,0,0.08)", maxHeight: 280, overflowY: "auto",
           }}
         >
           {/* People group */}
           {people.length > 0 && (
             <>
-              <div style={{ padding: "8px 12px 4px", fontSize: 10, fontWeight: 700, color: "#9CA3AF", letterSpacing: "0.5px", textTransform: "uppercase" }}>
+              <div style={{ padding: "8px 12px 4px", fontSize: 10, fontWeight: 700, color: "var(--theme-text-muted)", letterSpacing: "0.5px", textTransform: "uppercase" }}>
                 People
               </div>
               {people.map((r, i) => {
@@ -590,8 +590,8 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
                       {initials(r.label)}
                     </span>
                     <div style={{ minWidth: 0 }}>
-                      <p style={{ fontSize: 13, fontWeight: 500, color: "#12332B", margin: 0 }}>{r.label}</p>
-                      {r.department && <p style={{ fontSize: 11, color: "#9CA3AF", margin: 0 }}>{r.department}</p>}
+                      <p style={{ fontSize: 13, fontWeight: 500, color: "var(--theme-text-primary)", margin: 0 }}>{r.label}</p>
+                      {r.department && <p style={{ fontSize: 11, color: "var(--theme-text-muted)", margin: 0 }}>{r.department}</p>}
                     </div>
                   </button>
                 );
@@ -602,7 +602,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
           {/* Departments group */}
           {depts.length > 0 && (
             <>
-              <div style={{ padding: `${people.length > 0 ? "8px" : "8px"} 12px 4px`, fontSize: 10, fontWeight: 700, color: "#9CA3AF", letterSpacing: "0.5px", textTransform: "uppercase", borderTop: people.length > 0 ? "1px solid #F3F4F6" : "none" }}>
+              <div style={{ padding: `${people.length > 0 ? "8px" : "8px"} 12px 4px`, fontSize: 10, fontWeight: 700, color: "var(--theme-text-muted)", letterSpacing: "0.5px", textTransform: "uppercase", borderTop: people.length > 0 ? "1px solid var(--theme-border-subtle)" : "none" }}>
                 Departments
               </div>
               {depts.map((r, i) => {
@@ -622,11 +622,11 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
                     }}
                   >
                     <span style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: "#F0F7F5", border: "1px solid #C8E6E2", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <Building2 size={13} style={{ color: "#0F766E" }} />
+                      <Building2 size={13} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </span>
                     <div>
-                      <p style={{ fontSize: 13, fontWeight: 500, color: "#12332B", margin: 0 }}>{r.label}</p>
-                      <p style={{ fontSize: 11, color: "#9CA3AF", margin: 0 }}>All managers</p>
+                      <p style={{ fontSize: 13, fontWeight: 500, color: "var(--theme-text-primary)", margin: 0 }}>{r.label}</p>
+                      <p style={{ fontSize: 11, color: "var(--theme-text-muted)", margin: 0 }}>All managers</p>
                     </div>
                   </button>
                 );

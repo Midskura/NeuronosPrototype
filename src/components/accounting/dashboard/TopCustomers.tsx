@@ -54,16 +54,16 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
   return (
     <div
       className="rounded-xl overflow-hidden flex flex-col"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       {/* Header */}
       <div
         className="px-5 py-3 flex items-center justify-between"
-        style={{ borderBottom: "1px solid #E5E9F0", background: "#F8F9FB" }}
+        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#F8F9FB" }}
       >
         <h3
           className="text-[12px] font-semibold uppercase tracking-wider"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           Top Customers
         </h3>
@@ -81,7 +81,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
       {/* Customer bars */}
       <div className="px-5 py-3 flex-1 flex flex-col gap-3">
         {rows.length === 0 ? (
-          <p className="text-[13px] py-4 text-center" style={{ color: "#9CA3AF" }}>
+          <p className="text-[13px] py-4 text-center" style={{ color: "var(--theme-text-muted)" }}>
             No customer data available
           </p>
         ) : (
@@ -95,13 +95,13 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
                   <div className="flex items-center gap-2 min-w-0">
                     <span
                       className="text-[11px] font-semibold w-4 text-center flex-shrink-0"
-                      style={{ color: "#9CA3AF" }}
+                      style={{ color: "var(--theme-text-muted)" }}
                     >
                       {idx + 1}
                     </span>
                     <span
                       className="text-[13px] font-medium truncate"
-                      style={{ color: "#12332B" }}
+                      style={{ color: "var(--theme-text-primary)" }}
                     >
                       {row.name}
                     </span>
@@ -109,7 +109,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
                   <div className="flex items-center gap-2 flex-shrink-0 ml-2">
                     <span
                       className="text-[13px] font-semibold tabular-nums"
-                      style={{ color: "#12332B" }}
+                      style={{ color: "var(--theme-text-primary)" }}
                     >
                       {formatCurrencyCompact(row.revenue)}
                     </span>
@@ -129,7 +129,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
                 <div className="flex items-center gap-2 pl-6">
                   <div
                     className="h-2 rounded-full overflow-hidden flex-1"
-                    style={{ backgroundColor: "#F3F4F6" }}
+                    style={{ backgroundColor: "var(--theme-bg-surface-subtle)" }}
                   >
                     <div
                       className="h-full rounded-full transition-all duration-500"
@@ -151,10 +151,10 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
             className="pt-2 mt-1 flex items-center justify-between"
             style={{ borderTop: "1px dashed #E5E9F0" }}
           >
-            <span className="text-[11px] pl-6" style={{ color: "#9CA3AF" }}>
+            <span className="text-[11px] pl-6" style={{ color: "var(--theme-text-muted)" }}>
               Others
             </span>
-            <span className="text-[11px] tabular-nums" style={{ color: "#9CA3AF" }}>
+            <span className="text-[11px] tabular-nums" style={{ color: "var(--theme-text-muted)" }}>
               {formatCurrencyCompact(
                 totalRevenue - rows.reduce((s, r) => s + r.revenue, 0)
               )}

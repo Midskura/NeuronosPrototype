@@ -81,7 +81,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
     switch (s) {
       case "draft":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]">
             <FileText size={10} />
             Draft
           </span>
@@ -119,7 +119,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-600">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]">
             {status}
           </span>
         );
@@ -129,10 +129,10 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
   if (isLoading) {
     return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)"
       }}>
-        <div className="px-6 py-12 text-center" style={{ color: "#667085" }}>
+        <div className="px-6 py-12 text-center" style={{ color: "var(--theme-text-muted)" }}>
           Loading expenses...
         </div>
       </div>
@@ -142,7 +142,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
   if (expenses.length === 0) {
     return (
       <div className="rounded-[10px] overflow-hidden" style={{ 
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)"
       }}>
         <div className="px-6 py-12 text-center">
@@ -160,7 +160,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
 
   return (
     <div className="rounded-[10px] overflow-hidden" style={{ 
-      backgroundColor: "#FFFFFF",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)"
     }}>
       {/* Table Header */}

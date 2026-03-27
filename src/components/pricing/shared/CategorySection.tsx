@@ -51,7 +51,7 @@ export function CategorySection({
       {/* Category Header */}
       <div style={{
         padding: "12px 16px",
-        backgroundColor: "#F9FAFB",
+        backgroundColor: "var(--theme-bg-page)",
         borderBottom: isExpanded ? "1px solid var(--neuron-ui-border)" : "none",
         display: "flex",
         justifyContent: "space-between",
@@ -128,7 +128,7 @@ export function CategorySection({
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ 
-                backgroundColor: "#F9FAFB", 
+                backgroundColor: "var(--theme-bg-page)", 
                 borderBottom: "1px solid var(--neuron-ui-border)"
               }}>
                 <th style={{

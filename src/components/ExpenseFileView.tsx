@@ -50,12 +50,12 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
       case "Rejected":
         return "bg-red-100 text-red-800 border-red-200";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-primary)] border-[var(--theme-border-default)]";
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[var(--theme-bg-surface)]">
       {/* Print styles */}
       <style>{`
         @media print {
@@ -99,26 +99,26 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
         {/* Print-only header with logo */}
         <div className="print-header">
           <div className="print-logo">JJB Group Logistics</div>
-          <div className="text-sm text-[#6B7280]">
+          <div className="text-sm text-[var(--theme-text-muted)]">
             Generated: {new Date().toLocaleDateString()}
           </div>
         </div>
 
         {/* Breadcrumb - hide on print */}
-        <div className="flex items-center gap-2 text-sm text-[#6B7280] mb-4 no-print">
+        <div className="flex items-center gap-2 text-sm text-[var(--theme-text-muted)] mb-4 no-print">
           <button onClick={onBack} className="hover:text-[#F25C05] transition-colors">
             Accounting
           </button>
           <ChevronRight className="w-4 h-4" />
           <span className="hover:text-[#F25C05] transition-colors cursor-pointer">Entries</span>
           <ChevronRight className="w-4 h-4" />
-          <span className="text-[#0A1D4D]">{expenseId}</span>
+          <span className="text-[var(--theme-text-primary)]">{expenseId}</span>
         </div>
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-[#0A1D4D]">Expense File — {expenseId}</h1>
+            <h1 className="text-[var(--theme-text-primary)]">Expense File — {expenseId}</h1>
           </div>
           <div className="flex items-center gap-3 no-print">
             <span
@@ -132,7 +132,7 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
               variant="outline"
               size="sm"
               onClick={handlePrint}
-              className="border-[#E5E7EB] text-[#0A1D4D] hover:bg-[#F9FAFB]"
+              className="border-[var(--theme-border-default)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-bg-page)]"
             >
               <Printer className="w-4 h-4 mr-2" />
               Print
@@ -142,65 +142,65 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
 
         {/* Summary Section - 2x2 Grid */}
         <div className="grid grid-cols-4 gap-4 mb-6">
-          <Card className="p-4 bg-white border border-[#E5E7EB] rounded-lg">
-            <p className="text-xs text-[#6B7280] mb-2 uppercase tracking-wide">Amount</p>
-            <p className="text-2xl text-[#0A1D4D]">₱{expense.amount.toLocaleString()}</p>
+          <Card className="p-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg">
+            <p className="text-xs text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Amount</p>
+            <p className="text-2xl text-[var(--theme-text-primary)]">₱{expense.amount.toLocaleString()}</p>
           </Card>
 
-          <Card className="p-4 bg-white border border-[#E5E7EB] rounded-lg">
-            <p className="text-xs text-[#6B7280] mb-2 uppercase tracking-wide">Type</p>
-            <p className="text-2xl text-[#0A1D4D]">{expense.type}</p>
+          <Card className="p-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg">
+            <p className="text-xs text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Type</p>
+            <p className="text-2xl text-[var(--theme-text-primary)]">{expense.type}</p>
           </Card>
 
-          <Card className="p-4 bg-white border border-[#E5E7EB] rounded-lg">
-            <p className="text-xs text-[#6B7280] mb-2 uppercase tracking-wide">Linked Booking</p>
-            <p className="text-2xl text-[#0A1D4D]">{expense.bookingNo}</p>
+          <Card className="p-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg">
+            <p className="text-xs text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Linked Booking</p>
+            <p className="text-2xl text-[var(--theme-text-primary)]">{expense.bookingNo}</p>
           </Card>
 
-          <Card className="p-4 bg-white border border-[#E5E7EB] rounded-lg">
-            <p className="text-xs text-[#6B7280] mb-2 uppercase tracking-wide">Date Incurred</p>
-            <p className="text-2xl text-[#0A1D4D]">{expense.date}</p>
+          <Card className="p-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg">
+            <p className="text-xs text-[var(--theme-text-muted)] mb-2 uppercase tracking-wide">Date Incurred</p>
+            <p className="text-2xl text-[var(--theme-text-primary)]">{expense.date}</p>
           </Card>
         </div>
 
         {/* Main Details Section */}
-        <Card className="p-6 bg-white border border-[#E5E7EB] rounded-lg mb-6">
-          <h3 className="text-[#0A1D4D] mb-4">Details</h3>
+        <Card className="p-6 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg mb-6">
+          <h3 className="text-[var(--theme-text-primary)] mb-4">Details</h3>
           <div className="space-y-4">
-            <div className="flex items-center justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Booking No</span>
+            <div className="flex items-center justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Booking No</span>
               <span className="text-sm text-[#1F2937]">{expense.bookingNo}</span>
             </div>
 
-            <div className="flex items-center justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Route</span>
+            <div className="flex items-center justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Route</span>
               <span className="text-sm text-[#1F2937]">{route}</span>
             </div>
 
-            <div className="flex items-center justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Entered By</span>
+            <div className="flex items-center justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Entered By</span>
               <span className="text-sm text-[#1F2937]">{expense.enteredBy}</span>
             </div>
 
-            <div className="flex items-start justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Description</span>
+            <div className="flex items-start justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Description</span>
               <span className="text-sm text-[#1F2937] text-right max-w-md">
                 {expense.description || "No description provided"}
               </span>
             </div>
 
-            <div className="flex items-center justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Vendor</span>
+            <div className="flex items-center justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Vendor</span>
               <span className="text-sm text-[#1F2937]">{vendor}</span>
             </div>
 
-            <div className="flex items-center justify-between py-3 border-b border-[#E5E7EB]">
-              <span className="text-sm text-[#6B7280]">Payment Method</span>
+            <div className="flex items-center justify-between py-3 border-b border-[var(--theme-border-default)]">
+              <span className="text-sm text-[var(--theme-text-muted)]">Payment Method</span>
               <span className="text-sm text-[#1F2937]">{paymentMethod}</span>
             </div>
 
             <div className="flex items-center justify-between py-3">
-              <span className="text-sm text-[#6B7280]">Status</span>
+              <span className="text-sm text-[var(--theme-text-muted)]">Status</span>
               <span
                 className={`px-3 py-1 rounded-md border text-xs ${getStatusColor(
                   expense.status
@@ -213,13 +213,13 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
         </Card>
 
         {/* Attachments Section */}
-        <Card className="p-6 bg-white border border-[#E5E7EB] rounded-lg mb-6">
-          <h3 className="text-[#0A1D4D] mb-4">Attachments</h3>
+        <Card className="p-6 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg mb-6">
+          <h3 className="text-[var(--theme-text-primary)] mb-4">Attachments</h3>
           <div className="space-y-3">
             {attachments.map((file, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg hover:bg-white transition-colors"
+                className="flex items-center justify-between p-3 bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] rounded-lg hover:bg-[var(--theme-bg-surface)] transition-colors"
               >
                 <div className="flex items-center gap-3">
                   {file.type === "image" ? (
@@ -233,7 +233,7 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
                   )}
                   <div>
                     <p className="text-sm text-[#1F2937]">{file.name}</p>
-                    <p className="text-xs text-[#6B7280]">{file.size}</p>
+                    <p className="text-xs text-[var(--theme-text-muted)]">{file.size}</p>
                   </div>
                 </div>
                 <Button
@@ -250,8 +250,8 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
         </Card>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB] no-print">
-          <p className="text-sm text-[#6B7280]">
+        <div className="flex items-center justify-between pt-4 border-t border-[var(--theme-border-default)] no-print">
+          <p className="text-sm text-[var(--theme-text-muted)]">
             Last updated by {lastUpdatedBy} · {lastUpdatedDate} {lastUpdatedTime}
           </p>
           <div className="flex gap-2">

@@ -154,7 +154,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
           top: dropdownPosition.top,
           right: dropdownPosition.right,
           width: "340px",
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid #D9E1DE",
           borderRadius: "8px",
           zIndex: 50,
@@ -181,7 +181,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
               style={{
                 position: "absolute",
                 left: "12px",
-                color: "#9CA3AF"
+                color: "var(--theme-text-muted)"
               }}
             />
             <input
@@ -197,7 +197,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
                 border: "1px solid #D9E1DE",
                 borderRadius: "6px",
                 outline: "none",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 transition: "all 0.15s ease"
               }}
               onFocus={(e) => {
@@ -230,13 +230,13 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
                   borderRadius: "4px"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F3F4F6";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
                 }}
               >
-                <X size={14} style={{ color: "#9CA3AF" }} />
+                <X size={14} style={{ color: "var(--theme-text-muted)" }} />
               </button>
             )}
           </div>
@@ -254,7 +254,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
             padding: "8px 16px 4px 16px",
             fontSize: "11px",
             fontWeight: 600,
-            color: "#9CA3AF",
+            color: "var(--theme-text-muted)",
             letterSpacing: "0.05em",
             textTransform: "uppercase"
           }}>
@@ -275,7 +275,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
                   width: "100%",
                   padding: "10px 16px",
                   border: "none",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   textAlign: "left",
                   cursor: "pointer",
                   transition: "all 0.15s ease",
@@ -300,7 +300,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
             <div style={{
               padding: "24px 16px",
               textAlign: "center",
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               fontSize: "13px"
             }}>
                 No matching presets found.
@@ -312,7 +312,7 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
         {showCreateOption && (
             <div style={{
                 padding: "12px 16px",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 borderTop: "1px solid #E8EDEF",
                 flexShrink: 0
             }}>
@@ -323,20 +323,20 @@ export function CategoryPresetDropdown({ isOpen, onClose, onSelect, buttonRef, a
                         padding: "10px 12px",
                         border: "1px dashed #0F766E", // Dashed border as per image
                         borderRadius: "8px",
-                        backgroundColor: "white", // White background for minimal look
+                        backgroundColor: "var(--theme-bg-surface)", // White background for minimal look
                         textAlign: "left",
                         cursor: "pointer",
                         transition: "all 0.15s ease",
                         fontSize: "13px",
                         fontWeight: 600,
-                        color: "#0F766E",
+                        color: "var(--theme-action-primary-bg)",
                         display: "flex",
                         alignItems: "center",
                         gap: "8px",
                         justifyContent: "center"
                     }}
                     onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F0FDF9"; // Light green hover
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; // Light green hover
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "white";

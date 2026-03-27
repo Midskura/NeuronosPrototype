@@ -63,7 +63,7 @@ export function UnifiedEVouchersTable({
   };
 
   const getTypeIcon = (type: EVoucherTransactionType | undefined) => {
-    const iconProps = { size: 14, className: "text-gray-400" };
+    const iconProps = { size: 14, className: "text-[var(--theme-text-muted)]" };
     switch (type) {
       case "expense": return <Wallet {...iconProps} />;
       case "budget_request": return <DollarSign {...iconProps} />;
@@ -128,7 +128,7 @@ export function UnifiedEVouchersTable({
     
     if (diffDays >= 3) return "text-red-600";
     if (diffDays >= 2) return "text-amber-600";
-    return "text-[#0A1D4D]";
+    return "text-[var(--theme-text-primary)]";
   };
 
   // -- Columns --
@@ -138,7 +138,7 @@ export function UnifiedEVouchersTable({
       width: "120px",
       cell: (item) => {
         const isPending = item.status === 'pending';
-        const colorClass = isPending ? getUrgencyColor(item.request_date) : "text-[#0A1D4D]";
+        const colorClass = isPending ? getUrgencyColor(item.request_date) : "text-[var(--theme-text-primary)]";
         
         return (
             <span className={`text-[12px] font-medium ${colorClass}`}>
@@ -153,7 +153,7 @@ export function UnifiedEVouchersTable({
       cell: (item) => (
         <div className="flex items-center gap-2">
             {getTypeIcon(item.transaction_type)}
-            <span className="text-[12px] font-mono text-[#0F766E] font-medium group-hover:underline decoration-[#0F766E] underline-offset-2">
+            <span className="text-[12px] font-mono text-[var(--theme-action-primary-bg)] font-medium group-hover:underline decoration-[#0F766E] underline-offset-2">
             {item.voucher_number}
             </span>
         </div>
@@ -163,7 +163,7 @@ export function UnifiedEVouchersTable({
       header: "Type",
       width: "100px",
       cell: (item) => (
-        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] bg-[#F3F4F6] text-[#374151]">
+        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]">
             {getTransactionTypeLabel(item.transaction_type)}
         </span>
       )
@@ -172,9 +172,9 @@ export function UnifiedEVouchersTable({
       header: "Requestor",
       cell: (item) => (
         <div>
-            <div className="text-[12px] font-medium text-[#101828]">{item.requestor_name}</div>
+            <div className="text-[12px] font-medium text-[var(--theme-text-primary)]">{item.requestor_name}</div>
             {item.requestor_department && (
-                <div className="text-[10px] text-[#667085]">{item.requestor_department}</div>
+                <div className="text-[10px] text-[var(--theme-text-muted)]">{item.requestor_department}</div>
             )}
         </div>
       )
@@ -182,7 +182,7 @@ export function UnifiedEVouchersTable({
     {
       header: "Vendor / Payee",
       cell: (item) => (
-        <span className="text-[12px] text-[#344054] font-medium truncate block max-w-[180px]">
+        <span className="text-[12px] text-[var(--theme-text-secondary)] font-medium truncate block max-w-[180px]">
           {item.vendor_name || "—"}
         </span>
       )
@@ -190,7 +190,7 @@ export function UnifiedEVouchersTable({
     {
       header: "Linked To",
       cell: (item) => (
-        <span className="text-[12px] text-[#0F766E] font-medium truncate block max-w-[150px]">
+        <span className="text-[12px] text-[var(--theme-action-primary-bg)] font-medium truncate block max-w-[150px]">
           {item.project_number || item.customer_name || "—"}
         </span>
       )
@@ -200,7 +200,7 @@ export function UnifiedEVouchersTable({
       width: "120px",
       align: "right",
       cell: (item) => (
-        <span className="text-[12px] font-bold text-[#12332B]">
+        <span className="text-[12px] font-bold text-[var(--theme-text-primary)]">
           {formatCurrency(item.amount, item.currency)}
         </span>
       )
@@ -220,7 +220,7 @@ export function UnifiedEVouchersTable({
                         e.stopPropagation();
                         setLiquidationVoucher(item);
                     }}
-                    className="text-[10px] font-semibold text-[#0F766E] hover:text-[#0D6560] bg-[#E8F5F3] hover:bg-[#D0EBE7] px-2 py-1 rounded transition-colors flex items-center gap-1"
+                    className="text-[10px] font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] bg-[#E8F5F3] hover:bg-[#D0EBE7] px-2 py-1 rounded transition-colors flex items-center gap-1"
                 >
                     <FileText size={10} />
                     Liquidate
@@ -232,18 +232,18 @@ export function UnifiedEVouchersTable({
   ];
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)]">
       {/* Control Bar */}
       <div className="flex items-center gap-2 mb-6">
         {/* Search */}
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98A2B3]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
           <input
             type="text"
             placeholder="Search voucher #, requestor, vendor..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[#E5E9F0] bg-white text-[#101828] placeholder-[#98A2B3]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[#98A2B3]"
           />
         </div>
 
@@ -251,7 +251,7 @@ export function UnifiedEVouchersTable({
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
-        <span className="text-[13px] text-[#6B7280] font-medium">to</span>
+        <span className="text-[13px] text-[var(--theme-text-muted)] font-medium">to</span>
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
@@ -304,16 +304,16 @@ export function UnifiedEVouchersTable({
         isLoading={isLoading}
         emptyMessage="No E-Vouchers found matching your filters."
         onRowClick={onViewDetail}
-        rowClassName={() => "group cursor-pointer hover:bg-gray-50 align-top"}
+        rowClassName={() => "group cursor-pointer hover:bg-[var(--theme-bg-surface-subtle)] align-top"}
         icon={FileText}
         footerSummary={[
           { 
              label: "Total Count", 
-             value: <span className="text-[#374151]">{filteredEvouchers.length}</span> 
+             value: <span className="text-[var(--theme-text-secondary)]">{filteredEvouchers.length}</span> 
           },
           { 
              label: "Total Amount", 
-             value: <span className="text-[#12332B] font-bold">{formatCurrency(totalAmount)}</span>
+             value: <span className="text-[var(--theme-text-primary)] font-bold">{formatCurrency(totalAmount)}</span>
           }
         ]}
       />

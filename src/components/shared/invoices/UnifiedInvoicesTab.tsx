@@ -188,7 +188,7 @@ export function UnifiedInvoicesTab({
       header: "Date",
       width: "140px",
       cell: (item) => (
-        <span className="text-[12px] text-[#0A1D4D] font-medium">
+        <span className="text-[12px] text-[var(--theme-text-primary)] font-medium">
           {formatDate(item.invoice_date || item.created_at || "")}
         </span>
       )
@@ -197,7 +197,7 @@ export function UnifiedInvoicesTab({
       header: "Invoice No.",
       width: "120px",
       cell: (item) => (
-        <span className="text-[12px] font-mono text-[#0F766E] font-medium group-hover:underline decoration-[#0F766E] underline-offset-2">
+        <span className="text-[12px] font-mono text-[var(--theme-action-primary-bg)] font-medium group-hover:underline decoration-[#0F766E] underline-offset-2">
           {item.invoice_number}
         </span>
       )
@@ -205,7 +205,7 @@ export function UnifiedInvoicesTab({
     {
       header: "Customer",
       cell: (item) => (
-        <span className="text-[12px] text-[#344054] font-medium max-w-[200px] truncate block">
+        <span className="text-[12px] text-[var(--theme-text-secondary)] font-medium max-w-[200px] truncate block">
           {item.customer_name}
         </span>
       )
@@ -217,10 +217,10 @@ export function UnifiedInvoicesTab({
         const lineage = invoiceLineage.get(item.id) || { bookingIds: [], projectRefs: [], contractRefs: [] };
         return (
           <div className="text-[11px] leading-4">
-            <div className="text-[#12332B] font-medium">
+            <div className="text-[var(--theme-text-primary)] font-medium">
               {lineage.bookingIds.length > 0 ? `${lineage.bookingIds.length} booking${lineage.bookingIds.length === 1 ? "" : "s"}` : "No bookings"}
             </div>
-            <div className="text-[#667085]">
+            <div className="text-[var(--theme-text-muted)]">
               {summarizeRefs(lineage.projectRefs.length > 0 ? lineage.projectRefs : lineage.contractRefs)}
             </div>
           </div>
@@ -234,7 +234,7 @@ export function UnifiedInvoicesTab({
         const dueDate = new Date(item.due_date || item.created_at || "");
         if (!item.due_date) dueDate.setDate(dueDate.getDate() + 30);
         return (
-          <span className="text-[12px] text-[#667085]">
+          <span className="text-[12px] text-[var(--theme-text-muted)]">
             {formatDate(dueDate.toISOString())}
           </span>
         );
@@ -247,14 +247,14 @@ export function UnifiedInvoicesTab({
       cell: (item) => {
         if (!isInvoiceFinanciallyActive(item)) {
           return (
-            <span className="text-[12px] text-[#98A2B3]">
+            <span className="text-[12px] text-[var(--theme-text-muted)]">
               â€”
             </span>
           );
         }
         const { balance } = calculateInvoiceBalance(item, collections);
         return (
-          <span className="text-[12px] text-[#667085]">
+          <span className="text-[12px] text-[var(--theme-text-muted)]">
             {formatCurrency(balance, item.currency)}
           </span>
         );
@@ -265,7 +265,7 @@ export function UnifiedInvoicesTab({
       width: "120px",
       align: "right",
       cell: (item) => (
-        <span className="text-[12px] font-bold text-[#12332B]">
+        <span className="text-[12px] font-bold text-[var(--theme-text-primary)]">
           {formatCurrency(item.total_amount ?? item.amount ?? 0, item.currency)}
         </span>
       )
@@ -283,7 +283,7 @@ export function UnifiedInvoicesTab({
           styles = "bg-[#FEF3C7] text-[#B45309] border-[#FCD34D]";
           label = "Reversal Draft";
         } else if (status === 'reversed') {
-          styles = "bg-[#F3F4F6] text-[#475467] border-[#D0D5DD]";
+          styles = "bg-[var(--theme-bg-surface-subtle)] text-[#475467] border-[var(--theme-border-default)]";
           label = "Reversed";
         } else if (status === 'paid') {
           styles = "bg-[#ECFDF5] text-[#059669] border-[#A6F4C5]"; // Green
@@ -324,10 +324,10 @@ export function UnifiedInvoicesTab({
   const PanelHeader = (
     <div className="flex items-center justify-between w-full">
          <div>
-            <h2 className="text-xl font-bold text-[#12332B]">
+            <h2 className="text-xl font-bold text-[var(--theme-text-primary)]">
                 {interfaceMode === 'create' ? "Invoice Creator" : "Invoice Viewer"}
             </h2>
-            <p className="text-[13px] text-[#667085]">
+            <p className="text-[13px] text-[var(--theme-text-muted)]">
                 {interfaceMode === 'create' 
                     ? `Drafting for ${project.customer_name}` 
                     : selectedInvoice?.invoice_number || "Viewing Invoice"
@@ -336,7 +336,7 @@ export function UnifiedInvoicesTab({
          </div>
          <button
             onClick={handleClose}
-            className="w-10 h-10 rounded-lg flex items-center justify-center text-[#667085] hover:bg-[#F3F4F6] transition-colors"
+            className="w-10 h-10 rounded-lg flex items-center justify-center text-[var(--theme-text-muted)] hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
          >
             <X size={20} />
          </button>
@@ -344,14 +344,14 @@ export function UnifiedInvoicesTab({
   );
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)]">
       {/* Header Section */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-[32px] font-semibold text-[#12332B] mb-1 tracking-tight">
+          <h1 className="text-[32px] font-semibold text-[var(--theme-text-primary)] mb-1 tracking-tight">
             {title || "Project Invoices"}
           </h1>
-          <p className="text-[14px] text-[#667085]">
+          <p className="text-[14px] text-[var(--theme-text-muted)]">
             {subtitle || "Generate, track, and manage official invoices for this project."}
           </p>
         </div>
@@ -360,7 +360,7 @@ export function UnifiedInvoicesTab({
            {!readOnly && (
              <button
                onClick={() => setInterfaceMode('create')}
-               className="flex items-center gap-2 px-4 py-2 bg-[#0F766E] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
+               className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-action-primary-bg)] text-white rounded-lg hover:bg-[#0D6559] transition-colors font-medium text-[14px]"
              >
                <Plus size={16} />
                New Invoice
@@ -373,13 +373,13 @@ export function UnifiedInvoicesTab({
       <div className="flex items-center gap-2 mb-6">
         {/* Search */}
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#98A2B3]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
           <input
             type="text"
             placeholder="Search by Invoice # or Customer..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[#E5E9F0] bg-white text-[#101828] placeholder-[#98A2B3]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[#98A2B3]"
           />
         </div>
 
@@ -387,7 +387,7 @@ export function UnifiedInvoicesTab({
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateFrom} onChange={setDateFrom} placeholder="Start Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
-        <span className="text-[13px] text-[#6B7280] font-medium">to</span>
+        <span className="text-[13px] text-[var(--theme-text-muted)] font-medium">to</span>
         <div style={{ minWidth: "140px" }}>
            <CustomDatePicker value={dateTo} onChange={setDateTo} placeholder="End Date" minWidth="100%" className="w-full px-4 py-2.5" />
         </div>
@@ -429,7 +429,7 @@ export function UnifiedInvoicesTab({
           },
           { 
              label: "Total Invoiced", 
-             value: <span className="text-[#374151]">{formatCurrency(totalInvoiced)}</span>
+             value: <span className="text-[var(--theme-text-secondary)]">{formatCurrency(totalInvoiced)}</span>
           }
         ]}
       />
@@ -442,7 +442,7 @@ export function UnifiedInvoicesTab({
         title={PanelHeader}
         showCloseButton={false}
       >
-        <div className="h-full bg-white">
+        <div className="h-full bg-[var(--theme-bg-surface)]">
              {interfaceMode !== 'none' && (
                  <InvoiceBuilder 
                     mode={interfaceMode === 'create' ? 'create' : 'view'}

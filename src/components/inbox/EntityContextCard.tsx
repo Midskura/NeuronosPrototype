@@ -109,7 +109,7 @@ export function EntityContextCard({ entity_type, entity_id, entity_label }: Enti
       }}
       onMouseEnter={(e) => {
         if (!route) return;
-        e.currentTarget.style.backgroundColor = "#FFFFFF";
+        e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
         e.currentTarget.style.borderColor = "var(--neuron-ui-active-border)";
       }}
       onMouseLeave={(e) => {
@@ -120,11 +120,11 @@ export function EntityContextCard({ entity_type, entity_id, entity_label }: Enti
       <span style={{ fontSize: 10, fontWeight: 700, color: tone.text, letterSpacing: "0.2px", flexShrink: 0 }}>
         {label}
       </span>
-      <span style={{ fontSize: 12, fontWeight: 500, color: "#12332B" }}>
+      <span style={{ fontSize: 12, fontWeight: 500, color: "var(--theme-text-primary)" }}>
         {entity_label || entity_id}
       </span>
       {route && (
-        <ExternalLink size={10} style={{ color: "#9CA3AF", flexShrink: 0, marginLeft: 2 }} />
+        <ExternalLink size={10} style={{ color: "var(--theme-text-muted)", flexShrink: 0, marginLeft: 2 }} />
       )}
     </button>
   );

@@ -41,8 +41,8 @@ export const SkeletonBankCard = memo(({ isSelected = false }: { isSelected?: boo
   <div 
     className={`shrink-0 rounded-lg border p-4 transition-all ${
       isSelected 
-        ? "border-[#0F766E] bg-[#F0FDFA]" 
-        : "border-[#E5ECE9] bg-white"
+        ? "border-[var(--theme-action-primary-bg)] bg-[#F0FDFA]" 
+        : "border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]"
     }`}
     style={{ width: 200, height: 90 }}
   >
@@ -89,7 +89,7 @@ export const SkeletonTableRow = memo(({ cols = 5 }: { cols?: number }) => {
 SkeletonTableRow.displayName = "SkeletonTableRow";
 
 export const SkeletonTableHeader = memo(({ cols = 5 }: { cols?: number }) => (
-  <div className="flex items-center gap-4 px-4 py-2.5 border-b border-[#E5ECE9] bg-[#F9FAFB]">
+  <div className="flex items-center gap-4 px-4 py-2.5 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-page)]">
     {Array.from({ length: cols }).map((_, i) => (
       <div key={i} className="flex-1">
         <SkeletonBar width="50%" height={11} className="opacity-60" />
@@ -100,7 +100,7 @@ export const SkeletonTableHeader = memo(({ cols = 5 }: { cols?: number }) => (
 SkeletonTableHeader.displayName = "SkeletonTableHeader";
 
 export const SkeletonTable = memo(({ rows = 8, cols = 5 }: { rows?: number; cols?: number }) => (
-  <div className="border border-[#E5ECE9] rounded-lg overflow-hidden bg-white">
+  <div className="border border-[var(--theme-border-default)] rounded-lg overflow-hidden bg-[var(--theme-bg-surface)]">
     <SkeletonTableHeader cols={cols} />
     {Array.from({ length: rows }).map((_, i) => (
       <SkeletonTableRow key={i} cols={cols} />
@@ -111,7 +111,7 @@ SkeletonTable.displayName = "SkeletonTable";
 
 // ─── KPI Card Skeleton (for Dashboard) ─────────────────────
 export const SkeletonKPICard = memo(() => (
-  <div className="border border-[#E5ECE9] rounded-xl p-5 bg-white">
+  <div className="border border-[var(--theme-border-default)] rounded-xl p-5 bg-[var(--theme-bg-surface)]">
     <div className="flex items-center justify-between mb-3">
       <SkeletonBar width="40%" height={12} />
       <SkeletonCircle size={28} />
@@ -137,7 +137,7 @@ SkeletonKPIRow.displayName = "SkeletonKPIRow";
 // ─── Chart Skeleton (for Dashboard) ─────────────────────────
 export const SkeletonChart = memo(({ height = 240 }: { height?: number }) => (
   <div 
-    className="border border-[#E5ECE9] rounded-xl p-5 bg-white"
+    className="border border-[var(--theme-border-default)] rounded-xl p-5 bg-[var(--theme-bg-surface)]"
   >
     <div className="flex items-center justify-between mb-4">
       <SkeletonBar width="30%" height={14} />
@@ -254,7 +254,7 @@ export const SkeletonEVouchersPage = memo(() => (
       <SkeletonBar width={150} height={36} className="rounded-lg" />
     </div>
     {/* Tabs */}
-    <div className="flex items-center gap-8 border-b border-[#E5E9F0] pb-0">
+    <div className="flex items-center gap-8 border-b border-[var(--theme-border-default)] pb-0">
       <SkeletonBar width={130} height={16} />
       <SkeletonBar width={100} height={16} />
       <SkeletonBar width={80} height={16} />

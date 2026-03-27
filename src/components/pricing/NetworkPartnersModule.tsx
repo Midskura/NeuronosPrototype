@@ -18,13 +18,13 @@ type Tab = "international" | "co-loader" | "all-in";
 const getServiceIcon = (service: string) => {
   const serviceLower = service.toLowerCase();
   if (serviceLower.includes("ocean")) {
-    return <Ship size={13} color="#6B7280" />;
+    return <Ship size={13} color="var(--theme-text-muted)" />;
   }
   if (serviceLower.includes("air")) {
-    return <Plane size={13} color="#6B7280" />;
+    return <Plane size={13} color="var(--theme-text-muted)" />;
   }
   // Fallback to first letter for other services
-  return <span style={{ fontSize: "11px", color: "#6B7280", fontWeight: 600 }} title={service}>{service.charAt(0).toUpperCase()}</span>;
+  return <span style={{ fontSize: "11px", color: "var(--theme-text-muted)", fontWeight: 600 }} title={service}>{service.charAt(0).toUpperCase()}</span>;
 };
 
 // Group partners by country
@@ -180,10 +180,10 @@ export function NetworkPartnersModule({
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center bg-white">
+      <div className="flex h-full items-center justify-center bg-[var(--theme-bg-surface)]">
         <div className="flex flex-col items-center gap-2">
-          <Loader2 className="h-8 w-8 animate-spin text-[#0F766E]" />
-          <p className="text-sm text-gray-500">Loading partners...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-[var(--theme-action-primary-bg)]" />
+          <p className="text-sm text-[var(--theme-text-muted)]">Loading partners...</p>
         </div>
       </div>
     );
@@ -207,7 +207,7 @@ export function NetworkPartnersModule({
       style={{
         display: "flex",
         height: "100%",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         position: "relative",
       }}
     >
@@ -236,7 +236,7 @@ export function NetworkPartnersModule({
                 style={{
                   fontSize: "32px",
                   fontWeight: 600,
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   marginBottom: "4px",
                   letterSpacing: "-1.2px",
                 }}
@@ -246,7 +246,7 @@ export function NetworkPartnersModule({
               <p
                 style={{
                   fontSize: "14px",
-                  color: "#667085",
+                  color: "var(--theme-text-muted)",
                   margin: 0,
                 }}
               >
@@ -262,7 +262,7 @@ export function NetworkPartnersModule({
                 gap: "8px",
                 height: "48px",
                 padding: "0 24px",
-                backgroundColor: "#0F766E",
+                backgroundColor: "var(--theme-action-primary-bg)",
                 border: "none",
                 borderRadius: "16px",
                 fontSize: "14px",
@@ -275,7 +275,7 @@ export function NetworkPartnersModule({
                 e.currentTarget.style.backgroundColor = "#0F544A";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#0F766E";
+                e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={16} />
@@ -303,7 +303,7 @@ export function NetworkPartnersModule({
                   fontWeight: 600,
                   backgroundColor: statusFilter === "all" ? "#E8F5F3" : "#F9FAFB",
                   color: statusFilter === "all" ? "#0F766E" : "#6B7280",
-                  border: statusFilter === "all" ? "2px solid #0F766E" : "1px solid #E5E7EB",
+                  border: statusFilter === "all" ? "2px solid #0F766E" : "1px solid var(--theme-border-default)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -319,7 +319,7 @@ export function NetworkPartnersModule({
                   fontWeight: 600,
                   backgroundColor: statusFilter === "active" ? "#D1FAE5" : "#F9FAFB",
                   color: statusFilter === "active" ? "#047857" : "#6B7280",
-                  border: statusFilter === "active" ? "2px solid #047857" : "1px solid #E5E7EB",
+                  border: statusFilter === "active" ? "2px solid #047857" : "1px solid var(--theme-border-default)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -335,7 +335,7 @@ export function NetworkPartnersModule({
                   fontWeight: 600,
                   backgroundColor: statusFilter === "expiring" ? "#FEF3C7" : "#F9FAFB",
                   color: statusFilter === "expiring" ? "#D97706" : "#6B7280",
-                  border: statusFilter === "expiring" ? "2px solid #D97706" : "1px solid #E5E7EB",
+                  border: statusFilter === "expiring" ? "2px solid #D97706" : "1px solid var(--theme-border-default)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -351,7 +351,7 @@ export function NetworkPartnersModule({
                   fontWeight: 600,
                   backgroundColor: statusFilter === "expired" ? "#FEE2E2" : "#F9FAFB",
                   color: statusFilter === "expired" ? "#DC2626" : "#6B7280",
-                  border: statusFilter === "expired" ? "2px solid #DC2626" : "1px solid #E5E7EB",
+                  border: statusFilter === "expired" ? "2px solid #DC2626" : "1px solid var(--theme-border-default)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -367,7 +367,7 @@ export function NetworkPartnersModule({
                   fontWeight: 600,
                   backgroundColor: statusFilter === "wca" ? "#EDE9FE" : "#F9FAFB",
                   color: statusFilter === "wca" ? "#7C3AED" : "#6B7280",
-                  border: statusFilter === "wca" ? "2px solid #7C3AED" : "1px solid #E5E7EB",
+                  border: statusFilter === "wca" ? "2px solid #7C3AED" : "1px solid var(--theme-border-default)",
                   cursor: "pointer",
                   transition: "all 0.2s",
                   display: "flex",
@@ -408,7 +408,7 @@ export function NetworkPartnersModule({
                     transition: "border-color 0.2s ease",
                   }}
                   onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "#0F766E";
+                    e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                     e.currentTarget.style.boxShadow = "0 0 0 1px #0F766E";
                   }}
                   onBlur={(e) => {
@@ -427,7 +427,7 @@ export function NetworkPartnersModule({
                   borderRadius: "8px",
                   fontSize: "13px",
                   color: "var(--neuron-ink-secondary)",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   cursor: "pointer",
                   outline: "none",
                   appearance: "none",
@@ -539,7 +539,7 @@ export function NetworkPartnersModule({
                 justifyContent: "center",
                 padding: "60px 20px",
                 color: "var(--neuron-ink-muted)",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 borderRadius: "12px",
                 border: "1px dashed var(--neuron-ui-border)",
               }}
@@ -558,7 +558,7 @@ export function NetworkPartnersModule({
                 border: "1.5px solid var(--neuron-ui-border)",
                 borderRadius: "16px",
                 overflow: "hidden",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             >
               <table className="w-full" style={{ borderCollapse: "collapse" }}>
@@ -582,9 +582,9 @@ export function NetworkPartnersModule({
                       {/* Country Group Header */}
                       <tr 
                         onClick={() => toggleCountry(country)}
-                        className="cursor-pointer hover:bg-[#F3F4F6] transition-colors"
+                        className="cursor-pointer hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
                         style={{ 
-                          backgroundColor: "#F9FAFB",
+                          backgroundColor: "var(--theme-bg-page)",
                           borderBottom: "1px solid var(--neuron-ui-border)"
                         }}
                       >
@@ -592,13 +592,13 @@ export function NetworkPartnersModule({
                           <div className="flex items-center gap-2">
                             <ChevronDown 
                               size={16} 
-                              className="text-gray-500 transition-transform duration-200"
+                              className="text-[var(--theme-text-muted)] transition-transform duration-200"
                               style={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)' }}
                             />
-                            <span className="text-[13px] font-semibold text-gray-700 uppercase tracking-wide">
+                            <span className="text-[13px] font-semibold text-[var(--theme-text-secondary)] uppercase tracking-wide">
                               {country}
                             </span>
-                            <span className="text-xs text-gray-500 font-medium bg-white px-2 py-0.5 rounded-full border border-gray-200">
+                            <span className="text-xs text-[var(--theme-text-muted)] font-medium bg-[var(--theme-bg-surface)] px-2 py-0.5 rounded-full border border-[var(--theme-border-default)]">
                               {partners.length}
                             </span>
                           </div>
@@ -630,7 +630,7 @@ export function NetworkPartnersModule({
                                       className="cursor-pointer hover:bg-[#FAFBFB] transition-colors"
                                       style={{ 
                                         borderBottom: "1px solid #EAECF0",
-                                        backgroundColor: "white"
+                                        backgroundColor: "var(--theme-bg-surface)"
                                       }}
                                     >
                                       {/* Status Dot */}
@@ -657,7 +657,7 @@ export function NetworkPartnersModule({
                                       {/* Location */}
                                       <td className="px-4 py-3 align-middle">
                                         <div className="flex flex-col">
-                                          <span className="text-[13px] text-gray-600">
+                                          <span className="text-[13px] text-[var(--theme-text-secondary)]">
                                             {partner.territory || partner.country}
                                           </span>
                                         </div>
@@ -665,7 +665,7 @@ export function NetworkPartnersModule({
 
                                       {/* WCA ID */}
                                       <td className="px-4 py-3 align-middle">
-                                        <span className="text-[13px] text-gray-600 font-mono">
+                                        <span className="text-[13px] text-[var(--theme-text-secondary)] font-mono">
                                           {partner.wca_id || "—"}
                                         </span>
                                       </td>
@@ -697,14 +697,14 @@ export function NetworkPartnersModule({
                                           {partner.services && partner.services.slice(0, 3).map(service => (
                                             <div 
                                               key={service}
-                                              className="p-1 rounded bg-gray-50 border border-gray-100"
+                                              className="p-1 rounded bg-[var(--theme-bg-surface-subtle)] border border-[var(--theme-border-subtle)]"
                                               title={service}
                                             >
                                               {getServiceIcon(service)}
                                             </div>
                                           ))}
                                           {partner.services && partner.services.length > 3 && (
-                                            <span className="text-[10px] text-gray-500 bg-gray-50 px-1 rounded flex items-center">
+                                            <span className="text-[10px] text-[var(--theme-text-muted)] bg-[var(--theme-bg-surface-subtle)] px-1 rounded flex items-center">
                                               +{partner.services.length - 3}
                                             </span>
                                           )}

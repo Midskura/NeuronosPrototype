@@ -24,10 +24,10 @@ interface ContractStatusSelectorProps {
 }
 
 const STATUS_CONFIG: Record<ContractStatus, { color: string; icon: any }> = {
-  Draft:    { color: "#6B7280", icon: FileText },
+  Draft:    { color: "var(--theme-text-muted)", icon: FileText },
   Active:   { color: "#059669", icon: CheckCircle },
   Expiring: { color: "#D97706", icon: AlertTriangle },
-  Expired:  { color: "#6B7280", icon: Clock },
+  Expired:  { color: "var(--theme-text-muted)", icon: Clock },
   Renewed:  { color: "#7C3AED", icon: RefreshCw },
 };
 
@@ -65,9 +65,9 @@ export function ContractStatusSelector({
           className
         )}
         style={{
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           color: config.color,
-          border: "1px solid #E5E7EB",
+          border: "1px solid var(--theme-border-default)",
         }}
       >
         {showIcon && Icon && <Icon size={16} />}
@@ -84,9 +84,9 @@ export function ContractStatusSelector({
       size="md"
       buttonClassName={cn("rounded-full font-medium min-w-[140px]", className)}
       buttonStyle={{
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
         color: config.color,
-        border: "1px solid #E5E7EB",
+        border: "1px solid var(--theme-border-default)",
       }}
     />
   );

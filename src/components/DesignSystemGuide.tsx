@@ -66,18 +66,18 @@ export function DesignSystemGuide() {
       <div style={{
         padding: "32px 48px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        background: "white"
+        background: "var(--theme-bg-surface)"
       }}>
         <h1 style={{ 
           fontSize: "32px", 
           fontWeight: 600, 
-          color: "#12332B", 
+          color: "var(--theme-text-primary)", 
           marginBottom: "4px",
           letterSpacing: "-1.2px"
         }}>
           Neuron OS Design System
         </h1>
-        <p style={{ fontSize: "14px", color: "#667085", marginBottom: "16px" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>
           Complete design system reference for building production-grade Neuron OS applications
         </p>
         
@@ -109,7 +109,7 @@ export function DesignSystemGuide() {
         <div style={{
           width: "280px",
           borderRight: "1px solid var(--neuron-ui-border)",
-          background: "white",
+          background: "var(--theme-bg-surface)",
           padding: "24px 16px",
           overflowY: "auto"
         }}>
@@ -160,7 +160,7 @@ export function DesignSystemGuide() {
           flex: 1,
           overflowY: "auto",
           padding: "32px 48px",
-          background: "white"
+          background: "var(--theme-bg-surface)"
         }}>
           {activeSection === "overview" && <OverviewSection />}
           {activeSection === "colors" && <ColorsSection />}
@@ -194,10 +194,10 @@ function OverviewSection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Design System Overview
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6", marginBottom: "16px" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6", marginBottom: "16px" }}>
           The Neuron OS design system is built for asset-light freight forwarding SMEs in the Philippines. 
           It emphasizes clarity, consistency, and efficiency through a minimalist approach with stroke-based 
           borders instead of shadows, creating a clean and professional interface.
@@ -206,12 +206,12 @@ function OverviewSection() {
 
       {/* Core Philosophy */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Core Philosophy
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -251,19 +251,19 @@ function PhilosophyItem({ title, description }: { title: string; description: st
         width: "24px",
         height: "24px",
         borderRadius: "50%",
-        background: "#E8F5F3",
+        background: "var(--theme-bg-surface-tint)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         flexShrink: 0
       }}>
-        <Check size={14} style={{ color: "#0F766E" }} />
+        <Check size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
       </div>
       <div>
-        <div style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+        <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
           {title}
         </div>
-        <div style={{ fontSize: "13px", color: "#667085", lineHeight: "1.5" }}>
+        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", lineHeight: "1.5" }}>
           {description}
         </div>
       </div>
@@ -274,16 +274,16 @@ function PhilosophyItem({ title, description }: { title: string; description: st
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <div style={{
-      background: "white",
+      background: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "12px",
       padding: "20px",
       textAlign: "center"
     }}>
-      <div style={{ fontSize: "32px", fontWeight: 700, color: "#0F766E", marginBottom: "4px" }}>
+      <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--theme-action-primary-bg)", marginBottom: "4px" }}>
         {value}
       </div>
-      <div style={{ fontSize: "13px", color: "#667085" }}>
+      <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
         {label}
       </div>
     </div>
@@ -320,10 +320,10 @@ function ColorsSection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           Color System
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           The Neuron OS color palette is built around green tones with functional supporting colors.
         </p>
       </div>
@@ -339,12 +339,12 @@ function ColorsSection() {
       
       {/* Status Colors */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Status Colors
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "16px" }}>
@@ -359,13 +359,13 @@ function ColorsSection() {
                 flexShrink: 0
               }} />
               <div>
-                <div style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "2px" }}>
+                <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "2px" }}>
                   {color.name}
                 </div>
-                <div style={{ fontSize: "12px", color: "#667085", fontFamily: "monospace", marginBottom: "4px" }}>
+                <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", fontFamily: "monospace", marginBottom: "4px" }}>
                   {color.hex}
                 </div>
-                <div style={{ fontSize: "12px", color: "#667085" }}>
+                <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                   {color.usage}
                 </div>
               </div>
@@ -380,12 +380,12 @@ function ColorsSection() {
 function ColorSection({ title, colors }: { title: string; colors: Array<{ name: string; var?: string; hex: string; usage: string }> }) {
   return (
     <div style={{
-      background: "white",
+      background: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "12px",
       padding: "24px"
     }}>
-      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
         {title}
       </h3>
       <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -400,18 +400,18 @@ function ColorSection({ title, colors }: { title: string; colors: Array<{ name: 
               flexShrink: 0
             }} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
                 {color.name}
               </div>
               {color.var && (
-                <div style={{ fontSize: "12px", color: "#667085", fontFamily: "monospace", marginBottom: "2px" }}>
+                <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", fontFamily: "monospace", marginBottom: "2px" }}>
                   var({color.var})
                 </div>
               )}
-              <div style={{ fontSize: "12px", color: "#667085", fontFamily: "monospace", marginBottom: "8px" }}>
+              <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", fontFamily: "monospace", marginBottom: "8px" }}>
                 {color.hex}
               </div>
-              <div style={{ fontSize: "12px", color: "#667085", lineHeight: "1.5" }}>
+              <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", lineHeight: "1.5" }}>
                 {color.usage}
               </div>
             </div>
@@ -427,27 +427,27 @@ function TypographySection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           Typography
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           Neuron OS uses Inter as the primary typeface with systematic sizing and weights.
         </p>
       </div>
 
       {/* Font Family */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Font Family
         </h3>
-        <div style={{ fontSize: "14px", color: "#667085", marginBottom: "12px" }}>
+        <div style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "12px" }}>
           <code style={{ 
-            background: "#F9FAFB", 
+            background: "var(--theme-bg-page)", 
             padding: "4px 8px", 
             borderRadius: "4px",
             fontSize: "13px"
@@ -455,19 +455,19 @@ function TypographySection() {
             font-family: Inter, system-ui, -apple-system, sans-serif
           </code>
         </div>
-        <p style={{ fontSize: "13px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           Inter provides excellent readability at all sizes and weights, making it ideal for data-heavy interfaces.
         </p>
       </div>
 
       {/* Typography Scale */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "24px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "24px" }}>
           Typography Scale
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -475,7 +475,7 @@ function TypographySection() {
             level="Page Title"
             size="32px"
             weight="600"
-            color="#12332B"
+            color="var(--theme-text-primary)"
             usage="Module headers, main page titles"
             letterSpacing="-1.2px"
             lineHeight="1.3"
@@ -484,7 +484,7 @@ function TypographySection() {
             level="Section Title"
             size="24px"
             weight="600"
-            color="#12332B"
+            color="var(--theme-text-primary)"
             usage="Section headers within pages"
             letterSpacing="-0.5px"
             lineHeight="1.3"
@@ -493,7 +493,7 @@ function TypographySection() {
             level="Card Title"
             size="18px"
             weight="600"
-            color="#12332B"
+            color="var(--theme-text-primary)"
             usage="Card headers, sub-sections"
             letterSpacing="0px"
             lineHeight="1.5"
@@ -502,7 +502,7 @@ function TypographySection() {
             level="Body Large"
             size="14px"
             weight="400"
-            color="#0A1D4D"
+            color="var(--theme-text-primary)"
             usage="Primary body text, descriptions"
             letterSpacing="0px"
             lineHeight="1.5"
@@ -520,7 +520,7 @@ function TypographySection() {
             level="Caption"
             size="11px"
             weight="400"
-            color="#667085"
+            color="var(--theme-text-muted)"
             usage="Helper text, table headers, metadata"
             letterSpacing="0.5px"
             lineHeight="1.6"
@@ -530,12 +530,12 @@ function TypographySection() {
 
       {/* Font Weights */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Font Weights
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
@@ -577,14 +577,14 @@ function TypeExample({
       }}>
         {level}
       </div>
-      <div style={{ display: "flex", gap: "16px", fontSize: "12px", color: "#667085", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: "16px", fontSize: "12px", color: "var(--theme-text-muted)", flexWrap: "wrap" }}>
         <span><strong>Size:</strong> {size}</span>
         <span><strong>Weight:</strong> {weight}</span>
         <span><strong>Line Height:</strong> {lineHeight}</span>
         <span><strong>Letter Spacing:</strong> {letterSpacing}</span>
         <span><strong>Color:</strong> {color}</span>
       </div>
-      <div style={{ fontSize: "12px", color: "#667085", marginTop: "4px" }}>
+      <div style={{ fontSize: "12px", color: "var(--theme-text-muted)", marginTop: "4px" }}>
         <strong>Usage:</strong> {usage}
       </div>
     </div>
@@ -594,18 +594,18 @@ function TypeExample({
 function WeightExample({ weight, label, usage }: { weight: string; label: string; usage: string }) {
   return (
     <div style={{
-      background: "#F9FAFB",
+      background: "var(--theme-bg-page)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "16px"
     }}>
-      <div style={{ fontSize: "18px", fontWeight: Number(weight), color: "#12332B", marginBottom: "8px" }}>
+      <div style={{ fontSize: "18px", fontWeight: Number(weight), color: "var(--theme-text-primary)", marginBottom: "8px" }}>
         Aa
       </div>
-      <div style={{ fontSize: "13px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+      <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
         {label} ({weight})
       </div>
-      <div style={{ fontSize: "12px", color: "#667085" }}>
+      <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
         {usage}
       </div>
     </div>
@@ -617,56 +617,56 @@ function SpacingSection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           Spacing System
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           Consistent spacing creates visual rhythm and hierarchy throughout the application.
         </p>
       </div>
 
       {/* Page Padding */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Page Padding
         </h3>
         <div style={{
-          background: "#F9FAFB",
+          background: "var(--theme-bg-page)",
           border: "2px dashed #0F766E",
           borderRadius: "8px",
           padding: "32px 48px",
           marginBottom: "16px"
         }}>
           <div style={{
-            background: "white",
+            background: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             padding: "16px",
             textAlign: "center",
-            color: "#667085",
+            color: "var(--theme-text-muted)",
             fontSize: "13px"
           }}>
             Page Content
           </div>
         </div>
-        <div style={{ fontSize: "13px", color: "#667085" }}>
+        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
           <strong>Standard:</strong> padding: 32px 48px (vertical horizontal)
         </div>
       </div>
 
       {/* Spacing Scale */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Spacing Scale
         </h3>
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -682,12 +682,12 @@ function SpacingSection() {
 
       {/* Border Radius */}
       <div style={{
-        background: "white",
+        background: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "12px",
         padding: "24px"
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "16px" }}>
+        <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
           Border Radius
         </h3>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px" }}>
@@ -712,10 +712,10 @@ function SpacingExample({ size, usage }: { size: string; usage: string }) {
         flexShrink: 0
       }} />
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: "13px", fontWeight: 600, color: "#12332B" }}>
+        <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
           {size}
         </div>
-        <div style={{ fontSize: "12px", color: "#667085" }}>
+        <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
           {usage}
         </div>
       </div>
@@ -726,7 +726,7 @@ function SpacingExample({ size, usage }: { size: string; usage: string }) {
 function RadiusExample({ size, label, usage }: { size: string; label: string; usage: string }) {
   return (
     <div style={{
-      background: "#F9FAFB",
+      background: "var(--theme-bg-page)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "16px",
@@ -739,13 +739,13 @@ function RadiusExample({ size, label, usage }: { size: string; label: string; us
         borderRadius: size,
         margin: "0 auto 12px"
       }} />
-      <div style={{ fontSize: "13px", fontWeight: 600, color: "#12332B", marginBottom: "4px" }}>
+      <div style={{ fontSize: "13px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px" }}>
         {label}
       </div>
-      <div style={{ fontSize: "11px", color: "#667085", marginBottom: "4px" }}>
+      <div style={{ fontSize: "11px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>
         {size}
       </div>
-      <div style={{ fontSize: "11px", color: "#667085" }}>
+      <div style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
         {usage}
       </div>
     </div>
@@ -783,10 +783,10 @@ function ComponentsSection({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           Component Library
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           Production-ready components following Neuron OS design principles.
         </p>
       </div>
@@ -809,8 +809,8 @@ function ComponentsSection({
             </button>
             <button style={{
               padding: "8px 16px",
-              background: "white",
-              color: "#0F766E",
+              background: "var(--theme-bg-surface)",
+              color: "var(--theme-action-primary-bg)",
               border: "1px solid #0F766E",
               borderRadius: "6px",
               fontSize: "13px",
@@ -834,7 +834,7 @@ function ComponentsSection({
             <button style={{
               padding: "8px 16px",
               background: "transparent",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               border: "none",
               borderRadius: "6px",
               fontSize: "13px",
@@ -884,8 +884,8 @@ function ComponentsSection({
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "13px",
-                background: "#F3F4F6",
-                color: "#9CA3AF",
+                background: "var(--theme-bg-surface-subtle)",
+                color: "var(--theme-text-muted)",
                 width: "300px"
               }}
             />
@@ -915,7 +915,7 @@ function ComponentsSection({
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085"
+                color: "var(--theme-text-muted)"
               }}
             />
             <input
@@ -941,7 +941,7 @@ function ComponentsSection({
       left: "12px",
       top: "50%",
       transform: "translateY(-50%)",
-      color: "#667085"
+      color: "var(--theme-text-muted)"
     }}
   />
   <input
@@ -1008,7 +1008,7 @@ function ComponentsSection({
       <ComponentCard title="Status Badges">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-            <StatusBadge status="Active" color="#0F766E" />
+            <StatusBadge status="Active" color="var(--theme-action-primary-bg)" />
             <StatusBadge status="Pending" color="#F59E0B" />
             <StatusBadge status="Cancelled" color="#EF4444" />
             <StatusBadge status="Completed" color="#3B82F6" />
@@ -1018,8 +1018,8 @@ function ComponentsSection({
   alignItems: "center",
   gap: "4px",
   padding: "4px 8px",
-  background: "#E8F5F3",
-  color: "#0F766E",
+  background: "var(--theme-bg-surface-tint)",
+  color: "var(--theme-action-primary-bg)",
   borderRadius: "4px",
   fontSize: "11px",
   fontWeight: 600
@@ -1033,16 +1033,16 @@ function ComponentsSection({
       <ComponentCard title="Cards">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <div style={{
-            background: "white",
+            background: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "12px",
             padding: "20px",
             maxWidth: "400px"
           }}>
-            <h4 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+            <h4 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
               Card Title
             </h4>
-            <p style={{ fontSize: "13px", color: "#667085", marginBottom: "16px" }}>
+            <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>
               Card description text goes here. Cards use stroke borders instead of shadows.
             </p>
             <button style={{
@@ -1059,7 +1059,7 @@ function ComponentsSection({
             </button>
           </div>
           <CodeBlock code={`<div style={{
-  background: "white",
+  background: "var(--theme-bg-surface)",
   border: "1px solid var(--neuron-ui-border)",
   borderRadius: "12px",
   padding: "20px"
@@ -1119,12 +1119,12 @@ function ComponentsSection({
             <div style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
-              background: "#F9FAFB",
+              background: "var(--theme-bg-page)",
               borderBottom: "1px solid var(--neuron-ui-border)",
               padding: "12px 16px",
               fontSize: "11px",
               fontWeight: 600,
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               letterSpacing: "0.5px"
             }}>
               <div>NAME</div>
@@ -1134,21 +1134,21 @@ function ComponentsSection({
             <div style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
-              background: "white",
+              background: "var(--theme-bg-surface)",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#0A1D4D",
+              color: "var(--theme-text-primary)",
               alignItems: "center"
             }}>
               <div>Sample Item</div>
-              <div><StatusBadge status="Active" color="#0F766E" /></div>
+              <div><StatusBadge status="Active" color="var(--theme-action-primary-bg)" /></div>
               <div>Jan 18, 2026</div>
             </div>
           </div>
           <CodeBlock code={`<div style={{
   display: "grid",
   gridTemplateColumns: "1fr 1fr 1fr",
-  background: "white",
+  background: "var(--theme-bg-surface)",
   padding: "12px 16px",
   fontSize: "13px",
   borderBottom: "1px solid var(--neuron-ui-border)"
@@ -1163,7 +1163,7 @@ function ComponentsSection({
       {/* Lucide Icons */}
       <ComponentCard title="Lucide Icons">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
             Neuron OS uses Lucide React icons throughout the system. Icons should be 16px-20px in size and use muted colors (#667085) by default.
           </p>
           <div style={{ 
@@ -1171,7 +1171,7 @@ function ComponentsSection({
             gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", 
             gap: "16px",
             padding: "16px",
-            background: "#F9FAFB",
+            background: "var(--theme-bg-page)",
             borderRadius: "8px"
           }}>
             {[
@@ -1197,18 +1197,18 @@ function ComponentsSection({
                 alignItems: "center",
                 gap: "8px",
                 padding: "12px",
-                background: "white",
+                background: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px"
               }}>
-                <Icon size={20} style={{ color: "#667085" }} />
-                <span style={{ fontSize: "11px", color: "#667085" }}>{label}</span>
+                <Icon size={20} style={{ color: "var(--theme-text-muted)" }} />
+                <span style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>{label}</span>
               </div>
             ))}
           </div>
           <CodeBlock code={`import { Home } from "lucide-react";
 
-<Home size={20} style={{ color: "#667085" }} />`} />
+<Home size={20} style={{ color: "var(--theme-text-muted)" }} />`} />
         </div>
       </ComponentCard>
 
@@ -1223,12 +1223,12 @@ function ComponentsSection({
             <div style={{
               display: "grid",
               gridTemplateColumns: "40px 2fr 1fr 1fr 1fr",
-              background: "#F9FAFB",
+              background: "var(--theme-bg-page)",
               borderBottom: "1px solid var(--neuron-ui-border)",
               padding: "12px 16px",
               fontSize: "11px",
               fontWeight: 600,
-              color: "#667085",
+              color: "var(--theme-text-muted)",
               letterSpacing: "0.5px"
             }}>
               <div></div>
@@ -1240,30 +1240,30 @@ function ComponentsSection({
             <div style={{
               display: "grid",
               gridTemplateColumns: "40px 2fr 1fr 1fr 1fr",
-              background: "white",
+              background: "var(--theme-bg-surface)",
               borderBottom: "1px solid var(--neuron-ui-border)",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#0A1D4D",
+              color: "var(--theme-text-primary)",
               alignItems: "center"
             }}>
-              <Ship size={18} style={{ color: "#667085" }} />
+              <Ship size={18} style={{ color: "var(--theme-text-muted)" }} />
               <div>Ocean Freight</div>
-              <div><StatusBadge status="Active" color="#0F766E" /></div>
+              <div><StatusBadge status="Active" color="var(--theme-action-primary-bg)" /></div>
               <div>Import</div>
               <div>Jan 15, 2026</div>
             </div>
             <div style={{
               display: "grid",
               gridTemplateColumns: "40px 2fr 1fr 1fr 1fr",
-              background: "white",
+              background: "var(--theme-bg-surface)",
               borderBottom: "1px solid var(--neuron-ui-border)",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#0A1D4D",
+              color: "var(--theme-text-primary)",
               alignItems: "center"
             }}>
-              <Truck size={18} style={{ color: "#667085" }} />
+              <Truck size={18} style={{ color: "var(--theme-text-muted)" }} />
               <div>Land Freight</div>
               <div><StatusBadge status="Pending" color="#F59E0B" /></div>
               <div>Domestic</div>
@@ -1272,13 +1272,13 @@ function ComponentsSection({
             <div style={{
               display: "grid",
               gridTemplateColumns: "40px 2fr 1fr 1fr 1fr",
-              background: "white",
+              background: "var(--theme-bg-surface)",
               padding: "12px 16px",
               fontSize: "13px",
-              color: "#0A1D4D",
+              color: "var(--theme-text-primary)",
               alignItems: "center"
             }}>
-              <Package size={18} style={{ color: "#667085" }} />
+              <Package size={18} style={{ color: "var(--theme-text-muted)" }} />
               <div>Customs Brokerage</div>
               <div><StatusBadge status="Completed" color="#3B82F6" /></div>
               <div>Export</div>
@@ -1292,7 +1292,7 @@ function ComponentsSection({
   gridTemplateColumns: "40px 2fr 1fr 1fr 1fr",
   alignItems: "center"
 }}>
-  <Ship size={18} style={{ color: "#667085" }} />
+  <Ship size={18} style={{ color: "var(--theme-text-muted)" }} />
   <div>Ocean Freight</div>
   <div>Active</div>
   ...
@@ -1303,17 +1303,17 @@ function ComponentsSection({
       {/* Dropdown with Icons */}
       <ComponentCard title="Dropdown with Icons">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <p style={{ fontSize: "13px", color: "#667085", marginBottom: "8px" }}>
+          <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "8px" }}>
             Custom dropdowns can include icons for better visual clarity and categorization.
           </p>
           <div style={{
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             padding: "16px",
-            background: "#F9FAFB"
+            background: "var(--theme-bg-page)"
           }}>
             <div style={{
-              background: "white",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
               padding: "8px 12px",
@@ -1323,14 +1323,14 @@ function ComponentsSection({
               maxWidth: "250px"
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <Ship size={16} style={{ color: "#667085" }} />
-                <span style={{ fontSize: "13px", color: "#0A1D4D" }}>Ocean Freight</span>
+                <Ship size={16} style={{ color: "var(--theme-text-muted)" }} />
+                <span style={{ fontSize: "13px", color: "var(--theme-text-primary)" }}>Ocean Freight</span>
               </div>
-              <ChevronDown size={14} style={{ color: "#667085" }} />
+              <ChevronDown size={14} style={{ color: "var(--theme-text-muted)" }} />
             </div>
             <div style={{
               marginTop: "4px",
-              background: "white",
+              background: "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
               maxWidth: "250px",
@@ -1349,12 +1349,12 @@ function ComponentsSection({
                     gap: "8px",
                     padding: "8px 12px",
                     fontSize: "13px",
-                    color: "#0A1D4D",
+                    color: "var(--theme-text-primary)",
                     cursor: "pointer",
                     borderBottom: "1px solid var(--neuron-ui-border)"
                   }}
                 >
-                  <Icon size={16} style={{ color: "#667085" }} />
+                  <Icon size={16} style={{ color: "var(--theme-text-muted)" }} />
                   {label}
                 </div>
               ))}
@@ -1365,7 +1365,7 @@ function ComponentsSection({
   alignItems: "center",
   gap: "8px"
 }}>
-  <Ship size={16} style={{ color: "#667085" }} />
+  <Ship size={16} style={{ color: "var(--theme-text-muted)" }} />
   <span>Ocean Freight</span>
 </div>`} />
         </div>
@@ -1374,7 +1374,7 @@ function ComponentsSection({
       {/* Checkboxes */}
       <ComponentCard title="Checkboxes">
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6", marginBottom: "8px" }}>
+          <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6", marginBottom: "8px" }}>
             Custom checkboxes with Neuron branding. Unticked state shows white background with gray border,
             ticked state shows Neuron green background with white checkmark.
           </p>
@@ -1384,7 +1384,7 @@ function ComponentsSection({
                 checked={sampleCheckbox1}
                 onChange={setSampleCheckbox1}
               />
-              <label style={{ fontSize: "13px", color: "#12332B", cursor: "pointer" }}
+              <label style={{ fontSize: "13px", color: "var(--theme-text-primary)", cursor: "pointer" }}
                 onClick={() => setSampleCheckbox1(!sampleCheckbox1)}>
                 Include optional charges
               </label>
@@ -1394,7 +1394,7 @@ function ComponentsSection({
                 checked={sampleCheckbox2}
                 onChange={setSampleCheckbox2}
               />
-              <label style={{ fontSize: "13px", color: "#12332B", cursor: "pointer" }}
+              <label style={{ fontSize: "13px", color: "var(--theme-text-primary)", cursor: "pointer" }}
                 onClick={() => setSampleCheckbox2(!sampleCheckbox2)}>
                 Apply tax (Checked state example)
               </label>
@@ -1404,7 +1404,7 @@ function ComponentsSection({
                 checked={sampleCheckbox3}
                 onChange={setSampleCheckbox3}
               />
-              <label style={{ fontSize: "13px", color: "#12332B", cursor: "pointer" }}
+              <label style={{ fontSize: "13px", color: "var(--theme-text-primary)", cursor: "pointer" }}
                 onClick={() => setSampleCheckbox3(!sampleCheckbox3)}>
                 Send notification email
               </label>
@@ -1418,7 +1418,7 @@ function ComponentsSection({
     onChange={setIsChecked}
   />
   <label 
-    style={{ fontSize: "13px", color: "#12332B", cursor: "pointer" }}
+    style={{ fontSize: "13px", color: "var(--theme-text-primary)", cursor: "pointer" }}
     onClick={() => setIsChecked(!isChecked)}
   >
     Label text
@@ -1433,12 +1433,12 @@ function ComponentsSection({
 function ComponentCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div style={{
-      background: "white",
+      background: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "12px",
       padding: "24px"
     }}>
-      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "20px" }}>
+      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "20px" }}>
         {title}
       </h3>
       {children}
@@ -1449,13 +1449,13 @@ function ComponentCard({ title, children }: { title: string; children: React.Rea
 function CodeBlock({ code }: { code: string }) {
   return (
     <div style={{
-      background: "#F9FAFB",
+      background: "var(--theme-bg-page)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "6px",
       padding: "12px",
       fontFamily: "monospace",
       fontSize: "11px",
-      color: "#344054",
+      color: "var(--theme-text-secondary)",
       overflow: "auto",
       whiteSpace: "pre-wrap"
     }}>
@@ -1484,7 +1484,7 @@ function StatusBadge({ status, color }: { status: string; color: string }) {
 
 function Alert({ type, message }: { type: "success" | "warning" | "error" | "info"; message: string }) {
   const configs = {
-    success: { icon: CheckCircle, color: "#0F766E", bg: "#E8F5F3" },
+    success: { icon: CheckCircle, color: "var(--theme-action-primary-bg)", bg: "#E8F5F3" },
     warning: { icon: AlertCircle, color: "#F59E0B", bg: "#FEF3C7" },
     error: { icon: XCircle, color: "#EF4444", bg: "#FEE2E2" },
     info: { icon: Info, color: "#3B82F6", bg: "#DBEAFE" }
@@ -1521,7 +1521,7 @@ function IconButton({
 }) {
   const styles = {
     primary: { background: "#0F766E", color: "white", border: "none" },
-    secondary: { background: "white", color: "#0F766E", border: "1px solid #0F766E" },
+    secondary: { background: "var(--theme-bg-surface)", color: "var(--theme-action-primary-bg)", border: "1px solid #0F766E" },
     danger: { background: "#EF4444", color: "white", border: "none" }
   };
   
@@ -1550,10 +1550,10 @@ function PrinciplesSection() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
       <div>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "#12332B", marginBottom: "8px" }}>
+        <h2 style={{ fontSize: "24px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
           Design Principles
         </h2>
-        <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6" }}>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6" }}>
           Core principles that guide all design decisions in Neuron OS.
         </p>
       </div>
@@ -1665,15 +1665,15 @@ function PrincipleCard({
 }) {
   return (
     <div style={{
-      background: "white",
+      background: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "12px",
       padding: "24px"
     }}>
-      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#12332B", marginBottom: "12px" }}>
+      <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "12px" }}>
         {title}
       </h3>
-      <p style={{ fontSize: "14px", color: "#667085", lineHeight: "1.6", marginBottom: "20px" }}>
+      <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", lineHeight: "1.6", marginBottom: "20px" }}>
         {description}
       </p>
       
@@ -1687,7 +1687,7 @@ function PrincipleCard({
             marginBottom: "12px",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#0F766E"
+            color: "var(--theme-action-primary-bg)"
           }}>
             <Check size={16} />
             Do
@@ -1698,9 +1698,9 @@ function PrincipleCard({
                 display: "flex",
                 gap: "8px",
                 fontSize: "13px",
-                color: "#344054"
+                color: "var(--theme-text-secondary)"
               }}>
-                <Check size={14} style={{ color: "#0F766E", flexShrink: 0, marginTop: "2px" }} />
+                <Check size={14} style={{ color: "var(--theme-action-primary-bg)", flexShrink: 0, marginTop: "2px" }} />
                 <span>{item}</span>
               </div>
             ))}
@@ -1727,7 +1727,7 @@ function PrincipleCard({
                 display: "flex",
                 gap: "8px",
                 fontSize: "13px",
-                color: "#344054"
+                color: "var(--theme-text-secondary)"
               }}>
                 <X size={14} style={{ color: "#EF4444", flexShrink: 0, marginTop: "2px" }} />
                 <span>{item}</span>

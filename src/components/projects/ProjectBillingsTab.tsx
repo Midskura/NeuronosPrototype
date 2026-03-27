@@ -221,7 +221,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
         
         {/* Header Bar */}
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border, #E5E7EB)",
           borderRadius: "8px",
           marginBottom: "24px"
@@ -291,7 +291,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                   alignItems: "center",
                   gap: "8px",
                   padding: "6px 12px",
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   color: "white",
                   border: "none",
                   borderRadius: "6px",
@@ -313,7 +313,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
           
           {/* Top: Unbilled Charges */}
           <div style={{ 
-            backgroundColor: "white", 
+            backgroundColor: "var(--theme-bg-surface)", 
             border: "1px solid var(--neuron-ui-border, #E5E7EB)", 
             borderRadius: "8px",
             overflow: "hidden",
@@ -324,7 +324,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
             <div style={{ 
               padding: "20px 24px", 
               borderBottom: "1px solid var(--neuron-ui-border, #E5E7EB)",
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center"
@@ -342,11 +342,11 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
             </div>
             
             {isLoading ? (
-              <div style={{ padding: "40px", textAlign: "center", color: "#6B7280" }}>
+              <div style={{ padding: "40px", textAlign: "center", color: "var(--theme-text-muted)" }}>
                 <Loader2 className="animate-spin inline-block mr-2" size={20} /> Loading charges...
               </div>
             ) : unbilledItems.length === 0 ? (
-               <div style={{ padding: "40px", textAlign: "center", color: "#6B7280" }}>
+               <div style={{ padding: "40px", textAlign: "center", color: "var(--theme-text-muted)" }}>
                 <p>No unbilled charges found.</p>
                 <p style={{ fontSize: "12px", marginTop: "8px", marginBottom: "20px" }}>
                   Approved billable expenses and quotation items will appear here.
@@ -362,7 +362,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                       alignItems: "center",
                       gap: "8px",
                       padding: "8px 16px",
-                      backgroundColor: "white",
+                      backgroundColor: "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-brand-green, #0F766E)",
                       borderRadius: "6px",
                       color: "var(--neuron-brand-green, #0F766E)",
@@ -380,12 +380,12 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
             ) : (
               <div style={{ maxHeight: "500px", overflowY: "auto" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead style={{ position: "sticky", top: 0, backgroundColor: "#F9FAFB", zIndex: 10 }}>
-                    <tr style={{ borderBottom: "1px solid #E5E7EB" }}>
+                  <thead style={{ position: "sticky", top: 0, backgroundColor: "var(--theme-bg-page)", zIndex: 10 }}>
+                    <tr style={{ borderBottom: "1px solid var(--theme-border-default)" }}>
                       <th style={{ padding: "12px 16px", width: "40px" }}>
                         <button 
                           onClick={handleSelectAll}
-                          style={{ background: "none", border: "none", cursor: "pointer", color: "#374151" }}
+                          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-secondary)" }}
                         >
                           {selectedIds.size === unbilledItems.length && unbilledItems.length > 0 ? (
                             <CheckSquare size={18} />
@@ -400,7 +400,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                   </thead>
                   <tbody>
                     {unbilledItems.map(item => (
-                      <tr key={item.id} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                      <tr key={item.id} style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}>
                         <td style={{ padding: "12px 16px" }}>
                           <button 
                             onClick={() => handleToggleSelect(item.id)}
@@ -410,10 +410,10 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                           </button>
                         </td>
                         <td style={{ padding: "12px 16px" }}>
-                          <div style={{ fontSize: "14px", fontWeight: 500, color: "#374151" }}>{item.purpose || "Service Charge"}</div>
-                          <div style={{ fontSize: "12px", color: "#6B7280" }}>{item.voucher_number}</div>
+                          <div style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-secondary)" }}>{item.purpose || "Service Charge"}</div>
+                          <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>{item.voucher_number}</div>
                         </td>
-                        <td style={{ padding: "12px 16px", textAlign: "right", fontSize: "14px", fontWeight: 600, color: "#374151" }}>
+                        <td style={{ padding: "12px 16px", textAlign: "right", fontSize: "14px", fontWeight: 600, color: "var(--theme-text-secondary)" }}>
                           {formatCurrency(item.amount, item.currency)}
                         </td>
                       </tr>
@@ -426,7 +426,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
 
           {/* Bottom: Billing Statements */}
           <div style={{ 
-            backgroundColor: "white", 
+            backgroundColor: "var(--theme-bg-surface)", 
             border: "1px solid var(--neuron-ui-border, #E5E7EB)", 
             borderRadius: "8px",
             overflow: "hidden"
@@ -434,7 +434,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
             <div style={{ 
               padding: "20px 24px", 
               borderBottom: "1px solid var(--neuron-ui-border, #E5E7EB)",
-              backgroundColor: "#F8FBFB",
+              backgroundColor: "var(--theme-bg-page)",
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center"
@@ -458,8 +458,8 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                   textAlign: "center", 
                   border: "1px dashed #E5E7EB", 
                   borderRadius: "12px",
-                  backgroundColor: "#F9FAFB",
-                  color: "#6B7280"
+                  backgroundColor: "var(--theme-bg-page)",
+                  color: "var(--theme-text-muted)"
                 }}>
                   No statements generated yet.
                 </div>
@@ -475,8 +475,8 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
 
                   return (
                     <div key={ref} style={{ 
-                      backgroundColor: "white", 
-                      border: "1px solid #E5E7EB", 
+                      backgroundColor: "var(--theme-bg-surface)", 
+                      border: "1px solid var(--theme-border-default)", 
                       borderRadius: "12px",
                       overflow: "hidden",
                       transition: "all 0.2s"
@@ -495,7 +495,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                           <div style={{ 
-                            color: "#6B7280", 
+                            color: "var(--theme-text-muted)", 
                             transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
                             transition: "transform 0.2s"
                           }}>
@@ -503,19 +503,19 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                           </div>
                           <div>
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              <div style={{ fontSize: "14px", fontWeight: 600, color: "#12332B" }}>{ref}</div>
+                              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)" }}>{ref}</div>
                               {isPosted && (
-                                <span style={{ fontSize: "10px", fontWeight: 600, color: "#0F766E", backgroundColor: "#E6FFFA", padding: "2px 6px", borderRadius: "4px", border: "1px solid #B2F5EA" }}>
+                                <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--theme-action-primary-bg)", backgroundColor: "#E6FFFA", padding: "2px 6px", borderRadius: "4px", border: "1px solid #B2F5EA" }}>
                                   POSTED
                                 </span>
                               )}
                             </div>
-                            <div style={{ fontSize: "12px", color: "#6B7280" }}>{date} • {items.length} items</div>
+                            <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>{date} • {items.length} items</div>
                           </div>
                         </div>
                         
                         <div style={{ textAlign: "right" }}>
-                          <div style={{ fontSize: "14px", fontWeight: 700, color: "#12332B" }}>
+                          <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--theme-text-primary)" }}>
                             {formatCurrency(totalAmount)}
                           </div>
                           <div style={{ fontSize: "11px", fontWeight: 600 }}>
@@ -532,23 +532,23 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                       
                       {/* Expanded Details */}
                       {isExpanded && (
-                        <div style={{ borderTop: "1px solid #E5E7EB", padding: "16px 20px", backgroundColor: "#FFFFFF" }}>
+                        <div style={{ borderTop: "1px solid var(--theme-border-default)", padding: "16px 20px", backgroundColor: "var(--theme-bg-surface)" }}>
                           <table style={{ width: "100%", fontSize: "13px" }}>
                             <tbody>
                               {items.map(item => (
                                 <tr key={item.id}>
-                                  <td style={{ padding: "6px 0", color: "#374151" }}>{item.purpose}</td>
-                                  <td style={{ padding: "6px 0", textAlign: "right", color: "#6B7280" }}>{formatCurrency(item.amount)}</td>
+                                  <td style={{ padding: "6px 0", color: "var(--theme-text-secondary)" }}>{item.purpose}</td>
+                                  <td style={{ padding: "6px 0", textAlign: "right", color: "var(--theme-text-muted)" }}>{formatCurrency(item.amount)}</td>
                                 </tr>
                               ))}
                             </tbody>
                             <tfoot style={{ borderTop: "1px dashed #E5E7EB" }}>
                               <tr>
-                                <td style={{ padding: "12px 0", fontWeight: 600, color: "#12332B" }}>Total Due</td>
-                                <td style={{ padding: "12px 0", textAlign: "right", fontWeight: 600, color: "#12332B" }}>{formatCurrency(totalAmount)}</td>
+                                <td style={{ padding: "12px 0", fontWeight: 600, color: "var(--theme-text-primary)" }}>Total Due</td>
+                                <td style={{ padding: "12px 0", textAlign: "right", fontWeight: 600, color: "var(--theme-text-primary)" }}>{formatCurrency(totalAmount)}</td>
                               </tr>
                               <tr>
-                                <td style={{ padding: "4px 0", fontWeight: 500, color: "#6B7280" }}>Balance Remaining</td>
+                                <td style={{ padding: "4px 0", fontWeight: 500, color: "var(--theme-text-muted)" }}>Balance Remaining</td>
                                 <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 600, color: "#C94F3D" }}>{formatCurrency(remainingAmount)}</td>
                               </tr>
                             </tfoot>
@@ -562,7 +562,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                                  style={{
                                    display: "flex", alignItems: "center", gap: "6px",
                                    padding: "6px 12px", fontSize: "12px", fontWeight: 600,
-                                   backgroundColor: "#0F766E", border: "none", borderRadius: "6px",
+                                   backgroundColor: "var(--theme-action-primary-bg)", border: "none", borderRadius: "6px",
                                    color: "white", cursor: isFinalizing === ref ? "not-allowed" : "pointer",
                                    opacity: isFinalizing === ref ? 0.7 : 1,
                                    marginRight: "auto" // Push to left
@@ -576,16 +576,16 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                              <button style={{
                                display: "flex", alignItems: "center", gap: "6px",
                                padding: "6px 12px", fontSize: "12px", fontWeight: 500,
-                               backgroundColor: "white", border: "1px solid #D1D5DB", borderRadius: "6px",
-                               color: "#374151", cursor: "pointer"
+                               backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--theme-border-default)", borderRadius: "6px",
+                               color: "var(--theme-text-secondary)", cursor: "pointer"
                              }}>
                                <Printer size={14} /> Print SOA
                              </button>
                              <button style={{
                                display: "flex", alignItems: "center", gap: "6px",
                                padding: "6px 12px", fontSize: "12px", fontWeight: 500,
-                               backgroundColor: "white", border: "1px solid #D1D5DB", borderRadius: "6px",
-                               color: "#374151", cursor: "pointer"
+                               backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--theme-border-default)", borderRadius: "6px",
+                               color: "var(--theme-text-secondary)", cursor: "pointer"
                              }}>
                                <Mail size={14} /> Email Client
                              </button>
@@ -601,7 +601,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
 
           {/* Project Billings Total */}
           <div style={{
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border, #E5E7EB)",
             borderRadius: "8px",
             padding: "24px"
@@ -633,7 +633,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
               <div style={{
                 fontSize: "28px",
                 fontWeight: 700,
-                color: "#12332B"
+                color: "var(--theme-text-primary)"
               }}>
                 {formatCurrency(totalProjectBillings)}
               </div>

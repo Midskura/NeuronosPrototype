@@ -95,8 +95,8 @@ export function EntriesPage({ expenses, bookings, onCreateExpense, onViewExpense
     <>
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-[#0A1D4D] mb-2">All Entries</h1>
-        <p className="text-[14px] text-[#6B7280] leading-[20px]">
+        <h1 className="text-[var(--theme-text-primary)] mb-2">All Entries</h1>
+        <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
           View and manage all expense entries across bookings
         </p>
       </div>
@@ -189,7 +189,7 @@ export function EntriesPage({ expenses, bookings, onCreateExpense, onViewExpense
 
       {/* Filters */}
       <div className="flex items-center gap-3 mb-6">
-        <Filter className="w-4 h-4 text-[#6B7280]" />
+        <Filter className="w-4 h-4 text-[var(--theme-text-muted)]" />
         <Select value={filterBooking} onValueChange={setFilterBooking}>
           <SelectTrigger className="w-[200px] h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
             <SelectValue placeholder="All Bookings" />
@@ -230,43 +230,43 @@ export function EntriesPage({ expenses, bookings, onCreateExpense, onViewExpense
       </div>
 
       {/* Entries Table */}
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Date</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Booking</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Type</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Amount</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Description</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Entered By</TableHead>
-              <TableHead className="text-[12px] text-[#6B7280] h-12">Status</TableHead>
+            <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Date</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Type</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Amount</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Description</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Entered By</TableHead>
+              <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredExpenses.map((expense) => (
               <TableRow 
                 key={expense.id} 
-                className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB] cursor-pointer"
+                className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] cursor-pointer"
                 onClick={() => onViewExpense?.(expense.id)}
                 style={{ minHeight: '48px' }}
               >
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {new Date(expense.date).toLocaleDateString()}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                   {expense.bookingNo}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {expense.type}
                 </TableCell>
                 <TableCell className="text-[14px] text-right font-medium tabular-nums" style={{ color: 'var(--text-expense)' }}>
                   ₱{expense.amount.toLocaleString()}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#6B7280] max-w-[200px] truncate">
+                <TableCell className="text-[14px] text-[var(--theme-text-muted)] max-w-[200px] truncate">
                   {expense.description || "—"}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {expense.enteredBy}
                 </TableCell>
                 <TableCell>

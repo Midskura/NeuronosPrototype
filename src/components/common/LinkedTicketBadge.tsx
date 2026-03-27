@@ -25,7 +25,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 const STATUS_COLOR: Record<string, { color: string; bg: string }> = {
   open:         { color: "#1D4ED8", bg: "#EFF6FF" },
-  acknowledged: { color: "#0F766E", bg: "#F0F7F5" },
+  acknowledged: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
   in_progress:  { color: "#D97706", bg: "#FEF3C7" },
   returned:     { color: "#DC2626", bg: "#FEE2E2" },
 };
@@ -50,7 +50,7 @@ export function LinkedTicketBadge({ recordType, recordId }: LinkedTicketBadgePro
 
   if (!ticket) return null;
 
-  const style = STATUS_COLOR[ticket.status] ?? { color: "#667085", bg: "#F3F4F6" };
+  const style = STATUS_COLOR[ticket.status] ?? { color: "var(--theme-text-muted)", bg: "#F3F4F6" };
 
   return (
     <button
@@ -78,7 +78,7 @@ export function LinkedTicketBadge({ recordType, recordId }: LinkedTicketBadgePro
         {ticket.priority === "urgent" ? "⚡ Urgent · " : ""}
         {STATUS_LABEL[ticket.status] ?? ticket.status}
       </span>
-      <span style={{ color: "#667085", fontWeight: 400 }}>
+      <span style={{ color: "var(--theme-text-muted)", fontWeight: 400 }}>
         · {ticket.subject}
       </span>
     </button>

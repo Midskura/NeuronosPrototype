@@ -592,7 +592,7 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
               <TasksList onViewTask={handleViewTask} />
             )}
             {subView === "detail" && selectedTask && (
-              <div className="h-full" style={{ padding: "32px 48px", background: "#FFFFFF" }}>
+              <div className="h-full" style={{ padding: "32px 48px", background: "var(--theme-bg-surface)" }}>
                 <TaskDetailInline 
                   task={selectedTask} 
                   onBack={handleBackFromTask}
@@ -609,7 +609,7 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
             {!selectedActivity ? (
               <ActivitiesList onViewActivity={handleViewActivity} />
             ) : (
-              <div className="h-full" style={{ padding: "32px 48px", background: "#FFFFFF" }}>
+              <div className="h-full" style={{ padding: "32px 48px", background: "var(--theme-bg-surface)" }}>
                 <ActivityDetailInline
                   activity={selectedActivity}
                   onBack={handleBackFromActivity}

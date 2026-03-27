@@ -36,7 +36,7 @@ export function FinancialSummaryPanel({
     <div style={{
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       overflow: "hidden",
       marginBottom: "24px"
     }}>
@@ -44,7 +44,7 @@ export function FinancialSummaryPanel({
       <div style={{
         padding: "12px 16px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "#F8FBFB"
+        backgroundColor: "var(--theme-bg-page)"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Calculator size={16} style={{ color: "var(--neuron-brand-green)" }} />
@@ -69,7 +69,7 @@ export function FinancialSummaryPanel({
             justifyContent: "space-between",
             alignItems: "center",
             padding: "10px 12px",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             borderRadius: "6px"
           }}>
             <span style={{
@@ -94,7 +94,7 @@ export function FinancialSummaryPanel({
             justifyContent: "space-between",
             alignItems: "center",
             padding: "10px 12px",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             borderRadius: "6px"
           }}>
             <span style={{
@@ -146,7 +146,7 @@ export function FinancialSummaryPanel({
                   fontWeight: 600,
                   border: "1px solid #F59E0B",
                   borderRadius: "4px",
-                  backgroundColor: "white"
+                  backgroundColor: "var(--theme-bg-surface)"
                 }}
               />
               <span style={{
@@ -169,7 +169,7 @@ export function FinancialSummaryPanel({
           {/* Other Charges */}
           <div style={{
             padding: "12px",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             borderRadius: "6px"
           }}>
             <label style={{
@@ -196,7 +196,7 @@ export function FinancialSummaryPanel({
                 fontSize: "14px",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "4px",
-                backgroundColor: "white"
+                backgroundColor: "var(--theme-bg-surface)"
               }}
             />
           </div>
@@ -211,7 +211,7 @@ export function FinancialSummaryPanel({
           {/* Grand Total (PHP) */}
           <div style={{
             padding: "16px",
-            backgroundColor: "#E8F5F3",
+            backgroundColor: "var(--theme-bg-surface-tint)",
             border: "2px solid var(--neuron-brand-green)",
             borderRadius: "6px"
           }}>
@@ -238,7 +238,7 @@ export function FinancialSummaryPanel({
           {/* Approx USD Total */}
           <div style={{
             padding: "12px 16px",
-            backgroundColor: "white", 
+            backgroundColor: "var(--theme-bg-surface)", 
             border: "1px solid #E0E6E4", // Subtle grey
             borderRadius: "6px"
           }}>
@@ -253,7 +253,7 @@ export function FinancialSummaryPanel({
                 APPROX. TOTAL (USD)
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "11px", color: "#6B7A76", fontWeight: 500 }}>@ Rate:</span>
+                <span style={{ fontSize: "11px", color: "var(--theme-text-muted)", fontWeight: 500 }}>@ Rate:</span>
                 <input 
                   type="number"
                   value={usdRefRate}
@@ -279,7 +279,7 @@ export function FinancialSummaryPanel({
             }}>
               $ {formatAmount(calculateApproxUSD())}
             </div>
-            <div style={{ marginTop: "6px", fontSize: "10px", color: "#6B7A76" }}>
+            <div style={{ marginTop: "6px", fontSize: "10px", color: "var(--theme-text-muted)" }}>
               * Reference only based on manual rate
             </div>
           </div>
@@ -287,7 +287,7 @@ export function FinancialSummaryPanel({
           {/* Breakdown Info */}
           <div style={{
             padding: "12px",
-            backgroundColor: "#F9FAFB",
+            backgroundColor: "var(--theme-bg-page)",
             borderRadius: "6px",
             fontSize: "11px",
             color: "var(--neuron-ink-muted)"

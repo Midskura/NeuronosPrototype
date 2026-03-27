@@ -80,7 +80,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
           alignItems: "center",
           justifyContent: "center",
           padding: "24px",
-          color: "#6B7280"
+          color: "var(--theme-text-muted)"
         }}
       >
         <Clock size={20} className="animate-spin" style={{ marginRight: "8px" }} />
@@ -95,7 +95,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
         style={{
           padding: "24px",
           textAlign: "center",
-          color: "#6B7280",
+          color: "var(--theme-text-muted)",
           fontSize: "14px"
         }}
       >
@@ -110,7 +110,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
         style={{
           fontSize: "16px",
           fontWeight: 600,
-          color: "#12332B",
+          color: "var(--theme-text-primary)",
           marginBottom: "20px",
           display: "flex",
           alignItems: "center",
@@ -159,7 +159,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                     width: "40px",
                     height: "40px",
                     borderRadius: "50%",
-                    backgroundColor: "#FFFFFF",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: `2px solid ${actionColor}`,
                     display: "flex",
                     alignItems: "center",
@@ -184,7 +184,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                     style={{
                       fontSize: "14px",
                       fontWeight: 600,
-                      color: "#374151",
+                      color: "var(--theme-text-secondary)",
                       marginBottom: "4px"
                     }}
                   >
@@ -196,7 +196,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                     <div
                       style={{
                         fontSize: "13px",
-                        color: "#6B7280",
+                        color: "var(--theme-text-muted)",
                         marginBottom: "8px"
                       }}
                     >
@@ -204,7 +204,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                         style={{
                           padding: "2px 8px",
                           borderRadius: "4px",
-                          backgroundColor: "#F3F4F6",
+                          backgroundColor: "var(--theme-bg-surface-subtle)",
                           fontSize: "12px",
                           textTransform: "capitalize"
                         }}
@@ -235,15 +235,15 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                       alignItems: "center",
                       gap: "8px",
                       fontSize: "13px",
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       marginBottom: entry.notes ? "8px" : "0"
                     }}
                   >
                     <User size={14} />
                     <span>
-                      <strong style={{ color: "#374151" }}>{entry.performed_by_name}</strong>
+                      <strong style={{ color: "var(--theme-text-secondary)" }}>{entry.performed_by_name}</strong>
                       {entry.performed_by_role && (
-                        <span style={{ color: "#9CA3AF" }}> • {entry.performed_by_role}</span>
+                        <span style={{ color: "var(--theme-text-muted)" }}> • {entry.performed_by_role}</span>
                       )}
                     </span>
                   </div>
@@ -252,7 +252,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                   <div
                     style={{
                       fontSize: "12px",
-                      color: "#9CA3AF",
+                      color: "var(--theme-text-muted)",
                       marginBottom: entry.notes ? "8px" : "0"
                     }}
                   >
@@ -271,11 +271,11 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                       style={{
                         marginTop: "8px",
                         padding: "12px",
-                        backgroundColor: "#FFFFFF",
-                        border: "1px solid #E5E7EB",
+                        backgroundColor: "var(--theme-bg-surface)",
+                        border: "1px solid var(--theme-border-default)",
                         borderRadius: "8px",
                         fontSize: "13px",
-                        color: "#374151",
+                        color: "var(--theme-text-secondary)",
                         fontStyle: "italic"
                       }}
                     >

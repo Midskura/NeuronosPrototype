@@ -63,24 +63,24 @@ export function ApprovalsPage({
     <>
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-[#0A1D4D] mb-2">Approvals</h1>
-        <p className="text-[14px] text-[#6B7280] leading-[20px]">
+        <h1 className="text-[var(--theme-text-primary)] mb-2">Approvals</h1>
+        <p className="text-[14px] text-[var(--theme-text-muted)] leading-[20px]">
           Review and approve pending expenses and payments
         </p>
       </div>
 
       <Tabs defaultValue="expenses" className="w-full">
-        <TabsList className="bg-[#F9FAFB] p-1 mb-6 h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <TabsList className="bg-[var(--theme-bg-page)] p-1 mb-6 h-10" style={{ borderRadius: 'var(--radius-sm)' }}>
           <TabsTrigger 
             value="expenses" 
-            className="text-[14px] h-8 px-4 data-[state=active]:bg-white" 
+            className="text-[14px] h-8 px-4 data-[state=active]:bg-[var(--theme-bg-surface)]" 
             style={{ borderRadius: 'var(--radius-xs)' }}
           >
             Expenses ({pendingExpenses.length})
           </TabsTrigger>
           <TabsTrigger 
             value="payments" 
-            className="text-[14px] h-8 px-4 data-[state=active]:bg-white"
+            className="text-[14px] h-8 px-4 data-[state=active]:bg-[var(--theme-bg-surface)]"
             style={{ borderRadius: 'var(--radius-xs)' }}
           >
             Payments ({pendingPayments.length})
@@ -88,23 +88,23 @@ export function ApprovalsPage({
         </TabsList>
 
         <TabsContent value="expenses">
-          <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+          <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
             <Table>
               <TableHeader>
-                <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Date</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Booking</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Type</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Amount</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Description</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Entered By</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12 text-center">Actions</TableHead>
+                <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Date</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Type</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Amount</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Description</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Entered By</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {pendingExpenses.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-[14px] text-[#6B7280] h-24">
+                    <TableCell colSpan={7} className="text-center text-[14px] text-[var(--theme-text-muted)] h-24">
                       No pending expenses
                     </TableCell>
                   </TableRow>
@@ -112,25 +112,25 @@ export function ApprovalsPage({
                   pendingExpenses.map((expense) => (
                     <TableRow 
                       key={expense.id} 
-                      className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB]"
+                      className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)]"
                       style={{ minHeight: '48px' }}
                     >
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {new Date(expense.date).toLocaleDateString()}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                      <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                         {expense.bookingNo}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {expense.type}
                       </TableCell>
                       <TableCell className="text-[14px] text-right font-medium tabular-nums" style={{ color: 'var(--text-expense)' }}>
                         ₱{expense.amount.toLocaleString()}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#6B7280] max-w-[200px] truncate">
+                      <TableCell className="text-[14px] text-[var(--theme-text-muted)] max-w-[200px] truncate">
                         {expense.description || "—"}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {expense.enteredBy}
                       </TableCell>
                       <TableCell>
@@ -165,21 +165,21 @@ export function ApprovalsPage({
         </TabsContent>
 
         <TabsContent value="payments">
-          <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+          <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
             <Table>
               <TableHeader>
-                <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Date</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Booking</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12">Method</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Amount</TableHead>
-                  <TableHead className="text-[12px] text-[#6B7280] h-12 text-center">Actions</TableHead>
+                <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Date</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Method</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Amount</TableHead>
+                  <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-center">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {pendingPayments.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-[14px] text-[#6B7280] h-24">
+                    <TableCell colSpan={5} className="text-center text-[14px] text-[var(--theme-text-muted)] h-24">
                       No pending payments
                     </TableCell>
                   </TableRow>
@@ -187,16 +187,16 @@ export function ApprovalsPage({
                   pendingPayments.map((payment) => (
                     <TableRow 
                       key={payment.id} 
-                      className="border-b border-[#E5E7EB] hover:bg-[#F9FAFB]"
+                      className="border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)]"
                       style={{ minHeight: '48px' }}
                     >
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {new Date(payment.date).toLocaleDateString()}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                      <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                         {payment.bookingNo}
                       </TableCell>
-                      <TableCell className="text-[14px] text-[#374151]">
+                      <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                         {payment.method}
                       </TableCell>
                       <TableCell className="text-[14px] text-right font-medium tabular-nums" style={{ color: 'var(--text-revenue)' }}>

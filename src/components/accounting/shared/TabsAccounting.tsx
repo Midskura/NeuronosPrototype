@@ -46,7 +46,7 @@ export function TabsAccounting({
   className = "",
 }: TabsAccountingProps) {
   return (
-    <div className={`w-full border-b border-[#E5E7EB] bg-white ${className}`}>
+    <div className={`w-full border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] ${className}`}>
       <div className="max-w-[1200px] mx-auto px-3">
         <nav className="flex items-center h-[44px]">
           {tabs.map((tab) => {
@@ -67,7 +67,7 @@ export function TabsAccounting({
                       ? "text-[#F25C05] border-[#F25C05]"
                       : isDisabled
                       ? "text-[#D1D5DB] border-transparent cursor-not-allowed"
-                      : "text-[#6B7280] border-transparent hover:text-[#374151] cursor-pointer"
+                      : "text-[var(--theme-text-muted)] border-transparent hover:text-[var(--theme-text-secondary)] cursor-pointer"
                   }
                 `}
               >

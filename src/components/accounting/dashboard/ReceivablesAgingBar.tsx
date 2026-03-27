@@ -51,7 +51,7 @@ interface ReceivablesAgingBarProps {
 }
 
 const AGING_CONFIG: { label: string; days: string; min: number; max: number; color: string; bgLight: string }[] = [
-  { label: "Current",  days: "Not yet due",   min: -Infinity, max: 0,   color: "#0F766E", bgLight: "#F0FDFA" },
+  { label: "Current",  days: "Not yet due",   min: -Infinity, max: 0,   color: "var(--theme-action-primary-bg)", bgLight: "#F0FDFA" },
   { label: "1–30d",    days: "1–30 days",      min: 1,         max: 30,  color: "#D97706", bgLight: "#FFFBEB" },
   { label: "31–60d",   days: "31–60 days",     min: 31,        max: 60,  color: "#EA580C", bgLight: "#FFF7ED" },
   { label: "61–90d",   days: "61–90 days",     min: 61,        max: 90,  color: "#DC2626", bgLight: "#FEF2F2" },
@@ -70,7 +70,7 @@ function getBalance(inv: any, collections: any[] = []): number {
 
 /** DSO severity: teal ≤30, amber 31–60, red 61+ */
 function getDsoStyle(dso: number): { bg: string; color: string } {
-  if (dso <= 30) return { bg: "#F0FDFA", color: "#0F766E" };
+  if (dso <= 30) return { bg: "#F0FDFA", color: "var(--theme-action-primary-bg)" };
   if (dso <= 60) return { bg: "#FFFBEB", color: "#D97706" };
   return { bg: "#FEF2F2", color: "#DC2626" };
 }
@@ -122,23 +122,23 @@ function InvoiceDrillDown({
           return (
             <div
               key={inv.id || idx}
-              className="px-4 py-2 flex items-center justify-between group/row hover:bg-white/50 transition-colors"
+              className="px-4 py-2 flex items-center justify-between group/row hover:bg-[var(--theme-bg-surface)]/50 transition-colors"
             >
               <div className="flex items-center gap-4 min-w-0 flex-1">
                 <span
                   className="text-[11px] font-semibold tabular-nums flex-shrink-0"
-                  style={{ color: "#12332B", minWidth: "90px" }}
+                  style={{ color: "var(--theme-text-primary)", minWidth: "90px" }}
                 >
                   {invNumber}
                 </span>
                 <span
                   className="text-[11px] font-medium truncate"
-                  style={{ color: "#667085", maxWidth: "200px" }}
+                  style={{ color: "var(--theme-text-muted)", maxWidth: "200px" }}
                 >
                   {customer}
                 </span>
                 {dueDate && (
-                  <span className="text-[10px] tabular-nums flex-shrink-0" style={{ color: "#9CA3AF" }}>
+                  <span className="text-[10px] tabular-nums flex-shrink-0" style={{ color: "var(--theme-text-muted)" }}>
                     Due: {formatShortDate(dueDate)}
                   </span>
                 )}
@@ -154,7 +154,7 @@ function InvoiceDrillDown({
                 )}
                 <span
                   className="text-[12px] font-bold tabular-nums"
-                  style={{ color: "#12332B" }}
+                  style={{ color: "var(--theme-text-primary)" }}
                 >
                   {fmtPHP(balance)}
                 </span>
@@ -162,8 +162,8 @@ function InvoiceDrillDown({
                 <div className="flex items-center gap-1 opacity-0 group-hover/row:opacity-100 transition-opacity duration-150">
                   {onRecordPayment && (
                     <button
-                      className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-white/80"
-                      style={{ color: "#0F766E", border: "1px solid #0F766E30" }}
+                      className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface)]/80"
+                      style={{ color: "var(--theme-action-primary-bg)", border: "1px solid #0F766E30" }}
                       onClick={(e) => { e.stopPropagation(); onRecordPayment(inv.id || invNumber); }}
                     >
                       Record Payment
@@ -171,8 +171,8 @@ function InvoiceDrillDown({
                   )}
                   {onSendReminder && (
                     <button
-                      className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-white/80"
-                      style={{ color: "#0F766E", border: "1px solid #0F766E30" }}
+                      className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface)]/80"
+                      style={{ color: "var(--theme-action-primary-bg)", border: "1px solid #0F766E30" }}
                       onClick={(e) => { e.stopPropagation(); onSendReminder(inv); }}
                     >
                       Send Reminder
@@ -301,18 +301,18 @@ function UnbilledDrillDown({
         {displayed.map((booking, idx) => (
           <div
             key={booking.bookingId || idx}
-            className="px-4 py-2 flex items-center justify-between group/row hover:bg-white/50 transition-colors"
+            className="px-4 py-2 flex items-center justify-between group/row hover:bg-[var(--theme-bg-surface)]/50 transition-colors"
           >
             <div className="flex items-center gap-4 min-w-0 flex-1">
               <span
                 className="text-[11px] font-semibold tabular-nums flex-shrink-0"
-                style={{ color: "#12332B", minWidth: "90px" }}
+                style={{ color: "var(--theme-text-primary)", minWidth: "90px" }}
               >
                 {booking.bookingId}
               </span>
               <span
                 className="text-[11px] font-medium truncate"
-                style={{ color: "#667085", maxWidth: "200px" }}
+                style={{ color: "var(--theme-text-muted)", maxWidth: "200px" }}
               >
                 {booking.customerName}
               </span>
@@ -328,7 +328,7 @@ function UnbilledDrillDown({
             <div className="flex items-center gap-2 flex-shrink-0 ml-4">
               <span
                 className="text-[12px] font-bold tabular-nums"
-                style={{ color: "#12332B" }}
+                style={{ color: "var(--theme-text-primary)" }}
               >
                 {fmtPHP(booking.unbilledAmount)}
               </span>
@@ -336,8 +336,8 @@ function UnbilledDrillDown({
               {onCreateInvoice && (
                 <div className="opacity-0 group-hover/row:opacity-100 transition-opacity duration-150">
                   <button
-                    className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-white/80"
-                    style={{ color: "#0F766E", border: "1px solid #0F766E30" }}
+                    className="px-2 py-0.5 rounded text-[10px] font-medium cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface)]/80"
+                    style={{ color: "var(--theme-action-primary-bg)", border: "1px solid #0F766E30" }}
                     onClick={(e) => { e.stopPropagation(); onCreateInvoice(booking.bookingId); }}
                   >
                     Create Invoice
@@ -466,26 +466,26 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
     return (
       <div
         className="rounded-xl px-5 py-3"
-        style={{ border: "1px solid #E5E9F0", background: "white" }}
+        style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <h3
               className="text-[13px] font-semibold uppercase tracking-wider"
-              style={{ color: "#667085" }}
+              style={{ color: "var(--theme-text-muted)" }}
             >
               Receivables Aging
             </h3>
             <span
               className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md"
-              style={{ background: "#F3F4F6", color: "#9CA3AF" }}
+              style={{ background: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" }}
             >
               <Calendar size={10} />
               As of {todayStr}
             </span>
           </div>
         </div>
-        <p className="text-[13px] mt-2" style={{ color: "#9CA3AF" }}>
+        <p className="text-[13px] mt-2" style={{ color: "var(--theme-text-muted)" }}>
           No outstanding receivables
         </p>
       </div>
@@ -495,7 +495,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
   return (
     <div
       className="rounded-xl px-5 py-3"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       {/* ── Header Row ── */}
       <div className="flex items-center justify-between mb-3">
@@ -503,13 +503,13 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
         <div className="flex items-center gap-3">
           <h3
             className="text-[13px] font-semibold uppercase tracking-wider"
-            style={{ color: "#667085" }}
+            style={{ color: "var(--theme-text-muted)" }}
           >
             Receivables Aging
           </h3>
           <span
             className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md"
-            style={{ background: "#F3F4F6", color: "#9CA3AF" }}
+            style={{ background: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" }}
           >
             <Calendar size={10} />
             As of {todayStr}
@@ -519,25 +519,25 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
         {/* Right: total outstanding + View */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-medium" style={{ color: "#9CA3AF" }}>
+            <span className="text-[11px] font-medium" style={{ color: "var(--theme-text-muted)" }}>
               Billed:
             </span>
-            <span className="text-[18px] font-bold tabular-nums" style={{ color: "#12332B" }}>
+            <span className="text-[18px] font-bold tabular-nums" style={{ color: "var(--theme-text-primary)" }}>
               {formatCurrencyCompact(totalAmount)}
             </span>
-            <span className="text-[11px] font-medium ml-0.5 tabular-nums" style={{ color: "#9CA3AF" }}>
+            <span className="text-[11px] font-medium ml-0.5 tabular-nums" style={{ color: "var(--theme-text-muted)" }}>
               ({totalCount})
             </span>
           </div>
           {hasUnbilled && (
-            <div className="flex items-center gap-1.5 pl-2" style={{ borderLeft: "1px solid #E5E9F0" }}>
-              <span className="text-[11px] font-medium" style={{ color: "#9CA3AF" }}>
+            <div className="flex items-center gap-1.5 pl-2" style={{ borderLeft: "1px solid var(--theme-border-default)" }}>
+              <span className="text-[11px] font-medium" style={{ color: "var(--theme-text-muted)" }}>
                 Unbilled:
               </span>
-              <span className="text-[14px] font-bold tabular-nums" style={{ color: "#667085" }}>
+              <span className="text-[14px] font-bold tabular-nums" style={{ color: "var(--theme-text-muted)" }}>
                 {formatCurrencyCompact(unbilledAmount)}
               </span>
-              <span className="text-[11px] font-medium ml-0.5 tabular-nums" style={{ color: "#9CA3AF" }}>
+              <span className="text-[11px] font-medium ml-0.5 tabular-nums" style={{ color: "var(--theme-text-muted)" }}>
                 ({unbilledBookingCount} {unbilledBookingCount === 1 ? "bkg" : "bkgs"})
               </span>
             </div>
@@ -545,7 +545,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
           {onNavigate && (
             <button
               className="text-[12px] font-medium cursor-pointer hover:underline"
-              style={{ color: "#0F766E" }}
+              style={{ color: "var(--theme-action-primary-bg)" }}
               onClick={onNavigate}
             >
               View →
@@ -592,7 +592,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 </div>
 
                 {/* Bar — simple solid color to distinguish from aging bars */}
-                <div className="flex-1 h-[18px] rounded overflow-hidden relative" style={{ background: "#F3F4F6" }}>
+                <div className="flex-1 h-[18px] rounded overflow-hidden relative" style={{ background: "var(--theme-bg-surface-subtle)" }}>
                   <div
                     className="h-full rounded transition-all duration-300 flex items-center px-1.5 min-w-[24px]"
                     style={{
@@ -613,7 +613,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 <div className="flex-shrink-0 text-right" style={{ width: "80px" }}>
                   <span
                     className="text-[12px] font-bold tabular-nums whitespace-nowrap"
-                    style={{ color: "#12332B" }}
+                    style={{ color: "var(--theme-text-primary)" }}
                   >
                     {formatCurrencyCompact(unbilledAmount)}
                   </span>
@@ -623,7 +623,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 <div className="flex-shrink-0 text-right" style={{ width: "40px" }}>
                   <span
                     className="text-[10px] tabular-nums"
-                    style={{ color: "#9CA3AF" }}
+                    style={{ color: "var(--theme-text-muted)" }}
                   >
                     {unbilledBookingCount} {unbilledBookingCount === 1 ? "bkg" : "bkgs"}
                   </span>
@@ -724,7 +724,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 </div>
 
                 {/* Bar area */}
-                <div className="flex-1 h-[18px] rounded overflow-hidden relative" style={{ background: "#F3F4F6" }}>
+                <div className="flex-1 h-[18px] rounded overflow-hidden relative" style={{ background: "var(--theme-bg-surface-subtle)" }}>
                   <div
                     className="h-full rounded transition-all duration-300 flex items-center px-1.5 min-w-[24px]"
                     style={{
@@ -745,7 +745,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 <div className="flex-shrink-0 text-right" style={{ width: "80px" }}>
                   <span
                     className="text-[12px] font-bold tabular-nums whitespace-nowrap"
-                    style={{ color: "#12332B" }}
+                    style={{ color: "var(--theme-text-primary)" }}
                   >
                     {formatCurrencyCompact(seg.amount)}
                   </span>
@@ -755,7 +755,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 <div className="flex-shrink-0 text-right" style={{ width: "40px" }}>
                   <span
                     className="text-[10px] tabular-nums"
-                    style={{ color: "#9CA3AF" }}
+                    style={{ color: "var(--theme-text-muted)" }}
                   >
                     {seg.count} inv
                   </span>
@@ -765,7 +765,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                 <div className="flex-shrink-0 text-right" style={{ width: "36px" }}>
                   <span
                     className="text-[10px] font-medium tabular-nums"
-                    style={{ color: "#667085" }}
+                    style={{ color: "var(--theme-text-muted)" }}
                   >
                     {sharePct.toFixed(sharePct < 1 && sharePct > 0 ? 1 : 0)}%
                   </span>

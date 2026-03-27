@@ -163,10 +163,10 @@ export function PLTrendCard({
   const collectionRate = scopedRevenue > 0 ? (scopedCollected / scopedRevenue) * 100 : 0;
 
   const summaryItems = [
-    { label: "Revenue", value: scopedRevenue, color: "#0F766E", sub: null as string | null },
+    { label: "Revenue", value: scopedRevenue, color: "var(--theme-action-primary-bg)", sub: null as string | null },
     { label: "Expenses", value: scopedExpenses, color: "#DC2626", sub: null },
     { label: "Net Profit", value: netProfit, color: netProfit >= 0 ? "#16A34A" : "#EF4444", sub: `${profitMargin.toFixed(1)}% margin` },
-    { label: "Collected", value: scopedCollected, color: "#0F766E", sub: `${collectionRate.toFixed(0)}% of invoiced` },
+    { label: "Collected", value: scopedCollected, color: "var(--theme-action-primary-bg)", sub: `${collectionRate.toFixed(0)}% of invoiced` },
     { label: "Net Cash", value: netCash, color: netCash >= 0 ? "#16A34A" : "#EF4444", sub: "Collected – Expenses" },
   ];
 
@@ -211,8 +211,8 @@ export function PLTrendCard({
     <div
       className="rounded-2xl overflow-hidden"
       style={{
-        border: "1px solid #E5E9F0",
-        background: "white",
+        border: "1px solid var(--theme-border-default)",
+        background: "var(--theme-bg-surface)",
         boxShadow: "0px 25px 50px -12px rgba(0,0,0,0.06)",
       }}
     >
@@ -228,7 +228,7 @@ export function PLTrendCard({
               style={{
                 fontSize: "12px",
                 letterSpacing: "0.6px",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             >
               P&L Trend
@@ -246,14 +246,14 @@ export function PLTrendCard({
                   className="rounded-full"
                   style={{ width: "8px", height: "8px", background: "#0F766E" }}
                 />
-                <span style={{ fontSize: "12px", color: "#9CA3AF" }}>Revenue</span>
+                <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Revenue</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <div
                   className="rounded-full"
                   style={{ width: "8px", height: "8px", background: "#DC2626" }}
                 />
-                <span style={{ fontSize: "12px", color: "#9CA3AF" }}>Expenses</span>
+                <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Expenses</span>
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@ export function PLTrendCard({
                 <span
                   key={`tick-${i}`}
                   className="text-right tabular-nums leading-none"
-                  style={{ fontSize: "10px", color: "#9CA3AF" }}
+                  style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}
                 >
                   {formatCurrencyCompact(tick)}
                 </span>
@@ -325,7 +325,7 @@ export function PLTrendCard({
                             className="flex-1 transition-opacity duration-200"
                             style={{
                               height: `${Math.max(revPct, item.revenue > 0 ? 1.5 : 0)}%`,
-                              backgroundColor: "#0F766E",
+                              backgroundColor: "var(--theme-action-primary-bg)",
                               borderRadius: `${BAR_RADIUS}px ${BAR_RADIUS}px 0 0`,
                               opacity: isHovered ? 1 : 0.88,
                             }}
@@ -347,8 +347,8 @@ export function PLTrendCard({
                           <div
                             className="absolute z-20 rounded-lg shadow-lg pointer-events-none"
                             style={{
-                              background: "white",
-                              border: "1px solid #E5E9F0",
+                              background: "var(--theme-bg-surface)",
+                              border: "1px solid var(--theme-border-default)",
                               bottom: `${Math.min(Math.max(revPct, expPct) + 6, 88)}%`,
                               left: "50%",
                               transform: "translateX(-50%)",
@@ -359,23 +359,23 @@ export function PLTrendCard({
                           >
                             <div
                               className="font-semibold"
-                              style={{ fontSize: "13px", color: "#12332B", marginBottom: "8px" }}
+                              style={{ fontSize: "13px", color: "var(--theme-text-primary)", marginBottom: "8px" }}
                             >
                               {item.month}
                             </div>
                             <div className="flex items-center justify-between" style={{ gap: "16px", marginBottom: "4px" }}>
                               <div className="flex items-center gap-1.5">
                                 <div className="rounded-full" style={{ width: "8px", height: "8px", background: "#0F766E" }} />
-                                <span style={{ fontSize: "12px", color: "#667085" }}>Revenue</span>
+                                <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Revenue</span>
                               </div>
-                              <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "#0F766E" }}>
+                              <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "var(--theme-action-primary-bg)" }}>
                                 {fmtFull(item.revenue)}
                               </span>
                             </div>
                             <div className="flex items-center justify-between" style={{ gap: "16px", marginBottom: "4px" }}>
                               <div className="flex items-center gap-1.5">
                                 <div className="rounded-full" style={{ width: "8px", height: "8px", background: "#DC2626" }} />
-                                <span style={{ fontSize: "12px", color: "#667085" }}>Expenses</span>
+                                <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Expenses</span>
                               </div>
                               <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "#DC2626" }}>
                                 {fmtFull(item.expenses)}
@@ -383,9 +383,9 @@ export function PLTrendCard({
                             </div>
                             <div
                               className="flex items-center justify-between"
-                              style={{ gap: "16px", paddingTop: "6px", marginTop: "6px", borderTop: "1px solid #F3F4F6" }}
+                              style={{ gap: "16px", paddingTop: "6px", marginTop: "6px", borderTop: "1px solid var(--theme-border-subtle)" }}
                             >
-                              <span style={{ fontSize: "12px", color: "#667085" }}>Net Profit</span>
+                              <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Net Profit</span>
                               <span
                                 className="font-bold tabular-nums"
                                 style={{ fontSize: "12px", color: item.profit >= 0 ? "#16A34A" : "#EF4444" }}
@@ -407,7 +407,7 @@ export function PLTrendCard({
                   <div
                     key={item.monthKey}
                     className="flex-1 text-center"
-                    style={{ fontSize: "10px", color: "#9CA3AF" }}
+                    style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}
                   >
                     {item.month}
                   </div>
@@ -431,7 +431,7 @@ export function PLTrendCard({
               style={{
                 fontSize: "12px",
                 letterSpacing: "0.6px",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             >
               Cash Flow Summary
@@ -446,7 +446,7 @@ export function PLTrendCard({
                   key={item.label}
                 >
                   <div className="flex items-baseline justify-between">
-                    <span style={{ fontSize: "13px", color: "#9CA3AF" }}>
+                    <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                       {item.label}
                     </span>
                     <div className="text-right">
@@ -466,7 +466,7 @@ export function PLTrendCard({
                           className="block"
                           style={{
                             fontSize: "10px",
-                            color: "#9CA3AF",
+                            color: "var(--theme-text-muted)",
                             lineHeight: "13px",
                           }}
                         >
@@ -486,9 +486,9 @@ export function PLTrendCard({
       {insightLine && (
         <div
           className="px-4 py-2"
-          style={{ borderTop: "1px solid #F3F4F6" }}
+          style={{ borderTop: "1px solid var(--theme-border-subtle)" }}
         >
-          <p className="text-[13px]" style={{ color: "#667085" }}>
+          <p className="text-[13px]" style={{ color: "var(--theme-text-muted)" }}>
             {insightLine}
           </p>
         </div>

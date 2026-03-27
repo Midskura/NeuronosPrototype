@@ -267,7 +267,7 @@ export function CreateBookingFromProjectModal({
           bottom: 0,
           width: "600px",
           maxWidth: "90vw",
-          background: "white",
+          background: "var(--theme-bg-surface)",
           zIndex: 1000,
           boxShadow: "-4px 0 24px rgba(0, 0, 0, 0.12)",
           display: "flex",
@@ -286,7 +286,7 @@ export function CreateBookingFromProjectModal({
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-                <FileText size={20} color="#0F766E" />
+                <FileText size={20} color="var(--theme-action-primary-bg)" />
                 <h2 style={{
                   fontSize: "18px",
                   fontWeight: 600,
@@ -312,7 +312,7 @@ export function CreateBookingFromProjectModal({
                 padding: "8px",
                 cursor: "pointer",
                 borderRadius: "6px",
-                color: "#6B7280",
+                color: "var(--theme-text-muted)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center"
@@ -374,14 +374,14 @@ export function CreateBookingFromProjectModal({
               fontWeight: 600,
               textTransform: "uppercase",
               letterSpacing: "0.5px",
-              color: "#0F766E",
+              color: "var(--theme-action-primary-bg)",
               marginBottom: "16px"
             }}>
               Pre-filled Information
             </h3>
             
             <div style={{
-              background: "#F9FAFB",
+              background: "var(--theme-bg-page)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "8px",
               padding: "20px"
@@ -452,7 +452,7 @@ export function CreateBookingFromProjectModal({
         <div style={{
           padding: "20px 32px",
           borderTop: "1px solid var(--neuron-ui-border)",
-          background: "white",
+          background: "var(--theme-bg-surface)",
           display: "flex",
           justifyContent: "flex-end",
           gap: "12px",
@@ -463,12 +463,12 @@ export function CreateBookingFromProjectModal({
             disabled={isSubmitting}
             style={{
               padding: "10px 24px",
-              background: "white",
-              border: "1px solid #D1D5DB",
+              background: "var(--theme-bg-surface)",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
               fontWeight: 600,
-              color: "#6B7280",
+              color: "var(--theme-text-muted)",
               cursor: isSubmitting ? "not-allowed" : "pointer",
               opacity: isSubmitting ? 0.5 : 1,
               transition: "all 150ms"
@@ -506,12 +506,12 @@ export function CreateBookingFromProjectModal({
             }}
             onMouseEnter={(e) => {
               if (!isSubmitting) {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }
             }}
             onMouseLeave={(e) => {
               if (!isSubmitting) {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }
             }}
           >
@@ -531,7 +531,7 @@ function PreviewField({ label, value }: { label: string; value?: string }) {
         fontWeight: 600,
         textTransform: "uppercase",
         letterSpacing: "0.5px",
-        color: "#6B7280",
+        color: "var(--theme-text-muted)",
         marginBottom: "4px"
       }}>
         {label}

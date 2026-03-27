@@ -264,7 +264,7 @@ export function ContractRateCardV2({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid #E5E9E8",
         borderRadius: "12px",
         padding: "28px",
@@ -299,7 +299,7 @@ export function ContractRateCardV2({
             style={{
               fontSize: "11px",
               fontWeight: 500,
-              color: "#6B7A76",
+              color: "var(--theme-text-muted)",
               backgroundColor: "#F0F4F3",
               padding: "2px 8px",
               borderRadius: "4px",
@@ -323,7 +323,7 @@ export function ContractRateCardV2({
                   padding: "6px 14px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  color: "#6B7A76",
+                  color: "var(--theme-text-muted)",
                   backgroundColor: "transparent",
                   border: "1px dashed #C8D0CD",
                   borderRadius: "6px",
@@ -331,7 +331,7 @@ export function ContractRateCardV2({
                   transition: "all 0.15s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                   e.currentTarget.style.color = "#0F766E";
                 }}
                 onMouseLeave={(e) => {
@@ -385,7 +385,7 @@ export function ContractRateCardV2({
                   transition: "all 0.15s ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#E8F5F3";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "transparent";
@@ -412,7 +412,7 @@ export function ContractRateCardV2({
                 transition: "all 0.15s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#E8F5F3";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -443,7 +443,7 @@ export function ContractRateCardV2({
           style={{
             padding: "48px 24px",
             textAlign: "center",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "10px",
           }}
@@ -479,7 +479,7 @@ export function ContractRateCardV2({
             border: "1px solid #E5E9E8",
             borderRadius: "10px",
             overflow: "visible",
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <div style={{ overflowX: "visible" as any }}>
@@ -534,8 +534,8 @@ export function ContractRateCardV2({
                         border: "1px solid #0F766E",
                         borderRadius: "4px",
                         outline: "none",
-                        backgroundColor: "white",
-                        color: "#0F766E",
+                        backgroundColor: "var(--theme-bg-surface)",
+                        color: "var(--theme-action-primary-bg)",
                         textAlign: "right",
                         letterSpacing: "0.5px",
                         textTransform: "uppercase",
@@ -565,7 +565,7 @@ export function ContractRateCardV2({
                         background: "none",
                         border: "none",
                         cursor: "pointer",
-                        color: "#9CA3AF",
+                        color: "var(--theme-text-muted)",
                         opacity: 0.6,
                         lineHeight: 0,
                       }}
@@ -683,7 +683,7 @@ const cellInputStyle: React.CSSProperties = {
   fontSize: "13px",
   fontWeight: 500,
   color: "#2C3E38",
-  backgroundColor: "white",
+  backgroundColor: "var(--theme-bg-surface)",
   border: "1px solid #E0E6E4",
   borderRadius: "6px",
   outline: "none",
@@ -790,7 +790,7 @@ function RateLineItem({
                   fontSize: "13px",
                   fontWeight: 500,
                   fontStyle: "italic",
-                  color: "#6B7280",
+                  color: "var(--theme-text-muted)",
                   textAlign: "right",
                   padding: "6px 8px",
                 }}
@@ -858,7 +858,7 @@ function RateLineItem({
               <span
                 style={{
                   fontSize: "12px",
-                  color: "#9CA3AF",
+                  color: "var(--theme-text-muted)",
                   fontStyle: "italic",
                   padding: "6px 8px",
                 }}
@@ -887,7 +887,7 @@ function RateLineItem({
                   fontSize: "12px",
                   borderRadius: "6px",
                   border: "1px solid #E0E6E4",
-                  backgroundColor: "white",
+                  backgroundColor: "var(--theme-bg-surface)",
                   fontWeight: 500,
                 }}
               />
@@ -994,7 +994,7 @@ function RateLineItem({
                 style={{
                   fontSize: "11px",
                   fontWeight: 600,
-                  color: "#0F766E",
+                  color: "var(--theme-action-primary-bg)",
                   padding: "3px 8px",
                   borderRadius: "4px",
                   backgroundColor: "transparent",
@@ -1107,7 +1107,7 @@ function RateLineItem({
                   padding: "3px 6px",
                   fontSize: "11px",
                   color: "var(--neuron-ink-muted)",
-                  backgroundColor: "#F3F4F6",
+                  backgroundColor: "var(--theme-bg-surface-subtle)",
                   borderRight: "1px solid #D9E1DE",
                 }}
               >
@@ -1200,7 +1200,7 @@ function RateLineItem({
                 padding: "6px 8px",
                 border: "1px solid #E0E6E4",
                 borderRadius: "6px",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 whiteSpace: "pre-wrap",
                 wordBreak: "break-word",
               }}

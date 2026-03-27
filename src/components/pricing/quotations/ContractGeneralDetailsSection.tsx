@@ -72,7 +72,7 @@ export function ContractGeneralDetailsSection({
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -151,7 +151,7 @@ export function ContractGeneralDetailsSection({
                 padding: "10px 12px",
                 fontSize: "13px",
                 color: "var(--neuron-ink-base)",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 minHeight: "38px",
@@ -222,7 +222,7 @@ export function ContractGeneralDetailsSection({
                 padding: "10px 12px",
                 fontSize: "13px",
                 color: "var(--neuron-ink-base)",
-                backgroundColor: "#F9FAFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 minHeight: "38px",

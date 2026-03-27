@@ -83,7 +83,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
     >
       <div
         style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           borderRadius: "12px",
           width: "100%",
           maxWidth: "540px",
@@ -125,7 +125,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
               transition: "background-color 0.2s"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#F3F4F6";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
@@ -314,7 +314,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                   fontSize: "14px",
                   outline: "none",
                   cursor: "pointer",
-                  backgroundColor: "white"
+                  backgroundColor: "var(--theme-bg-surface)"
                 }}
               >
                 <option value="Lead">Lead</option>
@@ -386,12 +386,12 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 fontSize: "14px",
                 fontWeight: 500,
                 color: "var(--neuron-ink-secondary)",
-                backgroundColor: "white",
+                backgroundColor: "var(--theme-bg-surface)",
                 cursor: "pointer",
                 transition: "all 0.2s"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F9FAFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "white";

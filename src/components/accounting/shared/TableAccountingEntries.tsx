@@ -65,8 +65,8 @@ export function TableAccountingEntries({
 
   if (loading) {
     return (
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <div className="flex items-center justify-center h-64 text-[14px] text-[#6B7280]">
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <div className="flex items-center justify-center h-64 text-[14px] text-[var(--theme-text-muted)]">
           Loading entries...
         </div>
       </div>
@@ -75,11 +75,11 @@ export function TableAccountingEntries({
 
   if (error) {
     return (
-      <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+      <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
             <p className="text-[14px] text-red-600 mb-2">{error}</p>
-            <p className="text-[12px] text-[#6B7280]">Please try again or contact support</p>
+            <p className="text-[12px] text-[var(--theme-text-muted)]">Please try again or contact support</p>
           </div>
         </div>
       </div>
@@ -87,26 +87,26 @@ export function TableAccountingEntries({
   }
 
   return (
-    <div className="border border-[#E5E7EB] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
+    <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
       <Table>
         <TableHeader>
-          <TableRow className="bg-[#F9FAFB] border-b border-[#E5E7EB]">
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Booking No</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Client</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Type</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12 text-right">Amount</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Account</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Category</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Date</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Note</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12">Status</TableHead>
-            <TableHead className="text-[12px] text-[#6B7280] h-12 text-center">Actions</TableHead>
+          <TableRow className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Booking No</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Client</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Type</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-right">Amount</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Account</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Category</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Date</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Note</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12">Status</TableHead>
+            <TableHead className="text-[12px] text-[var(--theme-text-muted)] h-12 text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {entries.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={10} className="text-center text-[14px] text-[#6B7280] h-24">
+              <TableCell colSpan={10} className="text-center text-[14px] text-[var(--theme-text-muted)] h-24">
                 {emptyMessage}
               </TableCell>
             </TableRow>
@@ -114,18 +114,18 @@ export function TableAccountingEntries({
             entries.map((entry, index) => (
               <TableRow
                 key={entry.id}
-                className={`border-b border-[#E5E7EB] hover:bg-[#F9FAFB] ${
+                className={`border-b border-[var(--theme-border-default)] hover:bg-[var(--theme-bg-page)] ${
                   zebra && index % 2 === 1 ? 'bg-[#FAFBFC]' : ''
                 }`}
                 style={{ minHeight: '48px' }}
               >
-                <TableCell className="text-[14px] text-[#0A1D4D] font-medium">
+                <TableCell className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                   {entry.bookingNo}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {entry.client}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151] capitalize">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)] capitalize">
                   {entry.type}
                 </TableCell>
                 <TableCell
@@ -134,16 +134,16 @@ export function TableAccountingEntries({
                 >
                   ₱{entry.amount.toLocaleString()}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {entry.account}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {entry.category || "—"}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#374151]">
+                <TableCell className="text-[14px] text-[var(--theme-text-secondary)]">
                   {new Date(entry.date).toLocaleDateString()}
                 </TableCell>
-                <TableCell className="text-[14px] text-[#6B7280] max-w-[200px]">
+                <TableCell className="text-[14px] text-[var(--theme-text-muted)] max-w-[200px]">
                   {entry.note ? (
                     <TooltipProvider>
                       <Tooltip>
@@ -171,7 +171,7 @@ export function TableAccountingEntries({
                         className="h-8 w-8 p-0"
                         onClick={() => onView(entry.id)}
                       >
-                        <Eye className="w-4 h-4 text-[#6B7280]" />
+                        <Eye className="w-4 h-4 text-[var(--theme-text-muted)]" />
                       </Button>
                     )}
                     {onEdit && (
@@ -181,7 +181,7 @@ export function TableAccountingEntries({
                         className="h-8 w-8 p-0"
                         onClick={() => onEdit(entry.id)}
                       >
-                        <Edit2 className="w-4 h-4 text-[#6B7280]" />
+                        <Edit2 className="w-4 h-4 text-[var(--theme-text-muted)]" />
                       </Button>
                     )}
                   </div>

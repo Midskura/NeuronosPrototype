@@ -93,7 +93,7 @@ export function EditableSectionCard({
   return (
     <div
       style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: `1px solid var(--neuron-ui-border)`,
         borderRadius: "8px",
         padding: "24px",
@@ -129,7 +129,7 @@ export function EditableSectionCard({
                 fontWeight: 500,
                 padding: "2px 8px",
                 backgroundColor: "rgba(15, 118, 110, 0.08)",
-                color: "#0F766E",
+                color: "var(--theme-action-primary-bg)",
                 borderRadius: "4px",
               }}
             >
@@ -150,15 +150,15 @@ export function EditableSectionCard({
                   padding: "6px 14px",
                   fontSize: "13px",
                   fontWeight: 500,
-                  backgroundColor: "white",
-                  border: "1px solid #E5E7EB",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "6px",
                   color: "var(--neuron-ink-secondary)",
                   cursor: "pointer",
                   transition: "background-color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#F9FAFB";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "white";
@@ -174,7 +174,7 @@ export function EditableSectionCard({
                   padding: "6px 14px",
                   fontSize: "13px",
                   fontWeight: 500,
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   border: "1px solid #0F766E",
                   borderRadius: "6px",
                   color: "white",
@@ -203,19 +203,19 @@ export function EditableSectionCard({
                   padding: "6px 14px",
                   fontSize: "13px",
                   fontWeight: 500,
-                  backgroundColor: "white",
-                  border: "1px solid #E5E7EB",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "6px",
                   color: "var(--neuron-ink-secondary)",
                   cursor: "pointer",
                   transition: "all 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "#0F766E";
+                  e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                   e.currentTarget.style.color = "#0F766E";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#E5E7EB";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
                   e.currentTarget.style.color = "var(--neuron-ink-secondary)";
                 }}
               >

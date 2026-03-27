@@ -218,7 +218,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
       }}
     >
       {/* Header */}
@@ -331,7 +331,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
             onChange={setStatusFilter}
             options={[
               { value: "All Statuses", label: "All Statuses", icon: <CircleDot size={16} /> },
-              { value: "Lead", label: "Lead", icon: <CircleDot size={16} style={{ color: "#6B7280" }} /> },
+              { value: "Lead", label: "Lead", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
               { value: "Prospect", label: "Prospect", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
               { value: "MQL", label: "MQL", icon: <CircleDot size={16} style={{ color: "#3B82F6" }} /> },
               { value: "Customer", label: "Customer", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> }
@@ -379,10 +379,10 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
         ) : (
           <div
             style={{
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "12px",
               overflow: "hidden",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           >
             {/* Table Header */}
@@ -393,10 +393,10 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
                 gap: "16px",
                 padding: "12px 24px",
                 backgroundColor: "transparent",
-                borderBottom: "1px solid #E5E7EB",
+                borderBottom: "1px solid var(--theme-border-default)",
                 fontSize: "11px",
                 fontWeight: 600,
-                color: "#9CA3AF",
+                color: "var(--theme-text-muted)",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
               }}
@@ -425,7 +425,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
                     transition: "background-color 0.2s",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#F3F4F6";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor =

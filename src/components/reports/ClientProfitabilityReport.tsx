@@ -31,8 +31,8 @@ export function ClientProfitabilityReport({ entries, period, generatedAt, compan
   const avgRevenuePerBooking = totals.numBookings > 0 ? totals.totalRevenue / totals.numBookings : 0;
 
   return (
-    <div className="bg-white rounded-lg border border-[#E5E7EB] overflow-hidden">
-      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "#FFFFFF" }}>
+    <div className="bg-[var(--theme-bg-surface)] rounded-lg border border-[var(--theme-border-default)] overflow-hidden">
+      <div style={{ fontFamily: "Arial, sans-serif", padding: "40px", backgroundColor: "var(--theme-bg-surface)" }}>
         {/* Header */}
         <div className="text-center mb-6">
           <div className="uppercase mb-3" style={{ fontSize: "11px", fontWeight: "bold", color: "#000000", letterSpacing: "0.5px" }}>
@@ -49,7 +49,7 @@ export function ClientProfitabilityReport({ entries, period, generatedAt, compan
         {/* Table */}
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "10px", border: "1px solid #000" }}>
           <thead>
-            <tr style={{ backgroundColor: "#0F766E", color: "#FFFFFF", height: "32px" }}>
+            <tr style={{ backgroundColor: "var(--theme-action-primary-bg)", color: "#FFFFFF", height: "32px" }}>
               <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: "bold", fontSize: "9px", textAlign: "left", color: "#FFFFFF" }}>
                 CLIENT NAME
               </th>
@@ -114,7 +114,7 @@ export function ClientProfitabilityReport({ entries, period, generatedAt, compan
             ))}
             
             {/* TOTAL ROW */}
-            <tr style={{ height: "32px", backgroundColor: "#F3F4F6" }}>
+            <tr style={{ height: "32px", backgroundColor: "var(--theme-bg-surface-subtle)" }}>
               <td colSpan={2} style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", color: "#000000" }}>
                 TOTAL
               </td>
@@ -141,7 +141,7 @@ export function ClientProfitabilityReport({ entries, period, generatedAt, compan
         </table>
 
         {/* Footer */}
-        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "#9CA3AF" }}>
+        <div className="mt-8 text-right" style={{ fontSize: "8px", color: "var(--theme-text-muted)" }}>
           Generated on {generatedAt}
         </div>
       </div>

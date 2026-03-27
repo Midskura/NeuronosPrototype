@@ -64,13 +64,13 @@ export function GroupedDropdown({ options = [], value, onChange, placeholder = "
         }}
         onFocus={(e) => {
           if (!disabled) {
-            e.currentTarget.style.borderColor = "#0F766E";
+            e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
             e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.1)";
           }
         }}
         onBlur={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#E5E7EB";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
             e.currentTarget.style.boxShadow = "none";
           }
         }}
@@ -87,7 +87,7 @@ export function GroupedDropdown({ options = [], value, onChange, placeholder = "
         <ChevronDown 
           size={16} 
           style={{ 
-            color: "#6B7280", 
+            color: "var(--theme-text-muted)", 
             marginLeft: "8px",
             transition: "transform 0.2s",
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)"
@@ -103,7 +103,7 @@ export function GroupedDropdown({ options = [], value, onChange, placeholder = "
             top: "calc(100% + 4px)",
             left: 0,
             right: 0,
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1.5px solid #E5E7EB",
             borderRadius: "8px",
             boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
@@ -121,9 +121,9 @@ export function GroupedDropdown({ options = [], value, onChange, placeholder = "
                   padding: "10px 14px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  color: "#0F766E",
-                  backgroundColor: "#F9FAFB",
-                  borderTop: groupIndex > 0 ? "1px solid #E5E7EB" : "none",
+                  color: "var(--theme-action-primary-bg)",
+                  backgroundColor: "var(--theme-bg-page)",
+                  borderTop: groupIndex > 0 ? "1px solid var(--theme-border-default)" : "none",
                   textTransform: "uppercase",
                   letterSpacing: "0.5px"
                 }}
@@ -151,7 +151,7 @@ export function GroupedDropdown({ options = [], value, onChange, placeholder = "
                   }}
                   onMouseEnter={(e) => {
                     if (value !== item) {
-                      e.currentTarget.style.backgroundColor = "#F9FAFB";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }
                   }}
                   onMouseLeave={(e) => {

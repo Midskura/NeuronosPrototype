@@ -74,7 +74,7 @@ export function ServiceModuleLayout({
   emptyMessage = "No bookings found"
 }: ServiceModuleLayoutProps) {
   return (
-    <div style={{ minHeight: "100vh", background: "#FFFFFF" }}>
+    <div style={{ minHeight: "100vh", background: "var(--theme-bg-surface)" }}>
       {/* Header */}
       <div style={{ padding: "32px 48px 24px 48px" }}>
         <div style={{ 
@@ -87,7 +87,7 @@ export function ServiceModuleLayout({
             <h1 style={{ 
               fontSize: "32px", 
               fontWeight: 600, 
-              color: "#12332B", 
+              color: "var(--theme-text-primary)", 
               marginBottom: "4px",
               letterSpacing: "-1.2px"
             }}>
@@ -95,7 +95,7 @@ export function ServiceModuleLayout({
             </h1>
             <p style={{ 
               fontSize: "14px", 
-              color: "#667085"
+              color: "var(--theme-text-muted)"
             }}>
               {subtitle}
             </p>
@@ -132,7 +132,7 @@ export function ServiceModuleLayout({
               left: "12px",
               top: "50%",
               transform: "translateY(-50%)",
-              color: "#667085",
+              color: "var(--theme-text-muted)",
             }}
           />
           <input
@@ -143,12 +143,12 @@ export function ServiceModuleLayout({
             style={{
               width: "100%",
               padding: "10px 12px 10px 40px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
               outline: "none",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           />
         </div>
@@ -166,11 +166,11 @@ export function ServiceModuleLayout({
             onChange={(e) => onTimePeriodChange(e.target.value)}
             style={{
               padding: "10px 12px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
               outline: "none",
               cursor: "pointer",
             }}
@@ -187,11 +187,11 @@ export function ServiceModuleLayout({
             onChange={(e) => onStatusChange(e.target.value)}
             style={{
               padding: "10px 12px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
               outline: "none",
               cursor: "pointer",
             }}
@@ -208,11 +208,11 @@ export function ServiceModuleLayout({
             onChange={(e) => onOwnerChange(e.target.value)}
             style={{
               padding: "10px 12px",
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               fontSize: "14px",
-              color: "#12332B",
-              backgroundColor: "#FFFFFF",
+              color: "var(--theme-text-primary)",
+              backgroundColor: "var(--theme-bg-surface)",
               outline: "none",
               cursor: "pointer",
             }}
@@ -230,11 +230,11 @@ export function ServiceModuleLayout({
               onChange={(e) => onServiceFilterChange(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -251,7 +251,7 @@ export function ServiceModuleLayout({
         <div style={{ 
           display: "flex", 
           gap: "8px", 
-          borderBottom: "1px solid #E5E7EB",
+          borderBottom: "1px solid var(--theme-border-default)",
           marginBottom: "24px"
         }}>
           {tabs.map(tab => (
@@ -272,7 +272,7 @@ export function ServiceModuleLayout({
       <div style={{ padding: "0 48px 48px 48px" }}>
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="text-[#12332B]/60">Loading...</div>
+            <div className="text-[var(--theme-text-primary)]/60">Loading...</div>
           </div>
         ) : (
           children

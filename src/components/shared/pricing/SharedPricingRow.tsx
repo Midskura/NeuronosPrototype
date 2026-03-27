@@ -140,7 +140,7 @@ export function SharedPricingRow({
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: mode === "add" ? "1px solid #0F766E" : "1px solid #E5E9E8",
       borderRadius: "10px",
       overflow: "hidden",
@@ -191,9 +191,9 @@ export function SharedPricingRow({
                   padding: "6px 12px",
                   fontSize: "12px",
                   fontWeight: 500,
-                  color: "#6B7280",
-                  backgroundColor: "white",
-                  border: "1px solid #D1D5DB",
+                  color: "var(--theme-text-muted)",
+                  backgroundColor: "var(--theme-bg-surface)",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "6px",
                   cursor: "pointer"
                 }}

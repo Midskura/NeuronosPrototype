@@ -71,7 +71,7 @@ export function MultiSelectDropdown({
           display: "block", 
           fontSize: "11px", 
           fontWeight: 600, 
-          color: "#667085",
+          color: "var(--theme-text-muted)",
           marginBottom: "6px",
           textTransform: "uppercase",
           letterSpacing: "0.5px"
@@ -94,7 +94,7 @@ export function MultiSelectDropdown({
           alignItems: "center",
           justifyContent: "space-between",
           border: "1px solid var(--neuron-ui-border)",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "var(--theme-bg-surface)",
           color: values.length === 0 ? "#98A2B3" : "#12332B",
           cursor: "pointer",
           minHeight: "40px",
@@ -102,10 +102,10 @@ export function MultiSelectDropdown({
           gap: "4px"
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#F9FAFB";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#FFFFFF";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
         }}
       >
         {values.length === 0 ? (
@@ -122,8 +122,8 @@ export function MultiSelectDropdown({
                     alignItems: "center",
                     gap: "4px",
                     padding: "2px 8px",
-                    backgroundColor: "#E8F5F3",
-                    color: "#0F766E",
+                    backgroundColor: "var(--theme-bg-surface-tint)",
+                    color: "var(--theme-action-primary-bg)",
                     borderRadius: "4px",
                     fontSize: "12px",
                     fontWeight: 500
@@ -145,7 +145,7 @@ export function MultiSelectDropdown({
         <ChevronDown 
           size={16} 
           style={{ 
-            color: "#667085",
+            color: "var(--theme-text-muted)",
             transition: "transform 0.2s",
             transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
             flexShrink: 0
@@ -167,7 +167,7 @@ export function MultiSelectDropdown({
             width: "100%",
             maxHeight: "240px",
             overflowY: "auto",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)"
           }}
@@ -188,7 +188,7 @@ export function MultiSelectDropdown({
                   transition: "background-color 0.15s ease",
                   backgroundColor: isSelected ? "#E8F5F3" : "#FFFFFF",
                   color: isSelected ? "#0F766E" : "#12332B",
-                  borderBottom: index < normalizedOptions.length - 1 ? "1px solid #F3F4F6" : "none",
+                  borderBottom: index < normalizedOptions.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -198,7 +198,7 @@ export function MultiSelectDropdown({
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = "#F9FAFB";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -209,7 +209,7 @@ export function MultiSelectDropdown({
                   {option.icon && <span style={{ display: "flex", alignItems: "center" }}>{option.icon}</span>}
                   <span>{option.label}</span>
                 </div>
-                {isSelected && <Check size={16} style={{ color: "#0F766E" }} />}
+                {isSelected && <Check size={16} style={{ color: "var(--theme-action-primary-bg)" }} />}
               </button>
             );
           })}

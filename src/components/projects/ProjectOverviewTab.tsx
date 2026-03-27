@@ -179,7 +179,7 @@ export function ProjectOverviewTab({ project, currentUser, onUpdate, onViewBooki
       </div>
 
       {viewMode === "pdf" ? (
-        <div className="h-[800px] border border-gray-200 rounded-xl overflow-hidden bg-white">
+        <div className="h-[800px] border border-[var(--theme-border-default)] rounded-xl overflow-hidden bg-[var(--theme-bg-surface)]">
             <QuotationPDFScreen 
                 project={displayProject}
                 onClose={() => setViewMode("form")}

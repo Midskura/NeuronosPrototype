@@ -834,7 +834,7 @@ export function AddRequestForPaymentPanel({
     switch (status) {
       case "Approved":
       case "posted":
-        return { bg: "#E8F5F3", color: "#0F766E" };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
       case "Disbursed":
       case "Audited":
         return { bg: "#D1FAE5", color: "#059669" };
@@ -847,9 +847,9 @@ export function AddRequestForPaymentPanel({
       case "Processing":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "Submitted":
-        return { bg: "#F3F4F6", color: "#6B7A76" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "#9CA3AF" };
+        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -894,7 +894,7 @@ export function AddRequestForPaymentPanel({
           stiffness: 300,
           duration: 0.3
         }}
-        className="fixed right-0 top-0 h-full w-[920px] bg-white shadow-2xl z-50 flex flex-col"
+        className="fixed right-0 top-0 h-full w-[920px] bg-[var(--theme-bg-surface)] shadow-2xl z-50 flex flex-col"
         style={{
           borderLeft: "1px solid var(--neuron-ui-border)",
         }}
@@ -904,13 +904,13 @@ export function AddRequestForPaymentPanel({
           style={{
             padding: "24px 48px",
             borderBottom: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         >
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "4px" }}>
-                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+                <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                   {finalPanelTitle}
                 </h2>
                 {/* Status Badge - Only in View Mode */}
@@ -929,7 +929,7 @@ export function AddRequestForPaymentPanel({
                   </span>
                 )}
               </div>
-              <p style={{ fontSize: "13px", color: "#667085" }}>
+              <p style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                 {finalPanelDescription}
               </p>
             </div>
@@ -941,7 +941,7 @@ export function AddRequestForPaymentPanel({
                 borderRadius: "8px",
                 border: "none",
                 backgroundColor: "transparent",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -949,7 +949,7 @@ export function AddRequestForPaymentPanel({
                 transition: "all 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F3F4F6";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -970,7 +970,7 @@ export function AddRequestForPaymentPanel({
               justifyContent: "space-between",
               marginBottom: "32px",
               paddingBottom: "24px",
-              borderBottom: "1px solid #E5E7EB"
+              borderBottom: "1px solid var(--theme-border-default)"
             }}>
               <div>
                 <img 
@@ -984,7 +984,7 @@ export function AddRequestForPaymentPanel({
                 <h1 style={{ 
                   fontSize: "20px", 
                   fontWeight: 700, 
-                  color: "#12332B",
+                  color: "var(--theme-text-primary)",
                   letterSpacing: "0.5px",
                   marginBottom: "16px"
                 }}>
@@ -997,7 +997,7 @@ export function AddRequestForPaymentPanel({
                     <span style={{ 
                       fontSize: "11px", 
                       fontWeight: 500, 
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                       display: "block",
@@ -1005,7 +1005,7 @@ export function AddRequestForPaymentPanel({
                     }}>
                       Date
                     </span>
-                    <span style={{ fontSize: "14px", fontWeight: 500, color: "#12332B" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       {formattedDate}
                     </span>
                   </div>
@@ -1013,7 +1013,7 @@ export function AddRequestForPaymentPanel({
                     <span style={{ 
                       fontSize: "11px", 
                       fontWeight: 500, 
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                       display: "block",
@@ -1021,7 +1021,7 @@ export function AddRequestForPaymentPanel({
                     }}>
                       Ref No.
                     </span>
-                    <span style={{ fontSize: "14px", fontWeight: 500, color: "#0F766E" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-action-primary-bg)" }}>
                       {displayEvrnNumber}
                     </span>
                   </div>
@@ -1034,7 +1034,7 @@ export function AddRequestForPaymentPanel({
               <h3 style={{ 
                 fontSize: "14px", 
                 fontWeight: 600, 
-                color: "#12332B", 
+                color: "var(--theme-text-primary)", 
                 marginBottom: "16px",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px"
@@ -1050,7 +1050,7 @@ export function AddRequestForPaymentPanel({
                 {isCollectionMode && !isViewMode && (
                    <div style={{ marginBottom: "8px" }}>
                       <label style={{ 
-                        display: "block", fontSize: "12px", fontWeight: 500, color: "#374151", marginBottom: "8px" 
+                        display: "block", fontSize: "12px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "8px" 
                       }}>
                         Link to Statement / Invoice <span style={{ color: "#EF4444" }}>*</span>
                       </label>
@@ -1061,7 +1061,7 @@ export function AddRequestForPaymentPanel({
                              const stmt = availableStatements.find(s => s.ref === e.target.value);
                              if (stmt) handleStatementSelect(stmt);
                           }}
-                          className="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]"
+                          className="w-full px-3 py-2.5 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]"
                           disabled={isLoadingStatements}
                         >
                           <option value="">Select an open statement...</option>
@@ -1073,11 +1073,11 @@ export function AddRequestForPaymentPanel({
                         </select>
                         {isLoadingStatements && (
                           <div className="absolute right-3 top-2.5">
-                            <Loader2 className="animate-spin text-gray-400" size={16} />
+                            <Loader2 className="animate-spin text-[var(--theme-text-muted)]" size={16} />
                           </div>
                         )}
                       </div>
-                      <p className="mt-1 text-xs text-gray-500">
+                      <p className="mt-1 text-xs text-[var(--theme-text-muted)]">
                         Selecting a statement will auto-populate the details.
                       </p>
                    </div>
@@ -1089,7 +1089,7 @@ export function AddRequestForPaymentPanel({
                     display: "block", 
                     fontSize: "12px", 
                     fontWeight: 500, 
-                    color: "#374151", 
+                    color: "var(--theme-text-secondary)", 
                     marginBottom: "8px" 
                   }}>
                     {isBillingMode ? "Billing Description / Title" : 
@@ -1107,7 +1107,7 @@ export function AddRequestForPaymentPanel({
                       width: "100%",
                       padding: "10px 14px",
                       fontSize: "14px",
-                      border: "1px solid #E5E7EB",
+                      border: "1px solid var(--theme-border-default)",
                       borderRadius: "6px",
                       outline: "none",
                       transition: "all 0.2s",
@@ -1117,12 +1117,12 @@ export function AddRequestForPaymentPanel({
                     }}
                     onFocus={(e) => {
                       if (!isViewMode) {
-                        e.currentTarget.style.borderColor = "#0F766E";
+                        e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                         e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.1)";
                       }
                     }}
                     onBlur={(e) => {
-                      e.currentTarget.style.borderColor = "#E5E7EB";
+                      e.currentTarget.style.borderColor = "var(--theme-border-default)";
                       e.currentTarget.style.boxShadow = "none";
                     }}
                   />
@@ -1144,7 +1144,7 @@ export function AddRequestForPaymentPanel({
                             display: "block", 
                             fontSize: "12px", 
                             fontWeight: 500, 
-                            color: "#374151", 
+                            color: "var(--theme-text-secondary)", 
                             marginBottom: "8px" 
                           }}>
                             Transaction Type <span style={{ color: "#EF4444" }}>*</span>
@@ -1180,7 +1180,7 @@ export function AddRequestForPaymentPanel({
                           display: "block", 
                           fontSize: "12px", 
                           fontWeight: 500, 
-                          color: "#374151", 
+                          color: "var(--theme-text-secondary)", 
                           marginBottom: "8px" 
                         }}>
                           {categoryLabel} <span style={{ color: "#EF4444" }}>*</span>
@@ -1209,7 +1209,7 @@ export function AddRequestForPaymentPanel({
                       display: "block", 
                       fontSize: "12px", 
                       fontWeight: 500, 
-                      color: "#374151", 
+                      color: "var(--theme-text-secondary)", 
                       marginBottom: "8px" 
                     }}>
                       Sub-Category
@@ -1227,7 +1227,7 @@ export function AddRequestForPaymentPanel({
                          type="text"
                          readOnly
                          placeholder="N/A"
-                         className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-400"
+                         className="w-full px-3 py-2.5 bg-[var(--theme-bg-surface-subtle)] border border-[var(--theme-border-default)] rounded-md text-sm text-[var(--theme-text-muted)]"
                       />
                     )}
                   </div>
@@ -1240,7 +1240,7 @@ export function AddRequestForPaymentPanel({
                       display: "block", 
                       fontSize: "12px", 
                       fontWeight: 500, 
-                      color: "#374151", 
+                      color: "var(--theme-text-secondary)", 
                       marginBottom: "8px" 
                     }}>
                       Project / Booking Ref (Optional)
@@ -1255,12 +1255,12 @@ export function AddRequestForPaymentPanel({
                         width: "100%",
                         padding: "10px 14px",
                         fontSize: "14px",
-                        border: "1px solid #E5E7EB",
+                        border: "1px solid var(--theme-border-default)",
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
                         backgroundColor: (isViewMode || bookingId || isCollectionMode) ? "#F9FAFB" : "#FFFFFF",
-                        color: "#374151"
+                        color: "var(--theme-text-secondary)"
                       }}
                     />
                   </div>
@@ -1271,7 +1271,7 @@ export function AddRequestForPaymentPanel({
                       display: "block", 
                       fontSize: "12px", 
                       fontWeight: 500, 
-                      color: "#374151", 
+                      color: "var(--theme-text-secondary)", 
                       marginBottom: "8px" 
                     }}>
                       {vendorLabel} <span style={{ color: "#EF4444" }}>*</span>
@@ -1287,7 +1287,7 @@ export function AddRequestForPaymentPanel({
                         width: "100%",
                         padding: "10px 14px",
                         fontSize: "14px",
-                        border: "1px solid #E5E7EB",
+                        border: "1px solid var(--theme-border-default)",
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
@@ -1305,7 +1305,7 @@ export function AddRequestForPaymentPanel({
                 <h3 style={{ 
                   fontSize: "14px", 
                   fontWeight: 600, 
-                  color: "#12332B", 
+                  color: "var(--theme-text-primary)", 
                   textTransform: "uppercase",
                   letterSpacing: "0.5px"
                 }}>
@@ -1321,7 +1321,7 @@ export function AddRequestForPaymentPanel({
                       gap: "6px",
                       fontSize: "12px",
                       fontWeight: 600,
-                      color: "#0F766E",
+                      color: "var(--theme-action-primary-bg)",
                       backgroundColor: "transparent",
                       border: "1px solid #E5E9E8",
                       padding: "6px 12px",
@@ -1329,7 +1329,7 @@ export function AddRequestForPaymentPanel({
                       cursor: "pointer",
                       transition: "all 0.2s"
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#F0FDFA"}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
                   >
                     <Plus size={14} />
@@ -1338,19 +1338,19 @@ export function AddRequestForPaymentPanel({
                 )}
               </div>
 
-              <div style={{ border: "1px solid #E5E7EB", borderRadius: "8px", overflow: "hidden" }}>
+              <div style={{ border: "1px solid var(--theme-border-default)", borderRadius: "8px", overflow: "hidden" }}>
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                  <thead style={{ backgroundColor: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
+                  <thead style={{ backgroundColor: "var(--theme-bg-page)", borderBottom: "1px solid var(--theme-border-default)" }}>
                     <tr>
-                      <th style={{ padding: "10px 16px", textAlign: "left", fontSize: "12px", fontWeight: 600, color: "#6B7280", width: "40%" }}>Particulars</th>
-                      <th style={{ padding: "10px 16px", textAlign: "left", fontSize: "12px", fontWeight: 600, color: "#6B7280", width: "30%" }}>Description</th>
-                      <th style={{ padding: "10px 16px", textAlign: "right", fontSize: "12px", fontWeight: 600, color: "#6B7280", width: "20%" }}>Amount</th>
+                      <th style={{ padding: "10px 16px", textAlign: "left", fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", width: "40%" }}>Particulars</th>
+                      <th style={{ padding: "10px 16px", textAlign: "left", fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", width: "30%" }}>Description</th>
+                      <th style={{ padding: "10px 16px", textAlign: "right", fontSize: "12px", fontWeight: 600, color: "var(--theme-text-muted)", width: "20%" }}>Amount</th>
                       {!isViewMode && !isCollectionMode && <th style={{ padding: "10px 16px", width: "10%" }}></th>}
                     </tr>
                   </thead>
                   <tbody>
                     {lineItems.map((item) => (
-                      <tr key={item.id} style={{ borderBottom: "1px solid #F3F4F6" }}>
+                      <tr key={item.id} style={{ borderBottom: "1px solid var(--theme-border-subtle)" }}>
                         <td style={{ padding: "10px 16px" }}>
                           <input
                             type="text"
@@ -1373,7 +1373,7 @@ export function AddRequestForPaymentPanel({
                         </td>
                         <td style={{ padding: "10px 16px" }}>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "4px" }}>
-                            <span style={{ color: "#9CA3AF", fontSize: "14px" }}>₱</span>
+                            <span style={{ color: "var(--theme-text-muted)", fontSize: "14px" }}>₱</span>
                             <input
                               type="number"
                               readOnly={isViewMode} // Allow editing amount in collection mode (partial payment)
@@ -1400,12 +1400,12 @@ export function AddRequestForPaymentPanel({
                       </tr>
                     ))}
                   </tbody>
-                  <tfoot style={{ backgroundColor: "#F9FAFB", borderTop: "1px solid #E5E7EB" }}>
+                  <tfoot style={{ backgroundColor: "var(--theme-bg-page)", borderTop: "1px solid var(--theme-border-default)" }}>
                     <tr>
-                      <td colSpan={2} style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: "13px", color: "#374151" }}>
+                      <td colSpan={2} style={{ padding: "12px 16px", textAlign: "right", fontWeight: 600, fontSize: "13px", color: "var(--theme-text-secondary)" }}>
                         Total Amount
                       </td>
-                      <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 700, fontSize: "14px", color: "#12332B" }}>
+                      <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 700, fontSize: "14px", color: "var(--theme-text-primary)" }}>
                         ₱ {totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                       {!isViewMode && !isCollectionMode && <td></td>}
@@ -1420,7 +1420,7 @@ export function AddRequestForPaymentPanel({
               <h3 style={{ 
                 fontSize: "14px", 
                 fontWeight: 600, 
-                color: "#12332B", 
+                color: "var(--theme-text-primary)", 
                 marginBottom: "16px",
                 textTransform: "uppercase",
                 letterSpacing: "0.5px"
@@ -1435,7 +1435,7 @@ export function AddRequestForPaymentPanel({
                     display: "block", 
                     fontSize: "12px", 
                     fontWeight: 500, 
-                    color: "#374151", 
+                    color: "var(--theme-text-secondary)", 
                     marginBottom: "8px" 
                   }}>
                     Method
@@ -1455,7 +1455,7 @@ export function AddRequestForPaymentPanel({
                     display: "block", 
                     fontSize: "12px", 
                     fontWeight: 500, 
-                    color: "#374151", 
+                    color: "var(--theme-text-secondary)", 
                     marginBottom: "8px" 
                   }}>
                     Source Account / Fund
@@ -1479,7 +1479,7 @@ export function AddRequestForPaymentPanel({
                     display: "block", 
                     fontSize: "12px", 
                     fontWeight: 500, 
-                    color: "#374151", 
+                    color: "var(--theme-text-secondary)", 
                     marginBottom: "8px" 
                   }}>
                     Credit Terms
@@ -1499,13 +1499,13 @@ export function AddRequestForPaymentPanel({
                     display: "block", 
                     fontSize: "12px", 
                     fontWeight: 500, 
-                    color: "#374151", 
+                    color: "var(--theme-text-secondary)", 
                     marginBottom: "8px" 
                   }}>
                     Payment Due Date
                   </label>
                   <div style={{ position: "relative" }}>
-                    <CalendarIcon size={16} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "#9CA3AF" }} />
+                    <CalendarIcon size={16} style={{ position: "absolute", left: "10px", top: "50%", transform: "translateY(-50%)", color: "var(--theme-text-muted)" }} />
                     <input
                       type="date"
                       readOnly={isViewMode}
@@ -1515,7 +1515,7 @@ export function AddRequestForPaymentPanel({
                         width: "100%",
                         padding: "10px 10px 10px 36px",
                         fontSize: "14px",
-                        border: "1px solid #E5E7EB",
+                        border: "1px solid var(--theme-border-default)",
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
@@ -1533,7 +1533,7 @@ export function AddRequestForPaymentPanel({
                 display: "block", 
                 fontSize: "12px", 
                 fontWeight: 500, 
-                color: "#374151", 
+                color: "var(--theme-text-secondary)", 
                 marginBottom: "8px" 
               }}>
                 Additional Notes
@@ -1548,7 +1548,7 @@ export function AddRequestForPaymentPanel({
                   width: "100%",
                   padding: "12px",
                   fontSize: "14px",
-                  border: "1px solid #E5E7EB",
+                  border: "1px solid var(--theme-border-default)",
                   borderRadius: "6px",
                   outline: "none",
                   resize: "vertical",
@@ -1564,7 +1564,7 @@ export function AddRequestForPaymentPanel({
           <div style={{ 
             padding: "24px 48px", 
             borderTop: "1px solid var(--neuron-ui-border)", 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             display: "flex",
             justifyContent: "flex-end",
             gap: "12px"
@@ -1576,9 +1576,9 @@ export function AddRequestForPaymentPanel({
                 padding: "10px 20px",
                 fontSize: "14px",
                 fontWeight: 500,
-                color: "#374151",
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #D1D5DB",
+                color: "var(--theme-text-secondary)",
+                backgroundColor: "var(--theme-bg-surface)",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 cursor: "pointer",
                 transition: "all 0.2s"
@@ -1595,8 +1595,8 @@ export function AddRequestForPaymentPanel({
                 padding: "10px 20px",
                 fontSize: "14px",
                 fontWeight: 500,
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid #12332B",
                 borderRadius: "6px",
                 cursor: isSaving ? "not-allowed" : "pointer",
@@ -1621,7 +1621,7 @@ export function AddRequestForPaymentPanel({
                   fontSize: "14px",
                   fontWeight: 600,
                   color: "#FFFFFF",
-                  backgroundColor: "#0F766E", // Slightly different shade if needed
+                  backgroundColor: "var(--theme-action-primary-bg)", // Slightly different shade if needed
                   border: "none",
                   borderRadius: "6px",
                   cursor: (isFormValid && !isSaving) ? "pointer" : "not-allowed",
@@ -1675,7 +1675,7 @@ export function AddRequestForPaymentPanel({
           <div style={{ 
             padding: "24px 48px", 
             borderTop: "1px solid var(--neuron-ui-border)", 
-            backgroundColor: "#FFFFFF",
+            backgroundColor: "var(--theme-bg-surface)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -1714,7 +1714,7 @@ export function AddRequestForPaymentPanel({
              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               {statusStyle && (
                 <div style={{ textAlign: "right" }}>
-                    <span style={{ display: "block", fontSize: "11px", color: "#6B7280", marginBottom: "4px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    <span style={{ display: "block", fontSize: "11px", color: "var(--theme-text-muted)", marginBottom: "4px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
                       STATUS
                     </span>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "8px" }}>
@@ -1737,13 +1737,13 @@ export function AddRequestForPaymentPanel({
              )}
 
              {/* Vertical Divider */}
-             <div style={{ width: "1px", height: "40px", backgroundColor: "#D1D5DB" }} />
+             <div style={{ width: "1px", height: "40px", backgroundColor: "var(--theme-border-default)" }} />
 
              <div style={{ textAlign: "right" }}>
-                <span style={{ display: "block", fontSize: "11px", color: "#6B7280", marginBottom: "4px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <span style={{ display: "block", fontSize: "11px", color: "var(--theme-text-muted)", marginBottom: "4px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   TOTAL AMOUNT
                 </span>
-                <span style={{ fontSize: "24px", fontWeight: 700, color: "#12332B" }}>
+                <span style={{ fontSize: "24px", fontWeight: 700, color: "var(--theme-text-primary)" }}>
                   ₱ {(existingData?.amount || totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
              </div>

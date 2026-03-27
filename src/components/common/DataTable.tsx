@@ -63,8 +63,8 @@ export function DataTable<T extends { id?: string | number }>({
 
   if (data.length === 0 && !renderTableOnEmpty) {
     return (
-      <div className="border border-[#E5E9F0] rounded-[10px] overflow-hidden bg-white">
-        <div className="px-6 py-12 text-center text-[#667085] text-[13px]">
+      <div className="border border-[var(--theme-border-default)] rounded-[10px] overflow-hidden bg-[var(--theme-bg-surface)]">
+        <div className="px-6 py-12 text-center text-[var(--theme-text-muted)] text-[13px]">
            {emptyMessage}
         </div>
       </div>
@@ -72,16 +72,16 @@ export function DataTable<T extends { id?: string | number }>({
   }
 
   return (
-    <div className="border border-[#E5E9F0] rounded-[10px] overflow-hidden bg-white">
+    <div className="border border-[var(--theme-border-default)] rounded-[10px] overflow-hidden bg-[var(--theme-bg-surface)]">
       <table className="w-full border-collapse">
-        <thead className="bg-[#F7FAF8] border-b border-[#E5E9F0]">
+        <thead className="bg-[#F7FAF8] border-b border-[var(--theme-border-default)]">
           <tr>
             {/* Selection Header Column */}
             {enableSelection && (
               <th className="w-10 px-4 py-3 text-center">
                  <input 
                     type="checkbox"
-                    className="w-4 h-4 rounded border-gray-300 text-[#0F766E] focus:ring-[#0F766E]"
+                    className="w-4 h-4 rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
                     checked={allSelected}
                     ref={input => {
                       if (input) input.indeterminate = isIndeterminate;
@@ -97,7 +97,7 @@ export function DataTable<T extends { id?: string | number }>({
             {columns.map((col, idx) => (
               <th
                 key={idx}
-                className={`px-4 py-3 text-[11px] font-semibold text-[#667085] uppercase tracking-[0.002em] ${col.className || ''}`}
+                className={`px-4 py-3 text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.002em] ${col.className || ''}`}
                 style={{ 
                   textAlign: col.align || "left", 
                   width: col.width 
@@ -113,7 +113,7 @@ export function DataTable<T extends { id?: string | number }>({
             <tr>
               <td 
                 colSpan={columns.length + (enableSelection ? 1 : 0) + (Icon ? 1 : 0)} 
-                className="px-6 py-12 text-center text-[#667085] text-[13px]"
+                className="px-6 py-12 text-center text-[var(--theme-text-muted)] text-[13px]"
               >
                  {emptyMessage}
               </td>
@@ -134,7 +134,7 @@ export function DataTable<T extends { id?: string | number }>({
                 <td className="w-10 px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
                    <input 
                       type="checkbox"
-                      className="w-4 h-4 rounded border-gray-300 text-[#0F766E] focus:ring-[#0F766E]"
+                      className="w-4 h-4 rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
                       checked={item.id ? selectedIds.includes(item.id) : false}
                       onChange={() => item.id && onSelectRow?.(item.id)}
                    />
@@ -145,7 +145,7 @@ export function DataTable<T extends { id?: string | number }>({
               {Icon && (
                 <td className="w-10 px-4 py-3 text-center">
                     <div className="flex items-center justify-center">
-                        <Icon className="w-4 h-4 text-[#98A2B3]" />
+                        <Icon className="w-4 h-4 text-[var(--theme-text-muted)]" />
                     </div>
                 </td>
               )}
@@ -173,13 +173,13 @@ export function DataTable<T extends { id?: string | number }>({
         
         {/* Footer Row */}
         {footerSummary && footerSummary.length > 0 && (
-           <tfoot className="bg-white border-t border-[#E5E9F0]">
+           <tfoot className="bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)]">
              <tr>
                <td colSpan={columns.length + (enableSelection ? 2 : 1)} className="px-4 py-3">
                  <div className="flex items-center justify-end gap-8">
                     {footerSummary.map((summary, idx) => (
                         <div key={idx} className="flex items-center gap-2">
-                            <span className="text-[11px] font-semibold text-[#667085] uppercase tracking-[0.002em]">
+                            <span className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.002em]">
                                 {summary.label}
                             </span>
                             <span className="text-[13px] font-bold">

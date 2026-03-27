@@ -87,7 +87,7 @@ export function VendorsList() {
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
       }}
     >
       {/* Header */}
@@ -202,7 +202,7 @@ export function VendorsList() {
               borderRadius: "8px",
               fontSize: "14px",
               color: "var(--neuron-ink-secondary)",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
               cursor: "pointer",
               outline: "none",
               appearance: "none",
@@ -261,19 +261,19 @@ export function VendorsList() {
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "8px",
               overflow: "hidden",
-              backgroundColor: "white",
+              backgroundColor: "var(--theme-bg-surface)",
             }}
           >
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "#F9FAFB" }}>
+                <tr style={{ borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-page)" }}>
                   <th
                     style={{
                       textAlign: "left",
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -286,7 +286,7 @@ export function VendorsList() {
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -299,7 +299,7 @@ export function VendorsList() {
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -312,7 +312,7 @@ export function VendorsList() {
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -325,7 +325,7 @@ export function VendorsList() {
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -338,7 +338,7 @@ export function VendorsList() {
                       padding: "12px 16px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      color: "#6B7280",
+                      color: "var(--theme-text-muted)",
                       textTransform: "uppercase",
                       letterSpacing: "0.5px",
                     }}
@@ -354,12 +354,12 @@ export function VendorsList() {
                     <tr
                       key={vendor.id}
                       style={{
-                        borderBottom: "1px solid #F3F4F6",
+                        borderBottom: "1px solid var(--theme-border-subtle)",
                         cursor: "pointer",
                         transition: "background-color 0.15s ease",
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = "transparent";
@@ -371,7 +371,7 @@ export function VendorsList() {
                             style={{
                               width: "40px",
                               height: "40px",
-                              backgroundColor: "#E8F5F3",
+                              backgroundColor: "var(--theme-bg-surface-tint)",
                               borderRadius: "8px",
                               display: "flex",
                               alignItems: "center",
@@ -379,7 +379,7 @@ export function VendorsList() {
                               flexShrink: 0,
                             }}
                           >
-                            <Building2 size={18} color="#0F766E" />
+                            <Building2 size={18} color="var(--theme-action-primary-bg)" />
                           </div>
                           <div>
                             <div
@@ -441,8 +441,8 @@ export function VendorsList() {
                                 padding: "2px 8px",
                                 borderRadius: "4px",
                                 fontSize: "11px",
-                                backgroundColor: "#F3F4F6",
-                                color: "#6B7280",
+                                backgroundColor: "var(--theme-bg-surface-subtle)",
+                                color: "var(--theme-text-muted)",
                               }}
                             >
                               {service}
@@ -454,8 +454,8 @@ export function VendorsList() {
                                 padding: "2px 8px",
                                 borderRadius: "4px",
                                 fontSize: "11px",
-                                backgroundColor: "#F3F4F6",
-                                color: "#6B7280",
+                                backgroundColor: "var(--theme-bg-surface-subtle)",
+                                color: "var(--theme-text-muted)",
                                 fontWeight: 600,
                               }}
                             >
@@ -481,7 +481,7 @@ export function VendorsList() {
                             style={{
                               fontSize: "12px",
                               color: "var(--neuron-ink-muted)",
-                              backgroundColor: "#F9FAFB",
+                              backgroundColor: "var(--theme-bg-page)",
                               padding: "4px 8px",
                               borderRadius: "4px",
                               fontFamily: "monospace",
@@ -490,7 +490,7 @@ export function VendorsList() {
                             {vendor.wca_number}
                           </span>
                         ) : (
-                          <span style={{ fontSize: "13px", color: "#D1D5DB" }}>—</span>
+                          <span style={{ fontSize: "13px", color: "var(--theme-border-default)" }}>—</span>
                         )}
                       </td>
                     </tr>

@@ -130,21 +130,21 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 w-[500px] bg-white shadow-2xl z-[70] flex flex-col border-l border-gray-100"
+            className="fixed inset-y-0 right-0 w-[500px] bg-[var(--theme-bg-surface)] shadow-2xl z-[70] flex flex-col border-l border-[var(--theme-border-subtle)]"
           >
             {/* Header */}
-            <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+            <div className="px-8 py-6 border-b border-[var(--theme-border-subtle)] flex items-center justify-between bg-[var(--theme-bg-surface-subtle)]/50">
               <div>
-                <h2 className="text-xl font-semibold text-[#12332B]">
+                <h2 className="text-xl font-semibold text-[var(--theme-text-primary)]">
                   Post to Ledger
                 </h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-[var(--theme-text-muted)] mt-1">
                   Create a Journal Entry for {evoucher.voucher_number}
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500"
+                className="p-2 hover:bg-[var(--theme-bg-surface-tint)] rounded-full transition-colors text-[var(--theme-text-muted)]"
               >
                 <X size={20} />
               </button>
@@ -154,61 +154,61 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
             <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
               
               {/* Summary Card */}
-              <div className="bg-[#E8F5F3] border border-[#0F766E]/20 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[#E8F5F3] border border-[var(--theme-action-primary-bg)]/20 rounded-xl p-4 flex items-center justify-between">
                 <div>
-                  <p className="text-xs font-semibold text-[#0F766E] uppercase tracking-wide">Amount to Post</p>
-                  <p className="text-2xl font-bold text-[#12332B] mt-1">
+                  <p className="text-xs font-semibold text-[var(--theme-action-primary-bg)] uppercase tracking-wide">Amount to Post</p>
+                  <p className="text-2xl font-bold text-[var(--theme-text-primary)] mt-1">
                     ₱ {evoucher.amount?.toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                   </p>
                 </div>
-                <div className="bg-white/50 p-2 rounded-lg">
-                  <ArrowRightLeft className="text-[#0F766E]" size={24} />
+                <div className="bg-[var(--theme-bg-surface)]/50 p-2 rounded-lg">
+                  <ArrowRightLeft className="text-[var(--theme-action-primary-bg)]" size={24} />
                 </div>
               </div>
 
               {/* Date & Description */}
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-[#12332B]">Posting Date</label>
+                  <label className="text-sm font-medium text-[var(--theme-text-primary)]">Posting Date</label>
                   <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
                     <input 
                       type="date" 
                       value={postingDate}
                       onChange={(e) => setPostingDate(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                     />
                   </div>
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-[#12332B]">Memo / Description</label>
+                  <label className="text-sm font-medium text-[var(--theme-text-primary)]">Memo / Description</label>
                   <input 
                     type="text" 
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm"
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm"
                   />
                 </div>
               </div>
 
-              <div className="h-px bg-gray-100" />
+              <div className="h-px bg-[var(--theme-bg-surface-subtle)]" />
 
               {/* GL Accounts */}
               <div className="space-y-6">
                 {/* Debit */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between">
-                    <label className="text-sm font-medium text-[#12332B]">Debit Account (Expense)</label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Debit Account (Expense)</label>
                     <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">DR</span>
                   </div>
                   {loadingAccounts ? (
-                    <div className="h-10 bg-gray-100 animate-pulse rounded-lg" />
+                    <div className="h-10 bg-[var(--theme-bg-surface-subtle)] animate-pulse rounded-lg" />
                   ) : (
                     <select
                       value={debitAccountId}
                       onChange={(e) => setDebitAccountId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                     >
                       <option value="">Select Expense Account...</option>
                       {expenseAccounts.map(acc => (
@@ -219,7 +219,7 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
                       ))}
                     </select>
                   )}
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[var(--theme-text-muted)]">
                     Typically an Expense account like "Ocean Freight Cost" or "Office Supplies"
                   </p>
                 </div>
@@ -227,16 +227,16 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
                 {/* Credit */}
                 <div className="space-y-1.5">
                   <div className="flex justify-between">
-                    <label className="text-sm font-medium text-[#12332B]">Credit Account (Source)</label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Credit Account (Source)</label>
                     <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded">CR</span>
                   </div>
                   {loadingAccounts ? (
-                    <div className="h-10 bg-gray-100 animate-pulse rounded-lg" />
+                    <div className="h-10 bg-[var(--theme-bg-surface-subtle)] animate-pulse rounded-lg" />
                   ) : (
                     <select
                       value={creditAccountId}
                       onChange={(e) => setCreditAccountId(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                     >
                       <option value="">Select Payment Source...</option>
                       {paymentAccounts.map(acc => (
@@ -247,7 +247,7 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
                       ))}
                     </select>
                   )}
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[var(--theme-text-muted)]">
                     Typically "Cash in Bank" (if paid) or "Accounts Payable" (if bill)
                   </p>
                 </div>
@@ -256,17 +256,17 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
             </div>
 
             {/* Footer */}
-            <div className="px-8 py-6 border-t border-gray-100 flex items-center justify-end gap-3 bg-white">
+            <div className="px-8 py-6 border-t border-[var(--theme-border-subtle)] flex items-center justify-end gap-3 bg-[var(--theme-bg-surface)]">
               <button
                 onClick={onClose}
-                className="px-5 py-2.5 text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                className="px-5 py-2.5 text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] font-medium text-sm transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePost}
                 disabled={loading || !debitAccountId || !creditAccountId}
-                className="px-6 py-2.5 bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="px-6 py-2.5 bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? "Posting..." : (
                   <>

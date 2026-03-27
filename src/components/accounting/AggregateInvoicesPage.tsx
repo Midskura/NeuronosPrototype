@@ -68,7 +68,7 @@ export function AggregateInvoicesPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-white p-12">
+    <div className="flex flex-col h-full bg-[var(--theme-bg-surface)] p-12">
       <UnifiedInvoicesTab
         financials={financials}
         project={dummyProject}

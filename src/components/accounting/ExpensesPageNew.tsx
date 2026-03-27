@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Plus, Search, Calendar } from "lucide-react";
 import type { Expense } from "../../types/accounting";
 import { supabase } from "../../utils/supabase/client";
+import { useDataScope } from "../../hooks/useDataScope";
 import { AddRequestForPaymentPanel } from "./AddRequestForPaymentPanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { ExpensesListTable } from "./ExpensesListTable";
@@ -23,22 +24,23 @@ export function ExpensesPageNew() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [dateRange, setDateRange] = useState<{ from?: string; to?: string }>({});
   
-  // Get current user
-  const userData = localStorage.getItem("neuron_user");
-  const currentUser = userData ? JSON.parse(userData) : null;
+  const { scope, isLoaded } = useDataScope();
 
   // Fetch expenses from API
   useEffect(() => {
     fetchExpenses();
-  }, [dateRange]);
+  }, [dateRange, scope, isLoaded]);
 
   const fetchExpenses = async () => {
+    if (!isLoaded) return;
     try {
       setLoading(true);
       setError(null);
-      
+
       // Fetch from evouchers table (expense type) + posted expenses
       let query = supabase.from('evouchers').select('*').eq('transaction_type', 'expense');
+      if (scope.type === 'userIds') query = query.in('created_by', scope.ids);
+      else if (scope.type === 'own') query = query.eq('created_by', scope.userId);
       if (dateRange.from) {
         query = query.gte('request_date', dateRange.from);
       }
@@ -132,7 +134,7 @@ export function ExpensesPageNew() {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "var(--theme-bg-surface)"
       }}
     >
       {/* Header */}
@@ -150,14 +152,14 @@ export function ExpensesPageNew() {
               style={{
                 fontSize: "32px",
                 fontWeight: 600,
-                color: "#12332B",
+                color: "var(--theme-text-primary)",
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}
             >
               Expenses
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Track all company expenses and disbursements
             </p>
           </div>
@@ -181,10 +183,10 @@ export function ExpensesPageNew() {
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={20} />
@@ -206,7 +208,7 @@ export function ExpensesPageNew() {
               className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
             />
@@ -232,9 +234,9 @@ export function ExpensesPageNew() {
             }}
             options={[
               { value: "all", label: "All Time", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--neuron-ink-muted)" }} /> },
-              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#0F766E" }} /> },
+              { value: "today", label: "Today", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-action-primary-bg)" }} /> },
               { value: "this-week", label: "This Week", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#6B7A76" }} /> }
+              { value: "this-month", label: "This Month", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
           />
         </div>

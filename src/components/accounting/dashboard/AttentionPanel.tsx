@@ -95,13 +95,13 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
   return (
     <div
       className="rounded-xl overflow-hidden transition-all duration-200"
-      style={{ border: "1px solid #E5E9F0", background: "white" }}
+      style={{ border: "1px solid var(--theme-border-default)", background: "var(--theme-bg-surface)" }}
     >
       {/* Header — always visible, clickable to toggle */}
       <button
-        className="w-full px-5 py-3 flex items-center gap-2.5 cursor-pointer transition-colors hover:bg-gray-50/50"
+        className="w-full px-5 py-3 flex items-center gap-2.5 cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface-subtle)]/50"
         style={{
-          borderBottom: isExpanded ? "1px solid #E5E9F0" : "none",
+          borderBottom: isExpanded ? "1px solid var(--theme-border-default)" : "none",
           background: isExpanded ? "#F8F9FB" : "white",
         }}
         onClick={() => setIsExpanded(!isExpanded)}
@@ -112,10 +112,10 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
           style={{ backgroundColor: accentColor }}
         />
 
-        <AlertTriangle size={14} style={{ color: "#667085" }} />
+        <AlertTriangle size={14} style={{ color: "var(--theme-text-muted)" }} />
         <span
           className="text-[12px] font-semibold uppercase tracking-wider"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         >
           Action Items
         </span>
@@ -124,7 +124,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
         {activeItems.length > 0 && (
           <span
             className="px-1.5 py-0.5 rounded text-[10px] font-semibold"
-            style={{ backgroundColor: "#F3F4F6", color: "#667085" }}
+            style={{ backgroundColor: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" }}
           >
             {activeItems.filter((i) => i.severity !== "success").length} pending
           </span>
@@ -164,9 +164,9 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
 
         {/* Expand/collapse icon */}
         {isExpanded ? (
-          <ChevronUp size={14} style={{ color: "#9CA3AF" }} />
+          <ChevronUp size={14} style={{ color: "var(--theme-text-muted)" }} />
         ) : (
-          <ChevronDown size={14} style={{ color: "#9CA3AF" }} />
+          <ChevronDown size={14} style={{ color: "var(--theme-text-muted)" }} />
         )}
       </button>
 
@@ -186,7 +186,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                   isClickable ? "cursor-pointer" : ""
                 }`}
                 style={{
-                  borderBottom: idx < activeItems.length - 1 ? "1px solid #F3F4F6" : "none",
+                  borderBottom: idx < activeItems.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                 }}
                 onClick={isClickable ? item.onAction : undefined}
                 onMouseEnter={(e) => {
@@ -217,7 +217,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                   {/* Label */}
                   <span
                     className="text-[13px] font-medium flex-1"
-                    style={{ color: "#12332B" }}
+                    style={{ color: "var(--theme-text-primary)" }}
                   >
                     {item.label}
                   </span>
@@ -235,7 +235,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                     <ChevronRight
                       size={14}
                       className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                      style={{ color: "#9CA3AF" }}
+                      style={{ color: "var(--theme-text-muted)" }}
                     />
                   )}
                 </div>
@@ -247,7 +247,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                     {item.detailLine && (
                       <span
                         className="text-[11px] flex-1"
-                        style={{ color: "#9CA3AF" }}
+                        style={{ color: "var(--theme-text-muted)" }}
                       >
                         {item.detailLine}
                       </span>
@@ -278,9 +278,9 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
 
           {/* Dismissed section */}
           {dismissedItems.length > 0 && (
-            <div style={{ borderTop: "1px solid #F3F4F6" }}>
+            <div style={{ borderTop: "1px solid var(--theme-border-subtle)" }}>
               <button
-                className="w-full px-5 py-2 flex items-center gap-2 cursor-pointer hover:bg-gray-50/30 transition-colors"
+                className="w-full px-5 py-2 flex items-center gap-2 cursor-pointer hover:bg-[var(--theme-bg-surface-subtle)]/30 transition-colors"
                 onClick={() => setShowDismissed(!showDismissed)}
               >
                 <span className="text-[10px] font-medium" style={{ color: "#B4B9C4" }}>
@@ -290,7 +290,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                   size={10}
                   className="transition-transform duration-200"
                   style={{
-                    color: "#D1D5DB",
+                    color: "var(--theme-border-default)",
                     transform: showDismissed ? "rotate(90deg)" : "rotate(0deg)",
                   }}
                 />
@@ -307,7 +307,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                         key={item.dismissKey || idx}
                         className="px-5 py-2 flex items-center gap-3 opacity-50"
                         style={{
-                          borderBottom: idx < dismissedItems.length - 1 ? "1px solid #F3F4F6" : "none",
+                          borderBottom: idx < dismissedItems.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                         }}
                       >
                         <div
@@ -322,13 +322,13 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                         </div>
                         <span
                           className="text-[12px] font-medium flex-1 line-through"
-                          style={{ color: "#667085" }}
+                          style={{ color: "var(--theme-text-muted)" }}
                         >
                           {item.label}
                         </span>
                         <button
                           className="text-[10px] font-medium cursor-pointer hover:underline"
-                          style={{ color: "#9CA3AF" }}
+                          style={{ color: "var(--theme-text-muted)" }}
                           onClick={() => {
                             setDismissedKeys((prev) => {
                               const next = new Set(prev);

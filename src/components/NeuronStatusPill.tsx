@@ -87,7 +87,7 @@ export function NeuronStatusPill({ children, status, variant, size = "md" }: Neu
     },
     info: {
       background: "#E8F4F8",
-      color: "#0F766E",
+      color: "var(--theme-action-primary-bg)",
     },
   };
 

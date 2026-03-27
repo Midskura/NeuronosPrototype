@@ -125,8 +125,8 @@ export function CreateMarineInsuranceBookingPanel({
             {/* General Information */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Package size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Package size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   General Information
                 </h3>
               </div>
@@ -134,7 +134,7 @@ export function CreateMarineInsuranceBookingPanel({
               <div className="space-y-4">
                 {/* Movement Toggle */}
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Movement <span style={{ color: "#C94F3D" }}>*</span>
                   </label>
                   <MovementToggle
@@ -164,7 +164,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Owner
                     </label>
                     <input
@@ -176,14 +176,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Account Handler
                     </label>
                     <input
@@ -195,7 +195,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -204,7 +204,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Quotation Reference
                     </label>
                     <input
@@ -216,7 +216,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -245,8 +245,8 @@ export function CreateMarineInsuranceBookingPanel({
             {/* Policy Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <Shield size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <Shield size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Policy Details
                 </h3>
               </div>
@@ -254,7 +254,7 @@ export function CreateMarineInsuranceBookingPanel({
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Policy Number
                     </label>
                     <input
@@ -266,14 +266,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Insurance Provider
                     </label>
                     <input
@@ -285,7 +285,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -294,7 +294,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Coverage Type
                     </label>
                     <input
@@ -306,14 +306,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Insured Party
                     </label>
                     <input
@@ -325,7 +325,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -334,7 +334,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Sum Insured
                     </label>
                     <input
@@ -346,14 +346,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Premium
                     </label>
                     <input
@@ -365,7 +365,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -374,7 +374,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Policy Start Date
                     </label>
                     <input
@@ -385,14 +385,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Policy End Date
                     </label>
                     <input
@@ -403,7 +403,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -415,15 +415,15 @@ export function CreateMarineInsuranceBookingPanel({
             {/* Cargo & Voyage Details */}
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-4">
-                <FileText size={16} style={{ color: "#0F766E" }} />
-                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "#12332B", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                <FileText size={16} style={{ color: "var(--theme-action-primary-bg)" }} />
+                <h3 style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                   Cargo & Voyage Details
                 </h3>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Commodity Description
                   </label>
                   <textarea
@@ -435,14 +435,14 @@ export function CreateMarineInsuranceBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Invoice Value
                   </label>
                   <input
@@ -454,7 +454,7 @@ export function CreateMarineInsuranceBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />
@@ -462,7 +462,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Voyage
                     </label>
                     <input
@@ -474,14 +474,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Vessel Name
                     </label>
                     <input
@@ -493,7 +493,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -502,7 +502,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Departure Port
                     </label>
                     <input
@@ -514,14 +514,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Arrival Port
                     </label>
                     <input
@@ -533,7 +533,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -542,7 +542,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Departure Date
                     </label>
                     <input
@@ -553,14 +553,14 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
                   </div>
 
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Arrival Date
                     </label>
                     <input
@@ -571,7 +571,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -580,7 +580,7 @@ export function CreateMarineInsuranceBookingPanel({
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                    <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                       Claim Status
                     </label>
                     <input
@@ -592,7 +592,7 @@ export function CreateMarineInsuranceBookingPanel({
                       className="w-full px-3.5 py-2.5 rounded-lg text-[13px]"
                       style={{
                         border: "1px solid var(--neuron-ui-border)",
-                        backgroundColor: "#FFFFFF",
+                        backgroundColor: "var(--theme-bg-surface)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />
@@ -600,7 +600,7 @@ export function CreateMarineInsuranceBookingPanel({
                 </div>
 
                 <div>
-                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "#12332B" }}>
+                  <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                     Remarks
                   </label>
                   <textarea
@@ -612,7 +612,7 @@ export function CreateMarineInsuranceBookingPanel({
                     className="w-full px-3.5 py-2.5 rounded-lg text-[13px] resize-none"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--neuron-ink-primary)",
                     }}
                   />

@@ -99,7 +99,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
 
         {/* Header Section */}
         <div style={{
-          backgroundColor: "white",
+          backgroundColor: "var(--theme-bg-surface)",
           border: "1px solid var(--neuron-ui-border)",
           borderRadius: "8px",
           padding: "24px",
@@ -149,7 +149,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                 <div
                   key={idx}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "8px",
                     overflow: "hidden",
@@ -161,7 +161,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                   <div
                     style={{
                       padding: "16px 20px",
-                      backgroundColor: "#F8FBFB",
+                      backgroundColor: "var(--theme-bg-page)",
                       borderBottom: "1px solid var(--neuron-ui-border)",
                     }}
                   >
@@ -272,7 +272,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                     <div
                       style={{
                         padding: "16px 20px",
-                        backgroundColor: "#F9FAFB",
+                        backgroundColor: "var(--theme-bg-page)",
                         borderBottom: "1px solid var(--neuron-ui-border)",
                       }}
                     >
@@ -404,7 +404,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                         style={{
                           padding: "24px 16px",
                           textAlign: "center",
-                          backgroundColor: "#F9FAFB",
+                          backgroundColor: "var(--theme-bg-page)",
                           border: "1px dashed var(--neuron-ui-border)",
                           borderRadius: "6px",
                           marginTop: "12px",
@@ -413,7 +413,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                         <p
                           style={{
                             fontSize: "12px",
-                            color: "#9CA3AF",
+                            color: "var(--theme-text-muted)",
                             margin: 0,
                           }}
                         >
@@ -428,7 +428,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
           </div>
         ) : (
           <div style={{
-            backgroundColor: "white",
+            backgroundColor: "var(--theme-bg-surface)",
             border: "1px solid var(--neuron-ui-border)",
             borderRadius: "8px",
             padding: "48px 24px",
@@ -443,7 +443,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
             </p>
             <p style={{
               fontSize: "13px",
-              color: "#9CA3AF",
+              color: "var(--theme-text-muted)",
               margin: 0
             }}>
               Service specifications are inherited from Quotation {project.quotation_number}

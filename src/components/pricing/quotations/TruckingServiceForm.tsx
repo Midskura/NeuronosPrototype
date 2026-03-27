@@ -116,7 +116,7 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -214,13 +214,13 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
                 marginBottom: "6px",
                 paddingLeft: "2px",
               }}>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "#667085", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   Destination
                 </span>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "#667085", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   Truck Type
                 </span>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "#667085", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   Qty
                 </span>
                 <span />
@@ -262,7 +262,7 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
                   marginTop: "6px",
                   fontSize: "13px",
                   fontWeight: 500,
-                  color: "#9CA3AF",
+                  color: "var(--theme-text-muted)",
                   backgroundColor: "transparent",
                   border: "1.5px dashed #D1D5DB",
                   borderRadius: "6px",
@@ -272,11 +272,11 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--neuron-brand-teal)";
                   e.currentTarget.style.color = "var(--neuron-brand-teal)";
-                  e.currentTarget.style.backgroundColor = "#F0FDF9";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#D1D5DB";
-                  e.currentTarget.style.color = "#9CA3AF";
+                  e.currentTarget.style.borderColor = "var(--theme-border-default)";
+                  e.currentTarget.style.color = "var(--theme-text-muted)";
                   e.currentTarget.style.backgroundColor = "transparent";
                 }}
               >
@@ -293,7 +293,7 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
                 marginTop: "8px",
                 paddingRight: "42px",
               }}>
-                <span style={{ fontSize: "12px", color: "#667085" }}>
+                <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                   Total: <strong style={{ color: "var(--neuron-ink-base)" }}>
                     {lineItems.reduce((sum, li) => sum + (li.quantity || 0), 0)}
                   </strong> truck{lineItems.reduce((sum, li) => sum + (li.quantity || 0), 0) !== 1 ? "s" : ""}
@@ -422,10 +422,10 @@ function DispatchRow({ li, isExport, viewMode, canRemove, showRemoveSlot, onFiel
             width: "28px",
             height: "28px",
             borderRadius: "6px",
-            border: "1px solid #E5E9F0",
-            backgroundColor: "white",
+            border: "1px solid var(--theme-border-default)",
+            backgroundColor: "var(--theme-bg-surface)",
             cursor: "pointer",
-            color: "#9CA3AF",
+            color: "var(--theme-text-muted)",
             transition: "all 0.15s ease",
           }}
           onMouseEnter={(e) => {
@@ -434,8 +434,8 @@ function DispatchRow({ li, isExport, viewMode, canRemove, showRemoveSlot, onFiel
             e.currentTarget.style.backgroundColor = "#FEF2F2";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "#E5E9F0";
-            e.currentTarget.style.color = "#9CA3AF";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
+            e.currentTarget.style.color = "var(--theme-text-muted)";
             e.currentTarget.style.backgroundColor = "white";
           }}
           title="Remove line"

@@ -159,7 +159,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
   const getStatusColor = (status: EVoucherStatus) => {
     switch (status) {
       case "Approved":
-        return { bg: "#E8F5F3", color: "#0F766E" };
+        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
       case "Disbursed":
         return { bg: "#D1FAE5", color: "#059669" };
       case "Recorded":
@@ -172,9 +172,9 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
       case "Processing":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "Submitted":
-        return { bg: "#F3F4F6", color: "#6B7A76" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "#9CA3AF" };
+        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -187,7 +187,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
       case "Trucking":
         return { bg: "#FEF3C7", color: "#D97706" };
       default: // Miscellaneous
-        return { bg: "#F3F4F6", color: "#6B7280" };
+        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -195,7 +195,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
     <div 
       className="h-full flex flex-col"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       {/* Header Section */}
@@ -209,10 +209,10 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               E-Vouchers
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               Manage expense vouchers and payment approvals
             </p>
           </div>
@@ -223,7 +223,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
               alignItems: "center",
               gap: "8px",
               padding: "10px 20px",
-              backgroundColor: "#0F766E",
+              backgroundColor: "var(--theme-action-primary-bg)",
               color: "#FFFFFF",
               border: "none",
               borderRadius: "8px",
@@ -232,10 +232,10 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
               fontWeight: 500,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0D6560";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#0F766E";
+              e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
             }}
           >
             <Plus size={18} />
@@ -254,7 +254,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -270,7 +270,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                 fontSize: "14px",
                 outline: "none",
                 color: "var(--neuron-ink-primary)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             />
           </div>
@@ -286,7 +286,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
               fontSize: "14px",
               outline: "none",
               color: "var(--neuron-ink-primary)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               cursor: "pointer",
             }}
           >
@@ -308,7 +308,7 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
               fontSize: "14px",
               outline: "none",
               color: "var(--neuron-ink-primary)",
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "var(--theme-bg-surface)",
               cursor: "pointer",
             }}
           >
@@ -329,11 +329,11 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
       <div className="flex-1 overflow-auto" style={{ padding: "24px 48px" }}>
         {filteredEVouchers.length === 0 ? (
           <div className="text-center py-12">
-            <FileText size={48} style={{ color: "#667085", margin: "0 auto 16px" }} />
-            <p style={{ fontSize: "16px", color: "#667085", marginBottom: "8px" }}>
+            <FileText size={48} style={{ color: "var(--theme-text-muted)", margin: "0 auto 16px" }} />
+            <p style={{ fontSize: "16px", color: "var(--theme-text-muted)", marginBottom: "8px" }}>
               No e-vouchers found
             </p>
-            <p style={{ fontSize: "14px", color: "#98A2B3" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               {searchQuery || statusFilter !== "all" || categoryFilter !== "all"
                 ? "Try adjusting your filters" 
                 : "Create your first e-voucher to get started"}
@@ -353,24 +353,24 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                     padding: "20px 24px",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "12px",
-                    backgroundColor: "#FFFFFF",
+                    backgroundColor: "var(--theme-bg-surface)",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "#0F766E";
+                    e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
                     e.currentTarget.style.backgroundColor = "#FAFAFA";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
-                    e.currentTarget.style.backgroundColor = "#FFFFFF";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                   }}
                 >
                   {/* Header Row */}
                   <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "12px" }}>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px", flexWrap: "wrap" }}>
-                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "#12332B" }}>
+                        <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                           {voucher.voucher_number}
                         </h3>
                         <span
@@ -398,15 +398,15 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                           {voucher.expense_category}
                         </span>
                       </div>
-                      <p style={{ fontSize: "13px", color: "#667085", marginBottom: "4px" }}>
+                      <p style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginBottom: "4px" }}>
                         {voucher.purpose}
                       </p>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ fontSize: "20px", fontWeight: 600, color: "#12332B" }}>
+                      <div style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)" }}>
                         ₱{voucher.amount.toLocaleString()}
                       </div>
-                      <div style={{ fontSize: "12px", color: "#667085" }}>
+                      <div style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
                         {voucher.currency}
                       </div>
                     </div>
@@ -415,14 +415,14 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                   {/* Meta Information */}
                   <div style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <User size={14} style={{ color: "#667085" }} />
-                      <span style={{ fontSize: "13px", color: "#667085" }}>
+                      <User size={14} style={{ color: "var(--theme-text-muted)" }} />
+                      <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                         {voucher.requestor_name}
                       </span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <Calendar size={14} style={{ color: "#667085" }} />
-                      <span style={{ fontSize: "13px", color: "#667085" }}>
+                      <Calendar size={14} style={{ color: "var(--theme-text-muted)" }} />
+                      <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                         {new Date(voucher.request_date).toLocaleDateString('en-PH', { 
                           month: 'short', 
                           day: 'numeric', 
@@ -431,23 +431,23 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
                       </span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <PhilippinePeso size={14} style={{ color: "#667085" }} />
-                      <span style={{ fontSize: "13px", color: "#667085" }}>
+                      <PhilippinePeso size={14} style={{ color: "var(--theme-text-muted)" }} />
+                      <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                         {voucher.vendor_name}
                       </span>
                     </div>
                     {voucher.customer_name && (
                       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <Building2 size={14} style={{ color: "#0F766E" }} />
-                        <span style={{ fontSize: "13px", color: "#0F766E", fontWeight: 500 }}>
+                        <Building2 size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
+                        <span style={{ fontSize: "13px", color: "var(--theme-action-primary-bg)", fontWeight: 500 }}>
                           {voucher.customer_name}
                         </span>
                       </div>
                     )}
                     {voucher.project_number && (
                       <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <FileText size={14} style={{ color: "#667085" }} />
-                        <span style={{ fontSize: "13px", color: "#667085" }}>
+                        <FileText size={14} style={{ color: "var(--theme-text-muted)" }} />
+                        <span style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                           {voucher.project_number}
                         </span>
                       </div>

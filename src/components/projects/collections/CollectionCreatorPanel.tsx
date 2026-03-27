@@ -346,30 +346,30 @@ export function CollectionCreatorPanel({
       size="xl"
       title={mode === 'view' ? "Collection Details" : "Receive Payment"}
     >
-      <div className="flex flex-col h-full bg-white">
+      <div className="flex flex-col h-full bg-[var(--theme-bg-surface)]">
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-8">
           <div className="max-w-6xl mx-auto space-y-6">
             
             {/* 1. Top Form Section */}
-            <div className={`bg-white rounded-xl border border-[#E5E9F0] p-6 ${isReadOnly ? 'pointer-events-none opacity-90' : ''}`}>
+            <div className={`bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] p-6 ${isReadOnly ? 'pointer-events-none opacity-90' : ''}`}>
               <div className="flex gap-8">
                 {/* Left Column: Details */}
                 <div className="flex-1 grid grid-cols-2 gap-x-6 gap-y-5">
                    {/* Customer */}
                    <div className="col-span-2">
-                      <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Customer</label>
+                      <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Customer</label>
                       <input 
                         type="text" 
                         readOnly 
                         value={project.customer_name}
-                        className="w-full px-3.5 py-2.5 bg-gray-50 border border-[#E5E7EB] rounded-lg text-[#0A1D4D] text-sm focus:outline-none"
+                        className="w-full px-3.5 py-2.5 bg-[var(--theme-bg-surface-subtle)] border border-[var(--theme-border-default)] rounded-lg text-[var(--theme-text-primary)] text-sm focus:outline-none"
                       />
                    </div>
 
                    {/* Row 1: Date & Method */}
                    <div>
-                      <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Payment Date</label>
+                      <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Payment Date</label>
                       <CustomDatePicker 
                         value={paymentDate}
                         onChange={setPaymentDate}
@@ -378,7 +378,7 @@ export function CollectionCreatorPanel({
                    </div>
 
                    <div>
-                      <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Payment Method</label>
+                      <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Payment Method</label>
                       <CustomDropdown
                         value={paymentMethod}
                         onChange={setPaymentMethod}
@@ -394,18 +394,18 @@ export function CollectionCreatorPanel({
 
                    {/* Row 2: Reference & Deposit */}
                    <div>
-                      <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Reference no.</label>
+                      <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Reference no.</label>
                       <input 
                         type="text" 
                         value={referenceNo}
                         onChange={(e) => setReferenceNo(e.target.value)}
-                        className="w-full px-3.5 py-2.5 bg-white border border-[#E5E7EB] rounded-lg text-[#0A1D4D] text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E]"
+                        className="w-full px-3.5 py-2.5 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-[var(--theme-text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)]"
                         placeholder="e.g. 12345"
                       />
                    </div>
 
                    <div>
-                      <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Deposit to</label>
+                      <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Deposit to</label>
                       <CustomDropdown
                         value={depositTo}
                         onChange={setDepositTo}
@@ -421,18 +421,18 @@ export function CollectionCreatorPanel({
 
                 {/* Right Column: Amount Received */}
                 <div className="w-[300px] flex flex-col justify-start pt-1">
-                   <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Amount Received</label>
+                   <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Amount Received</label>
                    <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium text-lg">₱</span>
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--theme-text-muted)] font-medium text-lg">₱</span>
                       <input 
                         type="number"
                         value={amountReceived || ""}
                         onChange={(e) => handleAmountReceivedChange(e.target.value)}
-                        className="w-full pl-10 pr-4 py-4 bg-white border border-[#E5E7EB] rounded-lg text-2xl font-bold text-[#0F766E] placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-2xl font-bold text-[var(--theme-action-primary-bg)] placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
                         placeholder="0.00"
                       />
                    </div>
-                   <p className="text-xs text-gray-500 mt-2">
+                   <p className="text-xs text-[var(--theme-text-muted)] mt-2">
                       {isReadOnly 
                         ? "Total amount for this collection record." 
                         : "Enter the total amount received. It will be automatically applied to the oldest invoices first, or you can manually select below."
@@ -443,12 +443,12 @@ export function CollectionCreatorPanel({
             </div>
 
             {/* 2. Outstanding Transactions Table */}
-            <div className="bg-white rounded-xl border border-[#E5E9F0] overflow-hidden flex flex-col min-h-[400px]">
-              <div className="px-6 py-4 border-b border-[#E5E9F0] bg-white flex justify-between items-center">
-                <h3 className="text-sm font-bold text-[#12332B] uppercase tracking-wide">
+            <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] overflow-hidden flex flex-col min-h-[400px]">
+              <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] flex justify-between items-center">
+                <h3 className="text-sm font-bold text-[var(--theme-text-primary)] uppercase tracking-wide">
                   {mode === 'view' ? "Linked Invoices" : "Outstanding Transactions"}
                 </h3>
-                <span className="text-xs text-gray-500 font-medium">
+                <span className="text-xs text-[var(--theme-text-muted)] font-medium">
                   {invoices.filter(inv => !inv.isReversed).length} {mode === 'view' ? "linked" : "open"} invoices
                   {invoices.some(inv => inv.isReversed) && (
                     <span className="ml-2 text-red-400">
@@ -459,25 +459,25 @@ export function CollectionCreatorPanel({
               </div>
 
               {invoices.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center p-12 text-gray-400">
+                <div className="flex-1 flex flex-col items-center justify-center p-12 text-[var(--theme-text-muted)]">
                   <p>{mode === 'view' ? "No invoices linked to this collection." : "No open invoices found."}</p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left border-collapse">
-                    <thead className="bg-white border-b border-[#E5E9F0]">
+                    <thead className="bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)]">
                       <tr>
                         <th className="px-6 py-3 w-12 text-center">
-                           <div className="w-5 h-5 rounded border border-gray-300 bg-white flex items-center justify-center opacity-50 cursor-not-allowed">
+                           <div className="w-5 h-5 rounded border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] flex items-center justify-center opacity-50 cursor-not-allowed">
                            </div>
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Description</th>
-                        <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Due Date</th>
-                        <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Original Amount</th>
-                        <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">
+                        <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider">Description</th>
+                        <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider">Due Date</th>
+                        <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider text-right">Original Amount</th>
+                        <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider text-right">
                           {mode === 'view' ? "Balance" : "Open Balance"}
                         </th>
-                        <th className="px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right w-48">Payment</th>
+                        <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider text-right w-48">Payment</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#F3F4F6]">
@@ -486,8 +486,8 @@ export function CollectionCreatorPanel({
                           key={inv.id}
                           className={`transition-colors ${
                             inv.isReversed
-                              ? "opacity-60 bg-gray-50"
-                              : `hover:bg-gray-50 ${inv.isSelected ? "bg-[#F0FDFA]" : ""}`
+                              ? "opacity-60 bg-[var(--theme-bg-surface-subtle)]"
+                              : `hover:bg-[var(--theme-bg-surface-subtle)] ${inv.isSelected ? "bg-[#F0FDFA]" : ""}`
                           } ${isReadOnly ? 'pointer-events-none' : ''}`}
                           onClick={(e) => {
                             if (!isReadOnly && !inv.isReversed) {
@@ -505,10 +505,10 @@ export function CollectionCreatorPanel({
                                 }}
                                 className={`w-5 h-5 rounded border flex items-center justify-center transition-colors mx-auto ${
                                   inv.isReversed
-                                    ? "bg-gray-100 border-gray-300 cursor-not-allowed"
+                                    ? "bg-[var(--theme-bg-surface-subtle)] border-[var(--theme-border-default)] cursor-not-allowed"
                                     : inv.isSelected
-                                      ? "bg-[#0F766E] border-[#0F766E] cursor-pointer"
-                                      : "bg-white border-gray-300 hover:border-[#0F766E] cursor-pointer"
+                                      ? "bg-[var(--theme-action-primary-bg)] border-[var(--theme-action-primary-bg)] cursor-pointer"
+                                      : "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] cursor-pointer"
                                 }`}
                               >
                                 {inv.isSelected && !inv.isReversed && <Check size={14} className="text-white" strokeWidth={3} />}
@@ -516,22 +516,22 @@ export function CollectionCreatorPanel({
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium text-[#12332B]">{inv.voucher_number}</span>
+                              <span className="text-sm font-medium text-[var(--theme-text-primary)]">{inv.voucher_number}</span>
                               {inv.isReversed && (
                                 <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-red-100 text-red-600 rounded uppercase tracking-wide">
                                   Reversed
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-gray-500">{inv.description}</div>
+                            <div className="text-xs text-[var(--theme-text-muted)]">{inv.description}</div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600">
+                          <td className="px-6 py-4 text-sm text-[var(--theme-text-secondary)]">
                             {new Date(inv.due_date).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 text-right">
+                          <td className="px-6 py-4 text-sm text-[var(--theme-text-secondary)] text-right">
                             {formatCurrency(inv.amount)}
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-[#12332B] text-right">
+                          <td className="px-6 py-4 text-sm font-medium text-[var(--theme-text-primary)] text-right">
                             {mode === 'view' ? "-" : inv.isReversed ? "—" : formatCurrency(inv.remaining_balance)}
                           </td>
                           <td className="px-6 py-4 text-right">
@@ -554,8 +554,8 @@ export function CollectionCreatorPanel({
                                 readOnly={isReadOnly}
                                 className={`w-full text-right px-3 py-2 border rounded-md text-sm outline-none transition-all ${
                                   inv.isSelected
-                                    ? "border-[#0F766E] ring-1 ring-[#0F766E] font-bold text-[#0F766E] bg-white"
-                                    : "border-gray-200 text-gray-700 bg-transparent"
+                                    ? "border-[var(--theme-action-primary-bg)] ring-1 ring-[#0F766E] font-bold text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)]"
+                                    : "border-[var(--theme-border-default)] text-[var(--theme-text-secondary)] bg-transparent"
                                 }`}
                                 placeholder="0.00"
                               />
@@ -573,11 +573,11 @@ export function CollectionCreatorPanel({
             <div className={`grid grid-cols-2 gap-8 ${isReadOnly ? 'pointer-events-none' : ''}`}>
                 {/* Memo */}
                 <div>
-                   <label className="block text-sm font-medium text-[#0A1D4D] mb-1.5">Memo</label>
+                   <label className="block text-sm font-medium text-[var(--theme-text-primary)] mb-1.5">Memo</label>
                    <textarea
                      value={notes}
                      onChange={(e) => setNotes(e.target.value)}
-                     className="w-full px-3.5 py-2.5 bg-white border border-[#E5E7EB] rounded-lg text-[#0A1D4D] text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                     className="w-full px-3.5 py-2.5 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-[var(--theme-text-primary)] text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
                      placeholder="Notes..."
                      rows={3}
                    />
@@ -586,17 +586,17 @@ export function CollectionCreatorPanel({
                 {/* Summary Metrics */}
                 <div className="flex flex-col justify-end gap-3">
                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-600">Amount to Apply:</span>
-                      <span className="font-semibold text-[#12332B]">{formatCurrency(totalApplied)}</span>
+                      <span className="text-[var(--theme-text-secondary)]">Amount to Apply:</span>
+                      <span className="font-semibold text-[var(--theme-text-primary)]">{formatCurrency(totalApplied)}</span>
                    </div>
                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-gray-600">Amount to Credit:</span>
-                      <span className="font-semibold text-[#12332B]">{formatCurrency(amountToCredit)}</span>
+                      <span className="text-[var(--theme-text-secondary)]">Amount to Credit:</span>
+                      <span className="font-semibold text-[var(--theme-text-primary)]">{formatCurrency(amountToCredit)}</span>
                    </div>
-                   <div className="h-px bg-gray-200 my-1"></div>
+                   <div className="h-px bg-[var(--theme-bg-surface-tint)] my-1"></div>
                    <div className="flex justify-between items-center">
-                      <span className="text-base font-bold text-[#0A1D4D]">Total Received:</span>
-                      <span className="text-xl font-bold text-[#0F766E]">{formatCurrency(amountReceived)}</span>
+                      <span className="text-base font-bold text-[var(--theme-text-primary)]">Total Received:</span>
+                      <span className="text-xl font-bold text-[var(--theme-action-primary-bg)]">{formatCurrency(amountReceived)}</span>
                    </div>
                 </div>
             </div>
@@ -606,10 +606,10 @@ export function CollectionCreatorPanel({
 
         {/* Action Bar */}
         {!isReadOnly && (
-          <div className="px-8 py-5 bg-white border-t border-[#E5E9F0] flex justify-end gap-3 shrink-0">
+          <div className="px-8 py-5 bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)] flex justify-end gap-3 shrink-0">
              <button
                onClick={onClose}
-               className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+               className="px-4 py-2 text-sm font-medium text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)] rounded-lg transition-colors"
              >
                Cancel
              </button>
@@ -619,7 +619,7 @@ export function CollectionCreatorPanel({
                className={`px-6 py-2 text-sm font-bold text-white rounded-lg shadow-sm flex items-center gap-2 transition-all ${
                  isSaving || amountReceived <= 0 
                    ? "bg-gray-400 cursor-not-allowed" 
-                   : "bg-[#0F766E] hover:bg-[#0D655E] hover:shadow-md"
+                   : "bg-[var(--theme-action-primary-bg)] hover:bg-[#0D655E] hover:shadow-md"
                }`}
              >
                {isSaving ? (

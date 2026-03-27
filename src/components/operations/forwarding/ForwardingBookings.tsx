@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Plus, Search, Package, Briefcase, UserCheck, FileEdit, Clock, CheckCircle, Trash2 } from "lucide-react";
 import { CreateForwardingBookingPanel } from "./CreateForwardingBookingPanel";
 import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
@@ -8,6 +8,7 @@ import { toast } from "../../ui/toast-utils";
 import { NeuronStatusPill } from "../../NeuronStatusPill";
 import { SkeletonTable } from "../../shared/NeuronSkeleton";
 import { useCachedFetch, useInvalidateCache } from "../../../hooks/useNeuronCache";
+import { useDataScope } from "../../../hooks/useDataScope";
 import { NeuronRefreshButton } from "../../shared/NeuronRefreshButton";
 
 interface ForwardingBookingsProps {
@@ -61,11 +62,20 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
     return (data || []).map(mapToForwardingBooking);
   };
 
-  const { data: bookings, isLoading, refresh: fetchBookings } = useCachedFetch<ForwardingBooking[]>(
+  const { scope, isLoaded: scopeLoaded } = useDataScope();
+
+  const { data: rawBookings, isLoading, refresh: fetchBookings } = useCachedFetch<ForwardingBooking[]>(
     "forwarding-bookings",
     bookingsFetcher,
     [],
   );
+
+  const bookings = useMemo(() => {
+    if (!scopeLoaded) return [];
+    if (scope.type === 'all') return rawBookings;
+    if (scope.type === 'userIds') return rawBookings.filter(b => scope.ids.includes((b as any).created_by || ''));
+    return rawBookings.filter(b => (b as any).created_by === scope.userId);
+  }, [rawBookings, scope, scopeLoaded]);
 
   // Deep-link: auto-select booking from pendingBookingId
   useEffect(() => {
@@ -179,7 +189,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
 
   return (
     <>
-      <div style={{ minHeight: "100vh", background: "#FFFFFF" }}>
+      <div style={{ minHeight: "100vh", background: "var(--theme-bg-surface)" }}>
         {/* Header */}
         <div style={{ padding: "32px 48px 24px 48px" }}>
           <div style={{ 
@@ -192,7 +202,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               <h1 style={{ 
                 fontSize: "32px", 
                 fontWeight: 600, 
-                color: "#12332B", 
+                color: "var(--theme-text-primary)", 
                 marginBottom: "4px",
                 letterSpacing: "-1.2px"
               }}>
@@ -200,7 +210,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               </h1>
               <p style={{ 
                 fontSize: "14px", 
-                color: "#667085"
+                color: "var(--theme-text-muted)"
               }}>
                 Manage freight forwarding operations and shipments
               </p>
@@ -243,7 +253,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                 left: "12px",
                 top: "50%",
                 transform: "translateY(-50%)",
-                color: "#667085",
+                color: "var(--theme-text-muted)",
               }}
             />
             <input
@@ -254,12 +264,12 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               style={{
                 width: "100%",
                 padding: "10px 12px 10px 40px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
                 outline: "none",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             />
           </div>
@@ -277,11 +287,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               onChange={(e) => setTimePeriodFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -298,11 +308,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               onChange={(e) => setStatusFilter(e.target.value as ExecutionStatus | "all")}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -323,11 +333,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               onChange={(e) => setMovementFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -343,11 +353,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               onChange={(e) => setOwnerFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -364,11 +374,11 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               onChange={(e) => setModeFilter(e.target.value)}
               style={{
                 padding: "10px 12px",
-                border: "1px solid #E5E7EB",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 fontSize: "14px",
-                color: "#12332B",
-                backgroundColor: "#FFFFFF",
+                color: "var(--theme-text-primary)",
+                backgroundColor: "var(--theme-bg-surface)",
                 outline: "none",
                 cursor: "pointer",
               }}
@@ -384,7 +394,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
           <div style={{ 
             display: "flex", 
             gap: "8px", 
-            borderBottom: "1px solid #E5E7EB",
+            borderBottom: "1px solid var(--theme-border-default)",
             marginBottom: "24px"
           }}>
             <TabButton
@@ -392,7 +402,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               label="All Bookings"
               count={allCount}
               isActive={activeTab === "all"}
-              color="#0F766E"
+              color="var(--theme-action-primary-bg)"
               onClick={() => setActiveTab("all")}
             />
             <TabButton
@@ -408,7 +418,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               label="Draft"
               count={draftCount}
               isActive={activeTab === "draft"}
-              color="#6B7280"
+              color="var(--theme-text-muted)"
               onClick={() => setActiveTab("draft")}
             />
             <TabButton
@@ -416,7 +426,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               label="In Progress"
               count={inProgressCount}
               isActive={activeTab === "in-progress"}
-              color="#0F766E"
+              color="var(--theme-action-primary-bg)"
               onClick={() => setActiveTab("in-progress")}
             />
             <TabButton
@@ -438,53 +448,53 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
             </div>
           ) : filteredBookings.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64">
-              <div className="text-[#12332B]/60 mb-2">
+              <div className="text-[var(--theme-text-primary)]/60 mb-2">
                 {searchTerm || statusFilter !== "all" 
                   ? "No bookings match your filters" 
                   : "No forwarding bookings yet"}
               </div>
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="text-[#0F766E] hover:underline"
+                className="text-[var(--theme-action-primary-bg)] hover:underline"
               >
                 Create your first booking
               </button>
             </div>
           ) : (
             <div style={{
-              border: "1px solid #E5E7EB",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "12px",
               overflow: "hidden",
-              backgroundColor: "#FFFFFF"
+              backgroundColor: "var(--theme-bg-surface)"
             }}>
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-[#12332B]/10">
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                  <tr className="border-b border-[var(--theme-text-primary)]/10">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Booking Details
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Customer
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Route
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Movement
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Mode
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Team
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Status
                     </th>
-                    <th className="text-left py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide">
+                    <th className="text-left py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide">
                       Created
                     </th>
-                    <th className="text-center py-3 px-4 text-[#667085] font-semibold text-xs uppercase tracking-wide" style={{ width: "80px" }}>
+                    <th className="text-center py-3 px-4 text-[var(--theme-text-muted)] font-semibold text-xs uppercase tracking-wide" style={{ width: "80px" }}>
                       Actions
                     </th>
                   </tr>
@@ -493,17 +503,17 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                   {filteredBookings.map((booking, index) => (
                     <tr
                       key={`${booking.bookingId}-${index}`}
-                      className="border-b border-[#12332B]/5 hover:bg-[#0F766E]/5 transition-colors cursor-pointer"
+                      className="border-b border-[var(--theme-text-primary)]/5 hover:bg-[var(--theme-action-primary-bg)]/5 transition-colors cursor-pointer"
                       onClick={() => onSelectBooking(booking)}
                     >
                       <td className="py-4 px-4">
                         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                          <Package size={20} color="#0F766E" style={{ flexShrink: 0 }} />
+                          <Package size={20} color="var(--theme-action-primary-bg)" style={{ flexShrink: 0 }} />
                           <div>
                             <div style={{ 
                               fontSize: "14px", 
                               fontWeight: 600, 
-                              color: "#12332B",
+                              color: "var(--theme-text-primary)",
                               marginBottom: "2px"
                             }}>
                               {(booking as any).booking_number || booking.bookingId}
@@ -511,7 +521,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                             {booking.projectNumber && (
                               <div style={{ 
                                 fontSize: "13px", 
-                                color: "#667085"
+                                color: "var(--theme-text-muted)"
                               }}>
                                 Project: {booking.projectNumber}
                               </div>
@@ -520,19 +530,19 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "14px", color: "#12332B" }}>
+                        <div style={{ fontSize: "14px", color: "var(--theme-text-primary)" }}>
                           {booking.customerName}
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "13px", color: "#12332B" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-primary)" }}>
                           {booking.portOfLoading && booking.portOfDischarge ? (
                             <>
                               <div>{booking.portOfLoading}</div>
-                              <div style={{ color: "#667085" }}>→ {booking.portOfDischarge}</div>
+                              <div style={{ color: "var(--theme-text-muted)" }}>→ {booking.portOfDischarge}</div>
                             </>
                           ) : (
-                            <span style={{ color: "#667085" }}>—</span>
+                            <span style={{ color: "var(--theme-text-muted)" }}>—</span>
                           )}
                         </div>
                       </td>
@@ -553,20 +563,20 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                         <div style={{ 
                           fontSize: "13px", 
                           fontWeight: 500,
-                          color: "#12332B" 
+                          color: "var(--theme-text-primary)" 
                         }}>
                           {booking.mode || "—"}
                         </div>
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "13px", color: "#12332B" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-primary)" }}>
                           {booking.assigned_handler_name ? (
                             <div>
                               <div style={{ fontWeight: 500 }}>{booking.assigned_handler_name}</div>
-                              <div style={{ fontSize: "11px", color: "#667085" }}>Handler</div>
+                              <div style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>Handler</div>
                             </div>
                           ) : (
-                            <span style={{ color: "#667085" }}>Unassigned</span>
+                            <span style={{ color: "var(--theme-text-muted)" }}>Unassigned</span>
                           )}
                         </div>
                       </td>
@@ -574,7 +584,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                         <NeuronStatusPill status={booking.status} />
                       </td>
                       <td className="py-4 px-4">
-                        <div style={{ fontSize: "13px", color: "#667085" }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-text-muted)" }}>
                           {new Date(booking.createdAt).toLocaleDateString()}
                         </div>
                       </td>
@@ -591,7 +601,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                             fontWeight: 600,
                             border: "1px solid #FCA5A5",
                             borderRadius: "6px",
-                            background: "white",
+                            background: "var(--theme-bg-surface)",
                             color: "#DC2626",
                             cursor: "pointer",
                             transition: "all 150ms"

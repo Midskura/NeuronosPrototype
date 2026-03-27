@@ -139,7 +139,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
   return (
     <>
       <div style={{
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "8px",
         overflow: "hidden",
@@ -149,7 +149,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
         <div
           style={{
             padding: "20px 24px",
-            backgroundColor: "#F8FBFB",
+            backgroundColor: "var(--theme-bg-page)",
             borderBottom: isExpanded ? "1px solid var(--neuron-ui-border)" : "none",
             display: "flex",
             justifyContent: "space-between",
@@ -274,7 +274,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
                       }}
                       style={{
                         padding: "16px",
-                        backgroundColor: "#F9FAFB",
+                        backgroundColor: "var(--theme-bg-page)",
                         border: "1px solid var(--neuron-ui-border)",
                         borderRadius: "8px",
                         display: "flex",
@@ -288,7 +288,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
                         e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F9FAFB";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                         e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
                       }}
                     >
@@ -317,7 +317,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
                 <div style={{
                   padding: "32px",
                   textAlign: "center",
-                  backgroundColor: "#F9FAFB",
+                  backgroundColor: "var(--theme-bg-page)",
                   border: "1px dashed var(--neuron-ui-border)",
                   borderRadius: "8px"
                 }}>
@@ -331,7 +331,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
                   {canCreateBookings && (
                     <p style={{
                       fontSize: "13px",
-                      color: "#9CA3AF",
+                      color: "var(--theme-text-muted)",
                       margin: "8px 0 0 0"
                     }}>
                       Click "Create Booking" above to get started

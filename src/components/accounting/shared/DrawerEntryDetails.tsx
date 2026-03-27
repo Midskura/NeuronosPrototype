@@ -80,7 +80,7 @@ export function DrawerEntryDetails({
         <DrawerHeader>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <DrawerTitle className="text-[#0A1D4D] mb-2">Entry Details</DrawerTitle>
+              <DrawerTitle className="text-[var(--theme-text-primary)] mb-2">Entry Details</DrawerTitle>
               <DrawerDescription className="flex items-center gap-2">
                 <BadgeType type={entry.type} />
                 {getStatusBadge(entry.status)}
@@ -108,44 +108,44 @@ export function DrawerEntryDetails({
           <div className="grid grid-cols-2 gap-4">
             {/* Date */}
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-[12px] text-[#6B7280]">
+              <div className="flex items-center gap-2 text-[12px] text-[var(--theme-text-muted)]">
                 <Calendar className="w-4 h-4" />
                 Date
               </div>
-              <div className="text-[14px] text-[#374151]">
+              <div className="text-[14px] text-[var(--theme-text-secondary)]">
                 {format(new Date(entry.date), "MMM d, yyyy")}
               </div>
             </div>
 
             {/* Booking No */}
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-[12px] text-[#6B7280]">
+              <div className="flex items-center gap-2 text-[12px] text-[var(--theme-text-muted)]">
                 <FileText className="w-4 h-4" />
                 Booking No
               </div>
-              <div className="text-[14px] text-[#0A1D4D] font-medium">
+              <div className="text-[14px] text-[var(--theme-text-primary)] font-medium">
                 {entry.bookingNo}
               </div>
             </div>
 
             {/* Client */}
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-[12px] text-[#6B7280]">
+              <div className="flex items-center gap-2 text-[12px] text-[var(--theme-text-muted)]">
                 <Building2 className="w-4 h-4" />
                 Client
               </div>
-              <div className="text-[14px] text-[#374151]">
+              <div className="text-[14px] text-[var(--theme-text-secondary)]">
                 {entry.client}
               </div>
             </div>
 
             {/* Account */}
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-[12px] text-[#6B7280]">
+              <div className="flex items-center gap-2 text-[12px] text-[var(--theme-text-muted)]">
                 <Wallet className="w-4 h-4" />
                 Account
               </div>
-              <div className="text-[14px] text-[#374151]">
+              <div className="text-[14px] text-[var(--theme-text-secondary)]">
                 {entry.account}
               </div>
             </div>
@@ -153,8 +153,8 @@ export function DrawerEntryDetails({
             {/* Category (if not transfer) */}
             {entry.category && (
               <div className="space-y-1">
-                <div className="text-[12px] text-[#6B7280]">Category</div>
-                <div className="text-[14px] text-[#374151]">
+                <div className="text-[12px] text-[var(--theme-text-muted)]">Category</div>
+                <div className="text-[14px] text-[var(--theme-text-secondary)]">
                   {entry.category}
                 </div>
               </div>
@@ -163,11 +163,11 @@ export function DrawerEntryDetails({
             {/* Entered By */}
             {entry.enteredBy && (
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[12px] text-[#6B7280]">
+                <div className="flex items-center gap-2 text-[12px] text-[var(--theme-text-muted)]">
                   <User className="w-4 h-4" />
                   Entered By
                 </div>
-                <div className="text-[14px] text-[#374151]">
+                <div className="text-[14px] text-[var(--theme-text-secondary)]">
                   {entry.enteredBy}
                 </div>
               </div>
@@ -179,8 +179,8 @@ export function DrawerEntryDetails({
             <>
               <Separator />
               <div className="space-y-2">
-                <div className="text-[12px] text-[#6B7280]">Note</div>
-                <div className="text-[14px] text-[#374151] p-3 bg-[#F9FAFB] rounded-lg">
+                <div className="text-[12px] text-[var(--theme-text-muted)]">Note</div>
+                <div className="text-[14px] text-[var(--theme-text-secondary)] p-3 bg-[var(--theme-bg-page)] rounded-lg">
                   {entry.note}
                 </div>
               </div>
@@ -192,7 +192,7 @@ export function DrawerEntryDetails({
             <>
               <Separator />
               <div className="space-y-2">
-                <div className="text-[12px] text-[#6B7280]">Attachment</div>
+                <div className="text-[12px] text-[var(--theme-text-muted)]">Attachment</div>
                 <Button
                   variant="outline"
                   className="w-full justify-start"
@@ -206,7 +206,7 @@ export function DrawerEntryDetails({
           )}
         </div>
 
-        <DrawerFooter className="border-t border-[#E5E7EB]">
+        <DrawerFooter className="border-t border-[var(--theme-border-default)]">
           <div className="flex gap-3 w-full">
             {/* Edit Button */}
             {canEdit && onEdit && (

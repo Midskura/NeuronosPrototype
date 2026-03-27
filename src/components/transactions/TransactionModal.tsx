@@ -176,24 +176,24 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
             exit={{ opacity: 0, scale: 0.95 }}
             className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           >
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden pointer-events-auto">
-              <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                <h2 className="text-lg font-semibold text-[#12332B]">New Transaction ({currency})</h2>
-                <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500">
+            <div className="bg-[var(--theme-bg-surface)] rounded-2xl shadow-xl w-full max-w-lg overflow-hidden pointer-events-auto">
+              <div className="px-6 py-4 border-b border-[var(--theme-border-subtle)] flex items-center justify-between bg-[var(--theme-bg-surface-subtle)]/50">
+                <h2 className="text-lg font-semibold text-[var(--theme-text-primary)]">New Transaction ({currency})</h2>
+                <button onClick={onClose} className="p-2 hover:bg-[var(--theme-bg-surface-tint)] rounded-full transition-colors text-[var(--theme-text-muted)]">
                   <X size={18} />
                 </button>
               </div>
 
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 {/* Type Toggle */}
-                <div className="flex bg-gray-100 p-1 rounded-lg mb-4">
+                <div className="flex bg-[var(--theme-bg-surface-subtle)] p-1 rounded-lg mb-4">
                   <button
                     type="button"
                     onClick={() => setTransactionType('expense')}
                     className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
                       transactionType === 'expense'
-                        ? "bg-white text-red-600 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
+                        ? "bg-[var(--theme-bg-surface)] text-red-600 shadow-sm"
+                        : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
                     }`}
                   >
                     Money Out (Expense)
@@ -203,8 +203,8 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                     onClick={() => setTransactionType('income')}
                     className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
                       transactionType === 'income'
-                        ? "bg-white text-green-600 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700"
+                        ? "bg-[var(--theme-bg-surface)] text-green-600 shadow-sm"
+                        : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
                     }`}
                   >
                     Money In (Income)
@@ -213,19 +213,19 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-[#12332B]">Date</label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Date</label>
                     <input
                       type="date"
                       required
                       value={formData.date}
                       onChange={e => setFormData(prev => ({ ...prev, date: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-[#12332B]">Amount</label>
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">Amount</label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--theme-text-muted)] font-medium">
                         {currency === 'PHP' ? '₱' : '$'}
                       </span>
                       <input
@@ -235,7 +235,7 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                         step="0.01"
                         value={formData.amount || ""}
                         onChange={e => setFormData(prev => ({ ...prev, amount: parseFloat(e.target.value) }))}
-                        className="w-full pl-8 pr-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm font-mono"
+                        className="w-full pl-8 pr-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm font-mono"
                         placeholder="0.00"
                       />
                     </div>
@@ -243,13 +243,13 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm font-medium text-[#12332B]">Description</label>
+                  <label className="text-sm font-medium text-[var(--theme-text-primary)]">Description</label>
                   <input
                     type="text"
                     required
                     value={formData.description}
                     onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm"
+                    className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm"
                     placeholder="e.g. Payment to Maersk"
                   />
                 </div>
@@ -257,14 +257,14 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                 {/* Account Selection */}
                 <div className="grid grid-cols-[1fr,auto,1fr] gap-2 items-center">
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-[#12332B]">
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">
                       {transactionType === 'expense' ? 'From (Bank)' : 'To (Bank)'}
                     </label>
                     <select
                       required
                       value={formData.bank_account_id}
                       onChange={e => setFormData(prev => ({ ...prev, bank_account_id: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                     >
                       <option value="">Select Bank...</option>
                       {bankAccounts.map(acc => (
@@ -273,19 +273,19 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                     </select>
                   </div>
 
-                  <div className="pt-6 text-gray-300">
+                  <div className="pt-6 text-[var(--theme-text-muted)]">
                     <ArrowRight size={20} />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-sm font-medium text-[#12332B]">
+                    <label className="text-sm font-medium text-[var(--theme-text-primary)]">
                       {transactionType === 'expense' ? 'To (Category)' : 'From (Source)'}
                     </label>
                     <select
                       required
                       value={formData.category_account_id}
                       onChange={e => setFormData(prev => ({ ...prev, category_account_id: e.target.value }))}
-                      className="w-full px-3 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-[#0F766E] text-sm bg-white"
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--theme-border-default)] focus:outline-none focus:border-[var(--theme-action-primary-bg)] text-sm bg-[var(--theme-bg-surface)]"
                     >
                       <option value="">Select Category...</option>
                       {categoryAccounts.map(acc => (
@@ -299,14 +299,14 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                   <button
                     type="button"
                     onClick={onClose}
-                    className="px-5 py-2.5 text-gray-600 hover:text-gray-900 font-medium text-sm transition-colors"
+                    className="px-5 py-2.5 text-[var(--theme-text-secondary)] hover:text-[var(--theme-text-primary)] font-medium text-sm transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-6 py-2.5 bg-[#0F766E] hover:bg-[#0D6560] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="px-6 py-2.5 bg-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-action-primary-border)] text-white rounded-xl font-semibold text-sm shadow-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {loading ? "Saving..." : <><Save size={18} /> Save Transaction</>}
                   </button>

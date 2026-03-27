@@ -7,6 +7,7 @@ import { AddContactPanel } from "../bd/AddContactPanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { toast } from "sonner@2.0.3";
 import type { Contact, LifecycleStage, LeadStatus } from "../../types/bd";
+import { useDataScope } from "../../hooks/useDataScope";
 
 interface BackendContact {
   id: string;
@@ -46,6 +47,8 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   const [isLoading, setIsLoading] = useState(true);
   const [activities, setActivities] = useState<any[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
+
+  const { scope, isLoaded } = useDataScope();
 
   // Direct Supabase query for BD users (replaces Edge Function fetch)
   const { users: bdUsers } = useUsers({ department: 'Business Development' });
@@ -90,9 +93,12 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
 
   // Fetch contacts from backend
   const fetchContacts = async () => {
+    if (!isLoaded) return;
     setIsLoading(true);
     try {
       let query = supabase.from('contacts').select('*');
+      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
+      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
       if (searchQuery) {
         query = query.or(`name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
       }
@@ -110,12 +116,12 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
     }
   };
 
-  // Fetch on mount
+  // Fetch on mount and when scope resolves
   useEffect(() => {
     fetchContacts();
     fetchActivities();
     fetchCustomers();
-  }, []);
+  }, [scope, isLoaded]);
 
   // Debounced search
   useEffect(() => {
@@ -264,7 +270,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
     <div 
       className="h-full overflow-auto"
       style={{
-        background: "#FFFFFF",
+        background: "var(--theme-bg-surface)",
       }}
     >
       <div style={{ padding: "32px 48px" }}>
@@ -277,10 +283,10 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
           }}
         >
           <div>
-            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "#12332B", marginBottom: "4px", letterSpacing: "-1.2px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
               Contacts
             </h1>
-            <p style={{ fontSize: "14px", color: "#667085" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
               {userDepartment === "Business Development" 
                 ? "Manage all customer and lead contacts" 
                 : "View contacts and check inquiries"}
@@ -303,10 +309,10 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                 cursor: "pointer",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#0D6560";
+                e.currentTarget.style.background = "var(--theme-action-primary-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#0F766E";
+                e.currentTarget.style.background = "var(--theme-action-primary-bg)";
               }}
               onClick={() => setIsAddContactOpen(true)}
             >
@@ -366,7 +372,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
               className="w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 text-[13px]"
               style={{
                 border: "1.5px solid var(--neuron-ui-border)",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "var(--theme-bg-surface)",
                 color: "var(--neuron-ink-primary)"
               }}
               onFocus={(e) => {
@@ -433,7 +439,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
           border: "1.5px solid var(--neuron-ui-border)", 
           borderRadius: "16px", 
           overflow: "hidden",
-          backgroundColor: "#FFFFFF"
+          backgroundColor: "var(--theme-bg-surface)"
         }}>
           <table className="w-full">
             <thead>
@@ -474,7 +480,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                         <div className="flex items-center gap-3">
                           <div 
                             className="w-8 h-8 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: "#E8F5F3", color: "#0F766E" }}
+                            style={{ backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" }}
                           >
                             <UserCircle size={16} />
                           </div>

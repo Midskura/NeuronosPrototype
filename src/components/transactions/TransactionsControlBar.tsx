@@ -36,7 +36,7 @@ export function TransactionsControlBar({
   ];
 
   return (
-    <div className="flex flex-col bg-white border-b border-gray-200">
+    <div className="flex flex-col bg-[var(--theme-bg-surface)] border-b border-[var(--theme-border-default)]">
       {/* Top Row: Tabs & Bank Register Link */}
       <div className="px-[45px] flex items-center justify-between mt-2">
         <div className="flex gap-8">
@@ -48,12 +48,12 @@ export function TransactionsControlBar({
                 onClick={() => onTabChange(tab.id)}
                 className={`
                   py-4 relative text-sm font-medium transition-colors
-                  ${isActive ? "text-[#0F766E]" : "text-gray-500 hover:text-gray-700"}
+                  ${isActive ? "text-[var(--theme-action-primary-bg)]" : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"}
                 `}
               >
                 {tab.label}
                 {isActive && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0F766E] rounded-t-full" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--theme-action-primary-bg)] rounded-t-full" />
                 )}
               </button>
             );
@@ -66,16 +66,16 @@ export function TransactionsControlBar({
       </div>
 
       {/* Bottom Row: Filters */}
-      <div className="px-[45px] py-3 bg-white border-t border-gray-200 flex items-center gap-3">
+      <div className="px-[45px] py-3 bg-[var(--theme-bg-surface)] border-t border-[var(--theme-border-default)] flex items-center gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--theme-text-muted)]" />
           <input
             type="text"
             placeholder="Search desc, payee, amount..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-white border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E] focus:border-[#0F766E] transition-all placeholder:text-gray-400"
+            className="w-full pl-9 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] transition-all placeholder:text-[var(--theme-text-muted)]"
           />
         </div>
 
@@ -110,7 +110,7 @@ export function TransactionsControlBar({
                 minWidth="130px"
             />
             
-            <button className="h-[38px] px-3 bg-white border border-gray-300 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors flex items-center gap-2 text-sm font-medium">
+            <button className="h-[38px] px-3 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-[var(--theme-text-muted)] hover:bg-[var(--theme-bg-surface-subtle)] hover:text-[var(--theme-text-secondary)] transition-colors flex items-center gap-2 text-sm font-medium">
                 <Filter size={16} />
                 More
             </button>

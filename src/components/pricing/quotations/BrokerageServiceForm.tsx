@@ -70,7 +70,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
 
   return (
     <div style={{
-      backgroundColor: "white",
+      backgroundColor: "var(--theme-bg-surface)",
       border: "1px solid var(--neuron-ui-border)",
       borderRadius: "8px",
       padding: "24px",
@@ -172,7 +172,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                 fontSize: "12px",
                 fontWeight: 500,
                 color: "var(--neuron-brand-green)",
-                backgroundColor: "#F0FDFA",
+                backgroundColor: "var(--theme-bg-surface-tint)",
                 border: "1px solid #CCFBF1",
                 borderRadius: "14px",
               }}>
@@ -185,7 +185,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                 fontSize: "12px",
                 fontWeight: 500,
                 color: "var(--neuron-brand-green)",
-                backgroundColor: "#F0FDFA",
+                backgroundColor: "var(--theme-bg-surface-tint)",
                 border: "1px solid #CCFBF1",
                 borderRadius: "14px",
               }}>
@@ -399,7 +399,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
             {data.mode === "FCL" && (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 marginTop: "20px"
@@ -638,7 +638,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
             {data.mode === "FCL" && (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px"
               }}>
@@ -855,7 +855,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
             {data.mode === "FCL" && (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 marginTop: "16px"
@@ -871,7 +871,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
             {data.mode === "LCL" && (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 marginTop: "16px",
@@ -957,7 +957,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
             {data.mode === "AIR" && (
               <div style={{
                 padding: "16px",
-                backgroundColor: "#F8FBFB",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 marginTop: "16px",

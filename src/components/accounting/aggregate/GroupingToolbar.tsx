@@ -103,7 +103,7 @@ export function GroupingToolbar({
         <Search
           size={18}
           className="absolute left-3 top-1/2 -translate-y-1/2"
-          style={{ color: "#667085" }}
+          style={{ color: "var(--theme-text-muted)" }}
         />
         <input
           type="text"
@@ -112,18 +112,18 @@ export function GroupingToolbar({
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full py-2.5 pl-10 pr-10 rounded-lg text-[14px]"
           style={{
-            border: "1px solid #E5E7EB",
+            border: "1px solid var(--theme-border-default)",
             outline: "none",
-            color: "#12332B",
-            backgroundColor: "#FFFFFF",
+            color: "var(--theme-text-primary)",
+            backgroundColor: "var(--theme-bg-surface)",
           }}
         />
         {searchQuery && (
           <button
             onClick={() => onSearchChange("")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-gray-100 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
           >
-            <X size={14} style={{ color: "#667085" }} />
+            <X size={14} style={{ color: "var(--theme-text-muted)" }} />
           </button>
         )}
       </div>
@@ -139,10 +139,10 @@ export function GroupingToolbar({
         <div className="relative" ref={groupRef}>
           <button
             onClick={() => setGroupOpen(!groupOpen)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-gray-50"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
             style={{
-              border: "1px solid #E5E7EB",
-              color: "#12332B",
+              border: "1px solid var(--theme-border-default)",
+              color: "var(--theme-text-primary)",
               backgroundColor: groupOpen ? "#F0FDFA" : "#FFFFFF",
             }}
           >
@@ -153,7 +153,7 @@ export function GroupingToolbar({
             <span>{activeGroupLabel}</span>
             <ChevronDown
               size={12}
-              style={{ color: "#667085" }}
+              style={{ color: "var(--theme-text-muted)" }}
               className={`transition-transform ${groupOpen ? "rotate-180" : ""}`}
             />
           </button>
@@ -162,8 +162,8 @@ export function GroupingToolbar({
             <div
               className="absolute top-full left-0 mt-1 z-50 rounded-lg shadow-lg py-1 min-w-[180px]"
               style={{
-                border: "1px solid #E5E7EB",
-                backgroundColor: "#FFFFFF",
+                border: "1px solid var(--theme-border-default)",
+                backgroundColor: "var(--theme-bg-surface)",
               }}
             >
               {groupByOptions.map((opt) => {
@@ -175,7 +175,7 @@ export function GroupingToolbar({
                       onGroupByChange(opt.value);
                       setGroupOpen(false);
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                     style={{
                       color: isActive ? "#0F766E" : "#12332B",
                       fontWeight: isActive ? 600 : 400,
@@ -184,7 +184,7 @@ export function GroupingToolbar({
                     {isActive ? (
                       <span
                         className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: "#0F766E" }}
+                        style={{ backgroundColor: "var(--theme-action-primary-bg)" }}
                       />
                     ) : (
                       <span className="w-1.5" />
@@ -202,7 +202,7 @@ export function GroupingToolbar({
           <div className="relative" ref={agingRef}>
             <button
               onClick={() => setAgingOpen(!agingOpen)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-gray-50"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
               style={{
                 border: `1px solid ${activeAgingBucket ? (agingBuckets!.find(b => b.label === activeAgingBucket)?.color || "#E5E7EB") + "60" : "#E5E7EB"}`,
                 color: activeAgingBucket ? agingBuckets!.find(b => b.label === activeAgingBucket)?.color || "#12332B" : "#12332B",
@@ -220,7 +220,7 @@ export function GroupingToolbar({
               <span>{activeAgingBucket || "Aging"}</span>
               <ChevronDown
                 size={12}
-                style={{ color: "#667085" }}
+                style={{ color: "var(--theme-text-muted)" }}
                 className={`transition-transform ${agingOpen ? "rotate-180" : ""}`}
               />
             </button>
@@ -229,8 +229,8 @@ export function GroupingToolbar({
               <div
                 className="absolute top-full left-0 mt-1 z-50 rounded-lg shadow-lg py-1 min-w-[240px]"
                 style={{
-                  border: "1px solid #E5E7EB",
-                  backgroundColor: "#FFFFFF",
+                  border: "1px solid var(--theme-border-default)",
+                  backgroundColor: "var(--theme-bg-surface)",
                 }}
               >
                 {/* All / Clear option */}
@@ -239,15 +239,15 @@ export function GroupingToolbar({
                     onAgingBucketChange!(null);
                     setAgingOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                   style={{
                     color: !activeAgingBucket ? "#0F766E" : "#12332B",
                     fontWeight: !activeAgingBucket ? 600 : 400,
-                    borderBottom: "1px solid #F3F4F6",
+                    borderBottom: "1px solid var(--theme-border-subtle)",
                   }}
                 >
                   {!activeAgingBucket ? (
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#0F766E" }} />
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--theme-action-primary-bg)" }} />
                   ) : (
                     <span className="w-1.5" />
                   )}
@@ -263,7 +263,7 @@ export function GroupingToolbar({
                         onAgingBucketChange!(isActive ? null : bucket.label);
                         setAgingOpen(false);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                       style={{
                         color: isActive ? bucket.color : "#12332B",
                         fontWeight: isActive ? 600 : 400,
@@ -302,7 +302,7 @@ export function GroupingToolbar({
           <div className="relative" ref={bookingTypeRef}>
             <button
               onClick={() => setBookingTypeOpen(!bookingTypeOpen)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-gray-50"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
               style={{
                 border: `1px solid ${activeBookingType ? "#E5E7EB" + "60" : "#E5E7EB"}`,
                 color: activeBookingType ? "#12332B" : "#12332B",
@@ -320,7 +320,7 @@ export function GroupingToolbar({
               <span>{activeBookingType || "Booking Type"}</span>
               <ChevronDown
                 size={12}
-                style={{ color: "#667085" }}
+                style={{ color: "var(--theme-text-muted)" }}
                 className={`transition-transform ${bookingTypeOpen ? "rotate-180" : ""}`}
               />
             </button>
@@ -329,8 +329,8 @@ export function GroupingToolbar({
               <div
                 className="absolute top-full left-0 mt-1 z-50 rounded-lg shadow-lg py-1 min-w-[240px]"
                 style={{
-                  border: "1px solid #E5E7EB",
-                  backgroundColor: "#FFFFFF",
+                  border: "1px solid var(--theme-border-default)",
+                  backgroundColor: "var(--theme-bg-surface)",
                 }}
               >
                 {/* All / Clear option */}
@@ -339,15 +339,15 @@ export function GroupingToolbar({
                     onBookingTypeChange!(null);
                     setBookingTypeOpen(false);
                   }}
-                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                   style={{
                     color: !activeBookingType ? "#0F766E" : "#12332B",
                     fontWeight: !activeBookingType ? 600 : 400,
-                    borderBottom: "1px solid #F3F4F6",
+                    borderBottom: "1px solid var(--theme-border-subtle)",
                   }}
                 >
                   {!activeBookingType ? (
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#0F766E" }} />
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--theme-action-primary-bg)" }} />
                   ) : (
                     <span className="w-1.5" />
                   )}
@@ -363,7 +363,7 @@ export function GroupingToolbar({
                         onBookingTypeChange!(isActive ? null : type);
                         setBookingTypeOpen(false);
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-gray-50"
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-[13px] transition-colors hover:bg-[var(--theme-bg-surface-subtle)]"
                       style={{
                         color: isActive ? "#0F766E" : "#12332B",
                         fontWeight: isActive ? 600 : 400,
