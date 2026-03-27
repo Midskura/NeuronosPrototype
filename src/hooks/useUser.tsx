@@ -76,6 +76,8 @@ async function fetchUserProfile(authUid: string): Promise<User | null> {
       created_at: data.created_at || new Date().toISOString(),
       is_active: data.is_active !== false,
       team_id: data.team_id || null,
+      avatar_url: data.avatar_url || null,
+      phone: data.phone || null,
       service_type: data.service_type || null,
       operations_role: data.operations_role || null,
     };
@@ -320,6 +322,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
           created_at: new Date().toISOString(),
           is_active: true,
           team_id: null,
+          avatar_url: null,
+          phone: null,
           service_type: (options?.service_type as User['service_type']) || null,
           operations_role: (options?.operations_role as User['operations_role']) || null,
         };
@@ -361,6 +365,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
           created_at: new Date().toISOString(),
           is_active: true,
           team_id: null,
+          avatar_url: null,
+          phone: null,
         };
         setUser(tempUser);
         localStorage.setItem('neuron_user', JSON.stringify(tempUser));
