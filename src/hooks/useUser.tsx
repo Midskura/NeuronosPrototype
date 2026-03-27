@@ -8,10 +8,13 @@ export interface User {
   email: string;
   name: string;
   department: 'Business Development' | 'Pricing' | 'Operations' | 'Accounting' | 'Executive' | 'HR';
-  role: 'rep' | 'manager' | 'director';
+  role: 'staff' | 'team_leader' | 'manager';
   created_at: string;
   is_active: boolean;
-  // Operations-specific fields for team assignment
+  team_id?: string | null;
+  avatar_url?: string | null;   // user's avatar image URL
+  phone?: string | null;         // contact phone number
+  // Operations-specific: controls which Ops module tabs are visible (separate from RBAC role)
   service_type?: 'Forwarding' | 'Brokerage' | 'Trucking' | 'Marine Insurance' | 'Others' | null;
   operations_role?: 'Manager' | 'Supervisor' | 'Handler' | null;
 }
@@ -69,9 +72,10 @@ async function fetchUserProfile(authUid: string): Promise<User | null> {
       email: data.email || '',
       name: data.name || data.email || '',
       department: data.department || 'Executive',
-      role: data.role || 'rep',
+      role: data.role || 'staff',
       created_at: data.created_at || new Date().toISOString(),
       is_active: data.is_active !== false,
+      team_id: data.team_id || null,
       service_type: data.service_type || null,
       operations_role: data.operations_role || null,
     };
@@ -122,7 +126,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const effectiveRole = (import.meta.env.DEV && devOverride?.enabled && devOverride.role)
     ? devOverride.role
-    : user?.role || 'rep';
+    : user?.role || 'staff';
 
   // Initialize auth — listen for Supabase session changes
   useEffect(() => {
@@ -312,9 +316,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
           email,
           name,
           department: (options?.department as User['department']) || 'Executive',
-          role: (options?.role as User['role']) || 'rep',
+          role: (options?.role as User['role']) || 'staff',
           created_at: new Date().toISOString(),
           is_active: true,
+          team_id: null,
           service_type: (options?.service_type as User['service_type']) || null,
           operations_role: (options?.operations_role as User['operations_role']) || null,
         };
@@ -352,9 +357,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
           email: data.user.email || email,
           name: data.user.user_metadata?.name || email,
           department: 'Executive',
-          role: 'rep',
+          role: 'staff',
           created_at: new Date().toISOString(),
           is_active: true,
+          team_id: null,
         };
         setUser(tempUser);
         localStorage.setItem('neuron_user', JSON.stringify(tempUser));
