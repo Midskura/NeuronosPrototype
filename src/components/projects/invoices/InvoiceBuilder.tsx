@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import { Loader2, ZoomIn, ZoomOut, Maximize, ChevronDown, User, Layout, Check, FileText, Calendar, Box, Truck, CreditCard, ArrowLeft, Download, Printer, RefreshCw, Coins } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { toast } from "../../ui/toast-utils";
 import type { FinancialContainer } from "../../../types/financials";
 import type { Project } from "../../../types/pricing";
@@ -7,6 +8,7 @@ import { Invoice, Billing, Account } from "../../../types/accounting";
 import type { BillingLineItem } from "../../../types/operations";
 import { getAccounts } from "../../../utils/accounting-api";
 import { supabase } from "../../../utils/supabase/client";
+import { queryKeys } from "../../../lib/queryKeys";
 import { InvoiceDocument, InvoicePrintOptions } from "./InvoiceDocument";
 import { downloadInvoicePDF } from "./InvoicePDFRenderer";
 import { SignatoryControl } from "../quotation/screen/controls/SignatoryControl";
@@ -105,7 +107,7 @@ export function InvoiceBuilder({
   const [commodityDescription, setCommodityDescription] = useState(project.commodity || "");
   const [creditTerms, setCreditTerms] = useState("NET 15");
   const [customerAddress, setCustomerAddress] = useState(project.customer_address || "");
-  const [isFetchingAddress, setIsFetchingAddress] = useState(false);
+  const [isFetchingAddress] = useState(false); // Kept for placeholder text; actual loading tracked by customerData query
 
   // Bill To Override (Consignee billing — Phase 4)
   const [billedToType, setBilledToType] = useState<"customer" | "consignee">("customer");
@@ -133,8 +135,6 @@ export function InvoiceBuilder({
 
   // Accounting State (For GL Posting — Revenue Account for DR AR / CR Revenue)
   const [revenueAccountId, setRevenueAccountId] = useState("");
-  const [accounts, setAccounts] = useState<Account[]>([]);
-  const [loadingAccounts, setLoadingAccounts] = useState(false);
 
   // -- Shared Options State --
   const [signatories, setSignatories] = useState({
@@ -149,6 +149,44 @@ export function InvoiceBuilder({
       show_tax_summary: true
   });
 
+  // -- Queries --
+
+  // Revenue accounts for GL posting (create mode only)
+  const { data: allAccountsRaw = [], isLoading: loadingAccounts } = useQuery({
+    queryKey: queryKeys.transactions.accounts(),
+    queryFn: async () => {
+      const accs = await getAccounts();
+      return accs;
+    },
+    enabled: mode === 'create',
+    staleTime: 60_000,
+  });
+
+  const accounts = useMemo(() => {
+    const incomeAccounts = allAccountsRaw.filter((a: any) => {
+      const t = (a.type || '').toLowerCase();
+      return (t === 'income' || t === 'revenue') && !a.is_folder;
+    });
+    console.log(`[InvoiceBuilder] Loaded ${allAccountsRaw.length} accounts, ${incomeAccounts.length} income accounts`, incomeAccounts.map((a: any) => ({ id: a.id, name: a.name, type: a.type })));
+    return incomeAccounts as unknown as Account[];
+  }, [allAccountsRaw]);
+
+  // Customer address lookup (create mode only)
+  const { data: customerData } = useQuery({
+    queryKey: queryKeys.customers.detail(project.customer_id || ""),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('customers')
+        .select('*')
+        .eq('id', project.customer_id)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: mode === 'create' && !!project.customer_id,
+    staleTime: 30_000,
+  });
+
   // -- Initialization / Effects --
 
   // 1. If View Mode, load data into state
@@ -156,7 +194,7 @@ export function InvoiceBuilder({
     if (mode === 'view' && viewInvoice) {
         // Load notes
         setNotes((viewInvoice.notes as string) || "");
-        
+
         // Load metadata (signatories, display options) if available
         const metadata = (viewInvoice as any).metadata || {};
         if (metadata.signatories) setSignatories(metadata.signatories);
@@ -171,58 +209,23 @@ export function InvoiceBuilder({
     }
   }, [mode, viewInvoice]);
 
+  // 2. Auto-select first revenue account when accounts load
   useEffect(() => {
-    if (mode === 'create') {
-        const loadAccounts = async () => {
-            setLoadingAccounts(true);
-            try {
-                const accs = await getAccounts();
-                // Filter to Income-type accounts for revenue recognition (DR AR / CR Revenue)
-                // Match any casing: "Income", "income", "INCOME", "Revenue"
-                const incomeAccounts = accs.filter(a => {
-                  const t = (a.type || '').toLowerCase();
-                  return (t === 'income' || t === 'revenue') && !a.is_folder;
-                });
-                console.log(`[InvoiceBuilder] Loaded ${accs.length} accounts, ${incomeAccounts.length} income accounts`, incomeAccounts.map(a => ({ id: a.id, name: a.name, type: a.type })));
-                setAccounts(incomeAccounts as unknown as Account[]);
-                
-                // Auto-select first revenue account only if nothing is currently selected
-                if (!revenueAccountId && incomeAccounts.length > 0) {
-                  setRevenueAccountId(incomeAccounts[0].id);
-                }
-            } catch (e) {
-                console.error("Failed to load revenue accounts for GL posting", e);
-            } finally {
-                setLoadingAccounts(false);
-            }
-        };
-        loadAccounts();
+    if (mode === 'create' && !revenueAccountId && accounts.length > 0) {
+      setRevenueAccountId(accounts[0].id);
     }
-  }, [mode]); // Revenue accounts don't depend on currency — load once on mount
+  }, [mode, accounts, revenueAccountId]);
 
-  // 2. Fetch Customer Address on Mount (Only for Create Mode)
+  // 3. Apply customer address/TIN from query result
   useEffect(() => {
-    if (mode === 'create' && project.customer_id && !customerAddress) {
-        const fetchCustomer = async () => {
-            setIsFetchingAddress(true);
-            try {
-                const { data: customerData } = await supabase.from('customers').select('*').eq('id', project.customer_id).single();
-                if (customerData) {
-                    const addr = customerData.address || customerData.registered_address || customerData.billing_address || "";
-                    if (addr) setCustomerAddress(addr);
-                    if (customerData.tin) setCustomerTin(customerData.tin);
-                }
-            } catch (err) {
-                console.error("Failed to fetch customer details:", err);
-            } finally {
-                setIsFetchingAddress(false);
-            }
-        };
-        fetchCustomer();
+    if (mode === 'create' && customerData) {
+      const addr = (customerData as any).address || (customerData as any).registered_address || (customerData as any).billing_address || "";
+      if (addr && !customerAddress) setCustomerAddress(addr);
+      if ((customerData as any).tin && !customerTin) setCustomerTin((customerData as any).tin);
     }
-  }, [mode, project.customer_id, customerAddress]);
+  }, [mode, customerData]);
   
-  // 3. Auto-scale Logic
+  // 4. Auto-scale Logic
   useEffect(() => {
     if (!autoScale || !containerRef.current) return;
 
