@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import { useUser } from "./useUser";
+import { queryKeys } from "../lib/queryKeys";
 
 export interface ThreadMessage {
   id: string;
@@ -74,8 +76,7 @@ export interface ThreadDetail {
 
 export function useThread(ticketId: string | null) {
   const { user } = useUser();
-  const [thread, setThread] = useState<ThreadDetail | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const markAsRead = useCallback(async (tid: string, lastMsgId: string) => {
     if (!user) return;
@@ -85,39 +86,35 @@ export function useThread(ticketId: string | null) {
     );
   }, [user]);
 
-  const fetchThread = useCallback(async () => {
-    if (!ticketId || !user) return;
-    setIsLoading(true);
-    try {
-      // Ticket metadata
+  const { data: thread = null, isLoading } = useQuery({
+    queryKey: queryKeys.inbox.thread(ticketId ?? ""),
+    queryFn: async () => {
+      if (!ticketId || !user) return null;
+
       const { data: ticket } = await supabase
         .from("tickets")
         .select("*")
         .eq("id", ticketId)
         .single();
 
-      if (!ticket) { setThread(null); setIsLoading(false); return; }
+      if (!ticket) return null;
 
-      // Participants
       const { data: participants } = await supabase
         .from("ticket_participants")
         .select("*")
         .eq("ticket_id", ticketId);
 
-      // Messages
       const { data: messages } = await supabase
         .from("ticket_messages")
         .select("*")
         .eq("ticket_id", ticketId)
         .order("created_at", { ascending: true });
 
-      // Attachments
       const { data: attachments } = await supabase
         .from("ticket_attachments")
         .select("*")
         .eq("ticket_id", ticketId);
 
-      // Assignment
       const { data: assignment } = await supabase
         .from("ticket_assignments")
         .select("*")
@@ -126,7 +123,6 @@ export function useThread(ticketId: string | null) {
         .limit(1)
         .maybeSingle();
 
-      // Collect all user IDs to enrich
       const allUserIds = new Set<string>();
       allUserIds.add(ticket.created_by);
       (participants || []).forEach((p) => { if (p.user_id) allUserIds.add(p.user_id); });
@@ -139,7 +135,6 @@ export function useThread(ticketId: string | null) {
         .in("id", [...allUserIds]);
       const userMap = Object.fromEntries((usersData || []).map((u) => [u.id, u]));
 
-      // Attach message attachments
       const attachByMsg: Record<string, ThreadAttachment[]> = {};
       (attachments || []).forEach((a) => {
         if (!attachByMsg[a.message_id]) attachByMsg[a.message_id] = [];
@@ -173,22 +168,19 @@ export function useThread(ticketId: string | null) {
           : undefined,
       };
 
-      setThread(detail);
-
       // Mark as read — use last non-system message id
       const lastMsg = [...enrichedMessages].reverse().find((m) => !m.is_system);
       if (lastMsg) markAsRead(ticketId, lastMsg.id);
-    } catch (err) {
-      console.error("useThread fetch error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [ticketId, user, markAsRead]);
 
-  useEffect(() => {
-    if (ticketId) fetchThread();
-    else setThread(null);
-  }, [ticketId, fetchThread]);
+      return detail;
+    },
+    enabled: !!ticketId && !!user,
+    staleTime: 0,
+  });
 
-  return { thread, isLoading, refresh: fetchThread };
+  const refresh = () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.inbox.thread(ticketId ?? "") });
+  };
+
+  return { thread, isLoading, refresh };
 }

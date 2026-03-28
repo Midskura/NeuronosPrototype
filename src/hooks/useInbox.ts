@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import { useUser } from "./useUser";
+import { queryKeys } from "../lib/queryKeys";
 
 export type TicketType = "fyi" | "request" | "approval";
 export type TicketStatus = "draft" | "open" | "acknowledged" | "in_progress" | "done" | "returned" | "archived";
@@ -40,38 +42,28 @@ export type InboxTab = "inbox" | "queue" | "sent" | "drafts";
 
 export function useInbox() {
   const { user, effectiveDepartment, effectiveRole } = useUser();
-  const [threads, setThreads] = useState<ThreadSummary[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<InboxTab>("inbox");
-  const [draftCount, setDraftCount] = useState(0);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [queueCount, setQueueCount] = useState(0);
 
   const isManager = effectiveRole === "manager" || effectiveRole === "director";
 
-  const fetchThreads = useCallback(async () => {
-    if (!user) return;
-    setIsLoading(true);
+  const { data: threads = [], isLoading } = useQuery({
+    queryKey: [...queryKeys.inbox.list(), activeTab, user?.id, effectiveDepartment, effectiveRole],
+    queryFn: async () => {
+      if (!user) return [];
 
-    try {
       let ticketIds: string[] = [];
 
       if (activeTab === "inbox" || activeTab === "queue") {
-        // Use RPC for inbox + queue — single query replaces 2-step participant→ticket chain
         const { data: rpcThreads } = await supabase.rpc("get_inbox_threads", {
           p_user_id: user.id,
           p_dept: effectiveDepartment || "",
           p_role: effectiveRole || "rep",
         });
 
-        if (!rpcThreads || rpcThreads.length === 0) {
-          setThreads([]);
-          setIsLoading(false);
-          return;
-        }
+        if (!rpcThreads || rpcThreads.length === 0) return [];
 
         if (activeTab === "queue" && isManager) {
-          // Queue: filter to dept-addressed only (exclude personally addressed)
           const deptTicketIds = new Set<string>();
           const { data: deptParticipants } = await supabase
             .from("ticket_participants")
@@ -84,7 +76,6 @@ export function useInbox() {
             .filter((t: { id: string }) => deptTicketIds.has(t.id))
             .map((t: { id: string }) => t.id);
         } else {
-          // Inbox: exclude own sent tickets
           ticketIds = rpcThreads
             .filter((t: { id: string; created_by: string }) => t.created_by !== user.id)
             .map((t: { id: string }) => t.id);
@@ -108,13 +99,8 @@ export function useInbox() {
         ticketIds = (data || []).map((t) => t.id);
       }
 
-      if (ticketIds.length === 0) {
-        setThreads([]);
-        setIsLoading(false);
-        return;
-      }
+      if (ticketIds.length === 0) return [];
 
-      // Fetch full ticket data + enrichment in parallel
       const [
         { data: ticketsData },
         { data: participantsData },
@@ -149,13 +135,8 @@ export function useInbox() {
           .in("ticket_id", ticketIds),
       ]);
 
-      if (!ticketsData) {
-        setThreads([]);
-        setIsLoading(false);
-        return;
-      }
+      if (!ticketsData) return [];
 
-      // Enrich user names from participant data
       const userIds = [
         ...new Set(
           (participantsData || [])
@@ -172,7 +153,6 @@ export function useInbox() {
         userMap = Object.fromEntries((usersData || []).map((u) => [u.id, u.name]));
       }
 
-      // Build maps
       const readMap = Object.fromEntries(
         (readData || []).map((r) => [r.ticket_id, r.last_read_at])
       );
@@ -189,7 +169,6 @@ export function useInbox() {
         }
       });
 
-      // Assemble enriched threads
       const enriched: ThreadSummary[] = ticketsData.map((t) => {
         const tParticipants = (participantsData || [])
           .filter((p) => p.ticket_id === t.id)
@@ -218,72 +197,67 @@ export function useInbox() {
         };
       });
 
-      setThreads(enriched);
-    } catch (err) {
-      console.error("useInbox fetch error:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [user, effectiveDepartment, effectiveRole, activeTab, isManager]);
+      return enriched;
+    },
+    enabled: !!user,
+    staleTime: 0,
+  });
 
-  const fetchCounts = useCallback(async () => {
-    if (!user) return;
+  const { data: counts = { draftCount: 0, unreadCount: 0, queueCount: 0 } } = useQuery({
+    queryKey: [...queryKeys.inbox.all(), "counts", user?.id, effectiveDepartment, effectiveRole],
+    queryFn: async () => {
+      if (!user) return { draftCount: 0, unreadCount: 0, queueCount: 0 };
 
-    // Draft count + unread count in parallel
-    const [{ count: dc }, { data: uc }] = await Promise.all([
-      supabase
-        .from("tickets")
-        .select("id", { count: "exact", head: true })
-        .eq("created_by", user.id)
-        .eq("status", "draft"),
-      supabase.rpc("get_unread_count", {
-        p_user_id: user.id,
-        p_dept: effectiveDepartment || "",
-        p_role: effectiveRole || "rep",
-      }),
-    ]);
-
-    setDraftCount(dc || 0);
-    setUnreadCount(uc || 0);
-
-    // Queue count (managers only)
-    if (isManager) {
-      const { data: queueParticipants } = await supabase
-        .from("ticket_participants")
-        .select("ticket_id")
-        .eq("participant_type", "department")
-        .eq("participant_dept", effectiveDepartment || "");
-
-      const queueIds = (queueParticipants || []).map((p) => p.ticket_id);
-      if (queueIds.length > 0) {
-        const { count: qc } = await supabase
+      const [{ count: dc }, { data: uc }] = await Promise.all([
+        supabase
           .from("tickets")
           .select("id", { count: "exact", head: true })
-          .in("id", queueIds)
-          .eq("status", "open");
-        setQueueCount(qc || 0);
-      } else {
-        setQueueCount(0);
+          .eq("created_by", user.id)
+          .eq("status", "draft"),
+        supabase.rpc("get_unread_count", {
+          p_user_id: user.id,
+          p_dept: effectiveDepartment || "",
+          p_role: effectiveRole || "rep",
+        }),
+      ]);
+
+      let queueCount = 0;
+      if (isManager) {
+        const { data: queueParticipants } = await supabase
+          .from("ticket_participants")
+          .select("ticket_id")
+          .eq("participant_type", "department")
+          .eq("participant_dept", effectiveDepartment || "");
+
+        const queueIds = (queueParticipants || []).map((p) => p.ticket_id);
+        if (queueIds.length > 0) {
+          const { count: qc } = await supabase
+            .from("tickets")
+            .select("id", { count: "exact", head: true })
+            .in("id", queueIds)
+            .eq("status", "open");
+          queueCount = qc || 0;
+        }
       }
-    }
-  }, [user, effectiveDepartment, effectiveRole, isManager]);
 
-  useEffect(() => { fetchThreads(); }, [fetchThreads]);
-  useEffect(() => { fetchCounts(); }, [fetchCounts]);
+      return { draftCount: dc || 0, unreadCount: uc || 0, queueCount };
+    },
+    enabled: !!user,
+    staleTime: 0,
+  });
 
-  const refresh = useCallback(() => {
-    fetchThreads();
-    fetchCounts();
-  }, [fetchThreads, fetchCounts]);
+  const refresh = () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.inbox.all() });
+  };
 
   return {
     threads,
     isLoading,
     activeTab,
     setActiveTab,
-    draftCount,
-    unreadCount,
-    queueCount,
+    draftCount: counts.draftCount,
+    unreadCount: counts.unreadCount,
+    queueCount: counts.queueCount,
     isManager,
     refresh,
   };
