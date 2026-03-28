@@ -1,6 +1,8 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { NetworkPartner, NETWORK_PARTNERS } from "../data/networkPartners";
 import { supabase } from "../utils/supabase/client";
+import { queryKeys } from "../lib/queryKeys";
 
 // Map NetworkPartner interface fields → service_providers DB column names
 function toDbRow(p: Partial<NetworkPartner>): Record<string, unknown> {
@@ -46,108 +48,65 @@ function fromDbRow(row: Record<string, unknown>): NetworkPartner {
 }
 
 export function useNetworkPartners() {
-  const [partners, setPartners] = useState<NetworkPartner[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
   const seedingAttempted = useRef(false);
 
-  const seedPartners = async (seedData: NetworkPartner[]) => {
-    if (seedingAttempted.current) return false;
-    seedingAttempted.current = true;
-
-    try {
-      console.log(`Starting seed with ${seedData.length} partners...`);
-
-      const { error: insertErr } = await supabase
-        .from('service_providers')
-        .upsert(seedData.map(toDbRow), { onConflict: 'id' });
-      
-      if (insertErr) {
-        console.error("Seeding failed:", insertErr.message);
-        return false;
-      }
-      
-      console.log(`Seeding complete. Successfully seeded ${seedData.length} partners.`);
-      return true;
-    } catch (err) {
-      console.error("Seeding process error:", err);
-      return false;
-    }
-  };
-
-  const fetchPartners = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
+  const { data: partners = [], isLoading, error: queryError } = useQuery({
+    queryKey: queryKeys.networkPartners.list(),
+    queryFn: async (): Promise<NetworkPartner[]> => {
       const { data, error: fetchErr } = await supabase
         .from('service_providers')
         .select('*');
 
-      if (fetchErr) {
-        throw new Error(fetchErr.message);
-      }
+      if (fetchErr) throw new Error(fetchErr.message);
 
       const rows = data || [];
 
-      // Auto-seeding logic
       if (rows.length === 0 && NETWORK_PARTNERS && NETWORK_PARTNERS.length > 0) {
-        console.log("Empty backend detected. Initiating seeding...");
-
-        // Show local data immediately for better UX
-        setPartners(NETWORK_PARTNERS);
-
-        // Seed in background
-        seedPartners(NETWORK_PARTNERS).then((seeded) => {
-          if (seeded) {
-            console.log("Seeding finished successfully. Data synced.");
-          } else {
-            console.warn("Seeding finished with errors or was skipped.");
-          }
-        });
-
-      } else {
-        setPartners(rows.map(fromDbRow));
+        if (!seedingAttempted.current) {
+          seedingAttempted.current = true;
+          supabase
+            .from('service_providers')
+            .upsert(NETWORK_PARTNERS.map(toDbRow), { onConflict: 'id' })
+            .then(({ error: insertErr }) => {
+              if (insertErr) {
+                console.error("Seeding failed:", insertErr.message);
+              } else {
+                console.log(`Seeding complete. Successfully seeded ${NETWORK_PARTNERS.length} partners.`);
+                queryClient.invalidateQueries({ queryKey: queryKeys.networkPartners.all() });
+              }
+            });
+        }
+        return NETWORK_PARTNERS;
       }
-    } catch (err) {
-      console.error("Error in useNetworkPartners:", err);
-      setError(String(err));
-      // Fallback to local data on error to keep app usable
-      if (NETWORK_PARTNERS) {
-        console.log("Falling back to local data due to error.");
-        setPartners(NETWORK_PARTNERS);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
-  const savePartner = async (partnerData: Partial<NetworkPartner>) => {
-    try {
+      return rows.map(fromDbRow);
+    },
+    staleTime: 5 * 60 * 1000,
+    // On error, fall back to local data so the app stays usable
+    placeholderData: NETWORK_PARTNERS,
+  });
+
+  const error = queryError ? String(queryError) : null;
+
+  const refetch = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.networkPartners.all() });
+  }, [queryClient]);
+
+  const saveMutation = useMutation({
+    mutationFn: async (partnerData: Partial<NetworkPartner>): Promise<NetworkPartner> => {
       const isNew = !partnerData.id || partnerData.id.startsWith("new-");
-      
-      // Optimistic update
-      const tempId = partnerData.id || `temp-${Date.now()}`;
-      const optimisticPartner = { ...partnerData, id: tempId } as NetworkPartner;
-      
-      setPartners(prev => {
-        if (isNew) return [...prev, optimisticPartner];
-        return prev.map(p => p.id === partnerData.id ? { ...p, ...partnerData } : p);
-      });
 
       if (isNew) {
-        const newPartner = toDbRow({ ...partnerData, id: `sp-${Date.now()}` });
+        const newRow = toDbRow({ ...partnerData, id: `sp-${Date.now()}` });
         const { data: created, error: insertErr } = await supabase
           .from('service_providers')
-          .insert(newPartner)
+          .insert(newRow)
           .select()
           .single();
 
         if (insertErr) throw new Error(insertErr.message);
-
-        const mapped = fromDbRow(created as Record<string, unknown>);
-        setPartners(prev => prev.map(p => p.id === tempId ? mapped : p));
-        return mapped;
+        return fromDbRow(created as Record<string, unknown>);
       } else {
         const { data: updated, error: updateErr } = await supabase
           .from('service_providers')
@@ -157,47 +116,78 @@ export function useNetworkPartners() {
           .single();
 
         if (updateErr) throw new Error(updateErr.message);
-
-        const mapped = fromDbRow(updated as Record<string, unknown>);
-        setPartners(prev => prev.map(p => p.id === mapped.id ? mapped : p));
-        return mapped;
+        return fromDbRow(updated as Record<string, unknown>);
       }
-    } catch (err) {
-      console.error("Error saving partner:", err);
-      throw err;
-    }
-  };
+    },
+    onMutate: async (partnerData) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.networkPartners.list() });
+      const previous = queryClient.getQueryData<NetworkPartner[]>(queryKeys.networkPartners.list());
+      const isNew = !partnerData.id || partnerData.id.startsWith("new-");
+      const tempId = partnerData.id || `temp-${Date.now()}`;
+      const optimistic = { ...partnerData, id: tempId } as NetworkPartner;
 
-  const deletePartner = async (id: string) => {
-    try {
-      // Optimistic update
-      setPartners(prev => prev.filter(p => p.id !== id));
+      queryClient.setQueryData<NetworkPartner[]>(queryKeys.networkPartners.list(), (prev = []) => {
+        if (isNew) return [...prev, optimistic];
+        return prev.map(p => p.id === partnerData.id ? { ...p, ...partnerData } : p);
+      });
 
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(queryKeys.networkPartners.list(), context.previous);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.networkPartners.all() });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string): Promise<void> => {
       const { error: deleteErr } = await supabase
         .from('service_providers')
         .delete()
         .eq('id', id);
 
-      if (deleteErr) {
-        throw new Error(deleteErr.message);
-      }
-    } catch (err) {
-      console.error("Error deleting partner:", err);
-      fetchPartners(); // Revert on error
-      throw err;
-    }
-  };
+      if (deleteErr) throw new Error(deleteErr.message);
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.networkPartners.list() });
+      const previous = queryClient.getQueryData<NetworkPartner[]>(queryKeys.networkPartners.list());
 
-  useEffect(() => {
-    fetchPartners();
-  }, [fetchPartners]);
+      queryClient.setQueryData<NetworkPartner[]>(queryKeys.networkPartners.list(), (prev = []) =>
+        prev.filter(p => p.id !== id)
+      );
+
+      return { previous };
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(queryKeys.networkPartners.list(), context.previous);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.networkPartners.all() });
+    },
+  });
+
+  const savePartner = useCallback(
+    (partnerData: Partial<NetworkPartner>) => saveMutation.mutateAsync(partnerData),
+    [saveMutation]
+  );
+
+  const deletePartner = useCallback(
+    (id: string) => deleteMutation.mutateAsync(id),
+    [deleteMutation]
+  );
 
   return {
     partners,
     isLoading,
     error,
-    refetch: fetchPartners,
+    refetch,
     savePartner,
-    deletePartner
+    deletePartner,
   };
 }

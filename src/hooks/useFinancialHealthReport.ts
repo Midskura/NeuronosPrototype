@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
-import { useCachedFetch } from "./useNeuronCache";
+import { queryKeys } from "../lib/queryKeys";
 
 export interface ProjectFinancialRow {
   projectNumber: string;
@@ -38,7 +39,9 @@ interface RpcRow {
 }
 
 export function useFinancialHealthReport(monthFilter?: string) {
-  const fetcher = useCallback(async (): Promise<RpcRow[]> => {
+  const queryClient = useQueryClient();
+
+  const queryFn = useCallback(async (): Promise<RpcRow[]> => {
     const { data, error } = await supabase.rpc("get_financial_health_summary", {
       p_month: monthFilter ?? null,
     });
@@ -49,12 +52,15 @@ export function useFinancialHealthReport(monthFilter?: string) {
     return (data as RpcRow[]) || [];
   }, [monthFilter]);
 
-  const { data: rpcRows, isLoading, refresh } = useCachedFetch<RpcRow[]>(
-    `financial-health:${monthFilter ?? "all"}`,
-    fetcher,
-    [],
-    { ttl: 300_000, deps: [monthFilter] } // 5-min TTL
-  );
+  const { data: rpcRows = [], isLoading } = useQuery({
+    queryKey: [...queryKeys.financials.health(), monthFilter ?? "all"],
+    queryFn,
+    staleTime: 30_000,
+  });
+
+  const refresh = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.financials.health() });
+  }, [queryClient]);
 
   const { rows, summary } = useMemo(() => {
     const computedRows: ProjectFinancialRow[] = rpcRows.map((row) => {

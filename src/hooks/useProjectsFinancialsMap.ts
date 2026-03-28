@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import type { Project, QuotationNew } from "../types/pricing";
 import {
@@ -15,7 +16,7 @@ import {
   filterInvoicesForScope,
   mapEvoucherExpensesForScope,
 } from "../utils/financialSelectors";
-import { useCachedFetch } from "./useNeuronCache";
+import { queryKeys } from "../lib/queryKeys";
 
 export interface ProjectFinancials extends FinancialTotals {
   income: number;
@@ -23,49 +24,63 @@ export interface ProjectFinancials extends FinancialTotals {
   margin?: number;
 }
 
+interface FinancialsPayload {
+  invoicesData: any[];
+  expensesData: any[];
+  billingItemsData: any[];
+  collectionsData: any[];
+  quotationsData: any[];
+}
+
+const EMPTY_PAYLOAD: FinancialsPayload = {
+  invoicesData: [],
+  expensesData: [],
+  billingItemsData: [],
+  collectionsData: [],
+  quotationsData: [],
+};
+
+async function fetchFinancialsPayload(): Promise<FinancialsPayload> {
+  const [
+    { data: invoices, error: e1 },
+    { data: expenses, error: e2 },
+    { data: billingItems, error: e3 },
+    { data: collections, error: e4 },
+    { data: quotations, error: e5 },
+  ] = await Promise.all([
+    supabase.from("invoices").select("*"),
+    supabase.from("evouchers").select("*"),
+    supabase.from("billing_line_items").select("*"),
+    supabase.from("collections").select("*"),
+    supabase.from("quotations").select("*"),
+  ]);
+
+  if (e1) throw new Error(`Failed to fetch invoices: ${e1.message}`);
+  if (e2) throw new Error(`Failed to fetch evouchers: ${e2.message}`);
+  if (e3) throw new Error(`Failed to fetch billing_line_items: ${e3.message}`);
+  if (e4) throw new Error(`Failed to fetch collections: ${e4.message}`);
+  if (e5) throw new Error(`Failed to fetch quotations: ${e5.message}`);
+
+  return {
+    invoicesData: invoices || [],
+    expensesData: expenses || [],
+    billingItemsData: billingItems || [],
+    collectionsData: collections || [],
+    quotationsData: quotations || [],
+  };
+}
+
 export function useProjectsFinancialsMap(projects: Project[]) {
   const [financialsMap, setFinancialsMap] = useState<Record<string, ProjectFinancials>>({});
 
-  const supabaseFetcher = useCallback((table: string) => async () => {
-    const { data, error } = await supabase.from(table).select("*");
-    if (error) throw new Error(`Failed to fetch ${table}: ${error.message}`);
-    return data || [];
-  }, []);
+  const { data = EMPTY_PAYLOAD, isLoading } = useQuery({
+    queryKey: queryKeys.financials.projectsMap(),
+    queryFn: fetchFinancialsPayload,
+    staleTime: 30_000,
+    enabled: projects.length > 0,
+  });
 
-  const skip = projects.length === 0;
-
-  const { data: invoicesData, isLoading: l1 } = useCachedFetch<any[]>(
-    "accounting-invoices",
-    supabaseFetcher("invoices"),
-    [],
-    { skip },
-  );
-  const { data: expensesData, isLoading: l2 } = useCachedFetch<any[]>(
-    "accounting-evouchers",
-    supabaseFetcher("evouchers"),
-    [],
-    { skip },
-  );
-  const { data: billingItemsData, isLoading: l3 } = useCachedFetch<any[]>(
-    "accounting-billing-items",
-    supabaseFetcher("billing_line_items"),
-    [],
-    { skip },
-  );
-  const { data: collectionsData, isLoading: l4 } = useCachedFetch<any[]>(
-    "accounting-collections",
-    supabaseFetcher("collections"),
-    [],
-    { skip },
-  );
-  const { data: quotationsData, isLoading: l5 } = useCachedFetch<any[]>(
-    "quotations",
-    supabaseFetcher("quotations"),
-    [],
-    { skip },
-  );
-
-  const isLoading = l1 || l2 || l3 || l4 || l5;
+  const { invoicesData, expensesData, billingItemsData, collectionsData, quotationsData } = data;
 
   useEffect(() => {
     if (isLoading || projects.length === 0) return;

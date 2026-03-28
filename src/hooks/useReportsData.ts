@@ -1,10 +1,7 @@
-// useReportsData — Shared data hook for the Reports module.
-// Fetches all raw data streams in parallel via useCachedFetch (dedup + SWR).
-// WHERE filters limit data to the last 2 years to avoid full-table scans.
-
 import { useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
-import { useCachedFetch } from "./useNeuronCache";
+import { queryKeys } from "../lib/queryKeys";
 
 export interface ReportsData {
   bookings: any[];
@@ -44,9 +41,11 @@ const EMPTY_PAYLOAD: ReportsPayload = {
 };
 
 export function useReportsData(): ReportsData {
-  const cutoff = twoYearsAgo();
+  const queryClient = useQueryClient();
 
-  const fetcher = useCallback(async (): Promise<ReportsPayload> => {
+  const queryFn = useCallback(async (): Promise<ReportsPayload> => {
+    const cutoff = twoYearsAgo();
+
     const [
       { data: bk },
       { data: p },
@@ -92,14 +91,17 @@ export function useReportsData(): ReportsData {
       collections: c || [],
       expenses: e || [],
     };
-  }, [cutoff]);
+  }, []);
 
-  const { data, isLoading, refresh } = useCachedFetch<ReportsPayload>(
-    "reports-data",
-    fetcher,
-    EMPTY_PAYLOAD,
-    { ttl: 300_000 } // 5-min TTL
-  );
+  const { data = EMPTY_PAYLOAD, isLoading } = useQuery({
+    queryKey: queryKeys.financials.reportsData(),
+    queryFn,
+    staleTime: 30_000,
+  });
+
+  const refresh = useCallback(async () => {
+    await queryClient.invalidateQueries({ queryKey: queryKeys.financials.reportsData() });
+  }, [queryClient]);
 
   return {
     bookings: data.bookings,
