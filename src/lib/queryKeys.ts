@@ -104,4 +104,35 @@ export const queryKeys = {
   dataScope: {
     user: (userId: string) => ["dataScope", userId] as const,
   },
+  tasks: {
+    all: () => ["tasks"] as const,
+    list: (filters?: Record<string, unknown>) => ["tasks", "list", filters ?? {}] as const,
+    detail: (id: string) => ["tasks", id] as const,
+  },
+  crmActivities: {
+    all: () => ["crmActivities"] as const,
+    list: (filters?: Record<string, unknown>) => ["crmActivities", "list", filters ?? {}] as const,
+    forCustomer: (customerId: string) => ["crmActivities", "customer", customerId] as const,
+    forContact: (contactId: string) => ["crmActivities", "contact", contactId] as const,
+  },
+  attachments: {
+    all: () => ["attachments"] as const,
+    forEntity: (entityType: string, entityId: string) => ["attachments", entityType, entityId] as const,
+  },
+  tickets: {
+    all: () => ["tickets"] as const,
+    list: (filters?: Record<string, unknown>) => ["tickets", "list", filters ?? {}] as const,
+    detail: (id: string) => ["tickets", id] as const,
+    messages: (ticketId: string) => ["tickets", ticketId, "messages"] as const,
+  },
+  teams: {
+    all: () => ["teams"] as const,
+    list: () => ["teams", "list"] as const,
+    detail: (id: string) => ["teams", id] as const,
+  },
+  inquiries: {
+    all: () => ["inquiries"] as const,
+    list: () => ["inquiries", "list"] as const,
+    detail: (id: string) => ["inquiries", id] as const,
+  },
 };
