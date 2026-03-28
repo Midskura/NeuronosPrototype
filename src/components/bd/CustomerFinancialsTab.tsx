@@ -1,51 +1,41 @@
 import type { Customer } from "../../types/bd";
 import { supabase } from "../../utils/supabase/client";
-import { useState, useEffect } from "react";
 import { TrendingUp, CreditCard, DollarSign, Activity, FileText } from "lucide-react";
 import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Cell } from "recharts";
+import { useQuery } from "@tanstack/react-query";
 
 interface CustomerFinancialsTabProps {
   customer: Customer;
 }
 
 export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) {
-  const [billings, setBillings] = useState<any[]>([]);
-  const [collections, setCollections] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchFinancials();
-  }, [customer.id]);
-
-  const fetchFinancials = async () => {
-    try {
-      setIsLoading(true);
-      
-      // Fetch Revenue (Billings)
-      const { data: billingRows } = await supabase
+  const { data: billings = [], isLoading: billingsLoading } = useQuery({
+    queryKey: ["customer_billings", customer.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from('billing_line_items')
         .select('*')
         .eq('customer_id', customer.id);
-      
-      // Fetch Collections
-      const { data: collectionRows } = await supabase
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 30_000,
+  });
+
+  const { data: collections = [], isLoading: collectionsLoading } = useQuery({
+    queryKey: ["customer_collections", customer.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from('collections')
         .select('*')
         .eq('customer_id', customer.id);
-      
-      if (billingRows) {
-        setBillings(billingRows);
-      }
-      
-      if (collectionRows) {
-        setCollections(collectionRows);
-      }
-    } catch (error) {
-      console.error("Error fetching financials:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 30_000,
+  });
+
+  const isLoading = billingsLoading || collectionsLoading;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-PH", {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, Plus, Calendar, Flag, Phone, Mail, Send, Users, MessageSquare, MessageCircle, Linkedin, ListTodo, CheckCircle2 } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
@@ -6,6 +6,9 @@ import { useDataScope } from '../../hooks/useDataScope';
 import type { Task, TaskPriority, TaskStatus, TaskType } from "../../types/bd";
 import { CustomDropdown } from "./CustomDropdown";
 import { AddTaskPanel } from "./AddTaskPanel";
+import { useTasks } from "../../hooks/useTasks";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
 
 interface TasksListProps {
   onViewTask: (task: Task) => void;
@@ -17,60 +20,14 @@ export function TasksList({ onViewTask }: TasksListProps) {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "All">("All");
   const [priorityFilter, setPriorityFilter] = useState<TaskPriority | "All">("All");
   const [isAddTaskOpen, setIsAddTaskOpen] = useState(false);
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { scope, isLoaded } = useDataScope();
 
-  // Fetch tasks from backend
-  const fetchTasks = async () => {
-    if (!isLoaded) return;
-    setIsLoading(true);
-    try {
-      let query = supabase.from('tasks').select('*');
-      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
-      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
-      const { data, error } = await query.order('created_at', { ascending: false });
-      if (error) throw error;
-      setTasks(data || []);
-      console.log(`Fetched ${data?.length || 0} tasks`);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-      toast.error('Unable to load tasks. Please try again.');
-      setTasks([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch customers from backend
-  const fetchCustomers = async () => {
-    try {
-      const { data, error } = await supabase.from('customers').select('*');
-      if (!error && data) setCustomers(data);
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
-
-  // Fetch contacts from backend
-  const fetchContacts = async () => {
-    try {
-      const { data, error } = await supabase.from('contacts').select('*');
-      if (!error && data) setContacts(data);
-    } catch (error) {
-      console.error('Error fetching contacts:', error);
-    }
-  };
-
-  // Load data on mount and when scope resolves
-  useEffect(() => {
-    fetchTasks();
-    fetchCustomers();
-    fetchContacts();
-  }, [scope, isLoaded]);
+  // Build scope-aware filters for useTasks
+  const scopeFilter = isLoaded && scope.type === 'own' ? { assigneeId: scope.userId } : {};
+  const { tasks, isLoading, invalidate: invalidateTasks } = useTasks({ ...scopeFilter, enabled: isLoaded });
+  const { customers } = useCustomers();
+  const { contacts } = useContacts();
 
   const handleSaveTask = async (taskData: Partial<Task>) => {
     try {
@@ -78,7 +35,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
       const { error } = await supabase.from('tasks').insert(newTask);
       if (error) throw error;
       toast.success('Task created successfully');
-      fetchTasks(); // Refresh the list
+      invalidateTasks();
     } catch (error) {
       console.error('Error creating task:', error);
       toast.error('Unable to create task. Please try again.');

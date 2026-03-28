@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Phone, Mail, Send, Users, MessageSquare, MessageCircle, Linkedin, FileText, RefreshCw, Plus, Search, Calendar } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 import type { Activity, ActivityType } from "../../types/bd";
 import { CustomDropdown } from "./CustomDropdown";
 import { AddActivityPanel } from "./AddActivityPanel";
+import { useCRMActivities } from "../../hooks/useCRMActivities";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
 
 interface ActivitiesListProps {
   onViewActivity?: (activity: Activity) => void;
@@ -16,52 +19,10 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
   const [dateRangeFilter, setDateRangeFilter] = useState<"Today" | "This Week" | "This Month" | "All Time">("All Time");
   const [ownerFilter, setOwnerFilter] = useState<string>("All");
   const [isAddActivityOpen, setIsAddActivityOpen] = useState(false);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [customers, setCustomers] = useState<any[]>([]);
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch activities from backend
-  const fetchActivities = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      setActivities(data || []);
-    } catch (error) {
-      console.error('Error fetching activities:', error);
-      setActivities([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch customers from backend
-  const fetchCustomers = async () => {
-    try {
-      const { data, error } = await supabase.from('customers').select('*');
-      if (!error && data) setCustomers(data);
-    } catch (error) {
-      console.error('Error fetching customers:', error);
-    }
-  };
-
-  // Fetch contacts from backend
-  const fetchContacts = async () => {
-    try {
-      const { data, error } = await supabase.from('contacts').select('*');
-      if (!error && data) setContacts(data);
-    } catch (error) {
-      console.error('Error fetching contacts:', error);
-    }
-  };
-
-  // Load data on mount
-  useEffect(() => {
-    fetchActivities();
-    fetchCustomers();
-    fetchContacts();
-  }, []);
+  const { activities, isLoading, invalidate: invalidateActivities } = useCRMActivities();
+  const { customers } = useCustomers();
+  const { contacts } = useContacts();
 
   const handleSaveActivity = async (activityData: Partial<Activity>) => {
     try {
@@ -73,7 +34,7 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
       const { error } = await supabase.from('crm_activities').insert(newActivity);
       if (error) throw error;
       toast.success('Activity created successfully');
-      fetchActivities();
+      invalidateActivities();
     } catch (error) {
       console.error('Error creating activity:', error);
       toast.error('Unable to create activity. Please try again.');

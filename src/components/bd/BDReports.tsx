@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, Plus, BarChart, FileText } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Stub sub-components (not yet implemented)
 const ReportTemplates = ({ onBack, onRunReport }: { onBack: () => void; onRunReport: (cfg: any) => void }) => <div />;
@@ -41,29 +42,23 @@ export function BDReports() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentReport, setCurrentReport] = useState<any>(null);
   const [reportConfig, setReportConfig] = useState<ReportConfig | null>(null);
-  const [savedReports, setSavedReports] = useState<SavedReport[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const queryClient = useQueryClient();
+
+  const { data: savedReports = [], isLoading } = useQuery({
+    queryKey: ["bd_reports"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('bd_reports').select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []) as SavedReport[];
+    },
+    staleTime: 30_000,
+  });
 
   console.log('[BDReports] Component mounted, viewMode:', viewMode, 'savedReports:', savedReports.length);
 
-  // Fetch saved reports on mount
-  useEffect(() => {
-    fetchSavedReports();
-  }, []);
-
-  const fetchSavedReports = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase.from('bd_reports').select('*').order('created_at', { ascending: false });
-      if (error) throw error;
-      setSavedReports(data || []);
-    } catch (error) {
-      console.error('Error fetching saved reports:', error);
-      toast.error('Failed to load saved reports');
-      setSavedReports([]);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchSavedReports = () => {
+    queryClient.invalidateQueries({ queryKey: ["bd_reports"] });
   };
 
   const handleRunTemplate = (config: ReportConfig) => {

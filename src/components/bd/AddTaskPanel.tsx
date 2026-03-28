@@ -1,8 +1,10 @@
 import { CheckSquare, Phone, Mail, Users, Send, MessageSquare, Linkedin, X, MessageCircle, Flag, UserCircle, Upload } from "lucide-react";
 import { CustomDropdown } from "./CustomDropdown";
-import { supabase } from "../../utils/supabase/client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Task, TaskType, TaskPriority } from "../../types/bd";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
+import { useUsers } from "../../hooks/useUsers";
 
 interface AddTaskPanelProps {
   isOpen: boolean;
@@ -10,29 +12,6 @@ interface AddTaskPanelProps {
   onSave: (taskData: Partial<Task>) => void;
 }
 
-interface BackendContact {
-  id: string;
-  name: string;
-  title: string;
-  customer_id: string;
-  email: string;
-  phone: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface BackendCustomer {
-  id: string;
-  name: string;
-  industry: string | null;
-}
-
-interface BackendUser {
-  id: string;
-  name: string;
-  role: string;
-  department: string;
-}
 
 export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
   const [taskData, setTaskData] = useState<Partial<Task>>({
@@ -48,36 +27,10 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
   });
 
   const [attachments, setAttachments] = useState<File[]>([]);
-  const [contacts, setContacts] = useState<BackendContact[]>([]);
-  const [customers, setCustomers] = useState<BackendCustomer[]>([]);
-  const [bdUsers, setBdUsers] = useState<BackendUser[]>([]);
 
-  // Fetch dropdown data when panel opens
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [{ data: contactRows }, { data: customerRows }, { data: userRows }] = await Promise.all([
-          supabase.from('contacts').select('*'),
-          supabase.from('customers').select('*'),
-          supabase.from('users').select('*'),
-        ]);
-        if (contactRows) setContacts(contactRows);
-        if (customerRows) setCustomers(customerRows);
-        if (userRows) {
-          const bdUsers = userRows.filter((u: any) => u.department === 'Business Development');
-          setBdUsers(bdUsers);
-        }
-        
-        console.log('[AddTaskPanel] Fetched dropdown data');
-      } catch (error) {
-        console.error('Error fetching data for AddTaskPanel:', error);
-      }
-    };
-
-    if (isOpen) {
-      fetchData();
-    }
-  }, [isOpen]);
+  const { customers } = useCustomers({ enabled: isOpen });
+  const { contacts } = useContacts({ enabled: isOpen });
+  const { users: bdUsers } = useUsers({ department: 'Business Development', enabled: isOpen });
 
   if (!isOpen) return null;
 

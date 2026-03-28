@@ -3,6 +3,9 @@ import { Plus, Search, Users as UsersIcon, MoreHorizontal, Building2, Target, Br
 import { NeuronKPICard } from "../ui/NeuronKPICard";
 import { supabase } from "../../utils/supabase/client";
 import { useUsers } from "../../hooks/useUsers";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
+import { useCRMActivities } from "../../hooks/useCRMActivities";
 import type { Customer, Industry, CustomerStatus } from "../../types/bd";
 import { useDataScope } from "../../hooks/useDataScope";
 import { CustomDropdown } from "../bd/CustomDropdown";
@@ -19,10 +22,6 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   const [statusFilter, setStatusFilter] = useState<CustomerStatus | "All">("All");
   const [ownerFilter, setOwnerFilter] = useState<string>("All");
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [allContacts, setAllContacts] = useState<any[]>([]);
-  const [activities, setActivities] = useState<any[]>([]);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -39,75 +38,22 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   // Direct Supabase query for BD users (replaces Edge Function fetch)
   const { users } = useUsers({ department: 'Business Development' });
 
-  // Fetch activities from backend
-  const fetchActivities = async () => {
-    try {
-      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
-      if (!error && data) {
-        setActivities(data);
-      } else {
-        setActivities([]);
-      }
-    } catch (error) {
-      console.error("Error fetching activities:", error);
-      setActivities([]);
+  const { customers: allCustomers, isLoading, invalidate: invalidateCustomers } = useCustomers({ scope, enabled: isLoaded });
+  const { contacts: allContacts, invalidate: invalidateContacts } = useContacts();
+  const { activities } = useCRMActivities();
+
+  // Client-side filtering for search, industry, status (replaces server-side filtering)
+  const customers = allCustomers.filter(customer => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = (customer.name || '').toLowerCase().includes(q) ||
+        (customer.company_name || '').toLowerCase().includes(q);
+      if (!matchesSearch) return false;
     }
-  };
-
-  // Fetch customers from backend
-  const fetchCustomers = async () => {
-    if (!isLoaded) return;
-    setIsLoading(true);
-    try {
-      let query = supabase.from('customers').select('*');
-      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
-      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,company_name.ilike.%${searchQuery}%`);
-      }
-      if (industryFilter && industryFilter !== "All") {
-        query = query.eq('industry', industryFilter);
-      }
-      if (statusFilter && statusFilter !== "All") {
-        query = query.eq('status', statusFilter);
-      }
-      const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data) {
-        setCustomers(data);
-      }
-    } catch (error) {
-      console.error("[CustomersListWithFilters] Error fetching customers:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch all contacts for counting
-  const fetchContacts = async () => {
-    try {
-      const { data, error } = await supabase.from('contacts').select('*');
-      if (!error && data) {
-        setAllContacts(data);
-      }
-    } catch (error) {
-      console.error('[CustomersListWithFilters] Error fetching contacts:', error);
-    }
-  };
-
-  // Fetch on mount and when scope resolves
-  useEffect(() => {
-    fetchCustomers();
-    fetchContacts();
-    fetchActivities();
-  }, [scope, isLoaded]);
-
-  // Debounced search and filter updates
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchCustomers();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery, industryFilter, statusFilter]);
+    if (industryFilter && industryFilter !== "All" && customer.industry !== industryFilter) return false;
+    if (statusFilter && statusFilter !== "All" && customer.status !== statusFilter) return false;
+    return true;
+  });
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -130,8 +76,8 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
     try {
       const { error } = await supabase.from('customers').delete().eq('id', customerId);
       if (!error) {
-        await fetchCustomers();
-        await fetchContacts();
+        invalidateCustomers();
+        invalidateContacts();
         setOpenDropdownId(null);
       } else {
         alert(`Failed to delete customer: ${error.message}`);
@@ -151,8 +97,8 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
         created_at: new Date().toISOString(),
       });
       if (error) throw error;
-      await fetchCustomers();
-      await fetchContacts();
+      invalidateCustomers();
+      invalidateContacts();
       setIsAddCustomerOpen(false);
     } catch (error) {
       console.error("Error creating customer:", error);

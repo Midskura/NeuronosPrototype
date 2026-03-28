@@ -1,8 +1,9 @@
 import { CustomDropdown } from "./CustomDropdown";
-import { supabase } from "../../utils/supabase/client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import type { Activity, ActivityType } from "../../types/bd";
 import { X, Phone, Mail, Users, MessageSquare, Send, MessageCircle, Linkedin, StickyNote, Upload, FileText, Trash2 } from "lucide-react";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
 
 interface AddActivityPanelProps {
   isOpen: boolean;
@@ -10,22 +11,6 @@ interface AddActivityPanelProps {
   onSave: (activityData: Partial<Activity>) => void;
 }
 
-interface BackendContact {
-  id: string;
-  name: string;
-  title: string;
-  customer_id: string;
-  email: string;
-  phone: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface BackendCustomer {
-  id: string;
-  name: string;
-  industry: string | null;
-}
 
 export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelProps) {
   // Default to current date/time
@@ -43,32 +28,11 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
   });
 
   const [attachments, setAttachments] = useState<File[]>([]);
-  const [contacts, setContacts] = useState<BackendContact[]>([]);
-  const [customers, setCustomers] = useState<BackendCustomer[]>([]);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch dropdown data when panel opens
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [{ data: contactRows }, { data: customerRows }] = await Promise.all([
-          supabase.from('contacts').select('*'),
-          supabase.from('customers').select('*'),
-        ]);
-        if (contactRows) setContacts(contactRows);
-        if (customerRows) setCustomers(customerRows);
-        
-        console.log('[AddActivityPanel] Fetched dropdown data');
-      } catch (error) {
-        console.error('Error fetching data for AddActivityPanel:', error);
-      }
-    };
-
-    if (isOpen) {
-      fetchData();
-    }
-  }, [isOpen]);
+  const { customers } = useCustomers();
+  const { contacts } = useContacts();
 
   if (!isOpen) return null;
 

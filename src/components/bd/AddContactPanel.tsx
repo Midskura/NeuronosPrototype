@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { UserPlus, X, User, Building2, Target } from "lucide-react";
 import type { LifecycleStage, LeadStatus } from "../../types/bd";
-import { supabase } from "../../utils/supabase/client";
 import { CustomSelect } from "./CustomSelect";
 import { useUsers } from "../../hooks/useUsers";
+import { useCustomers } from "../../hooks/useCustomers";
 
 interface AddContactPanelProps {
   isOpen: boolean;
@@ -13,28 +13,6 @@ interface AddContactPanelProps {
   prefilledCustomerName?: string; // Display name of pre-filled customer
 }
 
-interface BackendCustomer {
-  id: string;
-  name: string;
-  industry: string | null;
-  credit_terms: string;
-  address: string | null;
-  phone: string | null;
-  email: string | null;
-  created_at: string;
-  created_by: string | null;
-  updated_at: string;
-}
-
-interface BackendUser {
-  id: string;
-  email: string;
-  name: string;
-  department: string;
-  role: string;
-  created_at: string;
-  is_active: boolean;
-}
 
 export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, prefilledCustomerName }: AddContactPanelProps) {
   const [formData, setFormData] = useState({
@@ -50,29 +28,9 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
     notes: "",
   });
 
-  const [customers, setCustomers] = useState<BackendCustomer[]>([]);
-
-  // Direct Supabase query for BD users (replaces Edge Function fetch)
+  // Direct Supabase query for BD users
   const { users: bdUsers } = useUsers({ department: 'Business Development', enabled: isOpen });
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch customers
-        const { data: customerRows } = await supabase.from('customers').select('*');
-        
-        if (customerRows) {
-          setCustomers(customerRows);
-        }
-      } catch (error) {
-        console.error('Error fetching data for AddContactPanel:', error);
-      }
-    };
-    
-    if (isOpen) {
-      fetchData();
-    }
-  }, [isOpen]);
+  const { customers } = useCustomers({ enabled: isOpen });
 
   // Pre-fill customer_id when opening from Customer Detail page
   useEffect(() => {

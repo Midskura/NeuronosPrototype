@@ -1,7 +1,7 @@
 import type { Customer } from "../../types/bd";
-import { supabase } from "../../utils/supabase/client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Search, Plus, Building2, ChevronDown } from "lucide-react";
+import { useCustomers } from "../../hooks/useCustomers";
 
 interface CompanyAutocompleteProps {
   value: string; // company_name
@@ -20,47 +20,22 @@ export function CompanyAutocomplete({
 }: CompanyAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch customers from backend
-  const fetchCustomers = async (search: string = "") => {
-    setIsLoading(true);
-    try {
-      let query = supabase.from('customers').select('*');
-      if (search) {
-        query = query.or(`name.ilike.%${search}%,company_name.ilike.%${search}%`);
-      }
-      const { data, error } = await query;
-      if (!error && data) {
-        setCustomers(data);
-      }
-    } catch (error) {
-      console.error("Error fetching customers:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { customers: allCustomers, isLoading } = useCustomers();
 
-  // Fetch customers when dropdown opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchCustomers(searchQuery);
-    }
-  }, [isOpen]);
-
-  // Debounced search
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        fetchCustomers(searchQuery);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [searchQuery]);
+  // Client-side search filtering
+  const customers = useMemo(() => {
+    if (!searchQuery) return allCustomers;
+    const q = searchQuery.toLowerCase();
+    return allCustomers.filter(
+      (c) =>
+        (c.name || "").toLowerCase().includes(q) ||
+        (c.company_name || "").toLowerCase().includes(q)
+    );
+  }, [allCustomers, searchQuery]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -69,7 +44,6 @@ export function CompanyAutocomplete({
         setIsOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);

@@ -6,8 +6,9 @@ import { ForwardingFormV2 } from "../pricing/quotations/ForwardingFormV2";
 import { TruckingFormV2 } from "../pricing/quotations/TruckingFormV2";
 import { MarineInsuranceFormV2 } from "../pricing/quotations/MarineInsuranceFormV2";
 import { OthersFormV2 } from "../pricing/quotations/OthersFormV2";
-import { supabase } from "../../utils/supabase/client";
 import type { Customer } from "../../types/bd";
+import { useCustomers } from "../../hooks/useCustomers";
+import { useContacts } from "../../hooks/useContacts";
 import type { 
   ServiceType, 
   InquiryService,
@@ -24,31 +25,6 @@ interface AddInquiryPanelProps {
   onSave: (data: any) => void;
 }
 
-interface BackendCustomer {
-  id: string;
-  name: string;
-  industry: string | null;
-  credit_terms: string;
-  address: string | null;
-  phone: string | null;
-  email: string | null;
-  created_at: string;
-  created_by: string | null;
-  updated_at: string;
-}
-
-interface BackendContact {
-  id: string;
-  name: string;
-  title: string | null;
-  email: string | null;
-  phone: string | null;
-  customer_id: string | null;
-  notes: string | null;
-  created_at: string;
-  created_by: string | null;
-  updated_at: string;
-}
 
 const serviceOptions = [
   {
@@ -84,11 +60,10 @@ const serviceOptions = [
 ];
 
 export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
-  // Backend data
-  const [customers, setCustomers] = useState<BackendCustomer[]>([]);
-  const [allContacts, setAllContacts] = useState<BackendContact[]>([]);
-  const [isLoadingData, setIsLoadingData] = useState(true);
-  
+  // Backend data via TanStack Query
+  const { customers, isLoading: isLoadingData } = useCustomers();
+  const { contacts: allContacts } = useContacts();
+
   // Basic inquiry information
   const [customerId, setCustomerId] = useState("");
   const [contactPerson, setContactPerson] = useState("");
@@ -106,41 +81,6 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
   const [selectedServices, setSelectedServices] = useState<InquiryService[]>([]);
   const [expandedServiceIndex, setExpandedServiceIndex] = useState<number | null>(null);
 
-  // Fetch customers and contacts on mount
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoadingData(true);
-        
-        // Fetch customers
-        const { data: customerRows } = await supabase.from('customers').select('*');
-        
-        if (customerRows) {
-          const customersResult = { success: true, data: customerRows };
-          if (customersResult.success) {
-            setCustomers(customersResult.data);
-          }
-        }
-        
-        // Fetch all contacts
-        const { data: contactRows } = await supabase.from('contacts').select('*');
-        
-        if (contactRows) {
-          const contactsResult = { success: true, data: contactRows };
-          if (contactsResult.success) {
-            setAllContacts(contactsResult.data);
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching customers/contacts:', error);
-      } finally {
-        setIsLoadingData(false);
-      }
-    };
-    
-    fetchData();
-  }, []);
-  
   // Filter contacts based on selected customer
   const availableContacts = customerId 
     ? allContacts.filter(contact => contact.customer_id === customerId)

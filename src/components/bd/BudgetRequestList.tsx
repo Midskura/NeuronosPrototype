@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Search, Plus, Calendar, ArrowUpDown, X, SlidersHorizontal, Users, Package, Briefcase, FileText } from "lucide-react";
 import { supabase } from '../../utils/supabase/client';
 import { toast } from "../ui/toast-utils";
 import type { EVoucher } from "../../types/evoucher";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 import { CustomDropdown } from "./CustomDropdown";
 import { MultiSelectDropdown } from "./MultiSelectDropdown";
 import { AddRequestForPaymentPanel } from "../accounting/AddRequestForPaymentPanel";
@@ -26,13 +28,37 @@ export function BudgetRequestList() {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [vendorFilter, setVendorFilter] = useState<string[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [budgetRequests, setBudgetRequests] = useState<EVoucher[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<EVoucher | null>(null);
   const [showDetailPanel, setShowDetailPanel] = useState(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(new Set());
 
   // Current user (in real app, get from auth context)
   const currentUserId = "user001";
+
+  const queryClient = useQueryClient();
+
+  const { data: budgetRequests = [] } = useQuery({
+    queryKey: queryKeys.evouchers.list("bd"),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('evouchers')
+        .select('*')
+        .eq('source_module', 'bd')
+        .eq('transaction_type', 'budget_request')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return ((data || []).map((ev: any) => ({
+        ...ev,
+        status: normalizeStatus(ev.status),
+        amount: ev.amount ?? ev.total_amount ?? 0,
+        request_date: ev.request_date || ev.created_at,
+        requestor_name: ev.requestor_name || 'Unknown',
+        description: ev.description || ev.purpose || 'No description',
+        purpose: ev.purpose || ev.description || 'No purpose',
+      }))) as EVoucher[];
+    },
+    staleTime: 30_000,
+  });
 
   // Extract unique values for filters
   const categories = useMemo(() => 
@@ -247,48 +273,6 @@ export function BudgetRequestList() {
     return count;
   }, [quickFilterTab, dateRangeFilter, categoryFilter, customerFilter, requestorFilter, vendorFilter, statusFilter]);
 
-  const fetchBudgetRequests = useCallback(async () => {
-    try {
-      // Fetch E-Vouchers with transaction_type = "budget_request"
-      console.log('🔍 [Budget Requests] Fetching from:', `/evouchers?source_module=bd&transaction_type=budget_request`);
-      
-      const { data, error } = await supabase
-        .from('evouchers')
-        .select('*')
-        .eq('source_module', 'bd')
-        .eq('transaction_type', 'budget_request')
-        .order('created_at', { ascending: false });
-      
-      if (error) throw error;
-      
-      if (data) {
-        // Normalize status values and ensure amount field exists
-        const normalizedData = (data || []).map((ev: any) => ({
-          ...ev,
-          status: normalizeStatus(ev.status),
-          // Ensure amount field exists (fallback to total_amount if amount is missing)
-          amount: ev.amount ?? ev.total_amount ?? 0,
-          // Ensure other required fields have defaults
-          request_date: ev.request_date || ev.created_at,
-          requestor_name: ev.requestor_name || 'Unknown',
-          description: ev.description || ev.purpose || 'No description',
-          purpose: ev.purpose || ev.description || 'No purpose',
-        }));
-        
-        setBudgetRequests(normalizedData);
-        console.log(`✅ [Budget Requests] Fetched ${normalizedData.length} budget requests`);
-        console.log('📋 [Budget Requests] First item:', normalizedData[0]);
-      } else {
-        console.error('❌ [Budget Requests] API returned error:', (data as any).error);
-        setBudgetRequests([]); // Set empty array on error
-      }
-    } catch (error) {
-      console.error('❌ [Budget Requests] Exception:', error);
-      // Don't show error toast on initial load - just set empty array
-      setBudgetRequests([]);
-    }
-  }, [currentUserId]);
-
   // Helper function to normalize backend status to frontend display status
   const normalizeStatus = (status: string): string => {
     const statusMap: Record<string, string> = {
@@ -307,10 +291,6 @@ export function BudgetRequestList() {
     
     return statusMap[status] || status;
   };
-
-  useEffect(() => {
-    fetchBudgetRequests();
-  }, [fetchBudgetRequests]);
 
   return (
     <div 
@@ -723,7 +703,7 @@ export function BudgetRequestList() {
         onClose={() => setShowCreateModal(false)}
         onSuccess={() => {
           // Refresh the list after successful save
-          fetchBudgetRequests();
+          queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
         }}
         context="bd"
         defaultRequestor={currentUserId}

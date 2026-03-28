@@ -1,7 +1,7 @@
 import type { Contact } from "../../types/contact";
-import { supabase } from "../../utils/supabase/client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Search, Plus, Building2, ChevronDown } from "lucide-react";
+import { useContacts } from "../../hooks/useContacts";
 
 interface CustomerAutocompleteProps {
   value: string; // customer_name
@@ -22,49 +22,22 @@ export function CustomerAutocomplete({
 }: CustomerAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [contacts, setContacts] = useState<Contact[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch contacts from backend
-  const fetchContacts = async (search: string = "") => {
-    setIsLoading(true);
-    try {
-      let query = supabase.from("contacts").select("*");
-      if (search) {
-        query = query.or(
-          `first_name.ilike.%${search}%,last_name.ilike.%${search}%`
-        );
-      }
-      const { data, error } = await query;
-      if (!error && data) {
-        setContacts(data);
-      }
-    } catch (error) {
-      console.error("Error fetching contacts:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { contacts: allContacts, isLoading } = useContacts();
 
-  // Fetch contacts when dropdown opens
-  useEffect(() => {
-    if (isOpen) {
-      fetchContacts(searchQuery);
-    }
-  }, [isOpen]);
-
-  // Debounced search
-  useEffect(() => {
-    if (isOpen) {
-      const timer = setTimeout(() => {
-        fetchContacts(searchQuery);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [searchQuery]);
+  // Client-side search filtering
+  const contacts = useMemo(() => {
+    if (!searchQuery) return allContacts;
+    const q = searchQuery.toLowerCase();
+    return allContacts.filter((c: any) =>
+      ((c.first_name || "") + " " + (c.last_name || ""))
+        .toLowerCase()
+        .includes(q)
+    );
+  }, [allContacts, searchQuery]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

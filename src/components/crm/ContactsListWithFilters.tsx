@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, Plus, Mail, Phone, Building2, Users, UserCheck, UserCircle, MoreHorizontal } from "lucide-react";
 import { NeuronKPICard } from "../ui/NeuronKPICard";
 import { supabase } from "../../utils/supabase/client";
 import { useUsers } from "../../hooks/useUsers";
+import { useContacts } from "../../hooks/useContacts";
+import { useCRMActivities } from "../../hooks/useCRMActivities";
 import { AddContactPanel } from "../bd/AddContactPanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 import { toast } from "sonner@2.0.3";
@@ -43,15 +45,27 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "All">("All");
   const [ownerFilter, setOwnerFilter] = useState<string>("All");
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
-  const [contacts, setContacts] = useState<BackendContact[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activities, setActivities] = useState<any[]>([]);
-  const [customers, setCustomers] = useState<any[]>([]);
 
   const { scope, isLoaded } = useDataScope();
 
   // Direct Supabase query for BD users (replaces Edge Function fetch)
   const { users: bdUsers } = useUsers({ department: 'Business Development' });
+
+  const { contacts: allContacts, isLoading, invalidate: invalidateContacts } = useContacts({ enabled: isLoaded });
+  const { activities } = useCRMActivities();
+
+  // Apply scope + search client-side
+  const contacts = allContacts.filter((contact: BackendContact) => {
+    if (scope.type === 'userIds' && contact.owner_id && !scope.ids.includes(contact.owner_id)) return false;
+    if (scope.type === 'own' && contact.owner_id !== scope.userId) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesSearch = (contact.name || '').toLowerCase().includes(q) ||
+        (contact.email || '').toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+    }
+    return true;
+  });
 
   // Permissions based on department
   const permissions = {
@@ -60,78 +74,6 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
     showKPIs: true, // Both BD and PD see KPIs
     showOwnerFilter: userDepartment === "Business Development",
   };
-
-  // Fetch activities from backend
-  const fetchActivities = async () => {
-    try {
-      const { data, error } = await supabase.from('crm_activities').select('*').order('created_at', { ascending: false });
-      if (!error && data) {
-        setActivities(data);
-      } else {
-        setActivities([]);
-      }
-    } catch (error) {
-      console.error("Error fetching activities:", error);
-      setActivities([]);
-    }
-  };
-
-  // Fetch customers from backend
-  const fetchCustomers = async () => {
-    try {
-      const { data, error } = await supabase.from('customers').select('*');
-      if (!error && data) {
-        setCustomers(data);
-      } else {
-        setCustomers([]);
-      }
-    } catch (error) {
-      console.error("Error fetching customers:", error);
-      setCustomers([]);
-    }
-  };
-
-  // Fetch contacts from backend
-  const fetchContacts = async () => {
-    if (!isLoaded) return;
-    setIsLoading(true);
-    try {
-      let query = supabase.from('contacts').select('*');
-      if (scope.type === 'userIds') query = query.in('owner_id', scope.ids);
-      else if (scope.type === 'own') query = query.eq('owner_id', scope.userId);
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
-      }
-      const { data, error } = await query.order('created_at', { ascending: false });
-      if (!error && data) {
-        setContacts(data);
-      } else {
-        setContacts([]);
-      }
-    } catch (error) {
-      console.error("Error fetching contacts:", error);
-      setContacts([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch on mount and when scope resolves
-  useEffect(() => {
-    fetchContacts();
-    fetchActivities();
-    fetchCustomers();
-  }, [scope, isLoaded]);
-
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery !== undefined) {
-        fetchContacts();
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
 
   const handleSaveContact = async (contactData: any) => {
     try {
@@ -164,7 +106,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
       }).select().single();
 
       if (error) throw error;
-      await fetchContacts();
+      invalidateContacts();
       setIsAddContactOpen(false);
     } catch (error) {
       console.error("Error creating contact:", error);

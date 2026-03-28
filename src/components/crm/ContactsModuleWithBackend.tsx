@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Search, Plus, Mail, Phone, Building2, User, CircleDot } from "lucide-react";
 import type { Contact } from "../../types/contact";
 import { ContactCreationModal } from "./ContactCreationModal";
@@ -8,6 +8,9 @@ import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
 import type { QuotationNew } from "../../types/pricing";
 import { CustomDropdown } from "../bd/CustomDropdown";
+import { useContacts } from "../../hooks/useContacts";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 
 type View = "list" | "detail" | "builder";
 
@@ -18,72 +21,41 @@ interface ContactsModuleWithBackendProps {
 
 export function ContactsModuleWithBackend({ onViewQuotation, contactId }: ContactsModuleWithBackendProps) {
   const [view, setView] = useState<View>("list");
-  const [contacts, setContacts] = useState<Contact[]>([]);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All Statuses");
   const [quotation, setQuotation] = useState<QuotationNew | null>(null);
 
-  // Fetch contacts from backend
-  const fetchContacts = async () => {
-    setIsLoading(true);
-    try {
-      let query = supabase.from('contacts').select('*');
-      if (statusFilter !== "All Statuses") {
-        query = query.eq('status', statusFilter);
-      }
+  const queryClient = useQueryClient();
+  const { contacts: allContacts, isLoading } = useContacts();
+
+  // Client-side filtering (replaces server-side search + status filter)
+  const contacts = useMemo(() => {
+    return allContacts.filter((c: any) => {
+      if (statusFilter !== "All Statuses" && c.status !== statusFilter) return false;
       if (searchQuery) {
-        query = query.or(`first_name.ilike.%${searchQuery}%,last_name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+        const q = searchQuery.toLowerCase();
+        const name = ((c.first_name || "") + " " + (c.last_name || "")).toLowerCase();
+        if (!name.includes(q) && !(c.email || "").toLowerCase().includes(q)) return false;
       }
-      const { data, error } = await query.order('created_at', { ascending: false });
+      return true;
+    });
+  }, [allContacts, statusFilter, searchQuery]);
+
+  // Handle contactId prop - look up from cache or fetch once
+  const [_contactIdHandled, setContactIdHandled] = useState(false);
+  if (contactId && !_contactIdHandled) {
+    setContactIdHandled(true);
+    supabase.from('contacts').select('*').eq('id', contactId).maybeSingle().then(({ data, error }) => {
       if (!error && data) {
-        setContacts(data);
+        setSelectedContact(data);
+        setView("detail");
+      } else {
+        toast.error("Contact not found");
       }
-    } catch (error) {
-      console.error("Error fetching contacts:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch contacts on mount and when filters change
-  useEffect(() => {
-    fetchContacts();
-  }, [statusFilter]);
-
-  // Debounced search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery !== undefined) {
-        fetchContacts();
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
-  // Handle contactId prop - fetch and show contact detail when provided
-  useEffect(() => {
-    const fetchContactById = async () => {
-      if (contactId) {
-        try {
-          const { data, error } = await supabase.from('contacts').select('*').eq('id', contactId).maybeSingle();
-          if (!error && data) {
-            setSelectedContact(data);
-            setView("detail");
-          } else {
-            toast.error("Contact not found");
-          }
-        } catch (error) {
-          console.error('Error fetching contact:', error);
-          toast.error("Error loading contact");
-        }
-      }
-    };
-    
-    fetchContactById();
-  }, [contactId]);
+    });
+  }
 
   // Create new contact
   const handleCreateContact = async (contactData: Partial<Contact>) => {
@@ -94,7 +66,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
         created_at: new Date().toISOString(),
       });
       if (error) throw error;
-      await fetchContacts();
+      queryClient.invalidateQueries({ queryKey: queryKeys.contacts.all() });
       setIsCreating(false);
     } catch (error) {
       console.error("Error creating contact:", error);
@@ -107,7 +79,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
     try {
       const { error } = await supabase.from('contacts').update(updates).eq('id', id);
       if (error) throw error;
-      setContacts(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+      queryClient.invalidateQueries({ queryKey: queryKeys.contacts.all() });
       if (selectedContact && selectedContact.id === id) {
         setSelectedContact({ ...selectedContact, ...updates });
       }
@@ -117,17 +89,10 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
     }
   };
 
-  // View contact detail
-  const handleViewContact = async (contact: Contact) => {
-    try {
-      const { data, error } = await supabase.from('contacts').select('*').eq('id', contact.id).maybeSingle();
-      if (!error && data) {
-        setSelectedContact(data);
-        setView("detail");
-      }
-    } catch (error) {
-      console.error("Error fetching contact details:", error);
-    }
+  // View contact detail — use the already-fetched contact object directly
+  const handleViewContact = (contact: Contact) => {
+    setSelectedContact(contact);
+    setView("detail");
   };
 
   const formatDate = (dateString: string) => {
@@ -189,11 +154,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
 
             if (error) throw error;
             toast.success("Inquiry created successfully!");
-            // Refresh contact details
-            const { data: refreshedContact } = await supabase.from('contacts').select('*').eq('id', selectedContact.id).maybeSingle();
-            if (refreshedContact) {
-              setSelectedContact(refreshedContact);
-            }
+            queryClient.invalidateQueries({ queryKey: queryKeys.contacts.all() });
             setView("detail");
           } catch (error) {
             console.error("Error creating quotation:", error);
