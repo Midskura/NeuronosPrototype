@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 import { X, Save, ArrowRightLeft, Calendar } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { motion, AnimatePresence } from "motion/react";
@@ -16,10 +18,8 @@ interface PostToLedgerPanelProps {
 }
 
 export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, currentUser }: PostToLedgerPanelProps) {
-  const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(false);
-  const [loadingAccounts, setLoadingAccounts] = useState(true);
-  
+
   // Form State
   const [debitAccountId, setDebitAccountId] = useState("");
   const [creditAccountId, setCreditAccountId] = useState("");
@@ -27,25 +27,16 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
   const [description, setDescription] = useState(evoucher.description || evoucher.purpose || "");
 
   // Load Accounts
-  useEffect(() => {
-    if (isOpen) {
-      fetchAccounts();
-    }
-  }, [isOpen]);
-
-  const fetchAccounts = async () => {
-    try {
-      setLoadingAccounts(true);
+  const { data: accounts = [], isFetching: loadingAccounts } = useQuery({
+    queryKey: queryKeys.transactions.accounts(),
+    queryFn: async () => {
       const { data, error } = await supabase.from('accounts').select('*');
       if (error) throw new Error(error.message);
-      setAccounts(data || []);
-    } catch (error) {
-      console.error("Error loading accounts:", error);
-      toast.error("Failed to load accounts");
-    } finally {
-      setLoadingAccounts(false);
-    }
-  };
+      return (data || []) as Account[];
+    },
+    enabled: isOpen,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const handlePost = async () => {
     if (!debitAccountId || !creditAccountId) {
@@ -154,7 +145,7 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
             <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
               
               {/* Summary Card */}
-              <div className="bg-[#E8F5F3] border border-[var(--theme-action-primary-bg)]/20 rounded-xl p-4 flex items-center justify-between">
+              <div className="bg-[var(--theme-bg-surface-tint)] border border-[var(--theme-action-primary-bg)]/20 rounded-xl p-4 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-semibold text-[var(--theme-action-primary-bg)] uppercase tracking-wide">Amount to Post</p>
                   <p className="text-2xl font-bold text-[var(--theme-text-primary)] mt-1">
@@ -228,7 +219,7 @@ export function PostToLedgerPanel({ evoucher, isOpen, onClose, onSuccess, curren
                 <div className="space-y-1.5">
                   <div className="flex justify-between">
                     <label className="text-sm font-medium text-[var(--theme-text-primary)]">Credit Account (Source)</label>
-                    <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded">CR</span>
+                    <span className="text-xs font-medium text-[var(--theme-status-danger-fg)] bg-[var(--theme-status-danger-bg)] px-2 py-0.5 rounded">CR</span>
                   </div>
                   {loadingAccounts ? (
                     <div className="h-10 bg-[var(--theme-bg-surface-subtle)] animate-pulse rounded-lg" />

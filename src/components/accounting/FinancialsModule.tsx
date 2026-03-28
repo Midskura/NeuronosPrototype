@@ -14,7 +14,9 @@
  *   - FinancialDashboard (Dashboard tab — 6-zone company-wide view)
  */
 
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 import { useNavigate } from "react-router";
 import {
   Layout,
@@ -209,16 +211,9 @@ export function FinancialsModule() {
   }, [navigate, detectTargetTab]);
 
   // Centralised data (fetched once, shared across all tabs)
-  const [billingItems, setBillingItems] = useState<any[]>([]);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [collections, setCollections] = useState<any[]>([]);
-  const [expenses, setExpenses] = useState<OperationsExpense[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchAll = useCallback(async (retryCount = 0) => {
-    try {
-      setIsLoading(true);
-
+  const { data: financialsData, isFetching: isLoading, refetch: fetchAll } = useQuery({
+    queryKey: queryKeys.financials.reportsData(),
+    queryFn: async () => {
       const [
         { data: billingRows, error: e1 },
         { data: invoiceRows, error: e2 },
@@ -231,13 +226,10 @@ export function FinancialsModule() {
         supabase.from('expenses').select('*'),
       ]);
 
-      // Billing items
-      if (!e1 && billingRows) setBillingItems(billingRows);
+      const billingItems = (!e1 && billingRows) ? billingRows : [];
 
-      // Invoices (filter to valid statuses)
-      if (!e2 && invoiceRows) {
-        setInvoices(
-          invoiceRows.filter((b: any) => {
+      const invoices = (!e2 && invoiceRows)
+        ? invoiceRows.filter((b: any) => {
             const status = (b.status || "").toLowerCase();
             const paymentStatus = (b.payment_status || "").toLowerCase();
             return (
@@ -245,46 +237,41 @@ export function FinancialsModule() {
               ["paid", "partial"].includes(paymentStatus)
             );
           })
-        );
-      }
+        : [];
 
-      // Collections
-      if (!e3 && collectionRows) setCollections(collectionRows);
+      const collections = (!e3 && collectionRows) ? collectionRows : [];
 
-      // Expenses (map to OperationsExpense shape)
-      if (!e4 && expenseRows) {
-        const mapped = expenseRows.map((ev: any) => ({
-          id: ev.id,
-          expenseName: ev.voucher_number || ev.expense_name || ev.id,
-          description: ev.purpose || ev.description || "",
-          amount: ev.total_amount || ev.amount || 0,
-          currency: ev.currency || "PHP",
-          expenseCategory: ev.expense_category || ev.category || "General",
-          expenseDate: ev.request_date || ev.expense_date || ev.created_at,
-          createdAt: ev.created_at,
-          status: ev.status || "pending",
-          vendorName: ev.vendor_name || ev.payee_name || "\u2014",
-          bookingId: ev.booking_id || "",
-          isBillable: ev.is_billable || false,
-          customerName: ev.customer_name || "",
-          projectNumber: ev.project_number || "",
-          quotationNumber: ev.quotation_number || "",
-          hasProject: ev.has_project || false,
-          service_type: ev.service_type || "",
-        }));
-        setExpenses(mapped as any);
-      }
-    } catch (error) {
-      console.error("Error fetching financials data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+      const expenses: OperationsExpense[] = (!e4 && expenseRows)
+        ? expenseRows.map((ev: any) => ({
+            id: ev.id,
+            expenseName: ev.voucher_number || ev.expense_name || ev.id,
+            description: ev.purpose || ev.description || "",
+            amount: ev.total_amount || ev.amount || 0,
+            currency: ev.currency || "PHP",
+            expenseCategory: ev.expense_category || ev.category || "General",
+            expenseDate: ev.request_date || ev.expense_date || ev.created_at,
+            createdAt: ev.created_at,
+            status: ev.status || "pending",
+            vendorName: ev.vendor_name || ev.payee_name || "\u2014",
+            bookingId: ev.booking_id || "",
+            isBillable: ev.is_billable || false,
+            customerName: ev.customer_name || "",
+            projectNumber: ev.project_number || "",
+            quotationNumber: ev.quotation_number || "",
+            hasProject: ev.has_project || false,
+            service_type: ev.service_type || "",
+          }))
+        : [];
 
-  // Fetch data on mount (orphan cleanup removed — was server-side only)
-  useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+      return { billingItems, invoices, collections, expenses };
+    },
+    staleTime: 30_000,
+  });
+
+  const billingItems = financialsData?.billingItems ?? [];
+  const invoices = financialsData?.invoices ?? [];
+  const collections = financialsData?.collections ?? [];
+  const expenses: OperationsExpense[] = (financialsData?.expenses ?? []) as OperationsExpense[];
 
   const invoiceById = useMemo(() => {
     const map = new Map<string, any>();
@@ -381,7 +368,7 @@ export function FinancialsModule() {
       collections: sCollections,
       expenses: sExpenses as any[],
       isLoading,
-      refresh: fetchAll,
+      refresh: () => { void fetchAll(); },
       totals: calculateFinancialTotals(sInvoices, sBillings, sExpenses as any[], sCollections),
     };
   }, [invoices, billingItems, collections, expenses, isLoading, fetchAll, scope]);
@@ -457,10 +444,10 @@ export function FinancialsModule() {
   ];
 
   const BILLINGS_STATUS_OPTIONS: StatusOption[] = [
-    { value: "unbilled", label: "Unbilled", color: "#D97706" },
+    { value: "unbilled", label: "Unbilled", color: "var(--theme-status-warning-fg)" },
     { value: "billed", label: "Billed", color: "var(--theme-action-primary-bg)" },
     { value: "paid", label: "Paid", color: "#16A34A" },
-    { value: "voided", label: "Voided", color: "#DC2626" },
+    { value: "voided", label: "Voided", color: "var(--theme-status-danger-fg)" },
   ];
 
   const BILLINGS_COLUMNS: AggColumnDef<BillingItem>[] = useMemo(() => [
@@ -721,7 +708,7 @@ export function FinancialsModule() {
     { value: "draft", label: "Draft", color: "var(--theme-text-muted)" },
     { value: "posted", label: "Posted", color: "var(--theme-action-primary-bg)" },
     { value: "open", label: "Open", color: "#2563EB" },
-    { value: "partial", label: "Partial", color: "#D97706" },
+    { value: "partial", label: "Partial", color: "var(--theme-status-warning-fg)" },
     { value: "paid", label: "Paid", color: "#16A34A" },
   ];
 
@@ -964,11 +951,11 @@ export function FinancialsModule() {
   ];
 
   const COLLECTIONS_STATUS_OPTIONS: StatusOption[] = [
-    { value: "pending", label: "Pending", color: "#D97706" },
+    { value: "pending", label: "Pending", color: "var(--theme-status-warning-fg)" },
     { value: "posted", label: "Posted", color: "#16A34A" },
     { value: "credited", label: "Customer Credit", color: "#1D4ED8" },
     { value: "refunded", label: "Refunded", color: "#475467" },
-    { value: "voided", label: "Voided", color: "#EF4444" },
+    { value: "voided", label: "Voided", color: "var(--theme-status-danger-fg)" },
   ];
 
   const COLLECTIONS_COLUMNS: AggColumnDef<any>[] = useMemo(() => [
@@ -1177,10 +1164,10 @@ export function FinancialsModule() {
 
   const EXPENSES_STATUS_OPTIONS: StatusOption[] = [
     { value: "draft", label: "Draft", color: "var(--theme-text-muted)" },
-    { value: "pending", label: "Pending", color: "#D97706" },
+    { value: "pending", label: "Pending", color: "var(--theme-status-warning-fg)" },
     { value: "approved", label: "Approved", color: "var(--theme-action-primary-bg)" },
     { value: "posted", label: "Posted", color: "#16A34A" },
-    { value: "rejected", label: "Rejected", color: "#EF4444" },
+    { value: "rejected", label: "Rejected", color: "var(--theme-status-danger-fg)" },
   ];
 
   const EXPENSES_COLUMNS: AggColumnDef<any>[] = useMemo(() => [
@@ -1333,7 +1320,7 @@ export function FinancialsModule() {
             </p>
           </div>
           <NeuronRefreshButton
-            onRefresh={fetchAll}
+            onRefresh={() => { void fetchAll(); }}
             label="Refresh financials"
           />
         </div>

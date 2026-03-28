@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../hooks/useUser";
 import { cleanupDuplicates } from "../utils/cleanupDuplicates";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../utils/supabase/client";
+import { queryKeys } from "../lib/queryKeys";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
@@ -50,8 +52,8 @@ const SERVICE_TYPES: ServiceType[] = ["Forwarding", "Brokerage", "Trucking", "Ma
 
 const DEPT_COLORS: Record<string, { bg: string; text: string }> = {
   "Business Development": { bg: "#DBEAFE", text: "#1D4ED8" },
-  Pricing:               { bg: "#D1FAE5", text: "#065F46" },
-  Operations:            { bg: "#FEF3C7", text: "#92400E" },
+  Pricing:               { bg: "var(--theme-status-success-bg)", text: "#065F46" },
+  Operations:            { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" },
   Accounting:            { bg: "#FCE7F3", text: "#9D174D" },
   Executive:             { bg: "#F3E8FF", text: "#7E22CE" },
   HR:                    { bg: "#E0E7FF", text: "#3730A3" },
@@ -59,8 +61,8 @@ const DEPT_COLORS: Record<string, { bg: string; text: string }> = {
 
 const ROLE_COLORS: Record<Role, { bg: string; text: string }> = {
   manager:     { bg: "#F3E8FF", text: "#7E22CE" },
-  team_leader: { bg: "#FEF3C7", text: "#92400E" },
-  staff:       { bg: "#F3F4F6", text: "#374151" },
+  team_leader: { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" },
+  staff:       { bg: "var(--theme-bg-surface-subtle)", text: "#374151" },
 };
 
 // ─── Shared tab trigger style ─────────────────────────────────────────────────
@@ -151,7 +153,7 @@ function EditUserDialog({ user, teams, onClose, onSaved }: EditUserDialogProps) 
           {/* Team */}
           <div>
             <Label style={{ marginBottom: "6px", display: "block", fontSize: "13px" }}>
-              Team {role === "team_leader" && <span style={{ color: "#EF4444" }}>*</span>}
+              Team {role === "team_leader" && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
             </Label>
             <Select value={teamId} onValueChange={setTeamId}>
               <SelectTrigger><SelectValue placeholder="No team assigned" /></SelectTrigger>
@@ -161,7 +163,7 @@ function EditUserDialog({ user, teams, onClose, onSaved }: EditUserDialogProps) 
               </SelectContent>
             </Select>
             {role === "team_leader" && !teamId && (
-              <p style={{ fontSize: "12px", color: "#EF4444", marginTop: "4px" }}>
+              <p style={{ fontSize: "12px", color: "var(--theme-status-danger-fg)", marginTop: "4px" }}>
                 Team Leaders must be assigned to a team.
               </p>
             )}
@@ -227,25 +229,24 @@ interface UsersTabProps {
 }
 
 function PermissionsHubUsersTab({ teams, onTeamChange: _onTeamChange }: UsersTabProps) {
-  const [users, setUsers] = useState<AdminUser[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [deptFilter, setDeptFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [editing, setEditing] = useState<AdminUser | null>(null);
 
-  const fetchUsers = useCallback(async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from("users")
-      .select("id, name, email, department, role, is_active, team_id, service_type, operations_role, created_at")
-      .order("department")
-      .order("name");
-    setUsers((data as AdminUser[]) ?? []);
-    setLoading(false);
-  }, []);
-
-  useEffect(() => { fetchUsers(); }, [fetchUsers]);
+  const { data: users = [], isFetching: loading, refetch: fetchUsers } = useQuery({
+    queryKey: queryKeys.users.list(),
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("id, name, email, department, role, is_active, team_id, service_type, operations_role, created_at")
+        .order("department")
+        .order("name");
+      return (data as AdminUser[]) ?? [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   const teamName = (teamId: string | null) => {
     if (!teamId) return null;
@@ -343,8 +344,8 @@ function PermissionsHubUsersTab({ teams, onTeamChange: _onTeamChange }: UsersTab
                 </TableCell>
               </TableRow>
             ) : filtered.map((u) => {
-              const deptColor = DEPT_COLORS[u.department] ?? { bg: "#F3F4F6", text: "#374151" };
-              const roleColor = ROLE_COLORS[u.role] ?? { bg: "#F3F4F6", text: "#374151" };
+              const deptColor = DEPT_COLORS[u.department] ?? { bg: "var(--theme-bg-surface-subtle)", text: "#374151" };
+              const roleColor = ROLE_COLORS[u.role] ?? { bg: "var(--theme-bg-surface-subtle)", text: "#374151" };
               const team = teamName(u.team_id);
               return (
                 <TableRow key={u.id}>
@@ -405,7 +406,7 @@ function PermissionsHubUsersTab({ teams, onTeamChange: _onTeamChange }: UsersTab
           user={editing}
           teams={teams}
           onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); fetchUsers(); }}
+          onSaved={() => { setEditing(null); queryClient.invalidateQueries({ queryKey: queryKeys.users.all() }); }}
         />
       )}
     </div>
@@ -424,7 +425,6 @@ interface TeamsTabProps {
 }
 
 function PermissionsHubTeamsTab({ teams, onChanged }: TeamsTabProps) {
-  const [allUsers, setAllUsers] = useState<{ id: string; name: string; role: Role; department: string; email: string; team_id: string | null }[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [editingTeam, setEditingTeam] = useState<Team | null>(null);
@@ -434,14 +434,18 @@ function PermissionsHubTeamsTab({ teams, onChanged }: TeamsTabProps) {
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    supabase
-      .from("users")
-      .select("id, name, role, department, email, team_id")
-      .eq("is_active", true)
-      .order("name")
-      .then(({ data }) => setAllUsers((data as typeof allUsers) ?? []));
-  }, [teams]);
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["users", "active-list"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("id, name, role, department, email, team_id")
+        .eq("is_active", true)
+        .order("name");
+      return (data as { id: string; name: string; role: Role; department: string; email: string; team_id: string | null }[]) ?? [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   // Build teams with members
   const teamsWithMembers: TeamWithMembers[] = teams.map((t) => ({
@@ -565,7 +569,7 @@ function PermissionsHubTeamsTab({ teams, onChanged }: TeamsTabProps) {
                           <button onClick={() => openEdit(team)} style={{ padding: "6px", background: "transparent", border: "none", cursor: "pointer", color: "var(--theme-text-muted)" }} title="Edit team">
                             <Edit size={14} />
                           </button>
-                          <button onClick={() => handleDelete(team.id, team.name)} disabled={deletingId === team.id} style={{ padding: "6px", background: "transparent", border: "none", cursor: "pointer", color: "#EF4444" }} title="Delete team">
+                          <button onClick={() => handleDelete(team.id, team.name)} disabled={deletingId === team.id} style={{ padding: "6px", background: "transparent", border: "none", cursor: "pointer", color: "var(--theme-status-danger-fg)" }} title="Delete team">
                             <Trash2 size={14} />
                           </button>
                         </div>
@@ -578,7 +582,7 @@ function PermissionsHubTeamsTab({ teams, onChanged }: TeamsTabProps) {
                           ) : (
                             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                               {team.members.map((m) => {
-                                const rc = ROLE_COLORS[m.role] ?? { bg: "#F3F4F6", text: "#374151" };
+                                const rc = ROLE_COLORS[m.role] ?? { bg: "var(--theme-bg-surface-subtle)", text: "#374151" };
                                 return (
                                   <div key={m.id} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "8px 12px", background: "var(--theme-bg-page)", borderRadius: "8px" }}>
                                     <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)", flex: 1 }}>{m.name}</span>
@@ -703,14 +707,12 @@ interface PermissionOverride {
 
 const SCOPE_LABELS: Record<OverrideScope, { label: string; description: string; bg: string; text: string }> = {
   full:               { label: "Full Access", description: "Sees everything across all departments.", bg: "#F3E8FF", text: "#7E22CE" },
-  department_wide:    { label: "Department Wide", description: "Sees all records in their own department (bypasses team/staff restriction).", bg: "#FEF3C7", text: "#92400E" },
+  department_wide:    { label: "Department Wide", description: "Sees all records in their own department (bypasses team/staff restriction).", bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" },
   cross_department:   { label: "Cross Department", description: "Sees records in selected departments.", bg: "#E0E7FF", text: "#3730A3" },
 };
 
 function PermissionsHubOverridesTab() {
-  const [overrides, setOverrides] = useState<PermissionOverride[]>([]);
-  const [allUsers, setAllUsers] = useState<{ id: string; name: string; email: string; department: string; role: Role }[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [adding, setAdding] = useState(false);
   const [saving, setSaving] = useState(false);
   const [revokingId, setRevokingId] = useState<string | null>(null);
@@ -723,18 +725,30 @@ function PermissionsHubOverridesTab() {
 
   const { user: currentUser } = useUser();
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-    const [{ data: ovData }, { data: usersData }] = await Promise.all([
-      supabase.from("permission_overrides").select("*, user:user_id(name, email, department, role), grantor:granted_by(name)").order("created_at", { ascending: false }),
-      supabase.from("users").select("id, name, email, department, role").eq("is_active", true).order("name"),
-    ]);
-    setOverrides((ovData as PermissionOverride[]) ?? []);
-    setAllUsers((usersData as typeof allUsers) ?? []);
-    setLoading(false);
-  }, []);
+  const { data: overrides = [], isFetching: loading } = useQuery({
+    queryKey: ["permission_overrides"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("permission_overrides")
+        .select("*, user:user_id(name, email, department, role), grantor:granted_by(name)")
+        .order("created_at", { ascending: false });
+      return (data as PermissionOverride[]) ?? [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["users", "active-list"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("id, name, email, department, role")
+        .eq("is_active", true)
+        .order("name");
+      return (data as { id: string; name: string; email: string; department: string; role: Role }[]) ?? [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   const handleAdd = async () => {
     if (!formUserId) { toast.error("Select a user."); return; }
@@ -753,7 +767,7 @@ function PermissionsHubOverridesTab() {
     toast.success("Access override saved.");
     setAdding(false);
     setFormUserId(""); setFormScope("department_wide"); setFormDepts([]); setFormNotes("");
-    fetchData();
+    queryClient.invalidateQueries({ queryKey: ["permission_overrides"] });
   };
 
   const handleRevoke = async (override: PermissionOverride) => {
@@ -763,7 +777,7 @@ function PermissionsHubOverridesTab() {
     setRevokingId(null);
     if (error) { toast.error("Failed to revoke override."); return; }
     toast.success("Override revoked.");
-    fetchData();
+    queryClient.invalidateQueries({ queryKey: ["permission_overrides"] });
   };
 
   const toggleDept = (dept: string) => {
@@ -856,7 +870,7 @@ function PermissionsHubOverridesTab() {
                       <button
                         onClick={() => handleRevoke(ov)}
                         disabled={revokingId === ov.id}
-                        style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid #FCA5A5", background: "transparent", color: "#EF4444", fontSize: "12px", fontWeight: 500, cursor: revokingId === ov.id ? "not-allowed" : "pointer" }}
+                        style={{ padding: "6px 12px", borderRadius: "8px", border: "1px solid #FCA5A5", background: "transparent", color: "var(--theme-status-danger-fg)", fontSize: "12px", fontWeight: 500, cursor: revokingId === ov.id ? "not-allowed" : "pointer" }}
                       >
                         {revokingId === ov.id ? "Revoking…" : "Revoke"}
                       </button>
@@ -973,15 +987,17 @@ export function Admin() {
   const [isSeedingBalanceSheet, setIsSeedingBalanceSheet] = useState(false);
   const [isSeedingIncomeStatement, setIsSeedingIncomeStatement] = useState(false);
 
+  const queryClient = useQueryClient();
+
   // Teams — loaded once and shared between Users and Teams tabs
-  const [teams, setTeams] = useState<Team[]>([]);
-
-  const fetchTeams = useCallback(async () => {
-    const { data } = await supabase.from("teams").select("id, name, department, leader_id").order("department").order("name");
-    setTeams((data as Team[]) ?? []);
-  }, []);
-
-  useEffect(() => { fetchTeams(); }, [fetchTeams]);
+  const { data: teams = [], refetch: fetchTeams } = useQuery({
+    queryKey: ["teams"],
+    queryFn: async () => {
+      const { data } = await supabase.from("teams").select("id, name, department, leader_id").order("department").order("name");
+      return (data as Team[]) ?? [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
 
   // Settings handlers
   const handleAddExpenseType = () => {
@@ -1121,7 +1137,7 @@ export function Admin() {
                   {expenseTypes.map((type) => (
                     <span key={type} style={{ display: "inline-flex", alignItems: "center", padding: "6px 14px", borderRadius: "8px", fontSize: "13px", fontWeight: 500, backgroundColor: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-secondary)", border: "1px solid var(--theme-border-default)" }}>
                       {type}
-                      <button onClick={() => handleDeleteExpenseType(type)} style={{ marginLeft: "8px", background: "transparent", border: "none", color: "#EF4444", cursor: "pointer", fontSize: "18px", lineHeight: "1", padding: 0 }}>×</button>
+                      <button onClick={() => handleDeleteExpenseType(type)} style={{ marginLeft: "8px", background: "transparent", border: "none", color: "var(--theme-status-danger-fg)", cursor: "pointer", fontSize: "18px", lineHeight: "1", padding: 0 }}>×</button>
                     </span>
                   ))}
                 </div>
@@ -1140,7 +1156,7 @@ export function Admin() {
                   {documentTypes.map((type) => (
                     <span key={type} style={{ display: "inline-flex", alignItems: "center", padding: "6px 14px", borderRadius: "8px", fontSize: "13px", fontWeight: 500, backgroundColor: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-secondary)", border: "1px solid var(--theme-border-default)" }}>
                       {type}
-                      <button onClick={() => handleDeleteDocumentType(type)} style={{ marginLeft: "8px", background: "transparent", border: "none", color: "#EF4444", cursor: "pointer", fontSize: "18px", lineHeight: "1", padding: 0 }}>×</button>
+                      <button onClick={() => handleDeleteDocumentType(type)} style={{ marginLeft: "8px", background: "transparent", border: "none", color: "var(--theme-status-danger-fg)", cursor: "pointer", fontSize: "18px", lineHeight: "1", padding: 0 }}>×</button>
                     </span>
                   ))}
                 </div>
@@ -1232,7 +1248,7 @@ export function Admin() {
 
                 {/* Services Metadata Migration */}
                 <div style={{ padding: "16px", background: "#FEF3C7", borderRadius: "12px", border: "1px solid #FCD34D" }}>
-                  <p style={{ fontSize: "13px", color: "#92400E", marginBottom: "8px" }}>Fix Services Data Loss Bug</p>
+                  <p style={{ fontSize: "13px", color: "var(--theme-status-warning-fg)", marginBottom: "8px" }}>Fix Services Data Loss Bug</p>
                   <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "12px" }}>Migrate services_metadata from camelCase to snake_case</p>
                   <button onClick={handleMigrateServicesMetadata} disabled={isMigratingServices} style={{ height: "36px", padding: "0 20px", borderRadius: "8px", background: isMigratingServices ? "#F3F4F6" : "#F59E0B", border: "none", color: isMigratingServices ? "#9CA3AF" : "#FFFFFF", fontSize: "13px", fontWeight: 600, cursor: isMigratingServices ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
                     <RefreshCw className={`w-4 h-4 ${isMigratingServices ? "animate-spin" : ""}`} />
