@@ -2,12 +2,14 @@
 // Aging is measured from invoice due_date → invoice_date → created_at (first available).
 // Only financially-active invoices in the selected scope with outstanding > 0 are included.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import { isInScope } from "../components/accounting/aggregate/types";
 import type { DateScope } from "../components/accounting/aggregate/types";
 import { isInvoiceFinanciallyActive } from "../utils/invoiceReversal";
 import { isCollectionAppliedToInvoice } from "../utils/collectionResolution";
+import { queryKeys } from "../lib/queryKeys";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -55,14 +57,12 @@ function getAgingBucket(daysOld: number): AgingBucket {
 // ── Hook ───────────────────────────────────────────────────────────────────────
 
 export function useReceivablesAgingReport(scope: DateScope) {
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [collections, setCollections] = useState<any[]>([]);
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const filters = { scope } as Record<string, unknown>;
 
-  const fetchAll = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.financials.receivablesAging(filters),
+    queryFn: async () => {
       // Skip fully paid invoices at the DB level; limit to 2 years
       const cutoff = new Date();
       cutoff.setFullYear(cutoff.getFullYear() - 2);
@@ -77,19 +77,21 @@ export function useReceivablesAgingReport(scope: DateScope) {
         supabase.from("collections").select("*").gte("created_at", cutoffISO),
         supabase.from("bookings").select("id, booking_number, customer_name").gte("created_at", cutoffISO),
       ]);
-      setInvoices(invoiceRows || []);
-      setCollections(collectionRows || []);
-      setBookings(bookingRows || []);
-    } catch (err) {
-      console.error("Error fetching receivables aging data:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+      return {
+        invoices: invoiceRows || [],
+        collections: collectionRows || [],
+        bookings: bookingRows || [],
+      };
+    },
+    staleTime: 30_000,
+  });
 
   const { rows, summary } = useMemo(() => {
+    const invoices = data?.invoices ?? [];
+    const collections = data?.collections ?? [];
+    const bookings = data?.bookings ?? [];
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -162,7 +164,10 @@ export function useReceivablesAgingReport(scope: DateScope) {
         customerCount: new Set(computedRows.map(r => r.customerName)).size,
       } as AgingSummary,
     };
-  }, [invoices, collections, bookings, scope]);
+  }, [data, scope]);
 
-  return { rows, summary, isLoading, refresh: fetchAll };
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.financials.reportsData() });
+
+  return { rows, summary, isLoading, refresh };
 }

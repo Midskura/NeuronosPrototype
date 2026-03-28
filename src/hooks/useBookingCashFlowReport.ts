@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import {
   filterBillingItemsForScope,
@@ -9,6 +10,7 @@ import {
 import { calculateFinancialTotals } from "../utils/financialCalculations";
 import { isInScope } from "../components/accounting/aggregate/types";
 import type { DateScope } from "../components/accounting/aggregate/types";
+import { queryKeys } from "../lib/queryKeys";
 
 export interface BookingCashFlowRow {
   bookingId: string;
@@ -40,17 +42,12 @@ export interface BookingCashFlowSummary {
 }
 
 export function useBookingCashFlowReport(scope: DateScope) {
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [billingItems, setBillingItems] = useState<any[]>([]);
-  const [evouchers, setEvouchers] = useState<any[]>([]);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [collections, setCollections] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const filters = { scope } as Record<string, unknown>;
 
-  const fetchAll = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.financials.bookingCashFlow(filters),
+    queryFn: async () => {
       // Limit data to last 2 years to avoid full-table scans
       const cutoff = new Date();
       cutoff.setFullYear(cutoff.getFullYear() - 2);
@@ -79,23 +76,24 @@ export function useBookingCashFlowReport(scope: DateScope) {
         supabase.from("collections").select("*").gte("created_at", cutoffISO),
       ]);
 
-      setBookings(bookingRows || []);
-      setBillingItems(billingRows || []);
-      setEvouchers(evoucherRows || []);
-      setInvoices(invoiceRows || []);
-      setCollections(collectionRows || []);
-    } catch (error) {
-      console.error("Error fetching booking cash flow data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+      return {
+        bookings: bookingRows || [],
+        billingItems: billingRows || [],
+        evouchers: evoucherRows || [],
+        invoices: invoiceRows || [],
+        collections: collectionRows || [],
+      };
+    },
+    staleTime: 30_000,
+  });
 
   const { rows, summary } = useMemo(() => {
+    const bookings = data?.bookings ?? [];
+    const billingItems = data?.billingItems ?? [];
+    const evouchers = data?.evouchers ?? [];
+    const invoices = data?.invoices ?? [];
+    const collections = data?.collections ?? [];
+
     const computedRows = bookings
       .filter((booking) => isInScope(booking.created_at, scope))
       .map((booking): BookingCashFlowRow | null => {
@@ -185,7 +183,10 @@ export function useBookingCashFlowReport(scope: DateScope) {
     };
 
     return { rows: computedRows, summary: nextSummary };
-  }, [bookings, billingItems, evouchers, invoices, collections, scope]);
+  }, [data, scope]);
 
-  return { rows, summary, isLoading, refresh: fetchAll };
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.financials.reportsData() });
+
+  return { rows, summary, isLoading, refresh };
 }

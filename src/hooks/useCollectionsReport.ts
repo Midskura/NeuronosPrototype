@@ -2,11 +2,13 @@
 // Fetches all applied collections within the selected scope.
 // Groups by payment method for summary breakdown.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import { isInScope } from "../components/accounting/aggregate/types";
 import type { DateScope } from "../components/accounting/aggregate/types";
 import { isCollectionAppliedToInvoice } from "../utils/collectionResolution";
+import { queryKeys } from "../lib/queryKeys";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -39,14 +41,12 @@ export interface CollectionSummary {
 // ── Hook ───────────────────────────────────────────────────────────────────────
 
 export function useCollectionsReport(scope: DateScope) {
-  const [collections, setCollections] = useState<any[]>([]);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const filters = { scope } as Record<string, unknown>;
 
-  const fetchAll = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.financials.collectionsReport(filters),
+    queryFn: async () => {
       // Limit data to last 2 years
       const cutoff = new Date();
       cutoff.setFullYear(cutoff.getFullYear() - 2);
@@ -61,19 +61,21 @@ export function useCollectionsReport(scope: DateScope) {
         supabase.from("invoices").select("id, invoice_number, booking_id, customer_name").gte("created_at", cutoffISO),
         supabase.from("bookings").select("id, booking_number, customer_name").gte("created_at", cutoffISO),
       ]);
-      setCollections(collectionRows || []);
-      setInvoices(invoiceRows || []);
-      setBookings(bookingRows || []);
-    } catch (err) {
-      console.error("Error fetching collections report data:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+      return {
+        collections: collectionRows || [],
+        invoices: invoiceRows || [],
+        bookings: bookingRows || [],
+      };
+    },
+    staleTime: 30_000,
+  });
 
   const { rows, summary } = useMemo(() => {
+    const collections = data?.collections ?? [];
+    const invoices = data?.invoices ?? [];
+    const bookings = data?.bookings ?? [];
+
     // Lookup maps
     const invoiceMap = new Map<string, any>();
     invoices.forEach((inv: any) => invoiceMap.set(inv.id as string, inv));
@@ -153,7 +155,10 @@ export function useCollectionsReport(scope: DateScope) {
         byMethod,
       } as CollectionSummary,
     };
-  }, [collections, invoices, bookings, scope]);
+  }, [data, scope]);
 
-  return { rows, summary, isLoading, refresh: fetchAll };
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.financials.reportsData() });
+
+  return { rows, summary, isLoading, refresh };
 }

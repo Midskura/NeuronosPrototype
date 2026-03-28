@@ -3,11 +3,13 @@
 // covering those items (or the invoice total is less than the billed charges).
 // At-risk: bookings open 60+ days with unbilled balance.
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../utils/supabase/client";
 import { isInScope } from "../components/accounting/aggregate/types";
 import type { DateScope } from "../components/accounting/aggregate/types";
 import { isInvoiceFinanciallyActive } from "../utils/invoiceReversal";
+import { queryKeys } from "../lib/queryKeys";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -36,14 +38,12 @@ export interface UnbilledSummary {
 // ── Hook ───────────────────────────────────────────────────────────────────────
 
 export function useUnbilledRevenueReport(scope: DateScope) {
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [billingItems, setBillingItems] = useState<any[]>([]);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const filters = { scope } as Record<string, unknown>;
 
-  const fetchAll = useCallback(async () => {
-    try {
-      setIsLoading(true);
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.financials.unbilledRevenue(filters),
+    queryFn: async () => {
       // Limit to 2 years; exclude cancelled bookings
       const cutoff = new Date();
       cutoff.setFullYear(cutoff.getFullYear() - 2);
@@ -62,19 +62,21 @@ export function useUnbilledRevenueReport(scope: DateScope) {
         supabase.from("invoices").select("id, booking_id, total_amount, subtotal, status, invoice_type, reversal_for")
           .gte("created_at", cutoffISO),
       ]);
-      setBookings(bookingRows || []);
-      setBillingItems(billingRows || []);
-      setInvoices(invoiceRows || []);
-    } catch (err) {
-      console.error("Error fetching unbilled revenue data:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
 
-  useEffect(() => { fetchAll(); }, [fetchAll]);
+      return {
+        bookings: bookingRows || [],
+        billingItems: billingRows || [],
+        invoices: invoiceRows || [],
+      };
+    },
+    staleTime: 30_000,
+  });
 
   const { rows, summary } = useMemo(() => {
+    const bookings = data?.bookings ?? [];
+    const billingItems = data?.billingItems ?? [];
+    const invoices = data?.invoices ?? [];
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -167,7 +169,10 @@ export function useUnbilledRevenueReport(scope: DateScope) {
         byServiceType,
       } as UnbilledSummary,
     };
-  }, [bookings, billingItems, invoices, scope]);
+  }, [data, scope]);
 
-  return { rows, summary, isLoading, refresh: fetchAll };
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.financials.reportsData() });
+
+  return { rows, summary, isLoading, refresh };
 }
