@@ -1,108 +1,72 @@
-import { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { Consignee } from "../types/bd";
 import { supabase } from "../utils/supabase/client";
+import { queryKeys } from "../lib/queryKeys";
 
 export function useConsignees(customerId?: string) {
-  const [consignees, setConsignees] = useState<Consignee[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const qKey = queryKeys.customers.consignees(customerId ?? "");
 
-  const fetchConsignees = useCallback(async () => {
-    if (!customerId) {
-      setConsignees([]);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
+  const { data: consignees = [], isLoading, error } = useQuery({
+    queryKey: qKey,
+    queryFn: async () => {
       const { data, error: fetchErr } = await supabase
-        .from('consignees')
-        .select('*')
-        .eq('customer_id', customerId);
+        .from("consignees")
+        .select("*")
+        .eq("customer_id", customerId!);
+      if (fetchErr) throw fetchErr;
+      return (data || []) as Consignee[];
+    },
+    enabled: !!customerId,
+    staleTime: 5 * 60 * 1000,
+  });
 
-      if (fetchErr) {
-        setError(fetchErr.message);
-        setConsignees([]);
-      } else {
-        setConsignees(data || []);
-      }
-    } catch (err) {
-      console.warn("Consignees fetch failed:", err);
-      setConsignees([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [customerId]);
+  const invalidate = () => queryClient.invalidateQueries({ queryKey: qKey });
 
-  useEffect(() => {
-    fetchConsignees();
-  }, [fetchConsignees]);
-
-  const createConsignee = useCallback(
-    async (data: Partial<Consignee>) => {
-      if (!customerId) throw new Error("No customer_id");
-
-      const newConsignee = {
-        ...data,
-        customer_id: customerId,
-        id: `consignee-${Date.now()}`,
-        created_at: new Date().toISOString(),
-      };
-
+  const createMutation = useMutation({
+    mutationFn: async (data: Partial<Consignee>) => {
+      const payload = { ...data, customer_id: customerId };
       const { data: created, error } = await supabase
-        .from('consignees')
-        .insert(newConsignee)
+        .from("consignees")
+        .insert(payload)
         .select()
         .single();
-
       if (error) throw new Error(error.message);
-
-      await fetchConsignees();
       return created as Consignee;
     },
-    [customerId, fetchConsignees]
-  );
+    onSuccess: invalidate,
+  });
 
-  const updateConsignee = useCallback(
-    async (id: string, data: Partial<Consignee>) => {
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<Consignee> }) => {
       const { data: updated, error } = await supabase
-        .from('consignees')
+        .from("consignees")
         .update(data)
-        .eq('id', id)
+        .eq("id", id)
         .select()
         .single();
-
       if (error) throw new Error(error.message);
-
-      await fetchConsignees();
       return updated as Consignee;
     },
-    [fetchConsignees]
-  );
+    onSuccess: invalidate,
+  });
 
-  const deleteConsignee = useCallback(
-    async (id: string) => {
-      const { error } = await supabase
-        .from('consignees')
-        .delete()
-        .eq('id', id);
-
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("consignees").delete().eq("id", id);
       if (error) throw new Error(error.message);
-
-      await fetchConsignees();
     },
-    [fetchConsignees]
-  );
+    onSuccess: invalidate,
+  });
 
   return {
     consignees,
     isLoading,
-    error,
-    fetchConsignees,
-    createConsignee,
-    updateConsignee,
-    deleteConsignee,
+    error: error ? (error as Error).message : null,
+    fetchConsignees: invalidate,
+    createConsignee: (data: Partial<Consignee>) => createMutation.mutateAsync(data),
+    updateConsignee: (id: string, data: Partial<Consignee>) =>
+      updateMutation.mutateAsync({ id, data }),
+    deleteConsignee: (id: string) => deleteMutation.mutateAsync(id),
   };
 }
