@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { ChevronLeft, Play } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../../utils/supabase/client';
 
 interface Template {
@@ -16,25 +16,15 @@ interface ReportTemplatesProps {
 }
 
 export function ReportTemplates({ onBack, onRunReport }: ReportTemplatesProps) {
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchTemplates();
-  }, []);
-
-  const fetchTemplates = async () => {
-    try {
+  const { data: templates = [], isFetching: isLoading } = useQuery({
+    queryKey: ["bd_reports", "templates"],
+    queryFn: async () => {
       const { data, error } = await supabase.from('report_templates').select('*');
-      if (!error && data) {
-        setTemplates(data);
-      }
-    } catch (error) {
-      console.error('Error fetching templates:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      if (error) throw error;
+      return (data || []) as Template[];
+    },
+    staleTime: 30_000,
+  });
 
   const handleRunTemplate = (template: Template) => {
     onRunReport({

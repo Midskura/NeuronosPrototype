@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, Play, Trash2, Clock } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../utils/supabase/client';
 import { useUser } from '../../../hooks/useUser';
 
@@ -20,29 +21,23 @@ interface SavedReportsProps {
 
 export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
   const { user } = useUser();
-  const [reports, setReports] = useState<SavedReport[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (user) {
-      fetchSavedReports();
-    }
-  }, [user]);
-
-  const fetchSavedReports = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase.from('saved_reports').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-      if (!error && data) {
-        setReports(data);
-      }
-    } catch (error) {
-      console.error('Error fetching saved reports:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: reports = [], isFetching: isLoading } = useQuery({
+    queryKey: ["bd_reports", "saved", user?.id],
+    queryFn: async () => {
+      if (!user) return [] as SavedReport[];
+      const { data, error } = await supabase
+        .from('saved_reports')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []) as SavedReport[];
+    },
+    enabled: !!user,
+    staleTime: 30_000,
+  });
 
   const handleDelete = async (reportId: string) => {
     if (!user) return;
@@ -51,7 +46,7 @@ export function SavedReports({ onBack, onRunReport }: SavedReportsProps) {
     try {
       const { error } = await supabase.from('saved_reports').delete().eq('id', reportId).eq('user_id', user.id);
       if (error) throw error;
-      setReports(reports.filter((r) => r.id !== reportId));
+      queryClient.invalidateQueries({ queryKey: ["bd_reports", "saved", user.id] });
     } catch (error) {
       console.error('Error deleting report:', error);
     }

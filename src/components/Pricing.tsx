@@ -1,5 +1,7 @@
 import { supabase } from '../utils/supabase/client';
 import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../lib/queryKeys";
 import { QuotationDetail } from "./pricing/QuotationDetail";
 import { QuotationsListWithFilters } from "./pricing/QuotationsListWithFilters";
 import { QuotationBuilderV3 } from "./pricing/quotations/QuotationBuilderV3";
@@ -39,11 +41,10 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [selectedVendor, setSelectedVendor] = useState<NetworkPartner | null>(null);
-  const [quotations, setQuotations] = useState<QuotationNew[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [pendingQuotationType, setPendingQuotationType] = useState<QuotationType>("project");
 
   const { scope, isLoaded } = useDataScope();
+  const queryClient = useQueryClient();
 
   // Hook for Network Partners (Lifting State Up)
   const { partners, isLoading: isPartnersLoading, savePartner } = useNetworkPartners();
@@ -51,16 +52,16 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   // Map department name to userDepartment format
   const userDepartment: "Business Development" | "Pricing" = currentUser?.department === "Pricing" ? "Pricing" : "Business Development";
 
+  const scopeKey = isLoaded ? JSON.stringify(scope) : null;
+
   // Fetch quotations from backend
-  const fetchQuotations = async () => {
-    if (!isLoaded) return;
-    setIsLoading(true);
-    try {
+  const { data: quotations = [], isFetching: isLoading } = useQuery({
+    queryKey: [...queryKeys.quotations.list(), scopeKey],
+    queryFn: async () => {
       let query = supabase.from('quotations').select('*');
       if (scope.type === 'userIds') query = query.in('prepared_by', scope.ids);
       else if (scope.type === 'own') query = query.eq('prepared_by', scope.userId);
       const { data, error } = await query.order('created_at', { ascending: false });
-      
       if (error) throw error;
       // Merge details JSONB so financial fields (charge_categories, buying_price, etc.) are accessible
       // Also normalize contract date column names (DB: contract_start_date → type: contract_validity_start)
@@ -70,22 +71,16 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
         if (!m.contract_validity_end && m.contract_end_date) m.contract_validity_end = m.contract_end_date;
         return m;
       });
-      setQuotations(merged);
       console.log(`Fetched ${merged.length} quotations for Pricing module`);
-    } catch (error) {
-      console.log('Error fetching quotations:', error);
-      setQuotations([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return merged as QuotationNew[];
+    },
+    enabled: isLoaded && (view === "quotations" || view === "reports"),
+    staleTime: 30_000,
+  });
 
-  // Fetch quotations when view changes or scope resolves
-  useEffect(() => {
-    if (view === "quotations" || view === "reports") {
-      fetchQuotations();
-    }
-  }, [view, scope, isLoaded]);
+  const fetchQuotations = () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.quotations.list() });
+  };
 
   // Reset to list view when switching between main views
   useEffect(() => {

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Search, FileText, Plus, BarChart, Download, ChevronDown, ChevronUp, X, Filter } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
@@ -100,33 +101,24 @@ export function ReportsModule() {
   const [dataSource, setDataSource] = useState<DataSource>('quotations');
   const [filters, setFilters] = useState<FilterRow[]>([]);
   const [showFilters, setShowFilters] = useState(true);
-  const [columns, setColumns] = useState<ColumnConfig[]>([]);
-  const [results, setResults] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [columns, setColumns] = useState<ColumnConfig[]>(() =>
+    FIELD_CONFIGS['quotations'].map(field => ({ key: field.key, label: field.label, visible: true }))
+  );
   const [showColumnPicker, setShowColumnPicker] = useState(false);
   const [dateRange, setDateRange] = useState<{ start: string | null; end: string | null }>({ start: null, end: null });
 
-  // Initialize columns when data source changes
-  useEffect(() => {
-    const availableFields = FIELD_CONFIGS[dataSource];
+  // Initialize columns when data source changes (keep in sync)
+  const handleSetDataSource = (source: DataSource) => {
+    setDataSource(source);
     setColumns(
-      availableFields.map(field => ({
-        key: field.key,
-        label: field.label,
-        visible: true,
-      }))
+      FIELD_CONFIGS[source].map(field => ({ key: field.key, label: field.label, visible: true }))
     );
-    setFilters([]); // Clear filters when switching data source
-  }, [dataSource]);
+    setFilters([]);
+  };
 
-  // Fetch results whenever filters or data source change
-  useEffect(() => {
-    fetchResults();
-  }, [dataSource, filters, dateRange]);
-
-  const fetchResults = async () => {
-    setIsLoading(true);
-    try {
+  const { data: results = [], isFetching: isLoading } = useQuery({
+    queryKey: ["bd_reports", "module_results", dataSource, filters, dateRange],
+    queryFn: async () => {
       const tableName = dataSource === 'activities' ? 'crm_activities' : dataSource;
       let query = supabase.from(tableName).select('*');
       // Apply date filters if set
@@ -134,14 +126,10 @@ export function ReportsModule() {
       if (dateRange.end) query = query.lte('created_at', dateRange.end);
       const { data, error } = await query.order('created_at', { ascending: false });
       if (error) throw error;
-      setResults(data || []);
-    } catch (error) {
-      console.error('Error fetching results:', error);
-      setResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return data || [];
+    },
+    staleTime: 30_000,
+  });
 
   const addFilter = () => {
     const availableFields = FIELD_CONFIGS[dataSource];
@@ -287,7 +275,7 @@ export function ReportsModule() {
             {DATA_SOURCES.map(source => (
               <button
                 key={source.id}
-                onClick={() => setDataSource(source.id)}
+                onClick={() => handleSetDataSource(source.id)}
                 style={{
                   padding: '20px',
                   borderRadius: '12px',

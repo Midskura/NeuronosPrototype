@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { ExpensesTab } from "../operations/shared/ExpensesTab";
 import { supabase } from "../../utils/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 import { useProjectFinancials } from "../../hooks/useProjectFinancials";
 import { StatusSelector } from "../StatusSelector";
 import { ExecutionStatus } from "../../types/operations";
@@ -32,15 +34,60 @@ export function ProjectBookingReadOnlyView({
   onBookingUpdated
 }: ProjectBookingReadOnlyViewProps) {
   const [activeTab, setActiveTab] = useState<DetailTab>("booking-info");
-  const [booking, setBooking] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const { data: booking = null, isFetching: isLoading } = useQuery({
+    queryKey: [...queryKeys.bookings.detail(bookingId), bookingType],
+    queryFn: async () => {
+      console.log("[ProjectBookingReadOnlyView] Fetching booking:", { bookingId, bookingType });
+
+      // Validate bookingType before proceeding
+      if (!bookingType) {
+        console.error("[ProjectBookingReadOnlyView] Error: bookingType is undefined");
+        throw new Error("Booking type is required but was not provided");
+      }
+
+      // Normalize booking type to lowercase for mapping
+      const normalizedType = bookingType.toLowerCase();
+
+      // Map bookingType to the correct endpoint format
+      const endpointMap: Record<string, string> = {
+        "forwarding": "forwarding_bookings",
+        "brokerage": "brokerage_bookings",
+        "trucking": "trucking_bookings",
+        "marine-insurance": "marine_insurance_bookings",
+        "marine insurance": "marine_insurance_bookings",
+        "others": "others_bookings",
+      };
+
+      const endpoint = endpointMap[normalizedType];
+      if (!endpoint) {
+        console.error("[ProjectBookingReadOnlyView] Invalid booking type:", bookingType, "normalized:", normalizedType);
+        throw new Error(`Invalid booking type: ${bookingType}`);
+      }
+
+      console.log("[ProjectBookingReadOnlyView] Using endpoint:", endpoint);
+
+      const { data: bookingData, error } = await supabase.from(endpoint).select("*").eq("id", bookingId).maybeSingle();
+
+      if (!error && bookingData) {
+        return bookingData;
+      }
+
+      // Fallback: try all booking tables
+      console.log("[ProjectBookingReadOnlyView] Type-specific table failed, trying all tables");
+      const tables = ["forwarding_bookings", "brokerage_bookings", "trucking_bookings", "marine_insurance_bookings", "others_bookings"];
+      for (const table of tables) {
+        const { data: fb } = await supabase.from(table).select("*").eq("id", bookingId).maybeSingle();
+        if (fb) return fb;
+      }
+      throw new Error("Booking not found in any table");
+    },
+    enabled: !!bookingId && !!bookingType,
+    staleTime: 30_000,
+  });
 
   const financials = useProjectFinancials(booking?.projectNumber || "");
   const bookingBillingItems = financials.billingItems.filter(item => item.booking_id === bookingId);
-
-  useEffect(() => {
-    fetchBooking();
-  }, [bookingId, bookingType]);
 
   // Handle ESC key to close drawer
   useEffect(() => {
@@ -53,65 +100,6 @@ export function ProjectBookingReadOnlyView({
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onBack]);
-
-  const fetchBooking = async () => {
-    try {
-      setIsLoading(true);
-      
-      console.log("[ProjectBookingReadOnlyView] Fetching booking:", { bookingId, bookingType });
-      
-      // Validate bookingType before proceeding
-      if (!bookingType) {
-        console.error("[ProjectBookingReadOnlyView] Error: bookingType is undefined");
-        throw new Error("Booking type is required but was not provided");
-      }
-      
-      // Normalize booking type to lowercase for mapping
-      const normalizedType = bookingType.toLowerCase();
-      
-      // Map bookingType to the correct endpoint format
-      const endpointMap: Record<string, string> = {
-        "forwarding": "forwarding_bookings",
-        "brokerage": "brokerage_bookings",
-        "trucking": "trucking_bookings",
-        "marine-insurance": "marine_insurance_bookings",
-        "marine insurance": "marine_insurance_bookings",
-        "others": "others_bookings"
-      };
-      
-      const endpoint = endpointMap[normalizedType];
-      if (!endpoint) {
-        console.error("[ProjectBookingReadOnlyView] Invalid booking type:", bookingType, "normalized:", normalizedType);
-        throw new Error(`Invalid booking type: ${bookingType}`);
-      }
-
-      console.log("[ProjectBookingReadOnlyView] Using endpoint:", endpoint);
-
-      const { data: bookingData, error } = await supabase.from(endpoint).select('*').eq('id', bookingId).maybeSingle();
-
-      if (!error && bookingData) {
-        setBooking(bookingData);
-      } else {
-        // Fallback: try all booking tables
-        console.log("[ProjectBookingReadOnlyView] Type-specific table failed, trying all tables");
-        const tables = ['forwarding_bookings', 'brokerage_bookings', 'trucking_bookings', 'marine_insurance_bookings', 'others_bookings'];
-        let found = false;
-        for (const table of tables) {
-          const { data: fb } = await supabase.from(table).select('*').eq('id', bookingId).maybeSingle();
-          if (fb) {
-            setBooking(fb);
-            found = true;
-            break;
-          }
-        }
-        if (!found) throw new Error("Booking not found in any table");
-      }
-    } catch (error) {
-      console.error("[ProjectBookingReadOnlyView] Error fetching booking:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const getBookingTypeName = () => {
     const typeMap: Record<string, string> = {

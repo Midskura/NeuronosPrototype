@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { Search, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 
 type EntityType =
@@ -28,66 +29,6 @@ interface EntityResult {
   sub?: string;
 }
 
-async function searchEntities(type: EntityType, query: string): Promise<EntityResult[]> {
-  const q = query.trim().toLowerCase();
-  try {
-    switch (type) {
-      case "inquiry": {
-        const { data } = await supabase.from("inquiries").select("id, inquiry_name, customer_name").ilike("inquiry_name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.inquiry_name || r.id, sub: r.customer_name }));
-      }
-      case "quotation": {
-        const { data } = await supabase.from("quotations").select("id, quotation_name, customer_name").eq("quotation_type", "spot").ilike("quotation_name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.quotation_name || r.id, sub: r.customer_name }));
-      }
-      case "contract": {
-        const { data } = await supabase.from("quotations").select("id, quotation_name, customer_name").eq("quotation_type", "contract").ilike("quotation_name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.quotation_name || r.id, sub: r.customer_name }));
-      }
-      case "booking": {
-        const { data } = await supabase.from("bookings").select("id, tracking_number, customer_name").ilike("tracking_number", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.tracking_number || r.id, sub: r.customer_name }));
-      }
-      case "project": {
-        const { data } = await supabase.from("projects").select("id, project_number, customer_name").ilike("project_number", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.project_number || r.id, sub: r.customer_name }));
-      }
-      case "invoice": {
-        const { data } = await supabase.from("billings").select("id, invoice_number, customer_name").not("invoice_number", "is", null).ilike("invoice_number", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.invoice_number || r.id, sub: r.customer_name }));
-      }
-      case "collection": {
-        const { data } = await supabase.from("collections").select("id, reference_number, customer_name").ilike("reference_number", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.reference_number || r.id, sub: r.customer_name }));
-      }
-      case "expense": {
-        const { data } = await supabase.from("expenses").select("id, description, amount").ilike("description", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.description || r.id, sub: r.amount ? `PHP ${r.amount}` : undefined }));
-      }
-      case "customer": {
-        const { data } = await supabase.from("customers").select("id, name, industry").ilike("name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.industry }));
-      }
-      case "contact": {
-        const { data } = await supabase.from("contacts").select("id, name, company_name").ilike("name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.company_name }));
-      }
-      case "vendor": {
-        const { data } = await supabase.from("vendors").select("id, name, service_type").ilike("name", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.service_type }));
-      }
-      case "budget_request": {
-        const { data } = await supabase.from("budget_requests").select("id, title, amount").ilike("title", `%${q}%`).limit(20);
-        return (data || []).map((r) => ({ id: r.id, label: r.title || r.id, sub: r.amount ? `PHP ${r.amount}` : undefined }));
-      }
-      default:
-        return [];
-    }
-  } catch {
-    return [];
-  }
-}
-
 interface EntityPickerProps {
   onSelect: (entity: { entity_type: string; entity_id: string; entity_label: string }) => void;
   onClose: () => void;
@@ -96,20 +37,161 @@ interface EntityPickerProps {
 export function EntityPicker({ onSelect, onClose }: EntityPickerProps) {
   const [activeType, setActiveType] = useState<EntityType>("inquiry");
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<EntityResult[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const searchRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  useEffect(() => {
-    clearTimeout(searchRef.current);
-    setIsLoading(true);
-    searchRef.current = setTimeout(async () => {
-      const res = await searchEntities(activeType, query);
-      setResults(res);
-      setIsLoading(false);
-    }, 250);
-    return () => clearTimeout(searchRef.current);
-  }, [activeType, query]);
+  const q = query.trim().toLowerCase();
+
+  const { data: inquiryResults = [], isFetching: inquiryFetching } = useQuery({
+    queryKey: ["entity_picker", "inquiry", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("inquiries").select("id, inquiry_name, customer_name").ilike("inquiry_name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.inquiry_name || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "inquiry",
+    staleTime: 30_000,
+  });
+
+  const { data: quotationResults = [], isFetching: quotationFetching } = useQuery({
+    queryKey: ["entity_picker", "quotation", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("quotations").select("id, quotation_name, customer_name").eq("quotation_type", "spot").ilike("quotation_name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.quotation_name || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "quotation",
+    staleTime: 30_000,
+  });
+
+  const { data: contractResults = [], isFetching: contractFetching } = useQuery({
+    queryKey: ["entity_picker", "contract", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("quotations").select("id, quotation_name, customer_name").eq("quotation_type", "contract").ilike("quotation_name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.quotation_name || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "contract",
+    staleTime: 30_000,
+  });
+
+  const { data: bookingResults = [], isFetching: bookingFetching } = useQuery({
+    queryKey: ["entity_picker", "booking", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("bookings").select("id, tracking_number, customer_name").ilike("tracking_number", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.tracking_number || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "booking",
+    staleTime: 30_000,
+  });
+
+  const { data: projectResults = [], isFetching: projectFetching } = useQuery({
+    queryKey: ["entity_picker", "project", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("projects").select("id, project_number, customer_name").ilike("project_number", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.project_number || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "project",
+    staleTime: 30_000,
+  });
+
+  const { data: invoiceResults = [], isFetching: invoiceFetching } = useQuery({
+    queryKey: ["entity_picker", "invoice", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("billings").select("id, invoice_number, customer_name").not("invoice_number", "is", null).ilike("invoice_number", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.invoice_number || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "invoice",
+    staleTime: 30_000,
+  });
+
+  const { data: collectionResults = [], isFetching: collectionFetching } = useQuery({
+    queryKey: ["entity_picker", "collection", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("collections").select("id, reference_number, customer_name").ilike("reference_number", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.reference_number || r.id, sub: r.customer_name }));
+    },
+    enabled: activeType === "collection",
+    staleTime: 30_000,
+  });
+
+  const { data: expenseResults = [], isFetching: expenseFetching } = useQuery({
+    queryKey: ["entity_picker", "expense", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("expenses").select("id, description, amount").ilike("description", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.description || r.id, sub: r.amount ? `PHP ${r.amount}` : undefined }));
+    },
+    enabled: activeType === "expense",
+    staleTime: 30_000,
+  });
+
+  const { data: customerResults = [], isFetching: customerFetching } = useQuery({
+    queryKey: ["entity_picker", "customer", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("customers").select("id, name, industry").ilike("name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.industry }));
+    },
+    enabled: activeType === "customer",
+    staleTime: 30_000,
+  });
+
+  const { data: contactResults = [], isFetching: contactFetching } = useQuery({
+    queryKey: ["entity_picker", "contact", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("contacts").select("id, name, company_name").ilike("name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.company_name }));
+    },
+    enabled: activeType === "contact",
+    staleTime: 30_000,
+  });
+
+  const { data: vendorResults = [], isFetching: vendorFetching } = useQuery({
+    queryKey: ["entity_picker", "vendor", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("vendors").select("id, name, service_type").ilike("name", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.name, sub: r.service_type }));
+    },
+    enabled: activeType === "vendor",
+    staleTime: 30_000,
+  });
+
+  const { data: budgetRequestResults = [], isFetching: budgetRequestFetching } = useQuery({
+    queryKey: ["entity_picker", "budget_request", q],
+    queryFn: async () => {
+      const { data } = await supabase.from("budget_requests").select("id, title, amount").ilike("title", `%${q}%`).limit(20);
+      return (data || []).map((r) => ({ id: r.id, label: r.title || r.id, sub: r.amount ? `PHP ${r.amount}` : undefined }));
+    },
+    enabled: activeType === "budget_request",
+    staleTime: 30_000,
+  });
+
+  const resultsByType: Record<EntityType, EntityResult[]> = {
+    inquiry: inquiryResults,
+    quotation: quotationResults,
+    contract: contractResults,
+    booking: bookingResults,
+    project: projectResults,
+    invoice: invoiceResults,
+    collection: collectionResults,
+    expense: expenseResults,
+    customer: customerResults,
+    contact: contactResults,
+    vendor: vendorResults,
+    budget_request: budgetRequestResults,
+  };
+
+  const fetchingByType: Record<EntityType, boolean> = {
+    inquiry: inquiryFetching,
+    quotation: quotationFetching,
+    contract: contractFetching,
+    booking: bookingFetching,
+    project: projectFetching,
+    invoice: invoiceFetching,
+    collection: collectionFetching,
+    expense: expenseFetching,
+    customer: customerFetching,
+    contact: contactFetching,
+    vendor: vendorFetching,
+    budget_request: budgetRequestFetching,
+  };
+
+  const results = resultsByType[activeType];
+  const isLoading = fetchingByType[activeType];
 
   return (
     <div

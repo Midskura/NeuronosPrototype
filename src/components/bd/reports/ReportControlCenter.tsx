@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Plus, X, Download, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
@@ -132,42 +133,29 @@ export function ReportControlCenter({ onBack }: ReportControlCenterProps) {
   const [selectedFields, setSelectedFields] = useState<SelectedField[]>([]);
   const [filters, setFilters] = useState<Filter[]>([]);
   const [aggregations, setAggregations] = useState<Aggregation[]>([]);
-  
+
   // Expansion states
   const [expandedEntities, setExpandedEntities] = useState<Record<string, boolean>>({});
   const [fieldSearchQuery, setFieldSearchQuery] = useState('');
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [reportResults, setReportResults] = useState<any[]>([]);
-  const [resultColumns, setResultColumns] = useState<string[]>([]);
 
-  // Auto-run report when selections change
-  useEffect(() => {
-    if (selectedFields.length > 0) {
-      handleRunReport();
-    } else {
-      setReportResults([]);
-      setResultColumns([]);
-    }
-  }, [selectedFields, filters, aggregations]);
+  const { data: reportRows = null, isFetching: isLoading } = useQuery({
+    queryKey: ["bd_reports", "control_center", selectedFields, filters, aggregations],
+    queryFn: async () => {
+      if (selectedFields.length === 0) return { results: [], columns: [] };
 
-  const handleRunReport = async () => {
-    setIsLoading(true);
-    try {
       // Determine which entities we need
       const entities = [...new Set(selectedFields.map(f => f.entity))];
       const allResults: any[] = [];
-      
+
       for (const entity of entities) {
         const tableName = entity === 'activities' ? 'crm_activities' : entity;
         const { data } = await supabase.from(tableName).select('*');
         if (data) allResults.push(...data.map(row => ({ ...row, _entity: entity })));
       }
-      
+
       // Build result columns from selected fields
       const cols = selectedFields.map(f => f.displayLabel);
-      setResultColumns(cols);
-      
+
       // Map results to selected fields
       const mappedResults = allResults.map(row => {
         const mapped: any = {};
@@ -178,15 +166,15 @@ export function ReportControlCenter({ onBack }: ReportControlCenterProps) {
         });
         return mapped;
       });
-      setReportResults(mappedResults);
-    } catch (error) {
-      console.error('Error generating report:', error);
-      toast.error(String(error));
-      setReportResults([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+      return { results: mappedResults, columns: cols };
+    },
+    enabled: selectedFields.length > 0,
+    staleTime: 30_000,
+  });
+
+  const reportResults = reportRows?.results ?? [];
+  const resultColumns = reportRows?.columns ?? [];
 
   const handleToggleField = (field: FieldDef) => {
     const fieldKey = `${field.entity}.${field.field}`;

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronLeft, Download, Save, TrendingUp, TrendingDown } from 'lucide-react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '../../../utils/supabase/client';
 import { useUser } from '../../../hooks/useUser';
 import { toast } from 'sonner';
@@ -15,29 +16,20 @@ interface ReportResultsProps {
 
 export function ReportResults({ config, savedReport, onBack }: ReportResultsProps) {
   const { user } = useUser();
-  const [isLoading, setIsLoading] = useState(true);
-  const [reportData, setReportData] = useState<any>(null);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveName, setSaveName] = useState('');
   const [saveDescription, setSaveDescription] = useState('');
 
-  useEffect(() => {
-    generateReport();
-  }, [config]);
-
-  const generateReport = async () => {
-    setIsLoading(true);
-    try {
+  const { data: reportData = null, isFetching: isLoading } = useQuery({
+    queryKey: ["bd_reports", "results", config],
+    queryFn: async () => {
       const tableName = config.dataSource === 'activities' ? 'crm_activities' : (config.dataSource || 'quotations');
       const { data, error } = await supabase.from(tableName).select('*');
       if (error) throw error;
-      setReportData({ tableData: data || [], summary: {} });
-    } catch (error) {
-      console.error('Error generating report:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      return { tableData: data || [], summary: {} };
+    },
+    staleTime: 30_000,
+  });
 
   const handleExport = async (format: 'csv' | 'excel') => {
     if (!reportData || !reportData.tableData) return;
