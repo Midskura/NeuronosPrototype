@@ -217,7 +217,7 @@ export function UnifiedCollectionsTab({
       width: "120px",
       align: "right",
       cell: (item) => (
-        <span className="text-[12px] font-bold text-[#059669]">
+        <span className="text-[12px] font-bold text-[var(--theme-status-success-fg)]">
           {formatCurrency(item.amount)}
         </span>
       ),
@@ -239,7 +239,7 @@ export function UnifiedCollectionsTab({
           styles = "bg-[var(--theme-bg-surface-subtle)] text-[#475467] border-[var(--theme-border-default)]";
           label = getCollectionResolutionLabel(item) || "Refunded";
         } else if (isCleared) {
-          styles = "bg-[#ECFDF5] text-[#027A48] border-[#A6F4C5]";
+          styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[#A6F4C5]";
         }
 
         return (

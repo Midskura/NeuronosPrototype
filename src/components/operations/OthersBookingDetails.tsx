@@ -108,9 +108,9 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                     <div style={{ fontSize: "13px", color: "var(--neuron-ink-base)", marginBottom: "4px" }}><span style={{ fontWeight: 600 }}>{activity.fieldName}</span> updated</div>
                     {activity.oldValue && activity.newValue && (
                       <div style={{ fontSize: "12px", display: "flex", alignItems: "center", gap: "8px", marginTop: "6px" }}>
-                        <span style={{ padding: "2px 8px", backgroundColor: "#FEE2E2", borderRadius: "4px", textDecoration: "line-through", color: "#EF4444" }}>{activity.oldValue}</span>
+                        <span style={{ padding: "2px 8px", backgroundColor: "var(--theme-status-danger-bg)", borderRadius: "4px", textDecoration: "line-through", color: "var(--theme-status-danger-fg)" }}>{activity.oldValue}</span>
                         <ChevronRight size={12} />
-                        <span style={{ padding: "2px 8px", backgroundColor: "#D1FAE5", borderRadius: "4px", color: "#10B981" }}>{activity.newValue}</span>
+                        <span style={{ padding: "2px 8px", backgroundColor: "var(--theme-status-success-bg)", borderRadius: "4px", color: "#10B981" }}>{activity.newValue}</span>
                       </div>
                     )}
                   </div>
@@ -286,7 +286,7 @@ export function OthersBookingDetails({ booking, onBack, onUpdate, currentUser, i
                 <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)" }} />
                 <button
                   onClick={handleDeleteFromDetail}
-                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#DC2626", textAlign: "left" }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-status-danger-fg)", textAlign: "left" }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEF2F2")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >

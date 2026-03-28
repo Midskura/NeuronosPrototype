@@ -413,8 +413,8 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
 
       {/* Return reason panel (inline) */}
       {showReturnPanel && (
-        <div style={{ padding: "12px 28px", borderBottom: "1px solid var(--theme-border-default)", backgroundColor: "#FFFBEB", flexShrink: 0 }}>
-          <p style={{ fontSize: 12, fontWeight: 600, color: "#92400E", marginBottom: 8 }}>
+        <div style={{ padding: "12px 28px", borderBottom: "1px solid var(--theme-border-default)", backgroundColor: "var(--theme-status-warning-bg)", flexShrink: 0 }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "var(--theme-status-warning-fg)", marginBottom: 8 }}>
             {thread.type === "approval" ? "Reason for declining" : "Reason for returning"} (required)
           </p>
           <textarea

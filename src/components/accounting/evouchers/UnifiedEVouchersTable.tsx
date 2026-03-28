@@ -126,7 +126,7 @@ export function UnifiedEVouchersTable({
     const diffTime = Math.abs(now.getTime() - submitted.getTime());
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     
-    if (diffDays >= 3) return "text-red-600";
+    if (diffDays >= 3) return "text-[var(--theme-status-danger-fg)]";
     if (diffDays >= 2) return "text-amber-600";
     return "text-[var(--theme-text-primary)]";
   };
@@ -220,7 +220,7 @@ export function UnifiedEVouchersTable({
                         e.stopPropagation();
                         setLiquidationVoucher(item);
                     }}
-                    className="text-[10px] font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] bg-[#E8F5F3] hover:bg-[#D0EBE7] px-2 py-1 rounded transition-colors flex items-center gap-1"
+                    className="text-[10px] font-semibold text-[var(--theme-action-primary-bg)] hover:text-[#0D6560] bg-[var(--theme-bg-surface-tint)] hover:bg-[#D0EBE7] px-2 py-1 rounded transition-colors flex items-center gap-1"
                 >
                     <FileText size={10} />
                     Liquidate

@@ -380,13 +380,13 @@ export function EmployeeRosterExcel() {
                       </th>
                       <th
                         className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
-                        style={{ width: "140px", fontWeight: 600, backgroundColor: "#D1FAE5" }}
+                        style={{ width: "140px", fontWeight: 600, backgroundColor: "var(--theme-status-success-bg)" }}
                       >
                         PHILHEALTH NUMBER
                       </th>
                       <th
                         className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
-                        style={{ width: "140px", fontWeight: 600, backgroundColor: "#FEE2E2" }}
+                        style={{ width: "140px", fontWeight: 600, backgroundColor: "var(--theme-status-danger-bg)" }}
                       >
                         PAG-IBIG NUMBER
                       </th>
@@ -531,7 +531,7 @@ export function EmployeeRosterExcel() {
                       {/* Philhealth Number */}
                       <td
                         className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
-                        style={{ width: "140px", backgroundColor: "#D1FAE5" }}
+                        style={{ width: "140px", backgroundColor: "var(--theme-status-success-bg)" }}
                       >
                         {emp.philhealthNumber}
                       </td>
@@ -541,7 +541,7 @@ export function EmployeeRosterExcel() {
                           "border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px]",
                           emp.pagibigNumber === "MISSING"
                             ? "bg-[#FCA5A5] text-white"
-                            : "bg-[#FEE2E2] text-[var(--theme-text-primary)]"
+                            : "bg-[var(--theme-status-danger-bg)] text-[var(--theme-text-primary)]"
                         )}
                         style={{ width: "140px" }}
                       >

@@ -117,7 +117,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
           <div className="space-y-4">
             <div>
               <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
-                Client PO Number <span className="text-red-500">*</span>
+                Client PO Number <span className="text-[var(--theme-status-danger-fg)]">*</span>
               </label>
               <input
                 type="text"
@@ -132,7 +132,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
-                  Shipment Ready Date <span className="text-red-500">*</span>
+                  Shipment Ready Date <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </label>
                 <input
                   type="date"
@@ -145,7 +145,7 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
 
               <div>
                 <label className="block text-sm text-[var(--theme-text-secondary)] mb-2">
-                  Requested ETD <span className="text-red-500">*</span>
+                  Requested ETD <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </label>
                 <input
                   type="date"

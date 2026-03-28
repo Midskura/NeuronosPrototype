@@ -834,22 +834,22 @@ export function AddRequestForPaymentPanel({
     switch (status) {
       case "Approved":
       case "posted":
-        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" };
       case "Disbursed":
       case "Audited":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "Disapproved":
       case "rejected":
       case "cancelled":
-        return { bg: "#FFE5E5", color: "#C94F3D" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "Under Review":
       case "pending":
       case "Processing":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "Submitted":
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-page)", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -1052,7 +1052,7 @@ export function AddRequestForPaymentPanel({
                       <label style={{ 
                         display: "block", fontSize: "12px", fontWeight: 500, color: "var(--theme-text-secondary)", marginBottom: "8px" 
                       }}>
-                        Link to Statement / Invoice <span style={{ color: "#EF4444" }}>*</span>
+                        Link to Statement / Invoice <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                       </label>
                       <div className="relative">
                         <select
@@ -1094,7 +1094,7 @@ export function AddRequestForPaymentPanel({
                   }}>
                     {isBillingMode ? "Billing Description / Title" : 
                      isCollectionMode ? "Collection Reference / Title" :
-                     "Description / Purpose"} {!isViewMode && <span style={{ color: "#EF4444" }}>*</span>}
+                     "Description / Purpose"} {!isViewMode && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
                   </label>
                   <input
                     type="text"
@@ -1111,7 +1111,7 @@ export function AddRequestForPaymentPanel({
                       borderRadius: "6px",
                       outline: "none",
                       transition: "all 0.2s",
-                      backgroundColor: isViewMode ? "#F9FAFB" : "#FFFFFF",
+                      backgroundColor: isViewMode ? "var(--theme-bg-surface-subtle)" : "var(--theme-bg-surface)",
                       color: isViewMode ? "#374151" : "inherit",
                       cursor: isViewMode ? "default" : "text"
                     }}
@@ -1147,7 +1147,7 @@ export function AddRequestForPaymentPanel({
                             color: "var(--theme-text-secondary)", 
                             marginBottom: "8px" 
                           }}>
-                            Transaction Type <span style={{ color: "#EF4444" }}>*</span>
+                            Transaction Type <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                           </label>
                           <CustomDropdown
                             value={transactionType === "cash_advance" ? "cash_advance" : transactionSubtype === "billable_expense" ? "billable" : "expense"}
@@ -1183,7 +1183,7 @@ export function AddRequestForPaymentPanel({
                           color: "var(--theme-text-secondary)", 
                           marginBottom: "8px" 
                         }}>
-                          {categoryLabel} <span style={{ color: "#EF4444" }}>*</span>
+                          {categoryLabel} <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                         </label>
                         <CustomDropdown
                           options={
@@ -1274,7 +1274,7 @@ export function AddRequestForPaymentPanel({
                       color: "var(--theme-text-secondary)", 
                       marginBottom: "8px" 
                     }}>
-                      {vendorLabel} <span style={{ color: "#EF4444" }}>*</span>
+                      {vendorLabel} <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                     </label>
                     <input
                       type="text"
@@ -1390,7 +1390,7 @@ export function AddRequestForPaymentPanel({
                               <button
                                 type="button"
                                 onClick={() => handleRemoveLine(item.id)}
-                                style={{ color: "#EF4444", background: "none", border: "none", cursor: "pointer" }}
+                                style={{ color: "var(--theme-status-danger-fg)", background: "none", border: "none", cursor: "pointer" }}
                               >
                                 <X size={16} />
                               </button>
@@ -1519,7 +1519,7 @@ export function AddRequestForPaymentPanel({
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
-                        backgroundColor: isViewMode ? "#F9FAFB" : "#FFFFFF"
+                        backgroundColor: isViewMode ? "var(--theme-bg-surface-subtle)" : "var(--theme-bg-surface)"
                       }}
                     />
                   </div>
@@ -1552,7 +1552,7 @@ export function AddRequestForPaymentPanel({
                   borderRadius: "6px",
                   outline: "none",
                   resize: "vertical",
-                  backgroundColor: isViewMode ? "#F9FAFB" : "#FFFFFF"
+                  backgroundColor: isViewMode ? "var(--theme-bg-surface-subtle)" : "var(--theme-bg-surface)"
                 }}
               />
             </div>
@@ -1694,7 +1694,7 @@ export function AddRequestForPaymentPanel({
                     padding: "10px 16px",
                     fontSize: "13px",
                     fontWeight: 500,
-                    color: "#EF4444",
+                    color: "var(--theme-status-danger-fg)",
                     backgroundColor: "transparent",
                     border: "1px solid #FECACA",
                     borderRadius: "6px",

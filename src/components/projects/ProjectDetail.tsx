@@ -392,7 +392,7 @@ export function ProjectDetail({
                       border: "none",
                       background: "none",
                       fontSize: "14px",
-                      color: "#DC2626",
+                      color: "var(--theme-status-danger-fg)",
                       cursor: "pointer",
                       transition: "background-color 0.2s ease"
                     }}

@@ -95,7 +95,7 @@ export function AuditingSummary() {
       // Fetch billing line items and catalog items, aggregate client-side
       const [{ data: lineItems }, { data: catalogItems }] = await Promise.all([
         supabase.from('billing_line_items').select('*'),
-        supabase.from('catalog_items').select('*').eq('is_active', true),
+        supabase.from('catalog_items').select('id, name, category_id'),
       ]);
 
       if (!lineItems || !catalogItems) {
@@ -408,7 +408,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
             {meta.linked_percentage}% linked
           </span>
           {meta.unlinked_count > 0 && (
-            <span style={{ fontSize: "12px", color: "#92400E" }}>
+            <span style={{ fontSize: "12px", color: "var(--theme-status-warning-fg)" }}>
               {meta.unlinked_count} unlinked item{meta.unlinked_count !== 1 ? "s" : ""}
             </span>
           )}

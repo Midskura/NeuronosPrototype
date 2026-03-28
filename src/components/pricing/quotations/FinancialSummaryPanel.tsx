@@ -116,7 +116,7 @@ export function FinancialSummaryPanel({
           {/* Tax Rate Control */}
           <div style={{
             padding: "12px",
-            backgroundColor: "#FEF3C7",
+            backgroundColor: "var(--theme-status-warning-bg)",
             border: "1px solid #F59E0B",
             borderRadius: "6px"
           }}>
@@ -125,7 +125,7 @@ export function FinancialSummaryPanel({
               marginBottom: "6px",
               fontSize: "11px",
               fontWeight: 600,
-              color: "#92400E",
+              color: "var(--theme-status-warning-fg)",
               textTransform: "uppercase",
               letterSpacing: "0.5px"
             }}>
@@ -152,7 +152,7 @@ export function FinancialSummaryPanel({
               <span style={{
                 fontSize: "13px",
                 fontWeight: 600,
-                color: "#92400E"
+                color: "var(--theme-status-warning-fg)"
               }}>
                 %
               </span>
@@ -160,7 +160,7 @@ export function FinancialSummaryPanel({
             <div style={{
               marginTop: "8px",
               fontSize: "11px",
-              color: "#92400E"
+              color: "var(--theme-status-warning-fg)"
             }}>
               Tax Amount: ₱ {formatAmount(financialSummary.tax_amount)}
             </div>
@@ -335,9 +335,9 @@ export function FinancialSummaryPanel({
       <div style={{
         padding: "12px 16px",
         borderTop: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "#FFFBEB",
+        backgroundColor: "var(--theme-status-warning-bg)",
         fontSize: "11px",
-        color: "#92400E",
+        color: "var(--theme-status-warning-fg)",
         lineHeight: 1.5
       }}>
         <strong>Note:</strong> Mark line items as "Taxed" to include them in tax calculation. 

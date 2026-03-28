@@ -95,7 +95,7 @@ export function CompanyPnLReport({ entries, period, generatedAt, companyName = "
                 </tr>
               ))}
               {/* Total Expenses */}
-              <tr style={{ height: "28px", backgroundColor: "#FFE5E5" }}>
+              <tr style={{ height: "28px", backgroundColor: "var(--theme-status-danger-bg)" }}>
                 <td colSpan={3} style={{ border: "1px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", color: "#000000" }}>
                   TOTAL EXPENSES
                 </td>

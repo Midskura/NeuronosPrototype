@@ -93,7 +93,7 @@ export function SearchableDropdown({
           className="block mb-1.5"
           style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
         >
-          {label} {required && <span style={{ color: "#C94F3D" }}>*</span>}
+          {label} {required && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
         </label>
       )}
 

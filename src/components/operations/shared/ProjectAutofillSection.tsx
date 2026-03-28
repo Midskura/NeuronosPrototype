@@ -149,7 +149,7 @@ export function ProjectAutofillSection({
 
           {/* Error Message */}
           {error && (
-            <div className="mt-3 flex items-start gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3">
+            <div className="mt-3 flex items-start gap-2 text-sm text-red-700 bg-[var(--theme-status-danger-bg)] border border-[var(--theme-status-danger-border)] rounded-lg p-3">
               <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <p>{error}</p>
             </div>

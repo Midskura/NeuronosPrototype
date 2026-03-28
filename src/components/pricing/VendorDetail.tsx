@@ -399,7 +399,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                     {!isEditing ? (
                       <button
                          onClick={() => setIsEditing(true)}
-                         className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] hover:bg-[#F7FAF8]"
+                         className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-state-hover)]"
                       >
                          <Edit size={14} />
                          Update Details
@@ -423,7 +423,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                          <button 
                             onClick={handleCancelEdit}
                             disabled={isSaving}
-                            className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] hover:bg-[#F7FAF8]"
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] hover:bg-[var(--theme-state-hover)]"
                          >
                             Cancel
                          </button>
@@ -563,7 +563,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                                       newEmails.splice(i, 1);
                                       setEditedVendor({ ...editedVendor, emails: newEmails });
                                     }}
-                                    className="p-1.5 text-[var(--theme-text-muted)] hover:text-red-500 rounded"
+                                    className="p-1.5 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] rounded"
                                   >
                                     <Trash2 size={14} />
                                   </button>
@@ -613,7 +613,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                                            newPhones.splice(i, 1);
                                            setEditedVendor({ ...editedVendor, phone: newPhones.join(', ') });
                                         }}
-                                        className="p-1.5 text-[var(--theme-text-muted)] hover:text-red-500 rounded"
+                                        className="p-1.5 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] rounded"
                                       >
                                         <Trash2 size={14} />
                                       </button>
@@ -665,9 +665,9 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                  <div className="pt-6 mt-8 border-t border-[var(--theme-border-default)] pb-2">
                    <button 
                       onClick={handleDeleteVendor}
-                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[#FEE2E2] text-[#DC2626] bg-[var(--theme-bg-surface)] hover:bg-[#FEF2F2] transition-colors text-[13px] font-medium group"
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[var(--theme-status-danger-border)] text-[var(--theme-status-danger-fg)] bg-[var(--theme-bg-surface)] hover:bg-[var(--theme-status-danger-bg)] transition-colors text-[13px] font-medium group"
                    >
-                      <Trash2 size={14} className="text-[#DC2626] group-hover:text-[#B91C1C]" />
+                      <Trash2 size={14} className="text-[var(--theme-status-danger-fg)] group-hover:text-[#B91C1C]" />
                       Delete Vendor
                    </button>
                  </div>
@@ -688,7 +688,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                 {/* Save Action */}
                 {hasUnsavedChanges && (
                   <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <span className="text-[12px] font-medium text-[#F59E0B] flex items-center gap-1.5 bg-amber-50 px-2 py-1 rounded border border-amber-100">
+                    <span className="text-[12px] font-medium text-[#F59E0B] flex items-center gap-1.5 bg-[var(--theme-status-warning-bg)] px-2 py-1 rounded border border-amber-100">
                        <div className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
                        Unsaved Changes
                     </span>

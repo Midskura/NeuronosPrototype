@@ -91,7 +91,7 @@ export function EditableField({
     return (
       <div>
         <label style={labelStyle}>
-          {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
+          {label} {required && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
         </label>
         <div style={viewValueStyle(isEmpty, required, type === "textarea")}>
           {displayValue}
@@ -104,7 +104,7 @@ export function EditableField({
   return (
     <div>
       <label style={labelStyle}>
-        {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
+        {label} {required && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
       </label>
 
       {type === "textarea" ? (

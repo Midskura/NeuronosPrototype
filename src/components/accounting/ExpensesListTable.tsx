@@ -104,7 +104,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
       case "posted":
       case "paid":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-green-50 text-green-700">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]">
             <CheckCircle size={10} />
             Posted
           </span>
@@ -112,7 +112,7 @@ export function ExpensesListTable({ expenses, isLoading, onRowClick }: ExpensesL
       case "rejected":
       case "cancelled":
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-50 text-red-700">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--theme-status-danger-bg)] text-red-700">
             <XCircle size={10} />
             Rejected
           </span>

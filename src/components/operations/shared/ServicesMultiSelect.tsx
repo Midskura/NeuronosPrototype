@@ -52,7 +52,7 @@ export function ServicesMultiSelect({
         style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
       >
         {label}
-        {required && <span style={{ color: "#C94F3D" }}> *</span>}
+        {required && <span style={{ color: "var(--theme-status-danger-fg)" }}> *</span>}
       </label>
 
       <div

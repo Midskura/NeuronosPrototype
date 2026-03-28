@@ -367,7 +367,7 @@ export function UnifiedExpensesTab({
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="flex items-center justify-center w-10 h-10 rounded-lg text-[#EF4444] hover:bg-[#FEF2F2] transition-colors shrink-0"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] transition-colors shrink-0"
             title="Clear Filters"
           >
             <X size={18} />

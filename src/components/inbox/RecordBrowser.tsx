@@ -128,23 +128,23 @@ const DEPT_DEFAULT: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
-  active: { color: "#059669", bg: "#F0FDF4" },
+  active: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
   open: { color: "#0369A1", bg: "#EFF6FF" },
-  draft: { color: "var(--theme-text-muted)", bg: "#F3F4F6" },
-  sent: { color: "#D97706", bg: "#FEF9EE" },
+  draft: { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
+  sent: { color: "var(--theme-status-warning-fg)", bg: "#FEF9EE" },
   approved: { color: "#7C3AED", bg: "#F5F3FF" },
   posted: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-  paid: { color: "#059669", bg: "#F0FDF4" },
+  paid: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
   priced: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-  completed: { color: "#059669", bg: "#F0FDF4" },
+  completed: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
   confirmed: { color: "#1D4ED8", bg: "#EFF6FF" },
-  cancelled: { color: "#DC2626", bg: "#FFF5F5" },
-  "in transit": { color: "#D97706", bg: "#FEF3C7" },
+  cancelled: { color: "var(--theme-status-danger-fg)", bg: "#FFF5F5" },
+  "in transit": { color: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
 };
 
 function StatusBadge({ status }: { status?: string }) {
   if (!status) return null;
-  const colors = STATUS_COLORS[status.toLowerCase()] ?? { color: "var(--theme-text-muted)", bg: "#F3F4F6" };
+  const colors = STATUS_COLORS[status.toLowerCase()] ?? { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
   return <span style={{ fontSize: 10, fontWeight: 600, padding: "1px 6px", borderRadius: 4, color: colors.color, backgroundColor: colors.bg, textTransform: "capitalize", flexShrink: 0 }}>{status}</span>;
 }
 

@@ -280,16 +280,16 @@ export function UnifiedInvoicesTab({
         let label = "";
 
         if (status === 'reversal_draft') {
-          styles = "bg-[#FEF3C7] text-[#B45309] border-[#FCD34D]";
+          styles = "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)] border-[#FCD34D]";
           label = "Reversal Draft";
         } else if (status === 'reversed') {
           styles = "bg-[var(--theme-bg-surface-subtle)] text-[#475467] border-[var(--theme-border-default)]";
           label = "Reversed";
         } else if (status === 'paid') {
-          styles = "bg-[#ECFDF5] text-[#059669] border-[#A6F4C5]"; // Green
+          styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[#A6F4C5]"; // Green
           label = "Paid";
         } else if (status === 'overdue') {
-          styles = "bg-[#FEF2F2] text-[#DC2626] border-[#FECACA]"; // Red
+          styles = "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)] border-[#FECACA]"; // Red
           label = "Overdue";
         } else if (status === 'partial') {
            styles = "bg-[#FFF7ED] text-[#C2410C] border-[#FED7AA]"; // Orange
@@ -425,7 +425,7 @@ export function UnifiedInvoicesTab({
         footerSummary={[
           { 
              label: "Total Outstanding", 
-             value: <span className="text-[#DC2626]">{formatCurrency(totalOutstanding)}</span> 
+             value: <span className="text-[var(--theme-status-danger-fg)]">{formatCurrency(totalOutstanding)}</span> 
           },
           { 
              label: "Total Invoiced", 

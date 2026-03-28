@@ -1,16 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Eye, EyeOff, Loader2, Monitor, Moon, Palette, Pencil, Sun, X } from "lucide-react";
+import { Eye, EyeOff, Loader2, LogOut, Monitor, Moon, Pencil, Sun, X } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../../utils/supabase/client";
 import { useUser } from "../../hooks/useUser";
-import { syncWorkspaceTheme } from "../../theme/useWorkspaceTheme";
 import { getThemeModePreference, setThemeModePreference } from "../../theme/themeMode";
-import { getWorkspaceThemeSettings, saveWorkspaceThemeSettings } from "../../theme/themeSettings";
-import {
-  DEFAULT_WORKSPACE_THEME_SEEDS,
-  ThemeModePreference,
-  WorkspaceThemeSeeds,
-} from "../../theme/workspaceTheme";
+import { ThemeModePreference } from "../../theme/workspaceTheme";
 
 // ---------------------------------------------------------------------------
 // Primitives
@@ -18,7 +12,7 @@ import {
 
 function FieldLabel({ children, required }: { children: string; required?: boolean }) {
   return (
-    <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: "6px" }}>
+    <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)", marginBottom: "6px" }}>
       {children}{required && <span style={{ color: "var(--neuron-semantic-danger)" }}> *</span>}
     </label>
   );
@@ -32,15 +26,40 @@ function FieldError({ message }: { message: string }) {
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
-  height: "40px",
-  border: "1px solid var(--neuron-ui-border)",
+  height: "36px",
+  border: "1px solid var(--theme-border-default)",
   borderRadius: "8px",
   padding: "0 12px",
   fontSize: "13px",
-  color: "var(--neuron-ink-primary)",
-  backgroundColor: "var(--neuron-bg-page)",
+  color: "var(--theme-text-primary)",
+  backgroundColor: "var(--theme-bg-surface)",
   outline: "none",
   boxSizing: "border-box",
+};
+
+const quietButtonStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: "6px",
+  height: "32px",
+  padding: "0 12px",
+  borderRadius: "8px",
+  border: "1px solid var(--theme-border-default)",
+  backgroundColor: "transparent",
+  color: "var(--theme-text-secondary)",
+  fontSize: "13px",
+  fontWeight: 500,
+  cursor: "pointer",
+  transition: "background-color 120ms ease, border-color 120ms ease, color 120ms ease",
+};
+
+const primaryButtonStyle: React.CSSProperties = {
+  ...quietButtonStyle,
+  border: "1px solid var(--theme-action-primary-border)",
+  backgroundColor: "var(--theme-action-primary-bg)",
+  color: "var(--theme-action-primary-text)",
+  fontWeight: 600,
 };
 
 function TextInput({
@@ -86,142 +105,133 @@ function TextInput({
   );
 }
 
-function Card({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) {
+// Section: label sits above the card, children live inside the card
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div style={{
-      backgroundColor: "var(--neuron-bg-elevated)",
-      border: "1px solid var(--neuron-ui-border)",
-      borderRadius: "12px",
-      padding: "24px",
-      ...style,
-    }}>
-      {children}
+    <div>
+      <p style={{
+        fontSize: "12px",
+        fontWeight: 600,
+        color: "var(--theme-text-primary)",
+        marginBottom: "8px",
+      }}>
+        {title}
+      </p>
+      <div style={{
+        backgroundColor: "var(--theme-bg-surface)",
+        border: "1px solid var(--theme-border-default)",
+        borderRadius: "12px",
+        padding: "0 20px",
+      }}>
+        {children}
+      </div>
     </div>
   );
 }
 
-function CardTitle({ children }: { children: string }) {
-  return (
-    <p style={{ fontSize: "13px", fontWeight: 600, color: "var(--neuron-ink-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "20px" }}>
-      {children}
-    </p>
-  );
-}
-
-function AppearanceModeOption({
-  active,
+// A single settings row: label + description on left, control on right
+function SettingsRow({
   label,
   description,
-  icon,
-  onClick,
-}: {
-  active: boolean;
-  label: string;
-  description: string;
-  icon: React.ComponentType<{ size?: number }>;
-  onClick: () => void;
-}) {
-  const Icon = icon;
-
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        textAlign: "left",
-        padding: "16px",
-        borderRadius: "12px",
-        border: active ? "1px solid var(--neuron-action-primary)" : "1px solid var(--neuron-ui-border)",
-        backgroundColor: active ? "var(--neuron-state-selected)" : "var(--neuron-bg-elevated)",
-        cursor: "pointer",
-        transition: "all 150ms ease",
-      }}
-      onMouseEnter={(event) => {
-        if (!active) {
-          event.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
-        }
-      }}
-      onMouseLeave={(event) => {
-        if (!active) {
-          event.currentTarget.style.backgroundColor = "var(--neuron-bg-elevated)";
-        }
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-        <Icon size={16} />
-        <span style={{ fontSize: "14px", fontWeight: 600, color: "var(--neuron-ink-primary)" }}>{label}</span>
-      </div>
-      <p style={{ margin: 0, fontSize: "12px", lineHeight: "18px", color: "var(--neuron-ink-muted)" }}>{description}</p>
-    </button>
-  );
-}
-
-function ColorSeedControl({
-  label,
-  description,
-  value,
-  onChange,
+  children,
+  first = false,
+  align = "center",
 }: {
   label: string;
-  description: string;
-  value: string;
-  onChange: (value: string) => void;
+  description?: string;
+  children: React.ReactNode;
+  first?: boolean;
+  align?: "center" | "flex-start";
 }) {
   return (
     <div
       style={{
-        border: "1px solid var(--neuron-ui-border)",
-        borderRadius: "12px",
-        padding: "16px",
-        backgroundColor: "var(--neuron-bg-page)",
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: align,
+        justifyContent: "space-between",
+        gap: "12px 24px",
+        padding: "14px 0",
+        borderTop: first ? "none" : "1px solid var(--theme-border-subtle)",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "16px", marginBottom: "12px" }}>
-        <div>
-          <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "4px" }}>{label}</p>
-          <p style={{ fontSize: "12px", lineHeight: "18px", color: "var(--neuron-ink-muted)", margin: 0 }}>{description}</p>
-        </div>
-        <input
-          type="color"
-          aria-label={label}
-          value={value}
-          onChange={(event) => onChange(event.target.value.toUpperCase())}
-          style={{
-            width: "44px",
-            height: "44px",
-            padding: 0,
-            border: "1px solid var(--neuron-ui-border)",
-            borderRadius: "10px",
-            background: "transparent",
-            cursor: "pointer",
-          }}
-        />
+      <div style={{ flex: "1 1 240px", minWidth: 0 }}>
+        <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)", marginBottom: description ? "2px" : 0 }}>{label}</p>
+        {description && (
+          <p style={{ margin: 0, fontSize: "12px", lineHeight: "16px", color: "var(--theme-text-muted)" }}>{description}</p>
+        )}
       </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", flex: "0 1 auto", minWidth: "fit-content" }}>
+        {children}
+      </div>
+    </div>
+  );
+}
 
-      <div
+// Read-only value display
+function ReadOnlyValue({ value }: { value: string }) {
+  return (
+    <span style={{ fontSize: "13px", color: "var(--theme-text-secondary)", fontWeight: 400 }}>
+      {value}
+    </span>
+  );
+}
+
+// Theme dropdown
+function ThemeDropdown({
+  value,
+  onChange,
+}: {
+  value: ThemeModePreference;
+  onChange: (v: ThemeModePreference) => void;
+}) {
+  const options: { value: ThemeModePreference; label: string }[] = [
+    { value: "light", label: "Light" },
+    { value: "dark", label: "Dark" },
+    { value: "system", label: "System" },
+  ];
+
+  const iconMap: Record<ThemeModePreference, React.ReactNode> = {
+    light: <Sun size={14} />,
+    dark: <Moon size={14} />,
+    system: <Monitor size={14} />,
+  };
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+      <span style={{ color: "var(--theme-text-muted)", display: "flex", alignItems: "center" }}>
+        {iconMap[value]}
+      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as ThemeModePreference)}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
-          padding: "10px 12px",
-          borderRadius: "10px",
-          backgroundColor: "var(--neuron-bg-elevated)",
-          border: "1px solid var(--neuron-ui-border)",
+          height: "32px",
+          padding: "0 28px 0 10px",
+          border: "1px solid var(--theme-border-default)",
+          borderRadius: "8px",
+          backgroundColor: "var(--theme-bg-surface)",
+          color: "var(--theme-text-primary)",
+          fontSize: "13px",
+          fontWeight: 500,
+          cursor: "pointer",
+          outline: "none",
+          appearance: "none",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23667085' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right 8px center",
         }}
       >
-        <div
-          style={{
-            width: "18px",
-            height: "18px",
-            borderRadius: "999px",
-            backgroundColor: value,
-            border: "1px solid rgba(255,255,255,0.16)",
-            flexShrink: 0,
-          }}
-        />
-        <span style={{ fontSize: "12px", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", color: "var(--neuron-ink-secondary)" }}>
-          {value}
-        </span>
-      </div>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
     </div>
   );
 }
@@ -231,7 +241,7 @@ function ColorSeedControl({
 // ---------------------------------------------------------------------------
 
 export function Settings() {
-  const { user, session, setUser } = useUser();
+  const { user, session, setUser, logout } = useUser();
 
   // Profile edit state
   const [editing, setEditing] = useState(false);
@@ -247,7 +257,7 @@ export function Settings() {
   // Team name
   const [teamName, setTeamName] = useState<string | null>(null);
 
-  // Password (hidden by default)
+  // Password
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -258,10 +268,9 @@ export function Settings() {
 
   // Appearance
   const [themeModePreference, setThemeModePreferenceState] = useState<ThemeModePreference>(() => getThemeModePreference());
-  const [themeSeeds, setThemeSeeds] = useState<WorkspaceThemeSeeds>(DEFAULT_WORKSPACE_THEME_SEEDS);
-  const [savedThemeSeeds, setSavedThemeSeeds] = useState<WorkspaceThemeSeeds>(DEFAULT_WORKSPACE_THEME_SEEDS);
-  const [loadingTheme, setLoadingTheme] = useState(true);
-  const [savingTheme, setSavingTheme] = useState(false);
+
+  // Logout
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     if (user?.team_id) {
@@ -274,38 +283,6 @@ export function Settings() {
     }
   }, [user?.team_id]);
 
-  useEffect(() => {
-    let active = true;
-
-    async function loadThemeSettings() {
-      setLoadingTheme(true);
-
-      try {
-        const settings = await getWorkspaceThemeSettings();
-        if (!active) return;
-
-        setThemeSeeds(settings.seeds);
-        setSavedThemeSeeds(settings.seeds);
-        setThemeModePreferenceState(getThemeModePreference());
-      } catch (error) {
-        console.error(error);
-        if (active) {
-          toast.error("Unable to load appearance settings");
-        }
-      } finally {
-        if (active) {
-          setLoadingTheme(false);
-        }
-      }
-    }
-
-    void loadThemeSettings();
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
   const authUid = session?.user?.id;
   const displayAvatar = avatarPreview || avatarUrl;
   const initials = (user?.name || user?.email || "U").charAt(0).toUpperCase();
@@ -315,7 +292,7 @@ export function Settings() {
     user?.role === "manager" ? "Manager" :
     user?.role === "staff" ? "Staff" : user?.role || "";
 
-  // ── Avatar ───────────────────────────────────────────────────────────────
+  // ── Avatar ──────────────────────────────────────────────────────────────
 
   const handleAvatarSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -331,7 +308,7 @@ export function Settings() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  // ── Profile save ─────────────────────────────────────────────────────────
+  // ── Profile save ────────────────────────────────────────────────────────
 
   const handleSaveProfile = async () => {
     const trimmedName = name.trim();
@@ -392,7 +369,7 @@ export function Settings() {
     setEditing(false);
   };
 
-  // ── Password ──────────────────────────────────────────────────────────────
+  // ── Password ─────────────────────────────────────────────────────────────
 
   const validateNewPassword = () => {
     if (newPassword && newPassword.length < 8)
@@ -428,113 +405,73 @@ export function Settings() {
     }
   };
 
+  // ── Theme ────────────────────────────────────────────────────────────────
+
   const handleThemeModeChange = (preference: ThemeModePreference) => {
     setThemeModePreference(preference);
     setThemeModePreferenceState(preference);
   };
 
-  const handleThemeSeedChange = (key: keyof WorkspaceThemeSeeds, value: string) => {
-    setThemeSeeds((current) => ({
-      ...current,
-      [key]: value,
-    }));
-  };
+  // ── Logout ───────────────────────────────────────────────────────────────
 
-  const handleResetThemeEdits = () => {
-    setThemeSeeds(savedThemeSeeds);
-  };
-
-  const handleSaveTheme = async () => {
-    setSavingTheme(true);
-
+  const handleLogout = async () => {
+    setLoggingOut(true);
     try {
-      const savedSettings = await saveWorkspaceThemeSettings(themeSeeds);
-      const syncedTheme = await syncWorkspaceTheme();
-
-      if (syncedTheme.error) {
-        throw syncedTheme.error;
-      }
-
-      setThemeSeeds(savedSettings.seeds);
-      setSavedThemeSeeds(savedSettings.seeds);
-      toast.success("Appearance updated");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update appearance");
-    } finally {
-      setSavingTheme(false);
+      await (logout() as unknown as Promise<void>);
+    } catch {
+      toast.error("Failed to sign out — try again");
+      setLoggingOut(false);
     }
   };
-
-  const hasUnsavedThemeChanges = JSON.stringify(themeSeeds) !== JSON.stringify(savedThemeSeeds);
 
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--neuron-bg-page)" }}>
+    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--theme-bg-surface)" }}>
 
-      {/* Page Header */}
-      <div style={{ padding: "32px 48px 24px", borderBottom: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--neuron-bg-elevated)" }}>
-        <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--neuron-ink-primary)", letterSpacing: "-1.2px", marginBottom: "4px" }}>
+      {/* Page header */}
+      <div style={{ padding: "32px 48px 0" }}>
+        <h1 style={{ fontSize: "32px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "4px", letterSpacing: "-1.2px" }}>
           Settings
         </h1>
-        <p style={{ fontSize: "14px", color: "var(--neuron-ink-muted)" }}>Manage your account and personal preferences</p>
+        <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>
+          Manage your account and preferences
+        </p>
       </div>
 
       {/* Scrollable content */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "40px 48px" }}>
-        <div style={{ maxWidth: "600px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "24px 48px 48px", backgroundColor: "var(--theme-bg-surface)" }}>
+        <div style={{ maxWidth: "560px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
-          {/* ── Profile card ─────────────────────────────────────────────── */}
-          <Card>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-              <CardTitle>Profile</CardTitle>
-              {!editing && (
-                <button
-                  onClick={() => setEditing(true)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: "6px",
-                    height: "32px", padding: "0 12px",
-                    border: "1px solid var(--neuron-ui-border)", borderRadius: "8px",
-                    background: "none", cursor: "pointer",
-                    fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-secondary)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                >
-                  <Pencil size={14} />
-                  Edit
-                </button>
-              )}
-            </div>
-
+          {/* ── Profile ──────────────────────────────────────────────────── */}
+          <Section title="Profile">
             {editing ? (
-              /* ── Edit mode ─────────────────────────────────────────────── */
-              <div>
+              <div style={{ padding: "16px 0" }}>
                 {/* Avatar upload */}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "24px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
                   <div style={{
-                    width: "64px", height: "64px", borderRadius: "50%", flexShrink: 0,
+                    width: "56px", height: "56px", borderRadius: "50%", flexShrink: 0,
                     backgroundColor: displayAvatar ? "transparent" : "var(--neuron-brand-green-100)",
+                    border: "1px solid var(--theme-border-default)",
                     display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
                   }}>
                     {displayAvatar
                       ? <img src={displayAvatar} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                      : <span style={{ fontSize: "24px", fontWeight: 600, color: "var(--neuron-action-primary)" }}>{initials}</span>
+                      : <span style={{ fontSize: "20px", fontWeight: 600, color: "var(--neuron-action-primary)" }}>{initials}</span>
                     }
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                     <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" onChange={handleAvatarSelect} style={{ display: "none" }} />
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--neuron-action-primary)", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+                      style={{ fontSize: "13px", fontWeight: 500, color: "var(--neuron-action-primary)", background: "none", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}
                     >
                       Upload photo
                     </button>
                     {displayAvatar && (
                       <button
                         onClick={handleRemoveAvatar}
-                        style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+                        style={{ fontSize: "13px", color: "var(--theme-text-muted)", background: "none", border: "none", cursor: "pointer", textAlign: "left", padding: 0 }}
                       >
                         Remove
                       </button>
@@ -542,8 +479,7 @@ export function Settings() {
                   </div>
                 </div>
 
-                {/* Name */}
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "14px" }}>
                   <FieldLabel required>Full name</FieldLabel>
                   <TextInput
                     value={name}
@@ -554,258 +490,104 @@ export function Settings() {
                   <FieldError message={nameError} />
                 </div>
 
-                {/* Phone */}
-                <div style={{ marginBottom: "24px" }}>
+                <div style={{ marginBottom: "20px" }}>
                   <FieldLabel>Contact number</FieldLabel>
-                  <TextInput value={phone} onChange={setPhone} />
-                  <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)", marginTop: "4px" }}>e.g. +63 917 123 4567</p>
+                  <TextInput value={phone} onChange={setPhone} placeholder="+63 917 123 4567" />
                 </div>
 
-                {/* Actions */}
                 <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                  <button
-                    onClick={handleCancelEdit}
-                    style={{
-                      height: "36px", padding: "0 16px", borderRadius: "8px",
-                      border: "1px solid var(--neuron-ui-border)", background: "none",
-                      fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-secondary)", cursor: "pointer",
-                    }}
-                  >
-                    Cancel
-                  </button>
+                  <button onClick={handleCancelEdit} style={quietButtonStyle}>Cancel</button>
                   <button
                     onClick={handleSaveProfile}
                     disabled={savingProfile}
-                    style={{
-                      height: "36px", padding: "0 16px", borderRadius: "8px",
-                      border: "none", background: "var(--neuron-action-primary)",
-                      fontSize: "13px", fontWeight: 600, color: "var(--neuron-action-primary-text)",
-                      cursor: savingProfile ? "not-allowed" : "pointer",
-                      display: "flex", alignItems: "center", gap: "6px",
-                      opacity: savingProfile ? 0.8 : 1,
-                    }}
+                    style={{ ...primaryButtonStyle, height: "32px", padding: "0 14px", opacity: savingProfile ? 0.8 : 1, cursor: savingProfile ? "not-allowed" : "pointer" }}
                   >
-                    {savingProfile && <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />}
-                    {savingProfile ? "Saving…" : "Save changes"}
+                    {savingProfile && <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />}
+                    {savingProfile ? "Saving…" : "Save"}
                   </button>
                 </div>
               </div>
             ) : (
-              /* ── View mode ─────────────────────────────────────────────── */
-              <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-                {/* Avatar */}
-                <div style={{
-                  width: "64px", height: "64px", borderRadius: "50%", flexShrink: 0,
-                  backgroundColor: displayAvatar ? "transparent" : "var(--neuron-brand-green-100)",
-                  display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
-                }}>
-                  {displayAvatar
-                    ? <img src={displayAvatar} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    : <span style={{ fontSize: "24px", fontWeight: 600, color: "var(--neuron-action-primary)" }}>{initials}</span>
-                  }
-                </div>
-
-                {/* Identity */}
-                <div>
-                  <p style={{ fontSize: "17px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "2px" }}>
-                    {user?.name || "—"}
-                  </p>
-                  <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", marginBottom: "4px" }}>
-                    {user?.department}{roleLabel ? ` · ${roleLabel}` : ""}
-                  </p>
-                  {(user?.phone) && (
-                    <p style={{ fontSize: "13px", color: "var(--neuron-ink-secondary)" }}>
-                      {user.phone}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "16px 0" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                  <div style={{
+                    width: "44px", height: "44px", borderRadius: "50%", flexShrink: 0,
+                    backgroundColor: displayAvatar ? "transparent" : "var(--neuron-brand-green-100)",
+                    border: "1px solid var(--theme-border-default)",
+                    display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden",
+                  }}>
+                    {displayAvatar
+                      ? <img src={displayAvatar} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      : <span style={{ fontSize: "16px", fontWeight: 600, color: "var(--neuron-action-primary)" }}>{initials}</span>
+                    }
+                  </div>
+                  <div>
+                    <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "1px" }}>
+                      {user?.name || "—"}
                     </p>
-                  )}
+                    <p style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
+                      {user?.department}{roleLabel ? ` · ${roleLabel}` : ""}
+                      {user?.phone ? ` · ${user.phone}` : ""}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-          </Card>
-
-          {/* ── Account card (read-only) ──────────────────────────────────── */}
-          <Card>
-            <CardTitle>Account</CardTitle>
-
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 24px" }}>
-              {[
-                { label: "Email address", value: user?.email || "—" },
-                { label: "Department", value: user?.department || "—" },
-                { label: "Role", value: roleLabel || "—" },
-                { label: "Team", value: teamName || "—" },
-              ].map(({ label, value }) => (
-                <div key={label}>
-                  <p style={{ fontSize: "12px", fontWeight: 500, color: "var(--neuron-ink-muted)", marginBottom: "2px" }}>{label}</p>
-                  <p style={{ fontSize: "13px", color: "var(--neuron-ink-primary)" }}>{value}</p>
-                </div>
-              ))}
-            </div>
-
-          </Card>
-
-          {/* Appearance card */}
-          <Card>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-              <Palette size={16} color="var(--neuron-ink-muted)" />
-              <CardTitle>Appearance</CardTitle>
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-              <div>
-                <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "6px" }}>
-                  Theme mode
-                </p>
-                <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)", margin: "0 0 14px" }}>
-                  Choose how Neuron should render by default on this device.
-                </p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "12px" }}>
-                  <AppearanceModeOption
-                    active={themeModePreference === "light"}
-                    label="Light"
-                    description="Keep the interface bright and neutral."
-                    icon={Sun}
-                    onClick={() => handleThemeModeChange("light")}
-                  />
-                  <AppearanceModeOption
-                    active={themeModePreference === "dark"}
-                    label="Dark"
-                    description="Use the darker workspace palette."
-                    icon={Moon}
-                    onClick={() => handleThemeModeChange("dark")}
-                  />
-                  <AppearanceModeOption
-                    active={themeModePreference === "system"}
-                    label="System"
-                    description="Match your operating system preference."
-                    icon={Monitor}
-                    onClick={() => handleThemeModeChange("system")}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "6px" }}>
-                  Workspace colors
-                </p>
-                <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)", margin: "0 0 14px" }}>
-                  Tune the main brand colors used across cards, actions, and surfaces.
-                </p>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                  <ColorSeedControl
-                    label="Primary"
-                    description="Main brand tone used for actions and highlights."
-                    value={themeSeeds.primary}
-                    onChange={(value) => handleThemeSeedChange("primary", value)}
-                  />
-                  <ColorSeedControl
-                    label="Accent"
-                    description="Secondary tone used for supportive emphasis."
-                    value={themeSeeds.accent}
-                    onChange={(value) => handleThemeSeedChange("accent", value)}
-                  />
-                  <ColorSeedControl
-                    label="Surface tint"
-                    description="Tint blended into cards, panels, and surfaces."
-                    value={themeSeeds.surfaceTint}
-                    onChange={(value) => handleThemeSeedChange("surfaceTint", value)}
-                  />
-                  <ColorSeedControl
-                    label="Neutral base"
-                    description="Base neutral used to balance the overall palette."
-                    value={themeSeeds.neutralBase}
-                    onChange={(value) => handleThemeSeedChange("neutralBase", value)}
-                  />
-                </div>
-              </div>
-
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
-                <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)", margin: 0 }}>
-                  {loadingTheme ? "Loading saved appearance settings..." : "Color changes apply after saving."}
-                </p>
-
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <button
-                    onClick={handleResetThemeEdits}
-                    disabled={!hasUnsavedThemeChanges || savingTheme || loadingTheme}
-                    style={{
-                      height: "36px",
-                      padding: "0 16px",
-                      borderRadius: "8px",
-                      border: "1px solid var(--neuron-ui-border)",
-                      background: "none",
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "var(--neuron-ink-secondary)",
-                      cursor: !hasUnsavedThemeChanges || savingTheme || loadingTheme ? "not-allowed" : "pointer",
-                      opacity: !hasUnsavedThemeChanges || savingTheme || loadingTheme ? 0.6 : 1,
-                    }}
-                  >
-                    Reset
-                  </button>
-                  <button
-                    onClick={handleSaveTheme}
-                    disabled={!hasUnsavedThemeChanges || savingTheme || loadingTheme}
-                    style={{
-                      height: "36px",
-                      padding: "0 16px",
-                      borderRadius: "8px",
-                      border: "none",
-                      background: "var(--neuron-action-primary)",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      color: "var(--neuron-action-primary-text)",
-                      cursor: !hasUnsavedThemeChanges || savingTheme || loadingTheme ? "not-allowed" : "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      opacity: !hasUnsavedThemeChanges || savingTheme || loadingTheme ? 0.7 : 1,
-                    }}
-                  >
-                    {savingTheme && <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />}
-                    {savingTheme ? "Saving..." : "Save colors"}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Password card */}
-          <Card>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <p style={{ fontSize: "14px", fontWeight: 600, color: "var(--neuron-ink-primary)", marginBottom: "2px" }}>Password</p>
-                <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)" }}>Last changed: managed by Supabase Auth</p>
-              </div>
-              {!showPasswordForm && (
                 <button
-                  onClick={() => setShowPasswordForm(true)}
-                  style={{
-                    height: "32px", padding: "0 12px",
-                    border: "1px solid var(--neuron-ui-border)", borderRadius: "8px",
-                    background: "none", cursor: "pointer",
-                    fontSize: "13px", fontWeight: 500, color: "var(--neuron-ink-secondary)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; }}
+                  onClick={() => setEditing(true)}
+                  style={quietButtonStyle}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-state-hover)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
                 >
-                  Change password
+                  <Pencil size={13} />
+                  Edit
                 </button>
-              )}
-              {showPasswordForm && (
+              </div>
+            )}
+          </Section>
+
+          {/* ── Account ──────────────────────────────────────────────────── */}
+          <Section title="Account">
+            {[
+              { label: "Email", value: user?.email || "—" },
+              { label: "Department", value: user?.department || "—" },
+              { label: "Role", value: roleLabel || "—" },
+              { label: "Team", value: teamName || "—" },
+            ].map(({ label, value }, index) => (
+              <SettingsRow key={label} first={index === 0} label={label}>
+                <ReadOnlyValue value={value} />
+              </SettingsRow>
+            ))}
+          </Section>
+
+          {/* ── Security ─────────────────────────────────────────────────── */}
+          <Section title="Security">
+            <SettingsRow
+              first
+              label="Password"
+              description={showPasswordForm ? undefined : "Update your account password."}
+              align={showPasswordForm ? "flex-start" : "center"}
+            >
+              {!showPasswordForm ? (
+                <button
+                  onClick={() => setShowPasswordForm(true)}
+                  style={quietButtonStyle}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-state-hover)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                >
+                  Change
+                </button>
+              ) : (
                 <button
                   onClick={() => { setShowPasswordForm(false); setNewPassword(""); setConfirmPassword(""); setPasswordErrors({ new: "", confirm: "" }); }}
-                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--neuron-ink-muted)", display: "flex" }}
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: "4px" }}
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
               )}
-            </div>
+            </SettingsRow>
 
             {showPasswordForm && (
-              <div style={{ marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--neuron-ui-border)" }}>
-                <div style={{ marginBottom: "16px" }}>
+              <div style={{ paddingBottom: "16px" }}>
+                <div style={{ marginBottom: "14px" }}>
                   <FieldLabel required>New password</FieldLabel>
                   <TextInput
                     type={showNew ? "text" : "password"}
@@ -814,15 +596,15 @@ export function Settings() {
                     onBlur={validateNewPassword}
                     error={passwordErrors.new}
                     rightElement={
-                      <button onClick={() => setShowNew((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--neuron-ink-muted)", display: "flex" }}>
-                        {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
+                      <button onClick={() => setShowNew((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: 0 }}>
+                        {showNew ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     }
                   />
                   <FieldError message={passwordErrors.new} />
                 </div>
 
-                <div style={{ marginBottom: "24px" }}>
+                <div style={{ marginBottom: "16px" }}>
                   <FieldLabel required>Confirm password</FieldLabel>
                   <TextInput
                     type={showConfirm ? "text" : "password"}
@@ -831,8 +613,8 @@ export function Settings() {
                     onBlur={validateConfirmPassword}
                     error={passwordErrors.confirm}
                     rightElement={
-                      <button onClick={() => setShowConfirm((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--neuron-ink-muted)", display: "flex" }}>
-                        {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+                      <button onClick={() => setShowConfirm((v) => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: 0 }}>
+                        {showConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
                       </button>
                     }
                   />
@@ -843,22 +625,82 @@ export function Settings() {
                   <button
                     onClick={handleUpdatePassword}
                     disabled={savingPassword}
-                    style={{
-                      height: "36px", padding: "0 16px", borderRadius: "8px",
-                      border: "none", background: "var(--neuron-action-primary)",
-                      fontSize: "13px", fontWeight: 600, color: "var(--neuron-action-primary-text)",
-                      cursor: savingPassword ? "not-allowed" : "pointer",
-                      display: "flex", alignItems: "center", gap: "6px",
-                      opacity: savingPassword ? 0.8 : 1,
-                    }}
+                    style={{ ...primaryButtonStyle, height: "32px", padding: "0 14px", cursor: savingPassword ? "not-allowed" : "pointer", opacity: savingPassword ? 0.8 : 1 }}
                   >
-                    {savingPassword && <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} />}
+                    {savingPassword && <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />}
                     {savingPassword ? "Updating…" : "Update password"}
                   </button>
                 </div>
               </div>
             )}
-          </Card>
+          </Section>
+
+          {/* ── Appearance ───────────────────────────────────────────────── */}
+          <Section title="Appearance">
+            <SettingsRow
+              first
+              label="Theme"
+              description="Choose how Neuron looks on this device."
+            >
+              <ThemeDropdown
+                value={themeModePreference}
+                onChange={(pref) => handleThemeModeChange(pref)}
+              />
+            </SettingsRow>
+          </Section>
+
+          {/* ── Sign out ─────────────────────────────────────────────────── */}
+          <div>
+            <p style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
+              Danger zone
+            </p>
+            <div style={{
+              backgroundColor: "var(--theme-bg-surface)",
+              border: "1px solid var(--theme-border-default)",
+              borderRadius: "12px",
+              padding: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "16px",
+            }}>
+              <div>
+                <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)", marginBottom: "2px" }}>Sign out</p>
+                <p style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>
+                  You'll be signed out of Neuron on this device.
+                </p>
+              </div>
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  height: "32px",
+                  padding: "0 12px",
+                  borderRadius: "8px",
+                  border: "1px solid var(--neuron-semantic-danger)",
+                  backgroundColor: "transparent",
+                  color: "var(--neuron-semantic-danger)",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  cursor: loggingOut ? "not-allowed" : "pointer",
+                  opacity: loggingOut ? 0.7 : 1,
+                  transition: "background-color 120ms ease",
+                  flexShrink: 0,
+                }}
+                onMouseEnter={(e) => { if (!loggingOut) e.currentTarget.style.backgroundColor = "color-mix(in srgb, var(--neuron-semantic-danger) 8%, transparent)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+              >
+                {loggingOut
+                  ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />
+                  : <LogOut size={13} />
+                }
+                {loggingOut ? "Signing out…" : "Sign out"}
+              </button>
+            </div>
+          </div>
 
         </div>
       </div>

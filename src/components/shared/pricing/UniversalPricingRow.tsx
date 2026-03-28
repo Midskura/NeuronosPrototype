@@ -45,8 +45,7 @@ export interface UniversalPricingRowProps {
     onRemove?: () => void;
   };
   customActions?: React.ReactNode;
-  serviceType?: string; // For CatalogItemCombobox service-type-aware sorting
-  itemType?: "expense" | "charge" | "both"; // For CatalogItemCombobox auto-type on create
+  serviceType?: string; // For CatalogItemCombobox (reserved for future smart-sort)
 }
 
 export function UniversalPricingRow({
@@ -63,7 +62,6 @@ export function UniversalPricingRow({
   handlers,
   customActions,
   serviceType,
-  itemType
 }: UniversalPricingRowProps) {
   const { simpleMode, showCost, showMarkup, showTax, showForex, priceEditable, showPHPConversion } = config;
   const isViewMode = mode === "view";
@@ -145,16 +143,10 @@ export function UniversalPricingRow({
               value={data.description}
               catalogItemId={data.catalog_item_id}
               serviceType={serviceType}
-              itemType={itemType}
-              onChange={(description, catalogItemId, defaults) => {
+              onChange={(description, catalogItemId) => {
                 handleFieldChange('description', description);
                 if (catalogItemId !== undefined) {
                   handleFieldChange('catalog_item_id', catalogItemId);
-                }
-                // Apply defaults from catalog when selecting an item
-                if (defaults) {
-                  if (defaults.currency) handleFieldChange('currency', defaults.currency);
-                  if (defaults.is_taxable !== undefined) handleFieldChange('is_taxed', defaults.is_taxable);
                 }
               }}
               placeholder="Item description"
@@ -551,7 +543,7 @@ export function UniversalPricingRow({
           
           {simpleMode && data.status && isViewMode && (
              <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium border
-               ${data.status === 'paid' ? "bg-[#ECFDF5] text-[#059669] border-[#A7F3D0]" : 
+               ${data.status === 'paid' ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[#A7F3D0]" : 
                  (data.status === 'billed' || data.status === 'invoiced') ? "bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]" : 
                  "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] border-[var(--theme-border-default)]"}`}>
                {data.status === 'paid' ? "Paid" : (data.status === 'billed' || data.status === 'invoiced') ? "Invoiced" : "Unbilled"}
@@ -574,7 +566,7 @@ export function UniversalPricingRow({
               border: "1px solid #FCD4D1",
               borderRadius: "6px",
               backgroundColor: "var(--theme-bg-surface)",
-              color: "#DC2626",
+              color: "var(--theme-status-danger-fg)",
               cursor: "pointer",
               fontWeight: 500,
               transition: "all 0.2s ease"

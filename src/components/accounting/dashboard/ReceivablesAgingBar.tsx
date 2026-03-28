@@ -52,9 +52,9 @@ interface ReceivablesAgingBarProps {
 
 const AGING_CONFIG: { label: string; days: string; min: number; max: number; color: string; bgLight: string }[] = [
   { label: "Current",  days: "Not yet due",   min: -Infinity, max: 0,   color: "var(--theme-action-primary-bg)", bgLight: "#F0FDFA" },
-  { label: "1–30d",    days: "1–30 days",      min: 1,         max: 30,  color: "#D97706", bgLight: "#FFFBEB" },
+  { label: "1–30d",    days: "1–30 days",      min: 1,         max: 30,  color: "var(--theme-status-warning-fg)", bgLight: "#FFFBEB" },
   { label: "31–60d",   days: "31–60 days",     min: 31,        max: 60,  color: "#EA580C", bgLight: "#FFF7ED" },
-  { label: "61–90d",   days: "61–90 days",     min: 61,        max: 90,  color: "#DC2626", bgLight: "#FEF2F2" },
+  { label: "61–90d",   days: "61–90 days",     min: 61,        max: 90,  color: "var(--theme-status-danger-fg)", bgLight: "#FEF2F2" },
   { label: "90d+",     days: "Over 90 days",   min: 91,        max: Infinity, color: "#991B1B", bgLight: "#FEF2F2" },
 ];
 
@@ -71,8 +71,8 @@ function getBalance(inv: any, collections: any[] = []): number {
 /** DSO severity: teal ≤30, amber 31–60, red 61+ */
 function getDsoStyle(dso: number): { bg: string; color: string } {
   if (dso <= 30) return { bg: "#F0FDFA", color: "var(--theme-action-primary-bg)" };
-  if (dso <= 60) return { bg: "#FFFBEB", color: "#D97706" };
-  return { bg: "#FEF2F2", color: "#DC2626" };
+  if (dso <= 60) return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
+  return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
 }
 
 /** Format date as "Mar 8, 2026" */

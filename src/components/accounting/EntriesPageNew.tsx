@@ -261,8 +261,8 @@ export function EntriesPageNew() {
   const StatusBadge = ({ status }: { status: string }) => {
     const styles = {
       Pending: "bg-orange-100 text-orange-800 border-orange-200",
-      Approved: "bg-green-100 text-green-800 border-green-200",
-      Rejected: "bg-red-100 text-red-800 border-red-200",
+      Approved: "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]",
+      Rejected: "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]",
     };
     return (
       <div className={`inline-flex px-2 py-0.5 border text-[12px] ${styles[status as keyof typeof styles]}`} style={{ borderRadius: 'var(--radius-xs)' }}>

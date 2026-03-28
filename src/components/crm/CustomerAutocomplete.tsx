@@ -164,7 +164,7 @@ export function CustomerAutocomplete({
       </div>
 
       {error && (
-        <p style={{ color: "#EF4444", fontSize: "12px", marginTop: "4px" }}>
+        <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "12px", marginTop: "4px" }}>
           {error}
         </p>
       )}

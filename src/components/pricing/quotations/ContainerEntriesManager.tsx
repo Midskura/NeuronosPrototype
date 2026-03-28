@@ -161,7 +161,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
                   backgroundColor: "var(--theme-bg-surface)",
                   border: "1px solid #FCA5A5",
                   borderRadius: "6px",
-                  color: "#DC2626",
+                  color: "var(--theme-status-danger-fg)",
                   cursor: "pointer",
                   transition: "all 0.15s ease"
                 }}

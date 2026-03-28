@@ -172,7 +172,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 }}
               />
               {errors.name && (
-                <p style={{ color: "#EF4444", fontSize: "12px", marginTop: "4px" }}>{errors.name}</p>
+                <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "12px", marginTop: "4px" }}>{errors.name}</p>
               )}
             </div>
 
@@ -210,7 +210,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 }}
               />
               {errors.email && (
-                <p style={{ color: "#EF4444", fontSize: "12px", marginTop: "4px" }}>{errors.email}</p>
+                <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "12px", marginTop: "4px" }}>{errors.email}</p>
               )}
             </div>
 
@@ -248,7 +248,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 }}
               />
               {errors.phone && (
-                <p style={{ color: "#EF4444", fontSize: "12px", marginTop: "4px" }}>{errors.phone}</p>
+                <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "12px", marginTop: "4px" }}>{errors.phone}</p>
               )}
             </div>
 
@@ -286,7 +286,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 }}
               />
               {errors.company && (
-                <p style={{ color: "#EF4444", fontSize: "12px", marginTop: "4px" }}>{errors.company}</p>
+                <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "12px", marginTop: "4px" }}>{errors.company}</p>
               )}
             </div>
 
@@ -361,7 +361,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
             </div>
 
             {errors.submit && (
-              <p style={{ color: "#EF4444", fontSize: "14px", margin: 0 }}>{errors.submit}</p>
+              <p style={{ color: "var(--theme-status-danger-fg)", fontSize: "14px", margin: 0 }}>{errors.submit}</p>
             )}
           </div>
 

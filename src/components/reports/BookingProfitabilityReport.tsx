@@ -63,10 +63,10 @@ export function BookingProfitabilityReport({ entries, period, generatedAt, compa
               <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "#E3F2F7", color: "#000000" }}>
                 REVENUE (₱)
               </th>
-              <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "#FFE5E5", color: "#000000" }}>
+              <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#000000" }}>
                 EXPENSES (₱)
               </th>
-              <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "#FFE5E5", color: "#000000" }}>
+              <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#000000" }}>
                 ADMIN COST (₱)
               </th>
               <th style={{ border: "1px solid #000", padding: "6px 8px", fontWeight: 600, fontSize: "9px", textAlign: "right", backgroundColor: "#E8F5E9", color: "#000000" }}>
@@ -98,10 +98,10 @@ export function BookingProfitabilityReport({ entries, period, generatedAt, compa
                 <td style={{ border: "1px solid #000", padding: "4px 8px", fontSize: "9px", textAlign: "right", backgroundColor: "#E3F2F7", color: "#1F2937" }}>
                   ₱{entry.revenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </td>
-                <td style={{ border: "1px solid #000", padding: "4px 8px", fontSize: "9px", textAlign: "right", backgroundColor: "#FFE5E5", color: "#2A2A2A" }}>
+                <td style={{ border: "1px solid #000", padding: "4px 8px", fontSize: "9px", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#2A2A2A" }}>
                   ₱{entry.expenses.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </td>
-                <td style={{ border: "1px solid #000", padding: "4px 8px", fontSize: "9px", textAlign: "right", backgroundColor: "#FFE5E5", color: "#2A2A2A" }}>
+                <td style={{ border: "1px solid #000", padding: "4px 8px", fontSize: "9px", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#2A2A2A" }}>
                   ₱{entry.adminCost.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </td>
                 <td style={{ 
@@ -129,10 +129,10 @@ export function BookingProfitabilityReport({ entries, period, generatedAt, compa
               <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "#E3F2F7", color: "#000000" }}>
                 ₱{totals.revenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </td>
-              <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "#FFE5E5", color: "#000000" }}>
+              <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#000000" }}>
                 ₱{totals.expenses.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </td>
-              <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "#FFE5E5", color: "#000000" }}>
+              <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "var(--theme-status-danger-bg)", color: "#000000" }}>
                 ₱{totals.adminCost.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </td>
               <td style={{ border: "2px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", backgroundColor: "#E8F5E9", color: "#000000" }}>

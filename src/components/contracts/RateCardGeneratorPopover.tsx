@@ -327,7 +327,7 @@ export function RateCardGeneratorPopover({
                         alignItems: "center",
                         gap: "4px",
                         fontSize: "12px",
-                        color: "#059669",
+                        color: "var(--theme-status-success-fg)",
                         fontWeight: 500,
                       }}
                     >
@@ -341,7 +341,7 @@ export function RateCardGeneratorPopover({
                         alignItems: "center",
                         gap: "4px",
                         fontSize: "12px",
-                        color: "#D97706",
+                        color: "var(--theme-status-warning-fg)",
                         fontWeight: 500,
                       }}
                       title={`No rate matrix found for "${row.serviceType}" in this contract`}

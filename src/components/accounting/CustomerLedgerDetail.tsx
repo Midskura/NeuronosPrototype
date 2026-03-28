@@ -297,7 +297,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
                 {/* Total Billed */}
                 <div className="p-5 rounded-xl border border-[1.5px] border-[var(--neuron-ui-border)] bg-[var(--theme-bg-surface)]">
                   <div className="flex items-start justify-between mb-3">
-                    <div className="p-2 rounded-lg bg-[#E8F5F3]">
+                    <div className="p-2 rounded-lg bg-[var(--theme-bg-surface-tint)]">
                       <FileText size={18} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </div>
                   </div>
@@ -418,7 +418,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
                             <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)]">{formatDate(item.date)}</td>
                             <td className="px-6 py-3">
                               <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium ${
-                                item.type === "Invoice" ? "bg-orange-50 text-orange-700" : "bg-green-50 text-green-700"
+                                item.type === "Invoice" ? "bg-orange-50 text-orange-700" : "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"
                               }`}>
                                 {item.type}
                               </span>
@@ -501,7 +501,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
 
                         {/* Movement */}
                         <td className="px-6 py-5">
-                          <span className="inline-flex px-2.5 py-1 rounded text-[11px] font-semibold bg-[#E8F5F3] text-[var(--theme-action-primary-bg)] uppercase tracking-wide">
+                          <span className="inline-flex px-2.5 py-1 rounded text-[11px] font-semibold bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)] uppercase tracking-wide">
                             IMPORT
                           </span>
                         </td>
@@ -518,7 +518,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
                         {/* Status */}
                         <td className="px-6 py-5">
                           <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-medium ${
-                            project.status === 'Completed' ? 'bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]' : 'bg-[#F0FDF4] text-[#15803D]'
+                            project.status === 'Completed' ? 'bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]' : 'bg-[#F0FDF4] text-[var(--theme-status-success-fg)]'
                           }`}>
                             {project.status || "Active"}
                           </span>
@@ -670,7 +670,7 @@ export function CustomerLedgerDetail({ customer, onClose }: CustomerLedgerDetail
                         <td className="px-6 py-4 text-[13px] text-[var(--theme-text-secondary)]">{formatDate(col.collection_date || col.created_at)}</td>
                         <td className="px-6 py-4 text-[13px] text-[var(--theme-text-primary)]">{col.payment_method || "Check"}</td>
                         <td className="px-6 py-4 text-[13px] text-[var(--theme-text-primary)]">{col.deposit_account || "Main Ops"}</td>
-                        <td className="px-6 py-4 text-[13px] text-right font-medium text-[#15803D]">
+                        <td className="px-6 py-4 text-[13px] text-right font-medium text-[var(--theme-status-success-fg)]">
                           {formatCurrency(col.amount || 0)}
                         </td>
                       </tr>

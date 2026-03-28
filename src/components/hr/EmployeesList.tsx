@@ -486,10 +486,10 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                   {/* Name with Avatar */}
                   <div className="col-span-4 flex items-center gap-3">
                     <div
-                      className="flex-shrink-0 w-10 h-10 rounded-full bg-[#D1FAE5] flex items-center justify-center"
+                      className="flex-shrink-0 w-10 h-10 rounded-full bg-[var(--theme-status-success-bg)] flex items-center justify-center"
                     >
                       <span
-                        className="text-[#065F46]"
+                        className="text-[var(--theme-status-success-fg)]"
                         style={{ fontSize: "12px", fontWeight: 600 }}
                       >
                         {getInitials(employee.fullName)}
@@ -554,7 +554,7 @@ export function EmployeesList({ filterCompany, userRole, onEmployeeClick }: Empl
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={(e) => handleSuspendEmployee(employee, e)}
-                            className="text-[#C93737] focus:text-[#C93737] focus:bg-[#FEE2E2]"
+                            className="text-[#C93737] focus:text-[#C93737] focus:bg-[var(--theme-status-danger-bg)]"
                           >
                             Suspend employee
                           </DropdownMenuItem>

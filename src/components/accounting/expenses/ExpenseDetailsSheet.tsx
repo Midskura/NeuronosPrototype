@@ -97,25 +97,25 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
     switch (status?.toLowerCase()) {
       case "approved":
       case "posted":
-        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" };
       case "disbursed":
       case "audited":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "disapproved":
       case "rejected":
       case "cancelled":
-        return { bg: "#FFE5E5", color: "#C94F3D" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "under review":
       case "pending":
       case "processing":
       case "submitted":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-page)", color: "var(--theme-text-muted)" };
     }
   };
 
-  const statusStyle = expense ? getStatusColor(expense.status) : { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+  const statusStyle = expense ? getStatusColor(expense.status) : { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
 
   if (!isOpen) return null;
 
@@ -216,7 +216,7 @@ export function ExpenseDetailsSheet({ isOpen, onClose, expenseId }: ExpenseDetai
           {loading ? (
             <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center h-full text-red-500">
+            <div className="flex flex-col items-center justify-center h-full text-[var(--theme-status-danger-fg)]">
                <AlertCircle size={32} className="mb-2" />
                <p>{error}</p>
             </div>

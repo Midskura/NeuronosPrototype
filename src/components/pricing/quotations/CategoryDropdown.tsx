@@ -210,7 +210,7 @@ export function CategoryDropdown({ onAdd, onClose }: CategoryDropdownProps) {
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
-                e.currentTarget.style.color = "#0F766E";
+                e.currentTarget.style.color = "var(--theme-action-primary-bg)";
               }}
             >
               <Plus size={14} />

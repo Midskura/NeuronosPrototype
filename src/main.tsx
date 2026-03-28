@@ -30,7 +30,7 @@ createRoot(document.getElementById("root")!).render(
   <Sentry.ErrorBoundary fallback={<SentryFallback />}>
     <QueryClientProvider client={queryClient}>
       <App />
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+      {false && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   </Sentry.ErrorBoundary>
 );

@@ -613,7 +613,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                           className="w-full px-4 py-2.5 text-left text-[13px] transition-colors flex items-center gap-2"
                           style={{
                             backgroundColor: "var(--theme-bg-surface)",
-                            color: "#C94F3D",
+                            color: "var(--theme-status-danger-fg)",
                             border: "none"
                           }}
                           onMouseEnter={(e) => {

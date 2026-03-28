@@ -533,8 +533,8 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                 { value: "Sent to Client", label: "Sent to Client", icon: <CircleDot size={16} style={{ color: "#3B82F6" }} /> },
                 { value: "Needs Revision", label: "Needs Revision", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
                 { value: "Accepted by Client", label: "Accepted by Client", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
-                { value: "Rejected by Client", label: "Rejected by Client", icon: <CircleDot size={16} style={{ color: "#EF4444" }} /> },
-                { value: "Disapproved", label: "Disapproved", icon: <CircleDot size={16} style={{ color: "#DC2626" }} /> },
+                { value: "Rejected by Client", label: "Rejected by Client", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
+                { value: "Disapproved", label: "Disapproved", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
                 { value: "Converted to Project", label: "Converted to Project", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
                 { value: "Converted to Contract", label: "Converted to Contract", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
                 { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }

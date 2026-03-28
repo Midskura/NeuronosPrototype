@@ -77,20 +77,20 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
-      case "High": return { bg: "#FFE5E5", text: "#C94F3D" };
+      case "High": return { bg: "var(--theme-status-danger-bg)", text: "#C94F3D" };
       case "Medium": return { bg: "#FEF3E7", text: "#C88A2B" };
-      case "Low": return { bg: "#F3F4F6", text: "#6B7A76" };
-      default: return { bg: "#F3F4F6", text: "#6B7A76" };
+      case "Low": return { bg: "var(--theme-bg-surface-subtle)", text: "#6B7A76" };
+      default: return { bg: "var(--theme-bg-surface-subtle)", text: "#6B7A76" };
     }
   };
 
   const getStatusColor = (status: TaskStatus) => {
     switch (status) {
-      case "Completed": return { bg: "#E8F5F3", text: "#0F766E" };
-      case "Cancelled": return { bg: "#FFE5E5", text: "#C94F3D" };
+      case "Completed": return { bg: "var(--theme-bg-surface-tint)", text: "var(--theme-action-primary-bg)" };
+      case "Cancelled": return { bg: "var(--theme-status-danger-bg)", text: "#C94F3D" };
       case "Ongoing": return { bg: "#FEF3E7", text: "#C88A2B" };
-      case "Pending": return { bg: "#F3F4F6", text: "#6B7A76" };
-      default: return { bg: "#F3F4F6", text: "#6B7A76" };
+      case "Pending": return { bg: "var(--theme-bg-surface-subtle)", text: "#6B7A76" };
+      default: return { bg: "var(--theme-bg-surface-subtle)", text: "#6B7A76" };
     }
   };
 
@@ -199,7 +199,7 @@ export function TaskDetailInline({ task, onBack, onUpdate, onDelete, customers, 
               e.currentTarget.style.color = "#0D6560";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#0F766E";
+              e.currentTarget.style.color = "var(--theme-action-primary-bg)";
             }}
           >
             <ArrowLeft size={16} />

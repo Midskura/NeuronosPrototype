@@ -184,11 +184,11 @@ export function FormComboBox({
                   width: "18px",
                   height: "18px",
                   borderRadius: "50%",
-                  backgroundColor: "#FFFBEB",
+                  backgroundColor: "var(--theme-status-warning-bg)",
                 }}
                 title="Outside contract — manual pricing required"
               >
-                <AlertTriangle size={10} style={{ color: "#D97706" }} />
+                <AlertTriangle size={10} style={{ color: "var(--theme-status-warning-fg)" }} />
               </div>
             )
           )}

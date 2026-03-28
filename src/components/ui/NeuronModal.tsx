@@ -99,8 +99,8 @@ export function NeuronModal({
         style={{
           width: "100%",
           maxWidth: "525px",
-          backgroundColor: "#FFFFFF",
-          border: "1px solid #E5ECE9",
+          backgroundColor: "var(--theme-bg-surface)",
+          border: "1px solid var(--theme-border-default)",
           borderRadius: "8px",
           boxShadow: "0 8px 32px 0 rgba(16, 24, 20, 0.12)",
           overflow: "hidden",
@@ -119,7 +119,7 @@ export function NeuronModal({
             style={{
               fontSize: "20px",
               fontWeight: 600,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               letterSpacing: "-0.01em",
               marginBottom: "12px",
               lineHeight: "1.3",
@@ -134,7 +134,7 @@ export function NeuronModal({
             id="neuron-modal-desc"
             style={{
               fontSize: "14px",
-              color: "#6B7A76",
+              color: "var(--theme-text-muted)",
               lineHeight: "1.5",
               margin: 0,
             }}
@@ -144,7 +144,7 @@ export function NeuronModal({
         </div>
 
         {/* Divider */}
-        <div style={{ height: "1px", backgroundColor: "#EEF3F1", margin: "0 32px" }} />
+        <div style={{ height: "1px", backgroundColor: "var(--theme-border-subtle)", margin: "0 32px" }} />
 
         {/* Footer */}
         <div style={{
@@ -162,14 +162,14 @@ export function NeuronModal({
               padding: "8px 18px",
               fontSize: "14px",
               fontWeight: 500,
-              color: "#12332B",
+              color: "var(--theme-text-primary)",
               backgroundColor: "transparent",
-              border: "1px solid #E5ECE9",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "6px",
               cursor: "pointer",
               transition: "background-color 0.15s",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#F1F6F4"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--theme-state-hover)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
           >
             Cancel
@@ -187,7 +187,7 @@ export function NeuronModal({
               fontSize: "14px",
               fontWeight: 500,
               color: "#FFFFFF",
-              backgroundColor: isLoading ? "#D1D5DB" : config.confirmBg,
+              backgroundColor: isLoading ? "var(--theme-border-default)" : config.confirmBg,
               border: "none",
               borderRadius: "6px",
               cursor: isLoading ? "not-allowed" : "pointer",

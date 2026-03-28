@@ -69,7 +69,7 @@ export function QuotationActionMenu({
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
           e.currentTarget.style.backgroundColor = "#F8FBFB";
-          e.currentTarget.style.color = "#0F766E";
+          e.currentTarget.style.color = "var(--theme-action-primary-bg)";
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
@@ -214,7 +214,7 @@ export function QuotationActionMenu({
               borderTop: "1px solid var(--theme-border-subtle)",
               cursor: "pointer",
               fontSize: "14px",
-              color: "#DC2626",
+              color: "var(--theme-status-danger-fg)",
               textAlign: "left",
               transition: "background-color 0.15s ease"
             }}

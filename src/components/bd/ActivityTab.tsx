@@ -25,7 +25,7 @@ export function ActivityTab({ project }: ActivityTabProps) {
     switch (bookingStatus) {
       case "Fully Booked":
         return {
-          bg: "#ECFDF5",
+          bg: "var(--theme-status-success-bg)",
           border: "#10B981",
           text: "#065F46"
         };
@@ -37,9 +37,9 @@ export function ActivityTab({ project }: ActivityTabProps) {
         };
       default:
         return {
-          bg: "#F9FAFB",
-          border: "#D1D5DB",
-          text: "#6B7280"
+          bg: "var(--theme-bg-page)",
+          border: "var(--theme-border-default)",
+          text: "var(--theme-text-muted)"
         };
     }
   };

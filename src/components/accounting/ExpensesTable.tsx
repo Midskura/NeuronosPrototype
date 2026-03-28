@@ -85,10 +85,10 @@ export function ExpensesTable({
     let styles = "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)]"; // Default
     
     // Exact colors from design system
-    if (s === "posted" || s === "paid") styles = "bg-[#ECFDF5] text-[#059669]"; // Green
+    if (s === "posted" || s === "paid") styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"; // Green
     else if (s === "approved") styles = "bg-[#EFF6FF] text-[#2563EB]"; // Blue
-    else if (s === "rejected" || s === "cancelled") styles = "bg-[#FEF2F2] text-[#DC2626]"; // Red
-    else if (s === "pending" || s === "draft") styles = "bg-[#FFFBEB] text-[#D97706]"; // Amber
+    else if (s === "rejected" || s === "cancelled") styles = "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]"; // Red
+    else if (s === "pending" || s === "draft") styles = "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]"; // Amber
 
     return (
       <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${styles}`}>
@@ -160,7 +160,7 @@ export function ExpensesTable({
           return (
           <div
             key={item.id || index}
-            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[#F1F6F4]" : ""} ${isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md" : ""}`}
+            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[var(--theme-state-hover)]" : ""} ${isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md" : ""}`}
             onClick={() => onRowClick && onRowClick(item.originalData || item)}
             ref={isHighlighted ? highlightRef : undefined}
           >

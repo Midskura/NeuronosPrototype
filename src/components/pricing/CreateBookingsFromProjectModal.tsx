@@ -313,7 +313,7 @@ export function CreateBookingsFromProjectModal({
                 </div>
                 
                 {state.isCreated && (
-                  <div className="flex items-center gap-2 text-green-600">
+                  <div className="flex items-center gap-2 text-[var(--theme-status-success-fg)]">
                     <Check className="w-5 h-5" />
                     <span className="text-sm font-['Inter:Medium',sans-serif] font-medium">
                       Booking Created
@@ -333,7 +333,7 @@ export function CreateBookingsFromProjectModal({
 
                   {/* Error Message */}
                   {state.error && (
-                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="mt-4 p-3 bg-[var(--theme-status-danger-bg)] border border-[var(--theme-status-danger-border)] rounded-lg">
                       <p className="text-sm text-red-700">{state.error}</p>
                     </div>
                   )}
@@ -358,7 +358,7 @@ export function CreateBookingsFromProjectModal({
 
               {/* Booking Created State */}
               {state.isCreated && state.bookingId && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div className="bg-[var(--theme-status-success-bg)] border border-[var(--theme-status-success-border)] rounded-lg p-4">
                   <p className="text-sm text-green-800">
                     <span className="font-['Inter:Medium',sans-serif] font-medium">Booking ID:</span> {state.bookingId}
                   </p>

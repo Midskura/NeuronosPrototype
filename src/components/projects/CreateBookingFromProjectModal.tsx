@@ -440,7 +440,7 @@ export function CreateBookingFromProjectModal({
             <Info size={18} color="#92400E" style={{ flexShrink: 0, marginTop: "2px" }} />
             <div style={{
               fontSize: "13px",
-              color: "#92400E",
+              color: "var(--theme-status-warning-fg)",
               lineHeight: "1.6"
             }}>
               <strong>Next Step:</strong> After creation, you'll be able to add operational details (vessel, dates, container numbers, etc.) in the booking form.

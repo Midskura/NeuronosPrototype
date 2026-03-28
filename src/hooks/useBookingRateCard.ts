@@ -34,7 +34,7 @@ export interface BookingRateCardData {
  * @param contractId — The booking's `contract_id` field (undefined/empty if not a contract booking)
  */
 export function useBookingRateCard(contractId?: string): BookingRateCardData {
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: queryKeys.contracts.rateCard(contractId ?? ""),
     queryFn: async () => {
       const { data: row, error } = await supabase
@@ -46,11 +46,13 @@ export function useBookingRateCard(contractId?: string): BookingRateCardData {
       if (error) throw error;
       if (!row) return null;
 
+      const merged = { ...row.details, ...row };
+
       return {
-        rateMatrices: (row.rate_matrices ?? []) as ContractRateMatrix[],
-        contractNumber: row.quote_number ?? "",
-        customerName: row.customer_name ?? "",
-        currency: row.currency ?? "PHP",
+        rateMatrices: (merged.rate_matrices ?? []) as ContractRateMatrix[],
+        contractNumber: merged.quote_number ?? "",
+        customerName: merged.customer_name ?? "",
+        currency: merged.currency ?? "PHP",
       };
     },
     enabled: !!contractId,
@@ -59,7 +61,7 @@ export function useBookingRateCard(contractId?: string): BookingRateCardData {
 
   return {
     rateMatrices: data?.rateMatrices ?? [],
-    isLoading: !data,
+    isLoading,
     isContractBooking: !!contractId,
     contractId: contractId ?? "",
     contractNumber: data?.contractNumber ?? "",

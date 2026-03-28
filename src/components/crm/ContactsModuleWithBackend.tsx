@@ -142,15 +142,15 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Customer":
-        return { bg: "#D1FAE5", text: "#10B981" };
+        return { bg: "var(--theme-status-success-bg)", text: "#10B981" };
       case "MQL":
         return { bg: "#DBEAFE", text: "#3B82F6" };
       case "Prospect":
-        return { bg: "#FEF3C7", text: "#F59E0B" };
+        return { bg: "var(--theme-status-warning-bg)", text: "#F59E0B" };
       case "Lead":
-        return { bg: "#F3F4F6", text: "#6B7280" };
+        return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
       default:
-        return { bg: "#F3F4F6", text: "#6B7280" };
+        return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
     }
   };
 

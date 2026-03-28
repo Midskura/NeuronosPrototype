@@ -229,10 +229,10 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                     <button
                       onClick={cancelEdit}
                       disabled={saving}
-                      className="p-1 rounded hover:bg-red-50 transition-colors"
+                      className="p-1 rounded hover:bg-[var(--theme-status-danger-bg)] transition-colors"
                       title="Cancel"
                     >
-                      <X size={14} className="text-red-500" />
+                      <X size={14} className="text-[var(--theme-status-danger-fg)]" />
                     </button>
                   </div>
                 ) : (
@@ -266,7 +266,7 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                     </button>
                     <button
                       onClick={() => handleDelete(c.id)}
-                      className="p-0.5 rounded opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
+                      className="p-0.5 rounded opacity-0 group-hover:opacity-100 hover:bg-[var(--theme-status-danger-bg)] transition-all"
                       title="Delete"
                     >
                       <Trash2 size={12} className="text-red-400" />
@@ -304,10 +304,10 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                 <button
                   onClick={cancelAdd}
                   disabled={saving}
-                  className="p-1 rounded hover:bg-red-50 transition-colors"
+                  className="p-1 rounded hover:bg-[var(--theme-status-danger-bg)] transition-colors"
                   title="Cancel"
                 >
-                  <X size={14} className="text-red-500" />
+                  <X size={14} className="text-[var(--theme-status-danger-fg)]" />
                 </button>
               </div>
             ) : (

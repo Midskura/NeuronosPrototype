@@ -212,7 +212,7 @@ export function EditableSectionCard({
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
-                  e.currentTarget.style.color = "#0F766E";
+                  e.currentTarget.style.color = "var(--theme-action-primary-bg)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "var(--theme-border-default)";

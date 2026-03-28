@@ -444,13 +444,13 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
           <table className="w-full">
             <thead>
               <tr style={{ borderBottom: "1.5px solid var(--neuron-ui-border)" }}>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>CONTACT</th>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>COMPANY</th>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>PHONE</th>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>EMAIL</th>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>STAGE</th>
-                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>LAST ACTIVITY</th>
-                <th className="text-center px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>ACTIONS</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>CONTACT</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>COMPANY</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>PHONE</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>EMAIL</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>STAGE</th>
+                <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>LAST ACTIVITY</th>
+                <th className="text-center px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>ACTIONS</th>
               </tr>
             </thead>
             <tbody>
@@ -472,7 +472,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                   return (
                     <tr 
                       key={contact.id} 
-                      className="cursor-pointer hover:bg-[#FAFBFB] transition-colors"
+                      className="cursor-pointer hover:bg-[var(--theme-state-hover)] transition-colors"
                       style={{ borderBottom: "1px solid var(--neuron-ui-border)" }}
                       onClick={() => onViewContact(contact as any)}
                     >
@@ -517,7 +517,7 @@ export function ContactsListWithFilters({ userDepartment, onViewContact }: Conta
                       </td>
                       <td className="px-4 py-3 text-center">
                         <button 
-                          className="p-1 rounded hover:bg-[#E8F5F3] transition-colors"
+                          className="p-1 rounded hover:bg-[var(--theme-state-selected)] transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
                           }}

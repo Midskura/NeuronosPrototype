@@ -58,11 +58,11 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Customer": return { bg: "#D1FAE5", text: "#10B981" };
+      case "Customer": return { bg: "var(--theme-status-success-bg)", text: "#10B981" };
       case "MQL": return { bg: "#DBEAFE", text: "#3B82F6" };
-      case "Prospect": return { bg: "#FEF3C7", text: "#F59E0B" };
-      case "Lead": return { bg: "#F3F4F6", text: "#6B7280" };
-      default: return { bg: "#F3F4F6", text: "#6B7280" };
+      case "Prospect": return { bg: "var(--theme-status-warning-bg)", text: "#F59E0B" };
+      case "Lead": return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
+      default: return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
     }
   };
 

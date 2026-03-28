@@ -195,9 +195,9 @@ export function QuotationRateBreakdownSheet({
 
         {/* Read-only notice */}
         <div className="px-8 pb-6">
-          <div className="flex items-center gap-2 px-3 py-2.5 rounded-md bg-[#FFFBEB] border border-[#FDE68A]">
-            <Info size={13} className="text-[#D97706] shrink-0" />
-            <span className="text-[11px] text-[#92400E]">
+          <div className="flex items-center gap-2 px-3 py-2.5 rounded-md bg-[var(--theme-status-warning-bg)] border border-[#FDE68A]">
+            <Info size={13} className="text-[var(--theme-status-warning-fg)] shrink-0" />
+            <span className="text-[11px] text-[var(--theme-status-warning-fg)]">
               These rates have been applied to your selling prices. Edit them directly in the Selling Price section below.
             </span>
           </div>

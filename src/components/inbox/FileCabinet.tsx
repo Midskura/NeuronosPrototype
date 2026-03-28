@@ -155,17 +155,17 @@ const DRAWERS = [
 function StatusBadge({ status }: { status?: string }) {
   if (!status) return null;
   const colorMap: Record<string, { color: string; bg: string }> = {
-    active:    { color: "#059669", bg: "#F0FDF4" },
+    active:    { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
     open:      { color: "#0369A1", bg: "#EFF6FF" },
-    draft:     { color: "var(--theme-text-muted)", bg: "#F3F4F6" },
-    sent:      { color: "#D97706", bg: "#FEF9EE" },
+    draft:     { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
+    sent:      { color: "var(--theme-status-warning-fg)", bg: "#FEF9EE" },
     approved:  { color: "#7C3AED", bg: "#F5F3FF" },
     posted:    { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-    paid:      { color: "#059669", bg: "#F0FDF4" },
-    cancelled: { color: "#DC2626", bg: "#FFF5F5" },
+    paid:      { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
+    cancelled: { color: "var(--theme-status-danger-fg)", bg: "#FFF5F5" },
   };
   const s = status.toLowerCase();
-  const c = colorMap[s] ?? { color: "var(--theme-text-muted)", bg: "#F3F4F6" };
+  const c = colorMap[s] ?? { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
   return (
     <span style={{ fontSize: 10, fontWeight: 600, color: c.color, backgroundColor: c.bg, padding: "1px 6px", borderRadius: 4, textTransform: "capitalize", flexShrink: 0 }}>
       {status}

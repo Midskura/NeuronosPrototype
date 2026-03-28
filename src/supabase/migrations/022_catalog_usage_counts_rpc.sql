@@ -3,7 +3,7 @@
 -- Replaces full-table fetch + JS count in CatalogManagementPage.
 
 create or replace function get_catalog_usage_counts()
-returns table(catalog_item_id uuid, usage_count bigint)
+returns table(catalog_item_id text, usage_count bigint)
 language sql
 stable
 security definer

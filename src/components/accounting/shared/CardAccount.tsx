@@ -91,7 +91,7 @@ export function CardAccount({
             {onDelete && (
               <DropdownMenuItem
                 onClick={() => onDelete(account.id)}
-                className="text-red-600 focus:text-red-600"
+                className="text-[var(--theme-status-danger-fg)] focus:text-[var(--theme-status-danger-fg)]"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete

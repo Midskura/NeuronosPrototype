@@ -53,8 +53,8 @@ export function TableAccountingEntries({
   const StatusBadge = ({ status }: { status: string }) => {
     const colors = {
       Pending: "bg-orange-100 text-orange-800 border-orange-200",
-      Approved: "bg-green-100 text-green-800 border-green-200",
-      Rejected: "bg-red-100 text-red-800 border-red-200",
+      Approved: "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]",
+      Rejected: "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]",
     };
     return (
       <Badge className={`${colors[status as keyof typeof colors]} border text-xs px-2 py-0.5`} style={{ borderRadius: 'var(--radius-xs)' }}>
@@ -78,7 +78,7 @@ export function TableAccountingEntries({
       <div className="border border-[var(--theme-border-default)] overflow-hidden" style={{ borderRadius: 'var(--radius-sm)' }}>
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <p className="text-[14px] text-red-600 mb-2">{error}</p>
+            <p className="text-[14px] text-[var(--theme-status-danger-fg)] mb-2">{error}</p>
             <p className="text-[12px] text-[var(--theme-text-muted)]">Please try again or contact support</p>
           </div>
         </div>

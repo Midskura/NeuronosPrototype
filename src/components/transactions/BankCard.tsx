@@ -105,7 +105,7 @@ export function BankCard({
                 // onMouseDown prevents the input blur event from firing before the click
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={handleDelete}
-                className="p-1 hover:bg-red-50 rounded text-red-400 hover:text-red-600 outline-none transition-colors"
+                className="p-1 hover:bg-[var(--theme-status-danger-bg)] rounded text-red-400 hover:text-[var(--theme-status-danger-fg)] outline-none transition-colors"
                 title="Delete Account"
              >
                 <Trash2 size={12} />

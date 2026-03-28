@@ -233,7 +233,7 @@ export function ContractsList({
               options={[
                 { value: "all", label: "All Statuses", icon: <CircleDot size={16} /> },
                 { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> },
-                { value: "Expiring", label: "Expiring", icon: <AlertCircle size={16} style={{ color: "#D97706" }} /> },
+                { value: "Expiring", label: "Expiring", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
                 { value: "Expired", label: "Expired", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
                 { value: "Renewed", label: "Renewed", icon: <CheckCircle size={16} style={{ color: "#7C3AED" }} /> },
                 { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }

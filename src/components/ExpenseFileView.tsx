@@ -44,11 +44,11 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]";
       case "Pending":
         return "bg-orange-100 text-orange-800 border-orange-200";
       case "Rejected":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]";
       default:
         return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-primary)] border-[var(--theme-border-default)]";
     }
@@ -227,8 +227,8 @@ export function ExpenseFileView({ expense, onBack }: ExpenseFileViewProps) {
                       <Image className="w-5 h-5 text-blue-600" />
                     </div>
                   ) : (
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-red-600" />
+                    <div className="w-10 h-10 bg-[var(--theme-status-danger-bg)] rounded-lg flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-[var(--theme-status-danger-fg)]" />
                     </div>
                   )}
                   <div>

@@ -103,14 +103,14 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
         if (!isLoading) {
           e.currentTarget.style.backgroundColor = "#F0F7F5";
           e.currentTarget.style.borderColor = "#C8E6E2";
-          e.currentTarget.style.color = "#0F766E";
+          e.currentTarget.style.color = "var(--theme-action-primary-bg)";
         }
       }}
       onMouseLeave={(e) => {
         if (!isLoading) {
           e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
           e.currentTarget.style.borderColor = "var(--theme-border-default)";
-          e.currentTarget.style.color = "#374151";
+          e.currentTarget.style.color = "var(--theme-text-secondary)";
         }
       }}
     >

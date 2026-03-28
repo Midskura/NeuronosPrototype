@@ -203,7 +203,7 @@ export function ModalNewEntry({
               {/* Amount */}
               <div className="space-y-2">
                 <Label className="text-[14px]">
-                  Amount <span className="text-red-600">*</span>
+                  Amount <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -214,7 +214,7 @@ export function ModalNewEntry({
                   style={{ borderRadius: 'var(--radius-sm)' }}
                 />
                 {errors.amount && (
-                  <p className="text-[12px] text-red-600">{errors.amount}</p>
+                  <p className="text-[12px] text-[var(--theme-status-danger-fg)]">{errors.amount}</p>
                 )}
               </div>
 
@@ -250,7 +250,7 @@ export function ModalNewEntry({
               {/* Company */}
               <div className="space-y-2">
                 <Label className="text-[14px]">
-                  Company <span className="text-red-600">*</span>
+                  Company <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </Label>
                 <Select value={formData.company} onValueChange={(value) => setFormData({ ...formData, company: value })}>
                   <SelectTrigger style={{ borderRadius: 'var(--radius-sm)' }}>
@@ -265,7 +265,7 @@ export function ModalNewEntry({
                   </SelectContent>
                 </Select>
                 {errors.company && (
-                  <p className="text-[12px] text-red-600">{errors.company}</p>
+                  <p className="text-[12px] text-[var(--theme-status-danger-fg)]">{errors.company}</p>
                 )}
               </div>
 
@@ -273,7 +273,7 @@ export function ModalNewEntry({
               <div className="space-y-2">
                 <Label className="text-[14px]">
                   {formData.type === "transfer" ? "Source Account" : "Account"}{" "}
-                  <span className="text-red-600">*</span>
+                  <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </Label>
                 <Select value={formData.account} onValueChange={(value) => setFormData({ ...formData, account: value })}>
                   <SelectTrigger style={{ borderRadius: 'var(--radius-sm)' }}>
@@ -288,7 +288,7 @@ export function ModalNewEntry({
                   </SelectContent>
                 </Select>
                 {errors.account && (
-                  <p className="text-[12px] text-red-600">{errors.account}</p>
+                  <p className="text-[12px] text-[var(--theme-status-danger-fg)]">{errors.account}</p>
                 )}
               </div>
 
@@ -296,7 +296,7 @@ export function ModalNewEntry({
               {formData.type !== "transfer" && (
                 <div className="space-y-2">
                   <Label className="text-[14px]">
-                    Category <span className="text-red-600">*</span>
+                    Category <span className="text-[var(--theme-status-danger-fg)]">*</span>
                   </Label>
                   <Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}>
                     <SelectTrigger style={{ borderRadius: 'var(--radius-sm)' }}>
@@ -311,7 +311,7 @@ export function ModalNewEntry({
                     </SelectContent>
                   </Select>
                   {errors.category && (
-                    <p className="text-[12px] text-red-600">{errors.category}</p>
+                    <p className="text-[12px] text-[var(--theme-status-danger-fg)]">{errors.category}</p>
                   )}
                 </div>
               )}
@@ -357,7 +357,7 @@ export function ModalNewEntry({
               {formData.type === "transfer" && (
                 <div className="space-y-2">
                   <Label className="text-[14px]">
-                    Target Account <span className="text-red-600">*</span>
+                    Target Account <span className="text-[var(--theme-status-danger-fg)]">*</span>
                   </Label>
                   <Select value={formData.targetAccount} onValueChange={(value) => setFormData({ ...formData, targetAccount: value })}>
                     <SelectTrigger style={{ borderRadius: 'var(--radius-sm)' }}>
@@ -372,7 +372,7 @@ export function ModalNewEntry({
                     </SelectContent>
                   </Select>
                   {errors.targetAccount && (
-                    <p className="text-[12px] text-red-600">{errors.targetAccount}</p>
+                    <p className="text-[12px] text-[var(--theme-status-danger-fg)]">{errors.targetAccount}</p>
                   )}
                 </div>
               )}

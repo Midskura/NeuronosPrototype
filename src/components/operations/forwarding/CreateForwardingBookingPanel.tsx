@@ -417,7 +417,7 @@ export function CreateForwardingBookingPanel({
                 {/* Movement Toggle */}
                 <div>
                   <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
-                    Movement <span style={{ color: "#C94F3D" }}>*</span>
+                    Movement <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <MovementToggle
                     value={movement}
@@ -713,7 +713,7 @@ export function CreateForwardingBookingPanel({
                       className="block mb-1.5"
                       style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
-                      Pending Reason <span style={{ color: "#C94F3D" }}>*</span>
+                      Pending Reason <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                     </label>
                     <textarea
                       required
@@ -737,7 +737,7 @@ export function CreateForwardingBookingPanel({
                       className="block mb-1.5"
                       style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                     >
-                      Completion Date <span style={{ color: "#C94F3D" }}>*</span>
+                      Completion Date <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                     </label>
                     <input
                       type="date"
@@ -761,7 +761,7 @@ export function CreateForwardingBookingPanel({
                         className="block mb-1.5"
                         style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
-                        Cancellation Reason <span style={{ color: "#C94F3D" }}>*</span>
+                        Cancellation Reason <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                       </label>
                       <textarea
                         required
@@ -782,7 +782,7 @@ export function CreateForwardingBookingPanel({
                         className="block mb-1.5"
                         style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                       >
-                        Cancelled Date <span style={{ color: "#C94F3D" }}>*</span>
+                        Cancelled Date <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                       </label>
                       <input
                         type="date"

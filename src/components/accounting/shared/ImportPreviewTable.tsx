@@ -40,19 +40,19 @@ export function ImportPreviewTable({
   const StatusIcon = ({ status }: { status: ImportRow["status"] }) => {
     switch (status) {
       case "valid":
-        return <CheckCircle className="w-4 h-4 text-green-600" />;
+        return <CheckCircle className="w-4 h-4 text-[var(--theme-status-success-fg)]" />;
       case "warning":
         return <AlertTriangle className="w-4 h-4 text-orange-600" />;
       case "error":
-        return <AlertCircle className="w-4 h-4 text-red-600" />;
+        return <AlertCircle className="w-4 h-4 text-[var(--theme-status-danger-fg)]" />;
     }
   };
 
   const StatusBadge = ({ status }: { status: ImportRow["status"] }) => {
     const variants = {
-      valid: "bg-green-100 text-green-800 border-green-200",
+      valid: "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]",
       warning: "bg-orange-100 text-orange-800 border-orange-200",
-      error: "bg-red-100 text-red-800 border-red-200",
+      error: "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]",
     };
     const labels = {
       valid: "Valid",
@@ -75,7 +75,7 @@ export function ImportPreviewTable({
       <div className="flex items-center justify-between p-4 bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)]" style={{ borderRadius: 'var(--radius-sm)' }}>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
+            <CheckCircle className="w-4 h-4 text-[var(--theme-status-success-fg)]" />
             <span className="text-[14px] text-[var(--theme-text-secondary)]">
               <span className="font-medium tabular-nums">{validCount}</span> Valid
             </span>
@@ -87,7 +87,7 @@ export function ImportPreviewTable({
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-600" />
+            <AlertCircle className="w-4 h-4 text-[var(--theme-status-danger-fg)]" />
             <span className="text-[14px] text-[var(--theme-text-secondary)]">
               <span className="font-medium tabular-nums">{errorCount}</span> Errors
             </span>
@@ -141,7 +141,7 @@ export function ImportPreviewTable({
                 <TableRow
                   key={row.line}
                   className={`border-b border-[var(--theme-border-default)] ${
-                    row.status === "error" ? "bg-red-50" : ""
+                    row.status === "error" ? "bg-[var(--theme-status-danger-bg)]" : ""
                   }`}
                   style={{ minHeight: '48px' }}
                 >
@@ -172,7 +172,7 @@ export function ImportPreviewTable({
                   <TableCell>
                     <StatusBadge status={row.status} />
                   </TableCell>
-                  <TableCell className="text-[12px] text-red-600 max-w-[200px]">
+                  <TableCell className="text-[12px] text-[var(--theme-status-danger-fg)] max-w-[200px]">
                     {row.error ? (
                       <div className="flex items-start gap-1">
                         <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />

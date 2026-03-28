@@ -27,10 +27,10 @@ export function SegmentedToggle<T extends string>({
       className={className}
       style={{ 
         display: "inline-flex",
-        border: "1px solid #E5E9F0", // var(--neuron-ui-border)
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "10px",
         padding: "4px",
-        backgroundColor: "white",
+        backgroundColor: "var(--theme-bg-surface)",
         width: "fit-content"
       }}
     >
@@ -46,7 +46,7 @@ export function SegmentedToggle<T extends string>({
               padding: "6px 16px",
               fontSize: "13px",
               fontWeight: 500,
-              color: isActive ? "white" : "#4B5563", // var(--neuron-ink-secondary)
+              color: isActive ? "white" : "var(--theme-text-secondary)",
               backgroundColor: "transparent",
               border: "none",
               borderRadius: "6px",
@@ -65,7 +65,7 @@ export function SegmentedToggle<T extends string>({
                 style={{
                   position: "absolute",
                   inset: 0,
-                  backgroundColor: "#0F766E",
+                  backgroundColor: "var(--theme-action-primary-bg)",
                   borderRadius: "6px",
                   zIndex: -1
                 }}

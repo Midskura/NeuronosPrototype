@@ -50,8 +50,8 @@ interface EmployeeFileModalProps {
 }
 
 const COMPANY_COLORS: Record<string, string> = {
-  "Conforme Cargo Express": "bg-[#FEF3C7] text-[#92400E]",
-  "ZEUJ One Marketing International": "bg-[#D1FAE5] text-[#065F46]",
+  "Conforme Cargo Express": "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]",
+  "ZEUJ One Marketing International": "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]",
   "Juan Logistica Courier Services": "bg-[#FED7AA] text-[#9A3412]",
   "ZN International Cargo Forwarding": "bg-[#E0E7FF] text-[#3730A3]",
 };
@@ -539,7 +539,7 @@ export function EmployeeFileModal({
                         <Input
                           value={employee.philhealthNumber || "Not provided"}
                           disabled
-                          className="bg-[#D1FAE5] border-[#6EE7B7] text-[14px]"
+                          className="bg-[var(--theme-status-success-bg)] border-[var(--theme-status-success-border)] text-[14px]"
                         />
                       </div>
                       <div>
@@ -551,15 +551,15 @@ export function EmployeeFileModal({
                             value={employee.pagibigNumber || "Not provided"}
                             disabled
                             className={cn(
-                              "border-[#FCA5A5] text-[14px]",
+                              "border-[var(--theme-status-danger-border)] text-[14px]",
                               hasMissingPagibig
-                                ? "bg-[#FEE2E2] placeholder:text-[#991B1B]"
-                                : "bg-[#FEE2E2]"
+                                ? "bg-[var(--theme-status-danger-bg)] placeholder:text-[#991B1B]"
+                                : "bg-[var(--theme-status-danger-bg)]"
                             )}
                           />
                           {hasMissingPagibig && (
                             <span
-                              className="inline-flex items-center px-2 py-1 rounded-full bg-[#FEF2F2] border border-[#FCA5A5] text-[#991B1B] text-[11px]"
+                              className="inline-flex items-center px-2 py-1 rounded-full bg-[var(--theme-status-danger-bg)] border border-[var(--theme-status-danger-border)] text-[#991B1B] text-[11px]"
                               style={{ fontWeight: 600 }}
                             >
                               Missing in roster

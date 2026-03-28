@@ -353,8 +353,8 @@ export function EmployeeProfileModal({
                               className={cn(
                                 "px-2 py-1 rounded-full text-[10px]",
                                 record.status === "Active"
-                                  ? "bg-[#D1FAE5] text-[#065F46]"
-                                  : "bg-[#FEE2E2] text-[#991B1B]"
+                                  ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"
+                                  : "bg-[var(--theme-status-danger-bg)] text-[#991B1B]"
                               )}
                               style={{ fontWeight: 600 }}
                             >

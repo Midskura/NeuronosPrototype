@@ -183,7 +183,7 @@ export function MultiInputField({
                 type="button"
                 onClick={() => handleRemove(index)}
                 disabled={disabled}
-                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-red-50 text-[var(--theme-text-muted)] hover:text-red-500 shrink-0"
+                className="flex items-center justify-center w-7 h-7 rounded transition-colors hover:bg-[var(--theme-status-danger-bg)] text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] shrink-0"
                 title="Remove"
               >
                 <X size={14} />

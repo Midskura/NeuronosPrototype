@@ -136,7 +136,7 @@ export function HR({ userRole }: HRProps) {
 
   const getCompanyColor = (company: string) => {
     const colors: Record<string, string> = {
-      "Conforme Cargo Express": "bg-[#FEF3C7] text-[#92400E]",
+      "Conforme Cargo Express": "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]",
       "ZEUJ One Marketing International": "bg-[#DBEAFE] text-[#1E40AF]",
       "Juan Logistica Courier Services": "bg-[#FED7AA] text-[#9A3412]",
       "ZN International Cargo Forwarding": "bg-[#E0E7FF] text-[#3730A3]",
@@ -610,8 +610,8 @@ export function HR({ userRole }: HRProps) {
                             className={cn(
                               "px-3 py-1 rounded-full text-[11px]",
                               idx === 1
-                                ? "bg-[#D1FAE5] text-[#065F46]"
-                                : "bg-[#FEF3C7] text-[#92400E]"
+                                ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"
+                                : "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]"
                             )}
                             style={{ fontWeight: 600 }}
                           >

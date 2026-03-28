@@ -152,7 +152,7 @@ export function CollectionsContentNew() {
       case "Cash":
         return "bg-[#FEF3E7] text-[#C88A2B]";
       case "Bank Transfer":
-        return "bg-[#E8F5F3] text-[var(--theme-action-primary-bg)]";
+        return "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]";
       case "Check":
         return "bg-[#DBEAFE] text-[#1D4ED8]";
       case "Credit Card":
@@ -314,7 +314,7 @@ export function CollectionsContentNew() {
                 width: "64px", 
                 height: "64px", 
                 borderRadius: "50%", 
-                backgroundColor: "#FEE2E2", 
+                backgroundColor: "var(--theme-status-danger-bg)", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "center",
@@ -323,7 +323,7 @@ export function CollectionsContentNew() {
               }}>
                 ⚠️
               </div>
-              <p style={{ fontSize: "16px", color: "#EF4444", marginBottom: "8px", fontWeight: 500 }}>
+              <p style={{ fontSize: "16px", color: "var(--theme-status-danger-fg)", marginBottom: "8px", fontWeight: 500 }}>
                 Error loading collections
               </p>
               <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "16px" }}>{error}</p>

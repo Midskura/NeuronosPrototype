@@ -275,7 +275,7 @@ export function CustomDropdown({
     <div className={fullWidth ? "w-full" : ""}>
       {/* Label */}
       <label className="block text-sm font-['Inter:Medium',sans-serif] font-medium text-[var(--theme-text-primary)] mb-1.5">
-        {label} {required && <span className="text-red-500">*</span>}
+        {label} {required && <span className="text-[var(--theme-status-danger-fg)]">*</span>}
         {helperText && <span className="ml-2">{helperText}</span>}
       </label>
 

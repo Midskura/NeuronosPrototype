@@ -175,7 +175,7 @@ export function AccountLedger({ account, onBack }: AccountLedgerProps) {
             <h1 className="text-2xl font-bold text-[var(--theme-text-primary)] tracking-tight flex items-center gap-3">
               {account.name}
               <span className={`text-sm font-normal px-2.5 py-0.5 rounded-full 
-                ${['Asset', 'Expense'].includes(account.type) ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                ${['Asset', 'Expense'].includes(account.type) ? 'bg-emerald-50 text-emerald-700' : 'bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]'}`}>
                 {account.type}
               </span>
             </h1>

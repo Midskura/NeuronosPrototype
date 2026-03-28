@@ -76,7 +76,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Mark as Expired",
         sublabel: "End this contract's active period",
         value: "Mark as Expired",
-        icon: <Clock size={16} style={{ color: "#D97706" }} />,
+        icon: <Clock size={16} style={{ color: "var(--theme-status-warning-fg)" }} />,
         action: () => {
           onStatusChange("Mark as Expired");
           setShowMenu(false);
@@ -118,7 +118,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Request Revision",
         sublabel: "Need more information from BD",
         value: "Needs Revision",
-        icon: <Clock size={16} style={{ color: "#D97706" }} />,
+        icon: <Clock size={16} style={{ color: "var(--theme-status-warning-fg)" }} />,
         action: () => {
           onStatusChange("Needs Revision");
           setShowMenu(false);
@@ -132,7 +132,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Mark as Ongoing",
         sublabel: "Send back for revisions",
         value: "Needs Revision",
-        icon: <Clock size={16} style={{ color: "#D97706" }} />,
+        icon: <Clock size={16} style={{ color: "var(--theme-status-warning-fg)" }} />,
         action: () => {
           onStatusChange("Needs Revision");
           setShowMenu(false);
@@ -317,12 +317,12 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
             }}
           >
             <div style={{ marginTop: "2px" }}>
-              <XCircle size={16} style={{ color: "#DC2626" }} />
+              <XCircle size={16} style={{ color: "var(--theme-status-danger-fg)" }} />
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ 
                 fontSize: "14px", 
-                color: "#DC2626",
+                color: "var(--theme-status-danger-fg)",
                 fontWeight: 500,
                 marginBottom: "2px"
               }}>
@@ -330,7 +330,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               </div>
               <div style={{ 
                 fontSize: "12px", 
-                color: "#DC2626",
+                color: "var(--theme-status-danger-fg)",
                 opacity: 0.8,
                 lineHeight: "1.4"
               }}>
@@ -440,7 +440,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
 
               {/* Alert Note */}
               <div style={{
-                backgroundColor: "#FFFBEB",
+                backgroundColor: "var(--theme-status-warning-bg)",
                 border: "1px solid #FDE68A",
                 borderRadius: "8px",
                 padding: "16px",

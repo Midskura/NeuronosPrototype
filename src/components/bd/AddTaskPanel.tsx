@@ -242,7 +242,7 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
                 options={[
                   { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "#10B981" }} /> },
                   { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "#F59E0B" }} /> },
-                  { value: "High", label: "High", icon: <Flag size={16} style={{ color: "#EF4444" }} /> }
+                  { value: "High", label: "High", icon: <Flag size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                 ]}
                 value={taskData.priority || "Medium"}
                 onChange={(value) => setTaskData({ ...taskData, priority: value as TaskPriority })}

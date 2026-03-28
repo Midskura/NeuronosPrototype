@@ -95,9 +95,9 @@ export function BookingRateCardButton({
   // ── Already applied: subtle single-line note ──
   if (alreadyGenerated) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--theme-bg-surface-tint)] border border-[#D1FAE5]">
-        <Check size={14} className="text-[#059669] shrink-0" />
-        <span className="text-[12px] text-[#059669] font-medium">
+      <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[var(--theme-bg-surface-tint)] border border-[var(--theme-status-success-border)]">
+        <Check size={14} className="text-[var(--theme-status-success-fg)] shrink-0" />
+        <span className="text-[12px] text-[var(--theme-status-success-fg)] font-medium">
           Rates applied from {rateCard.contractNumber}
         </span>
         <span className="text-[12px] text-[var(--theme-text-muted)]">

@@ -57,8 +57,8 @@ export function DrawerEntryDetails({
   const getStatusBadge = (status: string) => {
     const styles = {
       Pending: "bg-orange-100 text-orange-800 border-orange-200",
-      Approved: "bg-green-100 text-green-800 border-green-200",
-      Rejected: "bg-red-100 text-red-800 border-red-200",
+      Approved: "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]",
+      Rejected: "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]",
     };
     return (
       <Badge className={`${styles[status as keyof typeof styles]} border text-[12px] px-2 py-0.5`} style={{ borderRadius: 'var(--radius-xs)' }}>
@@ -238,7 +238,7 @@ export function DrawerEntryDetails({
               <Button
                 variant="outline"
                 onClick={handleReject}
-                className="flex-1 text-red-600 border-red-200 hover:bg-red-50"
+                className="flex-1 text-[var(--theme-status-danger-fg)] border-[var(--theme-status-danger-border)] hover:bg-[var(--theme-status-danger-bg)]"
                 style={{ borderRadius: 'var(--radius-sm)' }}
               >
                 <XCircle className="w-4 h-4 mr-2" />
@@ -251,7 +251,7 @@ export function DrawerEntryDetails({
               <Button
                 variant="ghost"
                 onClick={handleDelete}
-                className="text-red-600 hover:bg-red-50"
+                className="text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)]"
                 style={{ borderRadius: 'var(--radius-sm)' }}
               >
                 <Trash2 className="w-4 h-4" />

@@ -61,7 +61,7 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
           {/* 1. Profit Margin (Left) */}
           <div className="w-[200px] flex flex-col justify-center pr-8 border-r border-[var(--theme-border-default)]">
                 <div className="text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider mb-1">Profit Margin</div>
-                <div className={`text-[32px] font-bold ${grossMargin >= 0 ? 'text-[var(--theme-text-primary)]' : 'text-[#DC2626]'}`}>
+                <div className={`text-[32px] font-bold ${grossMargin >= 0 ? 'text-[var(--theme-text-primary)]' : 'text-[var(--theme-status-danger-fg)]'}`}>
                   {grossMargin.toFixed(1)}%
                 </div>
                 <div className="text-[13px] text-[var(--theme-text-muted)] mt-1">
@@ -117,7 +117,7 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                           title={`Collected: ${fmt(collectedAmount)}`}
                       ></div>
                   </div>
-                  <div className="w-24 text-right text-[14px] font-bold text-[#059669]">{fmt(collectedAmount)}</div>
+                  <div className="w-24 text-right text-[14px] font-bold text-[var(--theme-status-success-fg)]">{fmt(collectedAmount)}</div>
               </div>
           </div>
 
@@ -129,11 +129,11 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                 </div>
                 <div className="flex justify-between items-center">
                     <div className="text-[13px] font-medium text-[var(--theme-text-muted)]">Overdue</div>
-                    <div className="text-[14px] font-bold text-[#DC2626]">{fmt(overdueAmount)}</div>
+                    <div className="text-[14px] font-bold text-[var(--theme-status-danger-fg)]">{fmt(overdueAmount)}</div>
                 </div>
                 <div className="flex justify-between items-center pt-2 border-t border-[var(--theme-border-default)]">
                     <div className="text-[13px] font-medium text-[var(--theme-text-muted)]">Paid</div>
-                    <div className="text-[14px] font-bold text-[#059669]">{fmt(collectedAmount)}</div>
+                    <div className="text-[14px] font-bold text-[var(--theme-status-success-fg)]">{fmt(collectedAmount)}</div>
                 </div>
           </div>
 
@@ -164,7 +164,7 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                           {Object.entries(incomeByCategory).map(([category, amount], idx) => (
                               <tr key={idx} className="hover:bg-[var(--theme-bg-page)]">
                                   <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)] font-medium">{category}</td>
-                                  <td className="px-6 py-3 text-[13px] text-right text-[#059669] font-medium">{fmt(amount)}</td>
+                                  <td className="px-6 py-3 text-[13px] text-right text-[var(--theme-status-success-fg)] font-medium">{fmt(amount)}</td>
                               </tr>
                           ))}
                           {Object.keys(incomeByCategory).length === 0 && (

@@ -369,7 +369,7 @@ export function ConsigneesTab({ customerId }: ConsigneesTabProps) {
                       <button
                         onClick={() => handleDelete(csg.id)}
                         disabled={deletingId === csg.id}
-                        className="p-1.5 rounded hover:bg-red-50 transition-colors disabled:opacity-50"
+                        className="p-1.5 rounded hover:bg-[var(--theme-status-danger-bg)] transition-colors disabled:opacity-50"
                         title="Delete"
                       >
                         <Trash2 className="w-3.5 h-3.5" style={{ color: deletingId === csg.id ? "#98A2B3" : "#EF4444" }} />

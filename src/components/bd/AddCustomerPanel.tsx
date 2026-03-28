@@ -182,7 +182,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Company Name <span style={{ color: "#C94F3D" }}>*</span>
+                    Company Name <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <input
                     id="company_name"
@@ -227,7 +227,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Industry <span style={{ color: "#C94F3D" }}>*</span>
+                    Industry <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <CustomSelect
                     id="industry"
@@ -249,7 +249,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Registered Address <span style={{ color: "#C94F3D" }}>*</span>
+                    Registered Address <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <textarea
                     id="registered_address"
@@ -331,7 +331,7 @@ export function AddCustomerPanel({ isOpen, onClose, onSave }: AddCustomerPanelPr
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Account Owner <span style={{ color: "#C94F3D" }}>*</span>
+                    Account Owner <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <CustomSelect
                     id="owner_id"

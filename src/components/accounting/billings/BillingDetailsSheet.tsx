@@ -106,24 +106,24 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case "reversal_draft":
-        return { bg: "#FEF3C7", color: "#B45309" };
+        return { bg: "var(--theme-status-warning-bg)", color: "#B45309" };
       case "reversal_posted":
       case "reversed":
-        return { bg: "#F3F4F6", color: "#475467" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "#475467" };
       case "paid":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "partial":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "unpaid":
-        return { bg: "#FEE2E2", color: "#DC2626" };
+        return { bg: "#FEE2E2", color: "var(--theme-status-danger-fg)" };
       case "overdue":
         return { bg: "#FEE2E2", color: "#991B1B" };
       case "invoiced":
         return { bg: "#EFF6FF", color: "#1D4ED8" };
       case "pending":
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default:
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -241,7 +241,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
           {loading ? (
             <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center h-full text-red-500">
+            <div className="flex flex-col items-center justify-center h-full text-[var(--theme-status-danger-fg)]">
                <AlertCircle size={32} className="mb-2" />
                <p>{error}</p>
             </div>
@@ -398,7 +398,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       {(billing.discount_amount ?? 0) > 0 && (
                         <tr className="bg-[var(--theme-bg-surface-subtle)]/50">
                            <td colSpan={3} className="px-4 py-2 text-right text-xs text-[var(--theme-text-muted)] uppercase tracking-wide">Discount</td>
-                           <td className="px-4 py-2 text-right font-medium text-red-600">
+                           <td className="px-4 py-2 text-right font-medium text-[var(--theme-status-danger-fg)]">
                              -{formatCurrency(billing.discount_amount ?? 0)}
                            </td>
                         </tr>
@@ -424,7 +424,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                     </div>
                     <div>
                        <div className="text-xs font-semibold text-[var(--theme-text-muted)] uppercase mb-1">Balance Due</div>
-                       <div className="text-lg font-bold text-red-600">{formatCurrency(billing.amount_due ?? 0)}</div>
+                       <div className="text-lg font-bold text-[var(--theme-status-danger-fg)]">{formatCurrency(billing.amount_due ?? 0)}</div>
                     </div>
                  </div>
               </div>

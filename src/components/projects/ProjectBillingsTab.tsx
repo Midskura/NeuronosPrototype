@@ -520,11 +520,11 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                           </div>
                           <div style={{ fontSize: "11px", fontWeight: 600 }}>
                             {isPaid ? (
-                              <span style={{ color: "#059669", backgroundColor: "#D1FAE5", padding: "2px 6px", borderRadius: "4px" }}>PAID</span>
+                              <span style={{ color: "var(--theme-status-success-fg)", backgroundColor: "var(--theme-status-success-bg)", padding: "2px 6px", borderRadius: "4px" }}>PAID</span>
                             ) : remainingAmount < totalAmount ? (
-                              <span style={{ color: "#D97706", backgroundColor: "#FEF3C7", padding: "2px 6px", borderRadius: "4px" }}>PARTIAL</span>
+                              <span style={{ color: "var(--theme-status-warning-fg)", backgroundColor: "var(--theme-status-warning-bg)", padding: "2px 6px", borderRadius: "4px" }}>PARTIAL</span>
                             ) : (
-                              <span style={{ color: "#DC2626", backgroundColor: "#FEE2E2", padding: "2px 6px", borderRadius: "4px" }}>UNPAID</span>
+                              <span style={{ color: "var(--theme-status-danger-fg)", backgroundColor: "var(--theme-status-danger-bg)", padding: "2px 6px", borderRadius: "4px" }}>UNPAID</span>
                             )}
                           </div>
                         </div>
@@ -549,7 +549,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                               </tr>
                               <tr>
                                 <td style={{ padding: "4px 0", fontWeight: 500, color: "var(--theme-text-muted)" }}>Balance Remaining</td>
-                                <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 600, color: "#C94F3D" }}>{formatCurrency(remainingAmount)}</td>
+                                <td style={{ padding: "4px 0", textAlign: "right", fontWeight: 600, color: "var(--theme-status-danger-fg)" }}>{formatCurrency(remainingAmount)}</td>
                               </tr>
                             </tfoot>
                           </table>

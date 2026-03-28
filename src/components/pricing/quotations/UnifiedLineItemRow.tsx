@@ -232,7 +232,7 @@ export function UnifiedLineItemRow({
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: "#DC2626",
+            color: "var(--theme-status-danger-fg)",
             display: "flex",
             alignItems: "center",
             margin: "0 auto"

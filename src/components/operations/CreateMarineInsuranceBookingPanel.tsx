@@ -135,7 +135,7 @@ export function CreateMarineInsuranceBookingPanel({
                 {/* Movement Toggle */}
                 <div>
                   <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
-                    Movement <span style={{ color: "#C94F3D" }}>*</span>
+                    Movement <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <MovementToggle
                     value={formData.movement as "IMPORT" | "EXPORT"}

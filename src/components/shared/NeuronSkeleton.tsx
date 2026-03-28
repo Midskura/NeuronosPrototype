@@ -8,7 +8,7 @@
 import { memo } from "react";
 
 // ─── Base Shimmer ───────────────────────────────────────────
-const shimmerClass = "animate-pulse bg-[#EEF3F1] rounded";
+const shimmerClass = "animate-pulse bg-[var(--theme-bg-surface-tint)] rounded";
 
 /** A single rectangular shimmer bar */
 export const SkeletonBar = memo(({ 
@@ -30,7 +30,7 @@ SkeletonBar.displayName = "SkeletonBar";
 /** A circular shimmer (for avatars, icons) */
 export const SkeletonCircle = memo(({ size = 32 }: { size?: number }) => (
   <div 
-    className="animate-pulse bg-[#EEF3F1] rounded-full shrink-0"
+    className="animate-pulse bg-[var(--theme-bg-surface-tint)] rounded-full shrink-0"
     style={{ width: size, height: size }} 
   />
 ));
@@ -41,7 +41,7 @@ export const SkeletonBankCard = memo(({ isSelected = false }: { isSelected?: boo
   <div 
     className={`shrink-0 rounded-lg border p-4 transition-all ${
       isSelected 
-        ? "border-[var(--theme-action-primary-bg)] bg-[#F0FDFA]" 
+        ? "border-[var(--theme-action-primary-bg)] bg-[var(--theme-state-selected)]"
         : "border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)]"
     }`}
     style={{ width: 200, height: 90 }}
@@ -73,7 +73,7 @@ export const SkeletonTableRow = memo(({ cols = 5 }: { cols?: number }) => {
   const widths = ["60%", "80%", "45%", "70%", "55%", "40%", "65%"];
   return (
     <div 
-      className="flex items-center gap-4 px-4 py-3 border-b border-[#F3F4F6]"
+      className="flex items-center gap-4 px-4 py-3 border-b border-[var(--theme-border-subtle)]"
     >
       {Array.from({ length: cols }).map((_, i) => (
         <div key={i} className="flex-1">
@@ -144,7 +144,7 @@ export const SkeletonChart = memo(({ height = 240 }: { height?: number }) => (
       <SkeletonBar width="15%" height={12} />
     </div>
     <div 
-      className="animate-pulse bg-[#EEF3F1] rounded-lg" 
+      className="animate-pulse bg-[var(--theme-bg-surface-tint)] rounded-lg"
       style={{ height }} 
     />
   </div>
@@ -153,7 +153,7 @@ SkeletonChart.displayName = "SkeletonChart";
 
 // ─── List Item Skeleton (for Contacts, Customers, etc.) ────
 export const SkeletonListItem = memo(() => (
-  <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F3F4F6]">
+  <div className="flex items-center gap-3 px-4 py-3 border-b border-[var(--theme-border-subtle)]">
     <SkeletonCircle size={36} />
     <div className="flex-1 space-y-1.5">
       <SkeletonBar width="45%" height={13} />

@@ -113,7 +113,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
           <div className="space-y-4">
             {/* Description */}
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Description <span className="text-red-500">*</span></Label>
+              <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Description <span className="text-[var(--theme-status-danger-fg)]">*</span></Label>
               <Input
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -146,7 +146,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
             <div className="grid grid-cols-2 gap-4">
               {/* Amount */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Amount <span className="text-red-500">*</span></Label>
+                <Label className="text-xs font-medium text-[var(--theme-text-secondary)]">Amount <span className="text-[var(--theme-status-danger-fg)]">*</span></Label>
                 <div className="relative">
                   <Input
                     type="number"

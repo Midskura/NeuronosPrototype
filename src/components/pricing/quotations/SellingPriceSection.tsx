@@ -377,7 +377,6 @@ export function SellingPriceSection({
                             data={item as unknown as PricingItemData} 
                             mode={viewMode ? "view" : "edit"}
                             serviceType={item.service_tag || item.service || category.category_name}
-                            itemType="charge"
                             config={{
                               showCost: true,
                               showMarkup: true,

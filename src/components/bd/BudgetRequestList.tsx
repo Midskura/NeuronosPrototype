@@ -173,9 +173,9 @@ export function BudgetRequestList() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Approved":
-        return "bg-[#E8F5F3] text-[var(--theme-action-primary-bg)]";
+        return "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]";
       case "Rejected":
-        return "bg-[#FFE5E5] text-[#C94F3D]";
+        return "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]";
       case "Under Review":
         return "bg-[#FEF3E7] text-[#C88A2B]";
       case "Submitted":
@@ -525,8 +525,8 @@ export function BudgetRequestList() {
                 borderRadius: "8px",
                 fontSize: "14px",
                 fontWeight: 500,
-                color: "#C94F3D",
-                backgroundColor: "#FFE5E5",
+                color: "var(--theme-status-danger-fg)",
+                backgroundColor: "var(--theme-status-danger-bg)",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
               }}

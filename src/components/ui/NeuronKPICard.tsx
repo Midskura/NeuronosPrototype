@@ -31,21 +31,21 @@ export interface NeuronKPICardProps {
 }
 
 const SEVERITY_COLORS: Record<string, { iconBg: string; iconColor: string }> = {
-  normal:  { iconBg: "#E8F5F3", iconColor: "#0F766E" },
-  warning: { iconBg: "#FEF3C7", iconColor: "#D97706" },
-  danger:  { iconBg: "#FEE2E2", iconColor: "#DC2626" },
+  normal:  { iconBg: "var(--theme-status-success-bg)", iconColor: "var(--theme-action-primary-bg)" },
+  warning: { iconBg: "var(--theme-status-warning-bg)", iconColor: "var(--theme-status-warning-fg)" },
+  danger:  { iconBg: "var(--theme-status-danger-bg)",  iconColor: "var(--theme-status-danger-fg)" },
 };
 
 function getProgressColor(pct: number): string {
-  if (pct >= 80) return "#0F766E";
-  if (pct >= 60) return "#C88A2B";
-  return "#C94F3D";
+  if (pct >= 80) return "var(--theme-action-primary-bg)";
+  if (pct >= 60) return "var(--theme-status-warning-fg)";
+  return "var(--theme-status-danger-fg)";
 }
 
 function getProgressBgColor(pct: number): string {
-  if (pct >= 80) return "#E8F5F3";
-  if (pct >= 60) return "#FEF3E7";
-  return "#FFE5E5";
+  if (pct >= 80) return "var(--theme-status-success-bg)";
+  if (pct >= 60) return "var(--theme-status-warning-bg)";
+  return "var(--theme-status-danger-bg)";
 }
 
 export function NeuronKPICard({
@@ -68,7 +68,7 @@ export function NeuronKPICard({
       className="p-5 rounded-xl transition-shadow hover:shadow-sm"
       style={{
         border: "1.5px solid var(--neuron-ui-border)",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "var(--theme-bg-surface)",
       }}
     >
       {/* Top row: icon pill + trend/detail */}
@@ -87,13 +87,13 @@ export function NeuronKPICard({
           {hasTrend && (
             <div className="flex items-center gap-1">
               {trendUp ? (
-                <ArrowUp size={14} style={{ color: "#0F766E" }} />
+                <ArrowUp size={14} style={{ color: "var(--theme-status-success-fg)" }} />
               ) : (
-                <ArrowDown size={14} style={{ color: "#C94F3D" }} />
+                <ArrowDown size={14} style={{ color: "var(--theme-status-danger-fg)" }} />
               )}
               <span
                 className="text-xs font-medium"
-                style={{ color: trendUp ? "#0F766E" : "#C94F3D" }}
+                style={{ color: trendUp ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)" }}
               >
                 {Math.abs(trend!)}%
               </span>

@@ -282,7 +282,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 <div className="grid gap-4">
                   <div>
                     <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
-                      Company Name <span className="text-red-500">*</span>
+                      Company Name <span className="text-[var(--theme-status-danger-fg)]">*</span>
                     </label>
                     <input
                       {...register("company_name", { required: "Company name is required" })}
@@ -290,14 +290,14 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       placeholder="e.g. Acme Logistics Ltd."
                     />
                     {errors.company_name && (
-                      <span className="text-xs text-red-500 mt-1">{errors.company_name.message}</span>
+                      <span className="text-xs text-[var(--theme-status-danger-fg)] mt-1">{errors.company_name.message}</span>
                     )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
-                        Partner Type <span className="text-red-500">*</span>
+                        Partner Type <span className="text-[var(--theme-status-danger-fg)]">*</span>
                       </label>
                       <Controller
                         name="partner_type"
@@ -355,7 +355,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
-                        Country <span className="text-red-500">*</span>
+                        Country <span className="text-[var(--theme-status-danger-fg)]">*</span>
                       </label>
                       <Controller
                         name="country"
@@ -411,7 +411,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                 <div className="grid gap-4">
                   <div>
                     <label className="block text-sm font-medium text-[var(--theme-text-secondary)] mb-1">
-                      Primary Contact Person <span className="text-red-500">*</span>
+                      Primary Contact Person <span className="text-[var(--theme-status-danger-fg)]">*</span>
                     </label>
                     <input
                       {...register("contact_person", { required: "Contact person is required" })}
@@ -419,7 +419,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       placeholder="Full Name"
                     />
                     {errors.contact_person && (
-                      <span className="text-xs text-red-500 mt-1">{errors.contact_person.message}</span>
+                      <span className="text-xs text-[var(--theme-status-danger-fg)] mt-1">{errors.contact_person.message}</span>
                     )}
                   </div>
 
@@ -440,7 +440,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                             <button
                               type="button"
                               onClick={() => removeEmail(index)}
-                              className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] rounded-lg transition-colors"
                             >
                               <Trash2 size={16} />
                             </button>
@@ -475,7 +475,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                               <button
                                 type="button"
                                 onClick={() => removePhone(index)}
-                                className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] rounded-lg transition-colors"
                               >
                                 <Trash2 size={16} />
                               </button>
@@ -509,7 +509,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                               <button
                                 type="button"
                                 onClick={() => removeMobile(index)}
-                                className="p-2 text-[var(--theme-text-muted)] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                className="p-2 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] rounded-lg transition-colors"
                               >
                                 <Trash2 size={16} />
                               </button>

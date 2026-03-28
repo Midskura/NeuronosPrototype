@@ -73,10 +73,10 @@ const getBookingBillingStatus = (items: BillingTableItem[]): "Unbilled" | "Parti
 };
 
 const billingStatusStyles: Record<string, { bg: string; text: string; border: string }> = {
-  "Unbilled": { bg: "#F3F4F6", text: "#6B7280", border: "#E5E7EB" },
-  "Partially Billed": { bg: "#FFFBEB", text: "#D97706", border: "#FDE68A" },
-  "Fully Billed": { bg: "#ECFDF5", text: "#059669", border: "#A7F3D0" },
-  "Voided": { bg: "#FEF2F2", text: "#DC2626", border: "#FECACA" },
+  "Unbilled": { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)", border: "var(--theme-border-default)" },
+  "Partially Billed": { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)", border: "#FDE68A" },
+  "Fully Billed": { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)", border: "#A7F3D0" },
+  "Voided": { bg: "var(--theme-status-danger-bg)", text: "var(--theme-status-danger-fg)", border: "#FECACA" },
 };
 
 export function BillingsTable({
@@ -219,7 +219,7 @@ export function BillingsTable({
               display: "flex", alignItems: "center", gap: "4px",
               padding: "5px 9px", fontSize: "12px", fontWeight: 500,
               border: "1px solid #FDE68A", borderRadius: "6px",
-              backgroundColor: "var(--theme-bg-surface)", color: "#D97706", cursor: "pointer",
+              backgroundColor: "var(--theme-bg-surface)", color: "var(--theme-status-warning-fg)", cursor: "pointer",
             }}
             title="Void Item — sets status to voided, preserves the record for audit"
           >
@@ -233,7 +233,7 @@ export function BillingsTable({
             display: "flex", alignItems: "center", gap: "4px",
             padding: "5px 9px", fontSize: "12px", fontWeight: 500,
             border: "1px solid #FCD4D1", borderRadius: "6px",
-            backgroundColor: "var(--theme-bg-surface)", color: "#DC2626", cursor: "pointer",
+            backgroundColor: "var(--theme-bg-surface)", color: "var(--theme-status-danger-fg)", cursor: "pointer",
           }}
           title="Delete — permanently removes this record"
         >
@@ -483,7 +483,6 @@ export function BillingsTable({
                                     data={mapToPricingData(item)}
                                     mode={viewMode || isBilled ? "view" : "edit"}
                                     serviceType={item.serviceType}
-                                    itemType="charge"
                                     config={{
                                       showCost: false,
                                       showMarkup: false,
@@ -625,7 +624,6 @@ export function BillingsTable({
                                     data={mapToPricingData(item)}
                                     mode={viewMode || isBilled ? "view" : "edit"}
                                     serviceType={item.serviceType}
-                                    itemType="charge"
                                     config={{
                                         showCost: false,
                                         showMarkup: false,

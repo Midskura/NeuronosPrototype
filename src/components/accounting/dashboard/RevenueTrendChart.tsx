@@ -148,7 +148,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
         <div className="flex items-center gap-4">
           {[
             { label: "Revenue", color: "var(--theme-action-primary-bg)", shape: "rounded-sm" },
-            { label: "Expenses", color: "#DC2626", shape: "rounded-sm" },
+            { label: "Expenses", color: "var(--theme-status-danger-fg)", shape: "rounded-sm" },
           ].map((l) => (
             <div key={l.label} className="flex items-center gap-1.5">
               <div className={`w-2.5 h-2.5 ${l.shape}`} style={{ backgroundColor: l.color }} />
@@ -265,7 +265,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                             <div className="w-2 h-2 rounded-sm" style={{ background: "#DC2626" }} />
                             <span style={{ color: "var(--theme-text-muted)" }}>Expenses</span>
                           </div>
-                          <span className="font-bold tabular-nums" style={{ color: "#DC2626" }}>
+                          <span className="font-bold tabular-nums" style={{ color: "var(--theme-status-danger-fg)" }}>
                             {fmt(item.expenses)}
                           </span>
                         </div>

@@ -138,7 +138,7 @@ export function BrokerageFormV2({ data, onChange }: BrokerageFormV2Props) {
             options={[
               { value: "General", label: "General", icon: <Package size={16} /> },
               { value: "Perishable", label: "Perishable", icon: <AlertTriangle size={16} /> },
-              { value: "Hazardous", label: "Hazardous", icon: <AlertTriangle size={16} style={{ color: "#EF4444" }} /> },
+              { value: "Hazardous", label: "Hazardous", icon: <AlertTriangle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
               { value: "Fragile", label: "Fragile", icon: <AlertTriangle size={16} style={{ color: "#F59E0B" }} /> },
               { value: "High Value", label: "High Value", icon: <CheckCircle2 size={16} style={{ color: "#10B981" }} /> }
             ]}

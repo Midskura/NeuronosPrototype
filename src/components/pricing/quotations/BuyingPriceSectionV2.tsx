@@ -879,7 +879,7 @@ export function BuyingPriceSectionV2({
                                             border: "1px solid #FCD4D1",
                                             borderRadius: "6px",
                                             backgroundColor: "var(--theme-bg-surface)",
-                                            color: "#DC2626",
+                                            color: "var(--theme-status-danger-fg)",
                                             cursor: "pointer",
                                             fontWeight: 500,
                                             transition: "all 0.2s ease"

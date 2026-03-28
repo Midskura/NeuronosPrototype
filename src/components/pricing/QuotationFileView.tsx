@@ -625,12 +625,12 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
               alignItems: "center",
               gap: "8px",
               padding: "8px 16px",
-              backgroundColor: "#FEF3C7",
+              backgroundColor: "var(--theme-status-warning-bg)",
               border: "1px solid #FCD34D",
               borderRadius: "6px",
               fontSize: "13px",
               fontWeight: 500,
-              color: "#92400E"
+              color: "var(--theme-status-warning-fg)"
             }}>
               🔒 Locked
             </div>

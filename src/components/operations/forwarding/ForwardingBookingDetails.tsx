@@ -34,11 +34,11 @@ const STATUS_COLORS: Record<ExecutionStatus, string> = {
   "Draft": "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)] border-[var(--theme-border-default)]",
   "Confirmed": "bg-blue-50 text-blue-700 border-blue-300",
   "In Progress": "bg-[var(--theme-action-primary-bg)]/10 text-[var(--theme-action-primary-bg)] border-[var(--theme-action-primary-bg)]/30",
-  "Pending": "bg-amber-50 text-amber-700 border-amber-300",
+  "Pending": "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)] border-amber-300",
   "On Hold": "bg-orange-50 text-orange-700 border-orange-300",
   "Delivered": "bg-indigo-50 text-indigo-700 border-indigo-300",
   "Completed": "bg-emerald-50 text-emerald-700 border-emerald-300",
-  "Cancelled": "bg-red-50 text-red-700 border-red-300",
+  "Cancelled": "bg-[var(--theme-status-danger-bg)] text-red-700 border-red-300",
   "Closed": "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] border-[var(--theme-border-default)]",
 };
 
@@ -442,7 +442,7 @@ export function ForwardingBookingDetails({
                 <div style={{ height: "1px", backgroundColor: "var(--theme-bg-surface-subtle)" }} />
                 <button
                   onClick={handleDeleteFromDetail}
-                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "#DC2626", textAlign: "left" }}
+                  style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-status-danger-fg)", textAlign: "left" }}
                   onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEF2F2")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
@@ -602,17 +602,17 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                       }}>
                         <span style={{
                           padding: "2px 8px",
-                          backgroundColor: "#FEE2E2",
+                          backgroundColor: "var(--theme-status-danger-bg)",
                           borderRadius: "4px",
                           textDecoration: "line-through",
-                          color: "#EF4444"
+                          color: "var(--theme-status-danger-fg)"
                         }}>
                           {activity.oldValue || "(empty)"}
                         </span>
                         <ChevronRight size={12} />
                         <span style={{
                           padding: "2px 8px",
-                          backgroundColor: "#D1FAE5",
+                          backgroundColor: "var(--theme-status-success-bg)",
                           borderRadius: "4px",
                           color: "#10B981"
                         }}>
@@ -628,7 +628,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                       }}>
                         Set to: <span style={{
                           padding: "2px 8px",
-                          backgroundColor: "#D1FAE5",
+                          backgroundColor: "var(--theme-status-success-bg)",
                           borderRadius: "4px",
                           color: "#10B981",
                           fontWeight: 500
@@ -934,15 +934,15 @@ function BookingInformationTab({
           </div>
         )}
         {booking.status === "Cancelled" && (
-          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "#FEE2E2", border: "1px solid #EF444433", borderRadius: "8px" }}>
-            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#EF4444", marginBottom: "8px" }}>
+          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "var(--theme-status-danger-bg)", border: "1px solid #EF444433", borderRadius: "8px" }}>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--theme-status-danger-fg)", marginBottom: "8px" }}>
               Cancellation Reason
             </label>
-            <p style={{ fontSize: "14px", color: "#EF4444", margin: "0 0 12px" }}>{booking.cancellationReason}</p>
-            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#EF4444", marginBottom: "8px" }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-status-danger-fg)", margin: "0 0 12px" }}>{booking.cancellationReason}</p>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--theme-status-danger-fg)", marginBottom: "8px" }}>
               Cancelled Date
             </label>
-            <p style={{ fontSize: "14px", color: "#EF4444", margin: 0 }}>
+            <p style={{ fontSize: "14px", color: "var(--theme-status-danger-fg)", margin: 0 }}>
               {booking.cancelledDate ? new Date(booking.cancelledDate).toLocaleDateString() : "—"}
             </p>
           </div>

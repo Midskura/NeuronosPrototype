@@ -93,7 +93,7 @@ export function DesignSystemGuide() {
           marginTop: "12px"
         }}>
           <AlertCircle size={18} style={{ color: "#F59E0B", flexShrink: 0 }} />
-          <div style={{ fontSize: "13px", color: "#92400E", lineHeight: "1.5" }}>
+          <div style={{ fontSize: "13px", color: "var(--theme-status-warning-fg)", lineHeight: "1.5" }}>
             <strong style={{ fontWeight: 600 }}>Internal Development Reference Only:</strong> This design system guide is a development tool and not part of the production application. Use it as a reference when building Neuron OS modules.
           </div>
         </div>
@@ -1484,9 +1484,9 @@ function StatusBadge({ status, color }: { status: string; color: string }) {
 
 function Alert({ type, message }: { type: "success" | "warning" | "error" | "info"; message: string }) {
   const configs = {
-    success: { icon: CheckCircle, color: "var(--theme-action-primary-bg)", bg: "#E8F5F3" },
-    warning: { icon: AlertCircle, color: "#F59E0B", bg: "#FEF3C7" },
-    error: { icon: XCircle, color: "#EF4444", bg: "#FEE2E2" },
+    success: { icon: CheckCircle, color: "var(--theme-action-primary-bg)", bg: "var(--theme-bg-surface-tint)" },
+    warning: { icon: AlertCircle, color: "#F59E0B", bg: "var(--theme-status-warning-bg)" },
+    error: { icon: XCircle, color: "var(--theme-status-danger-fg)", bg: "#FEE2E2" },
     info: { icon: Info, color: "#3B82F6", bg: "#DBEAFE" }
   };
   
@@ -1716,7 +1716,7 @@ function PrincipleCard({
             marginBottom: "12px",
             fontSize: "14px",
             fontWeight: 600,
-            color: "#EF4444"
+            color: "var(--theme-status-danger-fg)"
           }}>
             <X size={16} />
             Don't
@@ -1729,7 +1729,7 @@ function PrincipleCard({
                 fontSize: "13px",
                 color: "var(--theme-text-secondary)"
               }}>
-                <X size={14} style={{ color: "#EF4444", flexShrink: 0, marginTop: "2px" }} />
+                <X size={14} style={{ color: "var(--theme-status-danger-fg)", flexShrink: 0, marginTop: "2px" }} />
                 <span>{item}</span>
               </div>
             ))}

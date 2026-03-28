@@ -24,11 +24,11 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case "Active": return { bg: "#FEF3C7", text: "#92400E" }; // Amber
-      case "Completed": return { bg: "#D1FAE5", text: "#065F46" }; // Emerald
-      case "On Hold": return { bg: "#F3F4F6", text: "#374151" }; // Gray
+      case "Active": return { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" }; // Amber
+      case "Completed": return { bg: "var(--theme-status-success-bg)", text: "#065F46" }; // Emerald
+      case "On Hold": return { bg: "var(--theme-bg-surface-subtle)", text: "#374151" }; // Gray
       case "Cancelled": return { bg: "#FEE2E2", text: "#991B1B" }; // Red
-      default: return { bg: "#F3F4F6", text: "#374151" };
+      default: return { bg: "var(--theme-bg-surface-subtle)", text: "#374151" };
     }
   };
 
@@ -95,7 +95,7 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
             { value: "Active", label: "Active", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#237F66" }} /> },
             { value: "Completed", label: "Completed", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#2B8A6E" }} /> },
             { value: "On Hold", label: "On Hold", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> },
-            { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} /> }
+            { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--theme-status-danger-fg)" }} /> }
           ]}
         />
       </div>

@@ -47,13 +47,13 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
   const getPaymentStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case "paid":
-        return "bg-[#D1FAE5] text-[#059669]";
+        return "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]";
       case "partial":
         return "bg-[#FEF3E7] text-[#C88A2B]";
       case "unpaid":
-        return "bg-[#FEE2E2] text-[#DC2626]";
+        return "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]";
       case "overdue":
-        return "bg-[#FEE2E2] text-[#991B1B]";
+        return "bg-[var(--theme-status-danger-bg)] text-[#991B1B]";
       case "invoiced":
         return "bg-blue-50 text-blue-700";
       case "pending":
@@ -68,11 +68,11 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
     
     switch (status?.toLowerCase()) {
       case "paid":
-        return <CheckCircle2 {...iconProps} style={{ color: "#059669" }} />;
+        return <CheckCircle2 {...iconProps} style={{ color: "var(--theme-status-success-fg)" }} />;
       case "partial":
         return <Clock {...iconProps} style={{ color: "#C88A2B" }} />;
       case "unpaid":
-        return <AlertCircle {...iconProps} style={{ color: "#DC2626" }} />;
+        return <AlertCircle {...iconProps} style={{ color: "var(--theme-status-danger-fg)" }} />;
       case "overdue":
         return <AlertCircle {...iconProps} style={{ color: "#991B1B" }} />;
       default:
@@ -190,7 +190,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
                       {formatCurrency(billing.total_amount || (billing as any).amount || 0, (billing as any).currency || "PHP")}
                     </div>
                     {(billing.amount_due ?? 0) > 0 && status !== "unpaid" && status !== "Paid" && (
-                      <div className="text-[10px] mt-0.5" style={{ color: "#DC2626" }}>
+                      <div className="text-[10px] mt-0.5" style={{ color: "var(--theme-status-danger-fg)" }}>
                         {formatCurrency(billing.amount_due ?? 0, (billing as any).currency || "PHP")} due
                       </div>
                     )}

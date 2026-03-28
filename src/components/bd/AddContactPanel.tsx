@@ -201,7 +201,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    First Name <span style={{ color: "#C94F3D" }}>*</span>
+                    First Name <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <input
                     id="first_name"
@@ -226,7 +226,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Last Name <span style={{ color: "#C94F3D" }}>*</span>
+                    Last Name <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <input
                     id="last_name"
@@ -275,7 +275,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Email Address <span style={{ color: "#C94F3D" }}>*</span>
+                    Email Address <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <input
                     id="email"
@@ -300,7 +300,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Mobile Number <span style={{ color: "#C94F3D" }}>*</span>
+                    Mobile Number <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <input
                     id="phone"
@@ -335,7 +335,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                   className="block mb-1.5"
                   style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                 >
-                  Company <span style={{ color: "#C94F3D" }}>*</span>
+                  Company <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                 </label>
                 {prefilledCustomerId && prefilledCustomerName ? (
                   // Show locked field when adding from Customer Detail page
@@ -435,7 +435,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
                     className="block mb-1.5"
                     style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}
                   >
-                    Contact Owner <span style={{ color: "#C94F3D" }}>*</span>
+                    Contact Owner <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <CustomSelect
                     id="owner_id"

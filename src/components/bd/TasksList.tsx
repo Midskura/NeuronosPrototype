@@ -143,7 +143,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
 
   const getPriorityColor = (priority: TaskPriority) => {
     switch (priority) {
-      case "High": return "text-[#C94F3D]";
+      case "High": return "text-[var(--theme-status-danger-fg)]";
       case "Medium": return "text-[#C88A2B]";
       case "Low": return "text-[var(--theme-text-muted)]";
       default: return "text-[var(--theme-text-muted)]";
@@ -155,7 +155,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
       case "Completed": return "bg-[var(--theme-bg-surface-tint)] text-[#2B8A6E]";
       case "Ongoing": return "bg-[var(--theme-bg-surface-tint)] text-[#237F66]";
       case "Pending": return "bg-[#FEF3E0] text-[#C88A2B]";
-      case "Cancelled": return "bg-[#FCE8E6] text-[#C94F3D]";
+      case "Cancelled": return "bg-[#FCE8E6] text-[var(--theme-status-danger-fg)]";
       default: return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
     }
   };
@@ -201,7 +201,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
       minute: '2-digit'
     });
     
-    if (isOverdue) return <span className="text-[#C94F3D]">{formatted} (Overdue)</span>;
+    if (isOverdue) return <span className="text-[var(--theme-status-danger-fg)]">{formatted} (Overdue)</span>;
     if (isToday) return <span className="text-[#C88A2B]">{formatted} (Today)</span>;
     if (isTomorrow) return <span className="text-[#237F66]">{formatted} (Tomorrow)</span>;
     
@@ -306,7 +306,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
               { value: "All", label: "All Statuses" },
               { value: "Ongoing", label: "Ongoing", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#237F66" }} /> },
               { value: "Pending", label: "Pending", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
-              { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} /> }
+              { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--theme-status-danger-fg)" }} /> }
             ]}
           />
 
@@ -316,7 +316,7 @@ export function TasksList({ onViewTask }: TasksListProps) {
             onChange={(value) => setPriorityFilter(value as TaskPriority | "All")}
             options={[
               { value: "All", label: "All Priorities" },
-              { value: "High", label: "High", icon: <Flag className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} /> },
+              { value: "High", label: "High", icon: <Flag className="w-3.5 h-3.5" style={{ color: "var(--theme-status-danger-fg)" }} /> },
               { value: "Medium", label: "Medium", icon: <Flag className="w-3.5 h-3.5" style={{ color: "#C88A2B" }} /> },
               { value: "Low", label: "Low", icon: <Flag className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> }
             ]}
@@ -343,13 +343,13 @@ export function TasksList({ onViewTask }: TasksListProps) {
             {tasksByPriority.High.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Flag className="w-3.5 h-3.5" style={{ color: "#C94F3D" }} />
-                  <h3 style={{ fontSize: "12px", fontWeight: 600, color: "#C94F3D", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  <Flag className="w-3.5 h-3.5" style={{ color: "var(--theme-status-danger-fg)" }} />
+                  <h3 style={{ fontSize: "12px", fontWeight: 600, color: "var(--theme-status-danger-fg)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
                     High Priority
                   </h3>
                   <span 
                     className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px]" 
-                    style={{ backgroundColor: "#FCE8E6", color: "#C94F3D", fontWeight: 600 }}
+                    style={{ backgroundColor: "#FCE8E6", color: "var(--theme-status-danger-fg)", fontWeight: 600 }}
                   >
                     {tasksByPriority.High.length}
                   </span>

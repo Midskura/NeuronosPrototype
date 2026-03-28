@@ -202,7 +202,7 @@ export function TruckingServiceForm({ data, onChange, movement = "IMPORT", viewM
         {!contractMode && (
           <div>
             <label style={{ ...labelStyle, marginBottom: "12px" }}>
-              Destinations <span style={{ color: "#C94F3D" }}>*</span>
+              Destinations <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
             </label>
 
             {/* Column headers — only shown when 2+ rows */}

@@ -81,8 +81,8 @@ export function EntriesPage({ expenses, bookings, onCreateExpense, onViewExpense
   const StatusBadge = ({ status }: { status: string }) => {
     const colors = {
       Pending: "bg-orange-100 text-orange-800 border-orange-200",
-      Approved: "bg-green-100 text-green-800 border-green-200",
-      Rejected: "bg-red-100 text-red-800 border-red-200",
+      Approved: "bg-[var(--theme-status-success-bg)] text-green-800 border-[var(--theme-status-success-border)]",
+      Rejected: "bg-[var(--theme-status-danger-bg)] text-red-800 border-[var(--theme-status-danger-border)]",
     };
     return (
       <Badge className={`${colors[status as keyof typeof colors]} border text-xs px-2 py-0.5`} style={{ borderRadius: 'var(--radius-xs)' }}>

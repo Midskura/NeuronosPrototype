@@ -2174,7 +2174,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
         {/* Locked Warning Banner */}
         {isLocked && (
           <div style={{
-            backgroundColor: "#FEF3C7",
+            backgroundColor: "var(--theme-status-warning-bg)",
             border: "1px solid #FCD34D",
             borderRadius: "8px",
             padding: "16px 20px",
@@ -2199,10 +2199,10 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
               🔒
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: "14px", fontWeight: 600, color: "#92400E", marginBottom: "4px" }}>
+              <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-status-warning-fg)", marginBottom: "4px" }}>
                 This quotation is locked
               </div>
-              <div style={{ fontSize: "13px", color: "#92400E", lineHeight: "1.5" }}>
+              <div style={{ fontSize: "13px", color: "var(--theme-status-warning-fg)", lineHeight: "1.5" }}>
                 This quotation has been converted to project <strong>{initialData?.project_number}</strong>. 
                 Pricing cannot be changed to maintain data integrity. You are in view-only mode.
               </div>

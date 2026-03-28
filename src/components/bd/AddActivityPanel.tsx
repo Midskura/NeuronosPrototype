@@ -354,7 +354,7 @@ export function AddActivityPanel({ isOpen, onClose, onSave }: AddActivityPanelPr
                       <button
                         type="button"
                         onClick={() => removeAttachment(index)}
-                        className="text-[var(--theme-text-muted)] hover:text-red-500 transition-colors p-1"
+                        className="text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] transition-colors p-1"
                       >
                         <Trash2 size={14} />
                       </button>

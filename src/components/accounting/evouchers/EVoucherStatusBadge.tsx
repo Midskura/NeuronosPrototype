@@ -13,15 +13,15 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
     switch (normalized) {
       case "draft":
         return {
-          bg: "#F9FAFB",
+          bg: "var(--theme-bg-page)",
           color: "var(--theme-text-muted)",
-          border: "#E5E7EB",
+          border: "var(--theme-border-default)",
           icon: FileText,
           label: "Draft"
         };
       case "pending":
         return {
-          bg: "#FEF3C7",
+          bg: "var(--theme-status-warning-bg)",
           color: "#F59E0B",
           border: "#FCD34D",
           icon: Clock,
@@ -29,7 +29,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
         };
       case "posted":
         return {
-          bg: "#E8F5F3",
+          bg: "var(--theme-bg-surface-tint)",
           color: "var(--theme-action-primary-bg)",
           border: "#99F6E4",
           icon: CheckCircle,
@@ -38,23 +38,23 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
       case "rejected":
         return {
           bg: "#FEE2E2",
-          color: "#EF4444",
-          border: "#FCA5A5",
+          color: "var(--theme-status-danger-fg)",
+          border: "var(--theme-status-danger-border)",
           icon: XCircle,
           label: "Rejected"
         };
       case "cancelled":
         return {
-          bg: "#F3F4F6",
+          bg: "var(--theme-bg-surface-subtle)",
           color: "var(--theme-text-muted)",
-          border: "#D1D5DB",
+          border: "var(--theme-border-default)",
           icon: Ban,
           label: "Cancelled"
         };
       // Legacy statuses
       case "submitted":
         return {
-          bg: "#FEF3C7",
+          bg: "var(--theme-status-warning-bg)",
           color: "#F59E0B",
           border: "#FCD34D",
           icon: Clock,
@@ -62,7 +62,7 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
         };
       case "under review":
         return {
-          bg: "#FEF3C7",
+          bg: "var(--theme-status-warning-bg)",
           color: "#F59E0B",
           border: "#FCD34D",
           icon: Clock,
@@ -70,17 +70,17 @@ export function EVoucherStatusBadge({ status, size = "md" }: EVoucherStatusBadge
         };
       case "approved":
         return {
-          bg: "#D1FAE5",
-          color: "#059669",
-          border: "#6EE7B7",
+          bg: "var(--theme-status-success-bg)",
+          color: "var(--theme-status-success-fg)",
+          border: "var(--theme-status-success-border)",
           icon: CheckCircle,
           label: "Approved"
         };
       default:
         return {
-          bg: "#F9FAFB",
+          bg: "var(--theme-bg-page)",
           color: "var(--theme-text-muted)",
-          border: "#E5E7EB",
+          border: "var(--theme-border-default)",
           icon: FileText,
           label: status
         };

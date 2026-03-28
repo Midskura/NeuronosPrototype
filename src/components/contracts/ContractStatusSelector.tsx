@@ -25,8 +25,8 @@ interface ContractStatusSelectorProps {
 
 const STATUS_CONFIG: Record<ContractStatus, { color: string; icon: any }> = {
   Draft:    { color: "var(--theme-text-muted)", icon: FileText },
-  Active:   { color: "#059669", icon: CheckCircle },
-  Expiring: { color: "#D97706", icon: AlertTriangle },
+  Active:   { color: "var(--theme-status-success-fg)", icon: CheckCircle },
+  Expiring: { color: "var(--theme-status-warning-fg)", icon: AlertTriangle },
   Expired:  { color: "var(--theme-text-muted)", icon: Clock },
   Renewed:  { color: "#7C3AED", icon: RefreshCw },
 };

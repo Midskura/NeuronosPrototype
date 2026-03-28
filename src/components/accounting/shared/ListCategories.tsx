@@ -62,7 +62,7 @@ export function ListCategories({
           {onDelete && (
             <DropdownMenuItem
               onClick={() => onDelete(category.id)}
-              className="text-red-600 focus:text-red-600"
+              className="text-[var(--theme-status-danger-fg)] focus:text-[var(--theme-status-danger-fg)]"
             >
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
@@ -92,8 +92,8 @@ export function ListCategories({
 
   if (error) {
     return (
-      <div className="border border-red-200 bg-red-50 p-8 text-center" style={{ borderRadius: 'var(--radius-sm)' }}>
-        <p className="text-[14px] text-red-600">{error}</p>
+      <div className="border border-[var(--theme-status-danger-border)] bg-[var(--theme-status-danger-bg)] p-8 text-center" style={{ borderRadius: 'var(--radius-sm)' }}>
+        <p className="text-[14px] text-[var(--theme-status-danger-fg)]">{error}</p>
       </div>
     );
   }

@@ -212,13 +212,13 @@ export function ExpensesPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Recorded":
-        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" };
       case "Audited":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "Disbursed":
         return { bg: "#DBEAFE", color: "#1D4ED8" };
       case "Draft":
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default:
         return { bg: "#FEF3E7", color: "#C88A2B" };
     }
@@ -371,7 +371,7 @@ export function ExpensesPage() {
           </div>
         ) : error ? (
           <div className="text-center py-12">
-            <p style={{ fontSize: "16px", color: "#EF4444", marginBottom: "8px" }}>Error loading expenses</p>
+            <p style={{ fontSize: "16px", color: "var(--theme-status-danger-fg)", marginBottom: "8px" }}>Error loading expenses</p>
             <p style={{ fontSize: "14px", color: "var(--theme-text-muted)" }}>{error}</p>
             <button
               onClick={fetchExpenses}

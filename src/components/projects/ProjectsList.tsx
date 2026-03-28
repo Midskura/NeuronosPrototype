@@ -243,7 +243,7 @@ export function ProjectsList({
                     { value: "all", label: "All Margins", icon: <TrendingUp size={16} /> },
                     { value: "high", label: "High Margin (>20%)", icon: <TrendingUp size={16} style={{ color: "#10B981" }} /> },
                     { value: "low", label: "Low Margin (<20%)", icon: <TrendingDown size={16} style={{ color: "#F59E0B" }} /> },
-                    { value: "loss", label: "Loss Making (<0%)", icon: <AlertCircle size={16} style={{ color: "#EF4444" }} /> }
+                    { value: "loss", label: "Loss Making (<0%)", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
                   placeholder="Filter by margin"
                 />
@@ -257,7 +257,7 @@ export function ProjectsList({
                   options={[
                     { value: "all", label: "All Status", icon: <DollarSign size={16} /> },
                     { value: "profitable", label: "Profitable", icon: <CheckCircle size={16} style={{ color: "#10B981" }} /> },
-                    { value: "loss", label: "Loss", icon: <AlertCircle size={16} style={{ color: "#EF4444" }} /> }
+                    { value: "loss", label: "Loss", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
                   placeholder="Profit status"
                 />
@@ -277,7 +277,7 @@ export function ProjectsList({
                     { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
                     { value: "Completed", label: "Completed", icon: <CheckCircle size={16} style={{ color: "#10B981" }} /> },
                     { value: "On Hold", label: "On Hold", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
-                    { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "#EF4444" }} /> }
+                    { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
                   placeholder="Select status"
                 />
@@ -549,7 +549,7 @@ export function ProjectsList({
                   </div>
 
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    <div style={{ fontSize: "13px", fontWeight: 500, color: "#059669" }}>
+                    <div style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-status-success-fg)" }}>
                       {formatCurrency(stats.income)}
                     </div>
                   </div>

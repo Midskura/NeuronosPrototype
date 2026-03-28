@@ -87,24 +87,24 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
       case "credited":
         return { bg: "#EFF6FF", color: "#1D4ED8" };
       case "refunded":
-        return { bg: "#F3F4F6", color: "#475467" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "#475467" };
       case "posted":
       case "cleared":
-        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" };
       case "deposited":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "pending":
       case "received":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "bounced":
       case "cancelled":
-        return { bg: "#FFE5E5", color: "#C94F3D" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       default:
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
     }
   };
 
-  const statusStyle = collection ? getStatusColor(collection.status || "pending") : { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+  const statusStyle = collection ? getStatusColor(collection.status || "pending") : { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
   const canResolve = Boolean(
     collection &&
     collectionSource &&
@@ -238,7 +238,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
           {loading ? (
             <div className="flex items-center justify-center h-full text-[var(--theme-text-muted)]">Loading details...</div>
           ) : error ? (
-            <div className="flex flex-col items-center justify-center h-full text-red-500">
+            <div className="flex flex-col items-center justify-center h-full text-[var(--theme-status-danger-fg)]">
                <AlertCircle size={32} className="mb-2" />
                <p>{error}</p>
             </div>

@@ -597,7 +597,7 @@ export function UnifiedBillingsTab({
             {pendingBillableCount != null && pendingBillableCount > 0 && (
               <span
                 className="text-[12px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "#FFFBEB", color: "#D97706", border: "1px solid #FDE68A" }}
+                style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)", border: "1px solid #FDE68A" }}
                 title={`${pendingBillableCount} billable expense${pendingBillableCount !== 1 ? "s" : ""} not yet converted to billing items`}
               >
                 {pendingBillableCount} pending
@@ -725,7 +725,7 @@ export function UnifiedBillingsTab({
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
-            className="flex items-center justify-center w-10 h-10 rounded-lg text-[#EF4444] hover:bg-[#FEF2F2] transition-colors shrink-0"
+            className="flex items-center justify-center w-10 h-10 rounded-lg text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] transition-colors shrink-0"
             title="Clear Filters"
           >
             <X size={18} />

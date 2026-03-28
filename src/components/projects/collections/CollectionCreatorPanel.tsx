@@ -518,7 +518,7 @@ export function CollectionCreatorPanel({
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-[var(--theme-text-primary)]">{inv.voucher_number}</span>
                               {inv.isReversed && (
-                                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-red-100 text-red-600 rounded uppercase tracking-wide">
+                                <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)] rounded uppercase tracking-wide">
                                   Reversed
                                 </span>
                               )}
@@ -540,7 +540,7 @@ export function CollectionCreatorPanel({
                                 <button
                                   onClick={(e) => { e.stopPropagation(); handleDeleteInvoice(inv.id); }}
                                   title="Delete reversed invoice"
-                                  className="ml-auto flex items-center justify-center w-8 h-8 rounded-md text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                  className="ml-auto flex items-center justify-center w-8 h-8 rounded-md text-red-400 hover:text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] transition-colors"
                                 >
                                   <Trash2 size={14} />
                                 </button>

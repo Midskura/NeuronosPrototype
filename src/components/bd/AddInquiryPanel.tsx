@@ -876,7 +876,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                             border: "none",
                             cursor: "pointer",
                             padding: "4px",
-                            color: "#DC2626",
+                            color: "var(--theme-status-danger-fg)",
                             display: "flex",
                             alignItems: "center",
                             transition: "opacity 0.15s",

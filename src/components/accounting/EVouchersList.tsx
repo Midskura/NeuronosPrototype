@@ -159,22 +159,22 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
   const getStatusColor = (status: EVoucherStatus) => {
     switch (status) {
       case "Approved":
-        return { bg: "#E8F5F3", color: "var(--theme-action-primary-bg)" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)" };
       case "Disbursed":
-        return { bg: "#D1FAE5", color: "#059669" };
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "Recorded":
       case "Audited":
         return { bg: "#DBEAFE", color: "#1D4ED8" };
       case "Disapproved":
       case "Cancelled":
-        return { bg: "#FFE5E5", color: "#C94F3D" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "Under Review":
       case "Processing":
         return { bg: "#FEF3E7", color: "#C88A2B" };
       case "Submitted":
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default: // Draft
-        return { bg: "#F9FAFB", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-page)", color: "var(--theme-text-muted)" };
     }
   };
 
@@ -185,9 +185,9 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
       case "Forwarding":
         return { bg: "#DBEAFE", color: "#2563EB" };
       case "Trucking":
-        return { bg: "#FEF3C7", color: "#D97706" };
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       default: // Miscellaneous
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
     }
   };
 

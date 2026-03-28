@@ -88,7 +88,7 @@ function TransactionRow({
         </td>
         <td className="py-3 px-4 text-sm">
           {txn.category_account_id ? (
-                <span className="px-2 py-1 rounded bg-green-50 text-green-700 text-xs border border-green-200">
+                <span className="px-2 py-1 rounded bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] text-xs border border-[var(--theme-status-success-border)]">
                     Match Found
                 </span>
           ) : (

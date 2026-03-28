@@ -257,7 +257,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
             <button
               onClick={onClose}
               style={{ background: "none", border: "none", cursor: "pointer", color: "var(--theme-text-muted)", display: "flex", padding: 4, marginLeft: 4 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#374151"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--theme-text-secondary)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
               title="Discard"
             >
@@ -296,7 +296,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
                 <button
                   onClick={() => setShowCc(true)}
                   style={{ fontSize: 11, color: "var(--theme-text-muted)", background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#0F766E"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--theme-action-primary-bg)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = "var(--theme-text-muted)"; }}
                 >
                   + CC

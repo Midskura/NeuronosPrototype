@@ -496,7 +496,7 @@ export function GeneralDetailsSection({
                     minWidth="100%"
                   />
                   {showValidityEndError && (
-                    <p style={{ margin: "4px 0 0", fontSize: "12px", color: "#DC2626" }}>
+                    <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--theme-status-danger-fg)" }}>
                       Valid Until date is required before saving.
                     </p>
                   )}
@@ -697,8 +697,8 @@ export function GeneralDetailsSection({
             <div style={{
               padding: "10px 12px",
               fontSize: "13px",
-              color: "#92400E",
-              backgroundColor: "#FFFBEB",
+              color: "var(--theme-status-warning-fg)",
+              backgroundColor: "var(--theme-status-warning-bg)",
               border: "1px solid #FDE68A",
               borderRadius: "6px",
               minHeight: "38px",
@@ -706,7 +706,7 @@ export function GeneralDetailsSection({
               alignItems: "center",
               gap: "8px",
             }}>
-              <AlertTriangle size={14} style={{ color: "#D97706", flexShrink: 0 }} />
+              <AlertTriangle size={14} style={{ color: "var(--theme-status-warning-fg)", flexShrink: 0 }} />
               <span>No active contract found. Rates will be entered manually.</span>
             </div>
           ) : (

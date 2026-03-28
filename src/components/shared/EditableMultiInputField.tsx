@@ -198,7 +198,7 @@ export function EditableMultiInputField({
             marginBottom: "6px",
           }}
         >
-          {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
+          {label} {required && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
         </label>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -311,7 +311,7 @@ export function EditableMultiInputField({
           marginBottom: "6px",
         }}
       >
-        {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
+        {label} {required && <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>}
       </label>
 
       {isEmpty ? (

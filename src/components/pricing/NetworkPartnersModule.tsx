@@ -565,13 +565,13 @@ export function NetworkPartnersModule({
                 {colWidths}
                 <thead>
                   <tr style={{ borderBottom: "1.5px solid var(--neuron-ui-border)" }}>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}></th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>COMPANY</th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>LOCATION</th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>WCA ID</th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>CONTACT</th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>EXPIRES</th>
-                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "#FAFBFB" }}>SERVICES</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}></th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>COMPANY</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>LOCATION</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>WCA ID</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>CONTACT</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>EXPIRES</th>
+                    <th className="text-left px-4 py-3 text-xs" style={{ color: "var(--neuron-ink-muted)", backgroundColor: "var(--theme-bg-page)" }}>SERVICES</th>
                   </tr>
                 </thead>
                 {groupedPartners.map(([country, partners]) => {
@@ -627,7 +627,7 @@ export function NetworkPartnersModule({
                                     <tr
                                       key={partner.id}
                                       onClick={() => onViewVendor?.(partner.id)}
-                                      className="cursor-pointer hover:bg-[#FAFBFB] transition-colors"
+                                      className="cursor-pointer hover:bg-[var(--theme-state-hover)] transition-colors"
                                       style={{ 
                                         borderBottom: "1px solid #EAECF0",
                                         backgroundColor: "var(--theme-bg-surface)"

@@ -815,8 +815,8 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
                       fontWeight: 700,
                       padding: "1px 6px",
                       borderRadius: 10,
-                      backgroundColor: "#FEE2E2",
-                      color: "#DC2626",
+                      backgroundColor: "var(--theme-status-danger-bg)",
+                      color: "var(--theme-status-danger-fg)",
                       marginLeft: "auto",
                       flexShrink: 0,
                     }}

@@ -92,8 +92,8 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
           {/* Row 2: Linked record chip (if workflow ticket) */}
           {thread.linked_record_type && (
             <div className="flex items-center gap-1 mb-1">
-              <Zap size={10} style={{ color: "#D97706", flexShrink: 0 }} />
-            <span style={{ fontSize: 11, color: "#D97706", fontWeight: 500 }}>
+              <Zap size={10} style={{ color: "var(--theme-status-warning-fg)", flexShrink: 0 }} />
+            <span style={{ fontSize: 11, color: "var(--theme-status-warning-fg)", fontWeight: 500 }}>
               {RECORD_TYPE_LABEL[thread.linked_record_type] ?? thread.linked_record_type}
             </span>
             </div>

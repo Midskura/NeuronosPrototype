@@ -70,7 +70,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
         {hasConcentrationRisk && (
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold"
-            style={{ backgroundColor: "#FFFBEB", color: "#D97706" }}
+            style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" }}
           >
             <AlertTriangle size={10} />
             Concentration Risk

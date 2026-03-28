@@ -134,8 +134,8 @@ export function AddInquiryDemo() {
 
                       <div style={{
                         padding: "4px 10px",
-                        backgroundColor: "#FEF3C7",
-                        color: "#92400E",
+                        backgroundColor: "var(--theme-status-warning-bg)",
+                        color: "var(--theme-status-warning-fg)",
                         fontSize: "11px",
                         fontWeight: 600,
                         borderRadius: "4px",

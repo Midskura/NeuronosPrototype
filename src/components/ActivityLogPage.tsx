@@ -258,7 +258,7 @@ export function ActivityLogPage() {
       case "booking":
         return { bg: "#EEF2FF", color: "#6366F1", border: "#6366F1" };
       default:
-        return { bg: "#F3F4F6", color: "var(--theme-text-muted)", border: "#6B7280" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)", border: "#6B7280" };
     }
   };
   

@@ -1,4 +1,4 @@
-// CatalogItemCombobox — Shared combobox for selecting/creating expense & charge catalog items
+// CatalogItemCombobox — Shared combobox for selecting/creating catalog items
 // Portal-based dropdown (matching CustomDropdown pattern), names-only display, one-click create
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -11,26 +11,25 @@ import { supabase } from "../../../utils/supabase/client";
 export interface CatalogItem {
   id: string;
   name: string;
-  type: "expense" | "charge" | "both";
-  category: string;
-  service_types: string[];
-  default_currency: string;
-  default_amount: number | null;
-  is_taxable: boolean;
-  is_active: boolean;
+  category_id: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CatalogCategory {
+  id: string;
+  name: string;
+  description?: string | null;
+  sort_order: number;
+  is_default: boolean;
+  item_count?: number;
 }
 
 interface CatalogItemComboboxProps {
   value: string;                        // current description text
   catalogItemId?: string;               // current linked catalog item ID
-  serviceType?: string;                 // current booking's service type for smart sorting
-  itemType?: "expense" | "charge" | "both"; // inferred from context (billings=charge, expenses=expense)
-  onChange: (description: string, catalogItemId?: string, defaults?: {
-    currency?: string;
-    is_taxable?: boolean;
-    default_amount?: number | null;
-    type?: string;
-  }) => void;
+  serviceType?: string;                 // kept for future smart-sort when we link catalog → service
+  onChange: (description: string, catalogItemId?: string) => void;
   disabled?: boolean;
   placeholder?: string;
 }
@@ -47,7 +46,10 @@ async function fetchCatalogItems(forceRefresh = false): Promise<CatalogItem[]> {
     return cachedItems;
   }
   try {
-    const { data, error } = await supabase.from('catalog_items').select('*');
+    const { data, error } = await supabase
+      .from('catalog_items')
+      .select('id, name, category_id, created_at, updated_at')
+      .order('name');
     if (!error && data) {
       cachedItems = data;
       cacheTimestamp = Date.now();
@@ -70,8 +72,6 @@ function invalidateCache() {
 export function CatalogItemCombobox({
   value,
   catalogItemId,
-  serviceType,
-  itemType = "both",
   onChange,
   disabled = false,
   placeholder = "Item description",
@@ -137,7 +137,6 @@ export function CatalogItemCombobox({
         menuRef.current && !menuRef.current.contains(target)
       ) {
         setIsOpen(false);
-        // Restore value if user didn't select anything
         setSearchText(value || "");
       }
     };
@@ -159,34 +158,14 @@ export function CatalogItemCombobox({
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, value]);
 
-  // Filter and sort items
-  const getFilteredItems = useCallback(() => {
+  // Filter items alphabetically
+  const getFilteredItems = useCallback((): CatalogItem[] => {
     const query = searchText.toLowerCase().trim();
-    let filtered = items;
-
-    if (query) {
-      filtered = items.filter((item) =>
-        item.name.toLowerCase().includes(query)
-      );
-    }
-
-    // Split into service-type-matching and others
-    const matching: CatalogItem[] = [];
-    const others: CatalogItem[] = [];
-
-    for (const item of filtered) {
-      if (serviceType && item.service_types?.includes(serviceType)) {
-        matching.push(item);
-      } else {
-        others.push(item);
-      }
-    }
-
-    matching.sort((a, b) => a.name.localeCompare(b.name));
-    others.sort((a, b) => a.name.localeCompare(b.name));
-
-    return { matching, others };
-  }, [items, searchText, serviceType]);
+    if (!query) return [...items].sort((a, b) => a.name.localeCompare(b.name));
+    return items
+      .filter(item => item.name.toLowerCase().includes(query))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [items, searchText]);
 
   // Check if typed text exactly matches an existing item
   const exactMatch = items.some(
@@ -196,12 +175,7 @@ export function CatalogItemCombobox({
   // Handle selecting an existing item
   const handleSelect = (item: CatalogItem) => {
     setSearchText(item.name);
-    onChange(item.name, item.id, {
-      currency: item.default_currency,
-      is_taxable: item.is_taxable,
-      default_amount: item.default_amount,
-      type: item.type,
-    });
+    onChange(item.name, item.id);
     setIsOpen(false);
   };
 
@@ -212,15 +186,11 @@ export function CatalogItemCombobox({
     setIsCreating(true);
 
     try {
-      const { data, error } = await supabase.from('catalog_items').insert({
-        name,
-        type: itemType,
-        category: name,
-        service_types: serviceType ? [serviceType] : [],
-        default_currency: "PHP",
-        is_taxable: itemType === "charge" || itemType === "both",
-        created_at: new Date().toISOString(),
-      }).select().single();
+      const { data, error } = await supabase
+        .from('catalog_items')
+        .insert({ name })
+        .select('id, name, category_id, created_at, updated_at')
+        .single();
 
       if (!error && data) {
         invalidateCache();
@@ -235,16 +205,15 @@ export function CatalogItemCombobox({
     }
   };
 
-  // Handle input change — also fire onChange with just description (no catalog link)
+  // Handle input change — fire onChange with just description (clears catalog link)
   const handleInputChange = (text: string) => {
     setSearchText(text);
     if (!isOpen) setIsOpen(true);
-    // If user is typing freely, clear the catalog link
     onChange(text, undefined);
   };
 
-  const { matching, others } = getFilteredItems();
-  const hasResults = matching.length > 0 || others.length > 0;
+  const filteredItems = getFilteredItems();
+  const hasResults = filteredItems.length > 0;
 
   return (
     <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
@@ -256,7 +225,6 @@ export function CatalogItemCombobox({
         onFocus={() => {
           if (!disabled) {
             setIsOpen(true);
-            // Select all text on focus for easy replacement
             inputRef.current?.select();
           }
         }}
@@ -280,9 +248,7 @@ export function CatalogItemCombobox({
           outline: "none",
         }}
         onMouseEnter={(e) => {
-          if (!disabled) {
-            e.currentTarget.style.borderColor = "#C7D0CC";
-          }
+          if (!disabled) e.currentTarget.style.borderColor = "#C7D0CC";
         }}
         onMouseLeave={(e) => {
           if (!disabled && document.activeElement !== e.currentTarget) {
@@ -290,7 +256,6 @@ export function CatalogItemCombobox({
           }
         }}
         onBlur={(e) => {
-          // Don't reset border if dropdown is open (click-outside handles close)
           if (!isOpen) {
             e.currentTarget.style.borderColor = "#E0E6E4";
             e.currentTarget.style.boxShadow = "none";
@@ -319,109 +284,62 @@ export function CatalogItemCombobox({
             fontSize: "13px",
           }}
         >
-            {/* ==================== DROPDOWN LIST ==================== */}
-              {isLoading && (
-                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
-                  Loading...
-                </div>
-              )}
+          {isLoading && (
+            <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
+              Loading...
+            </div>
+          )}
 
-              {!isLoading && !hasResults && searchText.trim() && (
-                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
-                  No matching items
-                </div>
-              )}
+          {!isLoading && !hasResults && searchText.trim() && (
+            <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
+              No matching items
+            </div>
+          )}
 
-              {/* Service-type-matching items */}
-              {matching.length > 0 && (
-                <>
-                  {others.length > 0 && serviceType && (
-                    <div style={{
-                      padding: "6px 12px 2px",
-                      fontSize: "10px",
-                      fontWeight: 600,
-                      color: "var(--theme-text-muted)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}>
-                      {serviceType}
-                    </div>
-                  )}
-                  {matching.map((item) => (
-                    <ItemOption key={item.id} item={item} onSelect={handleSelect} />
-                  ))}
-                </>
-              )}
+          {/* Items list */}
+          {filteredItems.map((item) => (
+            <ItemOption key={item.id} item={item} onSelect={handleSelect} />
+          ))}
 
-              {/* Divider between groups */}
-              {matching.length > 0 && others.length > 0 && (
-                <div style={{
-                  margin: "2px 12px",
-                  borderTop: "1px solid #F0F0F0",
-                }} />
-              )}
+          {/* Quick-add option — one click, no form */}
+          {searchText.trim() && !exactMatch && (
+            <>
+              {hasResults && <div style={{ margin: "2px 12px", borderTop: "1px solid #F0F0F0" }} />}
+              <button
+                type="button"
+                onClick={handleQuickCreate}
+                disabled={isCreating}
+                style={{
+                  width: "100%",
+                  padding: "8px 12px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "13px",
+                  color: isCreating ? "#9CA3AF" : "#0F766E",
+                  fontWeight: 500,
+                  backgroundColor: "transparent",
+                  border: "none",
+                  cursor: isCreating ? "not-allowed" : "pointer",
+                  textAlign: "left",
+                }}
+                onMouseEnter={(e) => { if (!isCreating) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+              >
+                <Plus size={14} />
+                {isCreating
+                  ? "Adding..."
+                  : `Add "${searchText.trim().length > 30 ? searchText.trim().substring(0, 30) + "..." : searchText.trim()}"`
+                }
+              </button>
+            </>
+          )}
 
-              {/* Other items */}
-              {others.length > 0 && (
-                <>
-                  {matching.length > 0 && (
-                    <div style={{
-                      padding: "6px 12px 2px",
-                      fontSize: "10px",
-                      fontWeight: 600,
-                      color: "var(--theme-text-muted)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.5px",
-                    }}>
-                      Other
-                    </div>
-                  )}
-                  {others.map((item) => (
-                    <ItemOption key={item.id} item={item} onSelect={handleSelect} />
-                  ))}
-                </>
-              )}
-
-              {/* Quick-add option — one click, no form */}
-              {searchText.trim() && !exactMatch && (
-                <>
-                  <div style={{ margin: "2px 12px", borderTop: "1px solid #F0F0F0" }} />
-                  <button
-                    type="button"
-                    onClick={handleQuickCreate}
-                    disabled={isCreating}
-                    style={{
-                      width: "100%",
-                      padding: "8px 12px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      fontSize: "13px",
-                      color: isCreating ? "#9CA3AF" : "#0F766E",
-                      fontWeight: 500,
-                      backgroundColor: "transparent",
-                      border: "none",
-                      cursor: isCreating ? "not-allowed" : "pointer",
-                      textAlign: "left",
-                    }}
-                    onMouseEnter={(e) => { if (!isCreating) e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                  >
-                    <Plus size={14} />
-                    {isCreating
-                      ? "Adding..."
-                      : `Add "${searchText.trim().length > 30 ? searchText.trim().substring(0, 30) + "..." : searchText.trim()}"`
-                    }
-                  </button>
-                </>
-              )}
-
-              {/* Empty state: no search, show all */}
-              {!isLoading && !searchText.trim() && !hasResults && (
-                <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
-                  No catalog items yet
-                </div>
-              )}
+          {!isLoading && !searchText.trim() && !hasResults && (
+            <div style={{ padding: "8px 12px", color: "var(--theme-text-muted)", fontSize: "12px" }}>
+              No catalog items yet
+            </div>
+          )}
         </div>,
         document.body
       )}

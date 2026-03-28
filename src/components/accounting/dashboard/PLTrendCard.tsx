@@ -164,7 +164,7 @@ export function PLTrendCard({
 
   const summaryItems = [
     { label: "Revenue", value: scopedRevenue, color: "var(--theme-action-primary-bg)", sub: null as string | null },
-    { label: "Expenses", value: scopedExpenses, color: "#DC2626", sub: null },
+    { label: "Expenses", value: scopedExpenses, color: "var(--theme-status-danger-fg)", sub: null },
     { label: "Net Profit", value: netProfit, color: netProfit >= 0 ? "#16A34A" : "#EF4444", sub: `${profitMargin.toFixed(1)}% margin` },
     { label: "Collected", value: scopedCollected, color: "var(--theme-action-primary-bg)", sub: `${collectionRate.toFixed(0)}% of invoiced` },
     { label: "Net Cash", value: netCash, color: netCash >= 0 ? "#16A34A" : "#EF4444", sub: "Collected – Expenses" },
@@ -377,7 +377,7 @@ export function PLTrendCard({
                                 <div className="rounded-full" style={{ width: "8px", height: "8px", background: "#DC2626" }} />
                                 <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Expenses</span>
                               </div>
-                              <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "#DC2626" }}>
+                              <span className="font-bold tabular-nums" style={{ fontSize: "12px", color: "var(--theme-status-danger-fg)" }}>
                                 {fmtFull(item.expenses)}
                               </span>
                             </div>

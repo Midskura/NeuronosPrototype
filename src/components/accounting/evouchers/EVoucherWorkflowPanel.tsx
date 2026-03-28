@@ -357,7 +357,7 @@ export function EVoucherWorkflowPanel({
               borderRadius: "8px",
               border: "1px solid #EF4444",
               backgroundColor: "var(--theme-bg-surface)",
-              color: "#EF4444",
+              color: "var(--theme-status-danger-fg)",
               fontSize: "14px",
               fontWeight: 500,
               cursor: isSubmitting ? "not-allowed" : "pointer",

@@ -871,7 +871,7 @@ export function InvoiceBuilder({
                           
                           {/* Conversion Hint */}
                           {selectedItems.some(i => i.currency !== targetCurrency) && (
-                              <div className="bg-amber-50 border border-amber-200 rounded-md p-3 text-xs text-amber-800 flex items-start gap-2">
+                              <div className="bg-[var(--theme-status-warning-bg)] border border-amber-200 rounded-md p-3 text-xs text-amber-800 flex items-start gap-2">
                                   <RefreshCw className="w-4 h-4 shrink-0 mt-0.5" />
                                   <div>
                                       <span className="font-semibold">Conversion Active:</span> Items not in {targetCurrency} will be converted using rate {exchangeRate}.

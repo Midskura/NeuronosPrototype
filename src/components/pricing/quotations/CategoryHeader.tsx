@@ -382,7 +382,7 @@ export function CategoryHeader({
                         gap: "8px",
                         padding: "10px 12px",
                         fontSize: "13px",
-                        color: "#DC2626",
+                        color: "var(--theme-status-danger-fg)",
                         backgroundColor: "transparent",
                         border: "none",
                         cursor: "pointer",

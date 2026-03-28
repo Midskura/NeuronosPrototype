@@ -63,7 +63,7 @@ const HeroMetric = memo(({
           <span className="text-[12px] text-[var(--theme-text-muted)] font-medium uppercase tracking-wide">
             {label}
           </span>
-          <Icon size={20} className={alert ? "text-[#C94F3D]" : "text-[var(--theme-text-muted)]"} />
+          <Icon size={20} className={alert ? "text-[var(--theme-status-danger-fg)]" : "text-[var(--theme-text-muted)]"} />
         </div>
         
         <div className="text-[32px] font-semibold text-[var(--theme-text-primary)] leading-none mb-2" style={{ letterSpacing: '-0.8px' }}>
@@ -75,9 +75,9 @@ const HeroMetric = memo(({
             {!isNeutral && (isPositive ? (
               <TrendingUp size={14} className="text-[var(--theme-action-primary-bg)]" />
             ) : (
-              <TrendingDown size={14} className="text-[#C94F3D]" />
+              <TrendingDown size={14} className="text-[var(--theme-status-danger-fg)]" />
             ))}
-            <span className={`text-[13px] font-medium ${isNeutral ? 'text-[var(--theme-text-muted)]' : isPositive ? 'text-[var(--theme-action-primary-bg)]' : 'text-[#C94F3D]'}`}>
+            <span className={`text-[13px] font-medium ${isNeutral ? 'text-[var(--theme-text-muted)]' : isPositive ? 'text-[var(--theme-action-primary-bg)]' : 'text-[var(--theme-status-danger-fg)]'}`}>
               {trendValue}
             </span>
           </div>
@@ -245,8 +245,8 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
           </div>
 
           {/* Critical Alerts Banner */}
-          <div className="mb-6 p-4 bg-[#FEF2F2] border border-[#FEE2E2] rounded-lg flex items-start gap-3">
-            <AlertTriangle size={20} className="text-[#EF4444] mt-0.5 flex-shrink-0" />
+          <div className="mb-6 p-4 bg-[var(--theme-status-danger-bg)] border border-[var(--theme-status-danger-border)] rounded-lg flex items-start gap-3">
+            <AlertTriangle size={20} className="text-[var(--theme-status-danger-fg)] mt-0.5 flex-shrink-0" />
             <div className="flex-1">
               <div className="text-[14px] font-semibold text-[var(--theme-text-primary)] mb-1">
                 Cash Flow Alert
@@ -560,7 +560,7 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                           <span className={`text-[13px] font-medium ${
                             client.paymentDays <= 30 ? 'text-[var(--theme-action-primary-bg)]' : 
                             client.paymentDays <= 45 ? 'text-[#F97316]' : 
-                            'text-[#EF4444]'
+                            'text-[var(--theme-status-danger-fg)]'
                           }`}>
                             {client.paymentDays} days
                           </span>
@@ -569,7 +569,7 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                           <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-medium ${
                             client.status === 'Excellent' 
                               ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' 
-                              : 'bg-[#FEF3C7] text-[#D97706]'
+                              : 'bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]'
                           }`}>
                             {client.status}
                           </span>
@@ -619,7 +619,7 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
                       <span className={`inline-flex px-2 py-1 rounded text-[10px] font-semibold ${
                         sub.rating === 'Excellent' 
                           ? 'bg-[var(--theme-bg-surface-tint)] text-[var(--theme-action-primary-bg)]' 
-                          : 'bg-[#FEF3C7] text-[#D97706]'
+                          : 'bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]'
                       }`}>
                         {sub.rating}
                       </span>
@@ -644,8 +644,8 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <NeuronCard padding="lg">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-[#FEF2F2] flex items-center justify-center">
-                  <AlertCircle size={18} className="text-[#EF4444]" />
+                <div className="w-10 h-10 rounded-lg bg-[var(--theme-status-danger-bg)] flex items-center justify-center">
+                  <AlertCircle size={18} className="text-[var(--theme-status-danger-fg)]" />
                 </div>
                 <div>
                   <div className="text-[13px] text-[var(--theme-text-muted)]">Overdue Payments</div>
@@ -659,7 +659,7 @@ export function ExecutiveDashboard({ currentUser }: ExecutiveDashboardProps) {
 
             <NeuronCard padding="lg">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-lg bg-[#FEF3C7] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-[var(--theme-status-warning-bg)] flex items-center justify-center">
                   <Clock size={18} className="text-[#F97316]" />
                 </div>
                 <div>

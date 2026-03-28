@@ -192,7 +192,7 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                     onClick={() => setTransactionType('expense')}
                     className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
                       transactionType === 'expense'
-                        ? "bg-[var(--theme-bg-surface)] text-red-600 shadow-sm"
+                        ? "bg-[var(--theme-bg-surface)] text-[var(--theme-status-danger-fg)] shadow-sm"
                         : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
                     }`}
                   >
@@ -203,7 +203,7 @@ export function TransactionModal({ isOpen, onClose, onSave, currency, preselecte
                     onClick={() => setTransactionType('income')}
                     className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
                       transactionType === 'income'
-                        ? "bg-[var(--theme-bg-surface)] text-green-600 shadow-sm"
+                        ? "bg-[var(--theme-bg-surface)] text-[var(--theme-status-success-fg)] shadow-sm"
                         : "text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)]"
                     }`}
                   >

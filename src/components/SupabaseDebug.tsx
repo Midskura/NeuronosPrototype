@@ -150,7 +150,7 @@ export function SupabaseDebug() {
             <Row label="Anon Key" value={maskedKey} />
             <Row label="Status" value={health.message} />
             {jwtRef !== projectId && (
-              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs">
+              <div className="p-3 rounded-lg bg-[var(--theme-status-danger-bg)] border border-[var(--theme-status-danger-border)] text-red-700 text-xs">
                 <strong>MISMATCH:</strong> The anon key's embedded ref (<code>{jwtRef}</code>) does not match
                 the configured project ID (<code>{projectId}</code>). The key belongs to a different project!
               </div>
@@ -165,7 +165,7 @@ export function SupabaseDebug() {
           </h2>
 
           {authError ? (
-            <p className="text-sm text-red-600 font-mono">{authError}</p>
+            <p className="text-sm text-[var(--theme-status-danger-fg)] font-mono">{authError}</p>
           ) : authUser ? (
             <div className="space-y-2 font-mono text-sm">
               <Row label="Auth UID" value={authUser.id} />
@@ -207,9 +207,9 @@ export function SupabaseDebug() {
                 >
                   <span style={{ color: "var(--neuron-ink-primary)" }}>{t.table}</span>
                   {t.error ? (
-                    <span className="text-red-600 truncate max-w-[60%] text-right">{t.error}</span>
+                    <span className="text-[var(--theme-status-danger-fg)] truncate max-w-[60%] text-right">{t.error}</span>
                   ) : (
-                    <span className="text-green-700">{t.count} rows</span>
+                    <span className="text-[var(--theme-status-success-fg)]">{t.count} rows</span>
                   )}
                 </div>
               ))}

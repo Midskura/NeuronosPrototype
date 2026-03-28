@@ -188,7 +188,7 @@ export function FinancialHealthPage() {
       label: "Total Expenses",
       value: formatCurrency(summary.totalExpenses),
       icon: Receipt,
-      color: "#DC2626",
+      color: "var(--theme-status-danger-fg)",
       bgColor: "#FEF2F2",
     },
     {

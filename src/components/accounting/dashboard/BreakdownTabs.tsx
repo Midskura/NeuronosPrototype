@@ -185,7 +185,7 @@ function CustomerTab({ billingItems, invoices }: { billingItems: any[]; invoices
       {hasConcentrationRisk && (
         <div
           className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold self-start"
-          style={{ backgroundColor: "#FFFBEB", color: "#D97706" }}
+          style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" }}
         >
           <AlertTriangle size={12} />
           Concentration Risk — single customer &gt; 40% of revenue

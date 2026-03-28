@@ -171,7 +171,7 @@ export function CreateTruckingBookingPanel({
                 {/* Movement Toggle */}
                 <div>
                   <label className="block mb-1.5" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
-                    Movement <span style={{ color: "#C94F3D" }}>*</span>
+                    Movement <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
                   <MovementToggle
                     value={formData.movement as "IMPORT" | "EXPORT"}
@@ -440,7 +440,7 @@ export function CreateTruckingBookingPanel({
                 {/* ✨ Multi-line trucking: Destinations repeater */}
                 <div>
                   <label className="block mb-3" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
-                    Destinations <span style={{ color: "#C94F3D" }}>*</span>
+                    Destinations <span style={{ color: "var(--theme-status-danger-fg)" }}>*</span>
                   </label>
 
                   {/* Column headers — only when 2+ rows */}
@@ -508,7 +508,7 @@ export function CreateTruckingBookingPanel({
                           <button
                             type="button"
                             onClick={() => setTruckingLineItems(prev => prev.filter(item => item.id !== li.id))}
-                            className="flex items-center justify-center w-7 h-7 rounded-md border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] opacity-0 group-hover/row:opacity-100 hover:border-[#FCA5A5] hover:text-[#EF4444] hover:bg-[#FEF2F2] transition-all text-[var(--theme-text-muted)]"
+                            className="flex items-center justify-center w-7 h-7 rounded-md border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] opacity-0 group-hover/row:opacity-100 hover:border-[var(--theme-status-danger-border)] hover:text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] transition-all text-[var(--theme-text-muted)]"
                           >
                             <X size={13} />
                           </button>

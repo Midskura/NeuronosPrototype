@@ -88,7 +88,7 @@ export function CustomerInquiriesTab({ inquiries, onViewInquiry, onCreateInquiry
             options={[
               { value: "all", label: "All Statuses" },
               { value: "Draft", label: "Draft", icon: <FileText className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> },
-              { value: "Pending Pricing", label: "Pending Pricing", icon: <Clock className="w-3.5 h-3.5" style={{ color: "#92400E" }} /> },
+              { value: "Pending Pricing", label: "Pending Pricing", icon: <Clock className="w-3.5 h-3.5" style={{ color: "var(--theme-status-warning-fg)" }} /> },
               { value: "Quoted", label: "Quoted", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#1E40AF" }} /> },
               { value: "Sent", label: "Sent", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#4338CA" }} /> }
             ]}

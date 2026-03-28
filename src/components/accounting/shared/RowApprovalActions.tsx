@@ -70,7 +70,7 @@ export function RowApprovalActions({
         <Button
           size="sm"
           variant="outline"
-          className="border-red-200 text-red-600 hover:bg-red-50 h-8 px-3"
+          className="border-[var(--theme-status-danger-border)] text-[var(--theme-status-danger-fg)] hover:bg-[var(--theme-status-danger-bg)] h-8 px-3"
           style={{ borderRadius: 'var(--radius-xs)' }}
           onClick={handleQuickReject}
         >
@@ -99,7 +99,7 @@ export function RowApprovalActions({
                 style={{ borderRadius: 'var(--radius-sm)' }}
               />
               {requireComment && !approveComment.trim() && (
-                <p className="text-[12px] text-red-600">Comment is required</p>
+                <p className="text-[12px] text-[var(--theme-status-danger-fg)]">Comment is required</p>
               )}
             </div>
             <div className="flex justify-end gap-3">
@@ -138,7 +138,7 @@ export function RowApprovalActions({
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label className="text-[14px]">
-                Reason {requireComment && <span className="text-red-600">*</span>}
+                Reason {requireComment && <span className="text-[var(--theme-status-danger-fg)]">*</span>}
               </Label>
               <Textarea
                 placeholder="Explain why this entry is being rejected..."
@@ -148,7 +148,7 @@ export function RowApprovalActions({
                 style={{ borderRadius: 'var(--radius-sm)' }}
               />
               {requireComment && !rejectComment.trim() && (
-                <p className="text-[12px] text-red-600">Reason is required</p>
+                <p className="text-[12px] text-[var(--theme-status-danger-fg)]">Reason is required</p>
               )}
             </div>
             <div className="flex justify-end gap-3">

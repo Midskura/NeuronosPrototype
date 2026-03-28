@@ -65,13 +65,13 @@ const formatDate = formatShortDate;
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "Draft": return { text: "#6B7280", bg: "#F3F4F6" };
+    case "Draft": return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
     case "Sent": return { text: "#3B82F6", bg: "#DBEAFE" };
-    case "Active": return { text: "#059669", bg: "#D1FAE5" };
-    case "Expiring": return { text: "#D97706", bg: "#FEF3C7" };
-    case "Expired": return { text: "#6B7280", bg: "#F3F4F6" };
+    case "Active": return { text: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" };
+    case "Expiring": return { text: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" };
+    case "Expired": return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
     case "Renewed": return { text: "#7C3AED", bg: "#EDE9FE" };
-    default: return { text: "#6B7280", bg: "#F3F4F6" };
+    default: return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
   }
 };
 

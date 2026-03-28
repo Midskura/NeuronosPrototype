@@ -68,7 +68,7 @@ export function Login({ onLogin }: LoginProps) {
               }`}
             />
             {emailError && (
-              <p className="text-xs text-red-600 mt-1">{emailError}</p>
+              <p className="text-xs text-[var(--theme-status-danger-fg)] mt-1">{emailError}</p>
             )}
           </div>
 

@@ -241,7 +241,7 @@ export function DiagnosticsPage() {
               </div>
             ) : (
               <div style={{
-                backgroundColor: "#FEF3C7",
+                backgroundColor: "var(--theme-status-warning-bg)",
                 border: "1px solid #FCD34D",
                 borderRadius: "8px",
                 padding: "16px"

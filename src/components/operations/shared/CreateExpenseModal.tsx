@@ -99,7 +99,7 @@ export function CreateExpenseModal({
           <div className="space-y-4">
             <div>
               <label className="block text-[var(--theme-text-primary)]/80 mb-2">
-                Description <span className="text-red-500">*</span>
+                Description <span className="text-[var(--theme-status-danger-fg)]">*</span>
               </label>
               <input
                 type="text"
@@ -114,7 +114,7 @@ export function CreateExpenseModal({
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2">
                 <label className="block text-[var(--theme-text-primary)]/80 mb-2">
-                  Amount <span className="text-red-500">*</span>
+                  Amount <span className="text-[var(--theme-status-danger-fg)]">*</span>
                 </label>
                 <input
                   type="number"

@@ -38,30 +38,13 @@ interface MatrixData {
   meta: MatrixMeta;
 }
 
-type ViewMode = "charges" | "expenses";
-
-const VIEW_THEME = {
-  charges: {
-    accent: "#0F766E",
-    footerBg: "#F0FDF9",
-    footerBgAlt: "#ECFDF5",
-    footerBorder: "#0F766E",
-    grandTotalColor: "#0F766E",
-    segmentBg: "#E8F5F3",
-    segmentColor: "#0F766E",
-    label: "Charges",
-  },
-  expenses: {
-    accent: "#D97706",
-    footerBg: "#FFFBEB",
-    footerBgAlt: "#FEF3C7",
-    footerBorder: "#D97706",
-    grandTotalColor: "#D97706",
-    segmentBg: "#FEF9C3",
-    segmentColor: "#92400E",
-    label: "Expenses",
-  },
-} as const;
+const MATRIX_THEME = {
+  accent: "#0F766E",
+  footerBg: "#F0FDF9",
+  footerBgAlt: "#ECFDF5",
+  footerBorder: "#0F766E",
+  grandTotalColor: "#0F766E",
+};
 
 const SERVICE_TYPES = ["All", "Brokerage", "Trucking", "Forwarding", "Marine Insurance", "Others"];
 
@@ -158,7 +141,6 @@ const CELL_MIN_WIDTH = 110;
 export function ChargeExpenseMatrix() {
   const [period, setPeriod] = useState(getCurrentPeriod);
   const [serviceType, setServiceType] = useState("All");
-  const [view, setView] = useState<ViewMode>("charges");
   const [data, setData] = useState<MatrixData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -171,7 +153,7 @@ export function ChargeExpenseMatrix() {
       // Fetch billing line items and catalog items, build matrix client-side
       const [{ data: lineItems }, { data: catalogItems }] = await Promise.all([
         supabase.from('billing_line_items').select('*'),
-        supabase.from('catalog_items').select('*').eq('is_active', true),
+        supabase.from('catalog_items').select('id, name, category_id'),
       ]);
 
       const emptyMeta = (): MatrixMeta => ({
@@ -182,7 +164,7 @@ export function ChargeExpenseMatrix() {
         linked_percentage: 0,
         period,
         service_type: serviceType,
-        view,
+        view: "all",
       });
 
       if (!catalogItems || catalogItems.length === 0) {
@@ -190,15 +172,8 @@ export function ChargeExpenseMatrix() {
         return;
       }
 
-      // Filter catalog items by view type
-      const filteredCatalog = (catalogItems as any[]).filter((ci: any) => {
-        if (view === "charges") return ci.type === "charge" || ci.type === "both" || !ci.type;
-        if (view === "expenses") return ci.type === "expense" || ci.type === "both";
-        return true;
-      });
-
-      // Build pivot: columns = catalog items filtered by view, rows = bookings
-      const columns = filteredCatalog.map((ci: any) => ({
+      // Build pivot: columns = all catalog items, rows = bookings
+      const columns = (catalogItems as any[]).map((ci: any) => ({
         catalog_item_id: ci.id,
         name: ci.name,
       }));
@@ -265,7 +240,7 @@ export function ChargeExpenseMatrix() {
     } finally {
       setLoading(false);
     }
-  }, [period, serviceType, view]);
+  }, [period, serviceType]);
 
   useEffect(() => { fetchMatrix(); }, [fetchMatrix]);
 
@@ -328,47 +303,6 @@ export function ChargeExpenseMatrix() {
           </select>
         </div>
 
-        {/* View segment control */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "6px",
-          padding: "0 8px",
-        }}>
-          <div style={{
-            display: "flex",
-            background: "var(--theme-bg-surface-subtle)",
-            borderRadius: "10px",
-            padding: "3px",
-            gap: "2px",
-          }}>
-            {(["charges", "expenses"] as ViewMode[]).map(v => {
-              const theme = VIEW_THEME[v];
-              const isActive = view === v;
-              return (
-                <button
-                  key={v}
-                  onClick={() => setView(v)}
-                  style={{
-                    padding: "6px 14px",
-                    fontSize: "13px",
-                    fontWeight: isActive ? 600 : 500,
-                    border: "none",
-                    borderRadius: "7px",
-                    cursor: "pointer",
-                    background: isActive ? theme.segmentBg : "transparent",
-                    color: isActive ? theme.segmentColor : "#6B7280",
-                    transition: "all 0.15s ease",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {theme.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Right side: meta chips + export */}
         {data?.meta && !loading && (
           <div style={{ marginLeft: "auto", display: "flex", gap: "8px", alignItems: "center" }}>
@@ -404,7 +338,7 @@ export function ChargeExpenseMatrix() {
         {!loading && !error && data && data.columns.length === 0 && <NoCatalogState />}
         {!loading && !error && data && data.columns.length > 0 && data.rows.length === 0 && <EmptyState period={period} />}
         {!loading && !error && data && data.columns.length > 0 && data.rows.length > 0 && (
-          <MatrixTable data={data} containerRef={tableContainerRef} view={view} />
+          <MatrixTable data={data} containerRef={tableContainerRef} />
         )}
       </div>
     </div>
@@ -413,9 +347,9 @@ export function ChargeExpenseMatrix() {
 
 // ==================== MATRIX TABLE ====================
 
-function MatrixTable({ data, containerRef, view }: { data: MatrixData; containerRef: React.RefObject<HTMLDivElement | null>; view: ViewMode }) {
+function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: React.RefObject<HTMLDivElement | null> }) {
   const { columns, rows, totals } = data;
-  const theme = VIEW_THEME[view];
+  const theme = MATRIX_THEME;
 
   return (
     <div
@@ -474,7 +408,7 @@ function MatrixTable({ data, containerRef, view }: { data: MatrixData; container
                   style={{
                     ...headerCellBase,
                     textAlign: "center",
-                    ...(isUnlinked ? { background: "#FEF9C3", color: "#92400E" } : {}),
+                    ...(isUnlinked ? { background: "#FEF9C3", color: "var(--theme-status-warning-fg)" } : {}),
                   }}
                   title={col.name}
                 >
@@ -732,7 +666,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
   return (
     <div style={{
       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      height: "100%", padding: "64px", color: "#DC2626",
+      height: "100%", padding: "64px", color: "var(--theme-status-danger-fg)",
     }}>
       <AlertCircle size={48} style={{ marginBottom: "16px", color: "var(--theme-border-default)" }} />
       <p style={{ fontSize: "14px", marginBottom: "12px", color: "var(--theme-text-muted)" }}>{message}</p>

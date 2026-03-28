@@ -213,7 +213,7 @@ export function ChartOfAccounts() {
       cell: (item) => (
         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium capitalize
           ${item.type === 'Asset' ? 'bg-emerald-50 text-emerald-700' :
-            item.type === 'Liability' ? 'bg-amber-50 text-amber-700' :
+            item.type === 'Liability' ? 'bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]' :
             item.type === 'Equity' ? 'bg-purple-50 text-purple-700' :
             item.type === 'Income' ? 'bg-blue-50 text-blue-700' :
             'bg-rose-50 text-rose-700' // Expense
@@ -314,7 +314,7 @@ export function ChartOfAccounts() {
           <div className="flex gap-3">
              <button 
                 onClick={handleResetCOA}
-                className="h-10 px-4 bg-[var(--theme-bg-surface)] border border-red-200 text-red-600 rounded-lg font-medium text-sm hover:bg-red-50 transition-colors flex items-center gap-2"
+                className="h-10 px-4 bg-[var(--theme-bg-surface)] border border-[var(--theme-status-danger-border)] text-[var(--theme-status-danger-fg)] rounded-lg font-medium text-sm hover:bg-[var(--theme-status-danger-bg)] transition-colors flex items-center gap-2"
                 title="Reset to Standard COA"
              >
                 <RefreshCw size={16} />

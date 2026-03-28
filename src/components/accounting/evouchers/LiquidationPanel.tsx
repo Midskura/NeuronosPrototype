@@ -213,7 +213,7 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
                   </div>
                   <button 
                     onClick={() => handleRemoveItem(item.id)}
-                    className="p-1 text-[var(--theme-text-muted)] hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="p-1 text-[var(--theme-text-muted)] hover:text-[var(--theme-status-danger-fg)] opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -230,7 +230,7 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
           {/* Result Card */}
           <div className={`p-4 rounded-xl border ${
             isRefund ? "bg-emerald-50 border-emerald-200" :
-            isReimbursement ? "bg-amber-50 border-amber-200" :
+            isReimbursement ? "bg-[var(--theme-status-warning-bg)] border-amber-200" :
             "bg-[var(--theme-bg-surface-subtle)] border-[var(--theme-border-default)]"
           }`}>
             <div className="flex gap-3">
@@ -251,7 +251,7 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
                 </h4>
                 <p className={`text-sm mt-1 ${
                   isRefund ? "text-emerald-700" :
-                  isReimbursement ? "text-amber-700" :
+                  isReimbursement ? "text-[var(--theme-status-warning-fg)]" :
                   "text-[var(--theme-text-secondary)]"
                 }`}>
                   {isRefund 

@@ -35,8 +35,8 @@ interface AttentionPanelProps {
 }
 
 const SEVERITY_COLORS: Record<string, { dot: string; bg: string; border: string }> = {
-  danger:  { dot: "#EF4444", bg: "#FEF2F2", border: "#FECACA" },
-  warning: { dot: "#F59E0B", bg: "#FFFBEB", border: "#FDE68A" },
+  danger:  { dot: "#EF4444", bg: "var(--theme-status-danger-bg)", border: "#FECACA" },
+  warning: { dot: "#F59E0B", bg: "var(--theme-status-warning-bg)", border: "#FDE68A" },
   success: { dot: "#16A34A", bg: "#F0FDF4", border: "#BBF7D0" },
   info:    { dot: "#6B7A76", bg: "#F8FAFC", border: "#E2E8F0" },
 };
@@ -136,7 +136,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
             {dangerCount > 0 && (
               <span
                 className="px-1.5 py-0.5 rounded text-[10px] font-semibold"
-                style={{ backgroundColor: "#FEE2E2", color: "#EF4444" }}
+                style={{ backgroundColor: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" }}
               >
                 {dangerCount} critical
               </span>
@@ -144,7 +144,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
             {warningCount > 0 && (
               <span
                 className="px-1.5 py-0.5 rounded text-[10px] font-semibold"
-                style={{ backgroundColor: "#FFFBEB", color: "#D97706" }}
+                style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" }}
               >
                 {warningCount} warning{warningCount > 1 ? "s" : ""}
               </span>
@@ -152,7 +152,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
             {dangerCount === 0 && warningCount === 0 && successCount > 0 && (
               <span
                 className="px-1.5 py-0.5 rounded text-[10px] font-semibold"
-                style={{ backgroundColor: "#DCFCE7", color: "#16A34A" }}
+                style={{ backgroundColor: "var(--theme-status-success-bg)", color: "#16A34A" }}
               >
                 All clear
               </span>
@@ -261,7 +261,7 @@ export function AttentionPanel({ items }: AttentionPanelProps) {
                 {/* Dismiss × — hover-only, top-right corner */}
                 {item.dismissKey && !isSuccess && (
                   <button
-                    className="absolute top-2.5 right-2 w-5 h-5 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all duration-150 cursor-pointer hover:bg-gray-200/60"
+                    className="absolute top-2.5 right-2 w-5 h-5 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-all duration-150 cursor-pointer hover:bg-[var(--theme-state-hover)]"
                     style={{ color: "#C4C9D4" }}
                     onClick={(e) => {
                       e.stopPropagation();

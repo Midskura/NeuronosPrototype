@@ -46,7 +46,7 @@ export function ContractRateToolbar({
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M20 6L9 17l-5-5" />
           </svg>
-          <span style={{ color: "#059669", fontWeight: 500 }}>
+          <span style={{ color: "var(--theme-status-success-fg)", fontWeight: 500 }}>
             {rateBridgeInfo.resolvedMode
               ? `${rateBridgeInfo.resolvedMode} rates applied`
               : "Rates applied"
@@ -82,7 +82,7 @@ export function ContractRateToolbar({
           </button>
         </div>
         {note && (
-          <span style={{ fontSize: "10px", fontStyle: "italic", color: "#D97706" }}>
+          <span style={{ fontSize: "10px", fontStyle: "italic", color: "var(--theme-status-warning-fg)" }}>
             {note}
           </span>
         )}
@@ -122,7 +122,7 @@ export function ContractRateToolbar({
         </button>
       </div>
       {note && (
-        <span style={{ fontSize: "10px", fontStyle: "italic", color: "#D97706" }}>
+        <span style={{ fontSize: "10px", fontStyle: "italic", color: "var(--theme-status-warning-fg)" }}>
           {note}
         </span>
       )}
