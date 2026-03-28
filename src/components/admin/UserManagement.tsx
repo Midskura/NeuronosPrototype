@@ -1,6 +1,8 @@
-import { useState, useCallback, useEffect } from "react";
-import { Plus, Users } from "lucide-react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
+import { Plus, Users } from "lucide-react";
 import { DataTable, ColumnDef } from "../common/DataTable";
 import { CreateUserPanel } from "./CreateUserPanel";
 import { EditUserPanel, type UserRow } from "./EditUserPanel";
@@ -87,26 +89,24 @@ function formatRole(role: string): string {
 }
 
 export function UserManagement() {
-  const [users, setUsers] = useState<UserRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [showCreate, setShowCreate] = useState(false);
   const [editUser, setEditUser] = useState<UserRow | null>(null);
 
-  const fetchUsers = useCallback(async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("users")
-      .select("id, email, name, department, role, team_id, is_active, avatar_url, teams(name)")
-      .order("name", { ascending: true });
-    if (!error && data) {
-      setUsers(data as UserRow[]);
-    }
-    setLoading(false);
-  }, []);
+  const { data: users = [], isLoading: loading } = useQuery({
+    queryKey: queryKeys.users.list(),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("users")
+        .select("id, email, name, department, role, team_id, is_active, avatar_url, teams(name)")
+        .order("name", { ascending: true });
+      if (!error && data) return data as UserRow[];
+      return [] as UserRow[];
+    },
+    staleTime: 30_000,
+  });
 
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+  const fetchUsers = () => queryClient.invalidateQueries({ queryKey: queryKeys.users.list() });
 
   const columns: ColumnDef<UserRow>[] = [
     {

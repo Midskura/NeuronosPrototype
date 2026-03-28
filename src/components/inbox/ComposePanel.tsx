@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { X, Link2, Paperclip, FileText, Send, Save, Building2 } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { useUser } from "../../hooks/useUser";
@@ -63,7 +64,6 @@ function initials(name: string) {
 
 export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, initialRecipientDept }: ComposePanelProps) {
   const { user } = useUser();
-  const [allUsers, setAllUsers] = useState<UserOption[]>([]);
   const [subject, setSubject] = useState(initialSubject ?? "");
   const [body, setBody] = useState("");
   const [type, setType] = useState<MessageType>("request");
@@ -87,15 +87,17 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
   const subjectRef = useRef<HTMLInputElement>(null);
 
   // Pre-load all users once on mount, filter current user client-side
-  useEffect(() => {
-    supabase
-      .from("users")
-      .select("id, name, department")
-      .order("name")
-      .then(({ data }) => {
-        setAllUsers((data || []).filter((u) => u.id !== user?.id));
-      });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { data: allUsers = [] } = useQuery({
+    queryKey: ["ticket_participants", "all_users"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("id, name, department")
+        .order("name");
+      return ((data || []) as UserOption[]).filter((u) => u.id !== user?.id);
+    },
+    staleTime: 0,
+  });
 
   useEffect(() => {
     subjectRef.current?.focus();

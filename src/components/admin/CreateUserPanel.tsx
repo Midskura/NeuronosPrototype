@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTeams } from "../../hooks/useTeams";
 import { Eye, EyeOff, AlertCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../../utils/supabase/client";
@@ -62,20 +63,13 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Teams list (Operations only)
-  const [teams, setTeams] = useState<{ id: string; name: string }[]>([]);
+  // Teams list (all teams — filtered to Operations in the UI)
+  const { teams: allTeams } = useTeams();
+  const teams = department === "Operations" ? allTeams : [];
+
+  // Reset teamId when department changes away from Operations
   useEffect(() => {
-    if (department === "Operations") {
-      supabase
-        .from("teams")
-        .select("id, name")
-        .eq("department", "Operations")
-        .order("name")
-        .then(({ data }) => setTeams(data || []));
-    } else {
-      setTeams([]);
-      setTeamId("");
-    }
+    if (department !== "Operations") setTeamId("");
   }, [department]);
 
   const validate = (): boolean => {

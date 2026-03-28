@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Search, X, TrendingUp, Package, ReceiptText, Users, Check, Link2 } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { useUser } from "../../hooks/useUser";
@@ -179,9 +180,8 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
   const { effectiveDepartment, effectiveRole } = useUser();
   const [activeDrawerId, setActiveDrawerId] = useState(DRAWERS[0].id);
   const [activeEntityType, setActiveEntityType] = useState(DRAWERS[0].entities[0].entityType);
-  const [records, setRecords] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selected, setSelected] = useState<PendingEntity[]>([]);
   const searchRef = useRef<HTMLInputElement>(null);
   const searchTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -196,51 +196,46 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
     activeDrawer.ownerDepts.length === 0 ||
     activeDrawer.ownerDepts.includes(effectiveDepartment ?? "");
 
+  // Debounce the search for the query key
+  useEffect(() => {
+    clearTimeout(searchTimeout.current);
+    searchTimeout.current = setTimeout(() => setDebouncedSearch(search), search ? 250 : 0);
+    return () => clearTimeout(searchTimeout.current);
+  }, [search]);
+
+  // Focus search on open
+  useEffect(() => { searchRef.current?.focus(); }, []);
+
+  const { data: records = [], isFetching: isLoading } = useQuery({
+    queryKey: ["entity_attachments", "file_cabinet", activeEntityType, debouncedSearch, isOwned],
+    queryFn: async () => {
+      if (!isOwned && !debouncedSearch.trim()) return [];
+      let query = (supabase.from(activeEntity.table) as any)
+        .select(activeEntity.columns)
+        .order("created_at", { ascending: false })
+        .limit(40);
+      if (activeEntity.extraFilter) {
+        for (const [k, v] of Object.entries(activeEntity.extraFilter)) {
+          query = query.eq(k, v);
+        }
+      }
+      if (debouncedSearch.trim()) {
+        query = query.ilike(activeEntity.searchColumn, `%${debouncedSearch.trim()}%`);
+      }
+      const { data } = await query;
+      return data ?? [];
+    },
+    staleTime: 0,
+    enabled: isOwned || debouncedSearch.trim().length > 0,
+  });
+
   // When drawer changes, reset entity to first in drawer
   const switchDrawer = (drawerId: string) => {
     const drawer = DRAWERS.find((d) => d.id === drawerId)!;
     setActiveDrawerId(drawerId);
     setActiveEntityType(drawer.entities[0].entityType);
     setSearch("");
-    setRecords([]);
-  };
-
-  // Fetch records
-  useEffect(() => {
-    clearTimeout(searchTimeout.current);
-    searchTimeout.current = setTimeout(fetchRecords, search ? 250 : 0);
-    return () => clearTimeout(searchTimeout.current);
-  }, [activeEntityType, search, isOwned]);
-
-  // Focus search on open
-  useEffect(() => { searchRef.current?.focus(); }, []);
-
-  const fetchRecords = async () => {
-    // Search-only mode: require a query
-    if (!isOwned && !search.trim()) {
-      setRecords([]);
-      return;
-    }
-
-    setIsLoading(true);
-    let query = (supabase.from(activeEntity.table) as any)
-      .select(activeEntity.columns)
-      .order("created_at", { ascending: false })
-      .limit(40);
-
-    if (activeEntity.extraFilter) {
-      for (const [k, v] of Object.entries(activeEntity.extraFilter)) {
-        query = query.eq(k, v);
-      }
-    }
-
-    if (search.trim()) {
-      query = query.ilike(activeEntity.searchColumn, `%${search.trim()}%`);
-    }
-
-    const { data } = await query;
-    setRecords(data ?? []);
-    setIsLoading(false);
+    setDebouncedSearch("");
   };
 
   const toggleRecord = (row: any) => {
@@ -338,7 +333,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
               return (
                 <button
                   key={ent.entityType}
-                  onClick={() => { setActiveEntityType(ent.entityType); setSearch(""); setRecords([]); }}
+                  onClick={() => { setActiveEntityType(ent.entityType); setSearch(""); setDebouncedSearch(""); }}
                   style={{
                     padding: "3px 10px",
                     borderRadius: 6,

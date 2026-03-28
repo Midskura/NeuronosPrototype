@@ -1,7 +1,9 @@
 import { BarChart3, Download, FileText } from "lucide-react";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import type { QuotationNew } from "../../types/pricing";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
 import { getQuotationStatusColor } from "../../utils/quotation-helpers";
 import {
   CANONICAL_QUOTATION_STATUS_ORDER,
@@ -21,37 +23,19 @@ export function PricingReports({
   const getQuotationValue = (quotation: QuotationNew) =>
     (quotation as QuotationNew & { total?: number }).total ?? quotation.financial_summary?.grand_total ?? 0;
 
-  const [fetchedQuotations, setFetchedQuotations] = useState<QuotationNew[]>([]);
-  const [localIsLoading, setLocalIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (providedQuotations) {
-      return;
-    }
-
-    const fetchQuotations = async () => {
-      setLocalIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from("quotations")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (!error && data) {
-          setFetchedQuotations(data);
-        } else {
-          setFetchedQuotations([]);
-        }
-      } catch (error) {
-        console.warn("Unable to fetch quotations from server. Using local data only.", error);
-        setFetchedQuotations([]);
-      } finally {
-        setLocalIsLoading(false);
-      }
-    };
-
-    fetchQuotations();
-  }, [providedQuotations]);
+  const { data: fetchedQuotations = [], isLoading: localIsLoading } = useQuery({
+    queryKey: queryKeys.quotations.list(),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("quotations")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (!error && data) return data as QuotationNew[];
+      return [] as QuotationNew[];
+    },
+    enabled: !providedQuotations,
+    staleTime: 30_000,
+  });
 
   const quotations = providedQuotations ?? fetchedQuotations;
   const isLoading = providedQuotations ? providedIsLoading : localIsLoading;

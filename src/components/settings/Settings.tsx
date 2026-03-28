@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Eye, EyeOff, Loader2, LogOut, Monitor, Moon, Pencil, Sun, X } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../../utils/supabase/client";
@@ -255,7 +256,6 @@ export function Settings() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Team name
-  const [teamName, setTeamName] = useState<string | null>(null);
 
   // Password
   const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -272,16 +272,15 @@ export function Settings() {
   // Logout
   const [loggingOut, setLoggingOut] = useState(false);
 
-  useEffect(() => {
-    if (user?.team_id) {
-      supabase
-        .from("teams")
-        .select("name")
-        .eq("id", user.team_id)
-        .single()
-        .then(({ data }) => setTeamName(data?.name || null));
-    }
-  }, [user?.team_id]);
+  const { data: teamName = null } = useQuery({
+    queryKey: ["teams", user?.team_id ?? ""],
+    queryFn: async () => {
+      const { data } = await supabase.from("teams").select("name").eq("id", user!.team_id!).single();
+      return data?.name || null;
+    },
+    enabled: !!user?.team_id,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const authUid = session?.user?.id;
   const displayAvatar = avatarPreview || avatarUrl;

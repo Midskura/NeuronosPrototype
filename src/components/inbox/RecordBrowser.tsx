@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Search,
   X,
@@ -175,9 +176,8 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
   const [activeSectionId, setActiveSectionId] = useState<string | null>(initialSection?.id ?? null);
   const [expandedSectionId, setExpandedSectionId] = useState<string | null>(initialSection?.id ?? null);
   const [activeEntityKey, setActiveEntityKey] = useState<string | null>(initialSection?.entities[0]?.key ?? null);
-  const [records, setRecords] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selected, setSelected] = useState<LinkedEntity[]>([]);
 
   const searchRef = useRef<HTMLInputElement>(null);
@@ -200,7 +200,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
     setExpandedSectionId(nextSection?.id ?? null);
     setActiveEntityKey(nextSection?.entities[0]?.key ?? null);
     setSearch("");
-    setRecords([]);
+    setDebouncedSearch("");
     setSelected([]);
   }, [isOpen, effectiveDepartment]);
 
@@ -209,7 +209,6 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
       setActiveSectionId(null);
       setExpandedSectionId(null);
       setActiveEntityKey(null);
-      setRecords([]);
       return;
     }
 
@@ -218,44 +217,39 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
     }
   }, [activeSection, activeEntity]);
 
-  const fetchRecords = useCallback(async () => {
-    if (!activeEntity) {
-      setRecords([]);
-      return;
-    }
-
-    if (!canBrowse && !search.trim()) {
-      setIsLoading(false);
-      setRecords([]);
-      return;
-    }
-
-    setIsLoading(true);
-    let query = (supabase.from(activeEntity.table) as any)
-      .select(activeEntity.columns)
-      .order("created_at", { ascending: false })
-      .limit(40);
-
-    if (activeEntity.extraFilters) {
-      for (const [key, value] of Object.entries(activeEntity.extraFilters)) {
-        query = query.eq(key, value);
-      }
-    }
-
-    if (search.trim()) {
-      query = query.ilike(activeEntity.searchColumn, `%${search.trim()}%`);
-    }
-
-    const { data } = await query;
-    setRecords(data ?? []);
-    setIsLoading(false);
-  }, [activeEntity, canBrowse, search]);
-
+  // Debounce search changes
   useEffect(() => {
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(fetchRecords, search ? 250 : 0);
+    debounceRef.current = setTimeout(() => setDebouncedSearch(search), search ? 250 : 0);
     return () => clearTimeout(debounceRef.current);
-  }, [fetchRecords, search]);
+  }, [search]);
+
+  const { data: records = [], isFetching: isLoading } = useQuery({
+    queryKey: ["entity_attachments", "record_browser", activeEntityKey, debouncedSearch, canBrowse],
+    queryFn: async () => {
+      if (!activeEntity) return [];
+      if (!canBrowse && !debouncedSearch.trim()) return [];
+      let query = (supabase.from(activeEntity.table) as any)
+        .select(activeEntity.columns)
+        .order("created_at", { ascending: false })
+        .limit(40);
+      if (activeEntity.extraFilters) {
+        for (const [key, value] of Object.entries(activeEntity.extraFilters)) {
+          query = query.eq(key, value);
+        }
+      }
+      if (debouncedSearch.trim()) {
+        query = query.ilike(activeEntity.searchColumn, `%${debouncedSearch.trim()}%`);
+      }
+      const { data } = await query;
+      return data ?? [];
+    },
+    staleTime: 0,
+    enabled: !!activeEntity && (canBrowse || debouncedSearch.trim().length > 0),
+  });
+
+  // Keep fetchRecords for compatibility (not used for data but referenced shape-wise)
+  const fetchRecords = useCallback(() => {}, []);
 
   const switchSection = (sectionId: string) => {
     const section = visibleSections.find((item) => item.id === sectionId);
@@ -264,7 +258,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
     setActiveSectionId(sectionId);
     setActiveEntityKey(section.entities[0]?.key ?? null);
     setSearch("");
-    setRecords([]);
+    setDebouncedSearch("");
   };
 
   const switchEntity = (sectionId: string, entityKey: string) => {
@@ -272,7 +266,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
     setActiveSectionId(sectionId);
     setActiveEntityKey(entityKey);
     setSearch("");
-    setRecords([]);
+    setDebouncedSearch("");
   };
 
   const toggleRecord = (row: any) => {

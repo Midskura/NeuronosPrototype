@@ -13,6 +13,8 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { queryKeys } from "../../lib/queryKeys";
 import { ArrowLeft, Edit3, RefreshCw, FileText, Calendar, Building2, Briefcase, Ship, Shield, Truck, Clock, Zap, Plus, ChevronDown, Layout, Layers, Users, Receipt, FileStack, DollarSign, TrendingUp, Paperclip, MessageSquare, Eye, MoreVertical } from "lucide-react";
 import type { QuotationNew, ContractRateMatrix } from "../../types/pricing";
 import type { FinancialContainer } from "../../types/financials";
@@ -103,8 +105,35 @@ export function ContractDetailView({
     (initialTab as ContractTab) || "financial_overview"
   );
   const [activeCategory, setActiveCategory] = useState<TabCategory>("dashboard");
-  const [linkedBookings, setLinkedBookings] = useState<any[]>([]);
-  const [isLoadingBookings, setIsLoadingBookings] = useState(false);
+  const bookingsTabActive = ["bookings", "billings", "expenses", "invoices", "collections"].includes(activeTab);
+
+  // ✨ CONTRACT PARITY Phase 5: Activity log
+  const { data: activityEvents = [], isFetching: isLoadingActivity } = useQuery({
+    queryKey: ["contract_activity", quotation.id],
+    queryFn: async () => {
+      const { data } = await supabase.from('contract_activity').select('*').eq('contract_id', quotation.id).order('created_at', { ascending: false });
+      return data && data.length > 0 ? data : [];
+    },
+    enabled: activeTab === "activity" && !!quotation.id,
+    staleTime: 30_000,
+  });
+
+  // Linked bookings (fetched when financial/ops tabs active)
+  const { data: linkedBookings = [], isFetching: isLoadingBookings } = useQuery({
+    queryKey: ["bookings", "contract_linked", quotation.id],
+    queryFn: async () => {
+      const tables = ['forwarding_bookings', 'brokerage_bookings', 'trucking_bookings', 'marine_insurance_bookings', 'others_bookings'];
+      const allBookings: any[] = [];
+      for (const table of tables) {
+        const { data } = await supabase.from(table).select('*').eq('contract_id', quotation.id);
+        if (data) allBookings.push(...data);
+      }
+      if (allBookings.length > 0) return allBookings;
+      return (quotation as any).linkedBookings || [];
+    },
+    enabled: bookingsTabActive && !!quotation.id,
+    staleTime: 30_000,
+  });
 
   // Contract financial data is resolved through the shared booking-first container hook.
   const linkedBookingIds = linkedBookings.map((b: any) => b.bookingId || b.id).filter(Boolean);
@@ -132,10 +161,6 @@ export function ContractDetailView({
   // ✨ CONTRACT PARITY Phase 3: Booking drill-down + Generate Billing state
   const [selectedBooking, setSelectedBooking] = useState<{ bookingId: string; bookingType: string } | null>(null);
   const [generatingBillingId, setGeneratingBillingId] = useState<string | null>(null);
-
-  // ✨ CONTRACT PARITY Phase 5: Activity log state
-  const [activityEvents, setActivityEvents] = useState<any[]>([]);
-  const [isLoadingActivity, setIsLoadingActivity] = useState(false);
 
   const financialContainer = useMemo<FinancialContainer>(
     () => ({
@@ -191,56 +216,6 @@ export function ContractDetailView({
   // Determine if the "Activate Contract" CTA should show
   // Show when: quotation status is "Accepted by Client" AND contract_status is not yet "Active"
   const showActivateCTA = normalizedStatus === "Accepted by Client" && contractStatus !== "Active";
-
-  // Fetch linked bookings when Bookings or Billings tab is active
-  useEffect(() => {
-    if ((activeTab === "bookings" || activeTab === "billings" || activeTab === "expenses" || activeTab === "invoices" || activeTab === "collections") && quotation.id) {
-      fetchLinkedBookings();
-    }
-    if (activeTab === "activity" && quotation.id) {
-      fetchActivityLog();
-    }
-  }, [activeTab, quotation.id]);
-
-  const fetchLinkedBookings = async () => {
-    setIsLoadingBookings(true);
-    try {
-      // Fetch bookings linked to this contract across all booking tables
-      const tables = ['forwarding_bookings', 'brokerage_bookings', 'trucking_bookings', 'marine_insurance_bookings', 'others_bookings'];
-      const allBookings: any[] = [];
-      for (const table of tables) {
-        const { data } = await supabase.from(table).select('*').eq('contract_id', quotation.id);
-        if (data) allBookings.push(...data);
-      }
-      if (allBookings.length > 0) {
-        setLinkedBookings(allBookings);
-      } else if ((quotation as any).linkedBookings?.length > 0) {
-        setLinkedBookings((quotation as any).linkedBookings);
-      }
-    } catch (err) {
-      console.error("Error fetching contract bookings:", err);
-      // Fallback: use contract's linkedBookings
-      if ((quotation as any).linkedBookings?.length > 0) {
-        setLinkedBookings((quotation as any).linkedBookings);
-      }
-    } finally {
-      setIsLoadingBookings(false);
-    }
-  };
-
-  const fetchActivityLog = async () => {
-    setIsLoadingActivity(true);
-    try {
-      const { data } = await supabase.from('contract_activity').select('*').eq('contract_id', quotation.id).order('created_at', { ascending: false });
-      if (data && data.length > 0) {
-        setActivityEvents(data);
-      }
-    } catch (err) {
-      console.error("Error fetching contract activity log:", err);
-    } finally {
-      setIsLoadingActivity(false);
-    }
-  };
 
   // ✨ PHASE 5: Renew contract
   const handleRenewContract = async () => {

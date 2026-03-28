@@ -8,9 +8,11 @@
  * @see /docs/blueprints/CONTRACT_PARITY_BLUEPRINT.md - Phase 4 (DRY extraction)
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Upload, File, Download, Trash2, FileText, Image as ImageIcon, Loader2 } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
 import { toast } from "../ui/toast-utils";
 
 interface EntityAttachmentsTabProps {
@@ -38,35 +40,30 @@ interface Attachment {
 }
 
 export function EntityAttachmentsTab({ entityId, entityType, currentUser }: EntityAttachmentsTabProps) {
-  const [attachments, setAttachments] = useState<Attachment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Fetch attachments
-  useEffect(() => {
-    fetchAttachments();
-  }, [entityId]);
-
-  const fetchAttachments = async () => {
-    setIsLoading(true);
-    try {
+  const { data: attachments = [], isLoading } = useQuery({
+    queryKey: queryKeys.attachments.forEntity(entityType, entityId),
+    queryFn: async () => {
       const { data, error } = await supabase
         .from('entity_attachments')
         .select('*')
         .eq('entity_type', entityType)
         .eq('entity_id', entityId)
         .order('uploaded_at', { ascending: false });
-
-      if (!error) {
-        setAttachments(data || []);
+      if (error) {
+        toast.error("Failed to load attachments");
+        return [] as Attachment[];
       }
-    } catch (error) {
-      console.error(`Error fetching ${entityType} attachments:`, error);
-      toast.error("Failed to load attachments");
-    } finally {
-      setIsLoading(false);
-    }
+      return (data || []) as Attachment[];
+    },
+    staleTime: 30_000,
+  });
+
+  const refetchAttachments = () => {
+    queryClient.invalidateQueries({ queryKey: queryKeys.attachments.forEntity(entityType, entityId) });
   };
 
   // Handle file upload
@@ -78,27 +75,11 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
     }
 
     setIsUploading(true);
-    
-    // Create optimistic attachments
-    const optimisticAttachments: Attachment[] = Array.from(files).map((file, index) => ({
-      id: `temp-${Date.now()}-${index}`,
-      file_name: file.name,
-      file_size: file.size,
-      file_type: file.type,
-      file_url: '',
-      uploaded_by: currentUser.name,
-      uploaded_at: new Date().toISOString(),
-      isUploading: true,
-    }));
-
-    // Add optimistic attachments to state immediately
-    setAttachments(prev => [...optimisticAttachments, ...prev]);
 
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const tempId = optimisticAttachments[i].id;
-        
+
         try {
           const filePath = `${entityType}/${entityId}/${Date.now()}-${file.name}`;
           const { error: uploadError } = await supabase.storage
@@ -122,16 +103,14 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
             uploaded_at: new Date().toISOString(),
           });
         } catch (error) {
-          // Remove failed upload from optimistic list
-          setAttachments(prev => prev.filter(a => a.id !== tempId));
           throw error;
         }
       }
 
       toast.success(`Successfully uploaded ${files.length} file(s)`);
       
-      // Fetch real attachments from server
-      fetchAttachments();
+      // Refresh attachments
+      refetchAttachments();
     } catch (error) {
       console.error("Error uploading files:", error);
       toast.error("Failed to upload files");
@@ -159,7 +138,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
           await supabase.storage.from('attachments').remove([(attachment as any).storage_path]);
         }
         toast.success("File deleted successfully");
-        fetchAttachments();
+        refetchAttachments();
       } else {
         throw new Error("Failed to delete file");
       }

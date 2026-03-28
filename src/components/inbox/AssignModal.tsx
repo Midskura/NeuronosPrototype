@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X, UserCheck } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 import { useUser } from "../../hooks/useUser";
 import { toast } from "sonner@2.0.3";
@@ -15,21 +16,20 @@ interface DeptMember { id: string; name: string; role: string; }
 
 export function AssignModal({ ticketId, department, onAssigned, onClose }: AssignModalProps) {
   const { user } = useUser();
-  const [members, setMembers] = useState<DeptMember[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [isAssigning, setIsAssigning] = useState(false);
   const [note, setNote] = useState("");
 
-  useEffect(() => {
-    supabase
-      .from("users")
-      .select("id, name, role")
-      .eq("department", department)
-      .then(({ data }) => {
-        setMembers(data || []);
-        setIsLoading(false);
-      });
-  }, [department]);
+  const { data: members = [], isLoading } = useQuery({
+    queryKey: ["ticket_assignments", "dept_members", department],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("users")
+        .select("id, name, role")
+        .eq("department", department);
+      return (data || []) as DeptMember[];
+    },
+    staleTime: 0,
+  });
 
   const handleAssign = async (memberId: string, memberName: string) => {
     if (!user) return;

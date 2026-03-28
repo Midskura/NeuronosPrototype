@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Plus, Search, Globe, MapPin, Building2 } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { toast } from "../ui/toast-utils";
@@ -20,33 +21,17 @@ interface NetworkVendor {
 export function VendorsList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<NetworkVendorType | "All">("All");
-  const [vendors, setVendors] = useState<NetworkVendor[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch vendors from backend
-  const fetchVendors = async () => {
-    setIsLoading(true);
-    try {
+  const { data: vendors = [], isLoading } = useQuery({
+    queryKey: ["network_partners"],
+    queryFn: async () => {
       const { data, error } = await supabase.from('network_partners').select('*').order('company_name');
-      if (!error && data) {
-        setVendors(data);
-      } else {
-        toast.error('Error loading vendors');
-        setVendors([]);
-      }
-    } catch (error) {
-      console.error('Error fetching vendors:', error);
-      toast.error('Unable to load vendors. Please try again.');
-      setVendors([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Load vendors on mount
-  useEffect(() => {
-    fetchVendors();
-  }, []);
+      if (!error && data) return data as NetworkVendor[];
+      toast.error('Error loading vendors');
+      return [] as NetworkVendor[];
+    },
+    staleTime: 30_000,
+  });
 
   // Filter vendors
   const filteredVendors = vendors.filter(vendor => {

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, Paperclip, X, Download, FileText } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 
@@ -34,19 +35,27 @@ export function CommentsTab({
   currentUserName,
   currentUserDepartment,
 }: CommentsTabProps) {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Fetch comments on mount and when inquiryId changes
-  useEffect(() => {
-    fetchComments();
-  }, [inquiryId]);
+  const { data: comments = [], isLoading } = useQuery({
+    queryKey: ["comments", "inquiry", inquiryId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('comments')
+        .select('*')
+        .eq('inquiry_id', inquiryId)
+        .order('created_at', { ascending: true });
+      if (error) return [] as Comment[];
+      return (data || []) as Comment[];
+    },
+    staleTime: 30_000,
+  });
 
   // Auto-resize textarea
   useEffect(() => {
@@ -55,28 +64,6 @@ export function CommentsTab({
       textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
     }
   }, [newComment]);
-
-  const fetchComments = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('comments')
-        .select('*')
-        .eq('inquiry_id', inquiryId)
-        .order('created_at', { ascending: true });
-
-      if (!error) {
-        setComments(data || []);
-      } else {
-        setComments([]);
-      }
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-      setComments([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +116,7 @@ export function CommentsTab({
       if (!insertError) {
         setNewComment("");
         setAttachedFiles([]);
-        await fetchComments();
+        queryClient.invalidateQueries({ queryKey: ["comments", "inquiry", inquiryId] });
         toast.success("Comment added");
       } else {
         toast.error(insertError.message || "Failed to add comment");

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useTeams } from "../../hooks/useTeams";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../../utils/supabase/client";
@@ -51,14 +52,7 @@ export function EditUserPanel({ isOpen, user, onClose, onSaved }: Props) {
   const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
   const [deactivating, setDeactivating] = useState(false);
 
-  const [teams, setTeams] = useState<{ id: string; name: string }[]>([]);
-  useEffect(() => {
-    supabase
-      .from("teams")
-      .select("id, name")
-      .order("name")
-      .then(({ data }) => setTeams(data || []));
-  }, []);
+  const { teams } = useTeams();
 
   const handleSave = async () => {
     setSaving(true);

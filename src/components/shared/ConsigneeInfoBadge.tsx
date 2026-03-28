@@ -9,36 +9,27 @@
  * @see /docs/blueprints/CONSIGNEE_FEATURE_BLUEPRINT.md — Phase 3
  */
 
-import { useState, useEffect } from "react";
 import { Building2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import type { Consignee } from "../../types/bd";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
 
 interface ConsigneeInfoBadgeProps {
   consigneeId?: string;
 }
 
 export function ConsigneeInfoBadge({ consigneeId }: ConsigneeInfoBadgeProps) {
-  const [consignee, setConsignee] = useState<Consignee | null>(null);
-
-  useEffect(() => {
-    if (!consigneeId) {
-      setConsignee(null);
-      return;
-    }
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data, error } = await supabase.from('consignees').select('*').eq('id', consigneeId).single();
-        if (!error && data && !cancelled) setConsignee(data);
-      } catch {
-        // Silently fail — badge is informational only
-      }
-    })();
-
-    return () => { cancelled = true; };
-  }, [consigneeId]);
+  const { data: consignee = null } = useQuery({
+    queryKey: ["consignees", consigneeId ?? ""],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('consignees').select('*').eq('id', consigneeId!).single();
+      if (error) return null;
+      return (data as Consignee) ?? null;
+    },
+    enabled: !!consigneeId,
+    staleTime: 5 * 60 * 1000,
+  });
 
   if (!consigneeId || !consignee) return null;
 

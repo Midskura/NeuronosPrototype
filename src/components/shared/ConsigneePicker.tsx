@@ -11,8 +11,10 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronDown, Building2, Plus, X } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import type { Consignee } from "../../types/bd";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
 
 interface ConsigneePickerProps {
   /** Current free-text value of the consignee field */
@@ -43,63 +45,39 @@ export function ConsigneePicker({
   style,
   className,
 }: ConsigneePickerProps) {
-  const [consignees, setConsignees] = useState<Consignee[]>([]);
-  const [resolvedCustomerId, setResolvedCustomerId] = useState<string | undefined>(directCustomerId);
   const [isOpen, setIsOpen] = useState(false);
   const [searchText, setSearchText] = useState(value);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Resolve customerId from customerName if not directly provided
-  useEffect(() => {
-    if (directCustomerId) {
-      setResolvedCustomerId(directCustomerId);
-      return;
-    }
-    if (!customerName?.trim()) {
-      setResolvedCustomerId(undefined);
-      setConsignees([]);
-      return;
-    }
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data, error } = await supabase.from('customers').select('id, name, company_name').ilike('company_name', customerName.trim());
-        if (cancelled) return;
-        const customers = data || [];
-        const match = customers.find(
-          (c: any) =>
-            (c.name || c.company_name || "").toLowerCase() === customerName.trim().toLowerCase()
-        );
-        setResolvedCustomerId(match?.id || undefined);
-      } catch {
-        if (!cancelled) setResolvedCustomerId(undefined);
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [customerName, directCustomerId]);
+  const { data: resolvedCustomerId } = useQuery({
+    queryKey: [queryKeys.customers.list()[0], "resolve_by_name", customerName ?? "", directCustomerId ?? ""],
+    queryFn: async () => {
+      if (directCustomerId) return directCustomerId;
+      if (!customerName?.trim()) return undefined;
+      const { data } = await supabase.from('customers').select('id, name, company_name').ilike('company_name', customerName.trim());
+      const customers = data || [];
+      const match = customers.find(
+        (c: any) => (c.name || c.company_name || "").toLowerCase() === customerName.trim().toLowerCase()
+      );
+      return match?.id || undefined;
+    },
+    enabled: !!directCustomerId || !!customerName?.trim(),
+    staleTime: 5 * 60 * 1000,
+  });
 
   // Fetch consignees when customerId is resolved
-  useEffect(() => {
-    if (!resolvedCustomerId) {
-      setConsignees([]);
-      return;
-    }
-
-    let cancelled = false;
-    (async () => {
-      try {
-        const { data, error } = await supabase.from('consignees').select('*').eq('customer_id', resolvedCustomerId);
-        if (!cancelled && !error) {
-          setConsignees(data || []);
-        }
-      } catch {
-        // silent
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [resolvedCustomerId]);
+  const { data: consignees = [] } = useQuery({
+    queryKey: ["consignees", resolvedCustomerId ?? ""],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('consignees').select('*').eq('customer_id', resolvedCustomerId!);
+      if (error) return [] as Consignee[];
+      return (data || []) as Consignee[];
+    },
+    enabled: !!resolvedCustomerId,
+    staleTime: 5 * 60 * 1000,
+  });
 
   // Sync searchText with external value
   useEffect(() => {

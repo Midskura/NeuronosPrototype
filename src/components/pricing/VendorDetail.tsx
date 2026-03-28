@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Building2, Award, MapPin, User, Mail, Phone, Ship, MessageSquare, Trash2, Plus, Edit, ShieldCheck, Plane, FileText } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
 import { useNetworkPartners } from "../../hooks/useNetworkPartners";
@@ -210,11 +211,8 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
   const hookData = useNetworkPartners();
   const saveAction = onSave || hookData.savePartner;
   
-  const [chargeCategories, setChargeCategories] = useState<QuotationChargeCategory[]>(
-    initialVendor.charge_categories || []
-  );
+  const queryClient = useQueryClient();
   const [currency, setCurrency] = useState<string>("USD");
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isEditSheetOpen, setIsEditSheetOpen] = useState(false); // Kept for adding contact logic if needed, but primary edit is inline
@@ -225,35 +223,33 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
     setEditedVendor(initialVendor);
   }, [initialVendor]);
 
-  // Load charge categories from backend on mount
-  useEffect(() => {
-    loadChargeCategories();
-  }, [currentVendor.id]);
+  const { data: fetchedCategories, isLoading } = useQuery({
+    queryKey: ["vendor_charge_categories", currentVendor.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('vendor_charge_categories').select('*').eq('vendor_id', currentVendor.id);
+      if (!error && data) return data as QuotationChargeCategory[];
+      return (currentVendor.charge_categories || []) as QuotationChargeCategory[];
+    },
+    staleTime: 30_000,
+  });
 
-  // Mark as unsaved when categories change
+  const [chargeCategories, setChargeCategories] = useState<QuotationChargeCategory[]>(
+    initialVendor.charge_categories || []
+  );
+
+  // Sync fetched categories into local editable state
+  useEffect(() => {
+    if (fetchedCategories) {
+      setChargeCategories(fetchedCategories);
+    }
+  }, [fetchedCategories]);
+
+  // Mark as unsaved when categories change (after initial load)
   useEffect(() => {
     if (!isLoading) {
       setHasUnsavedChanges(true);
     }
   }, [chargeCategories]);
-
-  const loadChargeCategories = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase.from('vendor_charge_categories').select('*').eq('vendor_id', currentVendor.id);
-
-      if (!error && data) {
-        setChargeCategories(data);
-      } else {
-        setChargeCategories(currentVendor.charge_categories || []);
-      }
-    } catch (error) {
-      console.error("Error loading charge categories:", error);
-      setChargeCategories(currentVendor.charge_categories || []);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const saveChargeCategories = async () => {
     try {

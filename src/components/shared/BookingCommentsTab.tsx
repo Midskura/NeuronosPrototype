@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, Paperclip, X, Download, FileText } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 import { toast } from "sonner@2.0.3";
 
@@ -34,19 +35,27 @@ export function BookingCommentsTab({
   currentUserName,
   currentUserDepartment,
 }: BookingCommentsTabProps) {
-  const [comments, setComments] = useState<BookingComment[]>([]);
+  const queryClient = useQueryClient();
   const [newComment, setNewComment] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [isUploadingFiles, setIsUploadingFiles] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Fetch comments on mount and when bookingId changes
-  useEffect(() => {
-    fetchComments();
-  }, [bookingId]);
+  const { data: comments = [], isLoading } = useQuery({
+    queryKey: ["booking_comments", bookingId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('booking_comments')
+        .select('*')
+        .eq('booking_id', bookingId)
+        .order('created_at', { ascending: true });
+      if (error) return [] as BookingComment[];
+      return (data || []) as BookingComment[];
+    },
+    staleTime: 30_000,
+  });
 
   // Auto-resize textarea
   useEffect(() => {
@@ -55,28 +64,6 @@ export function BookingCommentsTab({
       textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
     }
   }, [newComment]);
-
-  const fetchComments = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('booking_comments')
-        .select('*')
-        .eq('booking_id', bookingId)
-        .order('created_at', { ascending: true });
-
-      if (!error) {
-        setComments(data || []);
-      } else {
-        setComments([]);
-      }
-    } catch (error) {
-      console.error("Error fetching booking comments:", error);
-      setComments([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,7 +116,7 @@ export function BookingCommentsTab({
       if (!insertError) {
         setNewComment("");
         setAttachedFiles([]);
-        await fetchComments();
+        queryClient.invalidateQueries({ queryKey: ["booking_comments", bookingId] });
         toast.success("Comment added");
       } else {
         toast.error(insertError.message || "Failed to add comment");

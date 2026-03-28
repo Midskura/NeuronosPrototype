@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Zap } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
+import { queryKeys } from "../../lib/queryKeys";
 
 interface LinkedTicketBadgeProps {
   recordType: string;
@@ -32,21 +33,24 @@ const STATUS_COLOR: Record<string, { color: string; bg: string }> = {
 
 export function LinkedTicketBadge({ recordType, recordId }: LinkedTicketBadgeProps) {
   const navigate = useNavigate();
-  const [ticket, setTicket] = useState<LinkedTicket | null>(null);
 
-  useEffect(() => {
-    if (!recordId) return;
-    supabase
-      .from("tickets")
-      .select("id, subject, status, priority, type")
-      .eq("linked_record_type", recordType)
-      .eq("linked_record_id", recordId)
-      .not("status", "in", '("done","archived")')
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => setTicket(data ?? null));
-  }, [recordType, recordId]);
+  const { data: ticket = null } = useQuery({
+    queryKey: queryKeys.tickets.list({ recordType, recordId }),
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("tickets")
+        .select("id, subject, status, priority, type")
+        .eq("linked_record_type", recordType)
+        .eq("linked_record_id", recordId)
+        .not("status", "in", '("done","archived")')
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      return (data as LinkedTicket) ?? null;
+    },
+    enabled: !!recordId,
+    staleTime: 30_000,
+  });
 
   if (!ticket) return null;
 

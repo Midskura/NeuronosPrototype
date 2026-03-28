@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 import type { ServiceType } from "../../types/operations";
 import type { User } from "../../hooks/useUser";
@@ -24,100 +25,54 @@ export function TeamAssignmentForm({
   onChange, 
   initialAssignments 
 }: TeamAssignmentFormProps) {
-  const [manager, setManager] = useState<{ id: string; name: string } | null>(null);
-  const [supervisors, setSupervisors] = useState<User[]>([]);
-  const [handlers, setHandlers] = useState<User[]>([]);
-  
   const [selectedSupervisor, setSelectedSupervisor] = useState<string>("");
   const [selectedHandler, setSelectedHandler] = useState<string>("");
   const [saveAsDefault, setSaveAsDefault] = useState(false);
-  
-  const [isLoadingManager, setIsLoadingManager] = useState(true);
-  const [isLoadingSupervisors, setIsLoadingSupervisors] = useState(true);
-  const [isLoadingHandlers, setIsLoadingHandlers] = useState(true);
-  const [isLoadingPreference, setIsLoadingPreference] = useState(true);
-  
   const [hasSavedPreference, setHasSavedPreference] = useState(false);
 
-  // Fetch manager on mount
-  useEffect(() => {
-    const fetchManager = async () => {
-      setIsLoadingManager(true);
-      try {
-        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Manager');
-        if (data && data.length > 0) {
-          setManager({ id: data[0].id, name: data[0].name });
-        }
-      } catch (error) {
-        console.error("Error fetching manager:", error);
-      } finally {
-        setIsLoadingManager(false);
+  const { data: managerData, isLoading: isLoadingManager } = useQuery({
+    queryKey: ["client_handler_preferences", "manager", serviceType],
+    queryFn: async () => {
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Manager');
+      return data && data.length > 0 ? { id: data[0].id, name: data[0].name } : null;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const manager = managerData ?? null;
+
+  const { data: supervisors = [], isLoading: isLoadingSupervisors } = useQuery({
+    queryKey: ["client_handler_preferences", "supervisors", serviceType],
+    queryFn: async () => {
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Supervisor');
+      return (data || []) as User[];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { data: handlers = [], isLoading: isLoadingHandlers } = useQuery({
+    queryKey: ["client_handler_preferences", "handlers", serviceType],
+    queryFn: async () => {
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Handler');
+      return (data || []) as User[];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const { isLoading: isLoadingPreference } = useQuery({
+    queryKey: ["client_handler_preferences", customerId, serviceType],
+    queryFn: async () => {
+      const { data: pref } = await supabase.from('client_handler_preferences').select('*').eq('client_id', customerId).eq('service_type', serviceType).maybeSingle();
+      if (pref) {
+        setSelectedSupervisor(pref.preferred_supervisor_id);
+        setSelectedHandler(pref.preferred_handler_id);
+        setHasSavedPreference(true);
       }
-    };
-
-    fetchManager();
-  }, [serviceType]);
-
-  // Fetch supervisors on mount
-  useEffect(() => {
-    const fetchSupervisors = async () => {
-      setIsLoadingSupervisors(true);
-      try {
-        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Supervisor');
-        if (data) setSupervisors(data);
-      } catch (error) {
-        console.error("Error fetching supervisors:", error);
-      } finally {
-        setIsLoadingSupervisors(false);
-      }
-    };
-
-    fetchSupervisors();
-  }, [serviceType]);
-
-  // Fetch handlers on mount
-  useEffect(() => {
-    const fetchHandlers = async () => {
-      setIsLoadingHandlers(true);
-      try {
-        const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Handler');
-        if (data) setHandlers(data);
-      } catch (error) {
-        console.error("Error fetching handlers:", error);
-      } finally {
-        setIsLoadingHandlers(false);
-      }
-    };
-
-    fetchHandlers();
-  }, [serviceType]);
-
-  // Load saved preference on mount
-  useEffect(() => {
-    const loadPreference = async () => {
-      setIsLoadingPreference(true);
-      try {
-        const { data: pref } = await supabase.from('client_handler_preferences').select('*').eq('client_id', customerId).eq('service_type', serviceType).maybeSingle();
-        if (pref) {
-          setSelectedSupervisor(pref.preferred_supervisor_id);
-          setSelectedHandler(pref.preferred_handler_id);
-          setHasSavedPreference(true);
-        }
-      } catch (error) {
-        console.error("Error loading preference:", error);
-        // Don't throw - just continue without preference
-      } finally {
-        setIsLoadingPreference(false);
-      }
-    };
-
-    if (customerId && serviceType) {
-      loadPreference();
-    } else {
-      // If no customerId or serviceType, skip loading preference
-      setIsLoadingPreference(false);
-    }
-  }, [customerId, serviceType]);
+      return pref ?? null;
+    },
+    enabled: !!(customerId && serviceType),
+    staleTime: 30_000,
+  });
 
   // Use initial assignments if provided
   useEffect(() => {
