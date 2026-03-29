@@ -616,22 +616,22 @@ table th,
   padding: 24px;
 }
 
-/* JJB Toast Styling */
+/* Neuron Toast Styling */
 [data-sonner-toast] {
   display: flex !important;
   align-items: flex-start !important;
   gap: 12px !important;
-  background: #FFFFFF !important;
-  border: 1px solid #E5E7EB !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  background: var(--theme-bg-surface) !important;
+  border: 1px solid var(--theme-border-default) !important;
+  border-radius: 7px !important;
+  padding: 12px 14px !important;
+  box-shadow: var(--elevation-2), 0 4px 16px rgba(0, 0, 0, 0.07) !important;
 }
 
 [data-sonner-toast] [data-title] {
   font-size: 13px !important;
   font-weight: 600 !important;
-  color: var(--neuron-ink-primary) !important;
+  color: var(--theme-text-primary) !important;
   line-height: 1.4 !important;
   margin: 0 !important;
 }
@@ -639,7 +639,7 @@ table th,
 [data-sonner-toast] [data-description] {
   font-size: 12px !important;
   font-weight: 400 !important;
-  color: #6B7280 !important;
+  color: var(--theme-text-muted) !important;
   line-height: 1.4 !important;
   margin: 0 !important;
   margin-top: 2px !important;
@@ -648,7 +648,7 @@ table th,
 [data-sonner-toast] [data-button],
 [data-sonner-toast] [data-cancel-button] {
   background: var(--neuron-brand-green) !important;
-  color: #FFFFFF !important;
+  color: var(--theme-text-inverse) !important;
   border: none !important;
   border-radius: 8px !important;
   padding: 6px 12px !important;
@@ -664,9 +664,9 @@ table th,
 }
 
 [data-sonner-toast] [data-close-button] {
-  color: #6B7280 !important;
-  opacity: 0.5 !important;
-  transition: opacity 0.2s ease !important;
+  color: var(--theme-text-muted) !important;
+  opacity: 0.6 !important;
+  transition: opacity 0.15s ease !important;
   background: transparent !important;
   border: none !important;
 }
@@ -676,40 +676,25 @@ table th,
   background: transparent !important;
 }
 
-/* Toast icon styling */
+/* Toast icon area */
 [data-sonner-toast] [data-icon] {
   width: 16px !important;
   height: 16px !important;
   flex-shrink: 0 !important;
-  margin-top: 2px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 1px !important;
 }
 
-/* Success toast icon color */
-[data-sonner-toast][data-type="success"] [data-icon],
-[data-sonner-toast][data-type="success"] [data-icon] > svg {
-  color: #10B981 !important;
-  stroke: #10B981 !important;
-}
-
-/* Error toast icon color */
-[data-sonner-toast][data-type="error"] [data-icon],
-[data-sonner-toast][data-type="error"] [data-icon] > svg {
-  color: #EF4444 !important;
-  stroke: #EF4444 !important;
-}
-
-/* Info toast icon color */
-[data-sonner-toast][data-type="info"] [data-icon],
-[data-sonner-toast][data-type="info"] [data-icon] > svg {
-  color: var(--neuron-brand-green) !important;
-  stroke: var(--neuron-brand-green) !important;
-}
-
-/* Warning toast icon color */
-[data-sonner-toast][data-type="warning"] [data-icon],
+/* Defer icon coloring to toast-utils inline styles */
+[data-sonner-toast] [data-icon] > svg,
+[data-sonner-toast][data-type="success"] [data-icon] > svg,
+[data-sonner-toast][data-type="error"] [data-icon] > svg,
+[data-sonner-toast][data-type="info"] [data-icon] > svg,
 [data-sonner-toast][data-type="warning"] [data-icon] > svg {
-  color: #F59E0B !important;
-  stroke: #F59E0B !important;
+  color: inherit !important;
+  stroke: currentColor !important;
 }
 
 /* Sonner container positioning */

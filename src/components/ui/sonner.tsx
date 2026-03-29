@@ -5,22 +5,25 @@ import { Toaster as Sonner, ToasterProps } from "sonner@2.0.3";
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      theme="system"
+      theme="light"
       className="toaster group"
       position="bottom-right"
-      duration={3000}
+      duration={3500}
+      gap={8}
       toastOptions={{
         style: {
           background: "var(--theme-bg-surface)",
           border: "1px solid var(--theme-border-default)",
-          borderRadius: "12px",
-          padding: "12px 16px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+          borderRadius: "7px",
+          padding: "12px 14px",
+          boxShadow: "var(--elevation-2), 0 4px 16px rgba(0, 0, 0, 0.07)",
           fontSize: "13px",
-          fontWeight: 600,
+          fontWeight: 400,
           color: "var(--theme-text-primary)",
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif",
-          letterSpacing: "0",
+          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+          letterSpacing: "-0.01em",
+          minWidth: "300px",
+          maxWidth: "380px",
         },
       }}
       style={

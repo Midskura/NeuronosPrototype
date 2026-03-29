@@ -415,12 +415,7 @@ export function Settings() {
 
   const handleLogout = async () => {
     setLoggingOut(true);
-    try {
-      await (logout() as unknown as Promise<void>);
-    } catch {
-      toast.error("Failed to sign out — try again");
-      setLoggingOut(false);
-    }
+    await (logout() as unknown as Promise<void>);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Neuron OS** — a desktop web app for asset-light freight forwarding SMEs in the Philippines. Manages the full business lifecycle: sales → quotations → contracts → operations bookings → accounting (billings, expenses, invoices, collections) → HR → executive reporting.
 
-Development is now fully local with Claude Code. No Figma Make. No Edge Functions. All data access goes through the Supabase JS client directly.
+Development is now fully local with Claude Code. No Figma Make. All data access goes through the Supabase JS client directly. Edge Functions are reserved for operations that cannot be done from the frontend client (see below).
 
 ## Commands
 
@@ -25,7 +25,7 @@ npm run build    # Build for production
 | Icons | `lucide-react` (20px standard, 16px small, 24px headers) |
 | Routing | `react-router` (NOT `react-router-dom`) |
 | State | React hooks only — no Redux/Zustand |
-| Backend | Supabase — Postgres + Auth + RLS (direct client, no Edge Functions) |
+| Backend | Supabase — Postgres + Auth + RLS (direct client; Edge Functions only when necessary) |
 | Charts | Recharts |
 | Toasts | `sonner@2.0.3` |
 | Animations | `motion/react` |
@@ -151,10 +151,17 @@ These SQL migrations are written and ready but must be applied manually in the S
 
 The dead Edge Function directory `/src/supabase/functions/server/` should also be deleted from the repo.
 
+## Edge Functions — Use Only When Necessary
+
+Default to `supabase.from()` for all data operations. Only reach for an Edge Function when the operation **requires server-side privileges** that cannot be done from the frontend client. Approved use cases:
+
+- **Admin auth operations** — creating users with a set password (`auth.admin.createUser`), deleting auth accounts, etc. These require the `SUPABASE_SERVICE_ROLE_KEY`, which must never be exposed to the frontend.
+
+Do not write a new Edge Function for anything achievable with the Supabase JS client and RLS.
+
 ## Things to Avoid
 
 - Don't use `apiFetch`, `fetchWithRetry`, or `API_URL` — migration to `supabase.from()` is complete
-- Don't call or deploy Edge Functions — the path is direct Supabase client queries
 - Don't use `react-router-dom` — use `react-router`
 - Don't use `react-resizable` — use `re-resizable`
 - Don't import sonner without version — must be `"sonner@2.0.3"`

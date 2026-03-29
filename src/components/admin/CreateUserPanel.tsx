@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
 import { useTeams } from "../../hooks/useTeams";
 import { Eye, EyeOff, AlertCircle, Loader2 } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { supabase } from "../../utils/supabase/client";
+import { projectId, publicAnonKey } from "../../utils/supabase/info";
 import { SidePanel } from "../common/SidePanel";
 import { CustomDropdown } from "../bd/CustomDropdown";
 
@@ -89,21 +91,46 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("create-user", {
-        body: {
-          name: name.trim(),
-          email: email.trim().toLowerCase(),
-          password,
-          department,
-          role,
-          team_id: teamId || null,
-        },
+      // Use an isolated client so signUp never touches the main auth state or
+      // triggers onAuthStateChange in the admin's active session.
+      const tempClient = createClient(
+        `https://${projectId}.supabase.co`,
+        publicAnonKey,
+        { auth: { persistSession: false, autoRefreshToken: false, storageKey: `neuron-signup-${Date.now()}` } }
+      );
+
+      const { data, error } = await tempClient.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password,
+        options: { data: { name: name.trim() } },
       });
 
-      if (error || !data?.success) {
-        const msg = data?.error || error?.message || "Failed to create account";
-        toast.error(msg);
+      if (error) {
+        toast.error(error.message);
         return;
+      }
+
+      if (!data.user) {
+        toast.error("Failed to create account. Check Supabase Auth settings.");
+        return;
+      }
+
+      if (data.user.identities?.length === 0) {
+        toast.error("An account with this email already exists.");
+        return;
+      }
+
+      // Wait for the auto-profile trigger to insert the users row
+      await new Promise((r) => setTimeout(r, 1000));
+
+      // Update the profile using the admin's main client
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ name: name.trim(), department, role, team_id: teamId || null })
+        .eq("auth_id", data.user.id);
+
+      if (updateError) {
+        console.warn("Profile update failed:", updateError);
       }
 
       toast.success(`Account created for ${name.trim()}`);

@@ -20,6 +20,7 @@ import type { Task } from "../types/bd";
 import type { Activity } from "../types/bd";
 import type { QuotationNew, Project, QuotationType } from "../types/pricing";
 import { toast } from "./ui/toast-utils";
+import { useUser } from "../hooks/useUser";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../lib/queryKeys";
 
@@ -58,6 +59,8 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
   const [taskContacts, setTaskContacts] = useState<any[]>([]);
   const [taskCustomers, setTaskCustomers] = useState<any[]>([]);
 
+  const { user } = useUser();
+
   // Map department name to userDepartment format
   const userDepartment: "Business Development" | "Pricing" = "Business Development"; // Always BD since this is the Business Development module
 
@@ -72,7 +75,11 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
         .select('*')
         .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
-      return data || [];
+      // Normalize DB column mismatch: DB stores `contact_name`, frontend type uses `contact_person_name`
+      return (data || []).map((row: any) => ({
+        ...row,
+        contact_person_name: row.contact_person_name || row.contact_name || null,
+      }));
     },
     staleTime: 30_000,
   });
@@ -363,59 +370,150 @@ export function BusinessDevelopment({ view: initialView = "contacts", onCreateIn
 
   const handleSaveInquiry = async (data: QuotationNew) => {
     console.log("Saving inquiry:", data);
-    
+
     try {
+      // Map QuotationNew fields → quotations table columns.
+      // Fields not in the schema are packed into the pricing JSONB column.
+      const dbPayload = {
+        quotation_number: data.quote_number,
+        quotation_type: data.quotation_type || 'spot',
+        customer_id: data.customer_id || null,
+        customer_name: data.customer_name || null,
+        quotation_name: data.quotation_name || null,
+        contact_id: data.contact_person_id || data.contact_id || null,
+        contact_person_id: data.contact_person_id || data.contact_id || null,
+        contact_name: data.contact_person_name || null,
+        services: data.services || [],
+        services_metadata: data.services_metadata || [],
+        pricing: {
+          movement: data.movement,
+          category: data.category,
+          shipment_freight: data.shipment_freight,
+          incoterm: data.incoterm,
+          carrier: data.carrier,
+          transit_days: data.transit_days,
+          commodity: data.commodity,
+          pol_aol: data.pol_aol,
+          pod_aod: data.pod_aod,
+          charge_categories: data.charge_categories || [],
+          financial_summary: data.financial_summary || {},
+          buying_price: data.buying_price || [],
+          selling_price: data.selling_price || [],
+          credit_terms: data.credit_terms,
+          validity_period: data.validity_period,
+          source_contract_id: data.source_contract_id || null,
+          source_contract_number: data.source_contract_number || null,
+          // Contract rate tables
+          rate_matrices: data.rate_matrices || [],
+          scope_of_services: data.scope_of_services || [],
+          terms_and_conditions: data.terms_and_conditions || [],
+          contract_general_details: data.contract_general_details || null,
+        },
+        status: data.status || 'Draft',
+        validity_date: data.valid_until || null,
+        created_by: user?.id || null,
+        created_by_name: user?.name || null,
+        currency: data.currency || 'PHP',
+        // Contract-specific top-level columns
+        ...(data.quotation_type === 'contract' && {
+          contract_start_date: data.contract_validity_start || null,
+          contract_end_date: data.contract_validity_end || null,
+          contract_status: data.contract_status || 'Draft',
+        }),
+      };
+
+      // Builder uses "quot-" prefix; update detection uses "QUO-" prefix
       const isUpdate = !!data.id && data.id.startsWith('QUO-');
-      
+
       if (isUpdate) {
         const { error } = await supabase
           .from('quotations')
-          .update({ ...data, updated_at: new Date().toISOString() })
+          .update({ ...dbPayload, updated_at: new Date().toISOString() })
           .eq('id', data.id);
-        
         if (error) throw error;
-        console.log('Inquiry updated successfully');
-        await fetchQuotations();
+        queryClient.invalidateQueries({ queryKey: queryKeys.quotations.list() });
         setSubView("list");
       } else {
         const newId = `QUO-${Date.now()}`;
-        const newData = {
-          ...data,
+        const { error } = await supabase.from('quotations').insert({
+          ...dbPayload,
           id: newId,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        };
-        
-        const { error } = await supabase.from('quotations').insert(newData);
-        
+        });
         if (error) throw error;
-        console.log('Inquiry created successfully:', newId);
-        await fetchQuotations();
+        queryClient.invalidateQueries({ queryKey: queryKeys.quotations.list() });
         setSubView("list");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving inquiry:', error);
-      alert('Error saving inquiry: ' + error);
+      toast.error('Error saving inquiry: ' + (error?.message ?? JSON.stringify(error)));
     }
   };
 
   const handleUpdateQuotation = async (updatedQuotation: QuotationNew) => {
     setSelectedQuotation(updatedQuotation);
-    
+
     try {
+      const dbPayload = {
+        quotation_number: updatedQuotation.quote_number,
+        quotation_type: updatedQuotation.quotation_type || 'spot',
+        customer_id: updatedQuotation.customer_id || null,
+        customer_name: updatedQuotation.customer_name || null,
+        quotation_name: updatedQuotation.quotation_name || null,
+        contact_id: updatedQuotation.contact_person_id || updatedQuotation.contact_id || null,
+        contact_person_id: updatedQuotation.contact_person_id || updatedQuotation.contact_id || null,
+        contact_name: updatedQuotation.contact_person_name || null,
+        services: updatedQuotation.services || [],
+        services_metadata: updatedQuotation.services_metadata || [],
+        pricing: {
+          movement: updatedQuotation.movement,
+          category: updatedQuotation.category,
+          shipment_freight: updatedQuotation.shipment_freight,
+          incoterm: updatedQuotation.incoterm,
+          carrier: updatedQuotation.carrier,
+          transit_days: updatedQuotation.transit_days,
+          commodity: updatedQuotation.commodity,
+          pol_aol: updatedQuotation.pol_aol,
+          pod_aod: updatedQuotation.pod_aod,
+          charge_categories: updatedQuotation.charge_categories || [],
+          financial_summary: updatedQuotation.financial_summary || {},
+          buying_price: updatedQuotation.buying_price || [],
+          selling_price: updatedQuotation.selling_price || [],
+          credit_terms: updatedQuotation.credit_terms,
+          validity_period: updatedQuotation.validity_period,
+          source_contract_id: updatedQuotation.source_contract_id || null,
+          source_contract_number: updatedQuotation.source_contract_number || null,
+          rate_matrices: updatedQuotation.rate_matrices || [],
+          scope_of_services: updatedQuotation.scope_of_services || [],
+          terms_and_conditions: updatedQuotation.terms_and_conditions || [],
+          contract_general_details: updatedQuotation.contract_general_details || null,
+        },
+        status: updatedQuotation.status || 'Draft',
+        validity_date: updatedQuotation.valid_until || null,
+        currency: updatedQuotation.currency || 'PHP',
+        updated_at: new Date().toISOString(),
+        ...(updatedQuotation.quotation_type === 'contract' && {
+          contract_start_date: updatedQuotation.contract_validity_start || null,
+          contract_end_date: updatedQuotation.contract_validity_end || null,
+          contract_status: updatedQuotation.contract_status || 'Draft',
+        }),
+      };
+
       const { error } = await supabase
         .from('quotations')
-        .update({ ...updatedQuotation, updated_at: new Date().toISOString() })
+        .update(dbPayload)
         .eq('id', updatedQuotation.id);
-      
+
       if (!error) {
-        console.log("Quotation updated successfully");
         await fetchQuotations();
       } else {
         console.error('Error updating quotation:', error.message);
+        toast.error('Error updating quotation: ' + error.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating quotation:', error);
+      toast.error('Error updating quotation: ' + (error?.message ?? JSON.stringify(error)));
     }
   };
 

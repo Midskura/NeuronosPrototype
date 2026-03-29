@@ -6,10 +6,10 @@ import { Layout } from "./components/Layout";
 import { UserProvider, useUser } from "./hooks/useUser";
 import { RouteGuard } from "./components/RouteGuard";
 import { AppModeProvider, useAppMode } from "./config/appMode";
-import { toast, Toaster } from "sonner@2.0.3";
+import { toast } from "sonner@2.0.3";
+import { Toaster } from "./components/ui/sonner";
 import type { Customer } from "./types/bd";
 import { NeuronLogo } from "./components/NeuronLogo";
-import { projectId } from "./utils/supabase/info";
 import { useWorkspaceTheme } from "./theme/useWorkspaceTheme";
 
 const ExecutiveDashboard = lazy(() => import("./components/ExecutiveDashboard").then((module) => ({ default: module.ExecutiveDashboard })));
@@ -23,7 +23,6 @@ const HR = lazy(() => import("./components/HR").then((module) => ({ default: mod
 const InboxPage = lazy(() => import("./components/InboxPage").then((module) => ({ default: module.InboxPage })));
 const ActivityLogPage = lazy(() => import("./components/ActivityLogPage").then((module) => ({ default: module.ActivityLogPage })));
 const EmployeeProfile = lazy(() => import("./components/EmployeeProfile").then((module) => ({ default: module.EmployeeProfile })));
-const Admin = lazy(() => import("./components/Admin").then((module) => ({ default: module.Admin })));
 const ReportControlCenter = lazy(() => import("./components/bd/reports/ReportControlCenter").then((module) => ({ default: module.ReportControlCenter })));
 const CreateBooking = lazy(() => import("./components/operations/CreateBooking").then((module) => ({ default: module.CreateBooking })));
 const BookingFullView = lazy(() => import("./components/operations/BookingFullView").then((module) => ({ default: module.BookingFullView })));
@@ -49,20 +48,12 @@ function RouteLoadingState() {
 }
 
 function LoginPage() {
-  const { setUser, login, signup } = useUser();
+  const { login } = useUser();
   const { mode, setMode } = useAppMode();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [department, setDepartment] = useState("");
-  const [role, setRole] = useState("");
-  const [serviceType, setServiceType] = useState("");
-  const [operationsRole, setOperationsRole] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [debugInfo, setDebugInfo] = useState("");
-  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
-  const [signupSuccess, setSignupSuccess] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,71 +71,7 @@ function LoginPage() {
     setIsLoading(false);
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-    setDebugInfo("");
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      setIsLoading(false);
-      return;
-    }
-
-    setDebugInfo(`Calling signUp for ${email} against project ${projectId}...`);
-    const result = await signup(email, password, name || email, {
-      department: department || 'Executive',
-      role: role || 'staff',
-      service_type: department === 'Operations' ? (serviceType || null) : null,
-      operations_role: department === 'Operations' ? (operationsRole || null) : null,
-    });
-    setDebugInfo(prev => prev + `\nResult: ${JSON.stringify(result)}`);
-
-    if (!result.success) {
-      setError(result.error || "Signup failed");
-    } else if (result.needsConfirmation) {
-      setSignupSuccess(true);
-    } else {
-      toast.success('Account created! Welcome to Neuron OS!');
-    }
-
-    setIsLoading(false);
-  };
-
   const isLoginDisabled = !email || !password || isLoading;
-  const isSignupDisabled = !email || !password || !department || !role || isLoading;
-
-  if (signupSuccess) {
-    return (
-      <div className="min-h-screen w-full bg-[rgb(255,255,255)] flex items-center justify-center p-6">
-        <div className="w-full max-w-[420px] bg-white rounded-2xl px-12 py-10">
-          <div className="flex flex-col items-center mb-8">
-            <NeuronLogo height={36} />
-          </div>
-          <div className="text-center space-y-4">
-            <div className="w-14 h-14 mx-auto rounded-full bg-[#E8F5E9] flex items-center justify-center">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-            <h2 className="text-[#0a1d4d]">Check your email</h2>
-            <p className="text-[#667085] text-sm">
-              We sent a confirmation link to <span className="text-[#0a1d4d]">{email}</span>.
-              Click the link to activate your account, then come back and sign in.
-            </p>
-            <button
-              type="button"
-              onClick={() => { setSignupSuccess(false); setActiveTab("login"); }}
-              className="mt-4 px-6 py-2.5 bg-[#6b9d94] text-white rounded-lg font-['Inter:Medium',sans-serif] font-medium hover:bg-[#5a8a82] transition-all duration-150"
-            >
-              Back to Sign In
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen w-full bg-[rgb(255,255,255)] flex items-center justify-center p-6">
@@ -155,32 +82,6 @@ function LoginPage() {
           <NeuronLogo height={36} />
         </div>
 
-        {/* Tabs */}
-        <div className="flex rounded-lg border border-gray-200 overflow-hidden mb-6">
-          <button
-            type="button"
-            onClick={() => { setActiveTab("login"); setError(""); }}
-            className="flex-1 py-2.5 px-3 text-sm font-medium transition-all duration-150"
-            style={{
-              backgroundColor: activeTab === "login" ? "#12332B" : "transparent",
-              color: activeTab === "login" ? "#fff" : "#667085",
-            }}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => { setActiveTab("signup"); setError(""); }}
-            className="flex-1 py-2.5 px-3 text-sm font-medium transition-all duration-150 border-l border-gray-200"
-            style={{
-              backgroundColor: activeTab === "signup" ? "#12332B" : "transparent",
-              color: activeTab === "signup" ? "#fff" : "#667085",
-            }}
-          >
-            Create Account
-          </button>
-        </div>
-
         {/* Error Message */}
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
@@ -189,8 +90,7 @@ function LoginPage() {
         )}
 
         {/* Login Form */}
-        {activeTab === "login" && (
-          <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
               <label htmlFor="login-email" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
                 Email
@@ -229,155 +129,6 @@ function LoginPage() {
               {isLoading ? "Signing in..." : "Sign In"}
             </button>
           </form>
-        )}
-
-        {/* Signup Form */}
-        {activeTab === "signup" && (
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-1.5">
-              <label htmlFor="signup-name" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                Full Name
-              </label>
-              <input
-                id="signup-name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Juan dela Cruz"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] placeholder:text-gray-400 focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all"
-                disabled={isLoading}
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="signup-email" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                Email
-              </label>
-              <input
-                id="signup-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="name@company.com"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] placeholder:text-gray-400 focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all"
-                disabled={isLoading}
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="signup-password" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                Password
-              </label>
-              <input
-                id="signup-password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Min. 6 characters"
-                className="w-full px-3.5 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] placeholder:text-gray-400 focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all"
-                disabled={isLoading}
-              />
-            </div>
-
-            {/* Department & Role — side by side */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <label htmlFor="signup-department" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                  Department
-                </label>
-                <select
-                  id="signup-department"
-                  value={department}
-                  onChange={(e) => { setDepartment(e.target.value); if (e.target.value !== 'Operations') { setServiceType(''); setOperationsRole(''); } }}
-                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all appearance-none"
-                  disabled={isLoading}
-                >
-                  <option value="" disabled>Select...</option>
-                  <option value="Business Development">Business Development</option>
-                  <option value="Pricing">Pricing</option>
-                  <option value="Operations">Operations</option>
-                  <option value="Accounting">Accounting</option>
-                  <option value="HR">HR</option>
-                  <option value="Executive">Executive</option>
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <label htmlFor="signup-role" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                  Role
-                </label>
-                <select
-                  id="signup-role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all appearance-none"
-                  disabled={isLoading}
-                >
-                  <option value="" disabled>Select...</option>
-                  <option value="staff">Staff</option>
-                  <option value="team_leader">Team Leader</option>
-                  <option value="manager">Manager</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Operations-specific fields — only shown when department is Operations */}
-            {department === 'Operations' && (
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label htmlFor="signup-service-type" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                    Service Type
-                  </label>
-                  <select
-                    id="signup-service-type"
-                    value={serviceType}
-                    onChange={(e) => setServiceType(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all appearance-none"
-                    disabled={isLoading}
-                  >
-                    <option value="" disabled>Select...</option>
-                    <option value="Forwarding">Forwarding</option>
-                    <option value="Brokerage">Brokerage</option>
-                    <option value="Trucking">Trucking</option>
-                    <option value="Marine Insurance">Marine Insurance</option>
-                    <option value="Others">Others</option>
-                  </select>
-                </div>
-                <div className="space-y-1.5">
-                  <label htmlFor="signup-ops-role" className="block text-[#0a1d4d] font-['Inter:Medium',sans-serif] font-medium">
-                    Ops Role
-                  </label>
-                  <select
-                    id="signup-ops-role"
-                    value={operationsRole}
-                    onChange={(e) => setOperationsRole(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-50 font-['Inter:Regular',sans-serif] text-[#0a1d4d] focus:outline-none focus:border-[#2f7f6f] focus:bg-white transition-all appearance-none"
-                    disabled={isLoading}
-                  >
-                    <option value="" disabled>Select...</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Supervisor">Supervisor</option>
-                    <option value="Handler">Handler</option>
-                  </select>
-                </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSignupDisabled}
-              className="w-full py-2.5 px-4 bg-[#6b9d94] text-white rounded-lg font-['Inter:Medium',sans-serif] font-medium hover:bg-[#5a8a82] active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 transition-all duration-150 mt-6 text-center"
-            >
-              {isLoading ? "Creating account..." : "Create Account"}
-            </button>
-
-            {/* Debug panel — visible during signup for troubleshooting */}
-            {debugInfo && (
-              <div className="mt-3 p-3 rounded-lg bg-gray-900 text-gray-300 text-xs font-mono whitespace-pre-wrap max-h-40 overflow-auto">
-                {debugInfo}
-              </div>
-            )}
-          </form>
-        )}
 
         {/* App Mode Toggle */}
         <div className="mt-6">
@@ -478,7 +229,6 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
     if (path.startsWith("/activity-log")) return "activity-log";
     if (path.startsWith("/settings")) return "settings";
     if (path.startsWith("/admin/users")) return "admin-users";
-    if (path.startsWith("/admin")) return "admin";
     if (path.startsWith("/design-system")) return "design-system";
     return "dashboard";
   };
@@ -533,7 +283,6 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
       "activity-log": "/activity-log",
       "settings": "/settings",
       "admin-users": "/admin/users",
-      "admin": "/admin",
       "design-system": "/design-system"
     };
     
@@ -1142,14 +891,6 @@ function UserManagementPage() {
   );
 }
 
-function AdminPage() {
-  return (
-    <RouteWrapper page="admin">
-      <Admin />
-    </RouteWrapper>
-  );
-}
-
 function DesignSystemPage() {
   return (
     <RouteWrapper page="design-system">
@@ -1180,7 +921,7 @@ function AppContent() {
   if (!isAuthenticated) {
     return (
       <>
-        <Toaster position="bottom-right" richColors />
+        <Toaster />
         <Suspense fallback={<RouteLoadingState />}>
           <Routes>
             <Route path="/supabase-debug" element={<SupabaseDebug />} />
@@ -1193,7 +934,7 @@ function AppContent() {
 
   return (
     <>
-      <Toaster position="bottom-right" richColors />
+      <Toaster />
       <Suspense fallback={<RouteLoadingState />}>
       <Routes>
         {/* Default route */}
@@ -1277,9 +1018,8 @@ function AppContent() {
           <Route path="/activity-log" element={<ActivityLogPageWrapper />} />
         </Route>
 
-        {/* Executive only routes — PermissionsHub lives here */}
+        {/* Executive only routes */}
         <Route element={<GuardedLayout allowedDepartments={["Executive"]} />}>
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin/users" element={<UserManagementPage />} />
         </Route>
 

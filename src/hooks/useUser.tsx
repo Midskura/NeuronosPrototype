@@ -379,7 +379,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch {
+      // Network error — continue with local cleanup so the user is always signed out
+    }
     setUser(null);
     setSession(null);
     localStorage.removeItem('neuron_user');

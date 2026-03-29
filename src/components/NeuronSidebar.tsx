@@ -14,8 +14,6 @@ import {
   ChevronRight,
   ChevronLeft,
   Menu,
-  HelpCircle,
-  Settings,
   Banknote,
   ListTodo,
   Truck,
@@ -287,20 +285,8 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
     { id: "inbox" as Page, label: "My Inbox", icon: Inbox },
   ];
   
-  // Add Ticket Queue for managers/directors only
-  if (isManager) {
-    personalItems.push({ id: "ticket-queue" as Page, label: "Tickets", icon: ListTodo });
-  }
-  
-  // Add Activity Log for Managers and Executive dept
-  if (isManager || effectiveDepartment === "Executive") {
-    personalItems.push({ id: "activity-log" as Page, label: "Activity Log", icon: Activity });
-  }
 
-  const otherItems = [
-    { id: "design-system" as Page, label: "Design System", icon: Palette },
-    { id: "admin" as Page, label: "Settings", icon: Settings },
-  ];
+  const otherItems: { id: Page; label: string; icon: any }[] = [];
 
   const renderNavButton = (item: { id: Page; label: string; icon: any }, isSubItem = false) => {
     const Icon = item.icon;
@@ -387,7 +373,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
         transform: "translateZ(0)",
         // Always above any fixed-position backdrops in main content (e.g. dropdown overlays at z-10)
         position: "relative",
-        zIndex: 100,
+        zIndex: 20,
       }}
     >
       {/* Header */}
@@ -830,31 +816,43 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
           return renderNavButton(item);
         })}
 
-        {/* Other Section */}
-        {renderSectionHeader("OTHER")}
-        
-        <button
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150"
-          style={{
-            height: "40px",
-            color: "var(--neuron-ink-secondary)",
-            justifyContent: isCollapsed ? "center" : "flex-start",
-            paddingLeft: isCollapsed ? "0" : "12px",
-            paddingRight: isCollapsed ? "0" : "12px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent";
-          }}
-          title={isCollapsed ? "Help" : undefined}
-        >
-          <HelpCircle size={20} style={{ color: "var(--neuron-ink-muted)", flexShrink: 0 }} />
-          {!isCollapsed && <span style={{ fontSize: "14px" }}>Help</span>}
-        </button>
-
         {otherItems.map(item => renderNavButton(item))}
+
+        {/* Executive Section */}
+        {currentUser?.department === 'Executive' && (
+          <>
+            {renderSectionHeader("EXECUTIVE")}
+            {renderNavButton({ id: "activity-log" as Page, label: "Activity Log", icon: Activity })}
+            {(() => {
+              const isActive = currentPage === "admin-users";
+              return (
+                <button
+                  onClick={() => onNavigate("admin-users")}
+                  className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150"
+                  style={{
+                    height: "40px",
+                    backgroundColor: isActive ? "var(--neuron-state-selected)" : "transparent",
+                    border: isActive ? "1.5px solid var(--neuron-ui-active-border)" : "1.5px solid transparent",
+                    color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-secondary)",
+                    fontWeight: isActive ? 600 : 400,
+                    justifyContent: isCollapsed ? "center" : "flex-start",
+                    paddingLeft: isCollapsed ? "0" : "12px",
+                    paddingRight: isCollapsed ? "0" : "12px",
+                  }}
+                  onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; }}
+                  onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "transparent"; }}
+                  title={isCollapsed ? "Users" : undefined}
+                >
+                  <Users
+                    size={20}
+                    style={{ color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-muted)", flexShrink: 0 }}
+                  />
+                  {!isCollapsed && <span style={{ fontSize: "14px", lineHeight: "20px" }}>Users</span>}
+                </button>
+              );
+            })()}
+          </>
+        )}
         </nav>
 
         {showTopScrollFade && (
@@ -877,40 +875,6 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
           />
         )}
       </div>
-
-      {/* Users nav entry — Executive only */}
-      {currentUser?.department === 'Executive' && (
-        <div style={{ padding: "0 16px 8px" }}>
-          {(() => {
-            const isActive = currentPage === "admin-users";
-            return (
-              <button
-                onClick={() => onNavigate("admin-users")}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150"
-                style={{
-                  height: "40px",
-                  backgroundColor: isActive ? "var(--neuron-state-selected)" : "transparent",
-                  border: isActive ? "1.5px solid var(--neuron-ui-active-border)" : "1.5px solid transparent",
-                  color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-secondary)",
-                  fontWeight: isActive ? 600 : 400,
-                  justifyContent: isCollapsed ? "center" : "flex-start",
-                  paddingLeft: isCollapsed ? "0" : "12px",
-                  paddingRight: isCollapsed ? "0" : "12px",
-                }}
-                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "var(--neuron-state-hover)"; }}
-                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "transparent"; }}
-                title={isCollapsed ? "Users" : undefined}
-              >
-                <Users
-                  size={20}
-                  style={{ color: isActive ? "var(--neuron-brand-green)" : "var(--neuron-ink-muted)", flexShrink: 0 }}
-                />
-                {!isCollapsed && <span style={{ fontSize: "14px", lineHeight: "20px" }}>Users</span>}
-              </button>
-            );
-          })()}
-        </div>
-      )}
 
       {/* Footer */}
       <div className="px-4 py-4" style={{ borderTop: "1px solid var(--neuron-ui-border)" }}>
