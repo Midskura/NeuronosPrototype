@@ -1,8 +1,19 @@
 node_modules
 build/
+dist/
+
+# Claude Code / dev environment
 .claude/
 .mcp.json
+.serena/
+.dora/
 vite-qa*.log
 
-# dora code context index
-.dora/
+# QA artifacts
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Vercel (keep project.json for linking, ignore local build output)
+.vercel/output/
