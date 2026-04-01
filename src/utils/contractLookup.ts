@@ -39,7 +39,7 @@ export async function fetchActiveContractsForCustomer(
       .from('quotations')
       .select('*')
       .eq('quotation_type', 'contract')
-      .eq('status', 'Active')
+      .in('contract_status', ['Active', 'Expiring'])
       .ilike('customer_name', `%${customerName.trim()}%`);
 
     if (error) {
@@ -122,13 +122,14 @@ export async function fetchFullContract(
 
     const quotation = data;
     if (!quotation) return null;
-    
+
     if (quotation.quotation_type !== "contract") {
       console.warn(`[contractLookup] Quotation ${contractId} is not a contract (type: ${quotation.quotation_type})`);
       return null;
     }
 
-    return quotation as QuotationNew;
+    // Merge details JSONB so rate_matrices and other overflow fields are top-level
+    return { ...(quotation.details ?? {}), ...quotation } as QuotationNew;
   } catch (err) {
     console.error(`[contractLookup] Error fetching contract ${contractId}:`, err);
     return null;

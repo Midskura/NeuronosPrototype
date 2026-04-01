@@ -14,7 +14,7 @@ export function DisplayOptionsControl({ options, onToggle }: DisplayOptionsContr
         onClick={onClick}
         className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
             active 
-            ? 'bg-[var(--theme-bg-surface-tint)] border-[#CCFBF1] text-[var(--theme-action-primary-bg)]' 
+            ? 'bg-[var(--theme-bg-surface-tint)] border-[var(--theme-status-success-border)] text-[var(--theme-action-primary-bg)]' 
             : 'bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-muted)] hover:border-[var(--theme-border-default)]'
         }`}
     >

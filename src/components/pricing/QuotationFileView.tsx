@@ -212,6 +212,41 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
         });
       }
     }
+
+    // Pricing → BD handoff: notify BD when quotation is priced and ready to send
+    if (normalizeQuotationStatus(newStatus, quotation) === "Priced" && currentUser) {
+      const existingReadyTicket = await getOpenWorkflowTicket("quotation", quotation.id);
+      if (!existingReadyTicket) {
+        await createWorkflowTicket({
+          subject: `Ready to Send: ${quotation.quote_number || quotation.quotation_name}`,
+          body: `Pricing for "${quotation.quotation_name}" (${quotation.quote_number}) is complete. Please review and send the quotation to ${quotation.customer_name}.`,
+          type: "fyi",
+          priority: "normal",
+          recipientDept: "Business Development",
+          linkedRecordType: "quotation",
+          linkedRecordId: quotation.id,
+          createdBy: currentUser.id,
+          createdByName: currentUser.name,
+          createdByDept: currentUser.department,
+          autoCreated: true,
+        });
+      }
+    }
+
+    // Project cascade: cancel linked project when quotation is rejected/cancelled
+    const normalizedNew = normalizeQuotationStatus(newStatus, quotation);
+    const cancellingStatuses: string[] = ["Rejected by Client", "Disapproved", "Cancelled"];
+    if (cancellingStatuses.includes(normalizedNew) && quotation.project_id) {
+      const { error: projectError } = await supabase
+        .from('projects')
+        .update({ status: "Cancelled", updated_at: new Date().toISOString() })
+        .eq('id', quotation.project_id);
+      if (projectError) {
+        console.error("Failed to cancel linked project:", projectError.message);
+      } else {
+        console.log(`Project ${quotation.project_id} cancelled due to quotation status: ${normalizedNew}`);
+      }
+    }
   };
 
   const handleCreateTicket = () => {
@@ -224,17 +259,34 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
     setShowCreateProjectModal(true);
   };
 
-  const handleProjectCreationSuccess = (projectId: string) => {
+  const handleProjectCreationSuccess = async (projectId: string) => {
     // Update quotation status to "Converted to Project"
     const updatedQuotation = {
       ...quotation,
       status: "Converted to Project" as QuotationNew["status"]
     };
     onUpdate(updatedQuotation);
-    
+
     // Close modal
     setShowCreateProjectModal(false);
-    
+
+    // Notify Operations that a new project is ready for execution
+    if (currentUser) {
+      await createWorkflowTicket({
+        subject: `New Project: ${quotation.quote_number || quotation.quotation_name}`,
+        body: `A new project has been created for ${quotation.customer_name} from quotation "${quotation.quotation_name}" (${quotation.quote_number}). Please review and begin execution planning.`,
+        type: "fyi",
+        priority: "normal",
+        recipientDept: "Operations",
+        linkedRecordType: "project",
+        linkedRecordId: projectId,
+        createdBy: currentUser.id,
+        createdByName: currentUser.name,
+        createdByDept: currentUser.department,
+        autoCreated: true,
+      });
+    }
+
     // Notify parent component
     if (onConvertToProject) {
       onConvertToProject(projectId);
@@ -260,19 +312,27 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
         customer_id: quotation.customer_id,
         customer_name: quotation.customer_name || quotation.customer_company,
         status: 'Active',
-        bd_owner_user_id: currentUser.id,
-        bd_owner_user_name: currentUser.name,
+        created_by: currentUser.id,
+        created_by_name: currentUser.name,
         created_at: new Date().toISOString(),
+        details: {
+          bd_owner_user_id: currentUser.id,
+          bd_owner_user_name: currentUser.name,
+        },
       };
       const { data: project, error: pError } = await supabase.from('projects').insert(projectData).select().single();
       if (pError) throw new Error(pError.message);
 
       const projectConversionPayload = {
         status: "Converted to Project" as QuotationNew["status"],
-        accepted_at: new Date().toISOString(),
         project_id: project.id,
-        project_number: project.project_number,
         updated_at: new Date().toISOString(),
+        // accepted_at and project_number stored in details — not top-level columns
+        details: {
+          ...(typeof quotation.details === 'object' && quotation.details !== null ? quotation.details as object : {}),
+          accepted_at: new Date().toISOString(),
+          project_number: project.project_number,
+        },
       };
       const { error: qError } = await supabase
         .from('quotations')
@@ -316,7 +376,6 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
       const contractActivationPayload = {
         status: "Converted to Contract" as QuotationNew["status"],
         contract_status: "Active" as QuotationNew["contract_status"],
-        activated_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
       const { error: activateError } = await supabase
@@ -442,12 +501,12 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "details" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "details" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "details" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "details" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -461,12 +520,12 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "comments" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "comments" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "comments" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "comments" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -626,7 +685,7 @@ export function QuotationFileView({ quotation, onBack, onEdit, userDepartment, o
               gap: "8px",
               padding: "8px 16px",
               backgroundColor: "var(--theme-status-warning-bg)",
-              border: "1px solid #FCD34D",
+              border: "1px solid var(--theme-status-warning-border)",
               borderRadius: "6px",
               fontSize: "13px",
               fontWeight: 500,

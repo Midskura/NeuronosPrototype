@@ -238,7 +238,7 @@ export function QuantityDisplaySection({
                   onChange={(e) =>
                     onQuantityChange?.(input.key, parseInt(e.target.value) || 0)
                   }
-                  className="w-16 h-8 text-center text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[var(--theme-bg-surface)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none"
+                  className="w-16 h-8 text-center text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[var(--theme-bg-surface)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] outline-none"
                 />
               ) : (
                 <div className="w-16 h-8 flex items-center justify-center text-[13px] font-medium text-[var(--theme-text-primary)] border border-[var(--theme-border-default)] rounded-[4px] bg-[#F8FAFC]">

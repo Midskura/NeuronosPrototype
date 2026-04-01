@@ -139,15 +139,15 @@ export function PricingReports({
             className="flex items-center gap-2 px-6 py-2.5 rounded-lg text-[14px] transition-all"
             style={{
               background: "var(--theme-bg-surface-tint)",
-              border: "1px solid #0F766E",
+              border: "1px solid var(--theme-action-primary-bg)",
               color: "var(--theme-action-primary-bg)",
               fontWeight: 500,
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#D1FAE5";
+              e.currentTarget.style.background = "var(--theme-status-success-bg)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#E8F5F3";
+              e.currentTarget.style.background = "var(--theme-bg-surface-tint)";
             }}
           >
             <Download size={18} />

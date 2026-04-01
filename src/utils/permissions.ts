@@ -1,14 +1,14 @@
 /**
  * ROLE-BASED ACCESS CONTROL (RBAC)
  * Defines permissions for different user departments and roles in the Neuron OS workflow.
- * 
+ *
  * Canonical values (source of truth: /hooks/useUser.tsx):
  *   department: 'Business Development' | 'Pricing' | 'Operations' | 'Accounting' | 'Executive' | 'HR'
- *   role:       'rep' | 'manager' | 'director'
+ *   role:       'staff' | 'team_leader' | 'manager'
  */
 
 export type Department = "Business Development" | "Pricing" | "Operations" | "Accounting" | "Executive" | "HR";
-export type Role = "rep" | "manager" | "director";
+export type Role = "staff" | "team_leader" | "manager";
 
 export type QuotationAction = 
   | "create_inquiry"
@@ -36,12 +36,12 @@ export type BookingAction =
   | "create_expense";
 
 /**
- * Role hierarchy: rep (0) < manager (1) < director (2)
+ * Role hierarchy: staff (0) < team_leader (1) < manager (2)
  */
 const ROLE_LEVEL: Record<Role, number> = {
-  rep: 0,
-  manager: 1,
-  director: 2,
+  staff: 0,
+  team_leader: 1,
+  manager: 2,
 };
 
 /**
@@ -62,8 +62,6 @@ export function canAccessModule(
 ): boolean {
   // Executive always passes
   if (userDepartment === "Executive") return true;
-  // Directors always pass
-  if (userRole === "director") return true;
 
   const moduleAccess: Record<string, { departments: Department[]; minRole?: Role }> = {
     bd: { departments: ["Business Development"] },
@@ -71,7 +69,7 @@ export function canAccessModule(
     operations: { departments: ["Operations"] },
     accounting: { departments: ["Accounting"] },
     hr: { departments: ["HR"] },
-    admin: { departments: [], minRole: "director" },
+    admin: { departments: ["Executive"] },
     "activity-log": { departments: ["Business Development", "Pricing", "Operations", "Accounting", "HR"], minRole: "manager" },
     "ticket-queue": { departments: ["Business Development", "Pricing", "Operations", "Accounting", "HR"], minRole: "manager" },
   };
@@ -93,8 +91,8 @@ export function canPerformQuotationAction(
   userDepartment: Department,
   userRole?: Role
 ): boolean {
-  // Directors and Executive always pass
-  if (userRole === "director" || userDepartment === "Executive") return true;
+  // Executive always passes
+  if (userDepartment === "Executive") return true;
 
   const permissions: Record<QuotationAction, Department[]> = {
     create_inquiry: ["Business Development"],
@@ -120,8 +118,8 @@ export function canPerformProjectAction(
   userDepartment: Department,
   userRole?: Role
 ): boolean {
-  // Directors and Executive always pass
-  if (userRole === "director" || userDepartment === "Executive") return true;
+  // Executive always passes
+  if (userDepartment === "Executive") return true;
 
   const permissions: Record<ProjectAction, Department[]> = {
     view_project: ["Business Development", "Pricing", "Operations", "Accounting"],
@@ -141,8 +139,8 @@ export function canPerformBookingAction(
   userDepartment: Department,
   userRole?: Role
 ): boolean {
-  // Directors and Executive always pass
-  if (userRole === "director" || userDepartment === "Executive") return true;
+  // Executive always passes
+  if (userDepartment === "Executive") return true;
 
   const permissions: Record<BookingAction, Department[]> = {
     create_booking: ["Pricing", "Operations"],
@@ -182,6 +180,59 @@ export function getActionName(action: QuotationAction | ProjectAction | BookingA
   };
 
   return names[action] || action;
+}
+
+// ---------------------------------------------------------------------------
+// E-Voucher workflow permissions
+// ---------------------------------------------------------------------------
+
+export type EVAction =
+  | "approve_tl"
+  | "approve_ceo"
+  | "approve_accounting"
+  | "post_gl"
+  | "unlock_posted";
+
+/**
+ * Check whether a user may perform a specific E-Voucher workflow action.
+ *
+ * @param action        - The workflow step being attempted.
+ * @param userRole      - The user's role string (staff | team_leader | manager).
+ * @param userDepartment - The user's department string.
+ */
+export function canPerformEVAction(
+  action: EVAction,
+  userRole: string,
+  userDepartment: string
+): boolean {
+  const isExecutive = userDepartment === "Executive";
+  const isAccounting = userDepartment === "Accounting";
+  // Cast to Role; unknown roles fall back to staff-level (no access)
+  const normalizedRole = (["staff", "team_leader", "manager"].includes(userRole)
+    ? userRole
+    : "staff") as Role;
+  const isTLOrAbove = hasMinRole(normalizedRole, "team_leader");
+  const isManager   = hasMinRole(normalizedRole, "manager");
+
+  switch (action) {
+    // TL or Manager in any non-Executive department
+    case "approve_tl":
+      return isTLOrAbove && !isExecutive;
+    // Executive department member OR any manager (any dept)
+    case "approve_ceo":
+      return isExecutive || isManager;
+    // Any Accounting department member
+    case "approve_accounting":
+      return isAccounting;
+    // Accounting posts the GL entry
+    case "post_gl":
+      return isAccounting;
+    // Only an Accounting Manager can unlock a posted EV
+    case "unlock_posted":
+      return isAccounting && isManager;
+    default:
+      return false;
+  }
 }
 
 /**

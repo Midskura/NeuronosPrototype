@@ -164,13 +164,13 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
         return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "Recorded":
       case "Audited":
-        return { bg: "#DBEAFE", color: "#1D4ED8" };
+        return { bg: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" };
       case "Disapproved":
       case "Cancelled":
         return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "Under Review":
       case "Processing":
-        return { bg: "#FEF3E7", color: "#C88A2B" };
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       case "Submitted":
         return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default: // Draft
@@ -181,9 +181,9 @@ export function EVouchersList({ budgetRequestData }: EVouchersListProps) {
   const getCategoryColor = (category: EVoucherCategory) => {
     switch (category) {
       case "Brokerage":
-        return { bg: "#EDE9FE", color: "#7C3AED" };
+        return { bg: "var(--neuron-status-accent-bg)", color: "var(--neuron-status-accent-fg)" };
       case "Forwarding":
-        return { bg: "#DBEAFE", color: "#2563EB" };
+        return { bg: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" };
       case "Trucking":
         return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       default: // Miscellaneous

@@ -229,17 +229,17 @@ export function UnifiedCollectionsTab({
         const status = (item.status || "pending").toLowerCase();
         const isCleared = status === "cleared" || status === "deposited" || status === "posted";
 
-        let styles = "bg-[#EFF6FF] text-[#175CD3] border-[#B2DDFF]";
+        let styles = "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)] border-[var(--neuron-semantic-info-border)]";
         let label = item.status || "Pending";
 
         if (status === "credited") {
-          styles = "bg-[#EFF6FF] text-[#1D4ED8] border-[#B2DDFF]";
+          styles = "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)] border-[var(--neuron-semantic-info-border)]";
           label = getCollectionResolutionLabel(item) || "Credited";
         } else if (status === "refunded") {
-          styles = "bg-[var(--theme-bg-surface-subtle)] text-[#475467] border-[var(--theme-border-default)]";
+          styles = "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-secondary)] border-[var(--theme-border-default)]";
           label = getCollectionResolutionLabel(item) || "Refunded";
         } else if (isCleared) {
-          styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[#A6F4C5]";
+          styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[var(--theme-status-success-border)]";
         }
 
         return (
@@ -305,7 +305,7 @@ export function UnifiedCollectionsTab({
             placeholder="Search by Reference, Customer, or Method..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[#98A2B3]"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] text-[13px] border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-[var(--theme-text-primary)] placeholder-[var(--theme-text-muted)]"
           />
         </div>
 

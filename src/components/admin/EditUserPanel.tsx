@@ -12,12 +12,15 @@ export type UserRow = {
   name: string;
   department: string;
   role: string;
+  position?: string | null;
   team_id: string | null;
   is_active: boolean;
   status?: "active" | "inactive" | "suspended" | null;
   avatar_url?: string | null;
   created_at?: string;
   teams: { name: string } | null;
+  service_type?: string | null;
+  ev_approval_authority?: boolean | null;
 };
 
 interface Props {
@@ -48,7 +51,10 @@ function FieldLabel({ children }: { children: string }) {
 export function EditUserPanel({ isOpen, user, onClose, onSaved }: Props) {
   const [department, setDepartment] = useState(user.department);
   const [role, setRole] = useState(user.role);
+  const [position, setPosition] = useState(user.position || "");
   const [teamId, setTeamId] = useState(user.team_id || "");
+  const [serviceType, setServiceType] = useState(user.service_type || "");
+  const [evApprovalAuthority, setEvApprovalAuthority] = useState(user.ev_approval_authority ?? false);
   const [isActive, setIsActive] = useState(user.is_active);
   const [saving, setSaving] = useState(false);
   const [showDeactivateConfirm, setShowDeactivateConfirm] = useState(false);
@@ -61,7 +67,15 @@ export function EditUserPanel({ isOpen, user, onClose, onSaved }: Props) {
     try {
       const { error } = await supabase
         .from("users")
-        .update({ department, role, team_id: teamId || null, is_active: isActive })
+        .update({
+          department,
+          role,
+          position: position.trim() || null,
+          team_id: teamId || null,
+          service_type: department === "Operations" ? (serviceType || null) : null,
+          ev_approval_authority: evApprovalAuthority,
+          is_active: isActive,
+        })
         .eq("id", user.id);
 
       if (error) throw new Error(error.message);
@@ -197,17 +211,103 @@ export function EditUserPanel({ isOpen, user, onClose, onSaved }: Props) {
         </div>
 
         <div style={{ marginBottom: "20px" }}>
-          <FieldLabel>Team</FieldLabel>
-          <CustomDropdown
-            label=""
-            value={teamId}
-            onChange={setTeamId}
-            options={[
-              { value: "", label: "No team" },
-              ...teams.map((t) => ({ value: t.id, label: t.name })),
-            ]}
+          <FieldLabel>Position / Job Title</FieldLabel>
+          <input
+            type="text"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
+            placeholder="e.g. Import Supervisor"
+            style={{
+              width: "100%",
+              height: "40px",
+              border: "1px solid var(--neuron-ui-border)",
+              borderRadius: "8px",
+              padding: "0 12px",
+              fontSize: "13px",
+              color: "var(--neuron-ink-primary)",
+              backgroundColor: "var(--neuron-bg-elevated)",
+              outline: "none",
+              boxSizing: "border-box",
+            }}
           />
         </div>
+
+        {department === "Operations" && (
+          <>
+            <div style={{ marginBottom: "20px" }}>
+              <FieldLabel>Team</FieldLabel>
+              <CustomDropdown
+                label=""
+                value={teamId}
+                onChange={setTeamId}
+                options={[
+                  { value: "", label: "No team" },
+                  ...teams.map((t) => ({ value: t.id, label: t.name })),
+                ]}
+              />
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <FieldLabel>Service Type</FieldLabel>
+              <CustomDropdown
+                label=""
+                value={serviceType}
+                onChange={setServiceType}
+                options={[
+                  { value: "", label: "No service type" },
+                  { value: "Forwarding", label: "Forwarding" },
+                  { value: "Brokerage", label: "Brokerage" },
+                  { value: "Trucking", label: "Trucking" },
+                  { value: "Marine Insurance", label: "Marine Insurance" },
+                  { value: "Others", label: "Others" },
+                ]}
+              />
+            </div>
+          </>
+        )}
+
+        {/* EV Approval Authority — visible for team_leader role only */}
+        {role === "team_leader" && (
+          <div style={{ marginBottom: "20px", padding: "16px", borderRadius: "10px", border: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--neuron-bg-subtle)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div>
+                <p style={{ fontSize: "14px", fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: "2px" }}>
+                  Independent EV Approval Authority
+                </p>
+                <p style={{ fontSize: "12px", color: "var(--neuron-ink-muted)" }}>
+                  When enabled, this team leader's approvals close the voucher without CEO escalation.
+                </p>
+              </div>
+              <button
+                onClick={() => setEvApprovalAuthority(!evApprovalAuthority)}
+                style={{
+                  width: "44px",
+                  height: "24px",
+                  borderRadius: "12px",
+                  border: "none",
+                  backgroundColor: evApprovalAuthority ? "var(--neuron-action-primary)" : "var(--neuron-ui-border)",
+                  cursor: "pointer",
+                  position: "relative",
+                  flexShrink: 0,
+                  transition: "background-color 0.2s",
+                }}
+              >
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "3px",
+                    left: evApprovalAuthority ? "23px" : "3px",
+                    width: "18px",
+                    height: "18px",
+                    borderRadius: "50%",
+                    backgroundColor: "#FFFFFF",
+                    transition: "left 0.2s",
+                  }}
+                />
+              </button>
+            </div>
+          </div>
+        )}
 
         <div style={{ marginBottom: "24px" }}>
           <FieldLabel>Status</FieldLabel>

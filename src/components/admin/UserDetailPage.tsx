@@ -3,13 +3,14 @@ import { useParams, useNavigate } from "react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../../utils/supabase/client";
 import { useUser } from "../../hooks/useUser";
+import { useTeams } from "../../hooks/useTeams";
 import { toast } from "sonner@2.0.3";
 import {
-  ArrowLeft, Loader2, Edit2, Shield, KeyRound, Trash2,
-  UserCheck, UserX, UserMinus,
+  ArrowLeft, Loader2, KeyRound, Trash2,
+  UserCheck, UserX, UserMinus, Pencil,
 } from "lucide-react";
-import { PermissionsMatrix } from "./PermissionsMatrix";
-import { EditUserPanel, type UserRow } from "./EditUserPanel";
+import { CustomDropdown } from "../bd/CustomDropdown";
+import { getOpsDisplayLabel } from "../../utils/roleLabels";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -22,9 +23,9 @@ function formatRole(role: string) {
 type UserStatus = "active" | "inactive" | "suspended";
 
 const STATUS_CONFIG: Record<UserStatus, { bg: string; text: string; dot: string; label: string }> = {
-  active:    { bg: "#DCFCE7", text: "#166534", dot: "#22C55E",  label: "Active" },
-  inactive:  { bg: "#F3F4F6", text: "#6B7280", dot: "#9CA3AF",  label: "Inactive" },
-  suspended: { bg: "#FEF3C7", text: "#92400E", dot: "#F59E0B",  label: "Suspended" },
+  active:    { bg: "var(--theme-status-success-bg)", text: "#166534", dot: "var(--theme-status-success-fg)",  label: "Active" },
+  inactive:  { bg: "var(--neuron-pill-inactive-bg)", text: "var(--theme-text-muted)", dot: "var(--neuron-ui-muted)",  label: "Inactive" },
+  suspended: { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)", dot: "var(--theme-status-warning-fg)",  label: "Suspended" },
 };
 
 function StatusBadge({ status }: { status: string }) {
@@ -53,18 +54,24 @@ export function UserDetailPage() {
   const queryClient = useQueryClient();
   const { user: currentUser } = useUser();
 
-  const [editOpen, setEditOpen]     = useState(false);
-  const [editPerms, setEditPerms]   = useState(false);
+  const [editing, setEditing]       = useState(false);
+  const [editDept, setEditDept]     = useState("");
+  const [editRole, setEditRole]     = useState("");
+  const [editTeamId, setEditTeamId] = useState("");
+  const [editServiceType, setEditServiceType] = useState("");
+  const [savingProfile, setSavingProfile] = useState(false);
   const [resetOpen, setResetOpen]   = useState(false);
   const [newPw, setNewPw]           = useState("");
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const { teams } = useTeams();
 
   const { data: user, isLoading } = useQuery({
     queryKey: ["users", "detail", userId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("users")
-        .select("id, email, name, department, role, team_id, is_active, status, avatar_url, created_at, teams!users_team_id_fkey(name)")
+        .select("id, email, name, department, role, team_id, service_type, is_active, status, avatar_url, created_at, teams!users_team_id_fkey(name)")
         .eq("id", userId!)
         .maybeSingle();
       if (error) throw error;
@@ -72,6 +79,44 @@ export function UserDetailPage() {
     },
     enabled: !!userId,
   });
+
+  const handleStartEdit = () => {
+    if (!user) return;
+    setEditDept(user.department);
+    setEditRole(user.role);
+    setEditTeamId(user.team_id || "");
+    setEditServiceType(user.service_type || "");
+    setEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setEditing(false);
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setSavingProfile(true);
+    try {
+      const { error } = await supabase
+        .from("users")
+        .update({
+          department: editDept,
+          role: editRole,
+          team_id: editTeamId || null,
+          service_type: editDept === "Operations" ? (editServiceType || null) : null,
+        })
+        .eq("id", user.id);
+      if (error) throw new Error(error.message);
+      toast.success("User updated");
+      setEditing(false);
+      queryClient.invalidateQueries({ queryKey: ["users", "detail", userId] });
+      queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to save changes");
+    } finally {
+      setSavingProfile(false);
+    }
+  };
 
   const callAdminAction = async (action: string, params: Record<string, unknown>) => {
     const { data, error } = await supabase.functions.invoke("admin-user-actions", {
@@ -154,7 +199,7 @@ export function UserDetailPage() {
     return (
       <div style={{ padding: "64px 48px", textAlign: "center" }}>
         <p style={{ fontSize: 14, color: "var(--neuron-ink-muted)" }}>User not found.</p>
-        <button onClick={() => navigate("/admin/users")} style={{ marginTop: 12, color: "#0F766E", background: "none", border: "none", cursor: "pointer", fontSize: 13 }}>
+        <button onClick={() => navigate("/admin/users")} style={{ marginTop: 12, color: "var(--theme-action-primary-bg)", background: "none", border: "none", cursor: "pointer", fontSize: 13 }}>
           ← Back to Users
         </button>
       </div>
@@ -175,18 +220,12 @@ export function UserDetailPage() {
     <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--neuron-bg-elevated)" }}>
 
       {/* Top bar */}
-      <div style={{ padding: "16px 48px", borderBottom: "1px solid var(--neuron-ui-border)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+      <div style={{ padding: "16px 48px", borderBottom: "1px solid var(--neuron-ui-border)", display: "flex", alignItems: "center", flexShrink: 0 }}>
         <button
           onClick={() => navigate("/admin/users")}
           style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", color: "var(--neuron-ink-muted)", fontSize: 13, fontWeight: 500, padding: 0 }}
         >
           <ArrowLeft size={15} /> Users
-        </button>
-        <button
-          onClick={() => setEditOpen(true)}
-          style={{ height: 34, padding: "0 14px", borderRadius: 8, background: "var(--neuron-bg-elevated)", border: "1px solid var(--neuron-ui-border)", color: "var(--neuron-ink-primary)", fontSize: 13, fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}
-        >
-          <Edit2 size={13} /> Edit User
         </button>
       </div>
 
@@ -195,8 +234,10 @@ export function UserDetailPage() {
 
         {/* ── Profile card ── */}
         <div style={{ background: "var(--neuron-bg-elevated)", border: "1px solid var(--neuron-ui-border)", borderRadius: 12, padding: 24 }}>
-          <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "#DCFCE7", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 18, fontWeight: 600, color: "#0F766E", overflow: "hidden" }}>
+
+          {/* View mode header — always visible */}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: editing ? 20 : 0 }}>
+            <div style={{ width: 48, height: 48, borderRadius: "50%", background: "var(--theme-status-success-bg)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 18, fontWeight: 600, color: "var(--theme-action-primary-bg)", overflow: "hidden" }}>
               {user.avatar_url
                 ? <img src={user.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 : initials}
@@ -207,46 +248,110 @@ export function UserDetailPage() {
                 <StatusBadge status={status} />
               </div>
               <p style={{ fontSize: 13, color: "var(--neuron-ink-muted)", margin: "0 0 10px" }}>{user.email}</p>
-              <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-                {[
-                  ["Department", user.department],
-                  ["Role", formatRole(user.role)],
-                  ...(teamName ? [["Team", teamName]] : []),
-                  ["Member since", new Date(user.created_at).toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" })],
-                ].map(([label, value]) => (
-                  <span key={label} style={{ fontSize: 12, color: "var(--neuron-ink-muted)" }}>
-                    <span style={{ fontWeight: 500, color: "var(--neuron-ink-primary)" }}>{label}:</span> {value}
-                  </span>
-                ))}
+              {!editing && (
+                <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+                  {[
+                    ["Department", user.department],
+                    ["Role", formatRole(user.role)],
+                    ...(teamName ? [["Team", teamName]] : []),
+                    ...(user.service_type ? [["Service Type", user.service_type]] : []),
+                    ...(user.department === "Operations" ? [["Ops Role", getOpsDisplayLabel(user.role)]] : []),
+                    ["Member since", new Date(user.created_at).toLocaleDateString("en-PH", { year: "numeric", month: "short", day: "numeric" })],
+                  ].map(([label, value]) => (
+                    <span key={label} style={{ fontSize: 12, color: "var(--neuron-ink-muted)" }}>
+                      <span style={{ fontWeight: 500, color: "var(--neuron-ink-primary)" }}>{label}:</span> {value}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            {!editing && (
+              <button
+                onClick={handleStartEdit}
+                style={{ display: "inline-flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", borderRadius: 8, border: "1px solid var(--neuron-ui-border)", background: "transparent", color: "var(--neuron-ink-muted)", fontSize: 13, fontWeight: 500, cursor: "pointer", flexShrink: 0 }}
+              >
+                <Pencil size={13} /> Edit
+              </button>
+            )}
+          </div>
+
+          {/* Edit mode form */}
+          {editing && (
+            <div style={{ borderTop: "1px solid var(--neuron-ui-border)", paddingTop: 20 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 20 }}>
+                <div>
+                  <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: 6 }}>Department</label>
+                  <CustomDropdown
+                    label=""
+                    value={editDept}
+                    onChange={setEditDept}
+                    options={["Business Development", "Pricing", "Operations", "Accounting", "HR", "Executive"].map(d => ({ value: d, label: d }))}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: 6 }}>Role</label>
+                  <CustomDropdown
+                    label=""
+                    value={editRole}
+                    onChange={setEditRole}
+                    options={[
+                      { value: "staff", label: "Staff" },
+                      { value: "team_leader", label: "Team Leader" },
+                      { value: "manager", label: "Manager" },
+                    ]}
+                  />
+                </div>
+                {editDept === "Operations" && (
+                  <>
+                    <div>
+                      <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: 6 }}>Team</label>
+                      <CustomDropdown
+                        label=""
+                        value={editTeamId}
+                        onChange={setEditTeamId}
+                        options={[{ value: "", label: "No team" }, ...teams.map(t => ({ value: t.id, label: t.name }))]}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: 6 }}>Service Type</label>
+                      <CustomDropdown
+                        label=""
+                        value={editServiceType}
+                        onChange={setEditServiceType}
+                        options={[
+                          { value: "", label: "No service type" },
+                          { value: "Forwarding", label: "Forwarding" },
+                          { value: "Brokerage", label: "Brokerage" },
+                          { value: "Trucking", label: "Trucking" },
+                          { value: "Marine Insurance", label: "Marine Insurance" },
+                          { value: "Others", label: "Others" },
+                        ]}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+                <button
+                  onClick={handleCancelEdit}
+                  style={{ height: 32, padding: "0 14px", borderRadius: 8, border: "1px solid var(--neuron-ui-border)", background: "transparent", color: "var(--neuron-ink-muted)", fontSize: 13, fontWeight: 500, cursor: "pointer" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveProfile}
+                  disabled={savingProfile}
+                  style={{ height: 32, padding: "0 14px", borderRadius: 8, background: "var(--neuron-action-primary)", border: "none", color: "var(--neuron-action-primary-text)", fontSize: 13, fontWeight: 600, cursor: savingProfile ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 6, opacity: savingProfile ? 0.8 : 1 }}
+                >
+                  {savingProfile && <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} />}
+                  {savingProfile ? "Saving…" : "Save"}
+                </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* ── Permissions ── */}
-        <div style={{ background: "var(--neuron-bg-elevated)", border: "1px solid var(--neuron-ui-border)", borderRadius: 12, overflow: "hidden" }}>
-          <div style={{ padding: "14px 24px", borderBottom: "1px solid var(--neuron-ui-border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <Shield size={15} style={{ color: "var(--neuron-ink-muted)" }} />
-              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--neuron-ink-primary)" }}>Permissions</span>
-            </div>
-            <button
-              onClick={() => setEditPerms(v => !v)}
-              style={{ height: 30, padding: "0 12px", borderRadius: 6, border: "1px solid var(--neuron-ui-border)", background: editPerms ? "#F0FDF9" : "var(--neuron-bg-elevated)", color: editPerms ? "#0F766E" : "var(--neuron-ink-muted)", fontSize: 12, fontWeight: 500, cursor: "pointer" }}
-            >
-              {editPerms ? "Done Editing" : "Edit Permissions"}
-            </button>
-          </div>
-          <div style={{ padding: "20px 24px" }}>
-            <PermissionsMatrix
-              userId={user.id}
-              userRole={user.role}
-              userDepartment={user.department}
-              readonly={!editPerms}
-              onSaved={() => setEditPerms(false)}
-            />
-          </div>
-        </div>
+        {/* ── Permissions ── (hidden until feature is ready) */}
 
         {/* ── Account actions ── */}
         <div style={{ background: "var(--neuron-bg-elevated)", border: "1px solid var(--neuron-ui-border)", borderRadius: 12, padding: 24 }}>
@@ -266,9 +371,9 @@ export function UserDetailPage() {
                     style={{
                       height: 34, padding: "0 14px", borderRadius: 8, fontSize: 13, fontWeight: 500,
                       cursor: isCurrent ? "default" : "pointer",
-                      border: isCurrent ? "1px solid #0F766E" : "1px solid var(--neuron-ui-border)",
-                      background: isCurrent ? "#F0FDF9" : "var(--neuron-bg-elevated)",
-                      color: isCurrent ? "#0F766E" : "var(--neuron-ink-muted)",
+                      border: isCurrent ? "1px solid var(--theme-action-primary-bg)" : "1px solid var(--neuron-ui-border)",
+                      background: isCurrent ? "var(--theme-status-success-bg)" : "var(--neuron-bg-elevated)",
+                      color: isCurrent ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
                       display: "flex", alignItems: "center", gap: 6,
                       opacity: (actionLoading && !isCurrent) ? 0.5 : 1,
                     }}
@@ -297,7 +402,7 @@ export function UserDetailPage() {
                 <button
                   onClick={handleDelete}
                   disabled={!!actionLoading}
-                  style={{ height: 34, padding: "0 14px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", gap: 6, border: "1px solid #FCA5A5", background: "var(--neuron-bg-elevated)", color: "#DC2626", opacity: actionLoading ? 0.6 : 1 }}
+                  style={{ height: 34, padding: "0 14px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", gap: 6, border: "1px solid var(--theme-status-danger-border)", background: "var(--neuron-bg-elevated)", color: "var(--theme-status-danger-fg)", opacity: actionLoading ? 0.6 : 1 }}
                 >
                   {actionLoading === "delete" ? <Loader2 size={14} style={{ animation: "spin 1s linear infinite" }} /> : <Trash2 size={14} />}
                   Delete Account
@@ -306,7 +411,7 @@ export function UserDetailPage() {
             </div>
 
             {resetOpen && (
-              <div style={{ marginTop: 14, padding: 16, background: "#F9FAFB", borderRadius: 8, border: "1px solid var(--neuron-ui-border)" }}>
+              <div style={{ marginTop: 14, padding: 16, background: "var(--neuron-pill-inactive-bg)", borderRadius: 8, border: "1px solid var(--neuron-ui-border)" }}>
                 <p style={{ fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", marginBottom: 8 }}>Set new password</p>
                 <div style={{ display: "flex", gap: 8 }}>
                   <input
@@ -320,7 +425,7 @@ export function UserDetailPage() {
                   <button
                     onClick={handleResetPassword}
                     disabled={!!actionLoading}
-                    style={{ height: 36, padding: "0 16px", borderRadius: 8, background: "#0F766E", border: "none", color: "white", fontSize: 13, fontWeight: 600, cursor: actionLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 6 }}
+                    style={{ height: 36, padding: "0 16px", borderRadius: 8, background: "var(--theme-action-primary-bg)", border: "none", color: "white", fontSize: 13, fontWeight: 600, cursor: actionLoading ? "not-allowed" : "pointer", display: "flex", alignItems: "center", gap: 6 }}
                   >
                     {actionLoading === "resetPassword" ? <Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> : null}
                     {actionLoading === "resetPassword" ? "Resetting…" : "Reset"}
@@ -339,19 +444,6 @@ export function UserDetailPage() {
 
       </div>
 
-      {/* Edit panel */}
-      {editOpen && (
-        <EditUserPanel
-          isOpen={editOpen}
-          user={user as unknown as UserRow}
-          onClose={() => setEditOpen(false)}
-          onSaved={() => {
-            setEditOpen(false);
-            queryClient.invalidateQueries({ queryKey: ["users", "detail", userId] });
-            queryClient.invalidateQueries({ queryKey: ["users", "list"] });
-          }}
-        />
-      )}
     </div>
   );
 }

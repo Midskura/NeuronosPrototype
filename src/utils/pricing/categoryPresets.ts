@@ -28,14 +28,14 @@ export const CATEGORY_PRESETS: CategoryPreset[] = [
     name: "FREIGHT CHARGES",
     description: "Ocean/Air freight rates, fuel surcharges, carrier fees",
     icon: "🚢",
-    color: "#3B82F6" // Blue
+    color: "var(--neuron-semantic-info)" // Blue
   },
   {
     id: "origin-local",
     name: "ORIGIN LOCAL CHARGES",
     description: "Pickup, documentation, export customs clearance",
     icon: "📦",
-    color: "#10B981" // Green
+    color: "var(--theme-status-success-fg)" // Green
   },
   {
     id: "destination-local",
@@ -49,7 +49,7 @@ export const CATEGORY_PRESETS: CategoryPreset[] = [
     name: "REIMBURSABLE CHARGES",
     description: "Client-reimbursed expenses and third-party costs",
     icon: "💰",
-    color: "#F59E0B" // Orange
+    color: "var(--theme-status-warning-fg)" // Orange
   },
   {
     id: "brokerage",
@@ -63,7 +63,7 @@ export const CATEGORY_PRESETS: CategoryPreset[] = [
     name: "OTHERS",
     description: "Miscellaneous charges and special services",
     icon: "⚙️",
-    color: "#6B7280" // Gray
+    color: "var(--theme-text-muted)" // Gray
   }
 ];
 

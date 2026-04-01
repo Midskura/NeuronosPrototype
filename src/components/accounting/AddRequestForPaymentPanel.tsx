@@ -845,7 +845,7 @@ export function AddRequestForPaymentPanel({
       case "Under Review":
       case "pending":
       case "Processing":
-        return { bg: "#FEF3E7", color: "#C88A2B" };
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       case "Submitted":
         return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default: // Draft
@@ -1061,7 +1061,7 @@ export function AddRequestForPaymentPanel({
                              const stmt = availableStatements.find(s => s.ref === e.target.value);
                              if (stmt) handleStatementSelect(stmt);
                           }}
-                          className="w-full px-3 py-2.5 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]"
+                          className="w-full px-3 py-2.5 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]"
                           disabled={isLoadingStatements}
                         >
                           <option value="">Select an open statement...</option>
@@ -1112,7 +1112,7 @@ export function AddRequestForPaymentPanel({
                       outline: "none",
                       transition: "all 0.2s",
                       backgroundColor: isViewMode ? "var(--theme-bg-surface-subtle)" : "var(--theme-bg-surface)",
-                      color: isViewMode ? "#374151" : "inherit",
+                      color: isViewMode ? "var(--theme-text-secondary)" : "inherit",
                       cursor: isViewMode ? "default" : "text"
                     }}
                     onFocus={(e) => {
@@ -1259,7 +1259,7 @@ export function AddRequestForPaymentPanel({
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
-                        backgroundColor: (isViewMode || bookingId || isCollectionMode) ? "#F9FAFB" : "#FFFFFF",
+                        backgroundColor: (isViewMode || bookingId || isCollectionMode) ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                         color: "var(--theme-text-secondary)"
                       }}
                     />
@@ -1291,7 +1291,7 @@ export function AddRequestForPaymentPanel({
                         borderRadius: "6px",
                         outline: "none",
                         transition: "all 0.2s",
-                        backgroundColor: (isViewMode || isCollectionMode) ? "#F9FAFB" : "#FFFFFF"
+                        backgroundColor: (isViewMode || isCollectionMode) ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)"
                       }}
                     />
                   </div>
@@ -1323,7 +1323,7 @@ export function AddRequestForPaymentPanel({
                       fontWeight: 600,
                       color: "var(--theme-action-primary-bg)",
                       backgroundColor: "transparent",
-                      border: "1px solid #E5E9E8",
+                      border: "1px solid var(--theme-border-default)",
                       padding: "6px 12px",
                       borderRadius: "6px",
                       cursor: "pointer",
@@ -1597,7 +1597,7 @@ export function AddRequestForPaymentPanel({
                 fontWeight: 500,
                 color: "var(--theme-text-primary)",
                 backgroundColor: "var(--theme-bg-surface)",
-                border: "1px solid #12332B",
+                border: "1px solid var(--theme-text-primary)",
                 borderRadius: "6px",
                 cursor: isSaving ? "not-allowed" : "pointer",
                 transition: "all 0.2s",
@@ -1646,7 +1646,7 @@ export function AddRequestForPaymentPanel({
                 fontSize: "14px",
                 fontWeight: 600,
                 color: "#FFFFFF",
-                backgroundColor: isAccounting ? "#115E59" : "#0F766E",
+                backgroundColor: isAccounting ? "var(--theme-action-primary-border)" : "var(--theme-action-primary-bg)",
                 border: "none",
                 borderRadius: "6px",
                 cursor: (isFormValid && !isSaving) ? "pointer" : "not-allowed",
@@ -1696,12 +1696,12 @@ export function AddRequestForPaymentPanel({
                     fontWeight: 500,
                     color: "var(--theme-status-danger-fg)",
                     backgroundColor: "transparent",
-                    border: "1px solid #FECACA",
+                    border: "1px solid var(--theme-status-danger-border)",
                     borderRadius: "6px",
                     cursor: isSaving ? "not-allowed" : "pointer",
                     transition: "all 0.2s"
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "#FEF2F2"}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)"}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "transparent"}
                 >
                   {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}

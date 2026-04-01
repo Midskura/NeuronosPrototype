@@ -215,14 +215,14 @@ export function AuditingSummary() {
           {(["charges", "expenses", "both"] as ViewMode[]).map(v => (
             <label key={v} style={{
               display: "flex", alignItems: "center", gap: "4px",
-              fontSize: "13px", color: view === v ? "#0F766E" : "#6B7280",
+              fontSize: "13px", color: view === v ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
               fontWeight: view === v ? 600 : 400, cursor: "pointer",
             }}>
               <input
                 type="radio" name="summaryView" value={v}
                 checked={view === v}
                 onChange={() => setView(v)}
-                style={{ accentColor: "#0F766E" }}
+                style={{ accentColor: "var(--theme-action-primary-bg)" }}
               />
               {v.charAt(0).toUpperCase() + v.slice(1)}
             </label>
@@ -286,8 +286,8 @@ function SummaryContent({ data }: { data: SummaryData }) {
               style={{
                 gridTemplateColumns: GRID_COLS,
                 borderBottom: i < items.length - 1 ? "1px solid var(--theme-border-default)" : "none",
-                background: isUnlinked ? "#FFFDE7" : "transparent",
-                borderTop: isUnlinked ? "2px solid #E5E7EB" : undefined,
+                background: isUnlinked ? "var(--theme-status-warning-bg)" : "transparent",
+                borderTop: isUnlinked ? "2px solid var(--theme-border-default)" : undefined,
                 alignItems: "center",
               }}
             >
@@ -295,7 +295,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
               <div style={{
                 fontSize: "13px",
                 fontWeight: isUnlinked ? 600 : 600,
-                color: isUnlinked ? "#92400E" : "#12332B",
+                color: isUnlinked ? "var(--theme-status-warning-fg)" : "var(--theme-text-primary)",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
@@ -329,7 +329,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
                 fontWeight: 600,
                 fontVariantNumeric: "tabular-nums",
                 fontFamily: "'SF Mono', 'Cascadia Code', 'Consolas', monospace",
-                color: totalFmt.isNegative ? "#DC2626" : totalFmt.isEmpty ? "#D1D5DB" : "#12332B",
+                color: totalFmt.isNegative ? "var(--theme-status-danger-fg)" : totalFmt.isEmpty ? "var(--neuron-ui-muted)" : "var(--theme-text-primary)",
               }}>
                 {totalFmt.text}
               </div>
@@ -340,7 +340,7 @@ function SummaryContent({ data }: { data: SummaryData }) {
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
                 fontFamily: "'SF Mono', 'Cascadia Code', 'Consolas', monospace",
-                color: avgFmt.isNegative ? "#DC2626" : avgFmt.isEmpty ? "#D1D5DB" : "#6B7280",
+                color: avgFmt.isNegative ? "var(--theme-status-danger-fg)" : avgFmt.isEmpty ? "var(--neuron-ui-muted)" : "var(--theme-text-muted)",
               }}>
                 {avgFmt.text}
               </div>
@@ -400,10 +400,10 @@ function SummaryContent({ data }: { data: SummaryData }) {
             fontSize: "13px",
             fontWeight: 600,
             color: meta.linked_percentage >= 90
-              ? "#059669"
+              ? "var(--theme-status-success-fg)"
               : meta.linked_percentage >= 50
-                ? "#D97706"
-                : "#DC2626",
+                ? "var(--theme-status-warning-fg)"
+                : "var(--theme-status-danger-fg)",
           }}>
             {meta.linked_percentage}% linked
           </span>
@@ -435,15 +435,15 @@ function SummaryContent({ data }: { data: SummaryData }) {
 
 function TypeBadge({ type }: { type: string }) {
   const normalized = type?.toLowerCase() || "";
-  let bg = "#F9FAFB";
-  let color = "#6B7280";
+  let bg = "var(--neuron-pill-inactive-bg)";
+  let color = "var(--theme-text-muted)";
 
   if (normalized === "charge") {
-    bg = "#ECFDF5";
-    color = "#059669";
+    bg = "var(--theme-status-success-bg)";
+    color = "var(--theme-status-success-fg)";
   } else if (normalized === "expense") {
-    bg = "#FEF2F2";
-    color = "#DC2626";
+    bg = "var(--theme-status-danger-bg)";
+    color = "var(--theme-status-danger-fg)";
   }
 
   return (
@@ -504,7 +504,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
       <p style={{ fontSize: "14px", color: "var(--theme-text-muted)", marginBottom: "12px" }}>{message}</p>
       <button onClick={onRetry} style={{
         padding: "8px 20px", fontSize: "13px", fontWeight: 500,
-        background: "#0F766E", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
+        background: "var(--theme-action-primary-bg)", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
       }}>
         Retry
       </button>

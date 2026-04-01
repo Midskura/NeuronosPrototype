@@ -213,8 +213,8 @@ function CustomerTab({ billingItems, invoices }: { billingItems: any[]; invoices
                 <span
                   className="text-[11px] font-medium px-1.5 py-0.5 rounded tabular-nums"
                   style={{
-                    backgroundColor: isRisky ? "#FFFBEB" : "#F3F4F6",
-                    color: isRisky ? "#D97706" : "#667085",
+                    backgroundColor: isRisky ? "var(--theme-status-warning-bg)" : "var(--neuron-pill-inactive-bg)",
+                    color: isRisky ? "var(--theme-status-warning-fg)" : "var(--neuron-pill-inactive-text)",
                   }}
                 >
                   {row.pct.toFixed(0)}%
@@ -397,8 +397,8 @@ function MarginBadge({ value, bold }: { value: number; bold?: boolean }) {
     <span
       className={`inline-block px-1.5 py-0.5 rounded text-[11px] ${bold ? "font-bold" : "font-semibold"} tabular-nums`}
       style={{
-        backgroundColor: isNegative ? "#FEE2E2" : isLow ? "#FFFBEB" : "#DCFCE7",
-        color: isNegative ? "#EF4444" : isLow ? "#D97706" : "#16A34A",
+        backgroundColor: isNegative ? "var(--theme-status-danger-bg)" : isLow ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)",
+        color: isNegative ? "var(--theme-status-danger-fg)" : isLow ? "var(--theme-status-warning-fg)" : "var(--theme-status-success-fg)",
       }}
     >
       {value.toFixed(0)}%

@@ -60,7 +60,7 @@ function TransactionRow({
         onClick={() => onToggleExpand(txn.id)}
         className={`
           group cursor-pointer transition-colors hover:bg-[var(--theme-bg-surface-subtle)]
-          ${isExpanded ? "bg-[var(--theme-bg-surface-subtle)] border-l-4 border-l-[#0F766E]" : "border-l-4 border-l-transparent"}
+          ${isExpanded ? "bg-[var(--theme-bg-surface-subtle)] border-l-4 border-l-[var(--theme-action-primary-bg)]" : "border-l-4 border-l-transparent"}
           ${isSelected ? "bg-[var(--theme-bg-surface-tint)]" : ""}
         `}
       >
@@ -69,7 +69,7 @@ function TransactionRow({
             type="checkbox" 
             checked={isSelected}
             onChange={() => onToggleSelect(txn.id)}
-            className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
+            className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]"
           />
         </td>
         <td className="py-3 px-4 text-sm text-[var(--theme-text-secondary)]">
@@ -128,7 +128,7 @@ function TransactionRow({
                           <label className="block text-xs font-medium text-[var(--theme-text-muted)] mb-1">From/To</label>
                           <input 
                               type="text" 
-                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[var(--theme-action-primary-bg)]"
                               placeholder="Enter Name"
                               value={payee}
                               onChange={(e) => setPayee(e.target.value)}
@@ -148,7 +148,7 @@ function TransactionRow({
                           <label className="block text-xs font-medium text-[var(--theme-text-muted)] mb-1">Memo</label>
                           <input 
                               type="text" 
-                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-[var(--theme-action-primary-bg)]"
                               placeholder="Add a memo..."
                               value={description}
                               onChange={(e) => setDescription(e.target.value)}
@@ -159,15 +159,15 @@ function TransactionRow({
                     {/* Right: Radio selection (Add / Find Match / Transfer) */}
                     <div className="w-64 border-l border-[var(--theme-border-subtle)] pl-6 space-y-3">
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} defaultChecked className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <input type="radio" name={`action-${txn.id}`} defaultChecked className="text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]" />
                           <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Add</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]" />
                           <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Find match</span>
                       </label>
                       <label className="flex items-center gap-2 cursor-pointer">
-                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]" />
+                          <input type="radio" name={`action-${txn.id}`} className="text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]" />
                           <span className="text-sm font-medium text-[var(--theme-text-secondary)]">Transfer</span>
                       </label>
                     </div>
@@ -269,7 +269,7 @@ export function TransactionsTable({
                 type="checkbox" 
                 checked={selectedIds.size === transactions.length && transactions.length > 0}
                 onChange={toggleSelectAll}
-                className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
+                className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]"
               />
             </th>
             <th className="py-3 px-4 text-xs font-semibold text-[var(--theme-text-muted)] uppercase text-left w-24">Date</th>

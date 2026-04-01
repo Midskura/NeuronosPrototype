@@ -222,9 +222,9 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
   
   // Helper function to get background color
   const getProgressBgColor = (progress: number) => {
-    if (progress >= 80) return "#E8F5F3"; // Light green
-    if (progress >= 60) return "#FEF3E7"; // Light yellow
-    return "#FFE5E5"; // Light red
+    if (progress >= 80) return "var(--theme-bg-surface-tint)"; // Light green
+    if (progress >= 60) return "var(--theme-status-warning-bg)"; // Light yellow
+    return "var(--theme-status-danger-bg)"; // Light red
   };
 
   // Format currency
@@ -264,7 +264,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                 height: "48px",
                 padding: "0 24px",
                 borderRadius: "16px",
-                background: "#0F766E",
+                background: "var(--theme-action-primary-bg)",
                 border: "none",
                 color: "#FFFFFF",
                 fontSize: "14px",
@@ -563,7 +563,7 @@ export function CustomersListWithFilters({ userDepartment, onViewCustomer }: Cus
                             border: "none"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = "#FFF5F5";
+                            e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";

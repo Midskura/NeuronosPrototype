@@ -37,7 +37,7 @@ export function FinalizedPriceSection({
     <div
       style={{
         backgroundColor: "var(--theme-bg-surface)",
-        border: "1px solid #E5E9E8",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "12px",
         padding: "28px",
         marginBottom: "24px",
@@ -51,7 +51,7 @@ export function FinalizedPriceSection({
         justifyContent: "space-between",
         marginBottom: "24px",
         paddingBottom: "20px",
-        borderBottom: "2px solid #E8F5F3"
+        borderBottom: "2px solid var(--theme-bg-surface-tint)"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <PhilippinePeso size={18} style={{ color: "var(--neuron-brand-green)" }} />
@@ -106,7 +106,7 @@ export function FinalizedPriceSection({
 
             return (
               <div key={category.id} style={{
-                border: "1px solid #E0E6E4",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "10px",
                 overflow: "hidden",
                 backgroundColor: "var(--theme-bg-surface)"
@@ -122,10 +122,10 @@ export function FinalizedPriceSection({
                   }}
                   onClick={() => toggleCategory(category.id)}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#EDF2F1";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#F8FBFB";
+                    e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -149,7 +149,7 @@ export function FinalizedPriceSection({
                         style={{
                           fontSize: "14px",
                           fontWeight: 600,
-                          color: "#2C3E38",
+                          color: "var(--theme-text-primary)",
                           letterSpacing: "0.01em"
                         }}
                       >
@@ -187,7 +187,7 @@ export function FinalizedPriceSection({
                 {isCategoryExpanded && (
                   <div style={{ padding: "12px", backgroundColor: "var(--theme-bg-surface)" }}>
                     <div style={{
-                      border: "1px solid #E5E9E8",
+                      border: "1px solid var(--theme-border-default)",
                       borderRadius: "10px",
                       overflow: "hidden",
                       backgroundColor: "var(--theme-bg-surface)"
@@ -234,7 +234,7 @@ export function FinalizedPriceSection({
                                 gap: "8px",
                                 padding: "12px 16px",
                                 fontSize: "13px",
-                                color: "#2C3E38",
+                                color: "var(--theme-text-primary)",
                                 backgroundColor: "var(--theme-bg-surface)",
                                 alignItems: "center"
                               }}
@@ -248,11 +248,11 @@ export function FinalizedPriceSection({
                                   width: "100%",
                                   padding: "6px 8px",
                                   fontSize: "13px",
-                                  border: "1px solid #E0E6E4",
+                                  border: "1px solid var(--theme-border-default)",
                                   borderRadius: "6px",
                                   backgroundColor: "var(--theme-bg-page)", // Slightly gray for disabled
                                   fontWeight: 500,
-                                   color: "#2C3E38",
+                                   color: "var(--theme-text-primary)",
                                    overflow: "hidden",
                                    textOverflow: "ellipsis",
                                    whiteSpace: "nowrap"
@@ -277,7 +277,7 @@ export function FinalizedPriceSection({
                               <div style={{ fontSize: "12px" }}>
                                 <div style={{
                                   padding: "6px 8px",
-                                  border: "1px solid #E0E6E4",
+                                  border: "1px solid var(--theme-border-default)",
                                   borderRadius: "6px",
                                   backgroundColor: "var(--theme-bg-page)",
                                   color: "var(--theme-text-muted)",
@@ -297,7 +297,7 @@ export function FinalizedPriceSection({
                                   padding: "6px 8px",
                                   fontSize: "12px",
                                   textAlign: "right",
-                                  border: "1px solid #E0E6E4",
+                                  border: "1px solid var(--theme-border-default)",
                                   borderRadius: "6px",
                                   backgroundColor: "var(--theme-bg-page)",
                                   outline: "none"
@@ -356,10 +356,10 @@ export function FinalizedPriceSection({
                                     flex: 1,
                                     padding: "5px 8px",
                                     fontSize: "12px",
-                                    border: "1px solid #E0E6E4",
+                                    border: "1px solid var(--theme-border-default)",
                                     borderRadius: "6px",
                                     backgroundColor: "var(--theme-bg-surface)", // Keep white or slightly gray? Original input is white.
-                                    color: "#2C3E38",
+                                    color: "var(--theme-text-primary)",
                                     outline: "none"
                                   }}
                                 />
@@ -378,10 +378,10 @@ export function FinalizedPriceSection({
                                 <div style={{ flex: 1, fontSize: "12px" }}>
                                   <div style={{
                                     padding: "5px 8px",
-                                    border: "1px solid #E0E6E4",
+                                    border: "1px solid var(--theme-border-default)",
                                     borderRadius: "6px",
                                     backgroundColor: "var(--theme-bg-surface)",
-                                    color: "#2C3E38",
+                                    color: "var(--theme-text-primary)",
                                     whiteSpace: "nowrap",
                                     overflow: "hidden",
                                     textOverflow: "ellipsis"
@@ -439,7 +439,7 @@ export function FinalizedPriceSection({
             padding: "20px 24px",
             backgroundColor: "var(--theme-bg-surface-tint)",
             borderRadius: "10px",
-            border: "2px solid #B8E5DD"
+            border: "2px solid var(--theme-status-success-border)"
           }}>
             <div style={{
               display: "grid",
@@ -450,7 +450,7 @@ export function FinalizedPriceSection({
               <div style={{
                 fontSize: "15px",
                 fontWeight: 600,
-                color: "#2C3E38",
+                color: "var(--theme-text-primary)",
                 letterSpacing: "-0.01em"
               }}>
                 Total Selling Price:

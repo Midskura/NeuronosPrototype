@@ -165,9 +165,9 @@ export function PLTrendCard({
   const summaryItems = [
     { label: "Revenue", value: scopedRevenue, color: "var(--theme-action-primary-bg)", sub: null as string | null },
     { label: "Expenses", value: scopedExpenses, color: "var(--theme-status-danger-fg)", sub: null },
-    { label: "Net Profit", value: netProfit, color: netProfit >= 0 ? "#16A34A" : "#EF4444", sub: `${profitMargin.toFixed(1)}% margin` },
+    { label: "Net Profit", value: netProfit, color: netProfit >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)", sub: `${profitMargin.toFixed(1)}% margin` },
     { label: "Collected", value: scopedCollected, color: "var(--theme-action-primary-bg)", sub: `${collectionRate.toFixed(0)}% of invoiced` },
-    { label: "Net Cash", value: netCash, color: netCash >= 0 ? "#16A34A" : "#EF4444", sub: "Collected – Expenses" },
+    { label: "Net Cash", value: netCash, color: netCash >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)", sub: "Collected – Expenses" },
   ];
 
   // ── Anomaly insight line ──
@@ -290,7 +290,7 @@ export function PLTrendCard({
                       left: 0,
                       right: 0,
                       height: "1px",
-                      background: "#F0F1F3",
+                      background: "var(--neuron-pill-inactive-bg)",
                     }}
                   />
                 ))}
@@ -388,7 +388,7 @@ export function PLTrendCard({
                               <span style={{ fontSize: "12px", color: "var(--theme-text-muted)" }}>Net Profit</span>
                               <span
                                 className="font-bold tabular-nums"
-                                style={{ fontSize: "12px", color: item.profit >= 0 ? "#16A34A" : "#EF4444" }}
+                                style={{ fontSize: "12px", color: item.profit >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)" }}
                               >
                                 {fmtFull(item.profit)}
                               </span>
@@ -419,7 +419,7 @@ export function PLTrendCard({
 
         {/* ── Full-height vertical divider ── */}
         <div className="flex-shrink-0 flex justify-center" style={{ width: "32px" }}>
-          <div style={{ width: "1px", background: "#E5E9F0", alignSelf: "stretch" }} />
+          <div style={{ width: "1px", background: "var(--theme-border-default)", alignSelf: "stretch" }} />
         </div>
 
         {/* ── RIGHT COLUMN: Header + Summary (~30%) ── */}

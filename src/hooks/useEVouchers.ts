@@ -13,7 +13,7 @@ export function useEVouchers(view: EVoucherView, userId?: string) {
     let query = supabase.from('evouchers').select('*').order('created_at', { ascending: false });
 
     if (view === "pending") {
-      query = query.in('status', ['pending', 'Pending']);
+      query = query.in('status', ['pending_tl', 'pending_ceo', 'pending_accounting']);
     } else if (view === "my-evouchers" && userId) {
       query = query.eq('requestor_id', userId);
     } else if (view === "my-evouchers" && !userId) {
@@ -26,11 +26,9 @@ export function useEVouchers(view: EVoucherView, userId?: string) {
 
     const evouchers: EVoucher[] = data || [];
 
-    // NEURON-DRY-2411: E-Vouchers Module is now strictly "Money Out".
-    return evouchers.filter(item =>
-      item.transaction_type !== "collection" &&
-      item.transaction_type !== "billing"
-    );
+    // AR-side types ("billing", "collection") have been retired from EVoucherTransactionType.
+    // All records here are AP-side (expense, cash_advance, reimbursement, budget_request).
+    return evouchers;
   }, [view, userId]);
 
   const { data: evouchers = [], isLoading } = useQuery({

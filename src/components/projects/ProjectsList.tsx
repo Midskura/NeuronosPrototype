@@ -241,8 +241,8 @@ export function ProjectsList({
                   onChange={setMarginFilter}
                   options={[
                     { value: "all", label: "All Margins", icon: <TrendingUp size={16} /> },
-                    { value: "high", label: "High Margin (>20%)", icon: <TrendingUp size={16} style={{ color: "#10B981" }} /> },
-                    { value: "low", label: "Low Margin (<20%)", icon: <TrendingDown size={16} style={{ color: "#F59E0B" }} /> },
+                    { value: "high", label: "High Margin (>20%)", icon: <TrendingUp size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
+                    { value: "low", label: "Low Margin (<20%)", icon: <TrendingDown size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
                     { value: "loss", label: "Loss Making (<0%)", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
                   placeholder="Filter by margin"
@@ -256,7 +256,7 @@ export function ProjectsList({
                   onChange={setProfitFilter}
                   options={[
                     { value: "all", label: "All Status", icon: <DollarSign size={16} /> },
-                    { value: "profitable", label: "Profitable", icon: <CheckCircle size={16} style={{ color: "#10B981" }} /> },
+                    { value: "profitable", label: "Profitable", icon: <CheckCircle size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
                     { value: "loss", label: "Loss", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
                   placeholder="Profit status"
@@ -274,8 +274,8 @@ export function ProjectsList({
                   onChange={setStatusFilter}
                   options={[
                     { value: "all", label: "All Statuses", icon: <CircleDot size={16} /> },
-                    { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
-                    { value: "Completed", label: "Completed", icon: <CheckCircle size={16} style={{ color: "#10B981" }} /> },
+                    { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
+                    { value: "Completed", label: "Completed", icon: <CheckCircle size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
                     { value: "On Hold", label: "On Hold", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
                     { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                   ]}
@@ -319,8 +319,8 @@ export function ProjectsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "all" ? "2px solid #0F766E" : "2px solid transparent",
-              color: activeTab === "all" ? "#0F766E" : "#667085",
+              borderBottom: activeTab === "all" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+              color: activeTab === "all" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -336,8 +336,8 @@ export function ProjectsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "all" ? "#0F766E" : "#0F766E15",
-                color: activeTab === "all" ? "#FFFFFF" : "#0F766E",
+                background: activeTab === "all" ? "var(--theme-action-primary-bg)" : "var(--theme-action-primary-bg-15, rgba(15,118,110,0.08))",
+                color: activeTab === "all" ? "#FFFFFF" : "var(--theme-action-primary-bg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -355,8 +355,8 @@ export function ProjectsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "active" ? "2px solid #F59E0B" : "2px solid transparent",
-              color: activeTab === "active" ? "#F59E0B" : "#667085",
+              borderBottom: activeTab === "active" ? "2px solid var(--theme-status-warning-fg)" : "2px solid transparent",
+              color: activeTab === "active" ? "var(--theme-status-warning-fg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -372,8 +372,8 @@ export function ProjectsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "active" ? "#F59E0B" : "#F59E0B15",
-                color: activeTab === "active" ? "#FFFFFF" : "#F59E0B",
+                background: activeTab === "active" ? "var(--theme-status-warning-fg)" : "rgba(245,158,11,0.08)",
+                color: activeTab === "active" ? "#FFFFFF" : "var(--theme-status-warning-fg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -391,8 +391,8 @@ export function ProjectsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "completed" ? "2px solid #10B981" : "2px solid transparent",
-              color: activeTab === "completed" ? "#10B981" : "#667085",
+              borderBottom: activeTab === "completed" ? "2px solid var(--theme-status-success-fg)" : "2px solid transparent",
+              color: activeTab === "completed" ? "var(--theme-status-success-fg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -408,8 +408,8 @@ export function ProjectsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "completed" ? "#10B981" : "#10B98115",
-                color: activeTab === "completed" ? "#FFFFFF" : "#10B981",
+                background: activeTab === "completed" ? "var(--theme-status-success-fg)" : "rgba(16,185,129,0.08)",
+                color: activeTab === "completed" ? "#FFFFFF" : "var(--theme-status-success-fg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -507,7 +507,7 @@ export function ProjectsList({
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
-                        border: "1px solid #CCFBF1"
+                        border: "1px solid var(--theme-status-success-border)"
                     }}>
                         <Briefcase size={16} color="var(--theme-action-primary-bg)" />
                     </div>
@@ -555,13 +555,13 @@ export function ProjectsList({
                   </div>
 
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    <div style={{ fontSize: "13px", fontWeight: 500, color: "#B91C1C" }}>
+                    <div style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-status-danger-fg)" }}>
                       {formatCurrency(stats.costs)}
                     </div>
                   </div>
 
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    <div style={{ fontSize: "13px", fontWeight: 600, color: stats.grossProfit >= 0 ? "#12332B" : "#B91C1C" }}>
+                    <div style={{ fontSize: "13px", fontWeight: 600, color: stats.grossProfit >= 0 ? "var(--theme-text-primary)" : "var(--theme-status-danger-fg)" }}>
                       {formatCurrency(stats.grossProfit)}
                     </div>
                   </div>
@@ -574,8 +574,8 @@ export function ProjectsList({
                       borderRadius: "12px",
                       fontSize: "11px",
                       fontWeight: 600,
-                      backgroundColor: (stats.margin ?? 0) >= 20 ? "#ECFDF5" : (stats.margin ?? 0) >= 0 ? "#FFF7ED" : "#FEF2F2",
-                      color: (stats.margin ?? 0) >= 20 ? "#059669" : (stats.margin ?? 0) >= 0 ? "#C2410C" : "#B91C1C"
+                      backgroundColor: (stats.margin ?? 0) >= 20 ? "var(--theme-status-success-bg)" : (stats.margin ?? 0) >= 0 ? "var(--theme-status-warning-bg)" : "var(--theme-status-danger-bg)",
+                      color: (stats.margin ?? 0) >= 20 ? "var(--theme-status-success-fg)" : (stats.margin ?? 0) >= 0 ? "var(--theme-status-warning-fg)" : "var(--theme-status-danger-fg)"
                     }}>
                       {(stats.margin ?? 0).toFixed(1)}%
                     </div>

@@ -171,12 +171,12 @@ export function ContractGeneralDetailsSection({
                   let color = "var(--neuron-ink-base)";
 
                   if (isSelected) {
-                    bg = "#0F766E";
-                    border = "#0F766E";
+                    bg = "var(--theme-action-primary-bg)";
+                    border = "var(--theme-action-primary-bg)";
                     color = "white";
                   } else if (isHovered) {
-                    bg = "#F8FBFB";
-                    border = "#0F766E";
+                    bg = "var(--theme-bg-surface-tint)";
+                    border = "var(--theme-action-primary-bg)";
                   }
 
                   return (

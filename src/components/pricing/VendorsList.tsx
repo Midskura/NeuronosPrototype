@@ -56,9 +56,9 @@ export function VendorsList() {
   const getTypeBadgeColor = (type: NetworkVendorType) => {
     switch (type) {
       case "Overseas Agent": 
-        return { bg: "var(--theme-bg-surface-tint)", text: "#2B8A6E", border: "#2B8A6E" };
+        return { bg: "var(--theme-bg-surface-tint)", text: "var(--theme-status-success-fg)", border: "var(--theme-status-success-fg)" };
       case "Local Agent": 
-        return { bg: "var(--theme-bg-surface-tint)", text: "var(--theme-action-primary-bg)", border: "#0F766E" };
+        return { bg: "var(--theme-bg-surface-tint)", text: "var(--theme-action-primary-bg)", border: "var(--theme-action-primary-bg)" };
       case "Subcontractor": 
         return { bg: "#FEF3E7", text: "#C88A2B", border: "#C88A2B" };
       default: 

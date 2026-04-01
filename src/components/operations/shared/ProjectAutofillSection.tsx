@@ -99,7 +99,7 @@ export function ProjectAutofillSection({
               }}
               onKeyPress={handleKeyPress}
               placeholder="e.g., PROJ-2025-001"
-              className="flex-1 px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)]"
+              className="flex-1 px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)]"
               disabled={loading}
             />
             <button

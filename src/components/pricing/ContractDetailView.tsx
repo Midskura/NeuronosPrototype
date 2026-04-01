@@ -68,11 +68,11 @@ const formatDate = formatShortDate;
 const getStatusColor = (status: string) => {
   switch (status) {
     case "Draft": return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
-    case "Sent": return { text: "#3B82F6", bg: "#DBEAFE" };
+    case "Sent": return { text: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" };
     case "Active": return { text: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" };
     case "Expiring": return { text: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" };
     case "Expired": return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
-    case "Renewed": return { text: "#7C3AED", bg: "#EDE9FE" };
+    case "Renewed": return { text: "var(--neuron-status-accent-fg)", bg: "var(--neuron-status-accent-bg)" };
     default: return { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
   }
 };
@@ -182,7 +182,6 @@ export function ContractDetailView({
       const activationPayload = {
         contract_status: "Active" as QuotationNew["contract_status"],
         status: "Converted to Contract" as QuotationNew["status"],
-        activated_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
       const updatedQuotation: QuotationNew = {
@@ -393,8 +392,8 @@ export function ContractDetailView({
                         border: "none", borderBottom: "1px solid var(--theme-border-subtle)",
                         cursor: "pointer", textAlign: "left",
                       }}
-                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "#F0FAFA"}
-                      onMouseLeave={e => e.currentTarget.style.backgroundColor = "white"}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)"}
                     >
                       {getServiceIcon(svc.service_type)}
                       {svc.service_type}
@@ -500,12 +499,12 @@ export function ContractDetailView({
     // Event type → dot color mapping
     const getEventColor = (eventType: string) => {
       switch (eventType) {
-        case "contract_activated": return "#059669";
-        case "status_changed": return "#D97706";
-        case "booking_linked": return "#3B82F6";
-        case "billing_generated": return "#7C3AED";
-        case "contract_renewed": return "#7C3AED";
-        default: return "#6B7280";
+        case "contract_activated": return "var(--theme-status-success-fg)";
+        case "status_changed": return "var(--theme-status-warning-fg)";
+        case "booking_linked": return "var(--neuron-semantic-info)";
+        case "billing_generated": return "var(--neuron-status-accent-fg)";
+        case "contract_renewed": return "var(--neuron-status-accent-fg)";
+        default: return "var(--theme-text-muted)";
       }
     };
 
@@ -674,9 +673,9 @@ export function ContractDetailView({
           }}>
             {quotation.quotation_name || (quotation.customer_name ? `${quotation.customer_name} Contract` : quotation.quote_number)}
           </h1>
-          <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted, #6B7280)", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+          <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
             <span className="font-mono">{quotation.quote_number}</span>
-            <span className="text-[#D1D5DB]">•</span>
+            <span className="text-[var(--neuron-ui-muted)]">•</span>
             <span>{quotation.customer_name}</span>
           </p>
         </div>
@@ -696,7 +695,7 @@ export function ContractDetailView({
                   fontSize: "13px",
                   fontWeight: 600,
                   color: "white",
-                  backgroundColor: isActivating ? "#9CA3AF" : "var(--neuron-brand-green)",
+                  backgroundColor: isActivating ? "var(--theme-text-muted)" : "var(--neuron-brand-green)",
                   border: "none",
                   borderRadius: "6px",
                   cursor: isActivating ? "not-allowed" : "pointer",
@@ -746,7 +745,7 @@ export function ContractDetailView({
                   justifyContent: "center",
                   padding: "10px",
                   backgroundColor: "var(--theme-bg-surface)",
-                  border: "1.5px solid #D1D5DB",
+                  border: "1.5px solid var(--neuron-ui-muted)",
                   borderRadius: "8px",
                   cursor: "pointer",
                   transition: "all 0.2s ease"
@@ -827,12 +826,12 @@ export function ContractDetailView({
                           border: "none",
                           background: "none",
                           fontSize: "14px",
-                          color: "#7C3AED",
+                          color: "var(--neuron-status-accent-fg)",
                           cursor: "pointer",
                           transition: "background-color 0.2s ease"
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#F5F3FF";
+                          e.currentTarget.style.backgroundColor = "var(--neuron-status-accent-bg)";
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = "transparent";
@@ -865,7 +864,7 @@ export function ContractDetailView({
               onClick={() => handleCategoryClick(cat.id as TabCategory)}
               className="flex items-center gap-2 py-4 relative group"
               style={{
-                color: isActive ? "#0F766E" : "#6B7280",
+                color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -901,8 +900,8 @@ export function ContractDetailView({
               className="flex items-center gap-2 px-3 py-1.5 rounded-md transition-all whitespace-nowrap"
               style={{
                 backgroundColor: isActive ? "rgba(15, 118, 110, 0.05)" : "transparent",
-                color: isActive ? "#0F766E" : "#6B7280",
-                border: isActive ? "1px solid #0F766E" : "1px solid transparent",
+                color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
+                border: isActive ? "1px solid var(--theme-action-primary-bg)" : "1px solid transparent",
                 cursor: "pointer",
               }}
             >
@@ -1050,7 +1049,7 @@ export function ContractDetailView({
                   fontSize: "13px",
                   fontWeight: 500,
                   color: "white",
-                  backgroundColor: isRenewing ? "#9b8fcc" : "#7C3AED",
+                  backgroundColor: isRenewing ? "#9b8fcc" : "var(--neuron-status-accent-fg)",
                   border: "none",
                   borderRadius: "6px",
                   cursor: isRenewing ? "not-allowed" : "pointer",

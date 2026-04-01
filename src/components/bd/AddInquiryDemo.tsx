@@ -41,7 +41,7 @@ export function AddInquiryDemo() {
             marginBottom: "24px",
             padding: "20px 24px",
             backgroundColor: "var(--theme-bg-surface-tint)",
-            border: "1px solid #0F766E",
+            border: "1px solid var(--theme-action-primary-bg)",
             borderRadius: "8px",
           }}>
             <h2 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-action-primary-bg)", marginBottom: "12px" }}>
@@ -162,12 +162,12 @@ export function AddInquiryDemo() {
                                 alignItems: "center",
                                 gap: "4px",
                                 padding: "4px 10px",
-                                backgroundColor: hasDetails ? "#E8F5F3" : "#F3F4F6",
-                                border: hasDetails ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
+                                backgroundColor: hasDetails ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                                border: hasDetails ? "1px solid var(--theme-action-primary-bg)" : "1px solid var(--theme-border-default)",
                                 borderRadius: "4px",
                                 fontSize: "12px",
                                 fontWeight: 500,
-                                color: hasDetails ? "#0F766E" : "#6B7280",
+                                color: hasDetails ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                               }}
                             >
                               {serviceType}

@@ -147,15 +147,24 @@ export function RateCalculationSheet({
       }
 
       const billingRows = result.items.map((item) => ({
-        ...item,
         id: `BIL-${Date.now()}-${Math.random().toString(36).substr(2, 8)}`,
-        project_number: booking.projectNumber || "",
-        transaction_type: 'billing',
+        description: item.description,
+        service_type: item.service_type,
+        amount: item.amount,
+        quantity: item.quantity ?? 1,
+        currency: item.currency,
+        is_taxed: item.is_taxed ?? false,
         status: 'unbilled',
+        source_type: 'contract_rate',
+        source_id: contractId,
+        quotation_category: item.quotation_category,
+        booking_id: item.booking_id,
+        customer_name: customerName,
+        project_number: booking.projectNumber || "",
         created_at: new Date().toISOString(),
       }));
 
-      const { error: insertError } = await supabase.from('evouchers').insert(billingRows);
+      const { error: insertError } = await supabase.from('billing_line_items').insert(billingRows);
       if (insertError) throw new Error(insertError.message);
 
       toast.success(
@@ -185,7 +194,7 @@ export function RateCalculationSheet({
   );
 
   const panelFooter = (
-    <div className="px-8 py-4 border-t border-[var(--theme-border-default)] bg-[#FAFBFC] flex items-center justify-between">
+    <div className="px-8 py-4 border-t border-[var(--theme-border-default)] bg-[var(--neuron-pill-inactive-bg)] flex items-center justify-between">
       <div className="text-[13px] text-[var(--theme-text-muted)]">
         {totalItems} item{totalItems !== 1 ? "s" : ""} &middot;{" "}
         <span className="font-semibold text-[var(--theme-text-primary)]">{formatCurrency(grandTotal, currency)}</span>
@@ -202,7 +211,7 @@ export function RateCalculationSheet({
           disabled={isSaving || totalItems === 0}
           className="flex items-center gap-2 px-5 py-2 rounded-lg text-[13px] font-medium text-white transition-colors"
           style={{
-            backgroundColor: isSaving ? "#94A3B8" : "#0F766E",
+            backgroundColor: isSaving ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)",
             cursor: isSaving ? "not-allowed" : "pointer",
           }}
         >

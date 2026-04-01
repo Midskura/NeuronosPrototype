@@ -90,12 +90,8 @@ Role hierarchy: rep (0) < manager (1) < director (2). Executive department auto-
 
 ## Development Workflow
 
-This project is **blueprint-driven**:
-1. Read the relevant blueprint in `/src/docs/blueprints/` before any feature work
-2. Create/update a blueprint with a phased plan
-3. Wait for explicit "Go Ahead" before writing code
-4. Implement one phase at a time, update the blueprint after each phase
-5. Check `AGENT_COORDINATION.md` in the project root when Marcus says "check the board." Claim tasks before starting them, update when done, and leave messages for Claude if needed.
+1. Wait for explicit "Go Ahead" before writing code
+2. Check `AGENT_COORDINATION.md` in the project root when Marcus says "check the board." Claim tasks before starting them, update when done, and leave messages for Claude if needed.
 
 ## Protected Files (NEVER modify)
 
@@ -122,19 +118,19 @@ This project is **blueprint-driven**:
 
 **JSONB details columns**: Tables like `quotations`, `projects`, `bookings`, `evouchers` store overflow fields in a `details` JSONB column. Always merge: `{ ...data?.details, ...data }`.
 
-## Stale Context Files — Read With Caution
+## Context Navigation — Use Dora First
 
-These files in `/src/context/` predate the Supabase migration and contain outdated information:
+Before reading any file, use dora to navigate without burning tokens:
 
-| File | What's stale |
-|---|---|
-| `ARCHITECTURE_AND_PATTERNS.md` | References KV store prefixes and Edge Function routes — all dead |
-| `CURRENT_STATE.md` | Pre-auth snapshot from March 3 — completely obsolete |
-| `HANDOFF_CURRENT_SITUATION.md` | Says "all data fetches 404" — that's fixed |
-| `HANDOFF_KNOWN_BUGS.md` | Lists permissions.ts, Admin.tsx, EmployeesList bugs — all fixed |
-| `HANDOFF_MIGRATION_GUIDE.md` | Describes how to do the migration — it's already done |
+```bash
+dora symbol useUser              # find symbol definition + exact location
+dora refs CustomDropdown         # see all 60 import sites before touching it
+dora file src/App.tsx            # see all 33 deps — know what's safe to change
+dora docs search "billing"       # search doc content without reading files
+dora query "SELECT ..."          # custom SQL against the code index
+```
 
-Still-valid context files:
+Still-valid context files in `/src/context/`:
 - `MODULE_MAP.md` — module inventory, still accurate
 - `WORKING_CONVENTIONS.md` — code style and DRY rules, still applies
 - `PROJECT_OVERVIEW.md` — high-level domain overview, still useful

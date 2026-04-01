@@ -71,8 +71,9 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
       let transactionType = "";
 
       if (isRefund) {
-        // Create Collection Voucher for the return of funds
-        transactionType = "collection";
+        // Create a reimbursement-type EV to record the return of unused funds to Treasury.
+        // "collection" is a retired AR-side type; reimbursement is the correct AP-side record here.
+        transactionType = "reimbursement";
         payload = {
           requestName: `Liquidation Return - ${originalVoucher.voucher_number}`,
           expenseCategory: "Liquidation",
@@ -80,7 +81,7 @@ export function LiquidationPanel({ isOpen, onClose, originalVoucher, onSuccess }
           amount: balance, // The amount to return
           description: `Return of unused funds from ${originalVoucher.voucher_number}`,
           parent_voucher_id: originalVoucher.id, // LINK TO PARENT
-          transaction_type: "collection",
+          transaction_type: "reimbursement",
           notes: `Total Budget: ${originalAmount}, Total Spent: ${totalExpenses}. \n\nBreakdown:\n${items.map(i => `- ${i.description}: ${i.amount}`).join('\n')}`
         };
       } else if (isReimbursement) {

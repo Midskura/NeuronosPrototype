@@ -11,7 +11,7 @@ export function NotesControl({ value, onChange }: NotesControlProps) {
       <textarea 
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full h-32 px-3.5 py-3 text-sm border border-[var(--theme-border-default)] rounded-lg focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-[var(--theme-text-muted)] resize-none leading-relaxed"
+        className="w-full h-32 px-3.5 py-3 text-sm border border-[var(--theme-border-default)] rounded-lg focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)] resize-none leading-relaxed"
         placeholder="Add custom notes or payment instructions..."
       />
       <p className="mt-2 text-[11px] text-[var(--theme-text-muted)]">

@@ -1,32 +1,44 @@
 // E-Voucher System Types
 
-export type EVoucherStatus = 
-  | "draft"           // Initial creation (lowercase to match backend)
-  | "pending"         // Submitted, awaiting Accounting approval
-  | "posted"          // Approved and posted to ledger
-  | "rejected"        // Rejected by Accounting
-  | "cancelled"       // Cancelled by user
-  | "Submitted"       // Legacy - keeping for backwards compatibility
-  | "Under Review"    // Legacy
-  | "Approved"        // Legacy
-  | "Rejected"        // Legacy (capitalized)
-  | "Processing"      // Legacy
-  | "Disbursed"       // Legacy
-  | "Recorded"        // Legacy
-  | "Audited"         // Legacy
-  | "Draft"           // Legacy (capitalized)
-  | "Cancelled"       // Legacy (capitalized)
-  | "Disapproved";    // Legacy
+// Canonical AP workflow states (new state machine)
+export type EVoucherStatus =
+  | "draft"                // Initial creation
+  | "pending_tl"           // Awaiting Team Leader / Manager approval
+  | "pending_ceo"          // Awaiting CEO / Executive approval
+  | "pending_accounting"   // Awaiting Accounting GL posting
+  | "disbursed"            // Treasury has released cash
+  | "posted"               // GL entries written — expense is on the books
+  | "rejected"             // Rejected at TL or CEO gate (can return to draft)
+  | "cancelled"            // Terminal — from draft or rejected only
+  // Liquidation sub-states (cash_advance and budget_request only, after posted)
+  | "liquidation_open"     // Advance open — handler submitting receipts
+  | "liquidation_pending"  // Receipts submitted — Accounting reviewing
+  | "liquidation_closed"   // Advance fully accounted for
+  // Legacy states — kept for backwards compat with existing DB records; do not use for new EVs
+  | "pending"              // Legacy: pre-routing-rewrite "awaiting approval"
+  | "Submitted"
+  | "Under Review"
+  | "Approved"
+  | "Rejected"
+  | "Processing"
+  | "Disbursed"
+  | "Recorded"
+  | "Audited"
+  | "Draft"
+  | "Cancelled"
+  | "Disapproved";
 
-// Transaction Types - Universal E-Voucher System
-export type EVoucherTransactionType = 
-  | "expense"           // General expense voucher
-  | "budget_request"    // Budget request from BD module
-  | "cash_advance"      // Cash Advance for operations/staff
-  | "collection"        // Collection entry
-  | "billing"           // Billing adjustment
-  | "adjustment"        // General adjustment
-  | "reimbursement";    // Employee reimbursement
+// AP-side transaction types (go through the full EV approval workflow)
+export type EVoucherAPType =
+  | "expense"          // Pay a vendor — creates cost record
+  | "cash_advance"     // Give employee money before job — creates advance asset
+  | "reimbursement"    // Pay employee back for out-of-pocket — creates cost record, direct cash
+  | "budget_request";  // Lump sum to a department — creates advance asset
+
+// EVoucherTransactionType is now identical to EVoucherAPType.
+// The retired AR-side pseudo-types ("billing", "collection", "adjustment") have been removed.
+// Billings and collections are tracked in their own tables, not as EV transaction types.
+export type EVoucherTransactionType = EVoucherAPType;
 
 // Source Module - Which module created this E-Voucher
 export type EVoucherSourceModule = 
@@ -233,8 +245,8 @@ export interface EVoucher {
 
 export interface EVoucherFilters {
   status?: EVoucherStatus | "all";
-  transaction_type?: EVoucherTransactionType | "all"; // New filter
-  source_module?: EVoucherSourceModule | "all"; // New filter
+  transaction_type?: EVoucherTransactionType | "all";
+  source_module?: EVoucherSourceModule | "all";
   gl_category?: GLCategory | "all";
   date_from?: string;
   date_to?: string;
@@ -242,3 +254,47 @@ export interface EVoucherFilters {
   customer_id?: string;
   search?: string;
 }
+
+// A single receipt/expense line item within a liquidation submission
+export interface LiquidationLineItem {
+  id: string;
+  description: string;
+  amount: number;
+  receipt_url?: string; // Optional uploaded receipt photo
+}
+
+// A liquidation submission against a cash_advance or budget_request EV
+export interface LiquidationSubmission {
+  id: string;
+  evoucher_id: string;          // FK to the parent cash_advance / budget_request EV
+  submitted_by: string;         // User ID of handler
+  submitted_by_name: string;
+  line_items: LiquidationLineItem[];
+  total_spend: number;          // Sum of all line item amounts in this submission
+  unused_return?: number;       // Cash being returned (final submission only)
+  is_final: boolean;            // True = handler is closing out the advance
+  status: "pending" | "approved" | "revision_requested";
+  submitted_at: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  reviewer_remarks?: string;
+  created_at: string;
+}
+
+// GL journal entry suggestion per EV type (used in the GL Confirmation Sheet)
+export interface GLEntrySuggestion {
+  debit_account_id: string;
+  debit_account_name: string;
+  credit_account_id: string;
+  credit_account_name: string;
+  amount: number;
+  description: string;
+}
+
+// Canonical GL contract per AP type
+export const GL_CONTRACT: Record<EVoucherAPType, { on_approval: string; on_disbursement: string }> = {
+  expense:        { on_approval: "DR Accounts Payable / CR (pending)",  on_disbursement: "DR Accounts Payable / CR Cash" },
+  cash_advance:   { on_approval: "(no entry)",                           on_disbursement: "DR Advances to Employees / CR Cash" },
+  reimbursement:  { on_approval: "(no entry)",                           on_disbursement: "DR Expense / CR Cash" },
+  budget_request: { on_approval: "(no entry)",                           on_disbursement: "DR Advances to Employees / CR Cash" },
+};

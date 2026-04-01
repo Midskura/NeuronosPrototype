@@ -62,7 +62,7 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
       style={{
         flex: 1,
         overflow: "auto",
-        backgroundColor: "#FAFBFC",
+        backgroundColor: "var(--theme-bg-page)",
         padding: "32px 48px",
         maxWidth: "1400px",
         margin: "0 auto",
@@ -122,7 +122,7 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#FFF7ED", color: "#C05621" }}>
+                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "var(--theme-status-warning-bg)", color: "#C05621" }}>
                   <TrendingDown size={20} />
                 </div>
                 <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Cost</span>
@@ -143,12 +143,12 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#F0FDF4", color: "#15803D" }}>
+                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" }}>
                   <DollarSign size={20} />
                 </div>
                 <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Gross Profit</span>
               </div>
-              <div style={{ fontSize: "28px", fontWeight: 700, color: grossProfit >= 0 ? "#15803D" : "#DC2626" }}>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: grossProfit >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)" }}>
                 {formatCurrency(grossProfit)}
               </div>
               <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>Net Income</div>
@@ -164,12 +164,12 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "#EFF6FF", color: "#1D4ED8" }}>
+                <div style={{ padding: "8px", borderRadius: "8px", backgroundColor: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" }}>
                   <Activity size={20} />
                 </div>
                 <span style={{ fontSize: "14px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Profit Margin</span>
               </div>
-              <div style={{ fontSize: "28px", fontWeight: 700, color: "#1D4ED8" }}>{profitMargin.toFixed(1)}%</div>
+              <div style={{ fontSize: "28px", fontWeight: 700, color: "var(--neuron-semantic-info)" }}>{profitMargin.toFixed(1)}%</div>
               <div style={{ fontSize: "13px", color: "var(--theme-text-muted)", marginTop: "4px" }}>Return on Sales</div>
             </div>
           </div>
@@ -216,8 +216,8 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                               fontWeight: 600,
                               padding: "4px 8px",
                               borderRadius: "4px",
-                              backgroundColor: item.type === "Revenue" ? "#E0F2F1" : "#FFF7ED",
-                              color: item.type === "Revenue" ? "#0F766E" : "#C05621",
+                              backgroundColor: item.type === "Revenue" ? "var(--theme-bg-surface-tint)" : "var(--theme-status-warning-bg)",
+                              color: item.type === "Revenue" ? "var(--theme-action-primary-bg)" : "#C05621",
                             }}
                           >
                             {item.type}
@@ -228,7 +228,7 @@ export function ProjectFinancialsTab({ project, currentUser }: ProjectFinancials
                             padding: "16px 8px",
                             textAlign: "right",
                             fontWeight: 600,
-                            color: item.type === "Revenue" ? "#059669" : "#DC2626",
+                            color: item.type === "Revenue" ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)",
                           }}
                         >
                           {item.type === "Revenue" ? "+" : "-"}

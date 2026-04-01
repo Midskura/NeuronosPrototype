@@ -301,9 +301,9 @@ export function NetworkPartnersModule({
                   borderRadius: "16px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: statusFilter === "all" ? "#E8F5F3" : "#F9FAFB",
-                  color: statusFilter === "all" ? "#0F766E" : "#6B7280",
-                  border: statusFilter === "all" ? "2px solid #0F766E" : "1px solid var(--theme-border-default)",
+                  backgroundColor: statusFilter === "all" ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                  color: statusFilter === "all" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
+                  border: statusFilter === "all" ? "2px solid var(--theme-action-primary-bg)" : "1px solid var(--neuron-pill-inactive-border)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -317,9 +317,9 @@ export function NetworkPartnersModule({
                   borderRadius: "16px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: statusFilter === "active" ? "#D1FAE5" : "#F9FAFB",
-                  color: statusFilter === "active" ? "#047857" : "#6B7280",
-                  border: statusFilter === "active" ? "2px solid #047857" : "1px solid var(--theme-border-default)",
+                  backgroundColor: statusFilter === "active" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                  color: statusFilter === "active" ? "var(--theme-status-success-fg)" : "var(--neuron-pill-inactive-text)",
+                  border: statusFilter === "active" ? "2px solid var(--theme-status-success-fg)" : "1px solid var(--neuron-pill-inactive-border)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -333,9 +333,9 @@ export function NetworkPartnersModule({
                   borderRadius: "16px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: statusFilter === "expiring" ? "#FEF3C7" : "#F9FAFB",
-                  color: statusFilter === "expiring" ? "#D97706" : "#6B7280",
-                  border: statusFilter === "expiring" ? "2px solid #D97706" : "1px solid var(--theme-border-default)",
+                  backgroundColor: statusFilter === "expiring" ? "var(--theme-status-warning-bg)" : "var(--neuron-pill-inactive-bg)",
+                  color: statusFilter === "expiring" ? "var(--theme-status-warning-fg)" : "var(--neuron-pill-inactive-text)",
+                  border: statusFilter === "expiring" ? "2px solid var(--theme-status-warning-fg)" : "1px solid var(--neuron-pill-inactive-border)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -349,9 +349,9 @@ export function NetworkPartnersModule({
                   borderRadius: "16px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: statusFilter === "expired" ? "#FEE2E2" : "#F9FAFB",
-                  color: statusFilter === "expired" ? "#DC2626" : "#6B7280",
-                  border: statusFilter === "expired" ? "2px solid #DC2626" : "1px solid var(--theme-border-default)",
+                  backgroundColor: statusFilter === "expired" ? "var(--theme-status-danger-bg)" : "var(--neuron-pill-inactive-bg)",
+                  color: statusFilter === "expired" ? "var(--theme-status-danger-fg)" : "var(--neuron-pill-inactive-text)",
+                  border: statusFilter === "expired" ? "2px solid var(--theme-status-danger-fg)" : "1px solid var(--neuron-pill-inactive-border)",
                   cursor: "pointer",
                   transition: "all 0.2s"
                 }}
@@ -365,9 +365,9 @@ export function NetworkPartnersModule({
                   borderRadius: "16px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: statusFilter === "wca" ? "#EDE9FE" : "#F9FAFB",
-                  color: statusFilter === "wca" ? "#7C3AED" : "#6B7280",
-                  border: statusFilter === "wca" ? "2px solid #7C3AED" : "1px solid var(--theme-border-default)",
+                  backgroundColor: statusFilter === "wca" ? "var(--neuron-status-accent-bg)" : "var(--neuron-pill-inactive-bg)",
+                  color: statusFilter === "wca" ? "var(--neuron-status-accent-fg)" : "var(--neuron-pill-inactive-text)",
+                  border: statusFilter === "wca" ? "2px solid var(--neuron-status-accent-fg)" : "1px solid var(--neuron-pill-inactive-border)",
                   cursor: "pointer",
                   transition: "all 0.2s",
                   display: "flex",
@@ -453,8 +453,8 @@ export function NetworkPartnersModule({
                 padding: "0 0 16px 0",
                 fontSize: "14px",
                 fontWeight: 600,
-                color: activeTab === "international" ? "#0F766E" : "#6B7280",
-                borderBottom: activeTab === "international" ? "2px solid #0F766E" : "2px solid transparent",
+                color: activeTab === "international" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
+                borderBottom: activeTab === "international" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -463,9 +463,9 @@ export function NetworkPartnersModule({
               }}
             >
               International Partners
-              <span style={{ 
-                backgroundColor: activeTab === "international" ? "#F0FDF9" : "#F3F4F6", 
-                color: activeTab === "international" ? "#0F766E" : "#6B7280",
+              <span style={{
+                backgroundColor: activeTab === "international" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                color: activeTab === "international" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
                 fontSize: "12px", 
                 padding: "2px 8px", 
                 borderRadius: "12px" 
@@ -479,8 +479,8 @@ export function NetworkPartnersModule({
                 padding: "0 0 16px 0",
                 fontSize: "14px",
                 fontWeight: 600,
-                color: activeTab === "co-loader" ? "#0F766E" : "#6B7280",
-                borderBottom: activeTab === "co-loader" ? "2px solid #0F766E" : "2px solid transparent",
+                color: activeTab === "co-loader" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
+                borderBottom: activeTab === "co-loader" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -489,9 +489,9 @@ export function NetworkPartnersModule({
               }}
             >
               Co-Loader Partners
-              <span style={{ 
-                backgroundColor: activeTab === "co-loader" ? "#F0FDF9" : "#F3F4F6", 
-                color: activeTab === "co-loader" ? "#0F766E" : "#6B7280",
+              <span style={{
+                backgroundColor: activeTab === "co-loader" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                color: activeTab === "co-loader" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
                 fontSize: "12px", 
                 padding: "2px 8px", 
                 borderRadius: "12px" 
@@ -505,8 +505,8 @@ export function NetworkPartnersModule({
                 padding: "0 0 16px 0",
                 fontSize: "14px",
                 fontWeight: 600,
-                color: activeTab === "all-in" ? "#0F766E" : "#6B7280",
-                borderBottom: activeTab === "all-in" ? "2px solid #0F766E" : "2px solid transparent",
+                color: activeTab === "all-in" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
+                borderBottom: activeTab === "all-in" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
@@ -515,9 +515,9 @@ export function NetworkPartnersModule({
               }}
             >
               All-In Partners
-              <span style={{ 
-                backgroundColor: activeTab === "all-in" ? "#F0FDF9" : "#F3F4F6", 
-                color: activeTab === "all-in" ? "#0F766E" : "#6B7280",
+              <span style={{
+                backgroundColor: activeTab === "all-in" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                color: activeTab === "all-in" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-text)",
                 fontSize: "12px", 
                 padding: "2px 8px", 
                 borderRadius: "12px" 

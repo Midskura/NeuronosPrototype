@@ -41,14 +41,20 @@ export function CustomDatePicker({
   // Initialize viewDate when value changes
   useEffect(() => {
     if (value) {
-      setViewDate(new Date(value));
+      setViewDate(parseLocalDate(value));
     }
   }, [value]);
+
+  // Parse an ISO date string (YYYY-MM-DD) as a local date (no timezone shift)
+  const parseLocalDate = (dateStr: string): Date => {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
 
   // Format display value
   const formatDisplayValue = (dateStr: string) => {
     if (!dateStr) return placeholder;
-    const date = new Date(dateStr);
+    const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "2-digit",
@@ -87,9 +93,10 @@ export function CustomDatePicker({
 
   // Handle date selection
   const handleDateSelect = (day: number) => {
-    const selectedDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    const isoString = selectedDate.toISOString().split('T')[0];
-    onChange(isoString);
+    const y = viewDate.getFullYear();
+    const m = String(viewDate.getMonth() + 1).padStart(2, "0");
+    const d = String(day).padStart(2, "0");
+    onChange(`${y}-${m}-${d}`);
     setIsOpen(false);
   };
 
@@ -105,8 +112,10 @@ export function CustomDatePicker({
   // Handle Today button
   const handleToday = () => {
     const today = new Date();
-    const isoString = today.toISOString().split('T')[0];
-    onChange(isoString);
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    onChange(`${y}-${m}-${d}`);
     setViewDate(today);
     setIsOpen(false);
   };
@@ -136,7 +145,7 @@ export function CustomDatePicker({
   // Check if a day is selected
   const isDateSelected = (day: number) => {
     if (!value) return false;
-    const selectedDate = new Date(value);
+    const selectedDate = parseLocalDate(value);
     return (
       selectedDate.getDate() === day &&
       selectedDate.getMonth() === viewDate.getMonth() &&

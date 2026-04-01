@@ -113,7 +113,7 @@ export function BillingsSection({
     <div
       style={{
         backgroundColor: "var(--theme-bg-surface)",
-        border: "1px solid #E5E9E8",
+        border: "1px solid var(--theme-border-default)",
         borderRadius: "12px",
         padding: "28px",
         marginBottom: "24px"
@@ -126,7 +126,7 @@ export function BillingsSection({
         justifyContent: "space-between",
         marginBottom: "24px",
         paddingBottom: "20px",
-        borderBottom: "2px solid #E8F5F3"
+        borderBottom: "2px solid var(--theme-bg-surface-tint)"
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Receipt size={18} style={{ color: "var(--neuron-brand-green)" }} />
@@ -164,18 +164,18 @@ export function BillingsSection({
                 fontWeight: 500,
                 color: "var(--theme-text-muted)",
                 backgroundColor: "var(--theme-bg-surface)",
-                border: "1px solid #E0E6E4",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "8px",
                 cursor: "pointer",
                 transition: "all 0.2s ease"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F8FBFB";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "white";
-                e.currentTarget.style.borderColor = "#E0E6E4";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
+                e.currentTarget.style.borderColor = "var(--theme-border-default)";
               }}
             >
               {expandedCategories.size === allCategoryNames.length ? "Collapse All" : "Expand All"}
@@ -196,7 +196,7 @@ export function BillingsSection({
               fontWeight: 600,
               color: "var(--neuron-brand-green)",
               backgroundColor: "var(--theme-bg-surface)",
-              border: "1px solid #D9E1DE",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease"
@@ -207,8 +207,8 @@ export function BillingsSection({
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "white";
-              e.currentTarget.style.borderColor = "#D9E1DE";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
+              e.currentTarget.style.borderColor = "var(--theme-border-default)";
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >

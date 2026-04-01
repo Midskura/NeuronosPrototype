@@ -281,7 +281,7 @@ export function BillingCategorySection({
                   fontWeight: 600,
                   color: "var(--neuron-brand-green, #0F766E)",
                   backgroundColor: "var(--theme-bg-surface-tint)",
-                  border: "1px solid #CCFBF1",
+                  border: "1px solid var(--theme-status-success-border)",
                   borderRadius: "4px",
                   cursor: "pointer"
                 }}
@@ -311,9 +311,9 @@ export function BillingCategorySection({
                   transition: "all 0.2s"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#EF4444"; // Red on hover
-                  e.currentTarget.style.backgroundColor = "#FEF2F2";
-                  e.currentTarget.style.borderColor = "#FECACA";
+                  e.currentTarget.style.color = "var(--theme-status-danger-fg)"; // Red on hover
+                  e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
+                  e.currentTarget.style.borderColor = "var(--theme-status-danger-border)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = "var(--theme-text-muted)";
@@ -333,7 +333,7 @@ export function BillingCategorySection({
       {isExpanded && !isEditing && (
         <div className="p-4">
           <div style={{
-            border: "1px solid #E5E9E8",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "10px",
             overflow: "hidden",
             backgroundColor: "var(--theme-bg-surface)",

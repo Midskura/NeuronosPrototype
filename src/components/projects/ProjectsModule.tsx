@@ -42,9 +42,19 @@ export function ProjectsModule({ currentUser, onCreateTicket, initialProject, de
   const { data: projects = [], isLoading, refetch } = useQuery<Project[]>({
     queryKey: queryKeys.projects.list(),
     queryFn: async () => {
-      const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*, quotations(services_metadata, services)')
+        .order('created_at', { ascending: false });
       if (error) throw new Error(error.message);
-      return data || [];
+      return (data || []).map((p: any) => {
+        const { quotations, ...rest } = p;
+        return {
+          ...rest,
+          services_metadata: quotations?.services_metadata || rest.services_metadata || [],
+          linkedBookings: rest.linked_bookings || [],
+        };
+      });
     },
     staleTime: 30_000,
   });
@@ -88,10 +98,19 @@ export function ProjectsModule({ currentUser, onCreateTicket, initialProject, de
     // If viewing a specific project, fetch fresh detail (includes linkedBookings)
     if (selectedProject) {
       try {
-        const { data, error } = await supabase.from('projects').select('*').eq('id', selectedProject.id).single();
-        
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*, quotations(services_metadata, services, charge_categories)')
+          .eq('id', selectedProject.id)
+          .single();
+
         if (!error && data) {
-          setSelectedProject(data);
+          const { quotations, ...rest } = data as any;
+          setSelectedProject({
+            ...rest,
+            services_metadata: quotations?.services_metadata || rest.services_metadata || [],
+            linkedBookings: rest.linked_bookings || [],
+          });
         } else {
           console.error('Failed to fetch project:', error?.message);
         }

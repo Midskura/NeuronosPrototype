@@ -106,11 +106,11 @@ export function EmployeeFileModal({
                   borderRadius: "999px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: employee.company === "Conforme Cargo Express" ? "#FEF3C7" :
-                                   employee.company === "ZEUJ One Marketing International" ? "#D1FAE5" :
-                                   employee.company === "Juan Logistica Courier Services" ? "#FED7AA" : "#E0E7FF",
-                  color: employee.company === "Conforme Cargo Express" ? "#92400E" :
-                         employee.company === "ZEUJ One Marketing International" ? "#065F46" :
+                  backgroundColor: employee.company === "Conforme Cargo Express" ? "var(--theme-status-warning-bg)" :
+                                   employee.company === "ZEUJ One Marketing International" ? "var(--theme-status-success-bg)" :
+                                   employee.company === "Juan Logistica Courier Services" ? "#FED7AA" : "var(--neuron-semantic-info-bg)",
+                  color: employee.company === "Conforme Cargo Express" ? "var(--theme-status-warning-fg)" :
+                         employee.company === "ZEUJ One Marketing International" ? "var(--theme-status-success-fg)" :
                          employee.company === "Juan Logistica Courier Services" ? "#9A3412" : "#3730A3"
                 }}
               >
@@ -127,7 +127,7 @@ export function EmployeeFileModal({
                 height: "40px",
                 padding: "0 20px",
                 borderRadius: "12px",
-                background: "#0F766E",
+                background: "var(--theme-action-primary-bg)",
                 border: "none",
                 color: "#FFFFFF",
                 fontSize: "14px",
@@ -206,8 +206,8 @@ export function EmployeeFileModal({
                   borderRadius: "999px",
                   fontSize: "12px",
                   fontWeight: 600,
-                  backgroundColor: employee.status === "Active" ? "#E8F5E9" : "#F3F4F6",
-                  color: employee.status === "Active" ? "#10b981" : "#6B7280"
+                  backgroundColor: employee.status === "Active" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                  color: employee.status === "Active" ? "var(--theme-status-success-fg)" : "var(--theme-text-muted)"
                 }}
               >
                 {employee.status}
@@ -227,10 +227,10 @@ export function EmployeeFileModal({
                     padding: "16px 0",
                     fontSize: "14px",
                     fontWeight: activeTab === "personal" ? 600 : 500,
-                    color: activeTab === "personal" ? "#12332B" : "#667085",
+                    color: activeTab === "personal" ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                     background: "transparent",
                     border: "none",
-                    borderBottom: activeTab === "personal" ? "2px solid #0F766E" : "2px solid transparent",
+                    borderBottom: activeTab === "personal" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 150ms ease"
                   }}
@@ -243,10 +243,10 @@ export function EmployeeFileModal({
                     padding: "16px 0",
                     fontSize: "14px",
                     fontWeight: activeTab === "employment" ? 600 : 500,
-                    color: activeTab === "employment" ? "#12332B" : "#667085",
+                    color: activeTab === "employment" ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                     background: "transparent",
                     border: "none",
-                    borderBottom: activeTab === "employment" ? "2px solid #0F766E" : "2px solid transparent",
+                    borderBottom: activeTab === "employment" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 150ms ease"
                   }}
@@ -259,10 +259,10 @@ export function EmployeeFileModal({
                     padding: "16px 0",
                     fontSize: "14px",
                     fontWeight: activeTab === "emergency" ? 600 : 500,
-                    color: activeTab === "emergency" ? "#12332B" : "#667085",
+                    color: activeTab === "emergency" ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                     background: "transparent",
                     border: "none",
-                    borderBottom: activeTab === "emergency" ? "2px solid #0F766E" : "2px solid transparent",
+                    borderBottom: activeTab === "emergency" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                     cursor: "pointer",
                     transition: "all 150ms ease"
                   }}
@@ -529,7 +529,7 @@ export function EmployeeFileModal({
                         <Input
                           value={employee.sssNumber || "Not provided"}
                           disabled
-                          className="bg-[#DBEAFE] border-[#93C5FD] text-[14px]"
+                          className="bg-[var(--neuron-semantic-info-bg)] border-[var(--neuron-semantic-info-border)] text-[14px]"
                         />
                       </div>
                       <div>
@@ -582,9 +582,9 @@ export function EmployeeFileModal({
 
                   {/* Sync Note */}
                   <div
-                    className="p-4 bg-[#F0F9FF] border border-[#BFDBFE] rounded-lg"
+                    className="p-4 bg-[var(--neuron-semantic-info-bg)] border border-[var(--neuron-semantic-info-border)] rounded-lg"
                   >
-                    <p className="text-[12px] text-[#1E40AF]">
+                    <p className="text-[12px] text-[var(--neuron-semantic-info)]">
                       <strong>Note:</strong> Values synced from Excel roster 2025. HR can complete missing IDs here.
                     </p>
                   </div>

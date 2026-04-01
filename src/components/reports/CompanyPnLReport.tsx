@@ -69,7 +69,7 @@ export function CompanyPnLReport({ entries, period, generatedAt, companyName = "
                 </tr>
               ))}
               {/* Total Revenue */}
-              <tr style={{ height: "28px", backgroundColor: "#E3F2F7" }}>
+              <tr style={{ height: "28px", backgroundColor: "var(--neuron-semantic-info-bg)" }}>
                 <td colSpan={3} style={{ border: "1px solid #000", padding: "6px 8px", fontSize: "10px", fontWeight: "bold", textAlign: "right", color: "#000000" }}>
                   TOTAL REVENUE
                 </td>
@@ -105,7 +105,7 @@ export function CompanyPnLReport({ entries, period, generatedAt, companyName = "
               </tr>
 
               {/* Gross Profit */}
-              <tr style={{ height: "32px", backgroundColor: "#E8F5E9" }}>
+              <tr style={{ height: "32px", backgroundColor: "var(--theme-status-success-bg)" }}>
                 <td colSpan={3} style={{ border: "2px solid #000", padding: "8px", fontSize: "11px", fontWeight: "bold", textAlign: "right", color: "#000000" }}>
                   GROSS PROFIT
                 </td>
@@ -125,7 +125,7 @@ export function CompanyPnLReport({ entries, period, generatedAt, companyName = "
               </tr>
 
               {/* Net Profit */}
-              <tr style={{ height: "32px", backgroundColor: "#FFF3CD" }}>
+              <tr style={{ height: "32px", backgroundColor: "var(--theme-status-warning-bg)" }}>
                 <td colSpan={3} style={{ border: "2px solid #000", padding: "8px", fontSize: "11px", fontWeight: "bold", textAlign: "right", color: "#000000" }}>
                   NET PROFIT
                 </td>

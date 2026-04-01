@@ -74,11 +74,11 @@ export function NeuronStatusPill({ children, status, variant, size = "md" }: Neu
       color: "var(--neuron-semantic-success)",
     },
     warning: {
-      background: "#FFF4E6",
+      background: "var(--neuron-semantic-warn-bg)",
       color: "var(--neuron-semantic-warn)",
     },
     danger: {
-      background: "#FFEBE9",
+      background: "var(--neuron-semantic-danger-bg)",
       color: "var(--neuron-semantic-danger)",
     },
     neutral: {
@@ -86,8 +86,8 @@ export function NeuronStatusPill({ children, status, variant, size = "md" }: Neu
       color: "var(--neuron-ink-secondary)",
     },
     info: {
-      background: "#E8F4F8",
-      color: "var(--theme-action-primary-bg)",
+      background: "var(--neuron-semantic-info-bg)",
+      color: "var(--neuron-semantic-info)",
     },
   };
 

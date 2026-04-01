@@ -63,13 +63,13 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
   const getActionColor = (action: string) => {
     const actionLower = action.toLowerCase();
     
-    if (actionLower.includes("created")) return "#6B7280";
-    if (actionLower.includes("submitted")) return "#F59E0B";
-    if (actionLower.includes("approved") || actionLower.includes("posted")) return "#059669";
-    if (actionLower.includes("rejected")) return "#EF4444";
-    if (actionLower.includes("cancelled")) return "#9CA3AF";
-    
-    return "#6B7280";
+    if (actionLower.includes("created")) return "var(--theme-text-muted)";
+    if (actionLower.includes("submitted")) return "var(--theme-status-warning-fg)";
+    if (actionLower.includes("approved") || actionLower.includes("posted")) return "var(--theme-status-success-fg)";
+    if (actionLower.includes("rejected")) return "var(--theme-status-danger-fg)";
+    if (actionLower.includes("cancelled")) return "var(--theme-text-muted)";
+
+    return "var(--theme-text-muted)";
   };
 
   if (isLoading) {
@@ -130,7 +130,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
             top: "12px",
             bottom: "12px",
             width: "2px",
-            backgroundColor: "#E5E7EB"
+            backgroundColor: "var(--theme-border-default)"
           }}
         />
 
@@ -174,7 +174,7 @@ export function EVoucherHistoryTimeline({ evoucherId }: EVoucherHistoryTimelineP
                 <div
                   style={{
                     padding: "16px",
-                    backgroundColor: isLast ? "#F9FAFB" : "#FFFFFF",
+                    backgroundColor: isLast ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: `1px solid ${isLast ? actionColor + "40" : "var(--neuron-ui-border)"}`,
                     borderRadius: "12px"
                   }}

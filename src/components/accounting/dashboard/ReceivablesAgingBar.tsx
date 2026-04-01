@@ -70,7 +70,7 @@ function getBalance(inv: any, collections: any[] = []): number {
 
 /** DSO severity: teal ≤30, amber 31–60, red 61+ */
 function getDsoStyle(dso: number): { bg: string; color: string } {
-  if (dso <= 30) return { bg: "#F0FDFA", color: "var(--theme-action-primary-bg)" };
+  if (dso <= 30) return { bg: "var(--theme-status-success-bg)", color: "var(--theme-action-primary-bg)" };
   if (dso <= 60) return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
   return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
 }
@@ -645,7 +645,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                     size={12}
                     className="transition-transform duration-200"
                     style={{
-                      color: isExpanded ? UNBILLED_COLOR : "#D1D5DB",
+                      color: isExpanded ? UNBILLED_COLOR : "var(--neuron-ui-muted)",
                       transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
                     }}
                   />
@@ -669,7 +669,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
               <div
                 className="mx-1 my-1"
                 style={{
-                  borderBottom: "1px dashed #D1D5DB",
+                  borderBottom: "1px dashed var(--neuron-ui-muted)",
                 }}
               />
             </div>
@@ -694,7 +694,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
               const isUp = pctChange > 0;
               trendArrow = isUp ? "↑" : "↓";
               const isGood = isCurrentBucket ? isUp : !isUp;
-              trendColor = isGood ? "#16A34A" : "#EF4444";
+              trendColor = isGood ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)";
             }
           }
 
@@ -786,7 +786,7 @@ export function ReceivablesAgingBar({ invoices, collections = [], dso, onBucketC
                     size={12}
                     className="transition-transform duration-200"
                     style={{
-                      color: isExpanded ? seg.color : "#D1D5DB",
+                      color: isExpanded ? seg.color : "var(--neuron-ui-muted)",
                       transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
                     }}
                   />

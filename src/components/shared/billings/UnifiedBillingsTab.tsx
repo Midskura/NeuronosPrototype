@@ -411,7 +411,7 @@ export function UnifiedBillingsTab({
     // Map view fields to backend fields
     let backendField = field;
     if (field === 'category') backendField = 'quotation_category';
-    if (field === 'serviceType') backendField = 'service_type';
+    if (field === 'serviceType' || field === 'service') backendField = 'service_type';
     
     // Ensure numeric types
     if (['amount', 'quantity', 'forex_rate', 'amount_added', 'percentage_added'].includes(field)) {
@@ -531,7 +531,7 @@ export function UnifiedBillingsTab({
           if (newItems.length > 0) {
             ops.push(
               (supabase.from('billing_line_items').insert(
-                newItems.map(i => mapRow(i))
+                newItems.map(i => ({ id: crypto.randomUUID(), ...mapRow(i) }))
               ).select() as unknown) as Promise<any>
             );
           }
@@ -597,7 +597,7 @@ export function UnifiedBillingsTab({
             {pendingBillableCount != null && pendingBillableCount > 0 && (
               <span
                 className="text-[12px] font-semibold px-2 py-0.5 rounded-full"
-                style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)", border: "1px solid #FDE68A" }}
+                style={{ backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)", border: "1px solid var(--theme-status-warning-border)" }}
                 title={`${pendingBillableCount} billable expense${pendingBillableCount !== 1 ? "s" : ""} not yet converted to billing items`}
               >
                 {pendingBillableCount} pending

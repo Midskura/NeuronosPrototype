@@ -45,7 +45,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
           border: "1px solid var(--theme-border-default)",
           borderRadius: "8px",
           fontSize: "15px",
-          color: value ? "#12332B" : "#9CA3AF",
+          color: value ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
           backgroundColor: "var(--theme-bg-surface)",
           cursor: "pointer",
           transition: "border-color 0.2s ease",
@@ -67,7 +67,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
         }}
         onMouseEnter={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#9CA3AF";
+            e.currentTarget.style.borderColor = "var(--theme-text-muted)";
           }
         }}
         onMouseLeave={(e) => {
@@ -116,12 +116,12 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
               style={{
                 width: "100%",
                 padding: "12px 14px",
-                backgroundColor: value === option.value ? "#E8F5F3" : "white",
+                backgroundColor: value === option.value ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)",
                 border: "none",
                 borderBottom: index < options.length - 1 ? "1px solid var(--theme-border-subtle)" : "none",
                 cursor: "pointer",
                 fontSize: "15px",
-                color: value === option.value ? "#0F766E" : "#12332B",
+                color: value === option.value ? "var(--theme-action-primary-bg)" : "var(--theme-text-primary)",
                 textAlign: "left",
                 transition: "background-color 0.15s ease",
                 fontWeight: value === option.value ? 600 : 400
@@ -132,7 +132,7 @@ export function FormDropdown({ value, options, onChange, placeholder = "Select..
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = value === option.value ? "#E8F5F3" : "white";
+                e.currentTarget.style.backgroundColor = value === option.value ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)";
               }}
             >
               {option.label}

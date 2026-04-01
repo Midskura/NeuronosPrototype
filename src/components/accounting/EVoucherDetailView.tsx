@@ -1,13 +1,6 @@
-import { useState } from "react";
-import { X, FileText, User, Calendar, Building2, CheckCircle, XCircle, Clock, ArrowRight, ExternalLink } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { X, FileText, User, Calendar, Building2, CheckCircle } from "lucide-react";
 import { PhilippinePeso } from "../icons/PhilippinePeso";
-import { EVoucherStatusBadge } from "./evouchers/EVoucherStatusBadge";
 import { EVoucherWorkflowPanel } from "./evouchers/EVoucherWorkflowPanel";
-import { EVoucherHistoryTimeline } from "./evouchers/EVoucherHistoryTimeline";
-import { supabase } from "../../utils/supabase/client";
-import { toast } from "sonner@2.0.3";
-import { queryKeys } from "../../lib/queryKeys";
 import type { EVoucher } from "../../types/evoucher";
 
 interface EVoucherDetailViewProps {
@@ -18,191 +11,36 @@ interface EVoucherDetailViewProps {
 }
 
 export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusChange }: EVoucherDetailViewProps) {
-  const queryClient = useQueryClient();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Approved":
-        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)", icon: CheckCircle };
-      case "Disbursed":
+      case "posted":
+      case "disbursed":
+      case "liquidation_closed":
         return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)", icon: CheckCircle };
-      case "Recorded":
-      case "Audited":
-        return { bg: "#DBEAFE", color: "#1D4ED8", icon: CheckCircle };
-      case "Disapproved":
-      case "Cancelled":
-        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)", icon: XCircle };
-      case "Under Review":
-      case "Processing":
-        return { bg: "#FEF3E7", color: "#C88A2B", icon: Clock };
-      case "Submitted":
-        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)", icon: Clock };
-      default: // Draft
+      case "pending_accounting":
+      case "pending_ceo":
+      case "pending_tl":
+      case "liquidation_open":
+      case "liquidation_pending":
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)", icon: FileText };
+      case "rejected":
+      case "cancelled":
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)", icon: X };
+      // Legacy states — for old DB records
+      case "Approved": case "Recorded": case "Audited": case "Disbursed":
+        return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)", icon: CheckCircle };
+      case "Under Review": case "Processing": case "Submitted":
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)", icon: FileText };
+      case "Disapproved": case "Cancelled":
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)", icon: X };
+      default:
         return { bg: "var(--theme-bg-page)", color: "var(--theme-text-muted)", icon: FileText };
     }
   };
 
   const statusStyle = getStatusColor(evoucher.status);
   const StatusIcon = statusStyle.icon;
-
-  // Check if current user can approve
-  const dept = currentUser?.department;
-  const role = currentUser?.role;
-  const isAcctMgr = dept === 'Accounting' && (role === 'manager' || role === 'director');
-  const isAcctRep = dept === 'Accounting' && role === 'rep';
-  const isAcctDir = dept === 'Accounting' && role === 'director';
-  const isExec = dept === 'Executive';
-  const canApprove  = evoucher.status === 'Under Review' && (isAcctMgr || isExec);
-  const canDisburse = evoucher.status === 'Approved'     && (isAcctMgr || isExec);
-  const canRecord   = evoucher.status === 'Disbursed'    && (isAcctRep || isAcctMgr || isExec);
-  const canAudit    = evoucher.status === 'Recorded'     && (isAcctDir || isExec);
-
-  const getUserPayload = () => {
-    const userData = localStorage.getItem("neuron_user");
-    const user = userData ? JSON.parse(userData) : currentUser;
-    return {
-      user_id: user?.id || currentUser?.id,
-      user_name: user?.name || currentUser?.name,
-      user_role: user?.department || currentUser?.department,
-    };
-  };
-
-  const handleApprove = async () => {
-    if (!confirm("Are you sure you want to approve this E-Voucher?")) return;
-    setIsSubmitting(true);
-    try {
-      const payload = getUserPayload();
-      const { error } = await supabase.from('evouchers')
-        .update({ status: 'Approved', updated_at: new Date().toISOString() })
-        .eq('id', evoucher.id);
-      if (error) throw error;
-      await supabase.from('evoucher_history').insert({
-        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
-        action: 'Approved', previous_status: evoucher.status, new_status: 'Approved',
-        performed_by: payload.user_id, performed_by_name: payload.user_name,
-        performed_by_role: payload.user_role, created_at: new Date().toISOString()
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
-      toast.success("E-Voucher approved successfully");
-      onStatusChange?.();
-      onClose();
-    } catch (error) {
-      console.error("Error approving E-Voucher:", error);
-      toast.error("Failed to approve E-Voucher");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDisapprove = async () => {
-    const reason = prompt("Please provide a reason for disapproval:");
-    if (!reason) return;
-    setIsSubmitting(true);
-    try {
-      const payload = getUserPayload();
-      const { error } = await supabase.from('evouchers')
-        .update({ status: 'Disapproved', updated_at: new Date().toISOString() })
-        .eq('id', evoucher.id);
-      if (error) throw error;
-      await supabase.from('evoucher_history').insert({
-        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
-        action: 'Disapproved', previous_status: evoucher.status, new_status: 'Disapproved',
-        performed_by: payload.user_id, performed_by_name: payload.user_name,
-        performed_by_role: payload.user_role, notes: reason, created_at: new Date().toISOString()
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
-      toast.success("E-Voucher disapproved");
-      onStatusChange?.();
-      onClose();
-    } catch (error) {
-      console.error("Error disapproving E-Voucher:", error);
-      toast.error("Failed to disapprove E-Voucher");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleDisburse = async () => {
-    if (!confirm("Mark this E-Voucher as disbursed?")) return;
-    setIsSubmitting(true);
-    try {
-      const payload = getUserPayload();
-      const { error } = await supabase.from('evouchers')
-        .update({ status: 'Disbursed', updated_at: new Date().toISOString() })
-        .eq('id', evoucher.id);
-      if (error) throw error;
-      await supabase.from('evoucher_history').insert({
-        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
-        action: 'Disbursed', previous_status: evoucher.status, new_status: 'Disbursed',
-        performed_by: payload.user_id, performed_by_name: payload.user_name,
-        performed_by_role: payload.user_role, created_at: new Date().toISOString()
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
-      toast.success("E-Voucher marked as disbursed");
-      onStatusChange?.();
-      onClose();
-    } catch (error) {
-      console.error("Error disbursing E-Voucher:", error);
-      toast.error("Failed to disburse E-Voucher");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleRecord = async () => {
-    if (!confirm("Record the transaction for this E-Voucher? This will post to the accounting ledger.")) return;
-    setIsSubmitting(true);
-    try {
-      const payload = getUserPayload();
-      const { error } = await supabase.from('evouchers')
-        .update({ status: 'Recorded', posted_to_ledger: true, updated_at: new Date().toISOString() })
-        .eq('id', evoucher.id);
-      if (error) throw error;
-      await supabase.from('evoucher_history').insert({
-        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
-        action: 'Recorded / Posted to Ledger', previous_status: evoucher.status, new_status: 'Recorded',
-        performed_by: payload.user_id, performed_by_name: payload.user_name,
-        performed_by_role: payload.user_role, created_at: new Date().toISOString()
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
-      toast.success("Transaction recorded and posted to ledger");
-      onStatusChange?.();
-      onClose();
-    } catch (error) {
-      console.error("Error recording transaction:", error);
-      toast.error("Failed to record transaction");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleAudit = async () => {
-    if (!confirm("Mark this E-Voucher as audited? This completes the workflow.")) return;
-    setIsSubmitting(true);
-    try {
-      const payload = getUserPayload();
-      const { error } = await supabase.from('evouchers')
-        .update({ status: 'Audited', updated_at: new Date().toISOString() })
-        .eq('id', evoucher.id);
-      if (error) throw error;
-      await supabase.from('evoucher_history').insert({
-        id: `EH-${Date.now()}`, evoucher_id: evoucher.id,
-        action: 'Audited', previous_status: evoucher.status, new_status: 'Audited',
-        performed_by: payload.user_id, performed_by_name: payload.user_name,
-        performed_by_role: payload.user_role, created_at: new Date().toISOString()
-      });
-      queryClient.invalidateQueries({ queryKey: queryKeys.evouchers.all() });
-      toast.success("E-Voucher audit completed");
-      onStatusChange?.();
-      onClose();
-    } catch (error) {
-      console.error("Error auditing E-Voucher:", error);
-      toast.error("Failed to audit E-Voucher");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div
@@ -303,7 +141,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   padding: "20px",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "12px",
-                  backgroundColor: "#FAFAFA",
+                  backgroundColor: "var(--neuron-pill-inactive-bg)",
                 }}
               >
                 <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
@@ -448,11 +286,11 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                                 width: "8px",
                                 height: "8px",
                                 borderRadius: "50%",
-                                backgroundColor: isLast ? "#0F766E" : "#CBD5E1",
+                                backgroundColor: isLast ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
                               }}
                             />
                             {!isLast && (
-                              <div style={{ width: "2px", flex: 1, backgroundColor: "#E2E8F0", minHeight: "24px" }} />
+                              <div style={{ width: "2px", flex: 1, backgroundColor: "var(--theme-border-default)", minHeight: "24px" }} />
                             )}
                           </div>
                           <div style={{ flex: 1, paddingBottom: isLast ? "0" : "8px" }}>
@@ -493,7 +331,7 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                   padding: "20px",
                   border: "1px solid var(--neuron-ui-border)",
                   borderRadius: "12px",
-                  backgroundColor: "#FAFAFA",
+                  backgroundColor: "var(--neuron-pill-inactive-bg)",
                 }}
               >
                 <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
@@ -594,161 +432,31 @@ export function EVoucherDetailView({ evoucher, onClose, currentUser, onStatusCha
                 </div>
               )}
 
-              {/* Action Buttons */}
-              {(canApprove || canDisburse || canRecord || canAudit) && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                  {canApprove && (
-                    <>
-                      <button
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          borderRadius: "8px",
-                          border: "none",
-                          backgroundColor: "var(--theme-action-primary-bg)",
-                          color: "#FFFFFF",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
-                        }}
-                        onClick={handleApprove}
-                        disabled={isSubmitting}
-                      >
-                        <CheckCircle size={16} />
-                        Approve Voucher
-                      </button>
-                      <button
-                        style={{
-                          width: "100%",
-                          padding: "12px",
-                          borderRadius: "8px",
-                          border: "1px solid #EF4444",
-                          backgroundColor: "var(--theme-bg-surface)",
-                          color: "var(--theme-status-danger-fg)",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = "#FEE2E2";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
-                        }}
-                        onClick={handleDisapprove}
-                        disabled={isSubmitting}
-                      >
-                        <XCircle size={16} />
-                        Disapprove
-                      </button>
-                    </>
-                  )}
-                  {canDisburse && (
-                    <button
-                      style={{
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "var(--theme-action-primary-bg)",
-                        color: "#FFFFFF",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
-                      }}
-                      onClick={handleDisburse}
-                      disabled={isSubmitting}
-                    >
-                      <ArrowRight size={16} />
-                      Process Disbursement
-                    </button>
-                  )}
-                  {canRecord && (
-                    <button
-                      style={{
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "var(--theme-action-primary-bg)",
-                        color: "#FFFFFF",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
-                      }}
-                      onClick={handleRecord}
-                      disabled={isSubmitting}
-                    >
-                      <FileText size={16} />
-                      Record Transaction
-                    </button>
-                  )}
-                  {canAudit && (
-                    <button
-                      style={{
-                        width: "100%",
-                        padding: "12px",
-                        borderRadius: "8px",
-                        border: "none",
-                        backgroundColor: "var(--theme-action-primary-bg)",
-                        color: "#FFFFFF",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-border)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = "var(--theme-action-primary-bg)";
-                      }}
-                      onClick={handleAudit}
-                      disabled={isSubmitting}
-                    >
-                      <CheckCircle size={16} />
-                      Complete Audit
-                    </button>
-                  )}
-                </div>
-              )}
+              {/* Workflow Actions — all state transitions handled here */}
+              <div
+                style={{
+                  padding: "20px",
+                  border: "1px solid var(--neuron-ui-border)",
+                  borderRadius: "12px",
+                }}
+              >
+                <h3 style={{ fontSize: "16px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "16px" }}>
+                  Actions
+                </h3>
+                <EVoucherWorkflowPanel
+                  evoucherId={evoucher.id}
+                  evoucherNumber={evoucher.voucher_number}
+                  transactionType={evoucher.transaction_type}
+                  amount={evoucher.amount}
+                  currentStatus={evoucher.status}
+                  requestorId={evoucher.requestor_id}
+                  currentUser={currentUser}
+                  onStatusChange={() => {
+                    onStatusChange?.();
+                    onClose();
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

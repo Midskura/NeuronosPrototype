@@ -64,22 +64,10 @@ export function EmployeeProfile({ currentUser, onDepartmentChange }: EmployeePro
     setThemeModePreferenceState(preference);
   };
 
-  // Mock employee data - in real app would fetch from backend
   const employeeData = {
-    name: currentUser?.name || "Marcus",
-    email: currentUser?.email || "Marcus@neuron.com",
-    role:
-      selectedDepartment === "Executive"
-        ? "Chief Executive Officer"
-        : selectedDepartment === "Business Development"
-          ? "BD Manager"
-          : selectedDepartment === "Pricing"
-            ? "Pricing Analyst"
-            : selectedDepartment === "Operations"
-              ? "Operations Manager"
-              : selectedDepartment === "Accounting"
-                ? "Accounting Manager"
-                : "HR Manager",
+    name: user?.name || currentUser?.name || "—",
+    email: user?.email || currentUser?.email || "—",
+    position: (user as { position?: string | null } | null)?.position || null,
     department: selectedDepartment,
     phone: "+63 917 123 4567",
     location: "Makati City, Metro Manila",
@@ -190,7 +178,7 @@ export function EmployeeProfile({ currentUser, onDepartmentChange }: EmployeePro
                     marginBottom: "8px",
                   }}
                 >
-                  {employeeData.role}
+                  {employeeData.position || effectiveRole}
                 </p>
                 <p
                   style={{
@@ -387,7 +375,7 @@ export function EmployeeProfile({ currentUser, onDepartmentChange }: EmployeePro
                     paddingLeft: "24px",
                   }}
                 >
-                  {employeeData.role}
+                  {employeeData.position || "—"}
                 </p>
               </div>
             </div>

@@ -5,20 +5,23 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation, usePa
 import { Layout } from "./components/Layout";
 import { UserProvider, useUser } from "./hooks/useUser";
 import { RouteGuard } from "./components/RouteGuard";
-import { AppModeProvider, useAppMode } from "./config/appMode";
 import { toast } from "sonner@2.0.3";
 import { Toaster } from "./components/ui/sonner";
 import type { Customer } from "./types/bd";
 import { NeuronLogo } from "./components/NeuronLogo";
 import { useWorkspaceTheme } from "./theme/useWorkspaceTheme";
 
-const ExecutiveDashboard = lazy(() => import("./components/ExecutiveDashboard").then((module) => ({ default: module.ExecutiveDashboard })));
+const MyHomepage = lazy(() => import("./components/MyHomepage").then((module) => ({ default: module.MyHomepage })));
 const BusinessDevelopment = lazy(() => import("./components/BusinessDevelopment").then((module) => ({ default: module.BusinessDevelopment })));
 const Pricing = lazy(() => import("./components/Pricing").then((module) => ({ default: module.Pricing })));
 const Operations = lazy(() => import("./components/Operations").then((module) => ({ default: module.Operations })));
 const ProjectsModule = lazy(() => import("./components/projects/ProjectsModule").then((module) => ({ default: module.ProjectsModule })));
 const ContractsModule = lazy(() => import("./components/contracts/ContractsModule").then((module) => ({ default: module.ContractsModule })));
-const Accounting = lazy(() => import("./components/accounting/Accounting").then((module) => ({ default: module.Accounting })));
+const FinancialsModule = lazy(() => import("./components/accounting/FinancialsModule").then((module) => ({ default: module.FinancialsModule })));
+const FinancialStatementsPage = lazy(() => import("./components/accounting/FinancialStatementsPage").then((module) => ({ default: module.FinancialStatementsPage })));
+const EVouchersContent = lazy(() => import("./components/accounting/EVouchersContent").then((module) => ({ default: module.EVouchersContent })));
+const TransactionsModule = lazy(() => import("./components/transactions/TransactionsModule").then((module) => ({ default: module.TransactionsModule })));
+const ChartOfAccounts = lazy(() => import("./components/accounting/coa/ChartOfAccounts").then((module) => ({ default: module.ChartOfAccounts })));
 const HR = lazy(() => import("./components/HR").then((module) => ({ default: module.HR })));
 const InboxPage = lazy(() => import("./components/InboxPage").then((module) => ({ default: module.InboxPage })));
 const ActivityLogPage = lazy(() => import("./components/ActivityLogPage").then((module) => ({ default: module.ActivityLogPage })));
@@ -37,6 +40,7 @@ const DesignSystemGuide = lazy(() => import("./components/DesignSystemGuide").th
 const Settings = lazy(() => import("./components/settings/Settings").then((m) => ({ default: m.Settings })));
 const UserManagement = lazy(() => import("./components/admin/UserManagement").then((m) => ({ default: m.UserManagement })));
 const UserDetailPage = lazy(() => import("./components/admin/UserDetailPage").then((m) => ({ default: m.UserDetailPage })));
+const CalendarModule = lazy(() => import("./components/calendar/CalendarModule").then((m) => ({ default: m.CalendarModule })));
 
 function RouteLoadingState() {
   return (
@@ -50,7 +54,6 @@ function RouteLoadingState() {
 
 function LoginPage() {
   const { login } = useUser();
-  const { mode, setMode } = useAppMode();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -131,35 +134,6 @@ function LoginPage() {
             </button>
           </form>
 
-        {/* App Mode Toggle */}
-        <div className="mt-6">
-          <p className="text-center text-[#667085] text-xs font-medium mb-2.5">System Mode</p>
-          <div className="flex rounded-lg border border-gray-200 overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setMode("essentials")}
-              className="flex-1 py-2 px-3 text-xs font-medium transition-all duration-150"
-              style={{
-                backgroundColor: mode === "essentials" ? "#12332B" : "transparent",
-                color: mode === "essentials" ? "#fff" : "#667085",
-              }}
-            >
-              Essentials
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode("full")}
-              className="flex-1 py-2 px-3 text-xs font-medium transition-all duration-150 border-l border-gray-200"
-              style={{
-                backgroundColor: mode === "full" ? "#12332B" : "transparent",
-                color: mode === "full" ? "#fff" : "#667085",
-              }}
-            >
-              Full Suite
-            </button>
-          </div>
-        </div>
-
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-gray-400 text-xs">
@@ -222,6 +196,7 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
     if (path.startsWith("/accounting/contracts")) return "acct-contracts";
     if (path.startsWith("/accounting/customers")) return "acct-customers";
     if (path.startsWith("/accounting/bookings")) return "acct-bookings";
+    if (path.startsWith("/accounting/statements")) return "acct-statements";
     if (path.startsWith("/accounting/reports")) return "acct-reports";
     if (path.startsWith("/accounting/catalog")) return "acct-catalog";
     if (path.startsWith("/hr")) return "hr";
@@ -276,6 +251,7 @@ function RouteWrapper({ children, page }: { children: React.ReactNode; page: str
       "acct-contracts": "/accounting/contracts",
       "acct-customers": "/accounting/customers",
       "acct-bookings": "/accounting/bookings",
+      "acct-statements": "/accounting/statements",
       "acct-reports": "/accounting/reports",
       "acct-catalog": "/accounting/catalog",
       "hr": "/hr",
@@ -710,7 +686,7 @@ function BookingDetailPage() {
 function AccountingTransactionsPage() {
   return (
     <RouteWrapper page="acct-transactions">
-      <Accounting view="transactions" />
+      <TransactionsModule />
     </RouteWrapper>
   );
 }
@@ -719,7 +695,7 @@ function AccountingTransactionsPage() {
 function AccountingEVouchersPage() {
   return (
     <RouteWrapper page="acct-evouchers">
-      <Accounting view="evouchers" />
+      <EVouchersContent />
     </RouteWrapper>
   );
 }
@@ -727,7 +703,7 @@ function AccountingEVouchersPage() {
 function AccountingInvoicesPage() {
   return (
     <RouteWrapper page="acct-invoices">
-      <Accounting view="invoices" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -735,7 +711,7 @@ function AccountingInvoicesPage() {
 function AccountingBillingsPage() {
   return (
     <RouteWrapper page="acct-billings">
-      <Accounting view="billings" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -743,7 +719,7 @@ function AccountingBillingsPage() {
 function AccountingCollectionsPage() {
   return (
     <RouteWrapper page="acct-collections">
-      <Accounting view="collections" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -751,7 +727,7 @@ function AccountingCollectionsPage() {
 function AccountingExpensesPage() {
   return (
     <RouteWrapper page="acct-expenses">
-      <Accounting view="expenses" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -759,7 +735,7 @@ function AccountingExpensesPage() {
 function AccountingLedgerPage() {
   return (
     <RouteWrapper page="acct-ledger">
-      <Accounting view="ledger" />
+      <ChartOfAccounts />
     </RouteWrapper>
   );
 }
@@ -767,7 +743,15 @@ function AccountingLedgerPage() {
 function AccountingReportsPage() {
   return (
     <RouteWrapper page="acct-reports">
-      <Accounting view="reports" />
+      <FinancialsModule />
+    </RouteWrapper>
+  );
+}
+
+function AccountingStatementsPage() {
+  return (
+    <RouteWrapper page="acct-statements">
+      <FinancialStatementsPage />
     </RouteWrapper>
   );
 }
@@ -775,7 +759,7 @@ function AccountingReportsPage() {
 function AccountingCoaPage() {
   return (
     <RouteWrapper page="acct-coa">
-      <Accounting view="coa" />
+      <ChartOfAccounts />
     </RouteWrapper>
   );
 }
@@ -783,7 +767,7 @@ function AccountingCoaPage() {
 function AccountingProjectsPage() {
   return (
     <RouteWrapper page="acct-projects">
-      <Accounting view="projects" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -791,7 +775,7 @@ function AccountingProjectsPage() {
 function AccountingContractsPage() {
   return (
     <RouteWrapper page="acct-contracts">
-      <Accounting view="contracts" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -799,7 +783,7 @@ function AccountingContractsPage() {
 function AccountingCustomersPage() {
   return (
     <RouteWrapper page="acct-customers">
-      <Accounting view="customers" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -807,7 +791,7 @@ function AccountingCustomersPage() {
 function AccountingBookingsPage() {
   return (
     <RouteWrapper page="acct-bookings">
-      <Accounting view="bookings" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -815,7 +799,7 @@ function AccountingBookingsPage() {
 function AccountingCatalogPage() {
   return (
     <RouteWrapper page="acct-catalog">
-      <Accounting view="catalog" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -823,7 +807,7 @@ function AccountingCatalogPage() {
 function AccountingFinancialsPage() {
   return (
     <RouteWrapper page="acct-financials">
-      <Accounting view="financials" />
+      <FinancialsModule />
     </RouteWrapper>
   );
 }
@@ -833,7 +817,7 @@ function DashboardPage() {
   const { user } = useUser();
   return (
     <RouteWrapper page="dashboard">
-      <ExecutiveDashboard currentUser={user} />
+      <MyHomepage currentUser={user} />
     </RouteWrapper>
   );
 }
@@ -850,12 +834,7 @@ function HRPage() {
 function CalendarPage() {
   return (
     <RouteWrapper page="calendar">
-      <div className="h-full flex items-center justify-center" style={{ background: "var(--neuron-bg-page)" }}>
-        <div className="text-center">
-          <h2 style={{ color: "var(--neuron-ink-primary)" }} className="mb-2">My Calendar</h2>
-          <p style={{ color: "var(--neuron-ink-muted)" }}>Coming soon...</p>
-        </div>
-      </div>
+      <CalendarModule />
     </RouteWrapper>
   );
 }
@@ -1013,7 +992,12 @@ function AppContent() {
           <Route path="/accounting/customers" element={<AccountingCustomersPage />} />
           <Route path="/accounting/bookings" element={<AccountingBookingsPage />} />
           <Route path="/accounting/reports" element={<AccountingReportsPage />} />
+          <Route path="/accounting/statements" element={<AccountingStatementsPage />} />
           <Route path="/accounting/catalog" element={<AccountingCatalogPage />} />
+        </Route>
+
+        {/* Finance Overview — Accounting Manager or Executive only */}
+        <Route element={<GuardedLayout allowedDepartments={['Accounting']} requireMinRole="manager" />}>
           <Route path="/accounting/financials" element={<AccountingFinancialsPage />} />
         </Route>
         
@@ -1067,11 +1051,9 @@ export default function App() {
 
   return (
     <UserProvider>
-      <AppModeProvider>
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </AppModeProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </UserProvider>
   );
 }

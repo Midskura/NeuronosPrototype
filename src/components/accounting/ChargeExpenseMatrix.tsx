@@ -41,11 +41,11 @@ interface MatrixData {
 }
 
 const MATRIX_THEME = {
-  accent: "#0F766E",
-  footerBg: "#F0FDF9",
-  footerBgAlt: "#ECFDF5",
-  footerBorder: "#0F766E",
-  grandTotalColor: "#0F766E",
+  accent: "var(--theme-action-primary-bg)",
+  footerBg: "var(--theme-status-success-bg)",
+  footerBgAlt: "var(--theme-status-success-bg)",
+  footerBorder: "var(--theme-action-primary-bg)",
+  grandTotalColor: "var(--theme-action-primary-bg)",
 };
 
 const SERVICE_TYPES = ["All", "Brokerage", "Trucking", "Forwarding", "Marine Insurance", "Others"];
@@ -313,7 +313,7 @@ export function ChargeExpenseMatrix() {
             <MetaChip
               label="Linked"
               value={`${data.meta.linked_percentage}%`}
-              color={data.meta.linked_percentage >= 90 ? "#059669" : data.meta.linked_percentage >= 50 ? "#D97706" : "#DC2626"}
+              color={data.meta.linked_percentage >= 90 ? "var(--theme-status-success-fg)" : data.meta.linked_percentage >= 50 ? "var(--theme-status-warning-fg)" : "var(--theme-status-danger-fg)"}
             />
             <button
               onClick={() => exportMatrixCSV(data, period)}
@@ -390,7 +390,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
               textAlign: "left",
               background: "var(--theme-bg-page)",
               borderBottom: "1px solid var(--theme-border-default)",
-              borderRight: "2px solid #E5E7EB",
+              borderRight: "2px solid var(--theme-border-default)",
               whiteSpace: "nowrap",
             }}>
               Booking #
@@ -410,7 +410,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
                   style={{
                     ...headerCellBase,
                     textAlign: "center",
-                    ...(isUnlinked ? { background: "#FEF9C3", color: "var(--theme-status-warning-fg)" } : {}),
+                    ...(isUnlinked ? { background: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" } : {}),
                   }}
                   title={col.name}
                 >
@@ -442,7 +442,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
           {rows.map((row, i) => {
             const rowTotal = columns.reduce((sum, col) => sum + (row.cells[col.catalog_item_id]?.amount || 0), 0);
             const isEven = i % 2 === 0;
-            const rowBg = isEven ? "#FFFFFF" : "#F9FAFB";
+            const rowBg = isEven ? "var(--theme-bg-surface)" : "var(--neuron-pill-inactive-bg)";
 
             return (
               <tr key={row.booking_id}>
@@ -458,7 +458,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
                   fontWeight: 600,
                   color: "var(--theme-text-primary)",
                   background: rowBg,
-                  borderRight: "2px solid #E5E7EB",
+                  borderRight: "2px solid var(--theme-border-default)",
                   borderBottom: "1px solid var(--theme-border-default)",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
@@ -509,7 +509,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
                         fontFamily: "'SF Mono', 'Cascadia Code', 'Consolas', monospace",
                         whiteSpace: "nowrap",
                         minWidth: CELL_MIN_WIDTH,
-                        color: isNegative ? "#DC2626" : isEmpty ? "#D1D5DB" : "#12332B",
+                        color: isNegative ? "var(--theme-status-danger-fg)" : isEmpty ? "var(--neuron-ui-muted)" : "var(--theme-text-primary)",
                         background: isUnlinked && !isEmpty
                           ? (isEven ? "#FFFDE7" : "#FFFBCB")
                           : rowBg,
@@ -559,7 +559,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
               color: "var(--theme-text-primary)",
               background: theme.footerBg,
               borderTop: `2px solid ${theme.footerBorder}`,
-              borderRight: "2px solid #E5E7EB",
+              borderRight: "2px solid var(--theme-border-default)",
             }}>
               TOTAL
             </td>
@@ -594,7 +594,7 @@ function MatrixTable({ data, containerRef }: { data: MatrixData; containerRef: R
                     bottom: 0,
                     zIndex: 1,
                     fontWeight: 700,
-                    color: isNegative ? "#DC2626" : isEmpty ? "#D1D5DB" : "#12332B",
+                    color: isNegative ? "var(--theme-status-danger-fg)" : isEmpty ? "var(--neuron-ui-muted)" : "var(--theme-text-primary)",
                     background: isUnlinked ? "#FEF9C3" : theme.footerBg,
                     borderTop: `2px solid ${theme.footerBorder}`,
                     borderRight: "1px solid var(--theme-border-subtle)",
@@ -641,11 +641,11 @@ function MetaChip({ label, value, color }: { label: string; value: string | numb
       borderRadius: "8px",
       background: "var(--theme-bg-page)",
       border: "1px solid var(--theme-border-default)",
-      color: color || "#6B7280",
+      color: color || "var(--theme-text-muted)",
       fontWeight: 500,
       whiteSpace: "nowrap",
     }}>
-      {label}: <strong style={{ color: color || "#12332B" }}>{value}</strong>
+      {label}: <strong style={{ color: color || "var(--theme-text-primary)" }}>{value}</strong>
     </span>
   );
 }
@@ -674,7 +674,7 @@ function ErrorState({ message, onRetry }: { message: string; onRetry: () => void
       <p style={{ fontSize: "14px", marginBottom: "12px", color: "var(--theme-text-muted)" }}>{message}</p>
       <button onClick={onRetry} style={{
         padding: "8px 20px", fontSize: "13px", fontWeight: 500,
-        background: "#0F766E", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
+        background: "var(--theme-action-primary-bg)", color: "#FFF", border: "none", borderRadius: "8px", cursor: "pointer",
       }}>
         Retry
       </button>

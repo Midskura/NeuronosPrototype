@@ -235,11 +235,11 @@ export function CatalogItemCombobox({
           width: "100%",
           padding: "6px 8px",
           fontSize: "13px",
-          border: "1px solid #E0E6E4",
+          border: "1px solid var(--theme-border-default)",
           borderRadius: "6px",
-          backgroundColor: disabled ? "#F9FAFB" : "white",
+          backgroundColor: disabled ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
           fontWeight: 500,
-          color: "#2C3E38",
+          color: "var(--theme-text-primary)",
           transition: "all 0.15s ease",
           overflow: "hidden",
           textOverflow: "ellipsis",
@@ -248,16 +248,16 @@ export function CatalogItemCombobox({
           outline: "none",
         }}
         onMouseEnter={(e) => {
-          if (!disabled) e.currentTarget.style.borderColor = "#C7D0CC";
+          if (!disabled) e.currentTarget.style.borderColor = "var(--theme-border-default)";
         }}
         onMouseLeave={(e) => {
           if (!disabled && document.activeElement !== e.currentTarget) {
-            e.currentTarget.style.borderColor = "#E0E6E4";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
           }
         }}
         onBlur={(e) => {
           if (!isOpen) {
-            e.currentTarget.style.borderColor = "#E0E6E4";
+            e.currentTarget.style.borderColor = "var(--theme-border-default)";
             e.currentTarget.style.boxShadow = "none";
           }
         }}
@@ -277,7 +277,7 @@ export function CatalogItemCombobox({
             maxHeight: "280px",
             overflowY: "auto",
             backgroundColor: "var(--theme-bg-surface)",
-            border: "1px solid #E0E6E4",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "8px",
             boxShadow: "0px 4px 6px -2px rgba(16, 24, 40, 0.03), 0px 12px 16px -4px rgba(16, 24, 40, 0.08)",
             zIndex: 9999,
@@ -316,7 +316,7 @@ export function CatalogItemCombobox({
                   alignItems: "center",
                   gap: "6px",
                   fontSize: "13px",
-                  color: isCreating ? "#9CA3AF" : "#0F766E",
+                  color: isCreating ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)",
                   fontWeight: 500,
                   backgroundColor: "transparent",
                   border: "none",
@@ -365,7 +365,7 @@ function ItemOption({
         padding: "7px 12px",
         display: "block",
         fontSize: "13px",
-        color: "#2C3E38",
+        color: "var(--theme-text-primary)",
         fontWeight: 400,
         backgroundColor: "transparent",
         border: "none",

@@ -135,7 +135,7 @@ export function FormComboBox({
             paddingRight: showIndicator ? "58px" : "28px",
             fontSize: "13px",
             color: "var(--neuron-ink-base)",
-            backgroundColor: disabled ? "#F9FAFB" : "white",
+            backgroundColor: disabled ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
             border: `1px solid ${isOpen ? "var(--neuron-brand-teal)" : "var(--neuron-ui-border)"}`,
             borderRadius: "6px",
             outline: "none",
@@ -257,7 +257,7 @@ export function FormComboBox({
                     color: isSelected
                       ? "var(--neuron-brand-teal)"
                       : "var(--neuron-ink-base)",
-                    backgroundColor: isSelected ? "#E8F5F3" : "white",
+                    backgroundColor: isSelected ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)",
                     border: "none",
                     borderBottom: "1px solid var(--theme-border-subtle)",
                     textAlign: "left",
@@ -274,8 +274,8 @@ export function FormComboBox({
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = isSelected
-                      ? "#E8F5F3"
-                      : "white";
+                      ? "var(--theme-bg-surface-tint)"
+                      : "var(--theme-bg-surface)";
                   }}
                 >
                   <span>{option.label}</span>

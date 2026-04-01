@@ -42,11 +42,15 @@ export function CreateProjectModal({ quotation, onClose, onSuccess, currentUser 
         id: `proj-${Date.now()}`,
         quotation_id: quotation.id,
         ...formData,
-        ops_assigned_user_id: formData.ops_assigned_user_name ? "user-ops-rep-001" : null,
-        bd_owner_user_id: currentUser?.id,
-        bd_owner_user_name: currentUser?.name,
+        created_by: currentUser?.id,
+        created_by_name: currentUser?.name,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+        details: {
+          bd_owner_user_id: currentUser?.id,
+          bd_owner_user_name: currentUser?.name,
+          ops_assigned_user_id: formData.ops_assigned_user_name ? "user-ops-rep-001" : null,
+        },
       };
 
       const { data, error } = await supabase.from('projects').insert(projectData).select().single();

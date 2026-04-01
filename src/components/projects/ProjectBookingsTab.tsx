@@ -8,6 +8,7 @@ import { BookingsTable } from "../shared/BookingsTable";
 import { getServiceIcon } from "../../utils/quotation-helpers";
 import type { Project } from "../../types/pricing";
 import { ProjectBookingReadOnlyView } from "./ProjectBookingReadOnlyView";
+import { canPerformBookingAction } from "../../utils/permissions";
 
 interface ProjectBookingsTabProps {
   project: Project;
@@ -31,56 +32,46 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [showServiceDropdown, setShowServiceDropdown] = useState(false);
 
-  const linkedBookings = project.linkedBookings || [];
   const servicesMetadata = project.services_metadata || [];
 
-  const bookingsQueryKey = ["project_bookings", project.project_number, linkedBookings.length, hasCleanedUp, refreshTrigger];
+  const bookingsQueryKey = ["project_bookings", project.id, hasCleanedUp, refreshTrigger];
 
   const { data: verifiedBookings = [], isLoading: isVerifying } = useQuery({
     queryKey: bookingsQueryKey,
     queryFn: async () => {
+      // Always fetch live linked_bookings from DB (not from stale prop)
+      const { data: projectData } = await supabase
+        .from('projects')
+        .select('linked_bookings')
+        .eq('id', project.id)
+        .maybeSingle();
+
+      const liveLinkedBookings: any[] = projectData?.linked_bookings || [];
       const verified: any[] = [];
 
-      for (const booking of linkedBookings) {
+      for (const booking of liveLinkedBookings) {
         try {
-          const serviceType = booking.serviceType || booking.service;
-          let endpoint = "";
-
-          switch (serviceType) {
-            case "Forwarding":
-              endpoint = "forwarding_bookings";
-              break;
-            case "Brokerage":
-              endpoint = "brokerage_bookings";
-              break;
-            case "Trucking":
-              endpoint = "trucking_bookings";
-              break;
-            case "Marine Insurance":
-              endpoint = "marine_insurance_bookings";
-              break;
-            case "Others":
-              endpoint = "others_bookings";
-              break;
-            default:
-              console.warn(`Unknown service type: ${serviceType}`);
-              continue;
-          }
-
-          const { data: bookingData } = await supabase.from(endpoint).select('*').eq('id', booking.bookingId).maybeSingle();
+          const { data: bookingData } = await supabase
+            .from('bookings')
+            .select('id, status, service_type, booking_number')
+            .eq('id', booking.bookingId)
+            .maybeSingle();
 
           if (bookingData) {
             verified.push({
               ...booking,
-              status: bookingData.status || booking.status
+              status: bookingData.status || booking.status,
             });
           } else {
-            console.warn(`Booking ${booking.bookingId} not found in ${endpoint}`);
+            console.warn(`Booking ${booking.bookingId} not found in bookings table`);
           }
         } catch (error) {
           console.error(`Error verifying booking ${booking.bookingId}:`, error);
         }
       }
+
+      // Use liveLinkedBookings for orphan check
+      const linkedBookings = liveLinkedBookings;
 
       // If some bookings were removed, clean up the project automatically
       if (verified.length !== linkedBookings.length && !hasCleanedUp) {
@@ -128,17 +119,6 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
     }
   }, [selectedBookingId, selectedBooking, verifiedBookings]);
   
-  // DEBUG: Log the project data to console to help diagnose the booking issue
-  console.log('🔍 ProjectBookingsTab Debug:', {
-    projectId: project.id,
-    projectNumber: project.project_number,
-    linkedBookingsCount: linkedBookings.length,
-    verifiedBookingsCount: verifiedBookings.length,
-    linkedBookings: linkedBookings,
-    verifiedBookings: verifiedBookings,
-    bookingStatus: project.booking_status,
-    isVerifying: isVerifying
-  });
 
   return (
     <>
@@ -180,8 +160,8 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
             </p>
           </div>
 
-          {/* Create Booking dropdown — only when services exist */}
-          {servicesMetadata.length > 0 && (
+          {/* Create Booking dropdown — only when services exist AND user can create bookings */}
+          {servicesMetadata.length > 0 && canPerformBookingAction("create_booking", (currentUser?.department ?? "") as any) && (
             <div style={{ position: "relative", flexShrink: 0 }}>
               {servicesMetadata.length === 1 ? (
                 <button
@@ -299,25 +279,27 @@ export function ProjectBookingsTab({ project, currentUser, selectedBookingId }: 
                 <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted)", margin: "0 0 16px" }}>
                   Create bookings to start tracking operational execution for this project.
                 </p>
-                <button
-                  onClick={() => setCreateBookingService(servicesMetadata[0])}
-                  style={{
-                    padding: "10px 20px",
-                    backgroundColor: "var(--neuron-brand-green)",
-                    border: "1px solid var(--neuron-brand-green)",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "13px",
-                    fontWeight: 600,
-                    color: "white",
-                  }}
-                >
-                  <Plus size={16} />
-                  Create Booking
-                </button>
+                {canPerformBookingAction("create_booking", (currentUser?.department ?? "") as any) && (
+                  <button
+                    onClick={() => setCreateBookingService(servicesMetadata[0])}
+                    style={{
+                      padding: "10px 20px",
+                      backgroundColor: "var(--neuron-brand-green)",
+                      border: "1px solid var(--neuron-brand-green)",
+                      borderRadius: "6px",
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "white",
+                    }}
+                  >
+                    <Plus size={16} />
+                    Create Booking
+                  </button>
+                )}
               </div>
             ) : (
               <div style={{ padding: "48px 24px", textAlign: "center" }}>

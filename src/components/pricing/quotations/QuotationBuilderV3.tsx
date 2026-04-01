@@ -54,6 +54,7 @@
  */
 
 import { useState, useEffect } from "react";
+import { useUser } from "../../../hooks/useUser";
 import { toast } from "sonner@2.0.3";
 import { X, Save, FileText, Handshake } from "lucide-react";
 import { GeneralDetailsSection } from "./GeneralDetailsSection";
@@ -217,6 +218,7 @@ interface QuotationBuilderV3Props {
 }
 
 export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "create", customerData, contactData, builderMode = "quotation", viewMode = false, hideHeader = false, isAmendment = false, onAmend, initialQuotationType }: QuotationBuilderV3Props) {
+  const { user } = useUser();
   // Check if quotation is locked (converted to project)
   const isLocked = mode === "edit" && !!initialData?.project_id;
   
@@ -251,10 +253,11 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
     ""
   );
   const [contactPersonName, setContactPersonName] = useState(
-    initialData?.contact_person_name || 
-    contactData?.name || 
-    (contactData?.first_name && contactData?.last_name 
-      ? `${contactData.first_name} ${contactData.last_name}`.trim() 
+    initialData?.contact_person_name ||
+    initialData?.contact_name ||
+    contactData?.name ||
+    (contactData?.first_name && contactData?.last_name
+      ? `${contactData.first_name} ${contactData.last_name}`.trim()
       : "") ||
     ""
   );
@@ -384,7 +387,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
       console.log("🔄 QuotationBuilderV3: Syncing state with new initialData (View Mode)");
       
       if (initialData.customer_name) setCustomerName(initialData.customer_name);
-      if (initialData.contact_person_name) setContactPersonName(initialData.contact_person_name);
+      if (initialData.contact_person_name || initialData.contact_name) setContactPersonName(initialData.contact_person_name || initialData.contact_name || "");
       if (initialData.movement) setMovement(initialData.movement as "IMPORT" | "EXPORT");
       if (initialData.services) setSelectedServices(initialData.services);
       if (initialData.buying_price) setBuyingPrice(initialData.buying_price);
@@ -1979,7 +1982,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
       // Inquiry mode (BD): Draft or Pending Pricing when submitted
       // Quotation mode (PD): Preserve existing status, default to Priced if new
       status: targetStatus,
-      created_by: "current-user-id",
+      created_by: initialData?.created_by || user?.id || "",
       created_at: initialData?.created_at || new Date().toISOString(),
       updated_at: new Date().toISOString(),
       
@@ -2019,12 +2022,13 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
       );
     }
     
-    // In quotation mode, require charge categories
+    // In quotation mode, require charge categories (old format) OR selling price (new dual-pricing format)
+    const hasCharges = chargeCategories.length > 0 || sellingPrice.length > 0;
     return (
       customerName &&
       selectedServices.length > 0 &&
       date &&
-      chargeCategories.length > 0
+      hasCharges
     );
   };
 
@@ -2121,7 +2125,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
                 padding: "8px 20px",
                 fontSize: "13px",
                 fontWeight: 500,
-                color: isLocked ? "#9CA3AF" : "var(--neuron-brand-green)",
+                color: isLocked ? "var(--theme-text-muted)" : "var(--neuron-brand-green)",
                 backgroundColor: "var(--theme-bg-surface)",
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
@@ -2145,7 +2149,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
               fontSize: "13px",
               fontWeight: 600,
               color: "white",
-              backgroundColor: (isFormValid() && !isLocked) ? "var(--neuron-brand-green)" : "#D1D5DB",
+              backgroundColor: (isFormValid() && !isLocked) ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)",
               border: "none",
               borderRadius: "6px",
               cursor: (isFormValid() && !isLocked) ? "pointer" : "not-allowed",
@@ -2175,7 +2179,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
         {isLocked && (
           <div style={{
             backgroundColor: "var(--theme-status-warning-bg)",
-            border: "1px solid #FCD34D",
+            border: "1px solid var(--theme-status-warning-border)",
             borderRadius: "8px",
             padding: "16px 20px",
             margin: "24px 48px",
@@ -2187,7 +2191,7 @@ export function QuotationBuilderV3({ onClose, onSave, initialData, mode = "creat
               width: "24px",
               height: "24px",
               borderRadius: "50%",
-              backgroundColor: "#F59E0B",
+              backgroundColor: "var(--theme-status-warning-fg)",
               color: "white",
               display: "flex",
               alignItems: "center",

@@ -286,7 +286,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                     </label>
                     <input
                       {...register("company_name", { required: "Company name is required" })}
-                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                       placeholder="e.g. Acme Logistics Ltd."
                     />
                     {errors.company_name && (
@@ -322,7 +322,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       </label>
                       <input
                         {...register("wca_id")}
-                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                         placeholder="Optional"
                       />
                     </div>
@@ -333,7 +333,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       type="checkbox"
                       id="is_wca"
                       {...register("is_wca_conference")}
-                      className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
+                      className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]"
                     />
                     <label htmlFor="is_wca" className="text-sm text-[var(--theme-text-secondary)] cursor-pointer select-none">
                       Is WCA Conference Member?
@@ -379,7 +379,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       </label>
                       <input
                         {...register("territory")}
-                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                         placeholder="e.g. Shanghai"
                       />
                     </div>
@@ -392,7 +392,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                     <textarea
                       {...register("address")}
                       rows={2}
-                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent resize-none"
                       placeholder="Street address, building, etc."
                     />
                   </div>
@@ -415,7 +415,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                     </label>
                     <input
                       {...register("contact_person", { required: "Contact person is required" })}
-                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                       placeholder="Full Name"
                     />
                     {errors.contact_person && (
@@ -433,7 +433,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                         <div key={field.id} className="flex gap-2">
                           <input
                             {...register(`emails.${index}.value` as const)}
-                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                             placeholder="email@example.com"
                           />
                           {emailFields.length > 1 && (
@@ -468,7 +468,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                           <div key={field.id} className="flex gap-2">
                             <input
                               {...register(`phones.${index}.value` as const)}
-                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                               placeholder="+1 234..."
                             />
                             {phoneFields.length > 1 && (
@@ -502,7 +502,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                           <div key={field.id} className="flex gap-2">
                             <input
                               {...register(`mobiles.${index}.value` as const)}
-                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                               placeholder="+1 234..."
                             />
                             {mobileFields.length > 1 && (
@@ -537,7 +537,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                       </div>
                       <input
                         {...register("website")}
-                        className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent"
+                        className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent"
                         placeholder="www.example.com"
                       />
                     </div>
@@ -610,7 +610,7 @@ export function PartnerSheet({ isOpen, onClose, initialData, onSave }: PartnerSh
                     <textarea
                       {...register("notes")}
                       rows={3}
-                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:border-transparent resize-none"
+                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)] focus:border-transparent resize-none"
                       placeholder="Any specific handling instructions or notes..."
                     />
                   </div>

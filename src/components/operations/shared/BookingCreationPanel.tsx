@@ -127,7 +127,7 @@ export function BookingCreationPanel({
         disabled={!isFormValid || isSubmitting}
         className="px-6 py-2.5 rounded-lg transition-all flex items-center gap-2"
         style={{
-          backgroundColor: isFormValid && !isSubmitting ? "#0F766E" : "#D1D5DB",
+          backgroundColor: isFormValid && !isSubmitting ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
           color: "#FFFFFF",
           fontSize: "14px",
           fontWeight: 600,

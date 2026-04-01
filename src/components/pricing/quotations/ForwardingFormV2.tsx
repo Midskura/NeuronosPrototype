@@ -67,8 +67,8 @@ export function ForwardingFormV2({ data, onChange }: ForwardingFormV2Props) {
               { value: "General", label: "General", icon: <Package size={16} /> },
               { value: "Perishable", label: "Perishable", icon: <AlertTriangle size={16} /> },
               { value: "Hazardous", label: "Hazardous", icon: <AlertTriangle size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
-              { value: "Fragile", label: "Fragile", icon: <AlertTriangle size={16} style={{ color: "#F59E0B" }} /> },
-              { value: "High Value", label: "High Value", icon: <CheckCircle2 size={16} style={{ color: "#10B981" }} /> }
+              { value: "Fragile", label: "Fragile", icon: <AlertTriangle size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
+              { value: "High Value", label: "High Value", icon: <CheckCircle2 size={16} style={{ color: "var(--theme-status-success-fg)" }} /> }
             ]}
             placeholder="Select cargo type"
           />

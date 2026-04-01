@@ -58,9 +58,9 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Customer": return { bg: "var(--theme-status-success-bg)", text: "#10B981" };
-      case "MQL": return { bg: "#DBEAFE", text: "#3B82F6" };
-      case "Prospect": return { bg: "var(--theme-status-warning-bg)", text: "#F59E0B" };
+      case "Customer": return { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)" };
+      case "MQL": return { bg: "var(--neuron-semantic-info-bg)", text: "var(--neuron-semantic-info)" };
+      case "Prospect": return { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" };
       case "Lead": return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
       default: return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
     }
@@ -270,7 +270,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                   e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
                 <Edit2 size={16} />
@@ -414,7 +414,7 @@ export function ContactDetailView({ contact, onBack, onUpdate, onViewQuotation, 
                             e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = "white";
+                            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                           }}
                         >
                           <div style={{ fontSize: "13px", fontWeight: 500, color: "var(--neuron-brand-teal)" }}>

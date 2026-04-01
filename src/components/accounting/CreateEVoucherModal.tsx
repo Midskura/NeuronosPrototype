@@ -56,7 +56,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
       } else if (invoiceData) {
         setFormData(prev => ({
           ...prev,
-          transaction_type: "collection",
+          transaction_type: "expense",
           amount: invoiceData.amount_due,
           purpose: `Payment for Invoice ${invoiceData.invoice_number}`,
           project_number: invoiceData.project_number,
@@ -99,7 +99,8 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
     onClose();
   };
 
-  const isCollection = formData.transaction_type === "collection";
+  // "collection" is a retired AR-side type; this modal handles AP-side EVs only.
+  const isCollection = false;
 
   return (
     <div
@@ -197,7 +198,8 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                       }}
                     >
                       <option value="expense">Expense</option>
-                      <option value="collection">Collection</option>
+                      <option value="cash_advance">Cash Advance</option>
+                      <option value="reimbursement">Reimbursement</option>
                       <option value="budget_request">Budget Request</option>
                     </select>
                  </div>
@@ -316,7 +318,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                         fontSize: "14px",
                         outline: "none",
                         color: "var(--neuron-ink-primary)",
-                        backgroundColor: invoiceData ? "#F3F4F6" : "white"
+                        backgroundColor: invoiceData ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)"
                       }}
                     />
                   </div>
@@ -340,7 +342,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
                         fontSize: "14px",
                         outline: "none",
                         color: "var(--neuron-ink-primary)",
-                        backgroundColor: (budgetRequestData || invoiceData) ? "#F3F4F6" : "white"
+                        backgroundColor: (budgetRequestData || invoiceData) ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)"
                       }}
                     />
                   </div>
@@ -440,7 +442,7 @@ export function CreateEVoucherModal({ open, onClose, onSubmit, budgetRequestData
               display: "flex",
               justifyContent: "flex-end",
               gap: "12px",
-              backgroundColor: "#FAFAFA",
+              backgroundColor: "var(--neuron-pill-inactive-bg)",
             }}
           >
             <button

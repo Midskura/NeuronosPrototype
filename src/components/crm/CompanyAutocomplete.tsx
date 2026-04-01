@@ -251,7 +251,7 @@ export function CompanyAutocomplete({
                   padding: "12px 16px",
                   cursor: "pointer",
                   backgroundColor:
-                    highlightedIndex === index ? "#F3F4F6" : "white",
+                    highlightedIndex === index ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                   borderBottom:
                     index < customers.length - 1
                       ? "1px solid var(--theme-border-subtle)"

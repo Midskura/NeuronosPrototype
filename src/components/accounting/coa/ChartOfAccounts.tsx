@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Plus, Search, Filter, Download, ChevronDown, ChevronRight, Folder, FileText, MoreHorizontal, RefreshCw } from "lucide-react";
+import { Plus, Search, Filter, Download, ChevronDown, ChevronRight, Folder, FileText, MoreHorizontal, RefreshCw, BookOpen } from "lucide-react";
 import { toast } from "sonner@2.0.3";
 import { getAccounts, seedInitialAccounts, resetChartOfAccounts } from "../../../utils/accounting-api";
 import { Account } from "../../../types/accounting-core";
@@ -7,6 +7,7 @@ import { AccountSidePanel } from "./AccountSidePanel";
 import { DataTable, ColumnDef } from "../../common/DataTable";
 
 import { AccountLedger } from "./AccountLedger";
+import { ManualJournalEntryPanel } from "./ManualJournalEntryPanel";
 
 // Extended type for flattened tree
 type FlatAccount = Account & { level: number };
@@ -25,6 +26,7 @@ export function ChartOfAccounts() {
   // Side Panel State
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
+  const [showManualJE, setShowManualJE] = useState(false);
 
   // Expanded folders state (for hierarchy)
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({});
@@ -196,7 +198,7 @@ export function ChartOfAccounts() {
           <span className="font-mono text-[var(--theme-text-muted)] text-xs w-12">{item.code}</span>
 
           {item.is_folder ? (
-             <Folder size={16} className="text-[var(--theme-action-primary-bg)] fill-[#0F766E]/10" />
+             <Folder size={16} className="text-[var(--theme-action-primary-bg)] fill-[var(--theme-action-primary-bg)]/10" />
           ) : (
              <FileText size={16} className="text-[var(--theme-text-muted)]" />
           )}
@@ -325,6 +327,14 @@ export function ChartOfAccounts() {
                 Export
              </button>
              <button
+               onClick={() => setShowManualJE(true)}
+               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-white"
+               style={{ backgroundColor: "var(--neuron-brand-green, #0F766E)" }}
+             >
+               <BookOpen size={16} />
+               Create Journal Entry
+             </button>
+             <button
                onClick={handleAddAccount}
                style={{
                   display: "flex",
@@ -401,10 +411,10 @@ export function ChartOfAccounts() {
                    padding: "12px 4px",
                    background: "none",
                    border: "none",
-                   borderBottom: activeTab === tab ? "2px solid #0F766E" : "2px solid transparent",
+                   borderBottom: activeTab === tab ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                    fontSize: "14px",
                    fontWeight: 600,
-                   color: activeTab === tab ? "#0F766E" : "#667085",
+                   color: activeTab === tab ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                    cursor: "pointer",
                    transition: "all 0.2s ease",
                    marginBottom: "0"
@@ -431,7 +441,7 @@ export function ChartOfAccounts() {
                      justifyContent: "center",
                      padding: "2px 8px",
                      borderRadius: "10px",
-                     backgroundColor: activeTab === tab ? "#E8F4F3" : "#F3F4F6",
+                     backgroundColor: activeTab === tab ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
                      fontSize: "12px",
                      fontWeight: 600,
                      color: activeTab === tab ? "#0F766E" : "#667085"
@@ -470,6 +480,16 @@ export function ChartOfAccounts() {
         onClose={() => setIsPanelOpen(false)}
         onSave={loadAccounts}
         account={selectedAccount}
+      />
+
+      <ManualJournalEntryPanel
+        isOpen={showManualJE}
+        onClose={() => setShowManualJE(false)}
+        onCreated={() => {
+          setShowManualJE(false);
+          // refetch balances if the panel updated the ledger
+          loadAccounts();
+        }}
       />
     </div>
   );

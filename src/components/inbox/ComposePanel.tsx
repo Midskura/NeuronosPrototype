@@ -234,7 +234,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               style={{
                 padding: "6px 12px", borderRadius: 6, border: "1px solid var(--theme-border-default)",
                 backgroundColor: "transparent", fontSize: 12, fontWeight: 500,
-                color: canDraft ? "#667085" : "#D1D5DB", cursor: canDraft ? "pointer" : "not-allowed",
+                color: canDraft ? "var(--theme-text-muted)" : "var(--neuron-ui-muted)", cursor: canDraft ? "pointer" : "not-allowed",
               }}
               onMouseEnter={(e) => { if (canDraft) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
@@ -248,7 +248,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
               className="flex items-center gap-1.5 transition-all duration-150"
               style={{
                 padding: "6px 14px", borderRadius: 6, border: "none",
-                backgroundColor: canSend ? "#0F766E" : "#D1D5DB",
+                backgroundColor: canSend ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
                 color: "#FFFFFF", fontSize: 12, fontWeight: 600,
                 cursor: canSend ? "pointer" : "not-allowed",
               }}
@@ -383,7 +383,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
             <div className="flex flex-wrap gap-1.5 pb-6">
               {attachments.map((att, idx) => (
                 <span key={idx} className="flex items-center gap-1.5"
-                  style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid var(--neuron-ui-border)", backgroundColor: "#F8FAF9", fontSize: 12, color: "var(--neuron-ink-secondary)" }}>
+                  style={{ padding: "4px 8px", borderRadius: 6, border: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-page)", fontSize: 12, color: "var(--neuron-ink-secondary)" }}>
                   {att.type === "entity"
                     ? <><Link2 size={11} style={{ color: "var(--neuron-brand-green)" }} />{att.entity_label}</>
                     : <><FileText size={11} style={{ color: "var(--theme-text-muted)" }} />{att.file?.name}</>}
@@ -427,7 +427,7 @@ export function ComposePanel({ onClose, onSent, initialEntity, initialSubject, i
             <Paperclip size={13} /> Attach file
           </button>
           <input ref={fileInputRef} type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp" style={{ display: "none" }} onChange={handleFileSelect} />
-          <span style={{ fontSize: 11, color: "#B8C2BE", marginLeft: 4 }}>Ctrl/Cmd+Enter to send</span>
+          <span style={{ fontSize: 11, color: "var(--theme-text-muted)", marginLeft: 4 }}>Ctrl/Cmd+Enter to send</span>
         </div>
       </div>
 
@@ -515,7 +515,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
   const showDropdown = isOpen && (people.length > 0 || depts.length > 0);
 
   return (
-    <div style={{ padding: "10px 0", borderBottom: `1px solid ${isOpen ? "#D1E8E3" : "#F3F4F6"}`, position: "relative", transition: "border-color 150ms ease" }}>
+    <div style={{ padding: "10px 0", borderBottom: `1px solid ${isOpen ? "var(--theme-status-success-border)" : "var(--theme-border-default)"}`, position: "relative", transition: "border-color 150ms ease" }}>
       <div className="flex items-start gap-3 flex-wrap">
         <span style={{ fontSize: 12, color: "var(--theme-text-muted)", fontWeight: 500, marginTop: 5, width: 32, flexShrink: 0 }}>{label}</span>
         <div className="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
@@ -584,7 +584,7 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
                     className="w-full flex items-center gap-3 text-left"
                     style={{
                       padding: "8px 12px", border: "none",
-                      backgroundColor: isHighlighted ? "#F0F7F5" : "transparent",
+                      backgroundColor: isHighlighted ? "var(--theme-bg-surface-tint)" : "transparent",
                       cursor: "pointer", transition: "background-color 80ms ease",
                     }}
                   >
@@ -619,11 +619,11 @@ function RecipientField({ label, chips, allUsers, excludeIds, onAdd, onRemove, a
                     className="w-full flex items-center gap-3 text-left"
                     style={{
                       padding: "8px 12px", border: "none",
-                      backgroundColor: isHighlighted ? "#F0F7F5" : "transparent",
+                      backgroundColor: isHighlighted ? "var(--theme-bg-surface-tint)" : "transparent",
                       cursor: "pointer", transition: "background-color 80ms ease",
                     }}
                   >
-                    <span style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: "#F0F7F5", border: "1px solid #C8E6E2", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <span style={{ width: 28, height: 28, borderRadius: 8, backgroundColor: "var(--theme-bg-surface-tint)", border: "1px solid var(--theme-status-success-border)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                       <Building2 size={13} style={{ color: "var(--theme-action-primary-bg)" }} />
                     </span>
                     <div>

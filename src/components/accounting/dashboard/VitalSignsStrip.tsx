@@ -78,25 +78,25 @@ function HeroCard({ sign }: { sign: VitalSign }) {
   const Icon = isLoss ? TrendingDown : sign.icon;
 
   // Colors for dark vs light hero — with loss (red) variant
-  const bgColor = isLoss ? "#9F2323" : isDark ? "#0F766E" : "white";
-  const borderColor = isLoss ? "#9F2323" : isDark ? "#0F766E" : "#E5E9F0";
-  const labelColor = isDark ? "rgba(255,255,255,0.6)" : "#667085";
-  const valueColor = isDark ? "#FFFFFF" : "#12332B";
-  const subtextColor = isDark ? "rgba(255,255,255,0.5)" : "#9CA3AF";
-  const iconBg = isDark ? "rgba(255,255,255,0.12)" : "#F0FDF4";
-  const iconColor = isLoss ? "#FCA5A5" : isDark ? "#5EEAD4" : "#0F766E";
+  const bgColor = isLoss ? "#9F2323" : isDark ? "var(--theme-action-primary-bg)" : "var(--theme-bg-surface)";
+  const borderColor = isLoss ? "#9F2323" : isDark ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)";
+  const labelColor = isDark ? "rgba(255,255,255,0.6)" : "var(--theme-text-muted)";
+  const valueColor = isDark ? "#FFFFFF" : "var(--theme-text-primary)";
+  const subtextColor = isDark ? "rgba(255,255,255,0.5)" : "var(--theme-text-muted)";
+  const iconBg = isDark ? "rgba(255,255,255,0.12)" : "var(--theme-status-success-bg)";
+  const iconColor = isLoss ? "#FCA5A5" : isDark ? "#5EEAD4" : "var(--theme-action-primary-bg)";
 
   // Delta badge colors — adapted for dark bg
   const deltaColor = delta.trend === "flat"
-    ? (isDark ? "rgba(255,255,255,0.5)" : "#9CA3AF")
+    ? (isDark ? "rgba(255,255,255,0.5)" : "var(--theme-text-muted)")
     : delta.isGood
-      ? (isDark ? "#86EFAC" : "#16A34A")
-      : (isLoss ? "#FECACA" : isDark ? "#FCA5A5" : "#EF4444");
+      ? (isDark ? "#86EFAC" : "var(--theme-status-success-fg)")
+      : (isLoss ? "#FECACA" : isDark ? "#FCA5A5" : "var(--theme-status-danger-fg)");
   const deltaBg = delta.trend === "flat"
-    ? (isDark ? "rgba(255,255,255,0.08)" : "#F3F4F6")
+    ? (isDark ? "rgba(255,255,255,0.08)" : "var(--neuron-pill-inactive-bg)")
     : delta.isGood
-      ? (isDark ? "rgba(134,239,172,0.15)" : "#DCFCE7")
-      : (isLoss ? "rgba(254,202,202,0.15)" : isDark ? "rgba(252,165,165,0.15)" : "#FEE2E2");
+      ? (isDark ? "rgba(134,239,172,0.15)" : "var(--theme-status-success-bg)")
+      : (isLoss ? "rgba(254,202,202,0.15)" : isDark ? "rgba(252,165,165,0.15)" : "var(--theme-status-danger-bg)");
 
   return (
     <div
@@ -159,7 +159,7 @@ function HeroCard({ sign }: { sign: VitalSign }) {
           <span
             className="text-[11px] font-medium ml-auto transition-opacity duration-200"
             style={{
-              color: isDark ? "rgba(255,255,255,0.7)" : "#0F766E",
+              color: isDark ? "rgba(255,255,255,0.7)" : "var(--theme-action-primary-bg)",
               opacity: isHovered ? 1 : 0,
             }}
           >
@@ -182,11 +182,11 @@ function CompactCard({ sign }: { sign: VitalSign }) {
   const isClickable = !!sign.onCardClick;
 
   const deltaColor = delta.trend === "flat"
-    ? "#9CA3AF"
-    : delta.isGood ? "#16A34A" : "#EF4444";
+    ? "var(--theme-text-muted)"
+    : delta.isGood ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)";
   const deltaBg = delta.trend === "flat"
-    ? "#F3F4F6"
-    : delta.isGood ? "#DCFCE7" : "#FEE2E2";
+    ? "var(--neuron-pill-inactive-bg)"
+    : delta.isGood ? "var(--theme-status-success-bg)" : "var(--theme-status-danger-bg)";
 
   return (
     <div
@@ -216,7 +216,7 @@ function CompactCard({ sign }: { sign: VitalSign }) {
         </span>
         <div
           className="w-7 h-7 rounded-lg flex items-center justify-center"
-          style={{ backgroundColor: "#F0FDF4" }}
+          style={{ backgroundColor: "var(--theme-status-success-bg)" }}
         >
           <Icon size={14} style={{ color: "var(--theme-action-primary-bg)" }} />
         </div>

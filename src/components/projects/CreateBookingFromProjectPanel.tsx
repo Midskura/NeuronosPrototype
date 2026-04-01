@@ -94,7 +94,7 @@ export function CreateBookingFromProjectPanel({
   const handleSuccess = async (bookingData: any) => {
     try {
       // Validate booking data
-      if (!bookingData || !bookingData.bookingId) {
+      if (!bookingData || !bookingData.id) {
         console.error("Invalid booking data received:", bookingData);
         toast.error(
           "Invalid booking data",
@@ -104,13 +104,15 @@ export function CreateBookingFromProjectPanel({
         return;
       }
 
+      const bookingRef = bookingData.booking_number || bookingData.id;
+
       // Link the booking to the project
-      console.log(`Linking booking ${bookingData.bookingId} to project ${project.project_number}...`);
-      
+      console.log(`Linking booking ${bookingRef} to project ${project.project_number}...`);
+
       const linkResult = await linkBookingToProject(
         project.id,
-        bookingData.bookingId,
-        bookingData.bookingId, // Using bookingId as bookingNumber (e.g., "FWD-2026-825")
+        bookingData.id,
+        bookingRef,
         serviceType,
         bookingData.status || "Draft",
       );
@@ -125,7 +127,7 @@ export function CreateBookingFromProjectPanel({
         console.log(`✓ Successfully linked booking to project`);
         toast.success(
           `${serviceType} booking created!`,
-          `Booking ${bookingData.bookingId} has been created and linked to project ${project.project_number}`
+          `Booking ${bookingRef} has been created and linked to project ${project.project_number}`
         );
       }
 

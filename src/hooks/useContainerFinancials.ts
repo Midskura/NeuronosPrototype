@@ -56,6 +56,7 @@ export function useContainerFinancials({
     queryFn: async () => {
       const expenseTable = expenseSource === "evouchers" ? "evouchers" : "expenses";
       const scopeFilter = buildScopeFilter(linkedBookingIds, containerReference);
+      const billingItemsScopeFilter = buildBillingItemsScopeFilter(linkedBookingIds, containerReference);
 
       const [
         { data: invoiceRows, error: invoiceErr },
@@ -64,9 +65,9 @@ export function useContainerFinancials({
         { data: collectionRows, error: collectionErr },
         quotationResult,
       ] = await Promise.all([
-        supabase.from("invoices").select("*").or(scopeFilter),
-        supabase.from("billing_line_items").select("*").or(scopeFilter),
-        supabase.from(expenseTable).select("*").or(scopeFilter),
+        supabase.from("invoices").select("*").or(billingItemsScopeFilter),
+        supabase.from("billing_line_items").select("*").or(billingItemsScopeFilter),
+        supabase.from(expenseTable).select("*").or(billingItemsScopeFilter),
         supabase.from("collections").select("*"),
         includeQuotationVirtualItems && quotationId
           ? supabase.from("quotations").select("*").eq("id", quotationId).maybeSingle()
@@ -156,6 +157,24 @@ function buildScopeFilter(bookingIds: string[], containerRef?: string): string {
     parts.push(`project_number.eq.${containerRef}`);
     parts.push(`contract_number.eq.${containerRef}`);
     parts.push(`quotation_number.eq.${containerRef}`);
+  }
+
+  return parts.length > 0 ? parts.join(",") : "id.is.null";
+}
+
+/**
+ * Scope filter for billing_line_items — only references columns that exist in that table.
+ * billing_line_items has: booking_id, project_number (no source_booking_id, contract_number, quotation_number)
+ */
+function buildBillingItemsScopeFilter(bookingIds: string[], containerRef?: string): string {
+  const parts: string[] = [];
+
+  if (bookingIds.length > 0) {
+    bookingIds.forEach((id) => parts.push(`booking_id.eq.${id}`));
+  }
+
+  if (containerRef) {
+    parts.push(`project_number.eq.${containerRef}`);
   }
 
   return parts.length > 0 ? parts.join(",") : "id.is.null";

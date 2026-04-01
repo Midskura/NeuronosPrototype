@@ -1,7 +1,7 @@
 # Financial Architecture — Neuron OS
 
 > **Living document.** Update this when schema, join patterns, or status flows change.
-> Last reviewed: 2026-03-17
+> Last reviewed: 2026-03-31
 
 ---
 
@@ -23,7 +23,9 @@ PROJECT (aggregation container)
     │                  │
     │                  └── if is_billable=true ──▶ promoted to BILLING_LINE_ITEMS
     │
-    └──▶ EVOUCHER (AP/AR workflow wrapper)
+    └──▶ EVOUCHER (AP workflow — expense/cash_advance/reimbursement/budget_request)
+             │
+             ├──▶ LIQUIDATION_SUBMISSIONS (receipts filed against cash_advance / budget_request EVs)
              │
              └──▶ JOURNAL_ENTRY (double-entry GL)
 ```
@@ -200,27 +202,44 @@ Key fields:
 
 ---
 
-### 2.8 `evouchers` — AP/AR Workflow Wrapper
+### 2.8 `evouchers` — AP Workflow Wrapper
 
-Purpose: Universal payment voucher for expense claims, cash advances, billing, and collections. Gateway to GL.
+Purpose: Authorization and disbursement voucher for all money going **out** of the company. Gateway to GL for AP transactions. Strictly AP-side — AR documents (invoices, collections) do not go through this workflow.
+
+**Four real AP transaction types:**
+
+| Type | What it authorizes | GL at disbursement |
+|---|---|---|
+| `expense` | Pay a vendor for a service | DR Expense / CR Accounts Payable → DR AP / CR Cash |
+| `cash_advance` | Give an employee money before a job | DR Advances to Employees / CR Cash |
+| `reimbursement` | Pay an employee back for out-of-pocket spending | DR Expense / CR Cash (direct, no AP) |
+| `budget_request` | Lump-sum disbursement to a department | DR Advances to Employees / CR Cash |
+
+**Legacy AR-side types** (`collection`, `billing`, `adjustment`) are stored in the same table by the billings/collections modules but do **not** go through the AP approval workflow. They are kept only for backwards compatibility. Do not use them for new records.
 
 Key fields:
 
 | Field | Notes |
 |---|---|
 | `evoucher_number` | Human ID (e.g. `EV-2026-001`) |
-| `transaction_type` | `'expense'` \| `'budget_request'` \| `'cash_advance'` \| `'collection'` \| `'billing'` \| `'adjustment'` \| `'reimbursement'` |
-| `voucher_type` | `'AR'` (Accounts Receivable) \| `'AP'` (Accounts Payable) |
+| `transaction_type` | `'expense'` \| `'cash_advance'` \| `'reimbursement'` \| `'budget_request'` (AP types) or legacy `'collection'` \| `'billing'` \| `'adjustment'` (AR-side only) |
 | `source_module` | `'bd'` \| `'operations'` \| `'accounting'` \| `'pricing'` \| `'hr'` \| `'executive'` |
 | `booking_id` / `project_id` / `project_number` | Scope |
-| `customer_id` / `customer_name` / `vendor_name` | AR/AP party |
-| `amount` | Transaction amount |
-| `status` | See §6 — complex multi-path flow |
-| `approvers` | JSONB array — approval workflow trail |
-| `journal_entry_id` | FK → `journal_entries` (created when posted) |
-| `liquidation` | JSONB — for cash advances: `{amount, date, receipts, status}` |
+| `vendor_name` / `requestor_id` / `requestor_name` | Who is requesting / who gets paid |
+| `amount` | Requested disbursement amount |
+| `gl_category` / `gl_sub_category` | GL categorization filled by Accounting during processing |
+| `status` | See §6 — new canonical state machine |
+| `approvers` | JSONB array — full approval trail with timestamps and remarks |
+| `journal_entry_id` | FK → `journal_entries` (created at `posted` status) |
+| `parent_voucher_id` | FK → `evouchers` — links a reimbursement EV to its originating cash_advance (overspend path) |
 
-**Evouchers are workflow wrappers, not the source of truth for amounts.** The canonical amounts live on `invoices.total_amount`, `collections.amount`, and `expenses.amount`. Evouchers track the approval/disbursement process.
+**Approval routing:**
+- Every EV: Requestor → TL/Manager (`pending_tl`) → CEO/Executive (`pending_ceo`) → Accounting (`pending_accounting`) → Treasury (`disbursed`) → GL post (`posted`)
+- **Delegated TL** (`ev_approval_authority = true` on the user): their team's EVs skip `pending_ceo` and go straight to `pending_accounting`
+- **Executive creator:** auto-skips `pending_tl` and `pending_ceo` — lands at `pending_accounting` immediately
+- **Accounting/Treasury** cannot reject; they process only
+
+**Evouchers are workflow wrappers, not the source of truth for amounts.** `evoucher.amount` is the requested disbursement. The canonical expense amounts live on `expenses.amount`. For GL, trust `journal_entries`.
 
 ---
 
@@ -258,6 +277,49 @@ Key fields:
 | `parent_id` | FK → `accounts` (hierarchical CoA) |
 | `balance` | Cached current balance |
 | `is_system` | System accounts cannot be deleted |
+
+---
+
+### 2.11 `liquidation_submissions` — Cash Advance Receipt Filing
+
+Purpose: Incremental receipt submissions by a handler against an open `cash_advance` or `budget_request` EV. One or more submissions per EV are allowed until the advance is fully accounted for.
+
+Key fields:
+
+| Field | Notes |
+|---|---|
+| `evoucher_id` | FK → `evouchers` — the parent cash_advance or budget_request EV |
+| `submitted_by` | FK → `users` — the handler filing the receipts |
+| `line_items` | JSONB array: `[{id, description, amount, receipt_url?}]` |
+| `total_spend` | Sum of all line items in this submission |
+| `unused_return` | Cash being returned (final submission only) |
+| `is_final` | `true` = handler declares the advance fully spent; Accounting will close it |
+| `status` | `'pending'` → `'approved'` \| `'revision_requested'` |
+| `reviewed_by` / `reviewed_at` / `reviewer_remarks` | Accounting review fields |
+
+**Liquidation lifecycle** (applies to `cash_advance` and `budget_request` EVs only, after `posted`):
+```
+liquidation_open → liquidation_pending → liquidation_closed
+```
+- `liquidation_open`: EV posted, handler can submit receipts
+- `liquidation_pending`: Handler has set `is_final = true`; Accounting is reviewing the final submission
+- `liquidation_closed`: Accounting has approved the final submission; advance is fully reconciled
+- **Overspend**: if `Σ(total_spend) > evoucher.amount`, system prompts to create a new `reimbursement` EV linked via `parent_voucher_id`
+
+---
+
+### 2.12 `users` — Role and Authority Fields
+
+Relevant to EV routing:
+
+| Field | Notes |
+|---|---|
+| `role` | `'staff'` \| `'team_leader'` \| `'manager'` \| `'executive'` — canonical 4-tier hierarchy |
+| `department` | Determines routing fallback (no team → dept Manager) |
+| `team_id` | Which team the user belongs to; used to find their TL approver |
+| `ev_approval_authority` | `boolean` — when `true` for a `team_leader`, their team's EVs skip the CEO gate |
+
+**`operations_role` column has been retired** (migration 025). `Supervisor` → `team_leader` in the main `role` column. Do not reference `operations_role` in any new code.
 
 ---
 
@@ -350,8 +412,17 @@ They are separate records. Do not double-count both when computing project costs
 **Virtual billing items in UnifiedBillingsTab**
 When a quotation has selling prices but no real `billing_line_items` exist yet, the UI creates virtual items (`is_virtual=true`, `id='virtual-{sourceId}'`) from the quotation's `selling_price` JSONB. These are display-only and not persisted unless explicitly saved. Do not treat them as real records.
 
-**Evoucher status is denormalized inconsistently**
-The `evouchers.status` field evolved over time and contains mixed-case values (`'Submitted'`, `'Approved'`, `'Disbursed'`) alongside lowercase ones (`'draft'`, `'pending'`, `'posted'`). Filter defensively: `status.toLowerCase()` before comparing.
+**EVoucher status has legacy values in the DB**
+Old records contain mixed-case values (`'Submitted'`, `'Approved'`, `'Disbursed'`, etc.). New records use the canonical state machine (`draft → pending_tl → pending_ceo → pending_accounting → disbursed → posted`). Always normalize before comparing: `status.toLowerCase()`. See `EVoucherStatus` type in `src/types/evoucher.ts` for the full legacy list.
+
+**EVoucher `collection`/`billing`/`adjustment` types are AR-side, not AP**
+These transaction types are stored in the `evouchers` table by the billings and collections modules, but they do not go through the AP approval workflow. Do not route them through the EV approval chain. Do not use them for new records. Long-term these should migrate to their own tables.
+
+**`operations_role` column is gone**
+Migration 025 dropped it. Any code that reads `user.operations_role` will fail. The equivalent is `role = 'team_leader'` in the main `role` column.
+
+**Cash advance expenses don't exist until liquidation**
+For `cash_advance` and `budget_request` EVs, no `expenses` records are created at approval time. They are created during liquidation (each receipt in a `liquidation_submission` → one expense record). Booking cost summaries should show the outstanding advance amount as "Pending Expense" until the advance is closed.
 
 **GL is not auto-enforced**
 Journal entries are created by application logic when status transitions to `'posted'`. There is no database trigger enforcing this. If a document is `posted=true` but `journal_entry_id` is null, the GL is out of sync.
@@ -421,14 +492,22 @@ active → approved → posted → paid
                            → partial
 ```
 
-### `evouchers` (multi-path)
+### `evouchers` (canonical state machine — new records only)
 ```
-draft → pending → Submitted → Approved → Disbursed
-               → rejected
-               → cancelled
-               → posted  (GL recorded)
+draft → pending_tl → pending_ceo → pending_accounting → disbursed → posted
+                   ↘ pending_accounting  (if TL has ev_approval_authority = true)
+       pending_tl/pending_ceo → rejected → draft  (can be re-submitted)
+       draft/rejected → cancelled  (terminal)
 ```
-Note: Status values are mixed-case. Normalize with `.toLowerCase()` before comparisons.
+
+Executive creator: skips `pending_tl` and `pending_ceo`, lands directly at `pending_accounting`.
+
+**Liquidation sub-states** (cash_advance and budget_request only, after `posted`):
+```
+posted → liquidation_open → liquidation_pending → liquidation_closed
+```
+
+**Legacy status values** exist in old DB records (`'Submitted'`, `'Approved'`, `'Disbursed'`, `'Disapproved'`, etc.). Normalize with `.toLowerCase()` and map to the canonical states before any comparison or display logic.
 
 ### `journal_entries`
 ```
@@ -484,3 +563,7 @@ The schema aggressively denormalizes to avoid joins in high-volume financial que
 | `journal_entries` | `evoucher_id` | `evouchers` | GL source |
 | `journal_entries` | `booking_id` | `bookings` | Context |
 | `accounts` | `parent_id` | `accounts` | CoA hierarchy |
+| `liquidation_submissions` | `evoucher_id` | `evouchers` | Parent cash_advance/budget_request EV |
+| `liquidation_submissions` | `submitted_by` | `users` | Handler who filed the receipts |
+| `liquidation_submissions` | `reviewed_by` | `users` | Accounting reviewer |
+| `evouchers` | `parent_voucher_id` | `evouchers` | Overspend reimbursement → original advance |

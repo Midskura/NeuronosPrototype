@@ -13,7 +13,6 @@ export const queryKeys = {
       department?: string;
       role?: string;
       service_type?: string;
-      operations_role?: string;
     }) => ["users", "filtered", filters] as const,
     teamMembers: (teamId: string) => ["users", "team", teamId] as const,
   },
@@ -134,5 +133,17 @@ export const queryKeys = {
     all: () => ["inquiries"] as const,
     list: () => ["inquiries", "list"] as const,
     detail: (id: string) => ["inquiries", id] as const,
+  },
+  calendar: {
+    all: () => ["calendar"] as const,
+    events: (start: string, end: string) =>
+      ["calendar", "events", start, end] as const,
+    autoEvents: (start: string, end: string) =>
+      ["calendar", "auto", start, end] as const,
+    detail: (id: string) => ["calendar", "detail", id] as const,
+  },
+  workflowTickets: {
+    all: () => ["workflowTickets"] as const,
+    pendingForDept: (dept: string) => ["workflowTickets", "pending", dept] as const,
   },
 };

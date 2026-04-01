@@ -125,8 +125,8 @@ export function ThreadListPanel({
                   padding: "6px 10px",
                   fontSize: 12,
                   fontWeight: isActive ? 600 : 400,
-                  color: isActive ? "#0F766E" : "#667085",
-                  borderBottom: isActive ? "2px solid #0F766E" : "2px solid transparent",
+                  color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
+                  borderBottom: isActive ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                   marginBottom: -1,
                   whiteSpace: "nowrap",
                   background: "none",
@@ -141,8 +141,8 @@ export function ThreadListPanel({
                     fontWeight: 600,
                     padding: "1px 5px",
                     borderRadius: 10,
-                    backgroundColor: isActive ? "var(--neuron-state-selected)" : "#F4F6F5",
-                    color: isActive ? "var(--neuron-brand-green)" : "#6B7A76",
+                    backgroundColor: isActive ? "var(--neuron-state-selected)" : "var(--theme-bg-page)",
+                    color: isActive ? "var(--neuron-brand-green)" : "var(--theme-text-muted)",
                     marginLeft: 2,
                   }}>
                     {tab.count}

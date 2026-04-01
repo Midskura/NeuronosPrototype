@@ -16,7 +16,7 @@ interface ServiceBookingRowProps {
 
 export function ServiceBookingRow({
   icon: Icon,
-  iconColor = "#0F766E",
+  iconColor = "var(--theme-action-primary-bg)",
   bookingId,
   projectNumber,
   customerName,

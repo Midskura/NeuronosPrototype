@@ -181,12 +181,12 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
             {/* Bookings count badge */}
             <div style={{
               padding: "4px 12px",
-              backgroundColor: hasBookings ? "#E8F4F3" : "#F3F4F6",
-              border: `1px solid ${hasBookings ? "var(--neuron-brand-green)" : "#D1D5DB"}`,
+              backgroundColor: hasBookings ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+              border: `1px solid ${hasBookings ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)"}`,
               borderRadius: "12px",
               fontSize: "12px",
               fontWeight: 600,
-              color: hasBookings ? "var(--neuron-brand-green)" : "#6B7280"
+              color: hasBookings ? "var(--neuron-brand-green)" : "var(--theme-text-muted)"
             }}>
               {bookingsForService.length} {bookingsForService.length === 1 ? "Booking" : "Bookings"}
             </div>
@@ -284,7 +284,7 @@ export function ProjectServiceCard({ service, project, currentUser, onUpdate, on
                         transition: "all 0.2s ease"
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = "#F0F9F8";
+                        e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                         e.currentTarget.style.borderColor = "var(--neuron-brand-green)";
                       }}
                       onMouseLeave={(e) => {

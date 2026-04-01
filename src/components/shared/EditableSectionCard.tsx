@@ -161,7 +161,7 @@ export function EditableSectionCard({
                   e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                 }}
               >
                 Cancel
@@ -175,7 +175,7 @@ export function EditableSectionCard({
                   fontSize: "13px",
                   fontWeight: 500,
                   backgroundColor: "var(--theme-action-primary-bg)",
-                  border: "1px solid #0F766E",
+                  border: "1px solid var(--theme-action-primary-bg)",
                   borderRadius: "6px",
                   color: "white",
                   cursor: isSaving ? "wait" : "pointer",

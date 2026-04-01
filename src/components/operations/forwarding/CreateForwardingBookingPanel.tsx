@@ -220,88 +220,101 @@ export function CreateForwardingBookingPanel({
     setIsSubmitting(true);
 
     try {
-      const bookingData: Partial<ForwardingBooking> & {
-        assigned_manager_id?: string;
-        assigned_manager_name?: string;
-        assigned_supervisor_id?: string;
-        assigned_supervisor_name?: string;
-        assigned_handler_id?: string;
-        assigned_handler_name?: string;
-      } = {
-        bookingId: bookingNumber || undefined,
-        projectNumber: projectNumber || undefined,
-        ...(detectedContractId && { contract_id: detectedContractId }),
-        customerName,
-        movement,
-        accountOwner,
-        accountHandler,
+      const autoBookingNumber = bookingNumber.trim() || `FWD-${Date.now()}`;
+
+      const details: Record<string, any> = {
+        project_number: projectNumber || undefined,
+        account_owner: accountOwner,
+        account_handler: accountHandler,
         services,
-        subServices,
-        typeOfEntry,
-        mode,
-        cargoType,
+        sub_services: subServices,
+        type_of_entry: typeOfEntry,
+        cargo_type: cargoType,
         stackability,
-        deliveryAddress,
-        quotationReferenceNumber,
-        status,
-        pendingReason: status === "Pending" ? pendingReason : undefined,
-        completionDate: status === "Completed" ? completionDate : undefined,
-        cancellationReason: status === "Cancelled" ? cancellationReason : undefined,
-        cancelledDate: status === "Cancelled" ? cancelledDate : undefined,
+        delivery_address: deliveryAddress,
+        quotation_reference_number: quotationReferenceNumber,
         consignee,
         consignee_id: consigneeId,
         shipper,
-        mblMawb,
-        hblHawb,
-        registryNumber,
+        mbl_mawb: mblMawb,
+        hbl_hawb: hblHawb,
+        registry_number: registryNumber,
         carrier,
-        aolPol,
-        aodPod,
+        aol_pol: aolPol,
+        aod_pod: aodPod,
         forwarder,
-        commodityDescription,
-        countryOfOrigin,
-        preferentialTreatment,
-        grossWeight,
+        commodity_description: commodityDescription,
+        country_of_origin: countryOfOrigin,
+        preferential_treatment: preferentialTreatment,
+        gross_weight: grossWeight,
         dimensions,
         eta,
-        incoterms: movement === "EXPORT" ? incoterms : undefined,
-        cargoNature: movement === "EXPORT" ? cargoNature : undefined,
-        bookingReferenceNumber: movement === "EXPORT" ? bookingReferenceNumber : undefined,
-        lct: movement === "EXPORT" ? lct : undefined,
-        transitTime: movement === "EXPORT" ? transitTime : undefined,
-        route: movement === "EXPORT" ? route : undefined,
-        tareWeight: (movement === "EXPORT" && mode === "FCL") ? tareWeight : undefined,
-        vgm: (movement === "EXPORT" && mode === "FCL") ? vgm : undefined,
-        truckingName: (movement === "EXPORT" && mode === "FCL") ? truckingName : undefined,
-        plateNumber: (movement === "EXPORT" && mode === "FCL") ? plateNumber : undefined,
-        warehouseAddress: (movement === "EXPORT" && mode === "FCL") ? warehouseAddress : undefined,
-        pickupLocation: (movement === "EXPORT" && mode === "FCL") ? pickupLocation : undefined,
-        containerNumbers: mode === "FCL" ? containerNumbers.split(",").map(c => c.trim()).filter(Boolean) : undefined,
-        containerDeposit: mode === "FCL" ? containerDeposit : undefined,
-        emptyReturn: mode === "FCL" ? emptyReturn : undefined,
-        detDemValidity: mode === "FCL" ? detDemValidity : undefined,
-        storageValidity: mode === "FCL" ? storageValidity : undefined,
-        croAvailability: mode === "FCL" ? croAvailability : undefined,
-        warehouseLocation: (mode === "LCL" || mode === "AIR") ? warehouseLocation : undefined,
-        qty20ft: mode === "FCL" ? qty20ft : undefined,
-        qty40ft: mode === "FCL" ? qty40ft : undefined,
-        qty45ft: mode === "FCL" ? qty45ft : undefined,
-        volumeGrossWeight: mode === "FCL" ? volumeGrossWeight : undefined,
-        volumeDimensions: mode === "FCL" ? volumeDimensions : undefined,
-        volumeChargeableWeight: mode === "FCL" ? volumeChargeableWeight : undefined,
+        pending_reason: status === "Pending" ? pendingReason : undefined,
+        completion_date: status === "Completed" ? completionDate : undefined,
+        cancellation_reason: status === "Cancelled" ? cancellationReason : undefined,
+        cancelled_date: status === "Cancelled" ? cancelledDate : undefined,
+        ...(movement === "EXPORT" && {
+          incoterms,
+          cargo_nature: cargoNature,
+          booking_reference_number: bookingReferenceNumber,
+          lct,
+          transit_time: transitTime,
+          route,
+        }),
+        ...(movement === "EXPORT" && mode === "FCL" && {
+          tare_weight: tareWeight,
+          vgm,
+          trucking_name: truckingName,
+          plate_number: plateNumber,
+          warehouse_address: warehouseAddress,
+          pickup_location: pickupLocation,
+        }),
+        ...(mode === "FCL" && {
+          container_numbers: containerNumbers.split(",").map((c: string) => c.trim()).filter(Boolean),
+          container_deposit: containerDeposit,
+          empty_return: emptyReturn,
+          det_dem_validity: detDemValidity,
+          storage_validity: storageValidity,
+          cro_availability: croAvailability,
+          qty_20ft: qty20ft,
+          qty_40ft: qty40ft,
+          qty_45ft: qty45ft,
+          volume_gross_weight: volumeGrossWeight,
+          volume_dimensions: volumeDimensions,
+          volume_chargeable_weight: volumeChargeableWeight,
+        }),
+        ...((mode === "LCL" || mode === "AIR") && {
+          warehouse_location: warehouseLocation,
+        }),
       };
 
-      // Add team assignments if from Pricing
+      const insertPayload: Record<string, any> = {
+        id: crypto.randomUUID(),
+        booking_number: autoBookingNumber,
+        service_type: 'Forwarding',
+        customer_name: customerName,
+        movement_type: movement,
+        mode,
+        status,
+        details,
+        ...(fetchedProject?.id && { project_id: fetchedProject.id }),
+        ...(detectedContractId && { contract_id: detectedContractId }),
+      };
+
       if (source === "pricing" && teamAssignment) {
-        bookingData.assigned_manager_id = teamAssignment.manager.id;
-        bookingData.assigned_manager_name = teamAssignment.manager.name;
-        bookingData.assigned_supervisor_id = teamAssignment.supervisor?.id;
-        bookingData.assigned_supervisor_name = teamAssignment.supervisor?.name;
-        bookingData.assigned_handler_id = teamAssignment.handler?.id;
-        bookingData.assigned_handler_name = teamAssignment.handler?.name;
+        insertPayload.manager_id = teamAssignment.manager.id;
+        insertPayload.manager_name = teamAssignment.manager.name;
+        if (teamAssignment.supervisor) {
+          insertPayload.supervisor_id = teamAssignment.supervisor.id;
+          insertPayload.supervisor_name = teamAssignment.supervisor.name;
+        }
+        if (teamAssignment.handler) {
+          insertPayload.handler_id = teamAssignment.handler.id;
+          insertPayload.handler_name = teamAssignment.handler.name;
+        }
       }
 
-      const { data: createdBooking, error } = await supabase.from('forwarding_bookings').insert(bookingData).select().single();
+      const { data: createdBooking, error } = await supabase.from('bookings').insert(insertPayload).select().single();
 
       if (error) throw new Error(error.message);
 
@@ -309,8 +322,8 @@ export function CreateForwardingBookingPanel({
         try {
           await linkBookingToProject(
             fetchedProject.id,
-            createdBooking.bookingId,
-            createdBooking.bookingId,
+            createdBooking.id,
+            createdBooking.booking_number,
             "Forwarding",
             createdBooking.status,
           );
@@ -318,7 +331,7 @@ export function CreateForwardingBookingPanel({
           console.error("Error linking booking to project:", linkError);
         }
       }
-      
+
       if (source === "pricing" && teamAssignment?.saveAsDefault && customerId) {
         try {
           await supabase.from('client_handler_preferences').upsert({
@@ -331,8 +344,8 @@ export function CreateForwardingBookingPanel({
           console.error("Error saving team preference:", prefError);
         }
       }
-      
-      toast.success(`Forwarding booking ${createdBooking.bookingId} created successfully`);
+
+      toast.success(`Forwarding booking ${createdBooking.booking_number} created successfully`);
       onBookingCreated(createdBooking);
       onClose();
     } catch (error) {

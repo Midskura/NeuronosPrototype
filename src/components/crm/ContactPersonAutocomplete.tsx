@@ -126,7 +126,7 @@ export function ContactPersonAutocomplete({
             fontSize: "14px",
             outline: "none",
             transition: "border-color 0.2s",
-            backgroundColor: disabled ? "#F9FAFB" : "white",
+            backgroundColor: disabled ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
             cursor: disabled ? "not-allowed" : "text",
             opacity: disabled ? 0.6 : 1,
           }}
@@ -263,7 +263,7 @@ export function ContactPersonAutocomplete({
                   padding: "12px 16px",
                   cursor: "pointer",
                   backgroundColor:
-                    highlightedIndex === index ? "#F3F4F6" : "white",
+                    highlightedIndex === index ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                   borderBottom:
                     index < contacts.length - 1
                       ? "1px solid var(--theme-border-subtle)"

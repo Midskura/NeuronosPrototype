@@ -1,4 +1,4 @@
-import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock, AlertCircle, Loader2 } from "lucide-react";
+import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock, AlertCircle, Loader2, BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
 import { supabase } from "../../../utils/supabase/client";
@@ -15,6 +15,7 @@ import {
   isInvoiceReversedOriginal,
 } from "../../../utils/invoiceReversal";
 import { toast } from "../../ui/toast-utils";
+import { InvoiceGLPostingSheet } from "../invoices/InvoiceGLPostingSheet";
 
 interface BillingDetailsSheetProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
   const [reversalDocument, setReversalDocument] = useState<any | null>(null);
   const [isCreatingReversal, setIsCreatingReversal] = useState(false);
   const [isCompletingReversal, setIsCompletingReversal] = useState(false);
+  const [showGLPosting, setShowGLPosting] = useState(false);
 
   useEffect(() => {
     async function fetchBilling() {
@@ -113,13 +115,13 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
       case "paid":
         return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "partial":
-        return { bg: "#FEF3E7", color: "#C88A2B" };
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       case "unpaid":
-        return { bg: "#FEE2E2", color: "var(--theme-status-danger-fg)" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "overdue":
-        return { bg: "#FEE2E2", color: "#991B1B" };
+        return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
       case "invoiced":
-        return { bg: "#EFF6FF", color: "#1D4ED8" };
+        return { bg: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" };
       case "pending":
         return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)" };
       default:
@@ -365,7 +367,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {billing.line_items?.map((item: any, index: number) => (
+                      {((billing as any).metadata?.line_items ?? billing.line_items ?? []).map((item: any, index: number) => (
                         <tr key={index}>
                           <td className="px-4 py-3">
                             <div className="font-medium text-[var(--theme-text-primary)]">{item.description}</div>
@@ -429,6 +431,19 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                  </div>
               </div>
 
+              {billing.invoice_number && !billing.journal_entry_id && !isInvoiceReversalPosted(billing) && !isInvoiceReversedOriginal(billing) && (
+                <div style={{ marginBottom: "16px" }}>
+                  <button
+                    onClick={() => setShowGLPosting(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-white"
+                    style={{ backgroundColor: "var(--neuron-brand-green, #0F766E)" }}
+                  >
+                    <BookOpen size={14} />
+                    Post to GL
+                  </button>
+                </div>
+              )}
+
               {billing.invoice_number && (
                 <div
                   style={{
@@ -436,7 +451,7 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                     borderRadius: "12px",
                     padding: "16px 18px",
                     marginBottom: "24px",
-                    backgroundColor: linkedCollectionCount > 0 ? "#FEF2F2" : reversalDocument ? "#F0FDF9" : "#F9FAFB",
+                    backgroundColor: linkedCollectionCount > 0 ? "var(--theme-status-danger-bg)" : reversalDocument ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", alignItems: "center" }}>
@@ -445,15 +460,15 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                         Reversal Control
                       </div>
                       {linkedCollectionCount > 0 ? (
-                        <div style={{ fontSize: "13px", color: "#991B1B", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-status-danger-fg)", lineHeight: 1.5 }}>
                           {linkedCollectionCount} collection record(s) are linked to this invoice. Resolve customer credit or refund handling before creating a reversal draft.
                         </div>
                       ) : isInvoiceReversalPosted(billing) || isInvoiceReversedOriginal(billing) ? (
-                        <div style={{ fontSize: "13px", color: "#166534", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-status-success-fg)", lineHeight: 1.5 }}>
                           This invoice has already been reversed. The original document is preserved and no longer counts as active AR.
                         </div>
                       ) : reversalDocument ? (
-                        <div style={{ fontSize: "13px", color: "#166534", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-status-success-fg)", lineHeight: 1.5 }}>
                           {isInvoiceReversalDraft(reversalDocument)
                             ? <>Reversal draft created: <strong>{reversalDocument.invoice_number || reversalDocument.id}</strong>. Keep the original invoice intact and complete the cancellation from this reversal workflow.</>
                             : <>Reversal posted: <strong>{reversalDocument.invoice_number || reversalDocument.id}</strong>. The original invoice is preserved for audit history and excluded from active AR.</>}
@@ -473,8 +488,8 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                             disabled={isCreatingReversal}
                             style={{
                               border: "1px solid #12332B",
-                              backgroundColor: isCreatingReversal ? "#E5E7EB" : "#12332B",
-                              color: isCreatingReversal ? "#6B7280" : "#FFFFFF",
+                              backgroundColor: isCreatingReversal ? "var(--theme-border-default)" : "var(--theme-text-primary)",
+                              color: isCreatingReversal ? "var(--theme-text-muted)" : "#FFFFFF",
                               borderRadius: "10px",
                               padding: "10px 14px",
                               fontSize: "12px",
@@ -498,8 +513,8 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
                             disabled={isCompletingReversal}
                             style={{
                               border: "1px solid #0F766E",
-                              backgroundColor: isCompletingReversal ? "#E5E7EB" : "#ECFDF5",
-                              color: isCompletingReversal ? "#6B7280" : "#0F766E",
+                              backgroundColor: isCompletingReversal ? "var(--theme-border-default)" : "var(--theme-status-success-bg)",
+                              color: isCompletingReversal ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)",
                               borderRadius: "10px",
                               padding: "10px 14px",
                               fontSize: "12px",
@@ -548,6 +563,19 @@ export function BillingDetailsSheet({ isOpen, onClose, billingId }: BillingDetai
             </div>
           ) : null}
         </div>
+
+      {billingId && (
+        <InvoiceGLPostingSheet
+          isOpen={showGLPosting}
+          onClose={() => setShowGLPosting(false)}
+          invoiceId={billingId}
+          onPosted={() => {
+            setShowGLPosting(false);
+            // refetch to reflect updated journal_entry_id
+            setBilling(prev => prev ? { ...prev, journal_entry_id: "__posted__" } : prev);
+          }}
+        />
+      )}
     </SidePanel>
   );
 }

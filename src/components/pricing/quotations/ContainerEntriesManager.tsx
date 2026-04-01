@@ -131,7 +131,7 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: disabled ? "#F9FAFB" : "white",
+                    backgroundColor: disabled ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -159,14 +159,14 @@ export function ContainerEntriesManager({ containers, onChange, disabled = false
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor: "var(--theme-bg-surface)",
-                  border: "1px solid #FCA5A5",
+                  border: "1px solid var(--theme-status-danger-border)",
                   borderRadius: "6px",
                   color: "var(--theme-status-danger-fg)",
                   cursor: "pointer",
                   transition: "all 0.15s ease"
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = "#FEE2E2";
+                  e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
                 }}
                 onMouseOut={(e) => {
                   e.currentTarget.style.backgroundColor = "white";

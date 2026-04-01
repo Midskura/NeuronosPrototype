@@ -55,7 +55,7 @@ export function AddAccountForm({ onSuccess, onCancel }: AddAccountFormProps) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. BDO Savings"
-              className="w-full h-11 px-4 rounded-lg border border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-[var(--theme-text-muted)] text-[var(--theme-text-primary)]"
+              className="w-full h-11 px-4 rounded-lg border border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)] text-[var(--theme-text-primary)]"
               autoFocus
               required
             />
@@ -127,7 +127,7 @@ export function AddAccountForm({ onSuccess, onCancel }: AddAccountFormProps) {
                 value={balance}
                 onChange={(e) => setBalance(e.target.value)}
                 placeholder="0.00"
-                className="w-full h-11 pl-10 pr-4 rounded-lg border border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-[var(--theme-text-muted)] text-[var(--theme-text-primary)] font-mono"
+                className="w-full h-11 pl-10 pr-4 rounded-lg border border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)] text-[var(--theme-text-primary)] font-mono"
               />
             </div>
           </div>

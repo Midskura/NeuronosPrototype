@@ -13,23 +13,23 @@ export function getBookingStatusStyles(status: ExecutionStatus): StatusStyle {
   switch (status) {
     case "Draft":
       return {
-        bg: "#F3F4F6",
-        text: "#6B7280",
+        bg: "var(--neuron-pill-inactive-bg)",
+        text: "var(--theme-text-muted)",
         icon: FileText,
-        borderColor: "#E5E7EB"
+        borderColor: "var(--theme-border-default)"
       };
 
     case "Confirmed":
       return {
-        bg: "#EFF6FF",
-        text: "#1D4ED8",
+        bg: "var(--neuron-semantic-info-bg)",
+        text: "var(--neuron-semantic-info)",
         icon: CheckCircle2,
-        borderColor: "#DBEAFE"
+        borderColor: "var(--neuron-semantic-info-bg)"
       };
 
     case "In Progress":
       return {
-        bg: "#FFF7ED",
+        bg: "var(--neuron-dept-ops-bg)",
         text: "#F25C05",
         icon: Truck,
         borderColor: "#FFEDD5"
@@ -38,42 +38,42 @@ export function getBookingStatusStyles(status: ExecutionStatus): StatusStyle {
     case "Delivered":
     case "Completed":
       return {
-        bg: "#ECFDF5",
+        bg: "var(--theme-status-success-bg)",
         text: "#059669",
         icon: CheckCircle2,
-        borderColor: "#D1FAE5"
+        borderColor: "var(--theme-status-success-bg)"
       };
 
     case "On Hold":
       return {
-        bg: "#FFFBEB",
-        text: "#D97706",
+        bg: "var(--theme-status-warning-bg)",
+        text: "var(--theme-status-warning-fg)",
         icon: AlertCircle,
-        borderColor: "#FEF3C7"
+        borderColor: "var(--theme-status-warning-bg)"
       };
 
     case "Cancelled":
       return {
-        bg: "#FEF2F2",
-        text: "#DC2626",
+        bg: "var(--theme-status-danger-bg)",
+        text: "var(--theme-status-danger-fg)",
         icon: XCircle,
-        borderColor: "#FEE2E2"
+        borderColor: "var(--theme-status-danger-bg)"
       };
 
     case "Closed":
       return {
-        bg: "#F9FAFB",
-        text: "#4B5563",
+        bg: "var(--neuron-pill-inactive-bg)",
+        text: "var(--theme-text-secondary)",
         icon: FileText,
-        borderColor: "#E5E7EB"
+        borderColor: "var(--theme-border-default)"
       };
 
     default:
       return {
-        bg: "#F3F4F6",
-        text: "#6B7280",
+        bg: "var(--neuron-pill-inactive-bg)",
+        text: "var(--theme-text-muted)",
         icon: FileText,
-        borderColor: "#E5E7EB"
+        borderColor: "var(--theme-border-default)"
       };
   }
 }

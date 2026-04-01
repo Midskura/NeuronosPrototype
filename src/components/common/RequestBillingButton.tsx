@@ -68,8 +68,8 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
           gap: 6,
           padding: "8px 14px",
           borderRadius: 8,
-          border: "1px solid #C8E6E2",
-          backgroundColor: "#F0F7F5",
+          border: "1px solid var(--theme-status-success-border)",
+          backgroundColor: "var(--theme-bg-surface-tint)",
           fontSize: 13,
           fontWeight: 500,
           color: "var(--theme-action-primary-bg)",
@@ -92,17 +92,17 @@ export function RequestBillingButton({ bookingId, bookingNumber, currentUser }: 
         padding: "8px 14px",
         borderRadius: 8,
         border: "1px solid var(--theme-border-default)",
-        backgroundColor: isLoading ? "#F9FAFB" : "#FFFFFF",
+        backgroundColor: isLoading ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
         fontSize: 13,
         fontWeight: 500,
-        color: isLoading ? "#9CA3AF" : "#374151",
+        color: isLoading ? "var(--theme-text-muted)" : "var(--theme-text-secondary)",
         cursor: isLoading ? "not-allowed" : "pointer",
         transition: "all 150ms ease",
       }}
       onMouseEnter={(e) => {
         if (!isLoading) {
-          e.currentTarget.style.backgroundColor = "#F0F7F5";
-          e.currentTarget.style.borderColor = "#C8E6E2";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
+          e.currentTarget.style.borderColor = "var(--theme-status-success-border)";
           e.currentTarget.style.color = "var(--theme-action-primary-bg)";
         }
       }}

@@ -349,13 +349,13 @@ export async function linkBookingToProject(
       return { success: false, error: fetchErr?.message || 'Project not found' };
     }
     
-    // Add booking to linkedBookings array
-    const linkedBookings = project.linkedBookings || project.linked_bookings || [];
+    // Add booking to linked_bookings array
+    const linkedBookings = project.linked_bookings || [];
     linkedBookings.push({ bookingId, bookingNumber, serviceType, status });
-    
+
     const { error: updateErr } = await supabase
       .from('projects')
-      .update({ linkedBookings, updated_at: new Date().toISOString() })
+      .update({ linked_bookings: linkedBookings, updated_at: new Date().toISOString() })
       .eq('id', projectId);
     
     if (updateErr) return { success: false, error: updateErr.message };
@@ -383,12 +383,12 @@ export async function unlinkBookingFromProject(
       return { success: false, error: fetchErr?.message || 'Project not found' };
     }
     
-    const linkedBookings = (project.linkedBookings || project.linked_bookings || [])
+    const linkedBookings = (project.linked_bookings || [])
       .filter((b: any) => b.bookingId !== bookingId);
-    
+
     const { error: updateErr } = await supabase
       .from('projects')
-      .update({ linkedBookings, updated_at: new Date().toISOString() })
+      .update({ linked_bookings: linkedBookings, updated_at: new Date().toISOString() })
       .eq('id', projectId);
     
     if (updateErr) return { success: false, error: updateErr.message };

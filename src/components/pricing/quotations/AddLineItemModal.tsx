@@ -378,7 +378,7 @@ export function AddLineItemModal({
               <div style={{
                 padding: "12px 16px",
                 backgroundColor: "var(--theme-bg-surface-tint)",
-                border: "1px solid #0F766E",
+                border: "1px solid var(--theme-action-primary-bg)",
                 borderRadius: "6px"
               }}>
                 <div style={{
@@ -442,7 +442,7 @@ export function AddLineItemModal({
                 fontSize: "13px",
                 fontWeight: 600,
                 color: "white",
-                backgroundColor: isFormValid() ? "var(--neuron-brand-green)" : "#D1D5DB",
+                backgroundColor: isFormValid() ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)",
                 border: "none",
                 borderRadius: "6px",
                 cursor: isFormValid() ? "pointer" : "not-allowed"

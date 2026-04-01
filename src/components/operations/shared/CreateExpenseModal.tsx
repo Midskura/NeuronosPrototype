@@ -107,7 +107,7 @@ export function CreateExpenseModal({
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="e.g., Container trucking, Storage charges"
-                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
               />
             </div>
 
@@ -124,7 +124,7 @@ export function CreateExpenseModal({
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
@@ -135,7 +135,7 @@ export function CreateExpenseModal({
                 <select
                   value={currency}
                   onChange={(e) => setCurrency(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="PHP">PHP</option>
                   <option value="USD">USD</option>
@@ -155,7 +155,7 @@ export function CreateExpenseModal({
                   value={vendor}
                   onChange={(e) => setVendor(e.target.value)}
                   placeholder="Vendor or supplier name"
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
@@ -166,7 +166,7 @@ export function CreateExpenseModal({
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="">Select category...</option>
                   {EXPENSE_CATEGORIES.map(cat => (
@@ -185,7 +185,7 @@ export function CreateExpenseModal({
                   type="date"
                   value={expenseDate}
                   onChange={(e) => setExpenseDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 />
               </div>
 
@@ -196,7 +196,7 @@ export function CreateExpenseModal({
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value as "Pending" | "Approved" | "Paid")}
-                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                  className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 >
                   <option value="Pending">Pending</option>
                   <option value="Approved">Approved</option>
@@ -214,7 +214,7 @@ export function CreateExpenseModal({
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="Additional notes or comments..."
-                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                className="w-full px-3 py-2 border border-[var(--theme-text-primary)]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
               />
             </div>
           </div>
@@ -226,7 +226,7 @@ export function CreateExpenseModal({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="px-4 py-2 text-[var(--theme-text-primary)] hover:bg-[#12332B]/5 rounded-lg transition-colors disabled:opacity-50"
+            className="px-4 py-2 text-[var(--theme-text-primary)] hover:bg-[var(--theme-text-primary)]/5 rounded-lg transition-colors disabled:opacity-50"
           >
             Cancel
           </button>

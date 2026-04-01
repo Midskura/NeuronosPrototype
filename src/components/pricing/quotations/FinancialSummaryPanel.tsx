@@ -117,7 +117,7 @@ export function FinancialSummaryPanel({
           <div style={{
             padding: "12px",
             backgroundColor: "var(--theme-status-warning-bg)",
-            border: "1px solid #F59E0B",
+            border: "1px solid var(--theme-status-warning-fg)",
             borderRadius: "6px"
           }}>
             <label style={{
@@ -144,7 +144,7 @@ export function FinancialSummaryPanel({
                   padding: "6px 10px",
                   fontSize: "14px",
                   fontWeight: 600,
-                  border: "1px solid #F59E0B",
+                  border: "1px solid var(--theme-status-warning-fg)",
                   borderRadius: "4px",
                   backgroundColor: "var(--theme-bg-surface)"
                 }}

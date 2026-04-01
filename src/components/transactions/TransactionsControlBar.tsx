@@ -75,7 +75,7 @@ export function TransactionsControlBar({
             placeholder="Search desc, payee, amount..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] transition-all placeholder:text-[var(--theme-text-muted)]"
+            className="w-full pl-9 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] focus:border-[var(--theme-action-primary-bg)] transition-all placeholder:text-[var(--theme-text-muted)]"
           />
         </div>
 

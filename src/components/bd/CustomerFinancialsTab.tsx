@@ -65,7 +65,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
   const chartData = [
     { name: "Total Billed", amount: totalBilled, fill: "#0F766E" },
     { name: "Collected", amount: totalCollected, fill: "#059669" },
-    { name: "Outstanding", amount: outstandingBalance, fill: "#C05621" }
+    { name: "Outstanding", amount: outstandingBalance, fill: "var(--theme-status-warning-fg)" }
   ];
 
   return (
@@ -110,12 +110,12 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
               border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#F0FDF4", color: "#15803D" }}>
+                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" }}>
                   <CreditCard size={16} />
                 </div>
                 <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Total Collected</span>
               </div>
-              <div style={{ fontSize: "24px", fontWeight: 700, color: "#15803D" }}>{formatCurrency(totalCollected)}</div>
+              <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--theme-status-success-fg)" }}>{formatCurrency(totalCollected)}</div>
             </div>
 
             <div style={{ 
@@ -125,12 +125,12 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
               border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#FFF7ED", color: "#C05621" }}>
+                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" }}>
                   <DollarSign size={16} />
                 </div>
                 <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Outstanding</span>
               </div>
-              <div style={{ fontSize: "24px", fontWeight: 700, color: "#C05621" }}>{formatCurrency(outstandingBalance)}</div>
+              <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--theme-status-warning-fg)" }}>{formatCurrency(outstandingBalance)}</div>
             </div>
 
             <div style={{ 
@@ -140,12 +140,12 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
               border: "1px solid var(--theme-border-default)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "#EFF6FF", color: "#1D4ED8" }}>
+                <div style={{ padding: "6px", borderRadius: "6px", backgroundColor: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" }}>
                   <Activity size={16} />
                 </div>
                 <span style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-muted)" }}>Collection Rate</span>
               </div>
-              <div style={{ fontSize: "24px", fontWeight: 700, color: "#1D4ED8" }}>{collectionRate.toFixed(1)}%</div>
+              <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--neuron-semantic-info)" }}>{collectionRate.toFixed(1)}%</div>
             </div>
           </div>
 
@@ -196,7 +196,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                           <span style={{ 
                             fontSize: "12px", 
                             fontWeight: 500, 
-                            color: item.type === "Invoice" ? "#0F766E" : "#059669"
+                            color: item.type === "Invoice" ? "var(--theme-action-primary-bg)" : "var(--theme-status-success-fg)"
                           }}>
                             {item.ref}
                           </span>
@@ -205,7 +205,7 @@ export function CustomerFinancialsTab({ customer }: CustomerFinancialsTabProps) 
                            {item.description || item.type}
                         </td>
                         <td style={{ padding: "12px 8px", textAlign: "right", fontWeight: 600 }}>
-                          <span style={{ color: item.type === "Invoice" ? "#374151" : "#059669" }}>
+                          <span style={{ color: item.type === "Invoice" ? "var(--theme-text-secondary)" : "var(--theme-status-success-fg)" }}>
                             {item.type === "Payment" ? "-" : ""}{formatCurrency(item.amount)}
                           </span>
                         </td>

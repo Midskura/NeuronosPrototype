@@ -147,20 +147,20 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
               <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-surface-tint)] flex justify-between items-center">
                   <h3 className="text-[13px] font-bold text-[var(--theme-action-primary-bg)] uppercase tracking-wide">Income Breakdown</h3>
                   {unbilledCharges > 0 && (
-                     <span className="text-[11px] font-medium text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)] px-2 py-0.5 rounded border border-[#CCFBEF]">
+                     <span className="text-[11px] font-medium text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface)] px-2 py-0.5 rounded border border-[var(--theme-status-success-border)]">
                        Includes {fmt(unbilledCharges)} Unbilled
                      </span>
                   )}
               </div>
               <div className="p-0">
                   <table className="w-full">
-                      <thead className="bg-[#F8F9FB] border-b border-[var(--theme-border-default)]">
+                      <thead className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
                           <tr>
                               <th className="px-6 py-3 text-left text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Category</th>
                               <th className="px-6 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Amount</th>
                           </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#E5E9F0]">
+                      <tbody className="divide-y divide-[var(--theme-border-default)]">
                           {Object.entries(incomeByCategory).map(([category, amount], idx) => (
                               <tr key={idx} className="hover:bg-[var(--theme-bg-page)]">
                                   <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)] font-medium">{category}</td>
@@ -173,7 +173,7 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                               </tr>
                           )}
                       </tbody>
-                      <tfoot className="bg-[#F8F9FB] border-t border-[var(--theme-border-default)]">
+                      <tfoot className="bg-[var(--theme-bg-page)] border-t border-[var(--theme-border-default)]">
                           <tr>
                               <td className="px-6 py-3 text-[13px] font-bold text-[var(--theme-text-primary)]">Total Income</td>
                               <td className="px-6 py-3 text-[13px] font-bold text-right text-[var(--theme-action-primary-bg)]">{fmt(bookedCharges)}</td>
@@ -185,22 +185,22 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
 
           {/* Cost Breakdown */}
           <div className="bg-[var(--theme-bg-surface)] rounded-xl border border-[var(--theme-border-default)] overflow-hidden">
-              <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[#FFF7ED]">
-                  <h3 className="text-[13px] font-bold text-[#C05621] uppercase tracking-wide">Cost Breakdown</h3>
+              <div className="px-6 py-4 border-b border-[var(--theme-border-default)] bg-[var(--theme-status-warning-bg)]">
+                  <h3 className="text-[13px] font-bold text-[var(--theme-status-warning-fg)] uppercase tracking-wide">Cost Breakdown</h3>
               </div>
               <div className="p-0">
                   <table className="w-full">
-                      <thead className="bg-[#F8F9FB] border-b border-[var(--theme-border-default)]">
+                      <thead className="bg-[var(--theme-bg-page)] border-b border-[var(--theme-border-default)]">
                           <tr>
                               <th className="px-6 py-3 text-left text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Expense Type</th>
                               <th className="px-6 py-3 text-right text-[11px] font-semibold text-[var(--theme-text-muted)] uppercase tracking-[0.02em]">Amount</th>
                           </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#E5E9F0]">
+                      <tbody className="divide-y divide-[var(--theme-border-default)]">
                           {Object.entries(costByCategory).map(([category, amount], idx) => (
                               <tr key={idx} className="hover:bg-[var(--theme-bg-page)]">
                                   <td className="px-6 py-3 text-[13px] text-[var(--theme-text-primary)] font-medium">{category}</td>
-                                  <td className="px-6 py-3 text-[13px] text-right text-[#C05621] font-medium">{fmt(amount)}</td>
+                                  <td className="px-6 py-3 text-[13px] text-right text-[var(--theme-status-warning-fg)] font-medium">{fmt(amount)}</td>
                               </tr>
                           ))}
                           {Object.keys(costByCategory).length === 0 && (
@@ -209,10 +209,10 @@ export function ProjectFinancialOverview({ financials }: ProjectFinancialOvervie
                               </tr>
                           )}
                       </tbody>
-                      <tfoot className="bg-[#F8F9FB] border-t border-[var(--theme-border-default)]">
+                      <tfoot className="bg-[var(--theme-bg-page)] border-t border-[var(--theme-border-default)]">
                           <tr>
                               <td className="px-6 py-3 text-[13px] font-bold text-[var(--theme-text-primary)]">Total Costs</td>
-                              <td className="px-6 py-3 text-[13px] font-bold text-right text-[#C05621]">{fmt(directCost)}</td>
+                              <td className="px-6 py-3 text-[13px] font-bold text-right text-[var(--theme-status-warning-fg)]">{fmt(directCost)}</td>
                           </tr>
                       </tfoot>
                   </table>

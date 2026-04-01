@@ -193,8 +193,8 @@ export function AddTaskPanel({ isOpen, onClose, onSave }: AddTaskPanelProps) {
               </label>
               <CustomDropdown
                 options={[
-                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "#10B981" }} /> },
-                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "#F59E0B" }} /> },
+                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
+                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
                   { value: "High", label: "High", icon: <Flag size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                 ]}
                 value={taskData.priority || "Medium"}

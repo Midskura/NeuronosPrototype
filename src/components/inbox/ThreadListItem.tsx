@@ -55,8 +55,8 @@ export function ThreadListItem({ thread, isSelected, onClick }: ThreadListItemPr
       onClick={onClick}
       className="w-full text-left"
       style={{
-        borderLeft: isSelected ? "2px solid #0F766E" : "2px solid transparent",
-        backgroundColor: isSelected ? "#F0F7F5" : "transparent",
+        borderLeft: isSelected ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+        backgroundColor: isSelected ? "var(--theme-bg-surface-tint)" : "transparent",
         padding: "12px 16px 12px 14px",
         borderBottom: "1px solid var(--theme-border-default)",
         display: "block",

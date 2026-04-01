@@ -12,10 +12,13 @@ import { EditableSectionCard, useSectionEdit } from "../shared/EditableSectionCa
 import { EditableField } from "../shared/EditableField";
 import { ConsigneeInfoBadge } from "../shared/ConsigneeInfoBadge";
 import { supabase } from "../../utils/supabase/client";
+import { BookingPendingEVStrip } from "./shared/BookingPendingEVStrip";
 import { assessBookingFinancialState, canTransitionBookingToCancelled, getBookingCancellationStatusMessage, voidBookingUnbilledCharges, canHardDeleteBooking, getBookingCancellationMessage } from "../../utils/bookingCancellation";
 import { LinkedTicketBadge } from "../common/LinkedTicketBadge";
 import { RequestBillingButton } from "../common/RequestBillingButton";
 import { loadBookingActivityLog, appendBookingActivity } from "../../utils/bookingActivityLog";
+import { useUser } from "../../hooks/useUser";
+import { fireBillingTicketOnCompletion } from "../../utils/workflowTickets";
 import { BookingCommentsTab } from "../shared/BookingCommentsTab";
 import { useQuery } from "@tanstack/react-query";
 
@@ -131,14 +134,14 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
         Activity Timeline
       </h3>
       <div style={{ position: "relative" }}>
-        <div style={{ position: "absolute", left: "15px", top: "0", bottom: "0", width: "2px", backgroundColor: "#E5E7EB" }} />
+        <div style={{ position: "absolute", left: "15px", top: "0", bottom: "0", width: "2px", backgroundColor: "var(--theme-border-default)" }} />
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {activities.map((activity) => (
             <div key={activity.id} style={{ position: "relative", paddingLeft: "40px" }}>
               <div style={{
                 position: "absolute", left: "8px", top: "4px", width: "16px", height: "16px", borderRadius: "50%",
-                backgroundColor: activity.action === "status_changed" ? "#0F766E" : activity.action === "created" ? "#6B7280" : activity.action === "field_updated" ? "#3B82F6" : "#F59E0B",
-                border: "3px solid #FAFBFC"
+                backgroundColor: activity.action === "status_changed" ? "var(--theme-action-primary-bg)" : activity.action === "created" ? "var(--theme-text-muted)" : activity.action === "field_updated" ? "var(--neuron-semantic-info)" : "var(--theme-status-warning-fg)",
+                border: "3px solid var(--neuron-pill-inactive-bg)"
               }} />
               <div style={{ backgroundColor: "var(--theme-bg-surface)", border: "1px solid var(--neuron-ui-border)", borderRadius: "8px", padding: "12px 16px" }}>
                 <div style={{ fontSize: "11px", color: "var(--neuron-ink-muted)", marginBottom: "6px" }}>
@@ -155,7 +158,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                           {activity.oldValue || "(empty)"}
                         </span>
                         <ChevronRight size={12} />
-                        <span style={{ padding: "2px 8px", backgroundColor: "var(--theme-status-success-bg)", borderRadius: "4px", color: "#10B981" }}>
+                        <span style={{ padding: "2px 8px", backgroundColor: "var(--theme-status-success-bg)", borderRadius: "4px", color: "var(--theme-status-success-fg)" }}>
                           {activity.newValue}
                         </span>
                       </div>
@@ -182,6 +185,7 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
   );
   const [showTimeline, setShowTimeline] = useState(false);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(initialActivityLog);
+  const { user } = useUser();
   const [editedBooking, setEditedBooking] = useState<BrokerageBooking>(booking);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
@@ -269,6 +273,15 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
       if (error) throw error;
       toast.success(`Status updated to ${newStatus}`);
       onUpdate();
+      if (newStatus === "Completed" && user?.id) {
+        fireBillingTicketOnCompletion({
+          bookingId: booking.id || booking.bookingId,
+          bookingNumber: (booking as any).booking_number || booking.bookingId,
+          userId: user.id,
+          userName: currentUser?.name || user.name || "Operations",
+          userDept: currentUser?.department || user.department || "Operations",
+        });
+      }
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status");
@@ -282,9 +295,9 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
 
   const tabStyle = (tab: DetailTab) => ({
     padding: "0 4px", fontSize: "14px", fontWeight: 500,
-    color: activeTab === tab ? "#0F766E" : "var(--neuron-ink-muted)",
+    color: activeTab === tab ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
     background: "none", borderTop: "none", borderLeft: "none", borderRight: "none",
-    borderBottom: activeTab === tab ? "2px solid #0F766E" : "2px solid transparent",
+    borderBottom: activeTab === tab ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
     cursor: "pointer" as const, transition: "all 0.2s", height: "100%"
   });
 
@@ -325,10 +338,10 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
           <button onClick={() => setActiveTab("comments")} style={tabStyle("comments")}>Comments</button>
         </div>
         <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-          <button onClick={() => setShowTimeline(!showTimeline)} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px", backgroundColor: showTimeline ? "#E8F2EE" : "white", border: `1px solid ${showTimeline ? "#0F766E" : "var(--neuron-ui-border)"}`, borderRadius: "6px", fontSize: "13px", fontWeight: 500, color: showTimeline ? "#0F766E" : "var(--neuron-ink-secondary)", cursor: "pointer", transition: "all 0.2s ease" }}>
+          <button onClick={() => setShowTimeline(!showTimeline)} style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 16px", backgroundColor: showTimeline ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)", border: `1px solid ${showTimeline ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-border)"}`, borderRadius: "6px", fontSize: "13px", fontWeight: 500, color: showTimeline ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-secondary)", cursor: "pointer", transition: "all 0.2s ease" }}>
             <Clock size={16} /> Activity
           </button>
-          <div style={{ padding: "8px 16px", borderRadius: "6px", fontSize: "13px", fontWeight: 600, backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA", color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E", border: `1px solid ${booking.movement === "EXPORT" ? "#FED7AA" : "#99F6E4"}` }}>
+          <div style={{ padding: "8px 16px", borderRadius: "6px", fontSize: "13px", fontWeight: 600, backgroundColor: booking.movement === "EXPORT" ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)", color: booking.movement === "EXPORT" ? "#C2410C" : "var(--theme-action-primary-bg)", border: `1px solid ${booking.movement === "EXPORT" ? "var(--theme-status-warning-border)" : "var(--theme-status-success-border)"}` }}>
             {booking.movement || "IMPORT"}
           </div>
           <div style={{ position: "relative" }} ref={moreMenuRef}>
@@ -352,7 +365,7 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
                 <button
                   onClick={handleDeleteFromDetail}
                   style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-status-danger-fg)", textAlign: "left" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEF2F2")}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
                   Delete Booking
@@ -363,6 +376,8 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
         </div>
       </div>
 
+      <BookingPendingEVStrip bookingId={booking.bookingId} />
+
       {/* Content */}
       <div style={{ flex: 1, overflow: "hidden", display: "flex" }}>
         <div style={{ flex: showTimeline ? "0 0 65%" : "1", overflow: "auto", transition: "flex 0.3s ease" }}>
@@ -371,7 +386,7 @@ export function BrokerageBookingDetails({ booking, onBack, onUpdate, currentUser
           {activeTab === "expenses" && <ExpensesTab bookingId={booking.bookingId} bookingType="brokerage" currentUser={currentUser} highlightId={activeTab === "expenses" ? highlightId : undefined} existingBillingItems={bookingBillingItems} onPendingCountChange={setPendingBillableCount} />}
           {activeTab === "comments" && <BookingCommentsTab bookingId={booking.bookingId} currentUserId={currentUser?.email || "unknown"} currentUserName={currentUser?.name || "Unknown User"} currentUserDepartment={currentUser?.department || "Operations"} />}
         </div>
-        {showTimeline && <div style={{ flex: "0 0 35%", borderLeft: "1px solid var(--neuron-ui-border)", backgroundColor: "#FAFBFC", overflow: "auto" }}><ActivityTimeline activities={activityLog} /></div>}
+        {showTimeline && <div style={{ flex: "0 0 35%", borderLeft: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--neuron-pill-inactive-bg)", overflow: "auto" }}><ActivityTimeline activities={activityLog} /></div>}
       </div>
     </div>
   );

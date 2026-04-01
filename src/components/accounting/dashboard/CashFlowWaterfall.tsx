@@ -64,9 +64,9 @@ export function CashFlowWaterfall({
   const maxAmt = Math.max(invoicedRevenue, totalExpenses, totalCollected, paidExpenses, 1);
 
   const colorMap = {
-    inflow: "#0F766E",
-    outflow: "#DC2626",
-    net: "#12332B",
+    inflow: "var(--theme-action-primary-bg)",
+    outflow: "var(--theme-status-danger-fg)",
+    net: "var(--theme-text-primary)",
   };
 
   const iconMap = {
@@ -76,9 +76,9 @@ export function CashFlowWaterfall({
   };
 
   const bgMap = {
-    inflow: "#ECFDF5",
-    outflow: "#FEF2F2",
-    net: "#F0FDFA",
+    inflow: "var(--theme-status-success-bg)",
+    outflow: "var(--theme-status-danger-bg)",
+    net: "var(--theme-status-success-bg)",
   };
 
   function renderSection(title: string, rows: FlowRow[]) {
@@ -115,7 +115,7 @@ export function CashFlowWaterfall({
                 <div className="flex items-center justify-between mb-1">
                   <span
                     className="text-[12px] font-medium"
-                    style={{ color: row.type === "net" ? "#12332B" : "#667085" }}
+                    style={{ color: row.type === "net" ? "var(--theme-text-primary)" : "var(--theme-text-muted)" }}
                   >
                     {row.label}
                   </span>
@@ -176,7 +176,7 @@ export function CashFlowWaterfall({
         {renderSection("Accrual Basis", accrualRows)}
 
         {/* Divider */}
-        <div style={{ borderTop: "1px dashed #E5E9F0" }} />
+        <div style={{ borderTop: "1px dashed var(--theme-border-default)" }} />
 
         {renderSection("Cash Basis", cashRows)}
       </div>

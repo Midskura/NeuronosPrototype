@@ -42,9 +42,9 @@ function PermCell({
   onToggle?: () => void;
 }) {
   const iconEl = granted ? (
-    <Check size={14} color="#0F766E" strokeWidth={2.5} />
+    <Check size={14} color="var(--theme-action-primary-bg)" strokeWidth={2.5} />
   ) : (
-    <Minus size={14} color="#667085" strokeWidth={2} />
+    <Minus size={14} color="var(--theme-text-muted)" strokeWidth={2} />
   );
 
   const inner = isCustom ? (
@@ -56,8 +56,8 @@ function PermCell({
         width: 20,
         height: 20,
         borderRadius: "50%",
-        background: "#F0FDF9",
-        border: "1px solid #D1FAE5",
+        background: "var(--theme-status-success-bg)",
+        border: "1px solid var(--theme-status-success-border)",
       }}
     >
       {iconEl}
@@ -115,7 +115,7 @@ function PermCell({
           cursor: "pointer",
         }}
         onMouseEnter={(e) =>
-          ((e.currentTarget as HTMLButtonElement).style.background = "#F3F4F6")
+          ((e.currentTarget as HTMLButtonElement).style.background = "var(--neuron-pill-inactive-bg)")
         }
         onMouseLeave={(e) =>
           ((e.currentTarget as HTMLButtonElement).style.background = "transparent")
@@ -218,7 +218,7 @@ export function PermissionsMatrix({
             {PERM_ACTIONS.map((a) => <col key={a} style={{ width: 40 }} />)}
           </colgroup>
           <thead>
-            <tr style={{ background: "#F9FAFB", borderBottom: "1px solid var(--neuron-ui-border)" }}>
+            <tr style={{ background: "var(--neuron-pill-inactive-bg)", borderBottom: "1px solid var(--neuron-ui-border)" }}>
               <th style={{ textAlign: "left", padding: "6px 12px", fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "var(--neuron-ink-muted)", borderRight: "1px solid var(--neuron-ui-border)" }}>
                 Module
               </th>
@@ -234,7 +234,7 @@ export function PermissionsMatrix({
               const groupModules = PERM_MODULES.filter((m) => m.group === group);
               return (
                 <>
-                  <tr key={`group-${group}`} style={{ background: "#F9FAFB", borderTop: "1px solid var(--neuron-ui-border)" }}>
+                  <tr key={`group-${group}`} style={{ background: "var(--neuron-pill-inactive-bg)", borderTop: "1px solid var(--neuron-ui-border)" }}>
                     <td colSpan={PERM_ACTIONS.length + 1} style={{ padding: "5px 12px", fontSize: 12, fontWeight: 700, color: "var(--neuron-ink-primary)", letterSpacing: "0.01em" }}>
                       {group}
                     </td>
@@ -243,7 +243,7 @@ export function PermissionsMatrix({
                     <tr
                       key={mod.id}
                       style={{ background: "var(--neuron-bg-elevated, #fff)", borderTop: "1px solid var(--neuron-ui-border)" }}
-                      onMouseEnter={(e) => ((e.currentTarget as HTMLTableRowElement).style.background = "#F9FAFB")}
+                      onMouseEnter={(e) => ((e.currentTarget as HTMLTableRowElement).style.background = "var(--neuron-pill-inactive-bg)")}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLTableRowElement).style.background = "var(--neuron-bg-elevated, #fff)")}
                     >
                       <td style={{ padding: "6px 12px", fontSize: 13, color: "var(--neuron-ink-primary)", borderRight: "1px solid var(--neuron-ui-border)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -280,8 +280,8 @@ export function PermissionsMatrix({
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               padding: "6px 14px", borderRadius: 6, border: "none",
-              background: isDirty && !saving ? "#0F766E" : "#E5E9F0",
-              color: isDirty && !saving ? "#fff" : "#667085",
+              background: isDirty && !saving ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)",
+              color: isDirty && !saving ? "#fff" : "var(--theme-text-muted)",
               fontSize: 13, fontWeight: 500,
               cursor: isDirty && !saving ? "pointer" : "not-allowed",
             }}
@@ -300,7 +300,7 @@ export function PermissionsMatrix({
               fontSize: 13, fontWeight: 500,
               cursor: saving ? "not-allowed" : "pointer",
             }}
-            onMouseEnter={(e) => !saving && ((e.currentTarget as HTMLButtonElement).style.background = "#F9FAFB")}
+            onMouseEnter={(e) => !saving && ((e.currentTarget as HTMLButtonElement).style.background = "var(--neuron-pill-inactive-bg)")}
             onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.background = "transparent")}
           >
             Reset to Defaults

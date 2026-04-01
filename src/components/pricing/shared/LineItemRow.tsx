@@ -77,7 +77,7 @@ export function LineItemRow({
     color: "var(--neuron-ink-primary)",
     border: "1px solid transparent",
     borderRadius: "4px",
-    backgroundColor: readOnly ? "#F9FAFB" : "transparent",
+    backgroundColor: readOnly ? "var(--neuron-pill-inactive-bg)" : "transparent",
     outline: "none",
     transition: "all 0.15s ease",
     cursor: readOnly ? "not-allowed" : "text"

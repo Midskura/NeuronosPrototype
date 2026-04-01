@@ -244,7 +244,7 @@ export function ProjectDetail({
           </h1>
           <p style={{ fontSize: "13px", color: "var(--neuron-ink-muted, #6B7280)", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
             <span className="font-mono">{project.project_number}</span>
-            <span className="text-[#D1D5DB]">•</span>
+            <span className="text-[var(--neuron-ui-muted)]">•</span>
             <span>{project.customer_name}</span>
           </p>
         </div>
@@ -268,7 +268,7 @@ export function ProjectDetail({
                 justifyContent: "center",
                 padding: "10px",
                 backgroundColor: "var(--theme-bg-surface)",
-                border: "1.5px solid #D1D5DB",
+                border: "1.5px solid var(--neuron-ui-muted)",
                 borderRadius: "8px",
                 cursor: "pointer",
                 transition: "all 0.2s ease"
@@ -382,7 +382,7 @@ export function ProjectDetail({
                     <Archive size={16} style={{ display: "inline", marginRight: "8px", verticalAlign: "middle" }} />
                     Archive Project
                   </button>
-                  <div style={{ height: "1px", backgroundColor: "#E5E7EB", margin: "4px 0" }} />
+                  <div style={{ height: "1px", backgroundColor: "var(--theme-border-default)", margin: "4px 0" }} />
                   <button
                     onClick={handleDelete}
                     style={{
@@ -397,7 +397,7 @@ export function ProjectDetail({
                       transition: "background-color 0.2s ease"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#FEF2F2";
+                      e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "transparent";
@@ -430,7 +430,7 @@ export function ProjectDetail({
                     onClick={() => handleCategoryClick(cat.id as TabCategory)}
                     className="flex items-center gap-2 py-4 relative group"
                     style={{
-                        color: isActive ? "#0F766E" : "#6B7280",
+                        color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                     }}
                 >
                     <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
@@ -465,9 +465,9 @@ export function ProjectDetail({
                     className="flex items-center gap-2 px-3 py-1.5 rounded-md transition-all whitespace-nowrap"
                     style={{
                         backgroundColor: isActive ? "rgba(15, 118, 110, 0.05)" : "transparent",
-                        color: isActive ? "#0F766E" : "#6B7280",
+                        color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                         boxShadow: "none",
-                        border: isActive ? "1px solid #0F766E" : "1px solid transparent",
+                        border: isActive ? "1px solid var(--theme-action-primary-bg)" : "1px solid transparent",
                     }}
                 >
                     <Icon size={14} />

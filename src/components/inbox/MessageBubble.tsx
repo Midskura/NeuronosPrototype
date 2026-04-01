@@ -106,8 +106,8 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
             width: 28,
             height: 28,
             borderRadius: "50%",
-            backgroundColor: "#E8F4F2",
-            border: "1px solid #C8E6E2",
+            backgroundColor: "var(--theme-bg-surface-tint)",
+            border: "1px solid var(--theme-status-success-border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -135,8 +135,8 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                   color: "var(--theme-text-muted)",
                   padding: "2px 6px",
                   borderRadius: 6,
-                  border: "1px solid #E2E8E5",
-                  backgroundColor: "#F4F6F5",
+                  border: "1px solid var(--theme-border-default)",
+                  backgroundColor: "var(--theme-bg-page)",
                 }}
               >
                 {message.sender_department}
@@ -161,9 +161,9 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                   border: "1px solid var(--theme-border-default)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#DC2626";
-                  e.currentTarget.style.borderColor = "#FECACA";
-                  e.currentTarget.style.backgroundColor = "#FFF5F5";
+                  e.currentTarget.style.color = "var(--theme-status-danger-fg)";
+                  e.currentTarget.style.borderColor = "var(--theme-status-danger-border)";
+                  e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = "var(--theme-text-muted)";
@@ -231,7 +231,7 @@ export function MessageBubble({ message, onRetract }: MessageBubbleProps) {
                       cursor: "pointer",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = "#9CA3AF";
+                      e.currentTarget.style.borderColor = "var(--theme-text-muted)";
                       e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
                     }}
                     onMouseLeave={(e) => {

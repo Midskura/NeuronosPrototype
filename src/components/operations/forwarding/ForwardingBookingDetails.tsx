@@ -1,11 +1,11 @@
 import { supabase } from "../../../utils/supabase/client";
+import { BookingPendingEVStrip } from "../shared/BookingPendingEVStrip";
 import { toast } from "../../ui/toast-utils";
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, MoreVertical, Lock, Clock, ChevronRight, User } from "lucide-react";
 import type { ForwardingBooking, ExecutionStatus } from "../../../types/operations";
 import { UnifiedBillingsTab } from "../../shared/billings/UnifiedBillingsTab";
-import { BookingRateCardButton } from "../../contracts/BookingRateCardButton";
 import { ExpensesTab } from "../shared/ExpensesTab";
 import { BookingCommentsTab } from "../../shared/BookingCommentsTab";
 import { useProjectFinancials } from "../../../hooks/useProjectFinancials";
@@ -19,6 +19,8 @@ import { assessBookingFinancialState, canTransitionBookingToCancelled, getBookin
 import { LinkedTicketBadge } from "../../common/LinkedTicketBadge";
 import { RequestBillingButton } from "../../common/RequestBillingButton";
 import { loadBookingActivityLog, appendBookingActivity } from "../../../utils/bookingActivityLog";
+import { useUser } from "../../../hooks/useUser";
+import { fireBillingTicketOnCompletion } from "../../../utils/workflowTickets";
 
 interface ForwardingBookingDetailsProps {
   booking: ForwardingBooking;
@@ -87,6 +89,7 @@ export function ForwardingBookingDetails({
   );
   const [showTimeline, setShowTimeline] = useState(false);
   const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>(initialActivityLog);
+  const { user } = useUser();
 
   const { data: fetchedActivityLog } = useQuery({
     queryKey: ["forwarding_booking_activity", booking.bookingId],
@@ -203,11 +206,19 @@ export function ForwardingBookingDetails({
 
     // Persist to backend
     try {
-      const { error } = await supabase.from('forwarding_bookings').update({ status: newStatus }).eq('bookingId', booking.bookingId);
+      const { error } = await supabase.from('bookings').update({ status: newStatus }).eq('id', booking.id || booking.bookingId);
       if (error) throw error;
-      
       toast.success(`Status updated to ${newStatus}`);
       onBookingUpdated();
+      if (newStatus === "Completed" && user?.id) {
+        fireBillingTicketOnCompletion({
+          bookingId: booking.id || booking.bookingId,
+          bookingNumber: (booking as any).booking_number || booking.bookingId,
+          userId: user.id,
+          userName: currentUser?.name || user.name || "Operations",
+          userDept: currentUser?.department || user.department || "Operations",
+        });
+      }
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status");
@@ -313,12 +324,12 @@ export function ForwardingBookingDetails({
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "booking-info" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "booking-info" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "booking-info" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "booking-info" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -332,12 +343,12 @@ export function ForwardingBookingDetails({
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "billings" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "billings" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "billings" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "billings" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -351,12 +362,12 @@ export function ForwardingBookingDetails({
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "expenses" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "expenses" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "expenses" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "expenses" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -370,12 +381,12 @@ export function ForwardingBookingDetails({
               padding: "0 4px",
               fontSize: "14px",
               fontWeight: 500,
-              color: activeTab === "comments" ? "#0F766E" : "var(--neuron-ink-muted)",
+              color: activeTab === "comments" ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-muted)",
               background: "none",
               borderTop: "none",
               borderLeft: "none",
               borderRight: "none",
-              borderBottom: activeTab === "comments" ? "2px solid #0F766E" : "2px solid transparent",
+              borderBottom: activeTab === "comments" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
               cursor: "pointer",
               transition: "all 0.2s",
               height: "100%"
@@ -395,12 +406,12 @@ export function ForwardingBookingDetails({
               alignItems: "center",
               gap: "8px",
               padding: "8px 16px",
-              backgroundColor: showTimeline ? "#E8F2EE" : "white",
-              border: `1px solid ${showTimeline ? "#0F766E" : "var(--neuron-ui-border)"}`, // Thinner border to match other controls
+              backgroundColor: showTimeline ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)",
+              border: `1px solid ${showTimeline ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-border)"}`, // Thinner border to match other controls
               borderRadius: "6px",
               fontSize: "13px",
               fontWeight: 500,
-              color: showTimeline ? "#0F766E" : "var(--neuron-ink-secondary)",
+              color: showTimeline ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-secondary)",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
@@ -411,7 +422,7 @@ export function ForwardingBookingDetails({
             }}
             onMouseLeave={(e) => {
               if (!showTimeline) {
-                e.currentTarget.style.backgroundColor = "white";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }
             }}
           >
@@ -425,9 +436,9 @@ export function ForwardingBookingDetails({
             borderRadius: "6px",
             fontSize: "13px",
             fontWeight: 600,
-            backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA",
-            color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E",
-            border: `1px solid ${booking.movement === "EXPORT" ? "#FED7AA" : "#99F6E4"}`
+            backgroundColor: booking.movement === "EXPORT" ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)",
+            color: booking.movement === "EXPORT" ? "#C2410C" : "var(--theme-action-primary-bg)",
+            border: `1px solid ${booking.movement === "EXPORT" ? "var(--theme-status-warning-border)" : "var(--theme-status-success-border)"}`
           }}>
             {booking.movement || "IMPORT"}
           </div>
@@ -454,7 +465,7 @@ export function ForwardingBookingDetails({
                 <button
                   onClick={handleDeleteFromDetail}
                   style={{ width: "100%", display: "flex", alignItems: "center", gap: "10px", padding: "10px 14px", backgroundColor: "transparent", border: "none", cursor: "pointer", fontSize: "13px", color: "var(--theme-status-danger-fg)", textAlign: "left" }}
-                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#FEF2F2")}
+                  onMouseEnter={e => (e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)")}
                   onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
                 >
                   Delete Booking
@@ -465,8 +476,10 @@ export function ForwardingBookingDetails({
         </div>
       </div>
 
+      <BookingPendingEVStrip bookingId={booking.bookingId} />
+
       {/* Content with Timeline Sidebar */}
-      <div style={{ 
+      <div style={{
         flex: 1,
         overflow: "hidden",
         display: "flex"
@@ -493,7 +506,6 @@ export function ForwardingBookingDetails({
                 bookingId={booking.bookingId}
                 onRefresh={financials.refresh}
                 isLoading={financials.isLoading}
-                extraActions={<BookingRateCardButton booking={booking} serviceType="Forwarding" existingBillingItems={bookingBillingItems} onRefresh={financials.refresh} />}
                 pendingBillableCount={pendingBillableCount}
               />
             </div>
@@ -523,7 +535,7 @@ export function ForwardingBookingDetails({
           <div style={{
             flex: "0 0 35%",
             borderLeft: "1px solid var(--neuron-ui-border)",
-            backgroundColor: "#FAFBFC",
+            backgroundColor: "var(--neuron-pill-inactive-bg)",
             overflow: "auto"
           }}>
             <ActivityTimeline activities={activityLog} />
@@ -555,7 +567,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
           top: "0",
           bottom: "0",
           width: "2px",
-          backgroundColor: "#E5E7EB"
+          backgroundColor: "var(--theme-border-default)"
         }} />
 
         {/* Activity Items */}
@@ -570,10 +582,10 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                 width: "16px",
                 height: "16px",
                 borderRadius: "50%",
-                backgroundColor: activity.action === "status_changed" ? "#0F766E" :
-                               activity.action === "created" ? "#6B7280" :
-                               activity.action === "field_updated" ? "#3B82F6" : "#F59E0B",
-                border: "3px solid #FAFBFC"
+                backgroundColor: activity.action === "status_changed" ? "var(--theme-action-primary-bg)" :
+                               activity.action === "created" ? "var(--theme-text-muted)" :
+                               activity.action === "field_updated" ? "var(--neuron-semantic-info)" : "var(--theme-status-warning-fg)",
+                border: "3px solid var(--neuron-pill-inactive-bg)"
               }} />
 
               {/* Activity Content */}
@@ -625,7 +637,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                           padding: "2px 8px",
                           backgroundColor: "var(--theme-status-success-bg)",
                           borderRadius: "4px",
-                          color: "#10B981"
+                          color: "var(--theme-status-success-fg)"
                         }}>
                           {activity.newValue}
                         </span>
@@ -641,7 +653,7 @@ function ActivityTimeline({ activities }: { activities: ActivityLogEntry[] }) {
                           padding: "2px 8px",
                           backgroundColor: "var(--theme-status-success-bg)",
                           borderRadius: "4px",
-                          color: "#10B981",
+                          color: "var(--theme-status-success-fg)",
                           fontWeight: 500
                         }}>
                           {activity.newValue}
@@ -937,15 +949,15 @@ function BookingInformationTab({
 
         {/* Status-dependent fields (always visible, not editable via section) */}
         {booking.status === "Pending" && booking.pendingReason && (
-          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "#FFF3E0", border: "1px solid #F59E0B33", borderRadius: "8px" }}>
-            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "#F59E0B", marginBottom: "8px" }}>
+          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "var(--theme-status-warning-bg)", border: "1px solid var(--theme-status-warning-border)", borderRadius: "8px" }}>
+            <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--theme-status-warning-fg)", marginBottom: "8px" }}>
               Pending Reason
             </label>
-            <p style={{ fontSize: "14px", color: "#F59E0B", margin: 0 }}>{booking.pendingReason}</p>
+            <p style={{ fontSize: "14px", color: "var(--theme-status-warning-fg)", margin: 0 }}>{booking.pendingReason}</p>
           </div>
         )}
         {booking.status === "Cancelled" && (
-          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "var(--theme-status-danger-bg)", border: "1px solid #EF444433", borderRadius: "8px" }}>
+          <div style={{ marginTop: "20px", padding: "16px", backgroundColor: "var(--theme-status-danger-bg)", border: "1px solid var(--theme-status-danger-border)", borderRadius: "8px" }}>
             <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: "var(--theme-status-danger-fg)", marginBottom: "8px" }}>
               Cancellation Reason
             </label>

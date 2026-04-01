@@ -288,7 +288,7 @@ export function RateCardGeneratorPopover({
                   key={row.bookingId}
                   style={{
                     padding: "12px 16px",
-                    borderBottom: "1px solid #F9FAFB",
+                    borderBottom: "1px solid var(--neuron-pill-inactive-bg)",
                     display: "flex",
                     alignItems: "center",
                     gap: "12px",
@@ -362,7 +362,7 @@ export function RateCardGeneratorPopover({
                         fontWeight: 500,
                         color: "var(--theme-action-primary-bg)",
                         backgroundColor: "var(--theme-bg-surface-tint)",
-                        border: "1px solid #D1FAE5",
+                        border: "1px solid var(--theme-status-success-border)",
                         borderRadius: "5px",
                         cursor: generating ? "not-allowed" : "pointer",
                         whiteSpace: "nowrap" as const,

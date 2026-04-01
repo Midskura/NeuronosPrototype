@@ -304,8 +304,8 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
                     style={{
                       display: "flex", alignItems: "center", gap: 4,
                       padding: "4px 8px", borderRadius: 6,
-                      backgroundColor: isCurrent ? "var(--neuron-state-selected)" : isCompleted ? "#EEF4F1" : "#F7FAF8",
-                      color: isCurrent ? "var(--neuron-brand-green)" : isCompleted ? "var(--neuron-brand-green)" : isClickable ? "var(--neuron-ink-secondary)" : "#9CA3AF",
+                      backgroundColor: isCurrent ? "var(--neuron-state-selected)" : isCompleted ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-page)",
+                      color: isCurrent ? "var(--neuron-brand-green)" : isCompleted ? "var(--neuron-brand-green)" : isClickable ? "var(--neuron-ink-secondary)" : "var(--theme-text-muted)",
                       fontSize: 11, fontWeight: isCurrent ? 600 : 400,
                       cursor: isClickable ? "pointer" : "default",
                       border: `1px solid ${isCurrent || isCompleted ? "var(--neuron-ui-active-border)" : "var(--neuron-ui-border)"}`,
@@ -424,7 +424,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
             rows={2}
             style={{
               width: "100%", padding: "8px 10px", borderRadius: 6,
-              border: "1px solid #FDE68A", fontSize: 12, color: "var(--theme-text-primary)",
+              border: "1px solid var(--theme-status-warning-border)", fontSize: 12, color: "var(--theme-text-primary)",
               resize: "none", outline: "none", backgroundColor: "var(--theme-bg-surface)",
             }}
             autoFocus
@@ -435,8 +435,8 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
               disabled={!returnReason.trim() || isUpdatingStatus}
               style={{
                 padding: "5px 14px", borderRadius: 6, fontSize: 12, fontWeight: 600,
-                backgroundColor: returnReason.trim() ? "#DC2626" : "#E5E9F0",
-                color: returnReason.trim() ? "#FFFFFF" : "#9CA3AF",
+                backgroundColor: returnReason.trim() ? "var(--theme-status-danger-fg)" : "var(--theme-border-default)",
+                color: returnReason.trim() ? "#FFFFFF" : "var(--theme-text-muted)",
                 border: "none", cursor: returnReason.trim() ? "pointer" : "default",
               }}
             >
@@ -506,7 +506,7 @@ export function ThreadDetailPanel({ ticketId, onThreadUpdated }: ThreadDetailPan
 function EmptyState({ message }: { message?: string }) {
   return (
     <div className="flex flex-col items-center justify-center h-full" style={{ color: "var(--theme-text-muted)" }}>
-      <MessageSquare size={40} style={{ marginBottom: 12, color: "#E5E9F0" }} />
+      <MessageSquare size={40} style={{ marginBottom: 12, color: "var(--theme-border-default)" }} />
       <p style={{ fontSize: 14, color: "var(--theme-text-muted)" }}>{message || "Select a ticket to read it"}</p>
     </div>
   );

@@ -201,7 +201,7 @@ export function ActivitiesList({ onViewActivity }: ActivitiesListProps) {
               height: "48px",
               padding: "0 24px",
               borderRadius: "16px",
-              background: "#0F766E",
+              background: "var(--theme-action-primary-bg)",
               border: "none",
               color: "#FFFFFF",
               fontSize: "14px",

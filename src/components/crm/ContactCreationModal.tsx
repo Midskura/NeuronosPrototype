@@ -394,7 +394,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "white";
+                e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
               }}
             >
               Cancel
@@ -409,7 +409,7 @@ export function ContactCreationModal({ onClose, onSave }: ContactCreationModalPr
                 fontSize: "14px",
                 fontWeight: 600,
                 color: "white",
-                backgroundColor: isSaving ? "#9CA3AF" : "var(--neuron-brand-green)",
+                backgroundColor: isSaving ? "var(--neuron-ui-muted)" : "var(--neuron-brand-green)",
                 cursor: isSaving ? "not-allowed" : "pointer",
                 transition: "all 0.2s"
               }}

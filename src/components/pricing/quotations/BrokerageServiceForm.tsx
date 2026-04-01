@@ -119,12 +119,12 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
               let opacity = viewMode && !isSelected ? 0.6 : 1;
               
               if (isSelected) {
-                backgroundColor = "#0F766E";
-                borderColor = "#0F766E";
+                backgroundColor = "var(--theme-action-primary-bg)";
+                borderColor = "var(--theme-action-primary-bg)";
                 textColor = "white";
               } else if (isHovered && !viewMode) {
-                backgroundColor = "#F8FBFB";
-                borderColor = "#0F766E";
+                backgroundColor = "var(--theme-bg-surface-tint)";
+                borderColor = "var(--theme-action-primary-bg)";
               }
               
               return (
@@ -338,7 +338,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: viewMode ? "#F9FAFB" : "white",
+                    backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -377,7 +377,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",
@@ -445,7 +445,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: viewMode ? "#F9FAFB" : "white",
+                    backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -481,7 +481,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: viewMode ? "#F9FAFB" : "white",
+                    backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -592,7 +592,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: viewMode ? "#F9FAFB" : "white",
+                    backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -795,7 +795,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                     padding: "10px 12px",
                     fontSize: "13px",
                     color: "var(--neuron-ink-base)",
-                    backgroundColor: viewMode ? "#F9FAFB" : "white",
+                    backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                     border: "1px solid var(--neuron-ui-border)",
                     borderRadius: "6px",
                     outline: "none",
@@ -833,7 +833,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",
@@ -900,7 +900,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",
@@ -936,7 +936,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",
@@ -986,7 +986,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",
@@ -1022,7 +1022,7 @@ export function BrokerageServiceForm({ data, onChange, movement = "IMPORT", view
                       padding: "10px 12px",
                       fontSize: "13px",
                       color: "var(--neuron-ink-base)",
-                      backgroundColor: viewMode ? "#F9FAFB" : "white",
+                      backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                       border: "1px solid var(--neuron-ui-border)",
                       borderRadius: "6px",
                       outline: "none",

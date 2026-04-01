@@ -33,7 +33,7 @@ export function TeamAssignmentForm({
   const { data: managerData, isLoading: isLoadingManager } = useQuery({
     queryKey: ["client_handler_preferences", "manager", serviceType],
     queryFn: async () => {
-      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Manager');
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('role', 'manager');
       return data && data.length > 0 ? { id: data[0].id, name: data[0].name } : null;
     },
     staleTime: 5 * 60 * 1000,
@@ -44,7 +44,7 @@ export function TeamAssignmentForm({
   const { data: supervisors = [], isLoading: isLoadingSupervisors } = useQuery({
     queryKey: ["client_handler_preferences", "supervisors", serviceType],
     queryFn: async () => {
-      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Supervisor');
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('role', 'team_leader');
       return (data || []) as User[];
     },
     staleTime: 5 * 60 * 1000,
@@ -53,7 +53,7 @@ export function TeamAssignmentForm({
   const { data: handlers = [], isLoading: isLoadingHandlers } = useQuery({
     queryKey: ["client_handler_preferences", "handlers", serviceType],
     queryFn: async () => {
-      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('operations_role', 'Handler');
+      const { data } = await supabase.from('users').select('*').eq('department', 'Operations').eq('service_type', serviceType).eq('role', 'staff');
       return (data || []) as User[];
     },
     staleTime: 5 * 60 * 1000,
@@ -167,9 +167,9 @@ export function TeamAssignmentForm({
           onChange={(e) => setSaveAsDefault(e.target.checked)}
           className="w-4 h-4 rounded cursor-pointer appearance-none"
           style={{
-            backgroundColor: saveAsDefault ? "#0F766E" : "#FFFFFF",
+            backgroundColor: saveAsDefault ? "var(--theme-action-primary-bg)" : "var(--theme-bg-surface)",
             border: "1px solid",
-            borderColor: saveAsDefault ? "#0F766E" : "#D1D5DB",
+            borderColor: saveAsDefault ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
             backgroundImage: saveAsDefault 
               ? `url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3E%3C/svg%3E")` 
               : "none",

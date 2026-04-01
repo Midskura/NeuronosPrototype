@@ -129,17 +129,17 @@ const DEPT_DEFAULT: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, { color: string; bg: string }> = {
-  active: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
-  open: { color: "#0369A1", bg: "#EFF6FF" },
+  active: { color: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
+  open: { color: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" },
   draft: { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
-  sent: { color: "var(--theme-status-warning-fg)", bg: "#FEF9EE" },
-  approved: { color: "#7C3AED", bg: "#F5F3FF" },
-  posted: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-  paid: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
-  priced: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-  completed: { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
-  confirmed: { color: "#1D4ED8", bg: "#EFF6FF" },
-  cancelled: { color: "var(--theme-status-danger-fg)", bg: "#FFF5F5" },
+  sent: { color: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
+  approved: { color: "var(--neuron-status-accent-fg)", bg: "var(--neuron-status-accent-bg)" },
+  posted: { color: "var(--theme-action-primary-bg)", bg: "var(--theme-bg-surface-tint)" },
+  paid: { color: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
+  priced: { color: "var(--theme-action-primary-bg)", bg: "var(--theme-bg-surface-tint)" },
+  completed: { color: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
+  confirmed: { color: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" },
+  cancelled: { color: "var(--theme-status-danger-fg)", bg: "var(--theme-status-danger-bg)" },
   "in transit": { color: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
 };
 
@@ -339,7 +339,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
   return (
     <SidePanel isOpen={isOpen} onClose={onClose} title={title} footer={footer} width="720px">
       <div className="ticketing-ui" style={{ display: "flex", height: "100%", overflow: "hidden" }}>
-        <div style={{ width: 264, flexShrink: 0, borderRight: "1px solid var(--neuron-ui-border)", backgroundColor: "#FBFCFB", overflowY: "auto", padding: "18px 16px 16px" }}>
+        <div style={{ width: 264, flexShrink: 0, borderRight: "1px solid var(--neuron-ui-border)", backgroundColor: "var(--theme-bg-page)", overflowY: "auto", padding: "18px 16px 16px" }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: "var(--neuron-ink-muted)", letterSpacing: "0.5px", padding: "0 12px 12px" }}>WORK</div>
           <div className="space-y-1">
             {visibleSections.map((section) => {
@@ -450,7 +450,7 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
                     <div style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: "var(--theme-bg-surface-subtle)", flexShrink: 0 }} />
                     <div style={{ flex: 1 }}>
                       <div style={{ height: 12, backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: 4, marginBottom: 6, width: `${55 + item * 9}%` }} />
-                      <div style={{ height: 10, backgroundColor: "#F8FAF9", borderRadius: 4, width: "42%" }} />
+                      <div style={{ height: 10, backgroundColor: "var(--theme-bg-page)", borderRadius: 4, width: "42%" }} />
                     </div>
                   </div>
                 ))}
@@ -476,8 +476,8 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
                   onClick={() => !linked && toggleRecord(row)}
                   disabled={linked}
                   className="w-full text-left"
-                  style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 16px", border: "none", borderBottom: "1px solid #F6F8F7", backgroundColor: rowSelected ? "#F7FBF9" : "transparent", cursor: linked ? "default" : "pointer", width: "100%", textAlign: "left", transition: "background-color 120ms ease" }}
-                  onMouseEnter={(e) => { if (!linked && !rowSelected) e.currentTarget.style.backgroundColor = "#FAFCFB"; }}
+                  style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 16px", border: "none", borderBottom: "1px solid var(--theme-bg-page)", backgroundColor: rowSelected ? "var(--theme-bg-surface-tint)" : "transparent", cursor: linked ? "default" : "pointer", width: "100%", textAlign: "left", transition: "background-color 120ms ease" }}
+                  onMouseEnter={(e) => { if (!linked && !rowSelected) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
                   onMouseLeave={(e) => { if (!linked && !rowSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
                 >
                   <div
@@ -486,19 +486,19 @@ export function RecordBrowser({ isOpen, onClose, onLink, alreadyLinked = [] }: R
                       height: 16,
                       borderRadius: 4,
                       flexShrink: 0,
-                      border: `1.5px solid ${linked ? "#D1D5DB" : rowSelected ? "var(--neuron-brand-green)" : "#D1D5DB"}`,
-                      backgroundColor: linked ? "#F3F4F6" : rowSelected ? "var(--neuron-brand-green)" : "transparent",
+                      border: `1.5px solid ${linked ? "var(--neuron-ui-muted)" : rowSelected ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)"}`,
+                      backgroundColor: linked ? "var(--neuron-pill-inactive-bg)" : rowSelected ? "var(--neuron-brand-green)" : "transparent",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       transition: "all 120ms ease",
                     }}
                   >
-                    {(rowSelected || linked) && <Check size={10} style={{ color: linked ? "#9CA3AF" : "#FFFFFF" }} strokeWidth={2.5} />}
+                    {(rowSelected || linked) && <Check size={10} style={{ color: linked ? "var(--theme-text-muted)" : "#FFFFFF" }} strokeWidth={2.5} />}
                   </div>
 
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 500, margin: 0, color: linked ? "#9CA3AF" : "var(--neuron-ink-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <p style={{ fontSize: 13, fontWeight: 500, margin: 0, color: linked ? "var(--theme-text-muted)" : "var(--neuron-ink-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {label}
                     </p>
                     {sublabel && (

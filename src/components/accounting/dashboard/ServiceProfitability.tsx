@@ -90,7 +90,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
       {/* Header */}
       <div
         className="px-5 py-3 flex items-center justify-between"
-        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#F8F9FB" }}
+        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "var(--neuron-pill-inactive-bg)" }}
       >
         <h3
           className="text-[12px] font-semibold uppercase tracking-wider"
@@ -104,7 +104,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
       <div className="flex-1 overflow-auto">
         <table className="w-full">
           <thead>
-            <tr style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#FAFBFC" }}>
+            <tr style={{ borderBottom: "1px solid var(--theme-border-default)", background: "var(--neuron-pill-inactive-bg)" }}>
               <th className="px-4 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--theme-text-muted)" }}>
                 Service
               </th>
@@ -150,7 +150,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
                     </td>
                     <td
                       className="px-4 py-2.5 text-[13px] text-right font-semibold tabular-nums"
-                      style={{ color: isNegative ? "#EF4444" : "#12332B" }}
+                      style={{ color: isNegative ? "var(--theme-status-danger-fg)" : "var(--theme-text-primary)" }}
                     >
                       {formatCurrencyCompact(row.margin)}
                     </td>
@@ -159,15 +159,15 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
                         className="inline-block px-1.5 py-0.5 rounded text-[11px] font-semibold tabular-nums"
                         style={{
                           backgroundColor: isNegative
-                            ? "#FEE2E2"
+                            ? "var(--theme-status-danger-bg)"
                             : isLowMargin
-                            ? "#FFFBEB"
-                            : "#DCFCE7",
+                            ? "var(--theme-status-warning-bg)"
+                            : "var(--theme-status-success-bg)",
                           color: isNegative
-                            ? "#EF4444"
+                            ? "var(--theme-status-danger-fg)"
                             : isLowMargin
-                            ? "#D97706"
-                            : "#16A34A",
+                            ? "var(--theme-status-warning-fg)"
+                            : "var(--theme-status-success-fg)",
                         }}
                       >
                         {row.marginPct.toFixed(0)}%
@@ -180,7 +180,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
           </tbody>
           {rows.length > 0 && (
             <tfoot>
-              <tr style={{ borderTop: "2px solid #E5E9F0", background: "#FAFBFC" }}>
+              <tr style={{ borderTop: "2px solid var(--theme-border-default)", background: "var(--neuron-pill-inactive-bg)" }}>
                 <td className="px-4 py-2.5 text-[12px] font-bold" style={{ color: "var(--theme-text-primary)" }}>
                   Total
                 </td>
@@ -192,7 +192,7 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
                 </td>
                 <td
                   className="px-4 py-2.5 text-[12px] text-right font-bold tabular-nums"
-                  style={{ color: totalMargin < 0 ? "#EF4444" : "#12332B" }}
+                  style={{ color: totalMargin < 0 ? "var(--theme-status-danger-fg)" : "var(--theme-text-primary)" }}
                 >
                   {formatCurrencyCompact(totalMargin)}
                 </td>
@@ -200,8 +200,8 @@ export function ServiceProfitability({ billingItems, invoices, expenses }: Servi
                   <span
                     className="inline-block px-1.5 py-0.5 rounded text-[11px] font-bold tabular-nums"
                     style={{
-                      backgroundColor: totalMarginPct < 0 ? "#FEE2E2" : "#DCFCE7",
-                      color: totalMarginPct < 0 ? "#EF4444" : "#16A34A",
+                      backgroundColor: totalMarginPct < 0 ? "var(--theme-status-danger-bg)" : "var(--theme-status-success-bg)",
+                      color: totalMarginPct < 0 ? "var(--theme-status-danger-fg)" : "var(--theme-status-success-fg)",
                     }}
                   >
                     {totalMarginPct.toFixed(0)}%

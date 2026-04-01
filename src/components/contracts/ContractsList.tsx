@@ -235,7 +235,7 @@ export function ContractsList({
                 { value: "Active", label: "Active", icon: <CircleDot size={16} style={{ color: "var(--theme-action-primary-bg)" }} /> },
                 { value: "Expiring", label: "Expiring", icon: <AlertCircle size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
                 { value: "Expired", label: "Expired", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
-                { value: "Renewed", label: "Renewed", icon: <CheckCircle size={16} style={{ color: "#7C3AED" }} /> },
+                { value: "Renewed", label: "Renewed", icon: <CheckCircle size={16} style={{ color: "var(--neuron-status-accent-fg)" }} /> },
                 { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }
               ]}
               placeholder="Select status"
@@ -276,8 +276,8 @@ export function ContractsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "all" ? "2px solid #0F766E" : "2px solid transparent",
-              color: activeTab === "all" ? "#0F766E" : "#667085",
+              borderBottom: activeTab === "all" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+              color: activeTab === "all" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -293,8 +293,8 @@ export function ContractsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "all" ? "#0F766E" : "#0F766E15",
-                color: activeTab === "all" ? "#FFFFFF" : "#0F766E",
+                background: activeTab === "all" ? "var(--theme-action-primary-bg)" : "var(--theme-bg-surface-tint)",
+                color: activeTab === "all" ? "#FFFFFF" : "var(--theme-action-primary-bg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -312,8 +312,8 @@ export function ContractsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "active" ? "2px solid #F59E0B" : "2px solid transparent",
-              color: activeTab === "active" ? "#F59E0B" : "#667085",
+              borderBottom: activeTab === "active" ? "2px solid var(--theme-status-warning-fg)" : "2px solid transparent",
+              color: activeTab === "active" ? "var(--theme-status-warning-fg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -329,8 +329,8 @@ export function ContractsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "active" ? "#F59E0B" : "#F59E0B15",
-                color: activeTab === "active" ? "#FFFFFF" : "#F59E0B",
+                background: activeTab === "active" ? "var(--theme-status-warning-fg)" : "var(--theme-status-warning-bg)",
+                color: activeTab === "active" ? "#FFFFFF" : "var(--theme-status-warning-fg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -348,8 +348,8 @@ export function ContractsList({
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: activeTab === "expiring" ? "2px solid #EF4444" : "2px solid transparent",
-              color: activeTab === "expiring" ? "#EF4444" : "#667085",
+              borderBottom: activeTab === "expiring" ? "2px solid var(--theme-status-danger-fg)" : "2px solid transparent",
+              color: activeTab === "expiring" ? "var(--theme-status-danger-fg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -365,8 +365,8 @@ export function ContractsList({
                 borderRadius: "12px",
                 fontSize: "11px",
                 fontWeight: 700,
-                background: activeTab === "expiring" ? "#EF4444" : "#EF444415",
-                color: activeTab === "expiring" ? "#FFFFFF" : "#EF4444",
+                background: activeTab === "expiring" ? "var(--theme-status-danger-fg)" : "var(--theme-status-danger-bg)",
+                color: activeTab === "expiring" ? "#FFFFFF" : "var(--theme-status-danger-fg)",
                 minWidth: "20px",
                 textAlign: "center"
               }}
@@ -463,7 +463,7 @@ export function ContractsList({
                         alignItems: "center",
                         justifyContent: "center",
                         flexShrink: 0,
-                        border: "1px solid #CCFBF1"
+                        border: "1px solid var(--theme-status-success-border)"
                     }}>
                         <Handshake size={16} color="var(--theme-action-primary-bg)" />
                     </div>
@@ -544,8 +544,8 @@ export function ContractsList({
                         borderRadius: "12px",
                         fontSize: "11px",
                         fontWeight: 600,
-                        backgroundColor: daysRemaining <= 0 ? "#FEF2F2" : daysRemaining <= 30 ? "#FFF7ED" : "#ECFDF5",
-                        color: daysRemaining <= 0 ? "#B91C1C" : daysRemaining <= 30 ? "#C2410C" : "#059669"
+                        backgroundColor: daysRemaining <= 0 ? "var(--theme-status-danger-bg)" : daysRemaining <= 30 ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)",
+                        color: daysRemaining <= 0 ? "var(--theme-status-danger-fg)" : daysRemaining <= 30 ? "var(--theme-status-warning-fg)" : "var(--theme-status-success-fg)"
                       }}>
                         {daysRemaining <= 0 ? "Expired" : `${daysRemaining}d`}
                       </div>

@@ -134,7 +134,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                 className="px-2 py-1 rounded text-[10px] font-semibold transition-all cursor-pointer"
                 style={{
                   background: period === p ? "white" : "transparent",
-                  color: period === p ? "#12332B" : "#9CA3AF",
+                  color: period === p ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                   boxShadow: period === p ? "0 1px 2px rgba(0,0,0,0.06)" : "none",
                 }}
                 onClick={() => setPeriod(p)}
@@ -177,7 +177,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
               <div
                 key={`grid-${i}`}
                 className="absolute left-0 right-0"
-                style={{ bottom: `${(tick / yMax) * 100}%`, borderTop: "1px dashed #F3F4F6" }}
+                style={{ bottom: `${(tick / yMax) * 100}%`, borderTop: "1px dashed var(--neuron-pill-inactive-bg)" }}
               />
             ))}
 
@@ -201,7 +201,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                       <div
                         className="absolute text-[9px] font-bold tabular-nums"
                         style={{
-                          color: item.margin > 0 ? "#16A34A" : "#EF4444",
+                          color: item.margin > 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)",
                           bottom: `${Math.min(Math.max(revHeightPct, expHeightPct) + 2, 95)}%`,
                           left: "50%",
                           transform: "translateX(-50%)",
@@ -276,7 +276,7 @@ export function RevenueTrendChart({ invoices, expenses, onNavigate }: RevenueTre
                           <span style={{ color: "var(--theme-text-muted)" }}>Margin</span>
                           <span
                             className="font-bold tabular-nums"
-                            style={{ color: item.marginAmt >= 0 ? "#16A34A" : "#EF4444" }}
+                            style={{ color: item.marginAmt >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)" }}
                           >
                             {fmt(item.marginAmt)} ({item.margin}%)
                           </span>

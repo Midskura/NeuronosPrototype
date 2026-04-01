@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Plus, Clock, FileText, Building2, Users } from "lucide-react";
 import { CreateEVoucherForm } from "./evouchers/CreateEVoucherForm";
-import { BudgetRequestDetailPanel } from "../bd/BudgetRequestDetailPanel";
+import { EVoucherDetailView } from "./EVoucherDetailView";
 import { UnifiedEVouchersTable } from "./evouchers/UnifiedEVouchersTable";
 import { useEVouchers } from "../../hooks/useEVouchers";
 import { NeuronRefreshButton } from "../shared/NeuronRefreshButton";
@@ -124,7 +124,7 @@ export function EVouchersContent() {
       <div className="flex-1 p-12 overflow-auto bg-[var(--theme-bg-surface)]">
         {!currentUser ? (
           <div className="py-12 text-center text-[var(--theme-text-muted)]">
-            <Users size={48} className="mx-auto mb-4 text-[#D1D5DB]" />
+            <Users size={48} className="mx-auto mb-4 text-[var(--neuron-ui-muted)]" />
             <h3 className="text-[16px] font-semibold text-[var(--theme-text-secondary)] mb-2">Please Log In</h3>
             <p className="text-[14px]">You need to be logged in to view E-Vouchers</p>
           </div>
@@ -154,16 +154,14 @@ export function EVouchersContent() {
       )}
 
       {selectedEvoucher && (
-        <BudgetRequestDetailPanel
-          request={selectedEvoucher}
-          isOpen={!!selectedEvoucher}
+        <EVoucherDetailView
+          evoucher={selectedEvoucher}
           onClose={() => setSelectedEvoucher(null)}
           currentUser={currentUser}
           onStatusChange={() => {
             setSelectedEvoucher(null);
             setRefreshTrigger(prev => prev + 1);
           }}
-          showAccountingControls={hasApprovalAccess}
         />
       )}
     </div>

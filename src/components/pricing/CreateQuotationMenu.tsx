@@ -120,7 +120,7 @@ export function CreateQuotationMenu({ onSelect, buttonText, entityWord = "Quotat
                 border: "none",
                 borderBottom:
                   idx < MENU_OPTIONS.length - 1
-                    ? "0.8px solid #F3F4F6"
+                    ? "0.8px solid var(--neuron-pill-inactive-bg)"
                     : "none",
                 cursor: "pointer",
                 transition: "background-color 0.15s ease",

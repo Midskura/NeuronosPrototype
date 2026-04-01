@@ -1,4 +1,5 @@
 import { supabase } from '../utils/supabase/client';
+import { createWorkflowTicket } from '../utils/workflowTickets';
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../lib/queryKeys";
@@ -150,39 +151,115 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
   const handleSaveQuotation = async (data: QuotationNew) => {
     console.log("Saving quotation:", data);
 
-    // Remap contract date fields to match DB column names
-    const contractDateFields = {
-      contract_start_date: (data as any).contract_validity_start || (data as any).contract_start_date,
-      contract_end_date: (data as any).contract_validity_end || (data as any).contract_end_date,
+    const d = data as any;
+
+    // Fields that live inside the `pricing` JSONB column (not top-level DB columns)
+    const pricingFields: Record<string, unknown> = {};
+    const PRICING_KEYS = [
+      'selling_price', 'buying_price', 'financial_summary',
+      'movement', 'category', 'shipment_freight',
+      'incoterm', 'carrier', 'transit_days', 'commodity',
+      'pol_aol', 'pod_aod', 'charge_categories', 'currency',
+      'credit_terms', 'validity_period',
+    ];
+    for (const key of PRICING_KEYS) {
+      if (d[key] !== undefined) pricingFields[key] = d[key];
+    }
+
+    // Merge with any existing pricing data already on the record
+    const existingPricing = d.pricing && typeof d.pricing === 'object' ? d.pricing : {};
+    const mergedPricing = { ...existingPricing, ...pricingFields };
+
+    // Build a clean payload with only valid DB columns
+    const cleanPayload: Record<string, unknown> = {
+      quotation_name: d.quotation_name,
+      quotation_number: d.quotation_number,
+      quote_number: d.quote_number,
+      customer_id: d.customer_id,
+      customer_name: d.customer_name,
+      contact_id: d.contact_id,
+      contact_name: d.contact_name ?? d.contact_person_name,
+      contact_person_id: d.contact_person_id,
+      services: d.services,
+      services_metadata: d.services_metadata,
+      status: d.status,
+      quotation_type: d.quotation_type,
+      // Date field remaps
+      quotation_date: d.quotation_date ?? d.created_date,
+      expiry_date: d.expiry_date ?? d.valid_until,
+      validity_date: d.validity_date,
+      // Contract date fields
+      contract_start_date: d.contract_validity_start ?? d.contract_start_date,
+      contract_end_date: d.contract_validity_end ?? d.contract_end_date,
+      // Misc columns that do exist on the table
+      created_by: d.created_by,
+      created_by_name: d.created_by_name,
+      inquiry_id: d.inquiry_id,
+      project_id: d.project_id,
+      // Pack all pricing sub-fields into the JSONB column
+      pricing: Object.keys(mergedPricing).length > 0 ? mergedPricing : undefined,
+      // Contract rate matrices live in details (spread on load via { ...details, ...row })
+      details: d.rate_matrices !== undefined
+        ? { ...(d.details ?? {}), rate_matrices: d.rate_matrices }
+        : d.details ?? undefined,
     };
 
+    // Date fields — null out empty strings so Postgres doesn't choke on ""
+    const DATE_COLS = ['quotation_date', 'expiry_date', 'validity_date', 'contract_start_date', 'contract_end_date'];
+    for (const col of DATE_COLS) {
+      if (cleanPayload[col] === '') cleanPayload[col] = null;
+    }
+
+    // Strip undefined values so we don't send nulls for untouched fields
+    const payload = Object.fromEntries(
+      Object.entries(cleanPayload).filter(([, v]) => v !== undefined)
+    );
+
     try {
-      // IDs from builder: existing records use original DB id (QUO.../CQ...),
-      // new records use builder-generated temp id (quot-...). Treat anything
-      // that isn't a temp id and is non-empty as an update.
-      const isUpdate = !!data.id && !data.id.startsWith('quot-');
+      const isUpdate = !!d.id && !d.id.startsWith('quot-');
 
       if (isUpdate) {
+        // Don't include these on updates:
+        // - quote_number: builder regenerates it on every Edit open → unique constraint 409
+        // - created_by / created_by_name: immutable after creation → FK violation if builder passes wrong value
+        delete payload.quote_number;
+        delete payload.created_by;
+        delete payload.created_by_name;
         const { error } = await supabase
           .from('quotations')
-          .update({ ...data, ...contractDateFields, updated_at: new Date().toISOString() })
-          .eq('id', data.id);
+          .update({ ...payload, updated_at: new Date().toISOString() })
+          .eq('id', d.id);
 
         if (error) throw error;
         console.log('Quotation updated successfully');
+
+        // Pricing → BD handoff: fire ticket when builder saves with status "Priced"
+        if (d.status === "Priced" && currentUser?.id) {
+          await createWorkflowTicket({
+            subject: `Ready to Send: ${d.quote_number || d.quotation_name}`,
+            body: `Pricing for "${d.quotation_name}" (${d.quote_number}) is complete. Please review and send the quotation to ${d.customer_name}.`,
+            type: "fyi",
+            priority: "normal",
+            recipientDept: "Business Development",
+            linkedRecordType: "quotation",
+            linkedRecordId: d.id,
+            createdBy: currentUser.id,
+            createdByName: currentUser.name,
+            createdByDept: currentUser.department,
+            autoCreated: true,
+          });
+        }
+
         await fetchQuotations();
         setSubView("list");
       } else {
         const newId = `QUO-${Date.now()}`;
-        const newData = {
-          ...data,
-          ...contractDateFields,
+        const { error } = await supabase.from('quotations').insert({
+          ...payload,
           id: newId,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-        };
-
-        const { error } = await supabase.from('quotations').insert(newData);
+        });
         if (error) throw error;
         console.log('Quotation created successfully:', newId);
         await fetchQuotations();
@@ -190,19 +267,34 @@ export function Pricing({ view = "contacts", onViewInquiry, inquiryId, currentUs
       }
     } catch (error) {
       console.error('Error saving quotation:', error);
-      alert('Error saving quotation: ' + error);
+      const msg = (error as any)?.message ?? JSON.stringify(error);
+      alert('Error saving quotation: ' + msg);
     }
   };
 
   const handleUpdateQuotation = async (updatedQuotation: QuotationNew) => {
     setSelectedQuotation(updatedQuotation);
-    
+    // Status/field-only updates from QuotationFileView — safe columns only
+    const u = updatedQuotation as any;
+    const safeUpdate: Record<string, unknown> = { updated_at: new Date().toISOString() };
+    const SAFE_COLS = [
+      'status', 'quotation_name', 'quotation_number', 'quote_number',
+      'customer_id', 'customer_name', 'contact_id', 'contact_name',
+      'contact_person_id', 'services', 'services_metadata',
+      'quotation_type', 'quotation_date', 'expiry_date', 'validity_date',
+      'contract_start_date', 'contract_end_date',
+      'created_by', 'created_by_name', 'inquiry_id', 'project_id', 'pricing',
+    ];
+    for (const col of SAFE_COLS) {
+      if (u[col] !== undefined) safeUpdate[col] = u[col];
+    }
+
     try {
       const { error } = await supabase
         .from('quotations')
-        .update({ ...updatedQuotation, updated_at: new Date().toISOString() })
+        .update(safeUpdate)
         .eq('id', updatedQuotation.id);
-      
+
       if (!error) {
         console.log("Quotation updated successfully");
         await fetchQuotations();

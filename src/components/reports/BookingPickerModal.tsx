@@ -190,7 +190,7 @@ export function BookingPickerModal({
                   key={booking.bookingNo}
                   onClick={() => setSelectedBooking(booking.bookingNo)}
                   className={cn(
-                    "border-b border-[#F3F4F6] cursor-pointer transition-colors",
+                    "border-b border-[var(--neuron-pill-inactive-bg)] cursor-pointer transition-colors",
                     selectedBooking === booking.bookingNo 
                       ? "bg-[#FFF7ED]" 
                       : "hover:bg-[var(--theme-bg-page)]"
@@ -199,10 +199,10 @@ export function BookingPickerModal({
                   <td className="py-3 px-3 text-[var(--theme-text-primary)]" style={{ fontWeight: 500 }}>
                     {booking.bookingNo}
                   </td>
-                  <td className="py-3 px-3 text-[#4B5563]">{booking.client}</td>
-                  <td className="py-3 px-3 text-[#4B5563]">{booking.company}</td>
-                  <td className="py-3 px-3 text-[#4B5563]">{booking.date}</td>
-                  <td className="py-3 px-3 text-right text-[#4B5563]">
+                  <td className="py-3 px-3 text-[var(--theme-text-secondary)]">{booking.client}</td>
+                  <td className="py-3 px-3 text-[var(--theme-text-secondary)]">{booking.company}</td>
+                  <td className="py-3 px-3 text-[var(--theme-text-secondary)]">{booking.date}</td>
+                  <td className="py-3 px-3 text-right text-[var(--theme-text-secondary)]">
                     ₱{booking.revenue.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                   </td>
                   <td className="py-3 px-3 text-center">

@@ -315,7 +315,7 @@ export function CommentsTab({
                             download={file.file_name}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] hover:bg-[#F0FDF4] transition-colors group text-sm"
+                            className="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[var(--theme-bg-page)] border border-[var(--theme-border-default)] hover:border-[var(--theme-action-primary-bg)] hover:bg-[var(--theme-status-success-bg)] transition-colors group text-sm"
                           >
                             <FileText className="w-4 h-4 text-[var(--theme-text-muted)] group-hover:text-[var(--theme-action-primary-bg)]" />
                             <span className="font-medium text-[var(--theme-text-secondary)] group-hover:text-[var(--theme-action-primary-bg)]">
@@ -387,7 +387,7 @@ export function CommentsTab({
                   <button
                     type="button"
                     onClick={() => handleRemoveFile(idx)}
-                    className="p-0.5 rounded hover:bg-[#E5E7EB] transition-colors"
+                    className="p-0.5 rounded hover:bg-[var(--theme-border-default)] transition-colors"
                   >
                     <X className="w-4 h-4 text-[var(--theme-text-muted)]" />
                   </button>
@@ -407,7 +407,7 @@ export function CommentsTab({
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
             rows={1}
-            className="w-full pl-4 pr-24 py-3 rounded-lg border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-sm text-[var(--theme-text-secondary)] placeholder-[#9CA3AF] resize-none overflow-hidden focus:outline-none disabled:bg-[var(--theme-bg-surface-subtle)] disabled:cursor-not-allowed transition-colors min-h-[44px] max-h-[200px]"
+            className="w-full pl-4 pr-24 py-3 rounded-lg border border-[var(--theme-border-default)] bg-[var(--theme-bg-surface)] text-sm text-[var(--theme-text-secondary)] placeholder-[var(--theme-text-muted)] resize-none overflow-hidden focus:outline-none disabled:bg-[var(--theme-bg-surface-subtle)] disabled:cursor-not-allowed transition-colors min-h-[44px] max-h-[200px]"
           />
           
           {/* Action Buttons - Positioned at bottom-right, locked in place */}

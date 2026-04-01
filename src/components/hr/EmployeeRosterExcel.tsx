@@ -374,7 +374,7 @@ export function EmployeeRosterExcel() {
                       </th>
                       <th
                         className="border-r border-[var(--theme-border-default)] px-2 py-2 text-center text-[10px] text-[var(--theme-text-primary)] uppercase"
-                        style={{ width: "140px", fontWeight: 600, backgroundColor: "#DBEAFE" }}
+                        style={{ width: "140px", fontWeight: 600, backgroundColor: "var(--neuron-semantic-info-bg)" }}
                       >
                         SSS NUMBER
                       </th>
@@ -524,7 +524,7 @@ export function EmployeeRosterExcel() {
                       {/* SSS Number */}
                       <td
                         className="border-r border-[var(--theme-border-default)] px-2 py-3 text-center text-[11px] text-[var(--theme-text-primary)]"
-                        style={{ width: "140px", backgroundColor: "#DBEAFE" }}
+                        style={{ width: "140px", backgroundColor: "var(--neuron-semantic-info-bg)" }}
                       >
                         {emp.sssNumber}
                       </td>

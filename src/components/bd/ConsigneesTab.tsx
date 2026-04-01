@@ -286,8 +286,8 @@ export function ConsigneesTab({ customerId }: ConsigneesTabProps) {
 
       {/* Empty State */}
       {!isLoading && consignees.length === 0 && !isFormOpen && (
-        <div className="text-center py-16 rounded-lg" style={{ border: "1px dashed #E5E9F0" }}>
-          <Building2 className="w-10 h-10 mx-auto mb-3" style={{ color: "#D0D5DD" }} />
+        <div className="text-center py-16 rounded-lg" style={{ border: "1px dashed var(--theme-border-default)" }}>
+          <Building2 className="w-10 h-10 mx-auto mb-3" style={{ color: "var(--neuron-ui-muted)" }} />
           <p className="text-[14px] mb-1" style={{ color: "var(--theme-text-muted)" }}>
             No consignees yet
           </p>
@@ -332,7 +332,7 @@ export function ConsigneesTab({ customerId }: ConsigneesTabProps) {
                 <tr
                   key={csg.id}
                   className="hover:bg-[var(--theme-bg-surface-subtle)] transition-colors"
-                  style={{ borderBottom: "1px solid #F2F4F7" }}
+                  style={{ borderBottom: "1px solid var(--theme-border-default)" }}
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
@@ -372,7 +372,7 @@ export function ConsigneesTab({ customerId }: ConsigneesTabProps) {
                         className="p-1.5 rounded hover:bg-[var(--theme-status-danger-bg)] transition-colors disabled:opacity-50"
                         title="Delete"
                       >
-                        <Trash2 className="w-3.5 h-3.5" style={{ color: deletingId === csg.id ? "#98A2B3" : "#EF4444" }} />
+                        <Trash2 className="w-3.5 h-3.5" style={{ color: deletingId === csg.id ? "var(--theme-text-muted)" : "var(--theme-status-danger-fg)" }} />
                       </button>
                     </div>
                   </td>

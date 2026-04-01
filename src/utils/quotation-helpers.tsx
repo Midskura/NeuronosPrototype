@@ -23,12 +23,12 @@ interface ServiceIconOptions {
 
 /**
  * Returns a Lucide icon element for the given service type.
- * Default: size 16, color #667085 (muted).
- * ContractDetailView uses size 15, color #0F766E (teal).
+ * Default: size 16, color var(--theme-text-muted) (muted).
+ * ContractDetailView uses size 15, color var(--theme-action-primary-bg) (teal).
  */
 export function getServiceIcon(service: string, opts?: ServiceIconOptions) {
   const size = opts?.size ?? 16;
-  const color = opts?.color ?? "#667085";
+  const color = opts?.color ?? "var(--theme-text-muted)";
   const style = { color };
 
   switch (service) {
@@ -58,26 +58,26 @@ export function getQuotationStatusColor(status: QuotationStatus | string): strin
 
   switch (normalizedStatus) {
     case "Draft":
-      return "#6B7280";
+      return "var(--theme-text-muted)";
     case "Pending Pricing":
     case "Needs Revision":
-      return "#F59E0B";
+      return "var(--theme-status-warning-fg)";
     case "Priced":
       return "#8B5CF6";
     case "Sent to Client":
-      return "#3B82F6";
+      return "var(--neuron-semantic-info)";
     case "Accepted by Client":
     case "Converted to Project":
     case "Converted to Contract":
-      return "#10B981";
+      return "var(--theme-status-success-fg)";
     case "Rejected by Client":
-      return "#EF4444";
+      return "var(--theme-status-danger-fg)";
     case "Disapproved":
-      return "#DC2626";
+      return "var(--theme-status-danger-fg)";
     case "Cancelled":
-      return "#6B7280";
+      return "var(--theme-text-muted)";
     default:
-      return "#6B7280";
+      return "var(--theme-text-muted)";
   }
 }
 
@@ -90,25 +90,25 @@ export function getQuotationStatusBgColor(status: QuotationStatus | string): str
 
   switch (normalizedStatus) {
     case "Draft":
-      return "#F3F4F6";
+      return "var(--neuron-pill-inactive-bg)";
     case "Pending Pricing":
     case "Needs Revision":
-      return "#FEF3C7";
+      return "var(--theme-status-warning-bg)";
     case "Priced":
-      return "#EDE9FE";
+      return "var(--neuron-status-accent-bg)";
     case "Sent to Client":
-      return "#DBEAFE";
+      return "var(--neuron-semantic-info-bg)";
     case "Accepted by Client":
     case "Converted to Project":
     case "Converted to Contract":
-      return "#D1FAE5";
+      return "var(--theme-status-success-bg)";
     case "Rejected by Client":
     case "Disapproved":
-      return "#FEE2E2";
+      return "var(--theme-status-danger-bg)";
     case "Cancelled":
-      return "#F3F4F6";
+      return "var(--neuron-pill-inactive-bg)";
     default:
-      return "#F3F4F6";
+      return "var(--neuron-pill-inactive-bg)";
   }
 }
 
@@ -123,15 +123,15 @@ export function getQuotationStatusBgColor(status: QuotationStatus | string): str
 export function getDisplayStatusColor(displayStatus: DisplayStatus): string {
   switch (displayStatus) {
     case "Ongoing":
-      return "#D97706";
+      return "var(--theme-status-warning-fg)";
     case "Waiting Approval":
       return "#C88A2B";
     case "Approved":
-      return "#0F766E";
+      return "var(--theme-action-primary-bg)";
     case "Disapproved":
-      return "#DC2626";
+      return "var(--theme-status-danger-fg)";
     case "Cancelled":
-      return "#6B7280";
+      return "var(--theme-text-muted)";
   }
 }
 
@@ -141,15 +141,15 @@ export function getDisplayStatusColor(displayStatus: DisplayStatus): string {
 export function getDisplayStatusBgColor(displayStatus: DisplayStatus): string {
   switch (displayStatus) {
     case "Ongoing":
-      return "#FEF3C7";
+      return "var(--theme-status-warning-bg)";
     case "Waiting Approval":
-      return "#FEF3C7";
+      return "var(--theme-status-warning-bg)";
     case "Approved":
-      return "#D1FAE5";
+      return "var(--theme-status-success-bg)";
     case "Disapproved":
-      return "#FEE2E2";
+      return "var(--theme-status-danger-bg)";
     case "Cancelled":
-      return "#F3F4F6";
+      return "var(--neuron-pill-inactive-bg)";
   }
 }
 

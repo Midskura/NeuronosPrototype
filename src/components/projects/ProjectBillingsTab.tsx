@@ -215,7 +215,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
     <div style={{
       flex: 1,
       overflow: "auto",
-      backgroundColor: "#FAFBFC"
+      backgroundColor: "var(--theme-bg-page)"
     }}>
       <div style={{ padding: "32px 48px", maxWidth: "1400px", margin: "0 auto" }}>
         
@@ -262,7 +262,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
           {/* Action Bar / Filters Placeholder */}
           <div style={{
             padding: "12px 24px",
-            backgroundColor: "#FAFBFC",
+            backgroundColor: "var(--theme-bg-page)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -404,7 +404,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                         <td style={{ padding: "12px 16px" }}>
                           <button 
                             onClick={() => handleToggleSelect(item.id)}
-                            style={{ background: "none", border: "none", cursor: "pointer", color: selectedIds.has(item.id) ? "#0F766E" : "#D1D5DB" }}
+                            style={{ background: "none", border: "none", cursor: "pointer", color: selectedIds.has(item.id) ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)" }}
                           >
                             {selectedIds.has(item.id) ? <CheckSquare size={18} /> : <Square size={18} />}
                           </button>
@@ -456,7 +456,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                 <div style={{ 
                   padding: "40px", 
                   textAlign: "center", 
-                  border: "1px dashed #E5E7EB", 
+                  border: "1px dashed var(--theme-border-default)",
                   borderRadius: "12px",
                   backgroundColor: "var(--theme-bg-page)",
                   color: "var(--theme-text-muted)"
@@ -490,7 +490,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          backgroundColor: isExpanded ? "#F8FBFB" : "white"
+                          backgroundColor: isExpanded ? "var(--theme-bg-page)" : "var(--theme-bg-surface)"
                         }}
                       >
                         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
@@ -505,7 +505,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                               <div style={{ fontSize: "14px", fontWeight: 600, color: "var(--theme-text-primary)" }}>{ref}</div>
                               {isPosted && (
-                                <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--theme-action-primary-bg)", backgroundColor: "#E6FFFA", padding: "2px 6px", borderRadius: "4px", border: "1px solid #B2F5EA" }}>
+                                <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--theme-action-primary-bg)", backgroundColor: "var(--theme-status-success-bg)", padding: "2px 6px", borderRadius: "4px", border: "1px solid var(--theme-status-success-border)" }}>
                                   POSTED
                                 </span>
                               )}
@@ -542,7 +542,7 @@ export function ProjectBillingsTab({ project, currentUser }: ProjectBillingsTabP
                                 </tr>
                               ))}
                             </tbody>
-                            <tfoot style={{ borderTop: "1px dashed #E5E7EB" }}>
+                            <tfoot style={{ borderTop: "1px dashed var(--theme-border-default)" }}>
                               <tr>
                                 <td style={{ padding: "12px 0", fontWeight: 600, color: "var(--theme-text-primary)" }}>Total Due</td>
                                 <td style={{ padding: "12px 0", textAlign: "right", fontWeight: 600, color: "var(--theme-text-primary)" }}>{formatCurrency(totalAmount)}</td>

@@ -318,7 +318,7 @@ export function CreateBookingFromProjectModal({
                 justifyContent: "center"
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#F3F4F6";
+                e.currentTarget.style.background = "var(--neuron-pill-inactive-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
@@ -337,19 +337,19 @@ export function CreateBookingFromProjectModal({
         }}>
           {/* Auto-fill Notice */}
           <div style={{
-            background: "#EFF6FF",
-            border: "1px solid #93C5FD",
+            background: "var(--neuron-semantic-info-bg)",
+            border: "1px solid var(--neuron-semantic-info-border)",
             borderRadius: "8px",
             padding: "16px",
             marginBottom: "32px"
           }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-              <CheckCircle size={20} color="#1E40AF" style={{ flexShrink: 0, marginTop: "2px" }} />
+              <CheckCircle size={20} color="var(--neuron-semantic-info)" style={{ flexShrink: 0, marginTop: "2px" }} />
               <div>
                 <h4 style={{
                   fontSize: "14px",
                   fontWeight: 600,
-                  color: "#1E40AF",
+                  color: "var(--neuron-semantic-info)",
                   marginBottom: "4px",
                   margin: 0
                 }}>
@@ -357,7 +357,7 @@ export function CreateBookingFromProjectModal({
                 </h4>
                 <p style={{
                   fontSize: "13px",
-                  color: "#1E40AF",
+                  color: "var(--neuron-semantic-info)",
                   margin: 0,
                   lineHeight: "1.6"
                 }}>
@@ -430,14 +430,14 @@ export function CreateBookingFromProjectModal({
           {/* Info Note */}
           <div style={{
             padding: "16px",
-            background: "#FFFBEB",
-            border: "1px solid #FDE68A",
+            background: "var(--theme-status-warning-bg)",
+            border: "1px solid var(--theme-status-warning-border)",
             borderRadius: "8px",
             display: "flex",
             alignItems: "flex-start",
             gap: "12px"
           }}>
-            <Info size={18} color="#92400E" style={{ flexShrink: 0, marginTop: "2px" }} />
+            <Info size={18} color="var(--theme-status-warning-fg)" style={{ flexShrink: 0, marginTop: "2px" }} />
             <div style={{
               fontSize: "13px",
               color: "var(--theme-status-warning-fg)",
@@ -475,12 +475,12 @@ export function CreateBookingFromProjectModal({
             }}
             onMouseEnter={(e) => {
               if (!isSubmitting) {
-                e.currentTarget.style.background = "#F9FAFB";
+                e.currentTarget.style.background = "var(--neuron-pill-inactive-bg)";
               }
             }}
             onMouseLeave={(e) => {
               if (!isSubmitting) {
-                e.currentTarget.style.background = "white";
+                e.currentTarget.style.background = "var(--theme-bg-surface)";
               }
             }}
           >
@@ -491,7 +491,7 @@ export function CreateBookingFromProjectModal({
             disabled={isSubmitting}
             style={{
               padding: "10px 24px",
-              background: "#0F766E",
+              background: "var(--theme-action-primary-bg)",
               border: "none",
               borderRadius: "8px",
               fontSize: "14px",

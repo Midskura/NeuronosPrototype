@@ -59,7 +59,9 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
   const [email, setEmail] = useState("");
   const [department, setDepartment] = useState("");
   const [role, setRole] = useState("");
+  const [position, setPosition] = useState("");
   const [teamId, setTeamId] = useState("");
+  const [serviceType, setServiceType] = useState("");
   const [status, setStatus] = useState<"active" | "inactive">("active");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -70,9 +72,12 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
   const { teams: allTeams } = useTeams();
   const teams = department === "Operations" ? allTeams : [];
 
-  // Reset teamId when department changes away from Operations
+  // Reset Operations-specific fields when department changes away from Operations
   useEffect(() => {
-    if (department !== "Operations") setTeamId("");
+    if (department !== "Operations") {
+      setTeamId("");
+      setServiceType("");
+    }
   }, [department]);
 
   const validate = (): boolean => {
@@ -127,7 +132,16 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
       // Update the profile using the admin's main client
       const { error: updateError } = await supabase
         .from("users")
-        .update({ name: name.trim(), department, role, team_id: teamId || null, status, is_active: status === "active" })
+        .update({
+          name: name.trim(),
+          department,
+          role,
+          position: position.trim() || null,
+          team_id: teamId || null,
+          service_type: serviceType || null,
+          status,
+          is_active: status === "active",
+        })
         .eq("auth_id", data.user.id);
 
       if (updateError) {
@@ -255,19 +269,50 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
           <FieldError message={errors.role ?? ""} />
         </div>
 
+        <div style={{ marginBottom: "20px" }}>
+          <FieldLabel>Position / Job Title</FieldLabel>
+          <input
+            type="text"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
+            placeholder="e.g. Import Supervisor"
+            style={inputStyle}
+          />
+        </div>
+
         {department === "Operations" && (
-          <div style={{ marginBottom: "20px" }}>
-            <FieldLabel>Team</FieldLabel>
-            <CustomDropdown
-              label=""
-              value={teamId}
-              onChange={setTeamId}
-              options={[
-                { value: "", label: "No team" },
-                ...teams.map((t) => ({ value: t.id, label: t.name })),
-              ]}
-            />
-          </div>
+          <>
+            <div style={{ marginBottom: "20px" }}>
+              <FieldLabel>Team</FieldLabel>
+              <CustomDropdown
+                label=""
+                value={teamId}
+                onChange={setTeamId}
+                options={[
+                  { value: "", label: "No team" },
+                  ...teams.map((t) => ({ value: t.id, label: t.name })),
+                ]}
+              />
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <FieldLabel>Service Type</FieldLabel>
+              <CustomDropdown
+                label=""
+                value={serviceType}
+                onChange={setServiceType}
+                options={[
+                  { value: "", label: "Select service type" },
+                  { value: "Forwarding", label: "Forwarding" },
+                  { value: "Brokerage", label: "Brokerage" },
+                  { value: "Trucking", label: "Trucking" },
+                  { value: "Marine Insurance", label: "Marine Insurance" },
+                  { value: "Others", label: "Others" },
+                ]}
+              />
+            </div>
+
+          </>
         )}
 
         <div style={{ marginBottom: "20px" }}>
@@ -280,7 +325,7 @@ export function CreateUserPanel({ isOpen, onClose, onCreated }: Props) {
                 style={{
                   height: 36, padding: "0 16px", borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: "pointer",
                   border: status === s ? "1px solid var(--neuron-action-primary)" : "1px solid var(--neuron-ui-border)",
-                  background: status === s ? "#F0FDF9" : "var(--neuron-bg-elevated)",
+                  background: status === s ? "var(--theme-status-success-bg)" : "var(--neuron-bg-elevated)",
                   color: status === s ? "var(--neuron-action-primary)" : "var(--neuron-ink-muted)",
                 }}
               >

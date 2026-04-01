@@ -40,47 +40,18 @@ export function ProjectBookingReadOnlyView({
     queryFn: async () => {
       console.log("[ProjectBookingReadOnlyView] Fetching booking:", { bookingId, bookingType });
 
-      // Validate bookingType before proceeding
-      if (!bookingType) {
-        console.error("[ProjectBookingReadOnlyView] Error: bookingType is undefined");
-        throw new Error("Booking type is required but was not provided");
-      }
+      const { data: bookingData, error } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('id', bookingId)
+        .maybeSingle();
 
-      // Normalize booking type to lowercase for mapping
-      const normalizedType = bookingType.toLowerCase();
+      if (error) throw new Error(error.message);
+      if (!bookingData) throw new Error("Booking not found");
 
-      // Map bookingType to the correct endpoint format
-      const endpointMap: Record<string, string> = {
-        "forwarding": "forwarding_bookings",
-        "brokerage": "brokerage_bookings",
-        "trucking": "trucking_bookings",
-        "marine-insurance": "marine_insurance_bookings",
-        "marine insurance": "marine_insurance_bookings",
-        "others": "others_bookings",
-      };
-
-      const endpoint = endpointMap[normalizedType];
-      if (!endpoint) {
-        console.error("[ProjectBookingReadOnlyView] Invalid booking type:", bookingType, "normalized:", normalizedType);
-        throw new Error(`Invalid booking type: ${bookingType}`);
-      }
-
-      console.log("[ProjectBookingReadOnlyView] Using endpoint:", endpoint);
-
-      const { data: bookingData, error } = await supabase.from(endpoint).select("*").eq("id", bookingId).maybeSingle();
-
-      if (!error && bookingData) {
-        return bookingData;
-      }
-
-      // Fallback: try all booking tables
-      console.log("[ProjectBookingReadOnlyView] Type-specific table failed, trying all tables");
-      const tables = ["forwarding_bookings", "brokerage_bookings", "trucking_bookings", "marine_insurance_bookings", "others_bookings"];
-      for (const table of tables) {
-        const { data: fb } = await supabase.from(table).select("*").eq("id", bookingId).maybeSingle();
-        if (fb) return fb;
-      }
-      throw new Error("Booking not found in any table");
+      // Merge details JSONB into top level for field access
+      const { details, ...rest } = bookingData as any;
+      return { ...details, ...rest };
     },
     enabled: !!bookingId && !!bookingType,
     staleTime: 30_000,
@@ -260,8 +231,8 @@ export function ProjectBookingReadOnlyView({
                   padding: "14px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: activeTab === "booking-info" ? "2px solid #0F766E" : "2px solid transparent",
-                  color: activeTab === "booking-info" ? "#0F766E" : "#667085",
+                  borderBottom: activeTab === "booking-info" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+                  color: activeTab === "booking-info" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontSize: "13px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -277,8 +248,8 @@ export function ProjectBookingReadOnlyView({
                   padding: "14px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: activeTab === "billings" ? "2px solid #0F766E" : "2px solid transparent",
-                  color: activeTab === "billings" ? "#0F766E" : "#667085",
+                  borderBottom: activeTab === "billings" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+                  color: activeTab === "billings" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontSize: "13px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -294,8 +265,8 @@ export function ProjectBookingReadOnlyView({
                   padding: "14px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: activeTab === "expenses" ? "2px solid #0F766E" : "2px solid transparent",
-                  color: activeTab === "expenses" ? "#0F766E" : "#667085",
+                  borderBottom: activeTab === "expenses" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+                  color: activeTab === "expenses" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontSize: "13px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -311,8 +282,8 @@ export function ProjectBookingReadOnlyView({
                   padding: "14px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: activeTab === "comments" ? "2px solid #0F766E" : "2px solid transparent",
-                  color: activeTab === "comments" ? "#0F766E" : "#667085",
+                  borderBottom: activeTab === "comments" ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+                  color: activeTab === "comments" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontSize: "13px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -328,7 +299,7 @@ export function ProjectBookingReadOnlyView({
             <div style={{
               flex: 1,
               overflow: "auto",
-              backgroundColor: "#FAFAFA"
+              backgroundColor: "var(--theme-bg-page)"
             }}>
               {activeTab === "booking-info" && (
                 <BookingInformationReadOnly booking={booking} bookingType={bookingType} />

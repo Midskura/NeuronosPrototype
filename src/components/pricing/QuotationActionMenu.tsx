@@ -73,7 +73,7 @@ export function QuotationActionMenu({
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.borderColor = "var(--neuron-ui-border)";
-          e.currentTarget.style.backgroundColor = "white";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
           e.currentTarget.style.color = "var(--theme-text-muted)";
         }}
         title="Actions"
@@ -150,7 +150,7 @@ export function QuotationActionMenu({
                 fontWeight: 500
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F0FDF4";
+                e.currentTarget.style.backgroundColor = "var(--theme-status-success-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -185,7 +185,7 @@ export function QuotationActionMenu({
                 fontWeight: 500
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#F0FDF4";
+                e.currentTarget.style.backgroundColor = "var(--theme-status-success-bg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -219,7 +219,7 @@ export function QuotationActionMenu({
               transition: "background-color 0.15s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#FEE2E2";
+              e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";

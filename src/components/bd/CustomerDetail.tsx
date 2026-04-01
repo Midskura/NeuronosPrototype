@@ -335,7 +335,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
   const getStatusColor = (status: CustomerStatus) => {
     switch (status) {
-      case "Active": return "#0F766E";
+      case "Active": return "var(--theme-action-primary-bg)";
       case "Prospect": return "#C88A2B";
       case "Inactive": return "#6B7A76";
       default: return "#6B7A76";
@@ -344,7 +344,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
 
   const getTaskStatusColor = (status: string) => {
     switch (status) {
-      case "Completed": return "#0F766E";
+      case "Completed": return "var(--theme-action-primary-bg)";
       case "Ongoing": return "#C88A2B";
       case "Pending": return "#6B7A76";
       case "Cancelled": return "#C94F3D";
@@ -433,7 +433,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
           className="flex items-center gap-2 text-[13px] transition-colors"
           style={{ color: "var(--theme-action-primary-bg)" }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#0D6560";
+            e.currentTarget.style.color = "var(--theme-action-primary-border)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -823,7 +823,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                   onClick={() => setActiveTab("contacts")}
                   className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                   style={{
-                    color: activeTab === "contacts" ? "#0F766E" : "#667085"
+                    color: activeTab === "contacts" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                   }}
                 >
                   Contacts
@@ -841,7 +841,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     onClick={() => setActiveTab("activities")}
                     className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                     style={{
-                      color: activeTab === "activities" ? "#0F766E" : "#667085"
+                      color: activeTab === "activities" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                     }}
                   >
                     Activities
@@ -856,7 +856,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     onClick={() => setActiveTab("tasks")}
                     className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                     style={{
-                      color: activeTab === "tasks" ? "#0F766E" : "#667085"
+                      color: activeTab === "tasks" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                     }}
                   >
                     Tasks
@@ -873,7 +873,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 onClick={() => setActiveTab("inquiries")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "inquiries" ? "#0F766E" : "#667085"
+                  color: activeTab === "inquiries" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Inquiries
@@ -888,7 +888,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 onClick={() => setActiveTab("projects")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "projects" ? "#0F766E" : "#667085"
+                  color: activeTab === "projects" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Projects
@@ -904,7 +904,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 onClick={() => setActiveTab("contracts")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "contracts" ? "#0F766E" : "#667085"
+                  color: activeTab === "contracts" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Contracts
@@ -920,7 +920,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 onClick={() => setActiveTab("comments")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "comments" ? "#0F766E" : "#667085"
+                  color: activeTab === "comments" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Comments
@@ -935,7 +935,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                 onClick={() => setActiveTab("attachments")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "attachments" ? "#0F766E" : "#667085"
+                  color: activeTab === "attachments" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Attachments
@@ -1059,8 +1059,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                             <span 
                               className="text-[10px] px-2 py-0.5 rounded text-white font-medium"
                               style={{ 
-                                backgroundColor: displayStatus === "Customer" ? "#0F766E" : 
-                                                displayStatus === "Lead" ? "#C88A2B" : 
+                                backgroundColor: displayStatus === "Customer" ? "var(--theme-action-primary-bg)" :
+                                                displayStatus === "Lead" ? "#C88A2B" :
                                                 displayStatus === "MQL" ? "#6B7A76" :
                                                 displayStatus === "Prospect" ? "#C94F3D" : "#6B7A76"
                               }}
@@ -1096,7 +1096,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
                           style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "#0D6560";
+                            e.currentTarget.style.color = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -1114,7 +1114,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           className="p-6 rounded-xl"
                           style={{ 
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FAFAFA"
+                            backgroundColor: "var(--neuron-pill-inactive-bg)"
                           }}
                         >
                           <div className="space-y-6">
@@ -1465,8 +1465,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                   <div 
                                     className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                                     style={{ 
-                                      backgroundColor: task.status === "Completed" ? "#E8F5F3" : 
-                                                     task.status === "Cancelled" ? "#FFE5E5" : "#FEF3E7"
+                                      backgroundColor: task.status === "Completed" ? "var(--theme-bg-surface-tint)" :
+                                                     task.status === "Cancelled" ? "var(--theme-status-danger-bg)" : "var(--theme-status-warning-bg)"
                                     }}
                                   >
                                     {task.status === "Completed" ? (
@@ -1519,7 +1519,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
                           style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "#0D6560";
+                            e.currentTarget.style.color = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -1537,7 +1537,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         className="p-6 rounded-xl"
                         style={{ 
                           border: "1px solid var(--neuron-ui-border)",
-                          backgroundColor: "#FAFAFA"
+                          backgroundColor: "var(--neuron-pill-inactive-bg)"
                         }}
                       >
                         <div className="space-y-6">
@@ -1741,11 +1741,11 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                     {customerContracts.map((contract: any) => {
                       const statusColors: Record<string, { text: string; bg: string }> = {
                         Draft: { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
-                        Sent: { text: "#3B82F6", bg: "#DBEAFE" },
+                        Sent: { text: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" },
                         Active: { text: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
                         Expiring: { text: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
                         Expired: { text: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
-                        Renewed: { text: "#7C3AED", bg: "#EDE9FE" },
+                        Renewed: { text: "var(--neuron-status-accent-fg)", bg: "var(--neuron-status-accent-bg)" },
                       };
                       const sc = statusColors[contract.contract_status] || statusColors.Draft;
                       const validStart = contract.contract_validity_start
@@ -1760,7 +1760,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                           style={{
                             padding: "16px 20px",
                             borderRadius: "8px",
-                            border: "1px solid var(--neuron-ui-border, #E5E7EB)",
+                            border: "1px solid var(--neuron-ui-border)",
                             backgroundColor: "var(--theme-bg-surface)",
                             display: "flex",
                             alignItems: "center",
@@ -1857,10 +1857,10 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       className="p-4 rounded-lg"
                       style={{
                         background: comment.user_department === "BD" 
-                          ? "#E8F5F3" 
+                          ? "var(--theme-bg-surface-tint)" 
                           : "var(--neuron-bg-card)",
                         border: comment.user_department === "BD"
-                          ? "1.5px solid #0F766E"
+                          ? "1.5px solid var(--theme-action-primary-bg)"
                           : "1.5px solid var(--neuron-ui-border)",
                         marginLeft: comment.user_department === "BD" ? "40px" : "0",
                         marginRight: comment.user_department === "Pricing" ? "40px" : "0"
@@ -1879,7 +1879,7 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                         <span 
                           className="px-2 py-0.5 rounded text-[11px]"
                           style={{ 
-                            background: comment.user_department === "BD" ? "#0F766E" : "#6B7A76",
+                            background: comment.user_department === "BD" ? "var(--theme-action-primary-bg)" : "#6B7A76",
                             color: "#FFFFFF",
                             fontWeight: 500
                           }}
@@ -1925,8 +1925,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                       disabled={!newComment.trim()}
                       className="px-4 py-2 rounded-lg transition-all flex items-center gap-2"
                       style={{
-                        background: newComment.trim() ? "#0F766E" : "#E5E7EB",
-                        color: newComment.trim() ? "#FFFFFF" : "#9CA3AF",
+                        background: newComment.trim() ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)",
+                        color: newComment.trim() ? "#FFFFFF" : "var(--theme-text-muted)",
                         border: "none",
                         cursor: newComment.trim() ? "pointer" : "not-allowed",
                         height: "fit-content"
@@ -2012,8 +2012,8 @@ export function CustomerDetail({ customer, onBack, onCreateInquiry, onViewInquir
                                 <span 
                                   className="text-[11px] px-2 py-0.5 rounded font-medium uppercase tracking-wide"
                                   style={{
-                                    backgroundColor: attachment.source === "Customer" ? "#E8F5F3" : attachment.source === "Activity" ? "#FEF3E7" : "#F3F4F6",
-                                    color: attachment.source === "Customer" ? "#0F766E" : attachment.source === "Activity" ? "#C88A2B" : "#667085"
+                                    backgroundColor: attachment.source === "Customer" ? "var(--theme-bg-surface-tint)" : attachment.source === "Activity" ? "var(--theme-status-warning-bg)" : "var(--neuron-pill-inactive-bg)",
+                                    color: attachment.source === "Customer" ? "var(--theme-action-primary-bg)" : attachment.source === "Activity" ? "var(--theme-status-warning-fg)" : "var(--theme-text-muted)"
                                   }}
                                 >
                                   {attachment.source}

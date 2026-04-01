@@ -730,12 +730,12 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                         alignItems: "center",
                         gap: "6px",
                         padding: "6px 12px",
-                        backgroundColor: isAdded ? "#E8F5F3" : "white",
-                        border: isAdded ? "1.5px solid #0F766E" : "1px solid var(--neuron-ui-border)",
+                        backgroundColor: isAdded ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)",
+                        border: isAdded ? "1.5px solid var(--theme-action-primary-bg)" : "1px solid var(--neuron-ui-border)",
                         borderRadius: "6px",
                         cursor: isAdded ? "not-allowed" : "pointer",
                         transition: "all 0.15s ease",
-                        color: isAdded ? "#0F766E" : "var(--neuron-ink-primary)",
+                        color: isAdded ? "var(--theme-action-primary-bg)" : "var(--neuron-ink-primary)",
                         fontSize: "13px",
                         fontWeight: isAdded ? 600 : 400,
                         opacity: isAdded ? 0.7 : 1,
@@ -774,7 +774,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
                           alignItems: "center",
                           gap: "10px",
                           padding: "12px 16px",
-                          backgroundColor: isExpanded ? "#F8FBFB" : "white",
+                          backgroundColor: isExpanded ? "var(--theme-bg-page)" : "var(--theme-bg-surface)",
                         }}
                       >
                         <button
@@ -834,7 +834,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
 
                       {/* Service Details Form */}
                       {isExpanded && (
-                        <div style={{ padding: "16px", backgroundColor: "#FAFBFC" }}>
+                        <div style={{ padding: "16px", backgroundColor: "var(--theme-bg-page)" }}>
                           {service.service_type === "Brokerage" && (
                             <BrokerageFormV2
                               data={service.service_details as BrokerageDetails}
@@ -918,7 +918,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
             e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "white";
+            e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
           }}
         >
           Cancel
@@ -932,7 +932,7 @@ export function AddInquiryPanel({ onClose, onSave }: AddInquiryPanelProps) {
             fontSize: "13px",
             fontWeight: 600,
             color: "white",
-            backgroundColor: isFormValid() ? "var(--neuron-brand-green)" : "#D1D5DB",
+            backgroundColor: isFormValid() ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)",
             border: "none",
             borderRadius: "6px",
             cursor: isFormValid() ? "pointer" : "not-allowed",

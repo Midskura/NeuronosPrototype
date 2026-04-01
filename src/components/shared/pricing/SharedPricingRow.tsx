@@ -141,7 +141,7 @@ export function SharedPricingRow({
   return (
     <div style={{
       backgroundColor: "var(--theme-bg-surface)",
-      border: mode === "add" ? "1px solid #0F766E" : "1px solid #E5E9E8",
+      border: mode === "add" ? "1px solid var(--theme-action-primary-bg)" : "1px solid var(--theme-border-default)",
       borderRadius: "10px",
       overflow: "hidden",
       marginBottom: "12px",

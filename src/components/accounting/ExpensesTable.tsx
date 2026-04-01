@@ -86,7 +86,7 @@ export function ExpensesTable({
     
     // Exact colors from design system
     if (s === "posted" || s === "paid") styles = "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"; // Green
-    else if (s === "approved") styles = "bg-[#EFF6FF] text-[#2563EB]"; // Blue
+    else if (s === "approved") styles = "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)]"; // Blue
     else if (s === "rejected" || s === "cancelled") styles = "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]"; // Red
     else if (s === "pending" || s === "draft") styles = "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]"; // Amber
 
@@ -100,7 +100,7 @@ export function ExpensesTable({
   // Matches ActivitiesList "System Update" / "Note" style for neutral categories
   const getCategoryColor = (category: string) => {
     // We use the "Sage" style from ActivitiesList for general categories to look clean
-    return "bg-[#F1F6F4] text-[var(--theme-text-muted)]";
+    return "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-text-muted)]";
   };
 
   const hasConvertCol = !!(convertibleIds && onConvertItem);
@@ -139,7 +139,7 @@ export function ExpensesTable({
   return (
     <div className="rounded-[10px] overflow-hidden bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)]">
       {/* Header - Matches var(--neuron-bg-page) which is #F7FAF8 */}
-      <div className={`${gridClass} gap-3 px-4 py-2 border-b border-[var(--theme-border-default)] bg-[#F7FAF8]`}>
+      <div className={`${gridClass} gap-3 px-4 py-2 border-b border-[var(--theme-border-default)] bg-[var(--theme-bg-page)]`}>
         <div></div> {/* Icon Placeholder */}
         <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Category / Date</div>
         <div className="text-[11px] font-semibold uppercase tracking-[0.002em] text-[var(--theme-text-muted)]">Reference</div>
@@ -154,13 +154,13 @@ export function ExpensesTable({
       </div>
 
       {/* Rows */}
-      <div className="divide-y divide-[#E5E9F0]">
+      <div className="divide-y divide-[var(--theme-border-default)]">
         {data.map((item, index) => {
           const isHighlighted = highlightId === item.id;
           return (
           <div
             key={item.id || index}
-            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[var(--theme-state-hover)]" : ""} ${isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md" : ""}`}
+            className={`${gridClass} gap-3 px-4 py-3 transition-colors ${onRowClick ? "cursor-pointer hover:bg-[var(--theme-state-hover)]" : ""} ${isHighlighted ? "ring-2 ring-[var(--theme-action-primary-bg)] bg-[var(--theme-action-primary-bg)]/5 rounded-md" : ""}`}
             onClick={() => onRowClick && onRowClick(item.originalData || item)}
             ref={isHighlighted ? highlightRef : undefined}
           >
@@ -188,14 +188,14 @@ export function ExpensesTable({
 
              {/* Description - Dark gray primary text */}
              <div className="flex items-center">
-               <span className="text-[12px] text-[#111827] font-medium line-clamp-2" title={item.description || item.payee}>
+               <span className="text-[12px] text-[var(--theme-text-primary)] font-medium line-clamp-2" title={item.description || item.payee}>
                  {item.description || "—"}
                </span>
             </div>
 
             {/* Payee - Secondary Gray Text or Regular Text */}
             <div className="flex items-center">
-               <span className="text-[12px] text-[#4B5563] font-medium truncate" title={item.payee}>
+               <span className="text-[12px] text-[var(--theme-text-secondary)] font-medium truncate" title={item.payee}>
                  {item.payee}
                </span>
             </div>
@@ -230,7 +230,7 @@ export function ExpensesTable({
                     style={{
                       display: "flex", alignItems: "center", gap: "4px",
                       padding: "4px 8px", fontSize: "11px", fontWeight: 600,
-                      border: "1px solid #99F6E4", borderRadius: "6px",
+                      border: "1px solid var(--theme-status-success-border)", borderRadius: "6px",
                       backgroundColor: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)", cursor: "pointer",
                       whiteSpace: "nowrap",
                     }}

@@ -299,9 +299,9 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
       case "SQL":
         return "#C94F3D";
       case "Customer":
-        return "#0F766E";
+        return "var(--theme-action-primary-bg)";
       default:
-        return "#0F766E";
+        return "var(--theme-action-primary-bg)";
     }
   };
 
@@ -314,15 +314,15 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
       case "In Progress":
         return "#C94F3D";
       case "Connected":
-        return "#0F766E";
+        return "var(--theme-action-primary-bg)";
       case "Attempted to contact":
         return "#C88A2B";
       case "Unqualified":
-        return "#667085";
+        return "var(--theme-text-muted)";
       case "Bad timing":
-        return "#667085";
+        return "var(--theme-text-muted)";
       default:
-        return "#0F766E";
+        return "var(--theme-action-primary-bg)";
     }
   };
 
@@ -391,7 +391,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
           className="flex items-center gap-2 text-[13px] transition-colors"
           style={{ color: "var(--theme-action-primary-bg)" }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#0D6560";
+            e.currentTarget.style.color = "var(--theme-action-primary-border)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -663,7 +663,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="text-[14px] transition-colors"
                       style={{ color: "var(--theme-action-primary-bg)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#0D6560";
+                        e.currentTarget.style.color = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -706,7 +706,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                       className="text-[14px] transition-colors"
                       style={{ color: "var(--theme-action-primary-bg)" }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.color = "#0D6560";
+                        e.currentTarget.style.color = "var(--theme-action-primary-border)";
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -826,7 +826,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     <div 
                       className="text-[14px]"
                       style={{ 
-                        color: contact.notes ? "#12332B" : "#667085",
+                        color: contact.notes ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                         whiteSpace: "pre-wrap",
                         lineHeight: "1.6"
                       }}
@@ -843,12 +843,12 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                   <button
                     className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors text-[13px]"
                     style={{
-                      border: "1px solid #FFE5E5",
+                      border: "1px solid var(--theme-status-danger-border)",
                       backgroundColor: "var(--theme-bg-surface)",
                       color: "var(--theme-status-danger-fg)"
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#FFE5E5";
+                      e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
@@ -872,7 +872,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     onClick={() => setActiveTab("activities")}
                     className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                     style={{
-                      color: activeTab === "activities" ? "#0F766E" : "#667085"
+                      color: activeTab === "activities" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                     }}
                   >
                     Activities
@@ -887,7 +887,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                     onClick={() => setActiveTab("tasks")}
                     className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                     style={{
-                      color: activeTab === "tasks" ? "#0F766E" : "#667085"
+                      color: activeTab === "tasks" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                     }}
                   >
                     Tasks
@@ -904,7 +904,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 onClick={() => setActiveTab("inquiries")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "inquiries" ? "#0F766E" : "#667085"
+                  color: activeTab === "inquiries" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Inquiries
@@ -919,7 +919,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 onClick={() => setActiveTab("attachments")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "attachments" ? "#0F766E" : "#667085"
+                  color: activeTab === "attachments" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Attachments
@@ -934,7 +934,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                 onClick={() => setActiveTab("comments")}
                 className="px-1 pb-3 text-[13px] font-medium transition-colors relative"
                 style={{
-                  color: activeTab === "comments" ? "#0F766E" : "#667085"
+                  color: activeTab === "comments" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                 }}
               >
                 Comments
@@ -967,7 +967,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
                           style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "#0D6560";
+                            e.currentTarget.style.color = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -987,7 +987,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="p-6 rounded-xl"
                           style={{ 
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FAFAFA"
+                            backgroundColor: "var(--neuron-pill-inactive-bg)"
                           }}
                         >
                           <div className="space-y-6">
@@ -1511,8 +1511,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   <span 
                                     className="text-[11px] px-2 py-0.5 rounded font-medium"
                                     style={{
-                                      backgroundColor: task.status === "Completed" ? "#E8F5F3" : "#FEF3E7",
-                                      color: task.status === "Completed" ? "#0F766E" : "#C88A2B"
+                                      backgroundColor: task.status === "Completed" ? "var(--theme-bg-surface-tint)" : "var(--theme-status-warning-bg)",
+                                      color: task.status === "Completed" ? "var(--theme-action-primary-bg)" : "var(--theme-status-warning-fg)"
                                     }}
                                   >
                                     {task.status}
@@ -1545,7 +1545,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="flex items-center gap-2 text-[13px] transition-colors mb-4"
                           style={{ color: "var(--theme-action-primary-bg)" }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.color = "#0D6560";
+                            e.currentTarget.style.color = "var(--theme-action-primary-border)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.color = "var(--theme-action-primary-bg)";
@@ -1565,7 +1565,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           className="p-6 rounded-xl"
                           style={{ 
                             border: "1px solid var(--neuron-ui-border)",
-                            backgroundColor: "#FAFAFA"
+                            backgroundColor: "var(--neuron-pill-inactive-bg)"
                           }}
                         >
                           <div className="space-y-6">
@@ -1687,8 +1687,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               <CustomDropdown
                                 options={[
                                   { value: "High", label: "High", icon: <Flag size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
-                                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "#F59E0B" }} /> },
-                                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "#10B981" }} /> }
+                                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
+                                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "var(--theme-status-success-fg)" }} /> }
                                 ]}
                                 value={newTask.priority || "Medium"}
                                 onChange={(value) => setNewTask({ ...newTask, priority: value as "High" | "Medium" | "Low" })}
@@ -2075,7 +2075,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               <div 
                                 className="text-[14px]"
                                 style={{
-                                  color: selectedTask?.notes ? "#12332B" : "#667085",
+                                  color: selectedTask?.notes ? "var(--theme-text-primary)" : "var(--theme-text-muted)",
                                   whiteSpace: "pre-wrap",
                                   lineHeight: "1.6"
                                 }}
@@ -2097,8 +2097,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 value={editedTask.priority}
                                 onChange={(value) => setEditedTask({ ...editedTask, priority: value as any })}
                                 options={[
-                                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "#10B981" }} /> },
-                                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "#F59E0B" }} /> },
+                                  { value: "Low", label: "Low", icon: <Flag size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
+                                  { value: "Medium", label: "Medium", icon: <Flag size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
                                   { value: "High", label: "High", icon: <Flag size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> }
                                 ]}
                               />
@@ -2106,7 +2106,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                               <span
                                 className="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-medium uppercase tracking-wide"
                                 style={{
-                                  backgroundColor: selectedTask?.priority === "High" ? "#FFE5E5" : selectedTask?.priority === "Medium" ? "#FEF3E7" : "#F3F4F6",
+                                  backgroundColor: selectedTask?.priority === "High" ? "var(--theme-status-danger-bg)" : selectedTask?.priority === "Medium" ? "var(--theme-status-warning-bg)" : "var(--neuron-pill-inactive-bg)",
                                   color: selectedTask?.priority === "High" ? "#C94F3D" : selectedTask?.priority === "Medium" ? "#C88A2B" : "#667085"
                                 }}
                               >
@@ -2164,7 +2164,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                 className="text-center py-8 rounded-lg"
                                 style={{ 
                                   border: "1px dashed var(--neuron-ui-border)",
-                                  backgroundColor: "#FAFAFA"
+                                  backgroundColor: "var(--neuron-pill-inactive-bg)"
                                 }}
                               >
                                 <Paperclip size={24} style={{ color: "var(--theme-border-default)", margin: "0 auto 8px" }} />
@@ -2180,7 +2180,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                     className="flex items-center justify-between p-3 rounded-lg"
                                     style={{
                                       border: "1px solid var(--neuron-ui-border)",
-                                      backgroundColor: "#FAFAFA"
+                                      backgroundColor: "var(--neuron-pill-inactive-bg)"
                                     }}
                                   >
                                     <div className="flex items-center gap-3">
@@ -2284,8 +2284,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                     disabled={isProofRequired(selectedTask.type) && taskAttachments.length === 0}
                                     className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[13px] font-medium transition-colors"
                                     style={{
-                                      backgroundColor: (isProofRequired(selectedTask.type) && taskAttachments.length === 0) ? "#E5E7EB" : "#0F766E",
-                                      color: (isProofRequired(selectedTask.type) && taskAttachments.length === 0) ? "#9CA3AF" : "#FFFFFF",
+                                      backgroundColor: (isProofRequired(selectedTask.type) && taskAttachments.length === 0) ? "var(--theme-border-default)" : "var(--theme-action-primary-bg)",
+                                      color: (isProofRequired(selectedTask.type) && taskAttachments.length === 0) ? "var(--theme-text-muted)" : "#FFFFFF",
                                       cursor: (isProofRequired(selectedTask.type) && taskAttachments.length === 0) ? "not-allowed" : "pointer"
                                     }}
                                     onMouseEnter={(e) => {
@@ -2512,8 +2512,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                                   <span 
                                     className="text-[11px] px-2 py-0.5 rounded font-medium uppercase tracking-wide"
                                     style={{
-                                      backgroundColor: attachment.source === "Task" ? "#FEF3E7" : attachment.source === "Activity" ? "#E8F5F3" : "#F3F4F6",
-                                      color: attachment.source === "Task" ? "#C88A2B" : attachment.source === "Activity" ? "#0F766E" : "#667085"
+                                      backgroundColor: attachment.source === "Task" ? "var(--theme-status-warning-bg)" : attachment.source === "Activity" ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                                      color: attachment.source === "Task" ? "#C88A2B" : attachment.source === "Activity" ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)"
                                     }}
                                   >
                                     {attachment.source}
@@ -2558,10 +2558,10 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         className="p-4 rounded-lg"
                         style={{
                           background: comment.user_department === "BD" 
-                            ? "#E8F5F3" 
+                            ? "var(--theme-bg-surface-tint)" 
                             : "var(--neuron-bg-card)",
                           border: comment.user_department === "BD"
-                            ? "1.5px solid #0F766E"
+                            ? "1.5px solid var(--theme-action-primary-bg)"
                             : "1.5px solid var(--neuron-ui-border)",
                           marginLeft: comment.user_department === "BD" ? "40px" : "0",
                           marginRight: comment.user_department === "Pricing" ? "40px" : "0"
@@ -2580,7 +2580,7 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                           <span 
                             className="px-2 py-0.5 rounded text-[11px]"
                             style={{ 
-                              background: comment.user_department === "BD" ? "#0F766E" : "#6B7A76",
+                              background: comment.user_department === "BD" ? "var(--theme-action-primary-bg)" : "#6B7A76",
                               color: "#FFFFFF",
                               fontWeight: 500
                             }}
@@ -2626,8 +2626,8 @@ export function ContactDetail({ contact, onBack, onCreateInquiry, variant = "bd"
                         disabled={!newComment.trim()}
                         className="px-4 py-2 rounded-lg transition-all flex items-center gap-2"
                         style={{
-                          background: newComment.trim() ? "#0F766E" : "#E5E7EB",
-                          color: newComment.trim() ? "#FFFFFF" : "#9CA3AF",
+                          background: newComment.trim() ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)",
+                          color: newComment.trim() ? "#FFFFFF" : "var(--theme-text-muted)",
                           border: "none",
                           cursor: newComment.trim() ? "pointer" : "not-allowed",
                           height: "fit-content"

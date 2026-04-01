@@ -203,9 +203,9 @@ export function BudgetRequestList() {
       case "Rejected":
         return "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]";
       case "Under Review":
-        return "bg-[#FEF3E7] text-[#C88A2B]";
+        return "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]";
       case "Submitted":
-        return "bg-[#E0E7FF] text-[#4F46E5]";
+        return "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)]";
       case "Draft":
         return "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)]";
       default:
@@ -351,10 +351,10 @@ export function BudgetRequestList() {
                 padding: "10px 16px",
                 fontSize: "14px",
                 fontWeight: 500,
-                color: quickFilterTab === tab.id ? "#0F766E" : "#667085",
+                color: quickFilterTab === tab.id ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                 backgroundColor: "transparent",
                 border: "none",
-                borderBottom: quickFilterTab === tab.id ? "2px solid #0F766E" : "2px solid transparent",
+                borderBottom: quickFilterTab === tab.id ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
               }}
@@ -472,8 +472,8 @@ export function BudgetRequestList() {
               borderRadius: "8px",
               fontSize: "14px",
               fontWeight: 500,
-              color: showAdvancedFilters ? "#0F766E" : "#667085",
-              backgroundColor: showAdvancedFilters ? "#E8F5F3" : "#FFFFFF",
+              color: showAdvancedFilters ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
+              backgroundColor: showAdvancedFilters ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-surface)",
               cursor: "pointer",
               transition: "all 0.2s ease",
             }}
@@ -511,10 +511,10 @@ export function BudgetRequestList() {
                 transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFD1D1";
+                e.currentTarget.style.backgroundColor = "var(--theme-status-danger-border)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#FFE5E5";
+                e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
               }}
             >
               <X size={16} />

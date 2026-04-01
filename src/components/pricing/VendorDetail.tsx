@@ -46,7 +46,7 @@ interface UnifiedTextProps {
 
 const UnifiedText = ({ value, onChange, placeholder, readOnly, className = "", prefix, suffix }: UnifiedTextProps) => {
   const baseClasses = "flex-1 px-2 py-1.5 border rounded text-[13px] transition-colors duration-200 outline-none";
-  const editClasses = "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-primary)] focus:ring-1 focus:ring-[#0F766E] placeholder-gray-400";
+  const editClasses = "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-primary)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] placeholder-gray-400";
   const viewClasses = "bg-transparent border-transparent text-[var(--theme-text-primary)] cursor-default px-0";
 
   return (
@@ -131,7 +131,7 @@ interface UnifiedTextAreaProps {
 
 const UnifiedTextArea = ({ value, onChange, placeholder, readOnly, rows = 3 }: UnifiedTextAreaProps) => {
   const baseClasses = "w-full px-2 py-1.5 border rounded text-[13px] transition-colors duration-200 outline-none resize-none";
-  const editClasses = "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-primary)] focus:ring-1 focus:ring-[#0F766E] placeholder-gray-400";
+  const editClasses = "bg-[var(--theme-bg-surface)] border-[var(--theme-border-default)] text-[var(--theme-text-primary)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] placeholder-gray-400";
   const viewClasses = "bg-transparent border-transparent text-[var(--theme-text-primary)] cursor-default px-0";
 
   return (
@@ -469,7 +469,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                                 type="checkbox"
                                 checked={editedVendor.is_wca_conference || false}
                                 onChange={(e) => setEditedVendor({ ...editedVendor, is_wca_conference: e.target.checked })}
-                                className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E] cursor-pointer"
+                                className="rounded border-[var(--theme-border-default)] text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)] cursor-pointer"
                                 id="is_wca"
                               />
                               <label htmlFor="is_wca" className="text-[12px] select-none text-[var(--theme-text-secondary)] cursor-pointer">
@@ -663,7 +663,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                       onClick={handleDeleteVendor}
                       className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-[var(--theme-status-danger-border)] text-[var(--theme-status-danger-fg)] bg-[var(--theme-bg-surface)] hover:bg-[var(--theme-status-danger-bg)] transition-colors text-[13px] font-medium group"
                    >
-                      <Trash2 size={14} className="text-[var(--theme-status-danger-fg)] group-hover:text-[#B91C1C]" />
+                      <Trash2 size={14} className="text-[var(--theme-status-danger-fg)] group-hover:text-[var(--theme-status-danger-fg)]" />
                       Delete Vendor
                    </button>
                  </div>
@@ -684,8 +684,8 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                 {/* Save Action */}
                 {hasUnsavedChanges && (
                   <div className="flex items-center gap-3 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <span className="text-[12px] font-medium text-[#F59E0B] flex items-center gap-1.5 bg-[var(--theme-status-warning-bg)] px-2 py-1 rounded border border-amber-100">
-                       <div className="w-1.5 h-1.5 rounded-full bg-[#F59E0B]" />
+                    <span className="text-[12px] font-medium text-[var(--theme-status-warning-fg)] flex items-center gap-1.5 bg-[var(--theme-status-warning-bg)] px-2 py-1 rounded border border-amber-100">
+                       <div className="w-1.5 h-1.5 rounded-full bg-[var(--theme-status-warning-fg)]" />
                        Unsaved Changes
                     </span>
                     <button
@@ -711,7 +711,7 @@ export function VendorDetail({ vendor: initialVendor, onBack, onSave }: VendorDe
                 {isLoading ? (
                   <div className="absolute inset-0 flex items-center justify-center bg-[var(--theme-bg-surface)] z-10">
                     <div className="text-sm text-[var(--theme-text-muted)] flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-[var(--theme-border-default)] border-t-[#0F766E] rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-[var(--theme-border-default)] border-t-[var(--theme-action-primary-bg)] rounded-full animate-spin"></div>
                       Loading rates...
                     </div>
                   </div>

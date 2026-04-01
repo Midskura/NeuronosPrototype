@@ -18,11 +18,11 @@ export function FormCheckbox({ checked, onChange, label, disabled = false }: For
   let opacity = disabled ? 0.6 : 1;
   
   if (checked) {
-    borderColor = disabled ? "#9CA3AF" : "#0F766E";
-    backgroundColor = disabled ? "#9CA3AF" : "#0F766E";
+    borderColor = disabled ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)";
+    backgroundColor = disabled ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)";
   } else if (isHovered && !disabled) {
-    borderColor = "#0F766E";
-    backgroundColor = "#F8FBFB";
+    borderColor = "var(--theme-action-primary-bg)";
+    backgroundColor = "var(--theme-bg-surface-tint)";
   }
   
   return (

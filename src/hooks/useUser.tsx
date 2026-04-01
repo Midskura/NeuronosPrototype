@@ -16,14 +16,12 @@ export interface User {
   phone?: string | null;         // contact phone number
   // Operations-specific: controls which Ops module tabs are visible (separate from RBAC role)
   service_type?: 'Forwarding' | 'Brokerage' | 'Trucking' | 'Marine Insurance' | 'Others' | null;
-  operations_role?: 'Manager' | 'Supervisor' | 'Handler' | null;
 }
 
 interface SignupOptions {
   department: string;
   role: string;
   service_type?: string | null;
-  operations_role?: string | null;
 }
 
 interface DevRoleOverride {
@@ -79,7 +77,6 @@ async function fetchUserProfile(authUid: string): Promise<User | null> {
       avatar_url: data.avatar_url || null,
       phone: data.phone || null,
       service_type: data.service_type || null,
-      operations_role: data.operations_role || null,
     };
   } catch (error) {
     console.error('Error fetching user profile:', error);
@@ -293,7 +290,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
         if (options.department) updatePayload.department = options.department;
         if (options.role) updatePayload.role = options.role;
         if (options.service_type) updatePayload.service_type = options.service_type;
-        if (options.operations_role) updatePayload.operations_role = options.operations_role;
 
         console.log('[Neuron Auth] Updating profile with role info:', updatePayload);
         const { error: updateError } = await supabase
@@ -325,7 +321,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
           avatar_url: null,
           phone: null,
           service_type: (options?.service_type as User['service_type']) || null,
-          operations_role: (options?.operations_role as User['operations_role']) || null,
         };
         setUser(tempUser);
         localStorage.setItem('neuron_user', JSON.stringify(tempUser));

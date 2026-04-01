@@ -65,7 +65,7 @@ export function DateRangePicker({
         </PopoverContent>
       </Popover>
 
-      <span className="text-[#94A3B8] flex-shrink-0" style={{ fontSize: '12px' }}>–</span>
+      <span className="text-[var(--theme-text-muted)] flex-shrink-0" style={{ fontSize: '12px' }}>–</span>
 
       {/* End Date */}
       <Popover open={endOpen} onOpenChange={setEndOpen}>

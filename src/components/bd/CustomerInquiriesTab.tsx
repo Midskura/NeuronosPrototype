@@ -25,14 +25,14 @@ export function CustomerInquiriesTab({ inquiries, onViewInquiry, onCreateInquiry
 
   const getStatusStyle = (status: string) => {
     const statusStyles: Record<string, { bg: string; text: string }> = {
-      'Draft': { bg: '#F3F4F6', text: '#6B7280' },
-      'Pending Pricing': { bg: '#FEF3C7', text: '#92400E' },
-      'Quoted': { bg: '#DBEAFE', text: '#1E40AF' },
-      'Sent': { bg: '#E0E7FF', text: '#4338CA' },
-      'pending': { bg: '#FEF3C7', text: '#92400E' },
-      'draft': { bg: '#F3F4F6', text: '#6B7280' }
+      'Draft': { bg: 'var(--neuron-pill-inactive-bg)', text: 'var(--theme-text-muted)' },
+      'Pending Pricing': { bg: 'var(--theme-status-warning-bg)', text: 'var(--theme-status-warning-fg)' },
+      'Quoted': { bg: 'var(--neuron-semantic-info-bg)', text: 'var(--neuron-semantic-info)' },
+      'Sent': { bg: 'var(--neuron-semantic-info-bg)', text: 'var(--neuron-semantic-info)' },
+      'pending': { bg: 'var(--theme-status-warning-bg)', text: 'var(--theme-status-warning-fg)' },
+      'draft': { bg: 'var(--neuron-pill-inactive-bg)', text: 'var(--theme-text-muted)' }
     };
-    return statusStyles[status] || { bg: '#F3F4F6', text: '#6B7280' };
+    return statusStyles[status] || { bg: 'var(--neuron-pill-inactive-bg)', text: 'var(--theme-text-muted)' };
   };
 
   if (isLoading) {
@@ -71,7 +71,7 @@ export function CustomerInquiriesTab({ inquiries, onViewInquiry, onCreateInquiry
               placeholder="Search inquiries..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] text-[13px] w-[240px] transition-colors"
+              className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] text-[13px] w-[240px] transition-colors"
               style={{
                 border: "1px solid var(--neuron-ui-border)",
                 backgroundColor: "var(--theme-bg-surface)",
@@ -89,8 +89,8 @@ export function CustomerInquiriesTab({ inquiries, onViewInquiry, onCreateInquiry
               { value: "all", label: "All Statuses" },
               { value: "Draft", label: "Draft", icon: <FileText className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> },
               { value: "Pending Pricing", label: "Pending Pricing", icon: <Clock className="w-3.5 h-3.5" style={{ color: "var(--theme-status-warning-fg)" }} /> },
-              { value: "Quoted", label: "Quoted", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#1E40AF" }} /> },
-              { value: "Sent", label: "Sent", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#4338CA" }} /> }
+              { value: "Quoted", label: "Quoted", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--neuron-semantic-info)" }} /> },
+              { value: "Sent", label: "Sent", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--neuron-semantic-info)" }} /> }
             ]}
           />
         </div>
@@ -104,7 +104,7 @@ export function CustomerInquiriesTab({ inquiries, onViewInquiry, onCreateInquiry
               height: "40px", // Slightly smaller than TasksList (48px) to fit nicely in the tab content area
               padding: "0 16px",
               borderRadius: "12px",
-              background: "#0F766E",
+              background: "var(--theme-action-primary-bg)",
               border: "none",
               color: "#FFFFFF",
               fontSize: "13px",

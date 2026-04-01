@@ -26,14 +26,14 @@ export function ActivityTab({ project }: ActivityTabProps) {
       case "Fully Booked":
         return {
           bg: "var(--theme-status-success-bg)",
-          border: "#10B981",
-          text: "#065F46"
+          border: "var(--theme-status-success-fg)",
+          text: "var(--theme-status-success-fg)"
         };
       case "Partially Booked":
         return {
-          bg: "#EFF6FF",
-          border: "#3B82F6",
-          text: "#1E40AF"
+          bg: "var(--neuron-semantic-info-bg)",
+          border: "var(--neuron-semantic-info)",
+          text: "var(--neuron-semantic-info)"
         };
       default:
         return {

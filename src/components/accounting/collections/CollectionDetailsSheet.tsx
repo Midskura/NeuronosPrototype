@@ -1,4 +1,4 @@
-import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock, AlertCircle, Hash, DollarSign } from "lucide-react";
+import { X, Calendar, CreditCard, Building, User, FileText, CheckCircle2, Clock, AlertCircle, Hash, DollarSign, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import logoImage from "figma:asset/28c84ed117b026fbf800de0882eb478561f37f4f.png";
@@ -10,6 +10,7 @@ import {
   resolveCollectionDisposition,
 } from "../../../utils/collectionResolution";
 import { toast } from "../../ui/toast-utils";
+import { CollectionGLPostingSheet } from "./CollectionGLPostingSheet";
 
 interface CollectionDetailsSheetProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isResolving, setIsResolving] = useState(false);
+  const [showGLPosting, setShowGLPosting] = useState(false);
 
   useEffect(() => {
     async function fetchCollection() {
@@ -85,7 +87,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case "credited":
-        return { bg: "#EFF6FF", color: "#1D4ED8" };
+        return { bg: "var(--neuron-semantic-info-bg)", color: "var(--neuron-semantic-info)" };
       case "refunded":
         return { bg: "var(--theme-bg-surface-subtle)", color: "#475467" };
       case "posted":
@@ -95,7 +97,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
         return { bg: "var(--theme-status-success-bg)", color: "var(--theme-status-success-fg)" };
       case "pending":
       case "received":
-        return { bg: "#FEF3E7", color: "#C88A2B" };
+        return { bg: "var(--theme-status-warning-bg)", color: "var(--theme-status-warning-fg)" };
       case "bounced":
       case "cancelled":
         return { bg: "var(--theme-status-danger-bg)", color: "var(--theme-status-danger-fg)" };
@@ -350,6 +352,19 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                 </div>
               </div>
 
+              {!(collection as any).journal_entry_id && !isCollectionResolvedByCreditOrRefund(collection) && (
+                <div style={{ marginBottom: "16px" }}>
+                  <button
+                    onClick={() => setShowGLPosting(true)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-white"
+                    style={{ backgroundColor: "var(--neuron-brand-green, #0F766E)" }}
+                  >
+                    <BookOpen size={14} />
+                    Post to GL
+                  </button>
+                </div>
+              )}
+
               {(canResolve || isCollectionResolvedByCreditOrRefund(collection)) && (
                 <div
                   style={{
@@ -357,7 +372,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                     borderRadius: "12px",
                     padding: "16px 18px",
                     marginBottom: "24px",
-                    backgroundColor: isCollectionResolvedByCreditOrRefund(collection) ? "#F0FDF9" : "#F9FAFB",
+                    backgroundColor: isCollectionResolvedByCreditOrRefund(collection) ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", gap: "16px", alignItems: "center" }}>
@@ -366,7 +381,7 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                         Credit / Refund Control
                       </div>
                       {isCollectionResolvedByCreditOrRefund(collection) ? (
-                        <div style={{ fontSize: "13px", color: "#166534", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: "13px", color: "var(--theme-status-success-fg)", lineHeight: 1.5 }}>
                           Resolution recorded: <strong>{getCollectionResolutionLabel(collection)}</strong>. This payment stays in history but no longer applies to invoice settlement.
                         </div>
                       ) : (
@@ -382,9 +397,9 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                           onClick={() => handleResolveCollection("credited")}
                           disabled={isResolving}
                           style={{
-                            border: "1px solid #1D4ED8",
-                            backgroundColor: isResolving ? "#E5E7EB" : "#EFF6FF",
-                            color: isResolving ? "#6B7280" : "#1D4ED8",
+                            border: "1px solid var(--neuron-semantic-info)",
+                            backgroundColor: isResolving ? "var(--theme-border-default)" : "var(--neuron-semantic-info-bg)",
+                            color: isResolving ? "var(--theme-text-muted)" : "var(--neuron-semantic-info)",
                             borderRadius: "10px",
                             padding: "10px 14px",
                             fontSize: "12px",
@@ -398,9 +413,9 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
                           onClick={() => handleResolveCollection("refunded")}
                           disabled={isResolving}
                           style={{
-                            border: "1px solid #475467",
-                            backgroundColor: isResolving ? "#E5E7EB" : "#F9FAFB",
-                            color: isResolving ? "#6B7280" : "#475467",
+                            border: "1px solid var(--theme-text-secondary)",
+                            backgroundColor: isResolving ? "var(--theme-border-default)" : "var(--neuron-pill-inactive-bg)",
+                            color: isResolving ? "var(--theme-text-muted)" : "var(--theme-text-secondary)",
                             borderRadius: "10px",
                             padding: "10px 14px",
                             fontSize: "12px",
@@ -466,6 +481,19 @@ export function CollectionDetailsSheet({ isOpen, onClose, collectionId }: Collec
           ) : null}
         </div>
       </motion.div>
+
+      {collectionId && (
+        <CollectionGLPostingSheet
+          isOpen={showGLPosting}
+          onClose={() => setShowGLPosting(false)}
+          collectionId={collectionId}
+          onPosted={() => {
+            setShowGLPosting(false);
+            // refetch to reflect updated journal_entry_id
+            setCollection(prev => prev ? { ...prev, journal_entry_id: "__posted__" } : prev);
+          }}
+        />
+      )}
     </>
   );
 }

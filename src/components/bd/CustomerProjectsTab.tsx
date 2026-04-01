@@ -25,19 +25,19 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
   const getStatusStyle = (status: string) => {
     switch (status) {
       case "Active": return { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" }; // Amber
-      case "Completed": return { bg: "var(--theme-status-success-bg)", text: "#065F46" }; // Emerald
-      case "On Hold": return { bg: "var(--theme-bg-surface-subtle)", text: "#374151" }; // Gray
-      case "Cancelled": return { bg: "#FEE2E2", text: "#991B1B" }; // Red
-      default: return { bg: "var(--theme-bg-surface-subtle)", text: "#374151" };
+      case "Completed": return { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)" }; // Emerald
+      case "On Hold": return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-secondary)" }; // Gray
+      case "Cancelled": return { bg: "var(--theme-status-danger-bg)", text: "var(--theme-status-danger-fg)" }; // Red
+      default: return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-secondary)" };
     }
   };
 
   const getBookingStatusColor = (status: string) => {
     switch (status) {
-      case "Fully Booked": return "#059669";
-      case "Partially Booked": return "#D97706";
-      case "No Bookings Yet": return "#6B7280";
-      default: return "#6B7280";
+      case "Fully Booked": return "var(--theme-status-success-fg)";
+      case "Partially Booked": return "var(--theme-status-warning-fg)";
+      case "No Bookings Yet": return "var(--theme-text-muted)";
+      default: return "var(--theme-text-muted)";
     }
   };
 
@@ -76,7 +76,7 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] text-[13px] w-[240px] transition-colors"
+            className="pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] text-[13px] w-[240px] transition-colors"
             style={{
               border: "1px solid var(--neuron-ui-border)",
               backgroundColor: "var(--theme-bg-surface)",
@@ -92,8 +92,8 @@ export function CustomerProjectsTab({ projects, onViewProject, isLoading }: Cust
           onChange={(value) => setStatusFilter(value)}
           options={[
             { value: "all", label: "All Statuses" },
-            { value: "Active", label: "Active", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#237F66" }} /> },
-            { value: "Completed", label: "Completed", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "#2B8A6E" }} /> },
+            { value: "Active", label: "Active", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--theme-status-success-fg)" }} /> },
+            { value: "Completed", label: "Completed", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--theme-status-success-fg)" }} /> },
             { value: "On Hold", label: "On Hold", icon: <Calendar className="w-3.5 h-3.5" style={{ color: "var(--theme-text-muted)" }} /> },
             { value: "Cancelled", label: "Cancelled", icon: <CheckCircle2 className="w-3.5 h-3.5" style={{ color: "var(--theme-status-danger-fg)" }} /> }
           ]}

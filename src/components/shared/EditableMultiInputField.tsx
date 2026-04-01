@@ -280,8 +280,8 @@ export function EditableMultiInputField({
                     flexShrink: 0,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = "#FEF2F2";
-                    e.currentTarget.style.color = "#EF4444";
+                    e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
+                    e.currentTarget.style.color = "var(--theme-status-danger-fg)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "transparent";
@@ -321,7 +321,7 @@ export function EditableMultiInputField({
           style={{
             padding: "7px 10px",
             backgroundColor: "var(--theme-bg-surface)",
-            border: `1px solid ${required ? "#FCD34D" : "#E5E7EB"}`,
+            border: `1px solid ${required ? "var(--theme-status-warning-border)" : "var(--theme-border-default)"}`,
             borderRadius: "6px",
             fontSize: "13px",
             color: "var(--theme-text-muted)",
@@ -329,7 +329,7 @@ export function EditableMultiInputField({
             transition: "border-color 0.15s",
           }}
           onMouseEnter={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = "var(--theme-action-primary-bg)"; }}
-          onMouseLeave={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = required ? "#FCD34D" : "#E5E7EB"; }}
+          onMouseLeave={isControlled ? undefined : (e) => { e.currentTarget.style.borderColor = required ? "var(--theme-status-warning-border)" : "var(--theme-border-default)"; }}
         >
           {isEmpty ? "—" : placeholder}
         </div>
@@ -353,7 +353,7 @@ export function EditableMultiInputField({
               data-view-row
               style={{
                 padding: "7px 10px",
-                backgroundColor: "#FAFBFC",
+                backgroundColor: "var(--theme-bg-page)",
                 border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 fontSize: "13px",

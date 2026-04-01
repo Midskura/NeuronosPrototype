@@ -28,7 +28,7 @@ const STATUS_CONFIG: Record<ContractStatus, { color: string; icon: any }> = {
   Active:   { color: "var(--theme-status-success-fg)", icon: CheckCircle },
   Expiring: { color: "var(--theme-status-warning-fg)", icon: AlertTriangle },
   Expired:  { color: "var(--theme-text-muted)", icon: Clock },
-  Renewed:  { color: "#7C3AED", icon: RefreshCw },
+  Renewed:  { color: "var(--neuron-status-accent-fg)", icon: RefreshCw },
 };
 
 export function ContractStatusSelector({

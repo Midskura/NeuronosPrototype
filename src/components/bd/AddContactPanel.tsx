@@ -470,7 +470,7 @@ export function AddContactPanel({ isOpen, onClose, onSave, prefilledCustomerId, 
             disabled={!isFormValid}
             className="px-6 py-2.5 rounded-lg transition-all flex items-center gap-2"
             style={{
-              backgroundColor: isFormValid ? "#0F766E" : "#D1D5DB",
+              backgroundColor: isFormValid ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
               color: "#FFFFFF",
               fontSize: "14px",
               fontWeight: 600,

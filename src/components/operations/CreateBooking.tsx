@@ -30,7 +30,7 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
       description: "International freight forwarding (Sea/Air)",
       icon: Ship,
       color: "var(--theme-action-primary-bg)",
-      bgColor: "#E8F5F3"
+      bgColor: "var(--theme-bg-surface-tint)"
     },
     {
       id: "Brokerage",
@@ -38,15 +38,15 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
       description: "Customs clearance and documentation",
       icon: FileText,
       color: "#B45309",
-      bgColor: "#FFFBEB"
+      bgColor: "var(--theme-status-warning-bg)"
     },
     {
       id: "Trucking",
       title: "Trucking",
       description: "Local transport and delivery",
       icon: Truck,
-      color: "#1D4ED8",
-      bgColor: "#EFF6FF"
+      color: "var(--neuron-semantic-info)",
+      bgColor: "var(--neuron-semantic-info-bg)"
     },
     {
       id: "Marine Insurance",
@@ -61,8 +61,8 @@ export function CreateBooking({ onBack, onSubmit }: CreateBookingProps) {
       title: "Others",
       description: "Special services and miscellaneous",
       icon: Package,
-      color: "#4B5563",
-      bgColor: "#F3F4F6"
+      color: "var(--theme-text-secondary)",
+      bgColor: "var(--neuron-pill-inactive-bg)"
     }
   ];
 

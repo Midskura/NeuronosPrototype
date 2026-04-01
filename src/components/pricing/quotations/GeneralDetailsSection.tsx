@@ -197,7 +197,7 @@ export function GeneralDetailsSection({
                 fontWeight: 500,
                 color: "var(--theme-action-primary-bg)",
                 backgroundColor: "transparent",
-                border: "1px solid #E5E9E8",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 cursor: "pointer",
                 transition: "all 0.2s ease"
@@ -407,7 +407,7 @@ export function GeneralDetailsSection({
                       fontWeight: 500,
                       color: "white",
                       backgroundColor: "var(--theme-action-primary-bg)",
-                      border: "1px solid #0F766E",
+                      border: "1px solid var(--theme-action-primary-bg)",
                       borderRadius: "6px"
                     }}
                   >
@@ -429,12 +429,12 @@ export function GeneralDetailsSection({
                 let textColor = "var(--neuron-ink-base)";
                 
                 if (isSelected) {
-                  backgroundColor = "#0F766E";
-                  borderColor = "#0F766E";
+                  backgroundColor = "var(--theme-action-primary-bg)";
+                  borderColor = "var(--theme-action-primary-bg)";
                   textColor = "white";
                 } else if (isHovered) {
-                  backgroundColor = "#F8FBFB";
-                  borderColor = "#0F766E";
+                  backgroundColor = "var(--theme-bg-surface-tint)";
+                  borderColor = "var(--theme-action-primary-bg)";
                 }
                 
                 return (
@@ -486,7 +486,7 @@ export function GeneralDetailsSection({
                   />
                 </div>
                 <div>
-                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: showValidityEndError ? "#DC2626" : "var(--neuron-ink-base)", marginBottom: "8px" }}>
+                  <label style={{ display: "block", fontSize: "13px", fontWeight: 500, color: showValidityEndError ? "var(--theme-status-danger-fg)" : "var(--neuron-ink-base)", marginBottom: "8px" }}>
                     Valid Until *
                   </label>
                   <CustomDatePicker
@@ -645,7 +645,7 @@ export function GeneralDetailsSection({
             }}>
               <div style={{
                 width: "14px", height: "14px",
-                border: "2px solid #E5E7EB", borderTopColor: "#0F766E",
+                border: "2px solid var(--theme-border-default)", borderTopColor: "var(--theme-action-primary-bg)",
                 borderRadius: "50%", animation: "spin 0.8s linear infinite",
                 flexShrink: 0,
               }} />
@@ -699,7 +699,7 @@ export function GeneralDetailsSection({
               fontSize: "13px",
               color: "var(--theme-status-warning-fg)",
               backgroundColor: "var(--theme-status-warning-bg)",
-              border: "1px solid #FDE68A",
+              border: "1px solid var(--theme-status-warning-border)",
               borderRadius: "6px",
               minHeight: "38px",
               display: "flex",

@@ -91,7 +91,7 @@ export function ServicesAndBookingsTab({ project, currentUser, onUpdate }: Servi
                       style={{
                         padding: "8px 16px",
                         backgroundColor: "var(--theme-action-primary-bg)",
-                        border: "1px solid #0F766E",
+                        border: "1px solid var(--theme-action-primary-bg)",
                         borderRadius: "6px",
                         fontSize: "14px",
                         fontWeight: 500,
@@ -161,7 +161,7 @@ function Field({
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "6px",
         fontSize: "14px",
-        color: value ? "var(--neuron-ink-primary)" : "#9CA3AF"
+        color: value ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
       }}>
         {icon && <span style={{ color: "var(--neuron-brand-green)", flexShrink: 0 }}>{icon}</span>}
         <span>{value || "—"}</span>

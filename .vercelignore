@@ -1,0 +1,7 @@
+node_modules
+.git
+.dora
+dist
+.vercel/output
+src/supabase/functions
+*.log

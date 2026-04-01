@@ -124,8 +124,8 @@ export function ContractDetectionBanner({
         <div style={{
           width: "12px",
           height: "12px",
-          border: "1.5px solid #E5E7EB",
-          borderTopColor: "#0F766E",
+          border: "1.5px solid var(--theme-border-default)",
+          borderTopColor: "var(--theme-action-primary-bg)",
           borderRadius: "50%",
           animation: "spin 0.8s linear infinite",
         }} />
@@ -190,7 +190,7 @@ export function ContractDetectionBanner({
                   border: "none",
                   cursor: "pointer",
                   fontSize: "11px",
-                  color: isActive ? "#0F766E" : "#9CA3AF",
+                  color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontWeight: isActive ? 600 : 400,
                   width: "100%",
                   textAlign: "left",
@@ -200,7 +200,7 @@ export function ContractDetectionBanner({
                   width: "6px",
                   height: "6px",
                   borderRadius: "50%",
-                  backgroundColor: isActive ? "#0F766E" : "#D1D5DB",
+                  backgroundColor: isActive ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
                   flexShrink: 0,
                 }} />
                 {contract.quote_number}

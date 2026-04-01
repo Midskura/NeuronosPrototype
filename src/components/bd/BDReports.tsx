@@ -226,8 +226,8 @@ export function BDReports() {
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: mainTab === 'all' ? "2px solid #0F766E" : "2px solid transparent",
-              color: mainTab === 'all' ? "#0F766E" : "#667085",
+              borderBottom: mainTab === 'all' ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+              color: mainTab === 'all' ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -239,8 +239,8 @@ export function BDReports() {
             All Reports
             <span 
               style={{
-                backgroundColor: mainTab === 'all' ? "#E8F5F3" : "#F3F4F6",
-                color: mainTab === 'all' ? "#0F766E" : "#667085",
+                backgroundColor: mainTab === 'all' ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                color: mainTab === 'all' ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                 padding: "2px 8px",
                 borderRadius: "6px",
                 fontSize: "12px",
@@ -263,8 +263,8 @@ export function BDReports() {
               padding: "12px 20px",
               background: "transparent",
               border: "none",
-              borderBottom: mainTab === 'templates' ? "2px solid #0F766E" : "2px solid transparent",
-              color: mainTab === 'templates' ? "#0F766E" : "#667085",
+              borderBottom: mainTab === 'templates' ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
+              color: mainTab === 'templates' ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
               fontSize: "14px",
               fontWeight: 600,
               cursor: "pointer",
@@ -276,8 +276,8 @@ export function BDReports() {
             Templates
             <span 
               style={{
-                backgroundColor: mainTab === 'templates' ? "#E8F5F3" : "#F3F4F6",
-                color: mainTab === 'templates' ? "#0F766E" : "#667085",
+                backgroundColor: mainTab === 'templates' ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                color: mainTab === 'templates' ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                 padding: "2px 8px",
                 borderRadius: "6px",
                 fontSize: "12px",

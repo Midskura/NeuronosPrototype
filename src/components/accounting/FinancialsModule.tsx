@@ -36,6 +36,8 @@ import {
   Layers,
 } from "lucide-react";
 import { supabase } from "../../utils/supabase/client";
+import { useDataScope } from "../../hooks/useDataScope";
+import type { DataScope } from "../../hooks/useDataScope";
 import { calculateFinancialTotals } from "../../utils/financialCalculations";
 import { calculateInvoiceBalance } from "../../utils/accounting-math";
 import type { FinancialData } from "../../hooks/useProjectFinancials";
@@ -67,6 +69,10 @@ import { toast } from "../ui/toast-utils";
 
 // Dashboard (6-zone company-wide view)
 import { FinancialDashboard } from "./dashboard/FinancialDashboard";
+
+// Detail sheets (C9 + C10)
+import { BillingDetailsSheet } from "./billings/BillingDetailsSheet";
+import { CollectionDetailsSheet } from "./collections/CollectionDetailsSheet";
 
 // ── Types ──
 
@@ -154,6 +160,20 @@ const pickUniqueRef = (refs: string[]): string => (refs.length === 1 ? refs[0] :
 export function FinancialsModule() {
   const [activeTab, setActiveTab] = useState<FinancialsTab>("dashboard");
   const navigate = useNavigate();
+  const { scope: dataScope, isLoaded: isScopeLoaded } = useDataScope();
+
+  // Detail sheet state (C9 + C10)
+  const [selectedBillingId, setSelectedBillingId] = useState<string | null>(null);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<string | null>(null);
+
+  // Create actions (C12) — navigate to project-scoped creation flows
+  const handleCreateInvoice = useCallback(() => {
+    navigate("/accounting/projects?action=create-invoice");
+  }, [navigate]);
+
+  const handleCreateCollection = useCallback(() => {
+    navigate("/accounting/projects?action=create-collection");
+  }, [navigate]);
 
   // Aggregate scope state (shared across tabs — Phase 1: billings only)
   const [scope, setScope] = useState<DateScope>(() => createDateScope("this-month"));
@@ -210,9 +230,18 @@ export function FinancialsModule() {
     }
   }, [navigate, detectTargetTab]);
 
+  // Helper: apply data-scope filter to a Supabase query
+  const applyScope = useCallback((query: any, scope: DataScope): any => {
+    if (scope.type === 'all') return query;
+    if (scope.type === 'userIds') return query.in('created_by', scope.ids);
+    if (scope.type === 'own') return query.or(`created_by.eq.${scope.userId},assigned_to.eq.${scope.userId}`);
+    return query;
+  }, []);
+
   // Centralised data (fetched once, shared across all tabs)
   const { data: financialsData, isFetching: isLoading, refetch: fetchAll } = useQuery({
-    queryKey: queryKeys.financials.reportsData(),
+    queryKey: [...queryKeys.financials.reportsData(), JSON.stringify(dataScope)],
+    enabled: isScopeLoaded,
     queryFn: async () => {
       const [
         { data: billingRows, error: e1 },
@@ -220,10 +249,10 @@ export function FinancialsModule() {
         { data: collectionRows, error: e3 },
         { data: expenseRows, error: e4 },
       ] = await Promise.all([
-        supabase.from('billing_line_items').select('*'),
-        supabase.from('invoices').select('*'),
-        supabase.from('collections').select('*'),
-        supabase.from('expenses').select('*'),
+        applyScope(supabase.from('billing_line_items').select('*'), dataScope),
+        applyScope(supabase.from('invoices').select('*'), dataScope),
+        applyScope(supabase.from('collections').select('*'), dataScope),
+        applyScope(supabase.from('expenses').select('*'), dataScope),
       ]);
 
       const billingItems = (!e1 && billingRows) ? billingRows : [];
@@ -301,10 +330,10 @@ export function FinancialsModule() {
   const getResolvedRefDisplay = useCallback((item: any): string => {
     const lineage = resolveLineage(item);
     return (
-      getPrimaryRefDisplay(lineage.bookingRefs, "") ||
       getPrimaryRefDisplay(lineage.projectRefs, "") ||
       getPrimaryRefDisplay(lineage.contractRefs, "") ||
-      "â€”"
+      getPrimaryRefDisplay(lineage.bookingRefs, "") ||
+      "\u2014"
     );
   }, [resolveLineage]);
 
@@ -489,6 +518,31 @@ export function FinancialsModule() {
       cell: (item: BillingItem) => (
         <span className="font-medium tabular-nums">{formatCurrencyFull(Number(item.amount) || 0, item.currency || "PHP")}</span>
       ),
+    },
+    {
+      header: "Source",
+      width: "90px",
+      cell: (item: BillingItem) => {
+        const src = ((item as any).source_type || "manual") as string;
+        const label =
+          src === "quotation_item" ? "Quotation" :
+          src === "contract_rate" || src === "rate_card" ? "Contract" :
+          src === "billable_expense" ? "Expense" :
+          "Manual";
+        const color =
+          label === "Quotation" ? "#0F766E" :
+          label === "Contract" ? "#6366F1" :
+          label === "Expense" ? "#D97706" :
+          "#667085";
+        return (
+          <span
+            className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
+            style={{ backgroundColor: `${color}15`, color }}
+          >
+            {label}
+          </span>
+        );
+      },
     },
     {
       header: "Status",
@@ -1397,7 +1451,7 @@ export function FinancialsModule() {
               groups={billingsGroups}
               columns={BILLINGS_COLUMNS}
               isLoading={isLoading}
-              onRowClick={handleResolvedRowClick}
+              onRowClick={(item) => setSelectedBillingId((item as any).invoice_id || item.id)}
               exportFileName="billings"
             />
           </AggregateFinancialShell>
@@ -1411,6 +1465,15 @@ export function FinancialsModule() {
             isLoading={isLoading}
             hideScopeBar
           >
+            <div className="flex items-center justify-end px-4 pt-2">
+              <button
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-white"
+                style={{ backgroundColor: "var(--neuron-brand-green, #0F766E)" }}
+                onClick={handleCreateInvoice}
+              >
+                <FileStack className="w-4 h-4" /> Create Invoice
+              </button>
+            </div>
             <GroupingToolbar
               scope={scope}
               onScopeChange={setScope}
@@ -1446,6 +1509,15 @@ export function FinancialsModule() {
             isLoading={isLoading}
             hideScopeBar
           >
+            <div className="flex items-center justify-end px-4 pt-2">
+              <button
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[13px] font-medium text-white"
+                style={{ backgroundColor: "var(--neuron-brand-green, #0F766E)" }}
+                onClick={handleCreateCollection}
+              >
+                <DollarSign className="w-4 h-4" /> Add Collection
+              </button>
+            </div>
             <GroupingToolbar
               scope={scope}
               onScopeChange={setScope}
@@ -1464,7 +1536,7 @@ export function FinancialsModule() {
               groups={collectionsGroups}
               columns={COLLECTIONS_COLUMNS}
               isLoading={isLoading}
-              onRowClick={handleResolvedRowClick}
+              onRowClick={(item: any) => setSelectedCollectionId(item.id)}
               exportFileName="collections"
             />
           </AggregateFinancialShell>
@@ -1506,6 +1578,17 @@ export function FinancialsModule() {
         )}
       </div>
 
+      {/* Detail sheets (C9 + C10) */}
+      <BillingDetailsSheet
+        isOpen={!!selectedBillingId}
+        onClose={() => setSelectedBillingId(null)}
+        billingId={selectedBillingId || ""}
+      />
+      <CollectionDetailsSheet
+        isOpen={!!selectedCollectionId}
+        onClose={() => setSelectedCollectionId(null)}
+        collectionId={selectedCollectionId || ""}
+      />
     </div>
   );
 }

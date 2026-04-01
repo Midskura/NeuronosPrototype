@@ -103,7 +103,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
         gap: "12px",
         padding: "10px 16px",
         borderBottom: "none",
-        backgroundColor: index % 2 === 0 ? "white" : "#FAFBFC",
+        backgroundColor: index % 2 === 0 ? "var(--theme-bg-surface)" : "var(--theme-bg-surface-subtle)",
         position: "relative",
         ...getQuotationTypeAccentStyle(item.quotation_type),
       }}
@@ -129,7 +129,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
       >
         <span style={{ 
           fontSize: "13px", 
-          color: "#111827",
+          color: "var(--theme-text-primary)",
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
@@ -148,7 +148,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
             left: `${tooltipPosition.x}px`,
             top: `${tooltipPosition.y}px`,
             transform: "translate(-50%, -100%)",
-            backgroundColor: "#1F2937",
+            backgroundColor: "var(--theme-text-primary)",
             color: "white",
             padding: "6px 12px",
             borderRadius: "6px",
@@ -194,7 +194,7 @@ function QuotationTableRow({ item, index, totalItems, onItemClick, gridTemplateC
         ) : (
           <span style={{
             fontSize: "13px",
-            color: total > 0 ? "#111827" : "#9CA3AF"
+            color: total > 0 ? "var(--theme-text-primary)" : "var(--theme-text-muted)"
           }}>
             {item.currency} {total > 0 ? total.toLocaleString() : "0"}
           </span>
@@ -528,15 +528,15 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
               options={[
                 { value: "All Statuses", label: "All Statuses", icon: <CircleDot size={16} /> },
                 { value: "Draft", label: "Draft", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> },
-                { value: "Pending Pricing", label: "Pending Pricing", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
-                { value: "Priced", label: "Priced", icon: <CircleDot size={16} style={{ color: "#8B5CF6" }} /> },
-                { value: "Sent to Client", label: "Sent to Client", icon: <CircleDot size={16} style={{ color: "#3B82F6" }} /> },
-                { value: "Needs Revision", label: "Needs Revision", icon: <CircleDot size={16} style={{ color: "#F59E0B" }} /> },
-                { value: "Accepted by Client", label: "Accepted by Client", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
+                { value: "Pending Pricing", label: "Pending Pricing", icon: <CircleDot size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
+                { value: "Priced", label: "Priced", icon: <CircleDot size={16} style={{ color: "var(--neuron-status-accent-fg)" }} /> },
+                { value: "Sent to Client", label: "Sent to Client", icon: <CircleDot size={16} style={{ color: "var(--neuron-semantic-info)" }} /> },
+                { value: "Needs Revision", label: "Needs Revision", icon: <CircleDot size={16} style={{ color: "var(--theme-status-warning-fg)" }} /> },
+                { value: "Accepted by Client", label: "Accepted by Client", icon: <CircleDot size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
                 { value: "Rejected by Client", label: "Rejected by Client", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
                 { value: "Disapproved", label: "Disapproved", icon: <CircleDot size={16} style={{ color: "var(--theme-status-danger-fg)" }} /> },
-                { value: "Converted to Project", label: "Converted to Project", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
-                { value: "Converted to Contract", label: "Converted to Contract", icon: <CircleDot size={16} style={{ color: "#10B981" }} /> },
+                { value: "Converted to Project", label: "Converted to Project", icon: <CircleDot size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
+                { value: "Converted to Contract", label: "Converted to Contract", icon: <CircleDot size={16} style={{ color: "var(--theme-status-success-fg)" }} /> },
                 { value: "Cancelled", label: "Cancelled", icon: <CircleDot size={16} style={{ color: "var(--theme-text-muted)" }} /> }
               ]}
               placeholder="Select status"
@@ -621,7 +621,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                   justifyContent: "center",
                   padding: "2px 8px",
                   borderRadius: "10px",
-                  backgroundColor: workflowTab === tab ? "#E8F4F3" : "#F3F4F6",
+                  backgroundColor: workflowTab === tab ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
                   fontSize: "12px",
                   fontWeight: 600,
                   color: workflowTab === tab ? "var(--neuron-brand-green)" : "var(--neuron-ink-muted)"
@@ -712,7 +712,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                   <div style={{
                     width: "2px",
                     height: "60%",
-                    backgroundColor: resizingColumn === 'name' ? "#0F766E" : "#E5E7EB"
+                    backgroundColor: resizingColumn === 'name' ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"
                   }} />
                 </div>
               </div>
@@ -742,7 +742,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                   <div style={{
                     width: "2px",
                     height: "60%",
-                    backgroundColor: resizingColumn === 'customer' ? "#0F766E" : "#E5E7EB"
+                    backgroundColor: resizingColumn === 'customer' ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"
                   }} />
                 </div>
               </div>
@@ -772,7 +772,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                   <div style={{
                     width: "2px",
                     height: "60%",
-                    backgroundColor: resizingColumn === 'services' ? "#0F766E" : "#E5E7EB"
+                    backgroundColor: resizingColumn === 'services' ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"
                   }} />
                 </div>
               </div>
@@ -802,7 +802,7 @@ export function QuotationsListWithFilters({ onViewItem, onCreateQuotation, quota
                   <div style={{
                     width: "2px",
                     height: "60%",
-                    backgroundColor: resizingColumn === 'total' ? "#0F766E" : "#E5E7EB"
+                    backgroundColor: resizingColumn === 'total' ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"
                   }} />
                 </div>
               </div>

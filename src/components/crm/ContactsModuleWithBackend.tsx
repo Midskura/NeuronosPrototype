@@ -107,11 +107,11 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Customer":
-        return { bg: "var(--theme-status-success-bg)", text: "#10B981" };
+        return { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)" };
       case "MQL":
-        return { bg: "#DBEAFE", text: "#3B82F6" };
+        return { bg: "var(--neuron-semantic-info-bg)", text: "var(--neuron-semantic-info)" };
       case "Prospect":
-        return { bg: "var(--theme-status-warning-bg)", text: "#F59E0B" };
+        return { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" };
       case "Lead":
         return { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)" };
       default:
@@ -381,7 +381,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
                     gridTemplateColumns: "2fr 2fr 1.5fr 1fr 1fr",
                     gap: "16px",
                     padding: "16px 24px",
-                    backgroundColor: index % 2 === 0 ? "white" : "#FAFBFC",
+                    backgroundColor: index % 2 === 0 ? "var(--theme-bg-surface)" : "var(--neuron-pill-inactive-bg)",
                     cursor: "pointer",
                     transition: "background-color 0.2s",
                   }}
@@ -390,7 +390,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor =
-                      index % 2 === 0 ? "white" : "#FAFBFC";
+                      index % 2 === 0 ? "var(--theme-bg-surface)" : "var(--neuron-pill-inactive-bg)";
                   }}
                 >
                   {/* Name */}
@@ -402,7 +402,7 @@ export function ContactsModuleWithBackend({ onViewQuotation, contactId }: Contac
                         width: "32px",
                         height: "32px",
                         borderRadius: "50%",
-                        backgroundColor: "#E8F4F3",
+                        backgroundColor: "var(--theme-bg-surface-tint)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",

@@ -165,7 +165,7 @@ export function MultiInputField({
               onKeyDown={(e) => handleKeyDown(e, index)}
               placeholder={placeholder}
               disabled={disabled}
-              className="flex-1 px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] text-[13px] transition-colors"
+              className="flex-1 px-3.5 py-2.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] text-[13px] transition-colors"
               style={defaultInputStyle}
             />
             {!disabled && isLastRow(index) && (

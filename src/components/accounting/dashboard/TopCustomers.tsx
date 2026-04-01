@@ -59,7 +59,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
       {/* Header */}
       <div
         className="px-5 py-3 flex items-center justify-between"
-        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "#F8F9FB" }}
+        style={{ borderBottom: "1px solid var(--theme-border-default)", background: "var(--neuron-pill-inactive-bg)" }}
       >
         <h3
           className="text-[12px] font-semibold uppercase tracking-wider"
@@ -116,8 +116,8 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
                     <span
                       className="text-[11px] font-medium px-1.5 py-0.5 rounded tabular-nums"
                       style={{
-                        backgroundColor: isRisky ? "#FFFBEB" : "#F3F4F6",
-                        color: isRisky ? "#D97706" : "#667085",
+                        backgroundColor: isRisky ? "var(--theme-status-warning-bg)" : "var(--neuron-pill-inactive-bg)",
+                        color: isRisky ? "var(--theme-status-warning-fg)" : "var(--theme-text-muted)",
                       }}
                     >
                       {row.pct.toFixed(0)}%
@@ -135,7 +135,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
                       className="h-full rounded-full transition-all duration-500"
                       style={{
                         width: `${barWidth}%`,
-                        backgroundColor: isRisky ? "#D97706" : "#0F766E",
+                        backgroundColor: isRisky ? "var(--theme-status-warning-fg)" : "var(--theme-action-primary-bg)",
                       }}
                     />
                   </div>
@@ -149,7 +149,7 @@ export function TopCustomers({ billingItems, invoices }: TopCustomersProps) {
         {rows.length === 5 && totalRevenue > 0 && (
           <div
             className="pt-2 mt-1 flex items-center justify-between"
-            style={{ borderTop: "1px dashed #E5E9F0" }}
+            style={{ borderTop: "1px dashed var(--theme-border-default)" }}
           >
             <span className="text-[11px] pl-6" style={{ color: "var(--theme-text-muted)" }}>
               Others

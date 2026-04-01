@@ -25,10 +25,10 @@ const STATUS_LABEL: Record<string, string> = {
 };
 
 const STATUS_COLOR: Record<string, { color: string; bg: string }> = {
-  open:         { color: "#1D4ED8", bg: "#EFF6FF" },
-  acknowledged: { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
+  open:         { color: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" },
+  acknowledged: { color: "var(--theme-action-primary-bg)", bg: "var(--theme-bg-surface-tint)" },
   in_progress:  { color: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
-  returned:     { color: "var(--theme-status-danger-fg)", bg: "#FEE2E2" },
+  returned:     { color: "var(--theme-status-danger-fg)", bg: "var(--theme-status-danger-bg)" },
 };
 
 export function LinkedTicketBadge({ recordType, recordId }: LinkedTicketBadgeProps) {

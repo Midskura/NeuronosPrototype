@@ -113,7 +113,7 @@ export function BookingRateCardButton({
     <>
       <div
         onClick={() => setIsSheetOpen(true)}
-        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-[var(--theme-border-default)] bg-[#FAFBFC] hover:bg-[var(--theme-bg-surface-tint)] hover:border-[#99F6E4] transition-all cursor-pointer group"
+        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-[var(--theme-border-default)] bg-[var(--neuron-pill-inactive-bg)] hover:bg-[var(--theme-bg-surface-tint)] hover:border-[var(--theme-status-success-border)] transition-all cursor-pointer group"
       >
         <div className="w-9 h-9 rounded-lg bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0 group-hover:bg-[#CCFBF1] transition-colors">
           <FileSpreadsheet size={18} className="text-[var(--theme-action-primary-bg)]" />

@@ -64,7 +64,7 @@ export function OthersServiceForm({ data, onChange, viewMode = false, contractMo
               padding: "10px 12px",
               fontSize: "13px",
               color: "var(--neuron-ink-base)",
-              backgroundColor: viewMode ? "#F9FAFB" : "white",
+              backgroundColor: viewMode ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
               border: "1px solid var(--neuron-ui-border)",
               borderRadius: "6px",
               outline: "none",

@@ -56,7 +56,7 @@ export function EditableTimekeepingCell({
           style={{ height: "40px" }}
         >
           <div
-            className="absolute inset-0 flex items-center justify-center text-[9px] text-[#D1D5DB] pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center text-[9px] text-[var(--neuron-ui-muted)] pointer-events-none"
             style={{
               transform: "rotate(-45deg)",
               fontWeight: 600,
@@ -204,7 +204,7 @@ export function EditableTimekeepingCell({
               onUpdate?.(employeeId, day, "time", e.target.value, outTime);
             }}
             placeholder="08:00"
-            className="w-16 h-9 text-center text-[12px] border border-[#E6E9F0] rounded-lg bg-[var(--theme-bg-surface)] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+            className="w-16 h-9 text-center text-[12px] border border-[var(--theme-border-default)] rounded-lg bg-[var(--theme-bg-surface)] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
           />
           {isHovering && (
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -255,7 +255,7 @@ export function EditableTimekeepingCell({
             onUpdate?.(employeeId, day, "time", inTime, e.target.value);
           }}
           placeholder="17:00"
-          className="w-16 h-9 text-center text-[12px] border border-[#E6E9F0] rounded-lg bg-[var(--theme-bg-surface)] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+          className="w-16 h-9 text-center text-[12px] border border-[var(--theme-border-default)] rounded-lg bg-[var(--theme-bg-surface)] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
         />
       </td>
     </>

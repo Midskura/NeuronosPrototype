@@ -54,9 +54,6 @@ export function UnifiedEVouchersTable({
       expense: "Expense",
       budget_request: "Budget Request",
       cash_advance: "Cash Advance",
-      collection: "Collection",
-      billing: "Billing",
-      adjustment: "Adjustment",
       reimbursement: "Reimbursement"
     };
     return labels[type] || type;
@@ -68,8 +65,6 @@ export function UnifiedEVouchersTable({
       case "expense": return <Wallet {...iconProps} />;
       case "budget_request": return <DollarSign {...iconProps} />;
       case "cash_advance": return <Banknote {...iconProps} />;
-      case "collection": return <TrendingUp {...iconProps} />;
-      case "billing": return <Receipt {...iconProps} />;
       case "reimbursement": return <Users {...iconProps} />;
       default: return <FileText {...iconProps} />;
     }

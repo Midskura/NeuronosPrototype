@@ -33,11 +33,11 @@ const labelStyle: React.CSSProperties = {
 
 const viewValueStyle = (isEmpty: boolean, required: boolean, isTextarea: boolean): React.CSSProperties => ({
   padding: "8px 12px",
-  backgroundColor: isEmpty ? "white" : "#FAFBFC",
-  border: `1px solid ${isEmpty && required ? "#FCD34D" : "#E5E7EB"}`,
+  backgroundColor: isEmpty ? "white" : "var(--theme-bg-page)",
+  border: `1px solid ${isEmpty && required ? "var(--theme-status-warning-border)" : "var(--theme-border-default)"}`,
   borderRadius: "6px",
   fontSize: "13px",
-  color: isEmpty ? "#9CA3AF" : "var(--neuron-ink-primary, #12332B)",
+  color: isEmpty ? "var(--theme-text-muted)" : "var(--neuron-ink-primary, #12332B)",
   minHeight: isTextarea ? "60px" : "auto",
   whiteSpace: isTextarea ? ("pre-wrap" as const) : ("normal" as const),
 });

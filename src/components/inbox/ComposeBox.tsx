@@ -307,7 +307,7 @@ export function ComposeBox({ ticketId, onSent }: ComposeBoxProps) {
               padding: "6px 14px",
               borderRadius: 6,
               border: "none",
-              backgroundColor: body.trim() && !isSending ? "var(--neuron-brand-green)" : "#D1D5DB",
+              backgroundColor: body.trim() && !isSending ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)",
               color: "#FFFFFF",
               fontSize: 13,
               fontWeight: 600,

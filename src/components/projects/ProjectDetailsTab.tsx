@@ -95,7 +95,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.contact_person_name ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.contact_person_name ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.contact_person_name || "—"}
               </div>
@@ -125,7 +125,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                     style={{
                       padding: "8px 16px",
                       backgroundColor: "var(--theme-action-primary-bg)",
-                      border: "1px solid #0F766E",
+                      border: "1px solid var(--theme-action-primary-bg)",
                       borderRadius: "6px",
                       fontSize: "14px",
                       fontWeight: 500,
@@ -192,7 +192,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.quotation_number ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.quotation_number ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.quotation_number || "—"}
               </div>
@@ -217,7 +217,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.bd_owner_user_name ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.bd_owner_user_name ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.bd_owner_user_name || "—"}
               </div>
@@ -239,7 +239,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.ops_assigned_user_name ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.ops_assigned_user_name ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.ops_assigned_user_name || "—"}
               </div>
@@ -264,7 +264,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.movement ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.movement ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.movement || "—"}
               </div>
@@ -286,7 +286,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.category ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.category ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.category || "—"}
               </div>
@@ -308,7 +308,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.shipment_type ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.shipment_type ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.shipment_type || "—"}
               </div>
@@ -333,7 +333,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.pol_aol ? "var(--neuron-ink-primary)" : "#9CA3AF",
+                color: project.pol_aol ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px"
@@ -359,7 +359,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.pod_aod ? "var(--neuron-ink-primary)" : "#9CA3AF",
+                color: project.pod_aod ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px"
@@ -388,7 +388,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.carrier ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.carrier ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.carrier || "—"}
               </div>
@@ -410,7 +410,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.transit_days ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.transit_days ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.transit_days || "—"}
               </div>
@@ -432,7 +432,7 @@ export function ProjectDetailsTab({ project, currentUser, onUpdate }: ProjectDet
                 border: "1px solid var(--neuron-ui-border)",
                 borderRadius: "6px",
                 fontSize: "14px",
-                color: project.incoterm ? "var(--neuron-ink-primary)" : "#9CA3AF"
+                color: project.incoterm ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
               }}>
                 {project.incoterm || "—"}
               </div>

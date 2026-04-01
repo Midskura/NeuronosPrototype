@@ -155,7 +155,7 @@ export function EditableBulletList({
                       background: "none",
                       border: "none",
                       cursor: index === 0 ? "default" : "pointer",
-                      color: index === 0 ? "#D1D5DB" : "var(--neuron-ink-muted)",
+                      color: index === 0 ? "var(--neuron-ui-muted)" : "var(--neuron-ink-muted)",
                       opacity: index === 0 ? 0.4 : 1,
                     }}
                     title="Move up"
@@ -171,7 +171,7 @@ export function EditableBulletList({
                       background: "none",
                       border: "none",
                       cursor: index === items.length - 1 ? "default" : "pointer",
-                      color: index === items.length - 1 ? "#D1D5DB" : "var(--neuron-ink-muted)",
+                      color: index === items.length - 1 ? "var(--neuron-ui-muted)" : "var(--neuron-ink-muted)",
                       opacity: index === items.length - 1 ? 0.4 : 1,
                     }}
                     title="Move down"
@@ -255,7 +255,7 @@ export function EditableBulletList({
               fontSize: "13px",
               fontWeight: 500,
               color: !newItem.trim() ? "var(--neuron-ink-muted)" : "var(--neuron-brand-green)",
-              backgroundColor: !newItem.trim() ? "#F3F4F6" : "var(--neuron-brand-green-100)",
+              backgroundColor: !newItem.trim() ? "var(--neuron-pill-inactive-bg)" : "var(--neuron-brand-green-100)",
               border: `1px solid ${!newItem.trim() ? "var(--neuron-ui-border)" : "var(--neuron-brand-green)"}`,
               borderRadius: "6px",
               cursor: !newItem.trim() ? "default" : "pointer",

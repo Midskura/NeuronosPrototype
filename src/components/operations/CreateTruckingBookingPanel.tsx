@@ -564,7 +564,7 @@ export function CreateTruckingBookingPanel({
                         name="withGps"
                         checked={formData.withGps}
                         onChange={(e) => setFormData(prev => ({ ...prev, withGps: e.target.checked }))}
-                        className="w-4 h-4 text-[var(--theme-action-primary-bg)] border-[var(--theme-border-default)] rounded focus:ring-[#0F766E]"
+                        className="w-4 h-4 text-[var(--theme-action-primary-bg)] border-[var(--theme-border-default)] rounded focus:ring-[var(--theme-action-primary-bg)]"
                       />
                       <label htmlFor="withGps" style={{ fontSize: "13px", fontWeight: 500, color: "var(--theme-text-primary)" }}>
                         With GPS

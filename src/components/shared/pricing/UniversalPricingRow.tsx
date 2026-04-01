@@ -111,7 +111,7 @@ export function UniversalPricingRow({
           gap: "8px",
           padding: "12px 16px",
           fontSize: "13px",
-          color: "#2C3E38",
+          color: "var(--theme-text-primary)",
           backgroundColor: "var(--theme-bg-surface)",
           alignItems: "center"
         }}
@@ -125,11 +125,11 @@ export function UniversalPricingRow({
                 width: "100%",
                 padding: "6px 8px",
                 fontSize: "13px",
-                border: "1px solid #E0E6E4",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 backgroundColor: "var(--theme-bg-page)",
                 fontWeight: 500,
-                color: "#2C3E38",
+                color: "var(--theme-text-primary)",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
@@ -186,10 +186,10 @@ export function UniversalPricingRow({
               padding: "6px 8px",
               fontSize: "13px",
               textAlign: "right",
-              border: "1px solid #E0E6E4",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "6px",
               backgroundColor: "var(--theme-bg-surface)",
-              color: "#2C3E38",
+              color: "var(--theme-text-primary)",
               fontWeight: 500,
               outline: "none",
               transition: "all 0.15s ease",
@@ -201,7 +201,7 @@ export function UniversalPricingRow({
               e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.08)";
             }}
             onBlur={(e) => {
-              e.currentTarget.style.borderColor = "#E0E6E4";
+              e.currentTarget.style.borderColor = "var(--theme-border-default)";
               e.currentTarget.style.boxShadow = "none";
             }}
           />
@@ -234,10 +234,10 @@ export function UniversalPricingRow({
                 padding: "6px 8px",
                 fontSize: "13px",
                 textAlign: "right",
-                border: "1px solid #E0E6E4",
+                border: "1px solid var(--theme-border-default)",
                 borderRadius: "6px",
                 backgroundColor: "var(--theme-bg-surface)",
-                color: "#2C3E38",
+                color: "var(--theme-text-primary)",
                 fontWeight: 500,
                 outline: "none",
                 transition: "all 0.15s ease",
@@ -249,7 +249,7 @@ export function UniversalPricingRow({
                 e.currentTarget.style.boxShadow = "0 0 0 3px rgba(15, 118, 110, 0.08)";
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderColor = "#E0E6E4";
+                e.currentTarget.style.borderColor = "var(--theme-border-default)";
                 e.currentTarget.style.boxShadow = "none";
               }}
             />
@@ -276,8 +276,8 @@ export function UniversalPricingRow({
               textAlign: "right",
               border: isViewMode ? "1px solid #E0E6E4" : "1px solid #FBBF88",
               borderRadius: "6px",
-              backgroundColor: isViewMode ? "#F9FAFB" : "#FFFBF5",
-              color: isViewMode ? "#6B7A76" : "var(--neuron-brand-teal)",
+              backgroundColor: isViewMode ? "var(--neuron-pill-inactive-bg)" : "#FFFBF5",
+              color: isViewMode ? "var(--theme-text-muted)" : "var(--neuron-brand-teal)",
               fontWeight: 600,
               outline: "none",
               transition: "all 0.15s ease",
@@ -316,8 +316,8 @@ export function UniversalPricingRow({
               textAlign: "right",
               border: isViewMode ? "1px solid #E0E6E4" : "1px solid #FBBF88",
               borderRadius: "6px",
-              backgroundColor: isViewMode ? "#F9FAFB" : "#FFFBF5",
-              color: isViewMode ? "#6B7A76" : "var(--neuron-brand-teal)",
+              backgroundColor: isViewMode ? "var(--neuron-pill-inactive-bg)" : "#FFFBF5",
+              color: isViewMode ? "var(--theme-text-muted)" : "var(--neuron-brand-teal)",
               fontWeight: 600,
               outline: "none",
               transition: "all 0.15s ease",
@@ -370,9 +370,9 @@ export function UniversalPricingRow({
               padding: "6px 8px",
               fontSize: "12px",
               textAlign: "right",
-              border: "1px solid #E0E6E4",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "6px",
-              backgroundColor: isViewMode ? "#F9FAFB" : "#F8FBFB",
+              backgroundColor: isViewMode ? "var(--neuron-pill-inactive-bg)" : "#F8FBFB",
               outline: "none",
               cursor: isViewMode ? "default" : "text"
             }}
@@ -413,7 +413,7 @@ export function UniversalPricingRow({
                padding: "6px 8px",
                fontSize: "14px",
                textAlign: "right",
-               border: "1px solid #E0E6E4",
+               border: "1px solid var(--theme-border-default)",
                borderRadius: "6px",
                color: "var(--neuron-brand-green)",
                fontWeight: 700,
@@ -457,10 +457,10 @@ export function UniversalPricingRow({
         gap: "14px",
         padding: "10px 16px 12px 28px",
         backgroundColor: "var(--theme-bg-page)",
-        borderTop: "1px solid #EDF2F1",
+        borderTop: "1px solid var(--theme-border-default)",
         fontSize: "12px",
         color: "var(--theme-text-muted)",
-        borderBottom: "1px solid #EDF2F1" // Always border bottom for safety
+        borderBottom: "1px solid var(--theme-border-default)" // Always border bottom for safety
       }}>
         {/* Remarks */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flex: "1 1 300px" }}>
@@ -482,10 +482,10 @@ export function UniversalPricingRow({
               flex: 1,
               padding: "5px 8px",
               fontSize: "12px",
-              border: "1px solid #E0E6E4",
+              border: "1px solid var(--theme-border-default)",
               borderRadius: "6px",
-              backgroundColor: isViewMode ? "#F9FAFB" : "white",
-              color: "#2C3E38",
+              backgroundColor: isViewMode ? "var(--neuron-pill-inactive-bg)" : "white",
+              color: "var(--theme-text-primary)",
               outline: "none",
               transition: "all 0.15s ease",
               cursor: isViewMode ? "default" : "text"
@@ -497,7 +497,7 @@ export function UniversalPricingRow({
             }}
             onBlur={(e) => {
               if (isViewMode) return;
-              e.currentTarget.style.borderColor = "#E0E6E4";
+              e.currentTarget.style.borderColor = "var(--theme-border-default)";
               e.currentTarget.style.boxShadow = "none";
             }}
           />
@@ -543,8 +543,8 @@ export function UniversalPricingRow({
           
           {simpleMode && data.status && isViewMode && (
              <span className={`inline-flex px-2 py-0.5 rounded text-[11px] font-medium border
-               ${data.status === 'paid' ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[#A7F3D0]" : 
-                 (data.status === 'billed' || data.status === 'invoiced') ? "bg-[#EFF6FF] text-[#1D4ED8] border-[#BFDBFE]" : 
+               ${data.status === 'paid' ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)] border-[var(--theme-status-success-border)]" : 
+                 (data.status === 'billed' || data.status === 'invoiced') ? "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)] border-[var(--neuron-semantic-info-border)]" : 
                  "bg-[var(--theme-bg-surface-subtle)] text-[var(--theme-text-muted)] border-[var(--theme-border-default)]"}`}>
                {data.status === 'paid' ? "Paid" : (data.status === 'billed' || data.status === 'invoiced') ? "Invoiced" : "Unbilled"}
              </span>
@@ -563,7 +563,7 @@ export function UniversalPricingRow({
               gap: "5px",
               padding: "5px 10px",
               fontSize: "12px",
-              border: "1px solid #FCD4D1",
+              border: "1px solid var(--theme-status-danger-border)",
               borderRadius: "6px",
               backgroundColor: "var(--theme-bg-surface)",
               color: "var(--theme-status-danger-fg)",
@@ -573,13 +573,13 @@ export function UniversalPricingRow({
             }}
             title="Remove Item"
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#FEF2F2";
-              e.currentTarget.style.borderColor = "#DC2626";
+              e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
+              e.currentTarget.style.borderColor = "var(--theme-status-danger-fg)";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "white";
-              e.currentTarget.style.borderColor = "#FCD4D1";
+              e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
+              e.currentTarget.style.borderColor = "var(--theme-status-danger-border)";
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >

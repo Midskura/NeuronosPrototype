@@ -1159,10 +1159,10 @@ function CategoryFilterPopover({
         style={{
           display: "flex", alignItems: "center", gap: "5px",
           padding: "7px 10px", fontSize: "12px",
-          border: `1px solid ${isFiltered ? TEAL : "#E0E6E4"}`,
+          border: `1px solid ${isFiltered ? TEAL : "var(--theme-border-default)"}`,
           borderRadius: "8px",
-          color: isFiltered ? TEAL : "#2C3E38",
-          backgroundColor: isFiltered ? "#F0FDF9" : "white",
+          color: isFiltered ? TEAL : "var(--theme-text-primary)",
+          backgroundColor: isFiltered ? "var(--theme-status-success-bg)" : "var(--theme-bg-surface)",
           cursor: "pointer", outline: "none", whiteSpace: "nowrap",
           fontWeight: isFiltered ? 600 : 400,
         }}
@@ -1187,7 +1187,7 @@ function CategoryFilterPopover({
             position: "fixed", top: pos.top, left: pos.left,
             width: pos.width, minWidth: 230,
             background: "var(--theme-bg-surface)",
-            border: "1px solid #E0E6E4",
+            border: "1px solid var(--theme-border-default)",
             borderRadius: "10px",
             boxShadow: "0 8px 24px rgba(18,51,43,0.12)",
             zIndex: 9999, overflow: "hidden",
@@ -1195,14 +1195,14 @@ function CategoryFilterPopover({
         >
           <div style={{ padding: "8px 12px 7px", borderBottom: "1px solid var(--theme-border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <span style={{ fontSize: "10px", fontWeight: 600, color: "var(--theme-text-muted)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Categories</span>
-            <span style={{ fontSize: "10px", color: "#C0C7CC" }}>{categories.length} total</span>
+            <span style={{ fontSize: "10px", color: "var(--theme-text-muted)" }}>{categories.length} total</span>
           </div>
 
           <div
             onClick={() => { onFilterChange("all"); setOpen(false); }}
-            style={{ padding: "8px 12px", cursor: "pointer", backgroundColor: filterValue === "all" ? "#F0FDF9" : "transparent", display: "flex", alignItems: "center", gap: "8px" }}
+            style={{ padding: "8px 12px", cursor: "pointer", backgroundColor: filterValue === "all" ? "var(--theme-status-success-bg)" : "transparent", display: "flex", alignItems: "center", gap: "8px" }}
           >
-            <span style={{ flex: 1, fontSize: "13px", fontWeight: filterValue === "all" ? 600 : 400, color: filterValue === "all" ? TEAL : "#2C3E38" }}>
+            <span style={{ flex: 1, fontSize: "13px", fontWeight: filterValue === "all" ? 600 : 400, color: filterValue === "all" ? TEAL : "var(--theme-text-primary)" }}>
               All Categories
             </span>
             <span style={{ fontSize: "11px", color: "var(--theme-text-muted)" }}>
@@ -1216,7 +1216,7 @@ function CategoryFilterPopover({
             {categories.map(cat => (
               <div
                 key={cat.id}
-                style={{ display: "flex", alignItems: "center", gap: "4px", padding: "6px 12px", backgroundColor: filterValue === cat.id ? "#F0FDF9" : "transparent", minHeight: 34 }}
+                style={{ display: "flex", alignItems: "center", gap: "4px", padding: "6px 12px", backgroundColor: filterValue === cat.id ? "var(--theme-status-success-bg)" : "transparent", minHeight: 34 }}
               >
                 {renamingId === cat.id ? (
                   <>

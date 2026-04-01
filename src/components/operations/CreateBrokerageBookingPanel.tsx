@@ -490,17 +490,17 @@ export function CreateBrokerageBookingPanel({
                   const isSelected = formData.brokerageType === type;
                   const isHovered = hoveredType === type;
                   
-                  let backgroundColor = "white";
+                  let backgroundColor = "var(--theme-bg-surface)";
                   let borderColor = "var(--neuron-ui-border)";
                   let textColor = "var(--neuron-ink-base)";
-                  
+
                   if (isSelected) {
-                    backgroundColor = "#0F766E";
-                    borderColor = "#0F766E";
+                    backgroundColor = "var(--theme-action-primary-bg)";
+                    borderColor = "var(--theme-action-primary-bg)";
                     textColor = "white";
                   } else if (isHovered) {
-                    backgroundColor = "#F8FBFB";
-                    borderColor = "#0F766E";
+                    backgroundColor = "var(--theme-bg-surface-tint)";
+                    borderColor = "var(--theme-action-primary-bg)";
                   }
                   
                   return (

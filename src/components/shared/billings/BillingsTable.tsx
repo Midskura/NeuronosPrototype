@@ -74,9 +74,9 @@ const getBookingBillingStatus = (items: BillingTableItem[]): "Unbilled" | "Parti
 
 const billingStatusStyles: Record<string, { bg: string; text: string; border: string }> = {
   "Unbilled": { bg: "var(--theme-bg-surface-subtle)", text: "var(--theme-text-muted)", border: "var(--theme-border-default)" },
-  "Partially Billed": { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)", border: "#FDE68A" },
-  "Fully Billed": { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)", border: "#A7F3D0" },
-  "Voided": { bg: "var(--theme-status-danger-bg)", text: "var(--theme-status-danger-fg)", border: "#FECACA" },
+  "Partially Billed": { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)", border: "var(--theme-status-warning-border)" },
+  "Fully Billed": { bg: "var(--theme-status-success-bg)", text: "var(--theme-status-success-fg)", border: "var(--theme-status-success-border)" },
+  "Voided": { bg: "var(--theme-status-danger-bg)", text: "var(--theme-status-danger-fg)", border: "var(--theme-status-danger-border)" },
 };
 
 export function BillingsTable({
@@ -218,7 +218,7 @@ export function BillingsTable({
             style={{
               display: "flex", alignItems: "center", gap: "4px",
               padding: "5px 9px", fontSize: "12px", fontWeight: 500,
-              border: "1px solid #FDE68A", borderRadius: "6px",
+              border: "1px solid var(--theme-status-warning-border)", borderRadius: "6px",
               backgroundColor: "var(--theme-bg-surface)", color: "var(--theme-status-warning-fg)", cursor: "pointer",
             }}
             title="Void Item — sets status to voided, preserves the record for audit"
@@ -232,7 +232,7 @@ export function BillingsTable({
           style={{
             display: "flex", alignItems: "center", gap: "4px",
             padding: "5px 9px", fontSize: "12px", fontWeight: 500,
-            border: "1px solid #FCD4D1", borderRadius: "6px",
+            border: "1px solid var(--theme-status-danger-border)", borderRadius: "6px",
             backgroundColor: "var(--theme-bg-surface)", color: "var(--theme-status-danger-fg)", cursor: "pointer",
           }}
           title="Delete — permanently removes this record"
@@ -278,7 +278,7 @@ export function BillingsTable({
       <div className="flex flex-col gap-0">
         {/* Unified Table Container */}
         <div
-          className="bg-[var(--theme-bg-surface)] border border-[#E5E9E8] rounded-xl overflow-hidden"
+          className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-xl overflow-hidden"
         >
           {/* Single shared column header with Collapse/Expand toggle */}
           <PricingTableHeader
@@ -343,10 +343,10 @@ export function BillingsTable({
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: "10px 16px",
-                    background: isExpanded ? "#F8FFFE" : "#FAFCFB",
+                    background: isExpanded ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-page)",
                     border: "none",
-                    borderTop: bidIdx > 0 ? "1px solid #E5E9E8" : "none",
-                    borderBottom: isExpanded ? "1px solid #E5E9E8" : "none",
+                    borderTop: bidIdx > 0 ? "1px solid var(--theme-border-default)" : "none",
+                    borderBottom: isExpanded ? "1px solid var(--theme-border-default)" : "none",
                     cursor: "pointer",
                     transition: "background 0.15s ease",
                   }}
@@ -362,7 +362,7 @@ export function BillingsTable({
                     <span style={{
                       fontSize: "12px",
                       fontWeight: 600,
-                      color: bid === "unassigned" ? "#6B7280" : "#0F766E",
+                      color: bid === "unassigned" ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)",
                       fontFamily: "monospace",
                     }}>
                       {bid === "unassigned" ? "Unassigned Items" : bid}
@@ -422,7 +422,7 @@ export function BillingsTable({
                   <span style={{
                     fontSize: "13px",
                     fontWeight: 600,
-                    color: isEmpty ? "#9CA3AF" : "#12332B",
+                    color: isEmpty ? "var(--theme-text-muted)" : "var(--theme-text-primary)",
                     fontFamily: "monospace",
                   }}>
                     {formatCurrency(subtotal)}
@@ -477,7 +477,7 @@ export function BillingsTable({
                                   <div
                                     key={item.id}
                                     ref={isHighlighted ? highlightRef : undefined}
-                                    className={isHighlighted ? "ring-2 ring-[#0F766E] bg-[var(--theme-action-primary-bg)]/5 rounded-md transition-all duration-700" : ""}
+                                    className={isHighlighted ? "ring-2 ring-[var(--theme-action-primary-bg)] bg-[var(--theme-action-primary-bg)]/5 rounded-md transition-all duration-700" : ""}
                                   >
                                   <UniversalPricingRow
                                     data={mapToPricingData(item)}
@@ -509,7 +509,7 @@ export function BillingsTable({
                       <div
                         style={{
                           padding: "12px 16px 12px 44px",
-                          borderLeft: "2px dashed #D1D5DB",
+                          borderLeft: "2px dashed var(--neuron-ui-muted)",
                           marginLeft: "16px",
                           marginTop: "4px",
                           marginBottom: "8px",
@@ -578,7 +578,7 @@ export function BillingsTable({
             return (
             <div 
                 key={category}
-                className="bg-[var(--theme-bg-surface)] border border-[#E5E9E8] rounded-xl overflow-hidden"
+                className="bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-xl overflow-hidden"
             >
                 {/* Reused Category Header */}
                 <CategoryHeader 
@@ -601,7 +601,7 @@ export function BillingsTable({
                 {/* Collapsible Content */}
                 {isExpanded && (
                 <div className="p-4 bg-[var(--theme-bg-surface)]">
-                    <div className="border border-[#E5E9E8] rounded-lg overflow-hidden">
+                    <div className="border border-[var(--theme-border-default)] rounded-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         {/* Table Header */}
                         {items.length > 0 ? (
@@ -614,7 +614,7 @@ export function BillingsTable({
                                 />
 
                                 {/* Items */}
-                                <div className="divide-y divide-[#E5E9E8]">
+                                <div className="divide-y divide-[var(--theme-border-default)]">
                                 {items.map(item => {
                                     // Protect billed/paid items from editing
                                     const isBilled = ["billed", "paid", "invoiced", "voided", "cancelled", "void"].includes((item.status || "").toLowerCase());

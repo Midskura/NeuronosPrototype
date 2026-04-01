@@ -560,37 +560,35 @@ export function InvoiceBuilder({
       }
 
       const invoiceRow = {
+        id: crypto.randomUUID(),
         invoice_number: invoiceNumber,
         project_number: selectedLineage.projectRefs.length === 1 ? selectedLineage.projectRefs[0] : project.project_number,
         project_refs: selectedLineage.projectRefs,
+        contract_refs: selectedLineage.contractRefs,
         customer_id: project.customer_id,
         customer_name: billedToType === "consignee" && selectedConsignee ? selectedConsignee.name : project.customer_name,
-        customer_address: customerAddress,
-        billed_to_type: billedToType,
-        billed_to_consignee_id: billedToConsigneeId || null,
         booking_id: selectedLineage.bookingIds.length === 1 ? selectedLineage.bookingIds[0] : null,
         booking_ids: selectedLineage.bookingIds,
-        contract_number: selectedLineage.contractRefs.length === 1 ? selectedLineage.contractRefs[0] : null,
-        contract_refs: selectedLineage.contractRefs,
         billing_item_ids: finalBillingItemIds,
         invoice_date: invoiceDate,
         due_date: effectiveDueDate,
+        payment_terms: creditTerms || 'NET 15',
         notes: notes,
-        user_id: "current-user-id",
-        created_by_name: signatories.prepared_by.name,
         currency: targetCurrency,
-        exchange_rate: exchangeRate,
-        original_currency: project.currency,
-        line_items: draftInvoice.line_items,
         subtotal: draftInvoice.subtotal,
         total_amount: draftInvoice.total_amount,
         tax_amount: draftInvoice.tax_amount,
-        revenue_account_id: revenueAccountId || null,
         status: 'posted',
-        payment_status: 'unpaid',
         metadata: {
             signatories,
             displayOptions,
+            billed_to_type: billedToType,
+            billed_to_consignee_id: billedToConsigneeId || null,
+            customer_address: customerAddress,
+            exchange_rate: exchangeRate,
+            original_currency: project.currency,
+            revenue_account_id: revenueAccountId || null,
+            line_items: draftInvoice.line_items,
             zone_a: {
                 customer_tin: customerTin,
                 bl_number: blNumber,
@@ -611,12 +609,12 @@ export function InvoiceBuilder({
 
       if (invoiceError) throw new Error(invoiceError.message);
 
-      // Mark selected billing items as billed
+      // Mark selected billing items as invoiced
       const { error: updateError } = await supabase
-        .from('evouchers')
-        .update({ status: 'billed', invoice_id: invoiceData.id })
+        .from('billing_line_items')
+        .update({ status: 'invoiced', invoice_id: invoiceData.id, invoice_number: invoiceData.invoice_number })
         .in('id', finalBillingItemIds);
-      if (updateError) console.warn('[InvoiceBuilder] Failed to mark items as billed:', updateError.message);
+      if (updateError) console.warn('[InvoiceBuilder] Failed to mark items as invoiced:', updateError.message);
 
       toast.success(`Invoice ${invoiceData.invoice_number} created`);
       if (onSuccess) onSuccess();
@@ -659,7 +657,7 @@ export function InvoiceBuilder({
     const isSelected = selectedIds.has(item.id);
     const override = itemOverrides[item.id] || { remarks: "", tax_type: "NON-VAT" };
     return (
-      <div key={item.id} className={`group border-b border-[#F3F4F6] last:border-0 transition-all ${isSelected ? 'bg-[var(--theme-bg-surface-tint)]' : 'hover:bg-[var(--theme-bg-page)]'}`}>
+      <div key={item.id} className={`group border-b border-[var(--neuron-pill-inactive-bg)] last:border-0 transition-all ${isSelected ? 'bg-[var(--theme-bg-surface-tint)]' : 'hover:bg-[var(--theme-bg-page)]'}`}>
         <div className="flex items-start px-4 py-3 cursor-pointer" onClick={() => toggleSelection(item.id)}>
             <div className="w-8 shrink-0 pt-1 flex items-center justify-center">
                 <div className="relative flex items-center justify-center">
@@ -696,7 +694,7 @@ export function InvoiceBuilder({
                             type="text" 
                             value={override.remarks}
                             onChange={(e) => updateItemOverride(item.id, 'remarks', e.target.value)}
-                            className="w-full px-2.5 py-1.5 text-xs border border-[var(--theme-border-default)] rounded focus:ring-1 focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                            className="w-full px-2.5 py-1.5 text-xs border border-[var(--theme-border-default)] rounded focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                             placeholder="e.g. SERVICE CHARGE"
                             onClick={(e) => e.stopPropagation()}
                         />
@@ -743,7 +741,7 @@ export function InvoiceBuilder({
                             </button>
                         )}
                         <div>
-                            <h2 className="text-sm font-bold text-[#111827]">{viewInvoice?.invoice_number || "Loading..."}</h2>
+                            <h2 className="text-sm font-bold text-[var(--theme-text-primary)]">{viewInvoice?.invoice_number || "Loading..."}</h2>
                             <span className="text-xs text-[var(--theme-text-muted)]">{project.project_number}</span>
                         </div>
                     </div>
@@ -800,7 +798,7 @@ export function InvoiceBuilder({
                    <div className="w-px h-4 bg-[var(--theme-bg-surface-tint)]" />
                    <button 
                       onClick={toggleFit} 
-                      className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[var(--theme-action-primary-bg)] bg-[#F0FDFA]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
+                      className={`flex items-center gap-2 px-2 py-1 rounded-md text-sm font-medium transition-all ${autoScale ? 'text-[var(--theme-action-primary-bg)] bg-[var(--theme-bg-surface-tint)]' : 'text-[var(--theme-text-secondary)] hover:bg-[var(--theme-bg-surface-subtle)]'}`}
                       title="Fit to Screen"
                    >
                       <Maximize size={16} />
@@ -827,7 +825,7 @@ export function InvoiceBuilder({
                                       <select
                                           value={targetCurrency}
                                           onChange={(e) => setTargetCurrency(e.target.value)}
-                                          className="w-full h-9 pl-3 pr-8 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)] appearance-none bg-[var(--theme-bg-surface)]"
+                                          className="w-full h-9 pl-3 pr-8 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[var(--theme-action-primary-bg)] focus:border-[var(--theme-action-primary-bg)] appearance-none bg-[var(--theme-bg-surface)]"
                                       >
                                           <option value="PHP">PHP (Philippine Peso)</option>
                                           <option value="USD">USD (US Dollar)</option>
@@ -846,7 +844,7 @@ export function InvoiceBuilder({
                                           step="0.01"
                                           value={exchangeRate}
                                           onChange={(e) => setExchangeRate(parseFloat(e.target.value) || 0)}
-                                          className="w-full h-9 pl-3 pr-3 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[#0F766E] focus:border-[var(--theme-action-primary-bg)]"
+                                          className="w-full h-9 pl-3 pr-3 text-sm border border-[var(--theme-border-default)] rounded-md focus:ring-[var(--theme-action-primary-bg)] focus:border-[var(--theme-action-primary-bg)]"
                                       />
                                   </div>
                               </div>
@@ -947,10 +945,10 @@ export function InvoiceBuilder({
                                            className="w-full flex items-center justify-between transition-colors"
                                            style={{
                                              padding: "8px 16px",
-                                             background: isExpanded ? "#F8FFFE" : "#FAFCFB",
+                                             background: isExpanded ? "var(--theme-bg-surface-tint)" : "var(--theme-bg-page)",
                                              border: "none",
-                                             borderTop: bidIdx > 0 ? "1px solid #E5E9E8" : "none",
-                                             borderBottom: isExpanded ? "1px solid #E5E9E8" : "none",
+                                             borderTop: bidIdx > 0 ? "1px solid var(--theme-border-default)" : "none",
+                                             borderBottom: isExpanded ? "1px solid var(--theme-border-default)" : "none",
                                              cursor: "pointer",
                                            }}
                                          >
@@ -959,7 +957,7 @@ export function InvoiceBuilder({
                                                <ChevronDown size={13} />
                                              </div>
                                              {bid !== "unassigned" && getServiceIcon(serviceType, { size: 13, color: "var(--theme-action-primary-bg)" })}
-                                             <span style={{ fontSize: "11px", fontWeight: 600, color: bid === "unassigned" ? "#6B7280" : "#0F766E", fontFamily: "monospace" }}>
+                                             <span style={{ fontSize: "11px", fontWeight: 600, color: bid === "unassigned" ? "var(--theme-text-muted)" : "var(--theme-action-primary-bg)", fontFamily: "monospace" }}>
                                                {bid === "unassigned" ? "Unassigned Items" : bid}
                                              </span>
                                              {bid !== "unassigned" && (
@@ -971,7 +969,7 @@ export function InvoiceBuilder({
                                                {itemCount} item{itemCount !== 1 ? "s" : ""}
                                              </span>
                                            </div>
-                                           <span style={{ fontSize: "12px", fontWeight: 600, color: itemCount === 0 ? "#9CA3AF" : "#12332B", fontFamily: "monospace" }}>
+                                           <span style={{ fontSize: "12px", fontWeight: 600, color: itemCount === 0 ? "var(--theme-text-muted)" : "var(--theme-text-primary)", fontFamily: "monospace" }}>
                                              {formatCurrency(subtotal)}
                                            </span>
                                          </button>
@@ -1007,7 +1005,7 @@ export function InvoiceBuilder({
                                    })
                                    .map(([category, items]) => (
                                        <div key={category}>
-                                           <div className="px-4 py-2 bg-[var(--theme-bg-surface-subtle)] border-b border-[#F3F4F6] text-[10px] font-bold text-[var(--theme-text-muted)] uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10">
+                                           <div className="px-4 py-2 bg-[var(--theme-bg-surface-subtle)] border-b border-[var(--neuron-pill-inactive-bg)] text-[10px] font-bold text-[var(--theme-text-muted)] uppercase tracking-wider flex items-center gap-2 sticky top-0 z-10">
                                                <div className="w-1 h-1 rounded-full bg-gray-400"></div>
                                                {category}
                                                <span className="text-[9px] ml-auto bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] px-1.5 rounded-full text-[var(--theme-text-muted)]">{items.length}</span>
@@ -1032,7 +1030,7 @@ export function InvoiceBuilder({
                                       type="date"
                                       value={invoiceDate}
                                       onChange={(e) => setInvoiceDate(e.target.value)}
-                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
+                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
                                   />
                               </div>
                               <div>
@@ -1041,7 +1039,7 @@ export function InvoiceBuilder({
                                       type="date"
                                       value={dueDate}
                                       onChange={(e) => setDueDate(e.target.value)}
-                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
+                                      className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
                                   />
                               </div>
                           </div>
@@ -1056,7 +1054,7 @@ export function InvoiceBuilder({
                                     value={creditTerms}
                                     onChange={(e) => setCreditTerms(e.target.value)}
                                     placeholder="e.g. NET 15, NET 30, COD"
-                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                                 />
                               </div>
                           </div>
@@ -1068,7 +1066,7 @@ export function InvoiceBuilder({
                                   onChange={(e) => setNotes(e.target.value)}
                                   rows={3}
                                   placeholder="Add payment instructions or notes..."
-                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all"
                               />
                           </div>
                       </div>
@@ -1088,9 +1086,9 @@ export function InvoiceBuilder({
                                       onClick={() => handleBillToChange("customer")}
                                       className="px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all"
                                       style={{
-                                          backgroundColor: billedToType === "customer" ? "#0F766E" : "#F9FAFB",
-                                          color: billedToType === "customer" ? "#FFFFFF" : "#667085",
-                                          border: billedToType === "customer" ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
+                                          backgroundColor: billedToType === "customer" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-bg)",
+                                          color: billedToType === "customer" ? "#FFFFFF" : "var(--theme-text-muted)",
+                                          border: billedToType === "customer" ? "1px solid var(--theme-action-primary-bg)" : "1px solid var(--theme-border-default)",
                                       }}
                                   >
                                       Customer
@@ -1101,9 +1099,9 @@ export function InvoiceBuilder({
                                       disabled={customerConsignees.length === 0}
                                       className="px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                                       style={{
-                                          backgroundColor: billedToType === "consignee" ? "#0F766E" : "#F9FAFB",
-                                          color: billedToType === "consignee" ? "#FFFFFF" : "#667085",
-                                          border: billedToType === "consignee" ? "1px solid #0F766E" : "1px solid var(--theme-border-default)",
+                                          backgroundColor: billedToType === "consignee" ? "var(--theme-action-primary-bg)" : "var(--neuron-pill-inactive-bg)",
+                                          color: billedToType === "consignee" ? "#FFFFFF" : "var(--theme-text-muted)",
+                                          border: billedToType === "consignee" ? "1px solid var(--theme-action-primary-bg)" : "1px solid var(--theme-border-default)",
                                       }}
                                   >
                                       Consignee
@@ -1122,8 +1120,8 @@ export function InvoiceBuilder({
                                       <select
                                           value={billedToConsigneeId || ""}
                                           onChange={(e) => handleBillToConsigneeSelect(e.target.value)}
-                                          className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
-                                          style={{ color: billedToConsigneeId ? "#12332B" : "#9CA3AF" }}
+                                          className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all"
+                                          style={{ color: billedToConsigneeId ? "var(--theme-text-primary)" : "var(--theme-text-muted)" }}
                                       >
                                           <option value="" disabled>Choose a consignee...</option>
                                           {customerConsignees.map(csg => (
@@ -1150,7 +1148,7 @@ export function InvoiceBuilder({
                                   onChange={(e) => setCustomerAddress(e.target.value)}
                                   rows={3}
                                   placeholder={isFetchingAddress ? "Fetching address..." : "Enter customer address"}
-                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none resize-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
@@ -1162,7 +1160,7 @@ export function InvoiceBuilder({
                                   value={customerTin}
                                   onChange={(e) => setCustomerTin(e.target.value)}
                                   placeholder="000-000-000-000"
-                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
                           
@@ -1174,7 +1172,7 @@ export function InvoiceBuilder({
                                   value={blNumber}
                                   onChange={(e) => setBlNumber(e.target.value)}
                                   placeholder="e.g. KULA2503335"
-                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
@@ -1186,7 +1184,7 @@ export function InvoiceBuilder({
                                   value={consignee}
                                   onChange={(e) => setConsignee(e.target.value)}
                                   placeholder="Consignee Name"
-                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                  className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                               />
                           </div>
 
@@ -1200,7 +1198,7 @@ export function InvoiceBuilder({
                                     value={commodityDescription}
                                     onChange={(e) => setCommodityDescription(e.target.value)}
                                     placeholder="e.g. AIR / STC: LEAD FRAME"
-                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
+                                    className="w-full pl-9 pr-3 py-2 border border-[var(--theme-border-default)] rounded-lg text-sm focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)]"
                                 />
                               </div>
                           </div>
@@ -1238,7 +1236,7 @@ export function InvoiceBuilder({
                           <textarea
                               value={notes}
                               onChange={(e) => setNotes(e.target.value)}
-                              className="w-full px-3.5 py-3 text-sm border border-[var(--theme-border-default)] rounded-lg focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E] outline-none transition-all placeholder:text-[var(--theme-text-muted)] min-h-[100px] resize-none"
+                              className="w-full px-3.5 py-3 text-sm border border-[var(--theme-border-default)] rounded-lg focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)] outline-none transition-all placeholder:text-[var(--theme-text-muted)] min-h-[100px] resize-none"
                               placeholder="Add custom notes for this printout..."
                           />
                       </div>
@@ -1314,7 +1312,7 @@ function CollapsibleSection({ title, icon, children, defaultOpen = true }: { tit
         className="w-full flex items-center justify-between p-6 hover:bg-[var(--theme-bg-surface-subtle)] transition-colors group outline-none"
       >
         <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#E0F2F1] flex items-center justify-center shrink-0 group-hover:bg-[#B2DFDB] transition-colors text-[var(--theme-action-primary-bg)]">
+            <div className="w-8 h-8 rounded-lg bg-[var(--theme-bg-surface-tint)] flex items-center justify-center shrink-0 group-hover:bg-[var(--theme-status-success-border)] transition-colors text-[var(--theme-action-primary-bg)]">
                 {icon}
             </div>
             <h4 className="font-bold text-[var(--theme-text-primary)] text-sm select-none uppercase tracking-wide">{title}</h4>

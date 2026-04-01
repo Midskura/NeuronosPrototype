@@ -15,42 +15,42 @@ export function getProjectStatusStyles(status: ProjectStatus | string): StatusSt
 
   switch (normalizedStatus) {
     case "Active":
-      return { 
-        bg: "#EFF6FF", 
-        text: "#1D4ED8", 
-        borderColor: "#DBEAFE",
+      return {
+        bg: "var(--neuron-semantic-info-bg)",
+        text: "var(--neuron-semantic-info)",
+        borderColor: "var(--neuron-semantic-info-bg)",
         icon: Activity
       };
 
     case "Completed":
-      return { 
-        bg: "#ECFDF5", 
-        text: "#059669", 
-        borderColor: "#D1FAE5",
+      return {
+        bg: "var(--theme-status-success-bg)",
+        text: "#059669",
+        borderColor: "var(--theme-status-success-bg)",
         icon: CheckCircle2
       };
 
     case "On Hold":
-      return { 
-        bg: "#FFFBEB", 
-        text: "#D97706", 
-        borderColor: "#FEF3C7",
+      return {
+        bg: "var(--theme-status-warning-bg)",
+        text: "var(--theme-status-warning-fg)",
+        borderColor: "var(--theme-status-warning-bg)",
         icon: AlertCircle
       };
 
     case "Cancelled":
-      return { 
-        bg: "#FEF2F2", 
-        text: "#DC2626", 
-        borderColor: "#FEE2E2",
+      return {
+        bg: "var(--theme-status-danger-bg)",
+        text: "var(--theme-status-danger-fg)",
+        borderColor: "var(--theme-status-danger-bg)",
         icon: XCircle
       };
 
     default:
-      return { 
-        bg: "#F3F4F6", 
-        text: "#6B7280", 
-        borderColor: "#E5E7EB",
+      return {
+        bg: "var(--neuron-pill-inactive-bg)",
+        text: "var(--theme-text-muted)",
+        borderColor: "var(--theme-border-default)",
         icon: FileText
       };
   }

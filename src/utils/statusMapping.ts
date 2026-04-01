@@ -44,37 +44,37 @@ export function getStatusStyle(displayStatus: DisplayStatus) {
     case "Ongoing":
       return {
         icon: Clock,
-        color: "#D97706",
-        bgColor: "#FEF3C7",
-        borderColor: "#FDE68A"
+        color: "var(--theme-status-warning-fg)",
+        bgColor: "var(--theme-status-warning-bg)",
+        borderColor: "var(--theme-status-warning-border)"
       };
     case "Waiting Approval":
       return {
         icon: AlertCircle,
         color: "#C88A2B",
-        bgColor: "#FEF3C7",
-        borderColor: "#FDE68A"
+        bgColor: "var(--theme-status-warning-bg)",
+        borderColor: "var(--theme-status-warning-border)"
       };
     case "Approved":
       return {
         icon: CheckCircle,
-        color: "#0F766E",
-        bgColor: "#E8F5F3",
+        color: "var(--theme-action-primary-bg)",
+        bgColor: "var(--theme-bg-surface-tint)",
         borderColor: "#99E6DC"
       };
     case "Disapproved":
       return {
         icon: XCircle,
-        color: "#DC2626",
-        bgColor: "#FEE2E2",
+        color: "var(--theme-status-danger-fg)",
+        bgColor: "var(--theme-status-danger-bg)",
         borderColor: "#FECACA"
       };
     case "Cancelled":
       return {
         icon: XCircle,
-        color: "#6B7280",
-        bgColor: "#F3F4F6",
-        borderColor: "#D1D5DB"
+        color: "var(--theme-text-muted)",
+        bgColor: "var(--neuron-pill-inactive-bg)",
+        borderColor: "var(--neuron-ui-muted)"
       };
   }
 }

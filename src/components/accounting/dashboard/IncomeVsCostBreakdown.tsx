@@ -113,7 +113,7 @@ export function IncomeVsCostBreakdown({
             </span>
             <span
               className="text-[14px] font-bold tabular-nums"
-              style={{ color: margin >= 0 ? "#16A34A" : "#EF4444" }}
+              style={{ color: margin >= 0 ? "var(--theme-status-success-fg)" : "var(--theme-status-danger-fg)" }}
             >
               {fmt(margin)} ({marginPct.toFixed(1)}%)
             </span>
@@ -231,7 +231,7 @@ function BreakdownTable({
         </h3>
       </div>
       <table className="w-full">
-        <thead style={{ background: "#FAFBFC", borderBottom: "1px solid var(--theme-border-default)" }}>
+        <thead style={{ background: "var(--neuron-pill-inactive-bg)", borderBottom: "1px solid var(--theme-border-default)" }}>
           <tr>
             <th
               className="px-5 py-2.5 text-left text-[10px] font-semibold uppercase tracking-wider"
@@ -294,7 +294,7 @@ function BreakdownTable({
           )}
         </tbody>
         {rows.length > 0 && (
-          <tfoot style={{ borderTop: "2px solid #E5E9F0", background: "#FAFBFC" }}>
+          <tfoot style={{ borderTop: "2px solid var(--theme-border-default)", background: "var(--neuron-pill-inactive-bg)" }}>
             <tr>
               <td
                 className="px-5 py-2.5 text-[12px] font-bold"

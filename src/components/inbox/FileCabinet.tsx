@@ -156,14 +156,14 @@ const DRAWERS = [
 function StatusBadge({ status }: { status?: string }) {
   if (!status) return null;
   const colorMap: Record<string, { color: string; bg: string }> = {
-    active:    { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
-    open:      { color: "#0369A1", bg: "#EFF6FF" },
+    active:    { color: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
+    open:      { color: "var(--neuron-semantic-info)", bg: "var(--neuron-semantic-info-bg)" },
     draft:     { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" },
-    sent:      { color: "var(--theme-status-warning-fg)", bg: "#FEF9EE" },
-    approved:  { color: "#7C3AED", bg: "#F5F3FF" },
-    posted:    { color: "var(--theme-action-primary-bg)", bg: "#F0F7F5" },
-    paid:      { color: "var(--theme-status-success-fg)", bg: "#F0FDF4" },
-    cancelled: { color: "var(--theme-status-danger-fg)", bg: "#FFF5F5" },
+    sent:      { color: "var(--theme-status-warning-fg)", bg: "var(--theme-status-warning-bg)" },
+    approved:  { color: "var(--neuron-status-accent-fg)", bg: "var(--neuron-status-accent-bg)" },
+    posted:    { color: "var(--theme-action-primary-bg)", bg: "var(--theme-bg-surface-tint)" },
+    paid:      { color: "var(--theme-status-success-fg)", bg: "var(--theme-status-success-bg)" },
+    cancelled: { color: "var(--theme-status-danger-fg)", bg: "var(--theme-status-danger-bg)" },
   };
   const s = status.toLowerCase();
   const c = colorMap[s] ?? { color: "var(--theme-text-muted)", bg: "var(--theme-bg-surface-subtle)" };
@@ -276,8 +276,8 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
         className="flex items-center gap-1.5"
         style={{
           padding: "6px 14px", borderRadius: 6, border: "none",
-          backgroundColor: selected.length > 0 ? "#0F766E" : "#E5E9F0",
-          color: selected.length > 0 ? "#FFFFFF" : "#9CA3AF",
+          backgroundColor: selected.length > 0 ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)",
+          color: selected.length > 0 ? "#FFFFFF" : "var(--theme-text-muted)",
           fontSize: 12, fontWeight: 600,
           cursor: selected.length > 0 ? "pointer" : "not-allowed",
           transition: "all 120ms ease",
@@ -305,13 +305,13 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                 style={{
                   padding: "9px 14px",
                   border: "none",
-                  backgroundColor: isActive ? "#F0F7F5" : "transparent",
-                  color: isActive ? "#0F766E" : "#667085",
+                  backgroundColor: isActive ? "var(--theme-bg-surface-tint)" : "transparent",
+                  color: isActive ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   fontSize: 13,
                   fontWeight: isActive ? 600 : 400,
                   cursor: "pointer",
                   transition: "all 120ms ease",
-                  borderRight: isActive ? "2px solid #0F766E" : "2px solid transparent",
+                  borderRight: isActive ? "2px solid var(--theme-action-primary-bg)" : "2px solid transparent",
                   textAlign: "left",
                 }}
                 onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
@@ -338,8 +338,8 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                     padding: "3px 10px",
                     borderRadius: 6,
                     border: "none",
-                    backgroundColor: isActive ? "#12332B" : "transparent",
-                    color: isActive ? "#FFFFFF" : "#667085",
+                    backgroundColor: isActive ? "var(--theme-text-primary)" : "transparent",
+                    color: isActive ? "#FFFFFF" : "var(--theme-text-muted)",
                     fontSize: 12,
                     fontWeight: isActive ? 600 : 400,
                     cursor: "pointer",
@@ -389,7 +389,7 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
             {isLoading && (
               <div style={{ padding: "20px 12px" }}>
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} style={{ padding: "8px 0", borderBottom: "1px solid #F9FAFB" }}>
+                  <div key={i} style={{ padding: "8px 0", borderBottom: "1px solid var(--neuron-pill-inactive-bg)" }}>
                     <div style={{ height: 12, backgroundColor: "var(--theme-bg-surface-subtle)", borderRadius: 4, marginBottom: 5, width: `${60 + i * 8}%` }} />
                     <div style={{ height: 10, backgroundColor: "var(--theme-bg-page)", borderRadius: 4, width: "40%" }} />
                   </div>
@@ -421,28 +421,28 @@ export function FileCabinet({ isOpen, onLink, onClose, alreadyLinked }: FileCabi
                   style={{
                     padding: "9px 12px",
                     border: "none",
-                    borderBottom: "1px solid #F9FAFB",
-                    backgroundColor: sel ? "#F0F7F5" : "transparent",
+                    borderBottom: "1px solid var(--neuron-pill-inactive-bg)",
+                    backgroundColor: sel ? "var(--theme-bg-surface-tint)" : "transparent",
                     cursor: linked ? "default" : "pointer",
                     transition: "background-color 80ms ease",
                   }}
                   onMouseEnter={(e) => { if (!linked && !sel) e.currentTarget.style.backgroundColor = "var(--theme-bg-page)"; }}
-                  onMouseLeave={(e) => { if (!sel) e.currentTarget.style.backgroundColor = "transparent"; else e.currentTarget.style.backgroundColor = "#F0F7F5"; }}
+                  onMouseLeave={(e) => { if (!sel) e.currentTarget.style.backgroundColor = "transparent"; else e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; }}
                 >
                   {/* Checkbox */}
                   <div style={{
                     width: 16, height: 16, borderRadius: 4, flexShrink: 0,
-                    border: `1.5px solid ${linked ? "#D1D5DB" : sel ? "#0F766E" : "#D1D5DB"}`,
-                    backgroundColor: linked ? "#F3F4F6" : sel ? "#0F766E" : "transparent",
+                    border: `1.5px solid ${linked ? "var(--neuron-ui-muted)" : sel ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)"}`,
+                    backgroundColor: linked ? "var(--neuron-pill-inactive-bg)" : sel ? "var(--theme-action-primary-bg)" : "transparent",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 120ms ease",
                   }}>
-                    {(sel || linked) && <Check size={10} style={{ color: linked ? "#9CA3AF" : "#FFFFFF" }} strokeWidth={2.5} />}
+                    {(sel || linked) && <Check size={10} style={{ color: linked ? "var(--theme-text-muted)" : "#FFFFFF" }} strokeWidth={2.5} />}
                   </div>
 
                   {/* Text */}
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: 13, fontWeight: 500, color: linked ? "#9CA3AF" : "#12332B", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    <p style={{ fontSize: 13, fontWeight: 500, color: linked ? "var(--theme-text-muted)" : "var(--theme-text-primary)", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {label}
                     </p>
                     {sublabel && (

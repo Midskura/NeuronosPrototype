@@ -21,6 +21,40 @@ Deno.serve(async (req: Request) => {
     const body = await req.json();
     const { action, ...params } = body;
 
+    if (action === "createUser") {
+      const { email, password, name, department, role, position, service_type } = params as {
+        email: string;
+        password: string;
+        name: string;
+        department: string;
+        role: string;
+        position?: string;
+        service_type?: string;
+      };
+
+      const { data, error } = await adminClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { name },
+      });
+
+      if (error) throw error;
+      if (!data.user) throw new Error("User creation returned no user");
+
+      // Wait briefly for the trigger to create the profile row
+      await new Promise((r) => setTimeout(r, 500));
+
+      const { error: profileError } = await adminClient
+        .from("users")
+        .update({ name, department, role, position: position || null, service_type: service_type || null, is_active: true, status: "active" })
+        .eq("auth_id", data.user.id);
+
+      if (profileError) throw profileError;
+
+      return respond({ success: true, userId: data.user.id });
+    }
+
     if (action === "resetPassword") {
       const { userId, newPassword } = params as { userId: string; newPassword: string };
       const { error } = await adminClient.auth.admin.updateUserById(userId, { password: newPassword });

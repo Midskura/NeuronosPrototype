@@ -49,7 +49,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
       case "paid":
         return "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]";
       case "partial":
-        return "bg-[#FEF3E7] text-[#C88A2B]";
+        return "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]";
       case "unpaid":
         return "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]";
       case "overdue":
@@ -201,7 +201,7 @@ export function BillingsListTable({ billings, isLoading, onRowClick }: BillingsL
                     <span className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-[0.002em] ${getPaymentStatusColor(status)}`}>
                       {status}
                     </span>
-                    <div className="text-[10px] mt-1" style={{ color: isOverdue(billing) ? "#DC2626" : "var(--neuron-ink-muted)" }}>
+                    <div className="text-[10px] mt-1" style={{ color: isOverdue(billing) ? "var(--theme-status-danger-fg)" : "var(--neuron-ink-muted)" }}>
                       Due: {formatDate(billing.due_date || "")}
                     </div>
                   </div>

@@ -90,7 +90,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
         label: "Submit for Pricing",
         sublabel: "Send to Pricing department for review",
         value: "Pending Pricing",
-        icon: <Send size={16} style={{ color: "#1D4ED8" }} />,
+        icon: <Send size={16} style={{ color: "var(--neuron-semantic-info)" }} />,
         action: () => {
           onStatusChange("Pending Pricing");
           setShowMenu(false);
@@ -216,7 +216,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
           e.currentTarget.style.backgroundColor = statusStyle.bgColor;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "white";
+          e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
         }}
       >
         <span style={{ color: statusStyle.color, display: "flex", alignItems: "center" }}>
@@ -291,7 +291,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               {availableActions.length > 0 && (
                 <div style={{
                   height: "1px",
-                  backgroundColor: "#E5E7EB",
+                  backgroundColor: "var(--theme-border-default)",
                   margin: "4px 0"
                 }} />
               )}
@@ -310,7 +310,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               transition: "background-color 0.15s ease"
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#FEF2F2";
+              e.currentTarget.style.backgroundColor = "var(--theme-status-danger-bg)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = "transparent";
@@ -441,7 +441,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
               {/* Alert Note */}
               <div style={{
                 backgroundColor: "var(--theme-status-warning-bg)",
-                border: "1px solid #FDE68A",
+                border: "1px solid var(--theme-status-warning-border)",
                 borderRadius: "8px",
                 padding: "16px",
                 fontSize: "14px",
@@ -489,10 +489,10 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
-                  e.currentTarget.style.borderColor = "#9CA3AF";
+                  e.currentTarget.style.borderColor = "var(--theme-text-muted)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
+                  e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                   e.currentTarget.style.borderColor = "var(--theme-border-default)";
                 }}
               >
@@ -503,7 +503,7 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 disabled={!reason}
                 style={{
                   padding: "12px 24px",
-                  backgroundColor: !reason ? "#FCA5A5" : "#DC2626",
+                  backgroundColor: !reason ? "var(--theme-status-danger-border)" : "var(--theme-status-danger-fg)",
                   border: "none",
                   borderRadius: "8px",
                   fontSize: "15px",
@@ -514,12 +514,12 @@ export function StatusChangeButton({ quotation, onStatusChange, userDepartment }
                 }}
                 onMouseEnter={(e) => {
                   if (reason) {
-                    e.currentTarget.style.backgroundColor = "#B91C1C";
+                    e.currentTarget.style.backgroundColor = "var(--theme-status-danger-fg)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (reason) {
-                    e.currentTarget.style.backgroundColor = "#DC2626";
+                    e.currentTarget.style.backgroundColor = "var(--theme-status-danger-fg)";
                   }
                 }}
               >

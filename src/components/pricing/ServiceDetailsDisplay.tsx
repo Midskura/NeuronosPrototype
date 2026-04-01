@@ -25,7 +25,7 @@ function FieldDisplay({ label, value, fullWidth = false }: FieldDisplayProps) {
         border: "1px solid var(--neuron-ui-border)",
         borderRadius: "6px",
         fontSize: "14px",
-        color: value ? "var(--neuron-ink-primary)" : "#9CA3AF"
+        color: value ? "var(--neuron-ink-primary)" : "var(--theme-text-muted)"
       }}>
         {value || "\u2014"}
       </div>
@@ -97,7 +97,7 @@ function ContainersDisplay({ containers }: { containers: any[] }) {
           <div key={c.id || idx} style={{
             padding: "8px 14px",
             backgroundColor: "var(--theme-bg-surface-tint)",
-            border: "1px solid #0F766E",
+            border: "1px solid var(--theme-action-primary-bg)",
             borderRadius: "6px",
             fontSize: "14px",
             fontWeight: 500,

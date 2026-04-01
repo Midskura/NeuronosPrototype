@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { supabase } from "../../utils/supabase/client";
@@ -77,27 +77,27 @@ const DEPT_BADGE: Record<string, { bg: string; text: string }> = {
 };
 
 const ROLE_COLORS: Record<Role, { bg: string; text: string }> = {
-  manager:     { bg: "#F3E8FF", text: "#7E22CE" },
+  manager:     { bg: "var(--neuron-status-accent-bg)", text: "var(--neuron-status-accent-fg)" },
   team_leader: { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" },
-  staff:       { bg: "var(--neuron-bg-surface-subtle)", text: "#374151" },
+  staff:       { bg: "var(--neuron-bg-surface-subtle)", text: "var(--theme-text-secondary)" },
 };
 
 const STATUS_BADGE: Record<UserStatus, { bg: string; text: string; dot: string }> = {
-  active:    { bg: "#DCFCE7", text: "#166534", dot: "#22C55E" },
-  inactive:  { bg: "#F3F4F6", text: "#6B7280", dot: "#9CA3AF" },
-  suspended: { bg: "#FEF3C7", text: "#92400E", dot: "#F59E0B" },
+  active:    { bg: "var(--theme-status-success-bg)", text: "#166534", dot: "var(--theme-status-success-fg)" },
+  inactive:  { bg: "var(--neuron-pill-inactive-bg)", text: "var(--theme-text-muted)", dot: "var(--neuron-ui-muted)" },
+  suspended: { bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)", dot: "var(--theme-status-warning-fg)" },
 };
 
 const SCOPE_LABELS: Record<OverrideScope, { label: string; description: string; bg: string; text: string }> = {
-  full:             { label: "Full Access",        description: "Sees everything across all departments.", bg: "#F3E8FF", text: "#7E22CE" },
+  full:             { label: "Full Access",        description: "Sees everything across all departments.", bg: "var(--neuron-status-accent-bg)", text: "var(--neuron-status-accent-fg)" },
   department_wide:  { label: "Department Wide",    description: "Sees all records in their own department.", bg: "var(--theme-status-warning-bg)", text: "var(--theme-status-warning-fg)" },
-  cross_department: { label: "Cross Department",   description: "Sees records in selected departments.", bg: "#E0E7FF", text: "#3730A3" },
+  cross_department: { label: "Cross Department",   description: "Sees records in selected departments.", bg: "var(--neuron-semantic-info-bg)", text: "#3730A3" },
 };
 
 // ─── Shared cell components ───────────────────────────────────────────────────
 
 function DeptBadge({ dept }: { dept: string }) {
-  const c = DEPT_BADGE[dept] ?? { bg: "#F3F4F6", text: "#374151" };
+  const c = DEPT_BADGE[dept] ?? { bg: "var(--neuron-pill-inactive-bg)", text: "var(--theme-text-secondary)" };
   return (
     <span style={{ borderRadius: 999, padding: "2px 10px", fontSize: 12, fontWeight: 500, backgroundColor: c.bg, color: c.text }}>
       {dept}
@@ -119,10 +119,10 @@ function AvatarCell({ user }: { user: UserRow }) {
   const initials = (user.name || user.email || "U").charAt(0).toUpperCase();
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "#DCFCE7", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+      <div style={{ width: 28, height: 28, borderRadius: "50%", backgroundColor: "var(--theme-status-success-bg)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
         {user.avatar_url
           ? <img src={user.avatar_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          : <span style={{ fontSize: 11, fontWeight: 600, color: "#0F766E" }}>{initials}</span>}
+          : <span style={{ fontSize: 11, fontWeight: 600, color: "var(--theme-action-primary-bg)" }}>{initials}</span>}
       </div>
       <div>
         <p style={{ fontSize: 13, fontWeight: 500, color: "var(--neuron-ink-primary)", margin: 0 }}>{user.name || user.email}</p>
@@ -225,7 +225,7 @@ function FilterBar({
 
 // ─── Users Tab ────────────────────────────────────────────────────────────────
 
-function UsersTab() {
+function UsersTab({ onCountUpdate }: { onCountUpdate: (count: number) => void }) {
   const navigate = useNavigate();
   const [showCreate, setShowCreate] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({ search: "", dept: "", role: "", status: "", overrides: "all" });
@@ -241,6 +241,11 @@ function UsersTab() {
       return (data ?? []) as unknown as (UserRow & { status?: UserStatus; teams?: { name: string } | null })[];
     },
   });
+
+  // Update parent with user count
+  useEffect(() => {
+    onCountUpdate(users.length);
+  }, [users.length, onCountUpdate]);
 
   // DEBUG: surface query errors
   if (isError) console.error("[UsersTab] query error:", JSON.stringify(queryError, Object.getOwnPropertyNames(queryError ?? {})));
@@ -310,7 +315,7 @@ function UsersTab() {
         const hasOverride = overrideUserIds.has(u.id!);
         return hasOverride
           ? (
-            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "#7E22CE", background: "#F3E8FF", padding: "2px 8px", borderRadius: 999 }}>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 12, color: "var(--neuron-status-accent-fg)", background: "var(--neuron-status-accent-bg)", padding: "2px 8px", borderRadius: 999 }}>
               <Shield size={11} /> Custom
             </span>
           )
@@ -438,7 +443,7 @@ function EditTeamDialog({ team, onClose, onSaved }: { team: Team | null; onClose
   );
 }
 
-function TeamsTab() {
+function TeamsTab({ onCountUpdate }: { onCountUpdate: (count: number) => void }) {
   const queryClient = useQueryClient();
   const [expanded, setExpanded]     = useState<string | null>(null);
   const [creating, setCreating]     = useState(false);
@@ -471,6 +476,11 @@ function TeamsTab() {
     ...t,
     members: allUsers.filter(u => u.team_id === t.id).map(u => ({ id: u.id, name: u.name, role: u.role, email: u.email })),
   }));
+
+  // Update parent with teams count
+  useEffect(() => {
+    onCountUpdate(teams.length);
+  }, [teams.length, onCountUpdate]);
 
   const byDept = DEPARTMENTS.reduce<Record<string, TeamWithMembers[]>>((acc, dept) => {
     acc[dept] = teamsWithMembers.filter(t => t.department === dept);
@@ -528,7 +538,7 @@ function TeamsTab() {
       {/* Department sections */}
       {DEPARTMENTS.map(dept => {
         const deptTeams = byDept[dept] ?? [];
-        const colors = DEPT_BADGE[dept] ?? { bg: "#F3F4F6", text: "#374151" };
+        const colors = DEPT_BADGE[dept] ?? { bg: "var(--neuron-pill-inactive-bg)", text: "var(--theme-text-secondary)" };
         return (
           <div key={dept} style={{ border: "1px solid var(--neuron-ui-border)", borderRadius: 10, overflow: "hidden", background: "var(--neuron-bg-elevated)" }}>
             {/* Dept header */}
@@ -557,7 +567,7 @@ function TeamsTab() {
                         <span style={{ fontSize: 13, fontWeight: 600, color: "var(--neuron-ink-primary)" }}>{team.name}</span>
                         <span style={{ fontSize: 12, color: "var(--neuron-ink-muted)" }}>{team.members.length} member{team.members.length !== 1 ? "s" : ""}</span>
                         {leader && (
-                          <span style={{ fontSize: 11, color: "#0F766E", background: "#F0FDF9", padding: "1px 8px", borderRadius: 999 }}>
+                          <span style={{ fontSize: 11, color: "var(--theme-action-primary-bg)", background: "var(--theme-status-success-bg)", padding: "1px 8px", borderRadius: 999 }}>
                             {leader.name}
                           </span>
                         )}
@@ -649,7 +659,7 @@ function TeamsTab() {
 
 // ─── Access Overrides Tab ─────────────────────────────────────────────────────
 
-function AccessOverridesTab() {
+function AccessOverridesTab({ onCountUpdate }: { onCountUpdate: (count: number) => void }) {
   const queryClient = useQueryClient();
   const { user: currentUser } = useUser();
   const [search, setSearch]     = useState("");
@@ -683,6 +693,11 @@ function AccessOverridesTab() {
     },
     staleTime: 5 * 60 * 1000,
   });
+
+  // Update parent with overrides count
+  useEffect(() => {
+    onCountUpdate(overrides.length);
+  }, [overrides.length, onCountUpdate]);
 
   const filteredOverrides = useMemo(() => {
     if (!search.trim()) return overrides;
@@ -768,7 +783,7 @@ function AccessOverridesTab() {
           <div style={{ padding: 48, textAlign: "center", color: "var(--neuron-ink-muted)", fontSize: 14 }}>Loading…</div>
         ) : filteredOverrides.length === 0 ? (
           <div style={{ padding: 48, textAlign: "center" }}>
-            <Shield size={28} style={{ color: "#E5E9F0", margin: "0 auto 12px" }} />
+            <Shield size={28} style={{ color: "var(--theme-border-default)", margin: "0 auto 12px" }} />
             <p style={{ fontSize: 14, color: "var(--neuron-ink-muted)" }}>
               {search ? "No overrides match your search." : "No access overrides configured."}
             </p>
@@ -776,7 +791,7 @@ function AccessOverridesTab() {
         ) : (
           <>
             {/* Table header */}
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1.5fr 1.5fr 1fr auto", gap: 0, padding: "10px 20px", background: "#F9FAFB", borderBottom: "1px solid var(--neuron-ui-border)" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1.5fr 1.5fr 1fr auto", gap: 0, padding: "10px 20px", background: "var(--neuron-pill-inactive-bg)", borderBottom: "1px solid var(--neuron-ui-border)" }}>
               {["User", "Scope", "Departments", "Granted By", "Notes", ""].map(h => (
                 <span key={h} style={{ fontSize: 11, fontWeight: 500, color: "var(--neuron-ink-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{h}</span>
               ))}
@@ -793,7 +808,7 @@ function AccessOverridesTab() {
                     cursor: "pointer",
                   }}
                   onClick={() => ov.user && setMatrixUser({ id: ov.user_id, name: ov.user.name, role: ov.user.role, department: ov.user.department })}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#F9FAFB"; }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--neuron-pill-inactive-bg)"; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ""; }}
                 >
                   <div>
@@ -819,7 +834,7 @@ function AccessOverridesTab() {
                     <button
                       onClick={() => handleRevoke(ov)}
                       disabled={revokingId === ov.id}
-                      style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid #FCA5A5", background: "none", color: "#DC2626", fontSize: 11, cursor: revokingId === ov.id ? "not-allowed" : "pointer" }}
+                      style={{ padding: "4px 10px", borderRadius: 6, border: "1px solid var(--theme-status-danger-border)", background: "none", color: "var(--theme-status-danger-fg)", fontSize: 11, cursor: revokingId === ov.id ? "not-allowed" : "pointer" }}
                     >
                       {revokingId === ov.id ? "…" : "Revoke"}
                     </button>
@@ -883,7 +898,7 @@ function AccessOverridesTab() {
                     <button
                       key={key}
                       onClick={() => setFormScope(key)}
-                      style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "10px 14px", border: `1px solid ${formScope === key ? "#0F766E" : "#E5E9F0"}`, borderRadius: 10, background: formScope === key ? "#F0FDF9" : "white", cursor: "pointer", textAlign: "left" }}
+                      style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "10px 14px", border: `1px solid ${formScope === key ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"}`, borderRadius: 10, background: formScope === key ? "var(--theme-status-success-bg)" : "var(--theme-bg-surface)", cursor: "pointer", textAlign: "left" }}
                     >
                       <span style={{ fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 999, backgroundColor: val.bg, color: val.text, whiteSpace: "nowrap", marginTop: 1 }}>{val.label}</span>
                       <span style={{ fontSize: 12, color: "var(--theme-text-muted)" }}>{val.description}</span>
@@ -899,7 +914,7 @@ function AccessOverridesTab() {
                       <button
                         key={d}
                         onClick={() => toggleDept(d)}
-                        style={{ padding: "3px 12px", borderRadius: 999, fontSize: 12, fontWeight: 500, cursor: "pointer", border: `1px solid ${formDepts.includes(d) ? "#0F766E" : "#E5E9F0"}`, background: formDepts.includes(d) ? "#F0FDF9" : "white", color: formDepts.includes(d) ? "#0F766E" : "#667085" }}
+                        style={{ padding: "3px 12px", borderRadius: 999, fontSize: 12, fontWeight: 500, cursor: "pointer", border: `1px solid ${formDepts.includes(d) ? "var(--theme-action-primary-bg)" : "var(--theme-border-default)"}`, background: formDepts.includes(d) ? "var(--theme-status-success-bg)" : "var(--theme-bg-surface)", color: formDepts.includes(d) ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)" }}
                       >
                         {d}
                       </button>
@@ -935,46 +950,91 @@ const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "overrides", label: "Access Overrides", icon: Shield },
 ];
 
+// ─── Tab counts context ────────────────────────────────────────────────────────
+
+interface TabCounts {
+  users: number;
+  teams: number;
+  overrides: number;
+}
+
 // ─── Root export ──────────────────────────────────────────────────────────────
 
 export function UserManagement() {
   const [activeTab, setActiveTab] = useState<Tab>("users");
+  const [tabCounts, setTabCounts] = useState<TabCounts>({ users: 0, teams: 0, overrides: 0 });
+  const handleUsersCount = useCallback((count: number) => setTabCounts(prev => ({ ...prev, users: count })), []);
+  const handleTeamsCount = useCallback((count: number) => setTabCounts(prev => ({ ...prev, teams: count })), []);
+  const handleOverridesCount = useCallback((count: number) => setTabCounts(prev => ({ ...prev, overrides: count })), []);
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "var(--neuron-bg-elevated)" }}>
       {/* Page Header */}
-      <div style={{ padding: "32px 48px 0", borderBottom: "1px solid var(--neuron-ui-border)" }}>
-        <h1 style={{ fontSize: 32, fontWeight: 600, color: "var(--neuron-ink-primary)", letterSpacing: "-1.2px", marginBottom: 4 }}>
-          Users
-        </h1>
-        <p style={{ fontSize: 14, color: "var(--neuron-ink-muted)", marginBottom: 20 }}>
-          Manage workspace accounts, teams, and access permissions
-        </p>
-        {/* Tab nav */}
-        <div style={{ display: "flex", gap: 4 }}>
+      <div style={{ padding: "32px 48px 24px 48px", borderBottom: "1px solid var(--neuron-ui-border)" }}>
+        <div style={{ marginBottom: "24px" }}>
+          <h1 style={{ fontSize: 32, fontWeight: 600, color: "var(--neuron-ink-primary)", letterSpacing: "-1.2px", marginBottom: 4 }}>
+            Users
+          </h1>
+          <p style={{ fontSize: 14, color: "var(--neuron-ink-muted)", margin: 0 }}>
+            Manage workspace accounts, teams, and access permissions
+          </p>
+        </div>
+
+        {/* Tab nav — Quotations style with underline and badges */}
+        <div style={{
+          display: "flex",
+          gap: "24px"
+        }}>
           {TABS.map(({ id, label, icon: Icon }) => {
             const isActive = activeTab === id;
+            const count = tabCounts[id as keyof TabCounts];
             return (
               <button
                 key={id}
                 onClick={() => setActiveTab(id)}
                 style={{
-                  height: 38, padding: "0 16px",
-                  borderRadius: "10px 10px 0 0",
-                  border: "1px solid var(--neuron-ui-border)",
-                  borderBottom: isActive ? "1px solid var(--neuron-bg-elevated)" : "1px solid var(--neuron-ui-border)",
-                  background: isActive ? "var(--neuron-bg-elevated)" : "var(--neuron-bg-page)",
-                  color: isActive ? "var(--neuron-action-primary)" : "var(--neuron-ink-muted)",
-                  fontWeight: isActive ? 600 : 400,
-                  fontSize: 13,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "12px 4px",
+                  background: "none",
+                  border: "none",
+                  borderBottom: isActive ? "2px solid var(--neuron-action-primary)" : "2px solid transparent",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: isActive ? "var(--neuron-action-primary)" : "var(--neuron-ink-secondary)",
                   cursor: "pointer",
-                  display: "flex", alignItems: "center", gap: 6,
-                  marginBottom: "-1px",
-                  position: "relative", zIndex: isActive ? 1 : 0,
+                  transition: "all 0.2s ease",
+                  marginBottom: 0
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--neuron-ink-primary)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--neuron-ink-secondary)";
+                  }
                 }}
               >
-                <Icon size={14} />
+                <Icon size={16} />
                 {label}
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "2px 8px",
+                    borderRadius: "10px",
+                    backgroundColor: isActive ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    color: isActive ? "var(--neuron-action-primary)" : "var(--neuron-ink-muted)"
+                  }}
+                >
+                  {count}
+                </span>
               </button>
             );
           })}
@@ -983,9 +1043,9 @@ export function UserManagement() {
 
       {/* Tab content */}
       <div style={{ flex: 1, overflow: "auto", padding: "28px 48px" }}>
-        {activeTab === "users"    && <UsersTab />}
-        {activeTab === "teams"    && <TeamsTab />}
-        {activeTab === "overrides" && <AccessOverridesTab />}
+        {activeTab === "users"    && <UsersTab onCountUpdate={handleUsersCount} />}
+        {activeTab === "teams"    && <TeamsTab onCountUpdate={handleTeamsCount} />}
+        {activeTab === "overrides" && <AccessOverridesTab onCountUpdate={handleOverridesCount} />}
       </div>
     </div>
   );

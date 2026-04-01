@@ -101,7 +101,7 @@ export function ChargeItemDropdown({
           width: "100%",
           padding: "8px 10px",
           fontSize: "13px",
-          border: hasStartedEditing ? "1px solid #F59E0B" : "1px solid var(--theme-border-default)",
+          border: hasStartedEditing ? "1px solid var(--theme-status-warning-fg)" : "1px solid var(--theme-border-default)",
           borderRadius: "4px",
           backgroundColor: "var(--theme-bg-surface)",
           outline: "none",

@@ -331,10 +331,10 @@ export function UnifiedExpensesTab({
             style={{
               display: "flex", alignItems: "center", gap: "5px",
               padding: "7px 12px", fontSize: "12px", fontWeight: 600,
-              border: `1px solid ${showBillablePending ? "#FDE68A" : "#E5E9F0"}`,
+              border: `1px solid ${showBillablePending ? "var(--theme-status-warning-border)" : "var(--theme-border-default)"}`,
               borderRadius: "8px", cursor: "pointer", whiteSpace: "nowrap",
-              backgroundColor: showBillablePending ? "#FFFBEB" : "#FFFFFF",
-              color: showBillablePending ? "#D97706" : "#667085",
+              backgroundColor: showBillablePending ? "var(--theme-status-warning-bg)" : "var(--theme-bg-surface)",
+              color: showBillablePending ? "var(--theme-status-warning-fg)" : "var(--neuron-pill-inactive-text)",
             }}
             title="Show only billable expenses not yet converted to billing items"
           >
@@ -343,8 +343,8 @@ export function UnifiedExpensesTab({
               style={{
                 fontSize: "10px", fontWeight: 700,
                 padding: "1px 5px", borderRadius: "9999px",
-                backgroundColor: showBillablePending ? "#FDE68A" : "#F3F4F6",
-                color: showBillablePending ? "#92400E" : "#6B7280",
+                backgroundColor: showBillablePending ? "var(--theme-status-warning-border)" : "var(--neuron-pill-inactive-bg)",
+                color: showBillablePending ? "var(--theme-status-warning-fg)" : "var(--neuron-pill-inactive-text)",
               }}
             >
               {convertibleIds.size}

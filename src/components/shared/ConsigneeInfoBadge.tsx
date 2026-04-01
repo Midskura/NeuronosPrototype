@@ -43,12 +43,12 @@ export function ConsigneeInfoBadge({ consigneeId }: ConsigneeInfoBadgeProps) {
   return (
     <div
       className="flex items-start gap-1.5 mt-1 px-2 py-1.5 rounded-md"
-      style={{ backgroundColor: "var(--theme-bg-surface-tint)", border: "1px solid #D1FAE5" }}
+      style={{ backgroundColor: "var(--theme-bg-surface-tint)", border: "1px solid var(--theme-status-success-border)" }}
     >
       <Building2 size={12} className="mt-0.5 shrink-0" style={{ color: "var(--theme-action-primary-bg)" }} />
       <div className="text-[11px] leading-[16px]" style={{ color: "var(--theme-text-primary)" }}>
         <span className="font-medium" style={{ color: "var(--theme-action-primary-bg)" }}>Linked Consignee</span>
-        <span className="mx-1" style={{ color: "#94A3B8" }}>&middot;</span>
+        <span className="mx-1" style={{ color: "var(--theme-text-muted)" }}>&middot;</span>
         {details.join(" · ")}
       </div>
     </div>

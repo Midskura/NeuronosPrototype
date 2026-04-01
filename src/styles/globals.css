@@ -4,9 +4,9 @@
 
 :root {
   /* ===== WORKSPACE THEME TOKENS ===== */
-  --theme-bg-page: #F7FAF8;
+  --theme-bg-page: #FFFFFF;
   --theme-bg-surface: #FFFFFF;
-  --theme-bg-surface-subtle: #F1F6F4;
+  --theme-bg-surface-subtle: #FFFFFF;
   --theme-bg-surface-tint: #E8F2EE;
   --theme-text-primary: #12332B;
   --theme-text-secondary: #2E5147;
@@ -76,6 +76,16 @@
   --neuron-semantic-info-bg: #F0F9FF;
   --neuron-semantic-info-border: #BAE6FD;
 
+  /* Accent / Purple status (WCA badges, special categories) */
+  --neuron-status-accent-bg: #EDE9FE;
+  --neuron-status-accent-fg: #7C3AED;
+  --neuron-status-accent-border: #C4B5FD;
+
+  /* Pill / Chip tokens (inactive state for filter pills) */
+  --neuron-pill-inactive-bg: #F3F4F6;
+  --neuron-pill-inactive-text: #6B7280;
+  --neuron-pill-inactive-border: var(--theme-border-default);
+
   /* Action (Primary CTA) */
   --neuron-action-primary: var(--theme-action-primary-bg);
   --neuron-action-primary-hover: var(--theme-action-primary-border);
@@ -99,6 +109,32 @@
   --neuron-dept-executive-text: #14532D;
   --neuron-dept-default-bg: #F3F4F6;
   --neuron-dept-default-text: #374151;
+
+  /* Calendar Event Colors -- Pastel Department Tints */
+  --neuron-cal-bd: #D1FAE5;
+  --neuron-cal-bd-text: #065F46;
+  --neuron-cal-bd-border: #A7F3D0;
+  --neuron-cal-pricing: #DBEAFE;
+  --neuron-cal-pricing-text: #1E40AF;
+  --neuron-cal-pricing-border: #BFDBFE;
+  --neuron-cal-ops: #FFEDD5;
+  --neuron-cal-ops-text: #9A3412;
+  --neuron-cal-ops-border: #FED7AA;
+  --neuron-cal-accounting: #EDE9FE;
+  --neuron-cal-accounting-text: #5B21B6;
+  --neuron-cal-accounting-border: #DDD6FE;
+  --neuron-cal-hr: #FCE7F3;
+  --neuron-cal-hr-text: #9D174D;
+  --neuron-cal-hr-border: #FBCFE8;
+  --neuron-cal-executive: #DCFCE7;
+  --neuron-cal-executive-text: #14532D;
+  --neuron-cal-executive-border: #BBF7D0;
+  --neuron-cal-personal: #F3F4F6;
+  --neuron-cal-personal-text: #374151;
+  --neuron-cal-personal-border: #E5E7EB;
+  --neuron-cal-crm: #FEF3C7;
+  --neuron-cal-crm-text: #92400E;
+  --neuron-cal-crm-border: #FDE68A;
 
   /* Status Toggle */
   --neuron-toggle-active-bg: #12B76A;
@@ -196,6 +232,63 @@
   --theme-status-danger-fg: #F0AAA1;
   --theme-status-danger-border: #C94F3D;
   --neuron-state-focus-ring: 0 0 0 3px rgba(117, 131, 246, 0.22);
+
+  /* Info status -- dark mode */
+  --neuron-semantic-info: #7DD3FC;
+  --neuron-semantic-info-bg: #0C2D48;
+  --neuron-semantic-info-border: #0369A1;
+
+  /* Accent / Purple status -- dark mode */
+  --neuron-status-accent-bg: #1E1B2E;
+  --neuron-status-accent-fg: #C4B5FD;
+  --neuron-status-accent-border: #7C3AED;
+
+  /* Pill / Chip tokens -- dark mode */
+  --neuron-pill-inactive-bg: #1E2128;
+  --neuron-pill-inactive-text: #9097A7;
+  --neuron-pill-inactive-border: var(--theme-border-default);
+
+  /* Department Badge Colors -- dark mode */
+  --neuron-dept-bd-bg: #123126;
+  --neuron-dept-bd-text: #8FE3BC;
+  --neuron-dept-pricing-bg: #1E293B;
+  --neuron-dept-pricing-text: #93C5FD;
+  --neuron-dept-ops-bg: #2D1B0E;
+  --neuron-dept-ops-text: #FDBA74;
+  --neuron-dept-accounting-bg: #1E1B2E;
+  --neuron-dept-accounting-text: #C4B5FD;
+  --neuron-dept-hr-bg: #2D1524;
+  --neuron-dept-hr-text: #F9A8D4;
+  --neuron-dept-executive-bg: #14261A;
+  --neuron-dept-executive-text: #86EFAC;
+  --neuron-dept-default-bg: #1E2128;
+  --neuron-dept-default-text: #D1D5DB;
+
+  /* Calendar Event Colors -- Dark Mode */
+  --neuron-cal-bd: #123126;
+  --neuron-cal-bd-text: #8FE3BC;
+  --neuron-cal-bd-border: #2B8A6E;
+  --neuron-cal-pricing: #1E293B;
+  --neuron-cal-pricing-text: #93C5FD;
+  --neuron-cal-pricing-border: #3B82F6;
+  --neuron-cal-ops: #2D1B0E;
+  --neuron-cal-ops-text: #FDBA74;
+  --neuron-cal-ops-border: #C2410C;
+  --neuron-cal-accounting: #1E1B2E;
+  --neuron-cal-accounting-text: #C4B5FD;
+  --neuron-cal-accounting-border: #7C3AED;
+  --neuron-cal-hr: #2D1524;
+  --neuron-cal-hr-text: #F9A8D4;
+  --neuron-cal-hr-border: #BE185D;
+  --neuron-cal-executive: #14261A;
+  --neuron-cal-executive-text: #86EFAC;
+  --neuron-cal-executive-border: #22C55E;
+  --neuron-cal-personal: #1E2128;
+  --neuron-cal-personal-text: #D1D5DB;
+  --neuron-cal-personal-border: #4B5563;
+  --neuron-cal-crm: #2D2305;
+  --neuron-cal-crm-text: #FCD34D;
+  --neuron-cal-crm-border: #D97706;
 }
 
 @theme inline {
@@ -269,7 +362,7 @@
     box-shadow: none !important;
   }
 
-  /* Compose panel fields — no focus ring, clean composer aesthetic */
+  /* Compose panel fields -- no focus ring, clean composer aesthetic */
   .compose-panel input:focus,
   .compose-panel input:focus-visible,
   .compose-panel textarea:focus,
@@ -318,7 +411,7 @@
  * - H3 (18-20px): -0.5% (-0.005em)
  * - H2 (22-28px): -1.0% (-0.01em)
  * - H1/Page titles (30-40px): -1.5% (-0.015em)
- * - Display (≥44px): -2.0% (-0.02em)
+ * - Display (>=44px): -2.0% (-0.02em)
  * 
  * Font weights:
  * Regular = 400, Medium = 500, Semibold = 600, Bold = 700
@@ -327,7 +420,7 @@
  */
 @layer base {
   :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
-    /* H1 - 24px falls in 22-28px range → -1.0% */
+    /* H1 - 24px falls in 22-28px range -> -1.0% */
     h1 {
       font-size: 24px;
       font-weight: 600;
@@ -336,7 +429,7 @@
       font-variant-numeric: normal;
     }
 
-    /* H2 - 20px falls in 18-20px range → -0.5% */
+    /* H2 - 20px falls in 18-20px range -> -0.5% */
     h2 {
       font-size: 20px;
       font-weight: 500;
@@ -345,7 +438,7 @@
       font-variant-numeric: normal;
     }
 
-    /* H3 - 18px falls in 18-20px range → -0.5% */
+    /* H3 - 18px falls in 18-20px range -> -0.5% */
     h3 {
       font-size: 18px;
       font-weight: 500;
@@ -353,7 +446,7 @@
       letter-spacing: -0.005em;
     }
 
-    /* H4 - 16px is body range → 0% */
+    /* H4 - 16px is body range -> 0% */
     h4 {
       font-size: 16px;
       font-weight: 500;
@@ -361,7 +454,7 @@
       letter-spacing: 0;
     }
 
-    /* Body - 15px → 0% */
+    /* Body - 15px -> 0% */
     p {
       font-size: 15px;
       font-weight: 400;
@@ -369,7 +462,7 @@
       letter-spacing: 0;
     }
 
-    /* Label - 14px → 0% */
+    /* Label - 14px -> 0% */
     label {
       font-size: 14px;
       font-weight: 500;
@@ -377,7 +470,7 @@
       letter-spacing: 0;
     }
 
-    /* Button - 15px, weight 500 → 0% */
+    /* Button - 15px, weight 500 -> 0% */
     button {
       font-size: 15px;
       font-weight: 500;
@@ -385,7 +478,7 @@
       letter-spacing: 0;
     }
 
-    /* Inputs - 15px → 0% */
+    /* Inputs - 15px -> 0% */
     input, textarea, select {
       font-size: 15px;
       font-weight: 400;
@@ -393,7 +486,7 @@
       letter-spacing: 0;
     }
 
-    /* Table text - 14px → 0% with tabular numerals */
+    /* Table text - 14px -> 0% with tabular numerals */
     table {
       font-size: 14px;
       font-weight: 400;
@@ -402,7 +495,7 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Small text - 12px → +0.2% for readability */
+    /* Small text - 12px -> +0.2% for readability */
     small {
       font-size: 12px;
       font-weight: 600;
@@ -413,7 +506,7 @@
   }
 }
 
-/* ✨ PHASE 7: Animation keyframes for vendor inline rates */
+/* * PHASE 7: Animation keyframes for vendor inline rates */
 @keyframes expandIn {
   from {
     opacity: 0;
@@ -530,21 +623,21 @@ table th,
 }
 
 /* KPI metric cards and dashboard tiles - Large sizes get negative tracking */
-/* 32px falls in 30-40px range → -1.5% tracking */
+/* 32px falls in 30-40px range -> -1.5% tracking */
 [class*="text-[32px]"] {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1, 'kern' 1;
   letter-spacing: -0.015em;
 }
 
-/* 28px falls in 22-28px range → -1.0% tracking */
+/* 28px falls in 22-28px range -> -1.0% tracking */
 [class*="text-[28px]"] {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1, 'kern' 1;
   letter-spacing: -0.01em;
 }
 
-/* 24px falls in 22-28px range → -1.0% tracking */
+/* 24px falls in 22-28px range -> -1.0% tracking */
 [class*="text-[24px]"] {
   font-variant-numeric: tabular-nums;
   font-feature-settings: 'tnum' 1, 'kern' 1;
@@ -772,10 +865,10 @@ table th,
  * body { font-family: var(--font-sans); }
  * 
  * Font Weights (Mapping):
- * - Regular → 400
- * - Medium → 500
- * - Semibold → 600
- * - Bold → 700
+ * - Regular -> 400
+ * - Medium -> 500
+ * - Semibold -> 600
+ * - Bold -> 700
  * 
  * Letter Spacing (Controlled Negative - SF Pro Display-like):
  * - Small UI (10-12px): +0.2% (0.002em) - improved readability
@@ -783,7 +876,7 @@ table th,
  * - H3 (18-20px): -0.5% (-0.005em)
  * - H2 (22-28px): -1.0% (-0.01em)
  * - H1/Page titles (30-40px): -1.5% (-0.015em)
- * - Display (≥44px): -2.0% (-0.02em)
+ * - Display (>=44px): -2.0% (-0.02em)
  * 
  * Optical Adjustments (SF-like feel):
  * - Tightened headings visually with negative tracking
@@ -828,34 +921,34 @@ table th,
  * - text-rendering: optimizeLegibility (implicit)
  * 
  * Component Updates:
- * ✓ All text layers use Inter styles (no local font overrides)
- * ✓ Headings: negative tracking applied (-0.5% to -1.5%)
- * ✓ Body text: 0% tracking maintained
- * ✓ Small UI: +0.2% tracking for readability
- * ✓ KPI tiles: tabular numerals + negative tracking
- * ✓ Tables: tabular numerals enabled
- * ✓ Charts: tabular numerals on axis labels
- * ✓ Toast notifications: Inter
- * ✓ Print styles: Inter
- * ✓ Line heights: preserved from SF Pro Display
- * ✓ Layout spacing: unchanged
- * ✓ Color tokens: unchanged (#0A1D4D navy, #F25C05 orange)
- * ✓ Grid system: unchanged (12-column, 1280px max-width)
+ * ? All text layers use Inter styles (no local font overrides)
+ * ? Headings: negative tracking applied (-0.5% to -1.5%)
+ * ? Body text: 0% tracking maintained
+ * ? Small UI: +0.2% tracking for readability
+ * ? KPI tiles: tabular numerals + negative tracking
+ * ? Tables: tabular numerals enabled
+ * ? Charts: tabular numerals on axis labels
+ * ? Toast notifications: Inter
+ * ? Print styles: Inter
+ * ? Line heights: preserved from SF Pro Display
+ * ? Layout spacing: unchanged
+ * ? Color tokens: unchanged (#0A1D4D navy, #F25C05 orange)
+ * ? Grid system: unchanged (12-column, 1280px max-width)
  * 
  * QA Checklist:
- * □ No missing font warnings in browser console
- * □ All text uses Inter (no SF Pro/Instrument Sans fallbacks)
- * □ Headings show tightened tracking (negative letter-spacing)
- * □ Body text remains at 0% tracking
- * □ Small UI (10-12px) has +0.2% tracking
- * □ All numeric displays show aligned digits (tabular)
- * □ Buttons/inputs have no truncation at 14-16px
- * □ Line heights match previous design
- * □ Toast notifications render correctly
- * □ Print styles maintain font family
- * □ Charts display with tabular numerals
- * □ Apply/Download bar renders correctly
- * □ Reports filter bar displays properly
+ * ? No missing font warnings in browser console
+ * ? All text uses Inter (no SF Pro/Instrument Sans fallbacks)
+ * ? Headings show tightened tracking (negative letter-spacing)
+ * ? Body text remains at 0% tracking
+ * ? Small UI (10-12px) has +0.2% tracking
+ * ? All numeric displays show aligned digits (tabular)
+ * ? Buttons/inputs have no truncation at 14-16px
+ * ? Line heights match previous design
+ * ? Toast notifications render correctly
+ * ? Print styles maintain font family
+ * ? Charts display with tabular numerals
+ * ? Apply/Download bar renders correctly
+ * ? Reports filter bar displays properly
  * 
  * CSS Implementation Example:
  * h1 { letter-spacing: -0.01em; }
@@ -871,12 +964,12 @@ table th,
  * ENTRIES TABLE RESPONSIVE LAYOUT
  * ================================================================
  * 8-column grid with responsive breakpoints
- * Viewport ≥1280px: Full widths
+ * Viewport >=1280px: Full widths
  * Viewport 1024-1279px: Reduced AMOUNT & STATUS
  * Viewport <1024px: Compact mode with adjusted columns
  */
 
-/* Default: Desktop ≥1280px */
+/* Default: Desktop >=1280px */
 .entries-table-header,
 .entries-table-row {
   display: grid;
@@ -919,9 +1012,9 @@ table th,
 /* ================================================================
  * REPORTING MODULE - DATE CONTROLS RESPONSIVE
  * ================================================================
- * Desktop (≥1024px): All controls in a single row
+ * Desktop (>=1024px): All controls in a single row
  * Tablet (768px-1023px): Two rows - controls wrap, Apply + Export stay together
- * Mobile (≤767px): Stacked vertically with action buttons in a row
+ * Mobile (?767px): Stacked vertically with action buttons in a row
  */
 
 /* DateControlsCard responsive behavior */

@@ -113,7 +113,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
                             required
                             value={formData.invoice_date}
                             onChange={(e) => setFormData({ ...formData, invoice_date: e.target.value })}
-                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)]"
                         />
                     </div>
                 </div>
@@ -124,7 +124,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
                             type="date"
                             value={formData.due_date}
                             onChange={(e) => setFormData({ ...formData, due_date: e.target.value })}
-                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
+                            className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)]"
                             placeholder="Defaults to Net 30"
                         />
                     </div>
@@ -138,7 +138,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
                     rows={3}
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[#0F766E]"
+                    className="w-full px-3 py-2 border border-[var(--theme-border-default)] rounded-lg focus:outline-none focus:border-[var(--theme-action-primary-bg)] focus:ring-1 focus:ring-[var(--theme-action-primary-bg)]"
                     placeholder="Add payment instructions or notes..."
                 />
             </div>
@@ -153,7 +153,7 @@ export function CreateInvoiceModal({ open, onClose, onSubmit, selectedItems, cus
               display: "flex",
               justifyContent: "flex-end",
               gap: "12px",
-              backgroundColor: "#FAFAFA",
+              backgroundColor: "var(--neuron-pill-inactive-bg)",
               borderBottomLeftRadius: "16px",
               borderBottomRightRadius: "16px"
             }}

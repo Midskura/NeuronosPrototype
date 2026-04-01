@@ -113,7 +113,7 @@ export function ServiceModuleLayout({
               fontWeight: 600,
               border: "none",
               borderRadius: "8px",
-              background: "#0F766E",
+              background: "var(--theme-action-primary-bg)",
               color: "white",
               cursor: "pointer",
             }}
@@ -307,7 +307,7 @@ function TabButton({ icon, label, count, isActive, color, onClick }: TabButtonPr
         background: "transparent",
         border: "none",
         borderBottom: isActive ? `2px solid ${color}` : "2px solid transparent",
-        color: isActive ? color : (isHovered ? "#12332B" : "#667085"),
+        color: isActive ? color : (isHovered ? "var(--theme-text-primary)" : "var(--theme-text-muted)"),
         fontSize: "14px",
         fontWeight: 600,
         cursor: "pointer",

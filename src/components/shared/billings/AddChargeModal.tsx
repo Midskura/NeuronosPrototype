@@ -99,7 +99,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
             <DialogTitle className="text-lg font-semibold text-[var(--theme-text-primary)]">Add Billing Charge</DialogTitle>
             <button 
               onClick={onClose}
-              className="p-1 rounded-md text-[var(--theme-text-muted)] hover:text-[#475467] hover:bg-[#F2F4F7] transition-colors"
+              className="p-1 rounded-md text-[var(--theme-text-muted)] hover:text-[var(--theme-text-secondary)] hover:bg-[var(--neuron-pill-inactive-bg)] transition-colors"
             >
               <X size={20} />
             </button>
@@ -118,7 +118,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                 value={formData.description}
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
                 placeholder="e.g. Handling Fee"
-                className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
+                className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]"
               />
             </div>
 
@@ -129,7 +129,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                 value={formData.category}
                 onValueChange={(val) => setFormData({...formData, category: val})}
               >
-                <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
+                <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -155,7 +155,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                     value={formData.amount}
                     onChange={(e) => setFormData({...formData, amount: e.target.value})}
                     placeholder="0.00"
-                    className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E] pl-3"
+                    className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)] pl-3"
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                   value={formData.currency}
                   onValueChange={(val) => setFormData({...formData, currency: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -188,7 +188,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                   value={formData.service_type}
                   onValueChange={(val) => setFormData({...formData, service_type: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -208,7 +208,7 @@ export function AddChargeModal({ isOpen, onClose, onSuccess, projectId, bookingI
                   value={formData.charge_type}
                   onValueChange={(val) => setFormData({...formData, charge_type: val})}
                 >
-                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]">
+                  <SelectTrigger className="h-9 text-sm border-[var(--theme-border-default)] focus:border-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

@@ -288,10 +288,10 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           style={{
-            backgroundColor: isDragging ? "#E8F4F3" : "#F9FAFB",
+            backgroundColor: isDragging ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
             border: isDragging 
               ? "2px dashed var(--neuron-brand-green)" 
-              : "2px dashed #E5E7EB",
+              : "2px dashed var(--theme-border-default)",
             borderRadius: "8px",
             padding: "48px 32px",
             textAlign: "center",
@@ -306,7 +306,7 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
           <Upload
             size={40}
             style={{
-              color: isDragging ? "var(--neuron-brand-green)" : "#9CA3AF",
+              color: isDragging ? "var(--neuron-brand-green)" : "var(--theme-text-muted)",
               marginBottom: "16px",
             }}
           />
@@ -457,12 +457,12 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   }}
                   onMouseEnter={(e) => {
                     if (!attachment.isUploading) {
-                      e.currentTarget.style.backgroundColor = "#E8F4F3";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!attachment.isUploading) {
-                      e.currentTarget.style.backgroundColor = "white";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface)";
                     }
                   }}
                 >
@@ -485,8 +485,8 @@ export function EntityAttachmentsTab({ entityId, entityType, currentUser }: Enti
                   }}
                   onMouseEnter={(e) => {
                     if (!attachment.isUploading) {
-                      e.currentTarget.style.borderColor = "#EF4444";
-                      e.currentTarget.style.color = "#EF4444";
+                      e.currentTarget.style.borderColor = "var(--theme-status-danger-fg)";
+                      e.currentTarget.style.color = "var(--theme-status-danger-fg)";
                     }
                   }}
                   onMouseLeave={(e) => {

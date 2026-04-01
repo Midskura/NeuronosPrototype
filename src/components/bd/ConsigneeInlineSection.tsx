@@ -213,8 +213,8 @@ export function ConsigneeInlineSection({ customerId, isEditing = false }: Consig
                       placeholder="Consignee Name..."
                       className="flex-1 px-2.5 py-1.5 text-[13px] rounded-lg border outline-none"
                       style={{
-                        borderColor: "#0F766E",
-                        boxShadow: "0 0 0 1px #0F766E",
+                        borderColor: "var(--theme-action-primary-bg)",
+                        boxShadow: "0 0 0 1px var(--theme-action-primary-bg)",
                         color: "var(--neuron-ink-primary)",
                       }}
                     />

@@ -23,21 +23,43 @@ interface ForwardingBookingsProps {
 function mapToForwardingBooking(row: Record<string, any>): ForwardingBooking {
   const d = row.details || {};
   return {
+    // Spread details first so top-level fields override
+    ...d,
     ...row,
-    bookingId: row.id,
-    booking_number: row.booking_number,
+    // Explicit camelCase mappings expected by ForwardingBooking type
+    bookingId: row.booking_number || row.id,
+    id: row.id,
     customerName: row.customer_name,
-    projectNumber: row.project_id,
-    accountOwner: row.manager_name,
-    accountHandler: row.handler_name,
+    projectNumber: d.project_number || row.project_id,
+    accountOwner: d.account_owner || row.manager_name,
+    accountHandler: d.account_handler || row.handler_name,
     assigned_handler_name: row.handler_name,
     status: row.status,
     createdAt: row.created_at,
     updatedAt: row.updated_at || row.created_at,
-    movement: d.movement_type,
-    mode: d.mode,
-    portOfLoading: d.origin,
-    portOfDischarge: d.destination,
+    movement: row.movement_type || d.movement_type,
+    mode: row.mode || d.mode,
+    // Shipment fields from details
+    aolPol: d.aol_pol,
+    aodPod: d.aod_pod,
+    consignee: d.consignee,
+    shipper: d.shipper,
+    carrier: d.carrier,
+    mblMawb: d.mbl_mawb,
+    hblHawb: d.hbl_hawb,
+    commodityDescription: d.commodity_description,
+    grossWeight: d.gross_weight,
+    eta: d.eta,
+    typeOfEntry: d.type_of_entry,
+    cargoType: d.cargo_type,
+    stackability: d.stackability,
+    deliveryAddress: d.delivery_address,
+    quotationReferenceNumber: d.quotation_reference_number,
+    countryOfOrigin: d.country_of_origin,
+    preferentialTreatment: d.preferential_treatment,
+    forwarder: d.forwarder,
+    dimensions: d.dimensions,
+    registryNumber: d.registry_number,
   } as unknown as ForwardingBooking;
 }
 
@@ -232,7 +254,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                   fontWeight: 600,
                   border: "none",
                   borderRadius: "8px",
-                  background: "#0F766E",
+                  background: "var(--theme-action-primary-bg)",
                   color: "white",
                   cursor: "pointer",
                 }}
@@ -433,7 +455,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
               label="Completed"
               count={completedCount}
               isActive={activeTab === "completed"}
-              color="#10B981"
+              color="var(--theme-status-success-fg)"
               onClick={() => setActiveTab("completed")}
             />
           </div>
@@ -552,8 +574,8 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                           borderRadius: "4px",
                           fontSize: "12px",
                           fontWeight: 600,
-                          backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA",
-                          color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E",
+                          backgroundColor: booking.movement === "EXPORT" ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)",
+                          color: booking.movement === "EXPORT" ? "#C2410C" : "var(--theme-action-primary-bg)",
                         }}>
                           {booking.movement || "IMPORT"}
                         </span>
@@ -598,7 +620,7 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                             padding: "6px 12px",
                             fontSize: "12px",
                             fontWeight: 600,
-                            border: "1px solid #FCA5A5",
+                            border: "1px solid var(--theme-status-danger-border)",
                             borderRadius: "6px",
                             background: "var(--theme-bg-surface)",
                             color: "var(--theme-status-danger-fg)",
@@ -606,12 +628,12 @@ export function ForwardingBookings({ onSelectBooking, currentUser, pendingBookin
                             transition: "all 150ms"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#DC2626";
+                            e.currentTarget.style.background = "var(--theme-status-danger-fg)";
                             e.currentTarget.style.color = "white";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "white";
-                            e.currentTarget.style.color = "#DC2626";
+                            e.currentTarget.style.background = "var(--theme-bg-surface)";
+                            e.currentTarget.style.color = "var(--theme-status-danger-fg)";
                           }}
                         >
                           <Trash2 size={14} />
@@ -663,7 +685,7 @@ function TabButton({ icon, label, count, isActive, color, onClick }: TabButtonPr
         background: "transparent",
         border: "none",
         borderBottom: isActive ? `2px solid ${color}` : "2px solid transparent",
-        color: isActive ? color : (isHovered ? "#12332B" : "#667085"),
+        color: isActive ? color : (isHovered ? "var(--theme-text-primary)" : "var(--theme-text-muted)"),
         fontSize: "14px",
         fontWeight: 600,
         cursor: "pointer",

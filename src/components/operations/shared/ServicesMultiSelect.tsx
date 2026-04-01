@@ -72,9 +72,9 @@ export function ServicesMultiSelect({
               key={service}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs"
               style={{
-                backgroundColor: "#0F766E20",
+                backgroundColor: "var(--theme-bg-surface-tint)",
                 color: "var(--theme-action-primary-bg)",
-                border: "1px solid #0F766E40",
+                border: "1px solid var(--theme-action-primary-bg)",
               }}
             >
               {service}
@@ -122,7 +122,7 @@ export function ServicesMultiSelect({
                   onClick={() => toggleService(service)}
                   className="px-3.5 py-2.5 text-[13px] cursor-pointer flex items-center justify-between hover:bg-[var(--theme-action-primary-bg)]/5 transition-colors"
                   style={{
-                    backgroundColor: isSelected ? "#0F766E10" : "transparent",
+                    backgroundColor: isSelected ? "var(--theme-bg-surface-tint)" : "transparent",
                     color: isSelected ? "var(--theme-action-primary-bg)" : "var(--theme-text-primary)",
                   }}
                 >

@@ -235,7 +235,7 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
                         value={curr}
                         checked={formData.currency === curr}
                         onChange={() => setFormData(prev => ({ ...prev, currency: curr }))}
-                        className="text-[var(--theme-action-primary-bg)] focus:ring-[#0F766E]"
+                        className="text-[var(--theme-action-primary-bg)] focus:ring-[var(--theme-action-primary-bg)]"
                       />
                       <span className="text-sm text-[var(--theme-text-secondary)] font-medium">{curr}</span>
                     </label>
@@ -250,7 +250,7 @@ export function AccountSidePanel({ isOpen, onClose, onSave, account }: AccountSi
                   id="isFolder"
                   checked={formData.is_folder || false}
                   onChange={e => setFormData(prev => ({ ...prev, is_folder: e.target.checked }))}
-                  className="w-4 h-4 text-[var(--theme-action-primary-bg)] rounded border-[var(--theme-border-default)] focus:ring-[#0F766E]"
+                  className="w-4 h-4 text-[var(--theme-action-primary-bg)] rounded border-[var(--theme-border-default)] focus:ring-[var(--theme-action-primary-bg)]"
                 />
                 <div className="flex-1">
                   <label htmlFor="isFolder" className="text-sm font-medium text-[var(--theme-text-secondary)] cursor-pointer flex items-center gap-2">

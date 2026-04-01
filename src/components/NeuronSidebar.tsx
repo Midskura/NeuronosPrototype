@@ -24,14 +24,17 @@ import {
   Palette,
   CreditCard,
   Handshake,
-  ClipboardCheck
+  ClipboardCheck,
+  Receipt,
+  ArrowLeftRight,
+  BookOpen,
+  TrendingUp
 } from "lucide-react";
 import { NeuronLogo } from "./NeuronLogo";
 import { useUser } from "../hooks/useUser";
-import { useAppMode } from "../config/appMode";
 import { supabase } from "../utils/supabase/client";
 
-type Page = "dashboard" | "bd-contacts" | "bd-customers" | "bd-inquiries" | "projects" | "bd-projects" | "bd-contracts" | "bd-tasks" | "bd-activities" | "bd-budget-requests" | "bd-reports" | "pricing-contacts" | "pricing-customers" | "pricing-quotations" | "pricing-projects" | "pricing-contracts" | "pricing-vendors" | "pricing-reports" | "ops-forwarding" | "ops-brokerage" | "ops-trucking" | "ops-marine-insurance" | "ops-others" | "ops-reports" | "operations" | "acct-transactions" | "acct-evouchers" | "acct-billings" | "acct-invoices" | "acct-collections" | "acct-expenses" | "acct-coa" | "acct-reports" | "acct-projects" | "acct-contracts" | "acct-customers" | "acct-bookings" | "acct-catalog" | "acct-financials" | "hr" | "calendar" | "inbox" | "ticket-queue" | "settings" | "admin-users" | "admin" | "ticket-testing" | "activity-log" | "design-system";
+type Page = "dashboard" | "bd-contacts" | "bd-customers" | "bd-inquiries" | "projects" | "bd-projects" | "bd-contracts" | "bd-tasks" | "bd-activities" | "bd-budget-requests" | "bd-reports" | "pricing-contacts" | "pricing-customers" | "pricing-quotations" | "pricing-projects" | "pricing-contracts" | "pricing-vendors" | "pricing-reports" | "ops-forwarding" | "ops-brokerage" | "ops-trucking" | "ops-marine-insurance" | "ops-others" | "ops-reports" | "operations" | "acct-transactions" | "acct-evouchers" | "acct-billings" | "acct-invoices" | "acct-collections" | "acct-expenses" | "acct-coa" | "acct-reports" | "acct-statements" | "acct-projects" | "acct-contracts" | "acct-customers" | "acct-bookings" | "acct-catalog" | "acct-financials" | "hr" | "calendar" | "inbox" | "ticket-queue" | "settings" | "admin-users" | "admin" | "ticket-testing" | "activity-log" | "design-system";
 
 // SVG for Philippine Peso icon
 const Vector = () => (
@@ -168,7 +171,6 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
   
   // Use effectiveDepartment from context for dev role override support
   const { user, effectiveDepartment, effectiveRole } = useUser();
-  const { isEssentials } = useAppMode();
 
   // Fetch inbox unread count
   const fetchUnreadCount = useCallback(async () => {
@@ -237,32 +239,20 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
     { id: "ops-reports" as Page, label: "Reports", icon: BarChart3 },
   ];
 
-  // Accounting sub-items — mode-aware
-  const acctSubItems = isEssentials
-    ? [
-        { id: "acct-financials" as Page, label: "Financials", icon: CreditCard },
-        { id: "acct-projects" as Page, label: "Projects", icon: Briefcase },
-        { id: "acct-contracts" as Page, label: "Contracts", icon: Handshake },
-        { id: "acct-bookings" as Page, label: "Bookings", icon: Package },
-        { id: "acct-customers" as Page, label: "Customers", icon: Users },
-        { id: "acct-catalog" as Page, label: "Catalog", icon: ClipboardCheck },
-        { id: "acct-reports" as Page, label: "Reports", icon: BarChart3 },
-      ]
-    : [
-        { id: "acct-transactions" as Page, label: "Transactions", icon: CreditCard },
-        { id: "acct-customers" as Page, label: "Customers", icon: Users },
-        { id: "acct-projects" as Page, label: "Projects", icon: Briefcase },
-        { id: "acct-contracts" as Page, label: "Contracts", icon: Handshake },
-        { id: "acct-bookings" as Page, label: "Bookings", icon: Package },
-        { id: "acct-evouchers" as Page, label: "E-Vouchers", icon: FileText },
-        { id: "acct-billings" as Page, label: "Billings", icon: Banknote },
-        { id: "acct-invoices" as Page, label: "Invoices", icon: FileText },
-        { id: "acct-collections" as Page, label: "Collections", icon: Palette },
-        { id: "acct-expenses" as Page, label: "Expenses", icon: Palette },
-        { id: "acct-coa" as Page, label: "Chart of Accounts", icon: ListTodo },
-        { id: "acct-reports" as Page, label: "Reports", icon: BarChart3 },
-        { id: "acct-financials" as Page, label: "Financials", icon: CreditCard },
-      ];
+  // Accounting sub-items
+  const acctSubItems = [
+    { id: "acct-financials" as Page, label: "Finance Overview", icon: CreditCard },
+    { id: "acct-evouchers" as Page, label: "E-Vouchers", icon: Receipt },
+    { id: "acct-transactions" as Page, label: "Transactions", icon: ArrowLeftRight },
+    { id: "acct-coa" as Page, label: "Chart of Accounts", icon: BookOpen },
+    { id: "acct-projects" as Page, label: "Projects", icon: Briefcase },
+    { id: "acct-contracts" as Page, label: "Contracts", icon: Handshake },
+    { id: "acct-bookings" as Page, label: "Bookings", icon: Package },
+    { id: "acct-customers" as Page, label: "Customers", icon: Users },
+    { id: "acct-catalog" as Page, label: "Catalog", icon: ClipboardCheck },
+    { id: "acct-reports" as Page, label: "Reports", icon: BarChart3 },
+    { id: "acct-statements" as Page, label: "Financial Statements", icon: TrendingUp },
+  ];
   
   // Check if any BD page is active
   const isBDActive = currentPage.startsWith("bd-");
@@ -654,7 +644,7 @@ export function NeuronSidebar({ currentPage, onNavigate, currentUser }: NeuronSi
         
         {/* HR */}
         <div className="space-y-1">
-          {showHR && !isEssentials && renderNavButton({ id: "hr" as Page, label: "HR", icon: User })}
+          {showHR && renderNavButton({ id: "hr" as Page, label: "HR", icon: User })}
         </div>
 
         {/* Accounting with sub-items */}

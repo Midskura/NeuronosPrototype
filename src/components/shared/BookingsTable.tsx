@@ -116,7 +116,7 @@ export function BookingsTable({
         textTransform: "uppercase" as const,
         letterSpacing: "0.5px",
         borderBottom: "1px solid var(--neuron-ui-border)",
-        backgroundColor: "#FAFCFB",
+        backgroundColor: "var(--theme-bg-page)",
       }}>
         <div>Booking ID</div>
         <div>Service</div>
@@ -128,6 +128,7 @@ export function BookingsTable({
       {/* Table rows */}
       {bookings.map((booking, idx) => {
         const bookingId = booking.bookingId || (booking as any).id;
+        const displayId = (booking as any).bookingNumber || (booking as any).booking_number || bookingId;
         const serviceType = resolveServiceType(booking);
         const isGenerating = generatingBillingId === bookingId;
 
@@ -143,16 +144,16 @@ export function BookingsTable({
               fontSize: "13px",
               color: "var(--neuron-ink-primary)",
               borderBottom: idx < bookings.length - 1 ? "1px solid var(--neuron-ui-divider)" : "none",
-              backgroundColor: idx % 2 === 0 ? "white" : "#FAFCFB",
+              backgroundColor: idx % 2 === 0 ? "var(--theme-bg-surface)" : "var(--theme-bg-page)",
               cursor: "pointer",
               transition: "background-color 0.15s ease",
             }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#F0FAFA"; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = idx % 2 === 0 ? "white" : "#FAFCFB"; }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = idx % 2 === 0 ? "var(--theme-bg-surface)" : "var(--theme-bg-page)"; }}
           >
             {/* Booking ID — teal link style */}
             <div style={{ fontWeight: 500, color: "var(--theme-action-primary-bg)" }}>
-              {bookingId || "—"}
+              {displayId || "—"}
             </div>
 
             {/* Service type with icon */}
@@ -173,8 +174,8 @@ export function BookingsTable({
                 fontWeight: 500,
                 padding: "3px 8px",
                 borderRadius: "4px",
-                backgroundColor: booking.status === "Completed" ? "#D1FAE5" : "#F3F4F6",
-                color: booking.status === "Completed" ? "#059669" : "#6B7280",
+                backgroundColor: booking.status === "Completed" ? "var(--theme-status-success-bg)" : "var(--neuron-pill-inactive-bg)",
+                color: booking.status === "Completed" ? "var(--theme-status-success-fg)" : "var(--theme-text-muted)",
               }}>
                 {booking.status || "Draft"}
               </span>
@@ -190,14 +191,14 @@ export function BookingsTable({
                   style={{
                     display: "flex", alignItems: "center", gap: "4px",
                     padding: "4px 8px", fontSize: "12px", fontWeight: 500,
-                    color: isGenerating ? "#9CA3AF" : "#7C3AED",
+                    color: isGenerating ? "var(--theme-text-muted)" : "var(--neuron-status-accent-fg)",
                     backgroundColor: "transparent",
-                    border: `1px solid ${isGenerating ? "#E5E7EB" : "#DDD6FE"}`,
+                    border: `1px solid ${isGenerating ? "var(--theme-border-default)" : "var(--neuron-status-accent-border)"}`,
                     borderRadius: "4px",
                     cursor: isGenerating ? "not-allowed" : "pointer",
                   }}
-                  onMouseEnter={e => { if (!isGenerating) { e.currentTarget.style.backgroundColor = "#F5F3FF"; e.currentTarget.style.borderColor = "#7C3AED"; }}}
-                  onMouseLeave={e => { if (!isGenerating) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "#DDD6FE"; }}}
+                  onMouseEnter={e => { if (!isGenerating) { e.currentTarget.style.backgroundColor = "var(--neuron-status-accent-bg)"; e.currentTarget.style.borderColor = "var(--neuron-status-accent-fg)"; }}}
+                  onMouseLeave={e => { if (!isGenerating) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.borderColor = "var(--neuron-status-accent-border)"; }}}
                 >
                   <Receipt size={12} />
                   {isGenerating ? "..." : "Bill"}

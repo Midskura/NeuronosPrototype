@@ -128,7 +128,7 @@ export function AddCategoryModal({ onClose, onAdd }: AddCategoryModalProps) {
                   fontSize: "13px",
                   fontWeight: 600,
                   color: "white",
-                  backgroundColor: categoryName.trim() ? "var(--neuron-brand-green)" : "#D1D5DB",
+                  backgroundColor: categoryName.trim() ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)",
                   border: "none",
                   borderRadius: "6px",
                   cursor: categoryName.trim() ? "pointer" : "not-allowed"

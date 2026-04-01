@@ -22,6 +22,7 @@ export interface WorkflowTicketParams {
   createdBy: string;
   createdByName: string;
   createdByDept: string;
+  autoCreated?: boolean;
 }
 
 /**
@@ -43,6 +44,7 @@ export async function createWorkflowTicket(
     createdBy,
     createdByName,
     createdByDept,
+    autoCreated = false,
   } = params;
 
   // 1. Create the ticket
@@ -57,7 +59,7 @@ export async function createWorkflowTicket(
       linked_record_type: linkedRecordType,
       linked_record_id: linkedRecordId,
       resolution_action: resolutionAction ?? null,
-      auto_created: false,
+      auto_created: autoCreated,
       last_message_at: new Date().toISOString(),
     })
     .select("id")
@@ -109,7 +111,7 @@ export async function createWorkflowTicket(
  */
 export async function executeResolutionAction(
   action: string,
-  linkedRecordType: string,
+  _linkedRecordType: string,
   linkedRecordId: string
 ): Promise<void> {
   switch (action) {
@@ -134,8 +136,133 @@ export async function executeResolutionAction(
         .eq("id", linkedRecordId);
       break;
 
+    case "mark_invoice_gl_posted":
+      // Resolution handled inside InvoiceGLPostingSheet — ticket closes after GL post
+      break;
+
+    case "mark_collection_gl_posted":
+      // Resolution handled inside CollectionGLPostingSheet — ticket closes after GL post
+      break;
+
     default:
       console.warn("executeResolutionAction: unknown action", action);
+  }
+}
+
+/**
+ * Auto-fires a billing ticket to Accounting when a booking is marked Completed.
+ * Safe to call unconditionally — skips silently if a ticket already exists.
+ * Does not throw; ticket creation failure is non-blocking.
+ */
+export async function fireBillingTicketOnCompletion(params: {
+  bookingId: string;
+  bookingNumber: string;
+  userId: string;
+  userName: string;
+  userDept: string;
+}): Promise<void> {
+  try {
+    const existing = await getOpenWorkflowTicket("booking", params.bookingId);
+    if (existing) return;
+
+    await createWorkflowTicket({
+      subject: `Create Billing: ${params.bookingNumber}`,
+      body: `Booking ${params.bookingNumber} has been marked Completed. Please create the billing documents for this booking.`,
+      type: "request",
+      priority: "normal",
+      recipientDept: "Accounting",
+      linkedRecordType: "booking",
+      linkedRecordId: params.bookingId,
+      resolutionAction: "set_booking_billed",
+      createdBy: params.userId,
+      createdByName: params.userName,
+      createdByDept: params.userDept,
+      autoCreated: true,
+    });
+  } catch (err) {
+    console.error("fireBillingTicketOnCompletion: silent failure", err);
+  }
+}
+
+/**
+ * Auto-fires a GL posting ticket to Accounting when a collection is recorded.
+ * Safe to call unconditionally — skips silently if a ticket already exists.
+ */
+export async function fireGLPostingTicketOnCollection(params: {
+  collectionId: string;
+  collectionRef: string;
+  customerName: string;
+  amount: number;
+  userId: string;
+  userName: string;
+  userDept: string;
+}): Promise<void> {
+  try {
+    const existing = await getOpenWorkflowTicket("collection", params.collectionId);
+    if (existing) return;
+
+    const formattedAmount = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+    }).format(params.amount);
+
+    await createWorkflowTicket({
+      subject: `Post to GL: Collection ${params.collectionRef}`,
+      body: `Collection ${params.collectionRef} of ${formattedAmount} from ${params.customerName} has been recorded. Please post the journal entry (DR Cash / CR Accounts Receivable).`,
+      type: "request",
+      priority: "normal",
+      recipientDept: "Accounting",
+      linkedRecordType: "collection",
+      linkedRecordId: params.collectionId,
+      resolutionAction: "mark_collection_gl_posted",
+      createdBy: params.userId,
+      createdByName: params.userName,
+      createdByDept: params.userDept,
+      autoCreated: true,
+    });
+  } catch (err) {
+    console.error("fireGLPostingTicketOnCollection: silent failure", err);
+  }
+}
+
+/**
+ * Auto-fires a collections follow-up ticket to Accounting when an invoice is GL-posted.
+ * AR has been recognised — someone needs to follow up for collection.
+ * Safe to call unconditionally — skips silently if a ticket already exists.
+ */
+export async function fireInvoiceARTicket(params: {
+  invoiceId: string;
+  invoiceNumber: string;
+  customerName: string;
+  totalAmount: number;
+  userId: string;
+  userName: string;
+  userDept: string;
+}): Promise<void> {
+  try {
+    const existing = await getOpenWorkflowTicket("invoice", params.invoiceId);
+    if (existing) return;
+
+    const formattedAmount = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP",
+    }).format(params.totalAmount);
+
+    await createWorkflowTicket({
+      subject: `Collect: Invoice ${params.invoiceNumber}`,
+      body: `Invoice ${params.invoiceNumber} for ${params.customerName} (${formattedAmount}) has been posted to the GL — AR recognised. Please follow up with the client for collection.`,
+      type: "request",
+      priority: "normal",
+      recipientDept: "Accounting",
+      linkedRecordType: "invoice",
+      linkedRecordId: params.invoiceId,
+      createdBy: params.userId,
+      createdByName: params.userName,
+      createdByDept: params.userDept,
+      autoCreated: true,
+    });
+  } catch (err) {
+    console.error("fireInvoiceARTicket: silent failure", err);
   }
 }
 

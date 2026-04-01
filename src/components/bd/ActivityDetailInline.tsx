@@ -323,7 +323,7 @@ export function ActivityDetailInline({
                     className="flex items-center gap-3 p-3 rounded-lg transition-colors"
                     style={{
                       border: "1px solid var(--neuron-ui-border)",
-                      backgroundColor: "#FAFAFA"
+                      backgroundColor: "var(--neuron-pill-inactive-bg)"
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-subtle)";
@@ -403,7 +403,7 @@ export function ActivityDetailInline({
                           {formatDateTime(comment.timestamp)}
                         </span>
                       </div>
-                      <p className="text-[13px]" style={{ color: "#475467" }}>
+                      <p className="text-[13px]" style={{ color: "var(--theme-text-secondary)" }}>
                         {comment.text}
                       </p>
                     </div>
@@ -431,7 +431,7 @@ export function ActivityDetailInline({
                 disabled={!newComment.trim()}
                 className="w-full px-4 py-2.5 rounded-lg text-[13px] font-medium text-white transition-colors flex items-center justify-center gap-2"
                 style={{ 
-                  backgroundColor: newComment.trim() ? "#0F766E" : "#D1D5DB",
+                  backgroundColor: newComment.trim() ? "var(--theme-action-primary-bg)" : "var(--neuron-ui-muted)",
                   cursor: newComment.trim() ? "pointer" : "not-allowed"
                 }}
                 onMouseEnter={(e) => {
@@ -457,8 +457,8 @@ export function ActivityDetailInline({
           <div 
             className="rounded-lg p-6"
             style={{
-              border: "1px solid #FFE5E5",
-              backgroundColor: "#FFFBFB"
+              border: "1px solid var(--theme-status-danger-border)",
+              backgroundColor: "var(--theme-status-danger-bg)"
             }}
           >
             <div className="flex items-start gap-4">
@@ -474,14 +474,14 @@ export function ActivityDetailInline({
                 onClick={handleDelete}
                 className="px-4 py-2 rounded-lg text-[13px] font-medium text-white transition-colors flex items-center gap-2 flex-shrink-0"
                 style={{ 
-                  backgroundColor: "#C94F3D",
+                  backgroundColor: "var(--theme-status-danger-fg)",
                   cursor: "pointer"
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#B91C1C";
+                  e.currentTarget.style.backgroundColor = "var(--theme-status-danger-fg)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#C94F3D";
+                  e.currentTarget.style.backgroundColor = "var(--theme-status-danger-fg)";
                 }}
               >
                 <Trash2 size={14} />

@@ -328,7 +328,7 @@ export function EmployeeProfileModal({
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-[var(--theme-bg-surface)] divide-y divide-[#E5E7EB]">
+                    <tbody className="bg-[var(--theme-bg-surface)] divide-y divide-[var(--theme-border-default)]">
                       {employmentRecords.map((record) => (
                         <tr key={record.id} className="hover:bg-[var(--theme-bg-page)]">
                           <td className="px-4 py-3 text-[12px] text-[var(--theme-text-primary)]">
@@ -354,7 +354,7 @@ export function EmployeeProfileModal({
                                 "px-2 py-1 rounded-full text-[10px]",
                                 record.status === "Active"
                                   ? "bg-[var(--theme-status-success-bg)] text-[var(--theme-status-success-fg)]"
-                                  : "bg-[var(--theme-status-danger-bg)] text-[#991B1B]"
+                                  : "bg-[var(--theme-status-danger-bg)] text-[var(--theme-status-danger-fg)]"
                               )}
                               style={{ fontWeight: 600 }}
                             >

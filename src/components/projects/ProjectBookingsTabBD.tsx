@@ -224,16 +224,16 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                       <div
                         style={{
                           padding: "4px 10px",
-                          backgroundColor: hasBookings ? "#E8F4F3" : "#F3F4F6",
+                          backgroundColor: hasBookings ? "var(--theme-bg-surface-tint)" : "var(--neuron-pill-inactive-bg)",
                           border: `1px solid ${
-                            hasBookings ? "var(--neuron-brand-green)" : "#D1D5DB"
+                            hasBookings ? "var(--neuron-brand-green)" : "var(--neuron-ui-muted)"
                           }`,
                           borderRadius: "12px",
                           fontSize: "12px",
                           fontWeight: 600,
                           color: hasBookings
                             ? "var(--neuron-brand-green)"
-                            : "#6B7280",
+                            : "var(--theme-text-muted)",
                         }}
                       >
                         {bookingsForService.length}
@@ -246,7 +246,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                     onClick={() => toggleServiceExpanded(idx)}
                     style={{
                       padding: "12px 20px",
-                      backgroundColor: "#FAFBFC",
+                      backgroundColor: "var(--theme-bg-page)",
                       borderBottom: "1px solid var(--neuron-ui-border)",
                       cursor: "pointer",
                       display: "flex",
@@ -258,10 +258,10 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                       transition: "background-color 0.2s ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = "#F0F5F5";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-surface-tint)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = "#FAFBFC";
+                      e.currentTarget.style.backgroundColor = "var(--theme-bg-page)";
                     }}
                   >
                     {isExpanded ? "▼" : "▶"} {isExpanded ? "Hide" : "Show"} Service Specification
@@ -356,8 +356,8 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                             }
                             style={{
                               padding: "12px 16px",
-                              background: "#F0FDF4",
-                              border: "1px solid #86EFAC",
+                              background: "var(--theme-status-success-bg)",
+                              border: "1px solid var(--theme-status-success-border)",
                               borderRadius: "6px",
                               cursor: "pointer",
                               transition: "all 0.2s ease",
@@ -369,7 +369,7 @@ export function ProjectBookingsTabBD({ project, currentUser, onUpdate }: Project
                                 "0 0 0 2px rgba(15, 118, 110, 0.1)";
                             }}
                             onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = "#86EFAC";
+                              e.currentTarget.style.borderColor = "var(--theme-status-success-border)";
                               e.currentTarget.style.boxShadow = "none";
                             }}
                           >

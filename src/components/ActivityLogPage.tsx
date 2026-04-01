@@ -252,13 +252,13 @@ export function ActivityLogPage() {
   const getEntityBadgeColor = (entityType: string) => {
     switch (entityType) {
       case "ticket":
-        return { bg: "#FEF0E6", color: "#E87A3D", border: "#E87A3D" };
+        return { bg: "var(--theme-status-warning-bg)", color: "#E87A3D", border: "#E87A3D" };
       case "quotation":
-        return { bg: "#E8F5F0", color: "var(--theme-action-primary-bg)", border: "#0F766E" };
+        return { bg: "var(--theme-bg-surface-tint)", color: "var(--theme-action-primary-bg)", border: "var(--theme-action-primary-bg)" };
       case "booking":
         return { bg: "#EEF2FF", color: "#6366F1", border: "#6366F1" };
       default:
-        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)", border: "#6B7280" };
+        return { bg: "var(--theme-bg-surface-subtle)", color: "var(--theme-text-muted)", border: "var(--theme-text-muted)" };
     }
   };
   
@@ -291,7 +291,7 @@ export function ActivityLogPage() {
   
   if (!hasAccess) {
     return (
-      <div className="h-full flex items-center justify-center" style={{ backgroundColor: "#FEFEFE" }}>
+      <div className="h-full flex items-center justify-center" style={{ backgroundColor: "var(--theme-bg-surface)" }}>
         <div className="text-center" style={{ maxWidth: "400px" }}>
           <Activity size={48} style={{ color: "#E87A3D", margin: "0 auto 16px" }} />
           <h2 style={{ fontSize: "20px", fontWeight: 600, color: "var(--theme-text-primary)", marginBottom: "8px" }}>
@@ -308,7 +308,7 @@ export function ActivityLogPage() {
   const filteredActivities = getFilteredActivities();
   
   return (
-    <div className="h-full flex flex-col" style={{ backgroundColor: "#FEFEFE" }}>
+    <div className="h-full flex flex-col" style={{ backgroundColor: "var(--theme-bg-surface)" }}>
       {/* Header */}
       <div 
         className="px-12 py-8 border-b"
@@ -325,9 +325,9 @@ export function ActivityLogPage() {
               borderRadius: "6px",
               fontSize: "12px",
               fontWeight: 600,
-              background: isExecutive ? "#FEEAEA" : "#E8F5F0",
-              color: isExecutive ? "#E35858" : "#0F766E",
-              border: `1px solid ${isExecutive ? "#E35858" : "#0F766E"}`
+              background: isExecutive ? "var(--theme-status-danger-bg)" : "var(--theme-bg-surface-tint)",
+              color: isExecutive ? "var(--theme-status-danger-fg)" : "var(--theme-action-primary-bg)",
+              border: `1px solid ${isExecutive ? "var(--theme-status-danger-fg)" : "var(--theme-action-primary-bg)"}`
             }}>
               {isExecutive ? "EXECUTIVE" : "MANAGER"}
             </span>

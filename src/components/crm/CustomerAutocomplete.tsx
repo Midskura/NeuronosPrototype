@@ -287,7 +287,7 @@ export function CustomerAutocomplete({
                   padding: "12px 16px",
                   cursor: "pointer",
                   backgroundColor:
-                    highlightedIndex === index ? "#F3F4F6" : "white",
+                    highlightedIndex === index ? "var(--neuron-pill-inactive-bg)" : "var(--theme-bg-surface)",
                   borderBottom:
                     index < contacts.length - 1
                       ? "1px solid var(--theme-border-subtle)"
@@ -307,7 +307,7 @@ export function CustomerAutocomplete({
                       width: "36px",
                       height: "36px",
                       borderRadius: "6px",
-                      backgroundColor: "#E8F4F3",
+                      backgroundColor: "var(--theme-bg-surface-tint)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -363,10 +363,10 @@ export function CustomerAutocomplete({
                         borderRadius: "4px",
                         backgroundColor:
                           contact.status === "Customer"
-                            ? "#D1FAE5"
-                            : "#F3F4F6",
+                            ? "var(--theme-status-success-bg)"
+                            : "var(--neuron-pill-inactive-bg)",
                         color:
-                          contact.status === "Customer" ? "#10B981" : "#6B7280",
+                          contact.status === "Customer" ? "var(--theme-status-success-fg)" : "var(--theme-text-muted)",
                         fontSize: "11px",
                         fontWeight: 500,
                       }}

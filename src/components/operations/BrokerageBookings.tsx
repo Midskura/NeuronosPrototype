@@ -270,7 +270,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                   fontWeight: 600,
                   border: "none",
                   borderRadius: "8px",
-                  background: "#0F766E",
+                  background: "var(--theme-action-primary-bg)",
                   color: "white",
                   cursor: "pointer",
                 }}
@@ -471,7 +471,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
               label="Completed"
               count={completedCount}
               isActive={activeTab === "completed"}
-              color="#10B981"
+              color="var(--theme-status-success-fg)"
               onClick={() => setActiveTab("completed")}
             />
           </div>
@@ -575,8 +575,8 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                           borderRadius: "4px",
                           fontSize: "12px",
                           fontWeight: 600,
-                          backgroundColor: booking.movement === "EXPORT" ? "#FFF7ED" : "#E6FFFA",
-                          color: booking.movement === "EXPORT" ? "#C2410C" : "#0F766E",
+                          backgroundColor: booking.movement === "EXPORT" ? "var(--theme-status-warning-bg)" : "var(--theme-status-success-bg)",
+                          color: booking.movement === "EXPORT" ? "#C2410C" : "var(--theme-action-primary-bg)",
                         }}>
                           {booking.movement || "IMPORT"}
                         </span>
@@ -614,7 +614,7 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                             padding: "6px 12px",
                             fontSize: "12px",
                             fontWeight: 600,
-                            border: "1px solid #FCA5A5",
+                            border: "1px solid var(--theme-status-danger-border)",
                             borderRadius: "6px",
                             background: "var(--theme-bg-surface)",
                             color: "var(--theme-status-danger-fg)",
@@ -622,12 +622,12 @@ export function BrokerageBookings({ currentUser, pendingBookingId, initialTab, h
                             transition: "all 150ms"
                           }}
                           onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "#DC2626";
+                            e.currentTarget.style.background = "var(--theme-status-danger-fg)";
                             e.currentTarget.style.color = "white";
                           }}
                           onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "white";
-                            e.currentTarget.style.color = "#DC2626";
+                            e.currentTarget.style.background = "var(--theme-bg-surface)";
+                            e.currentTarget.style.color = "var(--theme-status-danger-fg)";
                           }}
                         >
                           <Trash2 size={14} />
@@ -679,7 +679,7 @@ function TabButton({ icon, label, count, isActive, color, onClick }: TabButtonPr
         background: "transparent",
         border: "none",
         borderBottom: isActive ? `2px solid ${color}` : "2px solid transparent",
-        color: isActive ? color : (isHovered ? "#12332B" : "#667085"),
+        color: isActive ? color : (isHovered ? "var(--theme-text-primary)" : "var(--theme-text-muted)"),
         fontSize: "14px",
         fontWeight: 600,
         cursor: "pointer",

@@ -4,8 +4,8 @@ import { toast } from "../../ui/toast-utils";
 import type { FinancialContainer } from "../../../types/financials";
 import type { LinkedBilling } from "../../../types/evoucher";
 import { Invoice, Collection } from "../../../types/accounting";
-import { useEVoucherSubmit } from "../../../hooks/useEVoucherSubmit";
 import { useUser } from "../../../hooks/useUser";
+import { fireGLPostingTicketOnCollection } from "../../../utils/workflowTickets";
 import { SidePanel } from "../../common/SidePanel";
 import { CustomDatePicker } from "../../common/CustomDatePicker";
 import { CustomDropdown } from "../../bd/CustomDropdown";
@@ -49,7 +49,7 @@ export function CollectionCreatorPanel({
   mode = 'create' 
 }: CollectionCreatorPanelProps) {
   const { user } = useUser();
-  const { submitForApproval, isSaving } = useEVoucherSubmit("collection");
+  const [isSaving, setIsSaving] = useState(false);
   const isReadOnly = mode === 'view';
 
   // -- Form State --
@@ -269,63 +269,70 @@ export function CollectionCreatorPanel({
 
     const selectedInvoices = invoices.filter(inv => inv.payment_amount > 0);
     const primaryInvoiceId = selectedInvoices.length === 1 ? selectedInvoices[0].id : undefined;
-    
-    // Calculate total applied to invoices
+
     const totalApplied = selectedInvoices.reduce((sum, inv) => sum + inv.payment_amount, 0);
-    
-    // Check for overpayment (credit)
     const amountToCredit = amountReceived - totalApplied;
 
+    const submissionNotes = amountToCredit > 0.01
+      ? [notes, `Customer credit pending: ${formatCurrency(amountToCredit)} remains unapplied.`].filter(Boolean).join("\n\n")
+      : notes;
+
     try {
+      setIsSaving(true);
+
       const linkedBillings: LinkedBilling[] = selectedInvoices.map(inv => ({
         id: inv.id,
         amount: inv.payment_amount
       }));
 
-      // Create line items
-      const lineItems = [{
-        id: "1",
-        particular: `Payment for ${selectedInvoices.length} invoices`,
-        description: selectedInvoices.map(inv => inv.voucher_number).join(", "),
-        amount: totalApplied
-      }];
+      const collectionNumber = `COL-${Date.now()}`;
+      const { data: created, error: insertErr } = await supabase
+        .from('collections')
+        .insert({
+          id: crypto.randomUUID(),
+          collection_number: collectionNumber,
+          project_number: project.project_number,
+          customer_id: project.customer_id || null,
+          customer_name: project.customer_name,
+          invoice_id: primaryInvoiceId || null,
+          amount: amountReceived,
+          currency: 'PHP',
+          payment_method: paymentMethod,
+          reference_number: referenceNo || null,
+          collection_date: new Date(paymentDate).toISOString(),
+          status: 'posted',
+          notes: submissionNotes || null,
+          created_by: user?.id || null,
+          linked_billings: linkedBillings,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
 
-      // If there's credit, add a line item or handle it (for now, we'll just note it)
-      if (amountToCredit > 0.01) {
-        lineItems.push({
-           id: "2",
-           particular: "Overpayment / Credit",
-           description: "Unapplied amount to be credited",
-           amount: amountToCredit
+      if (insertErr) throw new Error(insertErr.message);
+
+      toast.success(`Collection ${collectionNumber} recorded successfully!`);
+
+      if (user?.id) {
+        fireGLPostingTicketOnCollection({
+          collectionId: created.id,
+          collectionRef: referenceNo || collectionNumber,
+          customerName: project.customer_name,
+          amount: amountReceived,
+          userId: user.id,
+          userName: user.name || "Accounting",
+          userDept: user.department || "Accounting",
         });
       }
 
-      const submissionNotes = amountToCredit > 0.01
-        ? [notes, `Customer credit pending: ${formatCurrency(amountToCredit)} remains unapplied.`].filter(Boolean).join("\n\n")
-        : notes;
-
-      await submitForApproval({
-        requestName: `Collection - ${project.customer_name}`,
-        expenseCategory: "Collection",
-        subCategory: "",
-        projectNumber: project.project_number,
-        invoiceId: primaryInvoiceId,
-        lineItems: lineItems,
-        totalAmount: amountReceived,
-        preferredPayment: paymentMethod,
-        vendor: project.customer_name,
-        creditTerms: "None",
-        paymentSchedule: paymentDate,
-        notes: submissionNotes,
-        requestor: user?.name || "Current User",
-        transactionType: "collection",
-        linkedBillings: linkedBillings as any
-      });
-
       onSuccess();
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Submission error:", error);
+      toast.error("Failed to record collection: " + (error?.message || "Unknown error"));
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -480,14 +487,14 @@ export function CollectionCreatorPanel({
                         <th className="px-6 py-3 text-xs font-semibold text-[var(--theme-text-muted)] uppercase tracking-wider text-right w-48">Payment</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#F3F4F6]">
+                    <tbody className="divide-y divide-[var(--neuron-pill-inactive-bg)]">
                       {invoices.map((inv) => (
                         <tr
                           key={inv.id}
                           className={`transition-colors ${
                             inv.isReversed
                               ? "opacity-60 bg-[var(--theme-bg-surface-subtle)]"
-                              : `hover:bg-[var(--theme-bg-surface-subtle)] ${inv.isSelected ? "bg-[#F0FDFA]" : ""}`
+                              : `hover:bg-[var(--theme-bg-surface-subtle)] ${inv.isSelected ? "bg-[var(--theme-bg-surface-tint)]" : ""}`
                           } ${isReadOnly ? 'pointer-events-none' : ''}`}
                           onClick={(e) => {
                             if (!isReadOnly && !inv.isReversed) {

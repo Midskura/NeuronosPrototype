@@ -208,7 +208,7 @@ export function ManageAccountsModal({
               <input 
                 type="text" 
                 placeholder="Search accounts..." 
-                className="w-full pl-10 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[var(--theme-action-primary-bg)]"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[var(--theme-action-primary-bg)]/20 focus:border-[var(--theme-action-primary-bg)]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

@@ -137,9 +137,9 @@ export function HR({ userRole }: HRProps) {
   const getCompanyColor = (company: string) => {
     const colors: Record<string, string> = {
       "Conforme Cargo Express": "bg-[var(--theme-status-warning-bg)] text-[var(--theme-status-warning-fg)]",
-      "ZEUJ One Marketing International": "bg-[#DBEAFE] text-[#1E40AF]",
+      "ZEUJ One Marketing International": "bg-[var(--neuron-semantic-info-bg)] text-[var(--neuron-semantic-info)]",
       "Juan Logistica Courier Services": "bg-[#FED7AA] text-[#9A3412]",
-      "ZN International Cargo Forwarding": "bg-[#E0E7FF] text-[#3730A3]",
+      "ZN International Cargo Forwarding": "bg-[var(--neuron-semantic-info-bg)] text-[#3730A3]",
     };
     return colors[company] || "bg-[var(--theme-bg-surface-tint)] text-[var(--theme-text-primary)]";
   };
@@ -253,7 +253,7 @@ export function HR({ userRole }: HRProps) {
         {/* Pill-style Tabs - Similar to Accounting */}
         <div style={{ marginBottom: "16px" }}>
           <div
-            className="flex items-center gap-2 bg-[var(--theme-bg-surface)] border border-[#E6E9F0] rounded-2xl"
+            className="flex items-center gap-2 bg-[var(--theme-bg-surface)] border border-[var(--theme-border-default)] rounded-2xl"
             style={{
               height: "56px",
               padding: "8px 12px",
@@ -270,9 +270,9 @@ export function HR({ userRole }: HRProps) {
                   )}
                   style={{
                     fontWeight: activeSection === item.id ? 600 : 500,
-                    backgroundColor: activeSection === item.id ? "#E4EFEA" : "transparent",
-                    border: activeSection === item.id ? "1.5px solid #5FC4A1" : "1.5px solid transparent",
-                    color: activeSection === item.id ? "#237F66" : "#6B7280",
+                    backgroundColor: activeSection === item.id ? "var(--theme-bg-surface-tint)" : "transparent",
+                    border: activeSection === item.id ? "1.5px solid var(--theme-status-success-border)" : "1.5px solid transparent",
+                    color: activeSection === item.id ? "var(--theme-action-primary-bg)" : "var(--theme-text-muted)",
                   }}
                 >
                   <Icon className="w-4 h-4" />
@@ -380,7 +380,7 @@ export function HR({ userRole }: HRProps) {
                 {/* Timesheet Grid - No internal scroll */}
                 <div className="flex-1 p-6">
                   <div className="border border-[var(--theme-border-default)] rounded-lg overflow-hidden">
-                    <table className="min-w-full divide-y divide-[#D1D5DB]">
+                    <table className="min-w-full divide-y divide-[var(--neuron-ui-muted)]">
                       <thead className="bg-[var(--theme-bg-page)]">
                         <tr>
                           <th
@@ -420,7 +420,7 @@ export function HR({ userRole }: HRProps) {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="bg-[var(--theme-bg-surface)] divide-y divide-[#D1D5DB]">
+                      <tbody className="bg-[var(--theme-bg-surface)] divide-y divide-[var(--neuron-ui-muted)]">
                         {filteredEmployees.slice(0, 10).map((emp, empIdx) => (
                           <tr key={emp.id}>
                             <td
